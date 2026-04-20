@@ -3,15 +3,8 @@
 package shared
 
 type AssociateWorkflowLabelsRequest struct {
-	WorkflowIds []string `json:"workflowIds,omitempty"`
 	LabelIds    []int64  `json:"labelIds,omitempty"`
-}
-
-func (a *AssociateWorkflowLabelsRequest) GetWorkflowIds() []string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkflowIds
+	WorkflowIds []string `json:"workflowIds,omitempty"`
 }
 
 func (a *AssociateWorkflowLabelsRequest) GetLabelIds() []int64 {
@@ -19,4 +12,11 @@ func (a *AssociateWorkflowLabelsRequest) GetLabelIds() []int64 {
 		return nil
 	}
 	return a.LabelIds
+}
+
+func (a *AssociateWorkflowLabelsRequest) GetWorkflowIds() []string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkflowIds
 }

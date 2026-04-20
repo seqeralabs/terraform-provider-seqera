@@ -3,16 +3,9 @@
 package shared
 
 type Team struct {
-	Name string `json:"name"`
 	// Team description
 	Description *string `json:"description,omitempty"`
-}
-
-func (t *Team) GetName() string {
-	if t == nil {
-		return ""
-	}
-	return t.Name
+	Name        string  `json:"name"`
 }
 
 func (t *Team) GetDescription() *string {
@@ -20,4 +13,11 @@ func (t *Team) GetDescription() *string {
 		return nil
 	}
 	return t.Description
+}
+
+func (t *Team) GetName() string {
+	if t == nil {
+		return ""
+	}
+	return t.Name
 }

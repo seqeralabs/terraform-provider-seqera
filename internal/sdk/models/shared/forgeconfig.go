@@ -8,36 +8,6 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-// ForgeConfigType - Type of compute instances to provision:
-// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
-// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
-// - FARGATE: Use AWS Fargate serverless compute
-type ForgeConfigType string
-
-const (
-	ForgeConfigTypeSpot ForgeConfigType = "SPOT"
-	ForgeConfigTypeEc2  ForgeConfigType = "EC2"
-)
-
-func (e ForgeConfigType) ToPointer() *ForgeConfigType {
-	return &e
-}
-func (e *ForgeConfigType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "SPOT":
-		fallthrough
-	case "EC2":
-		*e = ForgeConfigType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ForgeConfigType: %v", v)
-	}
-}
-
 // AllocStrategy - Strategy for allocating compute resources:
 // - BEST_FIT: Selects instance type that best fits job requirements
 // - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
@@ -76,38 +46,37 @@ func (e *AllocStrategy) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// ForgeConfigType - Type of compute instances to provision:
+// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+// - FARGATE: Use AWS Fargate serverless compute
+type ForgeConfigType string
+
+const (
+	ForgeConfigTypeSpot ForgeConfigType = "SPOT"
+	ForgeConfigTypeEc2  ForgeConfigType = "EC2"
+)
+
+func (e ForgeConfigType) ToPointer() *ForgeConfigType {
+	return &e
+}
+func (e *ForgeConfigType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "SPOT":
+		fallthrough
+	case "EC2":
+		*e = ForgeConfigType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ForgeConfigType: %v", v)
+	}
+}
+
 type ForgeConfig struct {
-	// Type of compute instances to provision:
-	// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
-	// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
-	// - FARGATE: Use AWS Fargate serverless compute
-	//
-	Type ForgeConfigType `json:"type"`
-	// Minimum number of CPUs to maintain in the compute environment.
-	// Setting to 0 allows environment to scale to zero when idle.
-	//
-	MinCpus int `json:"minCpus"`
-	// Maximum number of CPUs available in the compute environment.
-	// Subject to AWS service quotas.
-	//
-	MaxCpus int `json:"maxCpus"`
-	// Enable GPU support for compute instances.
-	// When enabled, GPU-capable instance types will be selected.
-	//
-	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
-	// Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
-	// are dynamically attached and mounted (typically at /scratch) as disk space runs low.
-	// This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
-	// to configure a larger root volume instead.
-	//
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	EbsAutoScale *bool `json:"ebsAutoScale,omitempty"`
-	// List of EC2 instance types to use.
-	// Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
-	// Default: ["optimal"] - AWS Batch selects appropriate instances
-	//
-	InstanceTypes []string `json:"instanceTypes,omitempty"`
 	// Strategy for allocating compute resources:
 	// - BEST_FIT: Selects instance type that best fits job requirements
 	// - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
@@ -116,32 +85,26 @@ type ForgeConfig struct {
 	// Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 	//
 	AllocStrategy *AllocStrategy `json:"allocStrategy,omitempty"`
-	// Custom Amazon Machine Image (AMI) ID for compute instances.
-	// If not specified, AWS Batch selects the default ECS-optimized AMI.
+	// List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
+	// The work directory bucket is automatically included.
 	//
-	ImageID *string `json:"imageId,omitempty"`
-	// VPC ID where compute environment will be deployed.
-	// Format: vpc- followed by hexadecimal characters
+	AllowBuckets []string `json:"allowBuckets,omitempty"`
+	// Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
+	// compute jobs.
 	//
-	VpcID *string `json:"vpcId,omitempty"`
-	// List of subnet IDs for compute instances.
-	// Subnets must be in the specified VPC. Use multiple subnets for high availability.
-	// Must have sufficient IP addresses.
+	// Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
 	//
-	Subnets []string `json:"subnets,omitempty"`
-	// List of security group IDs to attach to compute instances.
-	// Security groups must allow necessary network access.
+	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
+	// The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+	// for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+	// then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+	// You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+	// field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+	// this field empty.
 	//
-	SecurityGroups []string `json:"securityGroups,omitempty"`
-	// Path where FSx will be mounted in the container.
+	// Must be a whole number between 0 and 100 (inclusive).
 	//
-	FsxMount *string `json:"fsxMount,omitempty"`
-	// FSx for Lustre file system name.
-	//
-	FsxName *string `json:"fsxName,omitempty"`
-	// Size of FSx file system in GB.
-	//
-	FsxSize *int `json:"fsxSize,omitempty"`
+	BidPercentage *int `json:"bidPercentage,omitempty"`
 	// When set to true for AWS Batch forge environments, automatically deletes AWS resources
 	// created during compute environment setup when the Terraform resource is destroyed.
 	//
@@ -162,14 +125,26 @@ type ForgeConfig struct {
 	// before deleting workspaces.
 	//
 	DisposeOnDeletion *bool `json:"disposeOnDeletion,omitempty"`
-	// EC2 key pair name for SSH access to compute instances.
-	// Key pair must exist in the specified region.
+	// Custom AMI ID for DRAGEN-enabled instances.
+	// Only applicable when dragen_enabled is true.
 	//
-	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
-	// List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
-	// The work directory bucket is automatically included.
+	DragenAmiID *string `json:"dragenAmiId,omitempty"`
+	// Enable Illumina DRAGEN support for the compute environment.
+	// When enabled, DRAGEN-specific instance types and AMIs will be used.
 	//
-	AllowBuckets []string `json:"allowBuckets,omitempty"`
+	DragenEnabled *bool `json:"dragenEnabled,omitempty"`
+	// EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
+	// Only applicable when dragen_enabled is true.
+	//
+	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
+	// Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
+	// are dynamically attached and mounted (typically at /scratch) as disk space runs low.
+	// This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
+	// to configure a larger root volume instead.
+	//
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	EbsAutoScale *bool `json:"ebsAutoScale,omitempty"`
 	// Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
 	// to run out of free space. Only applies when ebs_auto_scale is enabled.
 	// This is NOT the root/boot volume size — use ebs_boot_size for that.
@@ -178,16 +153,18 @@ type ForgeConfig struct {
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	EbsBlockSize *int `json:"ebsBlockSize,omitempty"`
-	// The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
-	// for that instance type before instances are launched. For example, if your maximum percentage is 20%,
-	// then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
-	// You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
-	// field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
-	// this field empty.
+	// Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 	//
-	// Must be a whole number between 0 and 100 (inclusive).
+	EbsBootSize *int `json:"ebsBootSize,omitempty"`
+	// EC2 key pair name for SSH access to compute instances.
+	// Key pair must exist in the specified region.
 	//
-	BidPercentage *int `json:"bidPercentage,omitempty"`
+	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
+	// Custom ECS agent configuration parameters appended to the ECS config file
+	// on compute instances. Use for advanced ECS tuning.
+	//
+	EcsConfig *string `json:"ecsConfig,omitempty"`
 	// Automatically create an EFS file system
 	EfsCreate *bool `json:"efsCreate,omitempty"`
 	// EFS file system ID to mount.
@@ -198,22 +175,6 @@ type ForgeConfig struct {
 	// Path where EFS will be mounted in the container.
 	//
 	EfsMount *string `json:"efsMount,omitempty"`
-	// Enable Illumina DRAGEN support for the compute environment.
-	// When enabled, DRAGEN-specific instance types and AMIs will be used.
-	//
-	DragenEnabled *bool `json:"dragenEnabled,omitempty"`
-	// Custom AMI ID for DRAGEN-enabled instances.
-	// Only applicable when dragen_enabled is true.
-	//
-	DragenAmiID *string `json:"dragenAmiId,omitempty"`
-	// Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
-	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
-	//
-	EbsBootSize *int `json:"ebsBootSize,omitempty"`
-	// Custom ECS agent configuration parameters appended to the ECS config file
-	// on compute instances. Use for advanced ECS tuning.
-	//
-	EcsConfig *string `json:"ecsConfig,omitempty"`
 	// Run the Nextflow head job using the Fargate container service. This speeds up the launch
 	// of your pipeline execution.
 	//
@@ -221,16 +182,55 @@ type ForgeConfig struct {
 	// Not compatible with EFS (`efs_create`, `efs_id`) or FSx (`fsx_name`) file systems.
 	//
 	FargateHeadEnabled *bool `json:"fargateHeadEnabled,omitempty"`
-	// Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
-	// compute jobs.
+	// Path where FSx will be mounted in the container.
 	//
-	// Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
+	FsxMount *string `json:"fsxMount,omitempty"`
+	// FSx for Lustre file system name.
 	//
-	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
-	// EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
-	// Only applicable when dragen_enabled is true.
+	FsxName *string `json:"fsxName,omitempty"`
+	// Size of FSx file system in GB.
 	//
-	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
+	FsxSize *int `json:"fsxSize,omitempty"`
+	// Enable GPU support for compute instances.
+	// When enabled, GPU-capable instance types will be selected.
+	//
+	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
+	// Custom Amazon Machine Image (AMI) ID for compute instances.
+	// If not specified, AWS Batch selects the default ECS-optimized AMI.
+	//
+	ImageID *string `json:"imageId,omitempty"`
+	// List of EC2 instance types to use.
+	// Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+	// Default: ["optimal"] - AWS Batch selects appropriate instances
+	//
+	InstanceTypes []string `json:"instanceTypes,omitempty"`
+	// Maximum number of CPUs available in the compute environment.
+	// Subject to AWS service quotas.
+	//
+	MaxCpus int `json:"maxCpus"`
+	// Minimum number of CPUs to maintain in the compute environment.
+	// Setting to 0 allows environment to scale to zero when idle.
+	//
+	MinCpus int `json:"minCpus"`
+	// List of security group IDs to attach to compute instances.
+	// Security groups must allow necessary network access.
+	//
+	SecurityGroups []string `json:"securityGroups,omitempty"`
+	// List of subnet IDs for compute instances.
+	// Subnets must be in the specified VPC. Use multiple subnets for high availability.
+	// Must have sufficient IP addresses.
+	//
+	Subnets []string `json:"subnets,omitempty"`
+	// Type of compute instances to provision:
+	// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+	// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+	// - FARGATE: Use AWS Fargate serverless compute
+	//
+	Type ForgeConfigType `json:"type"`
+	// VPC ID where compute environment will be deployed.
+	// Format: vpc- followed by hexadecimal characters
+	//
+	VpcID *string `json:"vpcId,omitempty"`
 }
 
 func (f ForgeConfig) MarshalJSON() ([]byte, error) {
@@ -244,116 +244,11 @@ func (f *ForgeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (f *ForgeConfig) GetType() ForgeConfigType {
-	if f == nil {
-		return ForgeConfigType("")
-	}
-	return f.Type
-}
-
-func (f *ForgeConfig) GetMinCpus() int {
-	if f == nil {
-		return 0
-	}
-	return f.MinCpus
-}
-
-func (f *ForgeConfig) GetMaxCpus() int {
-	if f == nil {
-		return 0
-	}
-	return f.MaxCpus
-}
-
-func (f *ForgeConfig) GetGpuEnabled() *bool {
-	if f == nil {
-		return nil
-	}
-	return f.GpuEnabled
-}
-
-func (f *ForgeConfig) GetEbsAutoScale() *bool {
-	if f == nil {
-		return nil
-	}
-	return f.EbsAutoScale
-}
-
-func (f *ForgeConfig) GetInstanceTypes() []string {
-	if f == nil {
-		return nil
-	}
-	return f.InstanceTypes
-}
-
 func (f *ForgeConfig) GetAllocStrategy() *AllocStrategy {
 	if f == nil {
 		return nil
 	}
 	return f.AllocStrategy
-}
-
-func (f *ForgeConfig) GetImageID() *string {
-	if f == nil {
-		return nil
-	}
-	return f.ImageID
-}
-
-func (f *ForgeConfig) GetVpcID() *string {
-	if f == nil {
-		return nil
-	}
-	return f.VpcID
-}
-
-func (f *ForgeConfig) GetSubnets() []string {
-	if f == nil {
-		return nil
-	}
-	return f.Subnets
-}
-
-func (f *ForgeConfig) GetSecurityGroups() []string {
-	if f == nil {
-		return nil
-	}
-	return f.SecurityGroups
-}
-
-func (f *ForgeConfig) GetFsxMount() *string {
-	if f == nil {
-		return nil
-	}
-	return f.FsxMount
-}
-
-func (f *ForgeConfig) GetFsxName() *string {
-	if f == nil {
-		return nil
-	}
-	return f.FsxName
-}
-
-func (f *ForgeConfig) GetFsxSize() *int {
-	if f == nil {
-		return nil
-	}
-	return f.FsxSize
-}
-
-func (f *ForgeConfig) GetDisposeOnDeletion() *bool {
-	if f == nil {
-		return nil
-	}
-	return f.DisposeOnDeletion
-}
-
-func (f *ForgeConfig) GetEc2KeyPair() *string {
-	if f == nil {
-		return nil
-	}
-	return f.Ec2KeyPair
 }
 
 func (f *ForgeConfig) GetAllowBuckets() []string {
@@ -363,11 +258,11 @@ func (f *ForgeConfig) GetAllowBuckets() []string {
 	return f.AllowBuckets
 }
 
-func (f *ForgeConfig) GetEbsBlockSize() *int {
+func (f *ForgeConfig) GetArm64Enabled() *bool {
 	if f == nil {
 		return nil
 	}
-	return f.EbsBlockSize
+	return f.Arm64Enabled
 }
 
 func (f *ForgeConfig) GetBidPercentage() *int {
@@ -375,6 +270,69 @@ func (f *ForgeConfig) GetBidPercentage() *int {
 		return nil
 	}
 	return f.BidPercentage
+}
+
+func (f *ForgeConfig) GetDisposeOnDeletion() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.DisposeOnDeletion
+}
+
+func (f *ForgeConfig) GetDragenAmiID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.DragenAmiID
+}
+
+func (f *ForgeConfig) GetDragenEnabled() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.DragenEnabled
+}
+
+func (f *ForgeConfig) GetDragenInstanceType() *string {
+	if f == nil {
+		return nil
+	}
+	return f.DragenInstanceType
+}
+
+func (f *ForgeConfig) GetEbsAutoScale() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.EbsAutoScale
+}
+
+func (f *ForgeConfig) GetEbsBlockSize() *int {
+	if f == nil {
+		return nil
+	}
+	return f.EbsBlockSize
+}
+
+func (f *ForgeConfig) GetEbsBootSize() *int {
+	if f == nil {
+		return nil
+	}
+	return f.EbsBootSize
+}
+
+func (f *ForgeConfig) GetEc2KeyPair() *string {
+	if f == nil {
+		return nil
+	}
+	return f.Ec2KeyPair
+}
+
+func (f *ForgeConfig) GetEcsConfig() *string {
+	if f == nil {
+		return nil
+	}
+	return f.EcsConfig
 }
 
 func (f *ForgeConfig) GetEfsCreate() *bool {
@@ -398,34 +356,6 @@ func (f *ForgeConfig) GetEfsMount() *string {
 	return f.EfsMount
 }
 
-func (f *ForgeConfig) GetDragenEnabled() *bool {
-	if f == nil {
-		return nil
-	}
-	return f.DragenEnabled
-}
-
-func (f *ForgeConfig) GetDragenAmiID() *string {
-	if f == nil {
-		return nil
-	}
-	return f.DragenAmiID
-}
-
-func (f *ForgeConfig) GetEbsBootSize() *int {
-	if f == nil {
-		return nil
-	}
-	return f.EbsBootSize
-}
-
-func (f *ForgeConfig) GetEcsConfig() *string {
-	if f == nil {
-		return nil
-	}
-	return f.EcsConfig
-}
-
 func (f *ForgeConfig) GetFargateHeadEnabled() *bool {
 	if f == nil {
 		return nil
@@ -433,16 +363,86 @@ func (f *ForgeConfig) GetFargateHeadEnabled() *bool {
 	return f.FargateHeadEnabled
 }
 
-func (f *ForgeConfig) GetArm64Enabled() *bool {
+func (f *ForgeConfig) GetFsxMount() *string {
 	if f == nil {
 		return nil
 	}
-	return f.Arm64Enabled
+	return f.FsxMount
 }
 
-func (f *ForgeConfig) GetDragenInstanceType() *string {
+func (f *ForgeConfig) GetFsxName() *string {
 	if f == nil {
 		return nil
 	}
-	return f.DragenInstanceType
+	return f.FsxName
+}
+
+func (f *ForgeConfig) GetFsxSize() *int {
+	if f == nil {
+		return nil
+	}
+	return f.FsxSize
+}
+
+func (f *ForgeConfig) GetGpuEnabled() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.GpuEnabled
+}
+
+func (f *ForgeConfig) GetImageID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.ImageID
+}
+
+func (f *ForgeConfig) GetInstanceTypes() []string {
+	if f == nil {
+		return nil
+	}
+	return f.InstanceTypes
+}
+
+func (f *ForgeConfig) GetMaxCpus() int {
+	if f == nil {
+		return 0
+	}
+	return f.MaxCpus
+}
+
+func (f *ForgeConfig) GetMinCpus() int {
+	if f == nil {
+		return 0
+	}
+	return f.MinCpus
+}
+
+func (f *ForgeConfig) GetSecurityGroups() []string {
+	if f == nil {
+		return nil
+	}
+	return f.SecurityGroups
+}
+
+func (f *ForgeConfig) GetSubnets() []string {
+	if f == nil {
+		return nil
+	}
+	return f.Subnets
+}
+
+func (f *ForgeConfig) GetType() ForgeConfigType {
+	if f == nil {
+		return ForgeConfigType("")
+	}
+	return f.Type
+}
+
+func (f *ForgeConfig) GetVpcID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.VpcID
 }

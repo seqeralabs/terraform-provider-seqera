@@ -3,15 +3,8 @@
 package shared
 
 type CreateDatasetRequest struct {
-	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
-}
-
-func (c *CreateDatasetRequest) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
+	Name        string  `json:"name"`
 }
 
 func (c *CreateDatasetRequest) GetDescription() *string {
@@ -19,4 +12,11 @@ func (c *CreateDatasetRequest) GetDescription() *string {
 		return nil
 	}
 	return c.Description
+}
+
+func (c *CreateDatasetRequest) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
 }

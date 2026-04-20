@@ -11,18 +11,18 @@ import (
 // Contains dataset metadata, versioning information, and access
 // controls for data management and sharing.
 type DatasetDto struct {
-	// Unique identifier for the dataset (max 22 characters)
-	ID *string `json:"id,omitempty"`
-	// Numeric identifier of the workspace containing this dataset
-	WorkspaceID *int64 `json:"workspaceId,omitempty"`
-	// Dataset name following naming conventions (1-100 characters)
-	Name *string `json:"name,omitempty"`
 	// Detailed description of the dataset contents and purpose (max 1000 characters)
 	Description *string `json:"description,omitempty"`
-	// MIME type or media type of the dataset content (max 80 characters)
-	MediaType *string `json:"mediaType,omitempty"`
+	// Unique identifier for the dataset (max 22 characters)
+	ID *string `json:"id,omitempty"`
 	// Timestamp when the dataset was last modified
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// MIME type or media type of the dataset content (max 80 characters)
+	MediaType *string `json:"mediaType,omitempty"`
+	// Dataset name following naming conventions (1-100 characters)
+	Name *string `json:"name,omitempty"`
+	// Numeric identifier of the workspace containing this dataset
+	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 }
 
 func (d DatasetDto) MarshalJSON() ([]byte, error) {
@@ -36,6 +36,13 @@ func (d *DatasetDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DatasetDto) GetDescription() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Description
+}
+
 func (d *DatasetDto) GetID() *string {
 	if d == nil {
 		return nil
@@ -43,25 +50,11 @@ func (d *DatasetDto) GetID() *string {
 	return d.ID
 }
 
-func (d *DatasetDto) GetWorkspaceID() *int64 {
+func (d *DatasetDto) GetLastUpdated() *time.Time {
 	if d == nil {
 		return nil
 	}
-	return d.WorkspaceID
-}
-
-func (d *DatasetDto) GetName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Name
-}
-
-func (d *DatasetDto) GetDescription() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Description
+	return d.LastUpdated
 }
 
 func (d *DatasetDto) GetMediaType() *string {
@@ -71,9 +64,16 @@ func (d *DatasetDto) GetMediaType() *string {
 	return d.MediaType
 }
 
-func (d *DatasetDto) GetLastUpdated() *time.Time {
+func (d *DatasetDto) GetName() *string {
 	if d == nil {
 		return nil
 	}
-	return d.LastUpdated
+	return d.Name
+}
+
+func (d *DatasetDto) GetWorkspaceID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.WorkspaceID
 }

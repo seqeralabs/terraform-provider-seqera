@@ -3,40 +3,40 @@
 package shared
 
 type ListWorkflowsResponseListWorkflowsElement struct {
+	Labels []LabelDbDto `json:"labels,omitempty"`
+	// Whether workflow is optimized
+	Optimized *bool `json:"optimized,omitempty"`
+	// Organization ID
+	OrgID *int64 `json:"orgId,omitempty"`
+	// Organization name
+	OrgName      *string                  `json:"orgName,omitempty"`
+	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
+	Progress     *ProgressData            `json:"progress,omitempty"`
+	// Whether workflow is starred
+	Starred *bool `json:"starred,omitempty"`
 	// Represents a workflow execution record.
 	// Contains execution status, metadata, and results from pipeline
 	// runs including logs and performance metrics.
 	//
 	Workflow *WorkflowDbDto `json:"workflow,omitempty"`
-	Progress *ProgressData  `json:"progress,omitempty"`
-	// Organization ID
-	OrgID *int64 `json:"orgId,omitempty"`
-	// Organization name
-	OrgName *string `json:"orgName,omitempty"`
 	// Workspace ID
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Workspace name
-	WorkspaceName *string      `json:"workspaceName,omitempty"`
-	Labels        []LabelDbDto `json:"labels,omitempty"`
-	// Whether workflow is starred
-	Starred *bool `json:"starred,omitempty"`
-	// Whether workflow is optimized
-	Optimized    *bool                    `json:"optimized,omitempty"`
-	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
+	WorkspaceName *string `json:"workspaceName,omitempty"`
 }
 
-func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetLabels() []LabelDbDto {
 	if l == nil {
 		return nil
 	}
-	return l.Workflow
+	return l.Labels
 }
 
-func (l *ListWorkflowsResponseListWorkflowsElement) GetProgress() *ProgressData {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetOptimized() *bool {
 	if l == nil {
 		return nil
 	}
-	return l.Progress
+	return l.Optimized
 }
 
 func (l *ListWorkflowsResponseListWorkflowsElement) GetOrgID() *int64 {
@@ -53,6 +53,34 @@ func (l *ListWorkflowsResponseListWorkflowsElement) GetOrgName() *string {
 	return l.OrgName
 }
 
+func (l *ListWorkflowsResponseListWorkflowsElement) GetPipelineInfo() *PipelineMinInfoResponse {
+	if l == nil {
+		return nil
+	}
+	return l.PipelineInfo
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElement) GetProgress() *ProgressData {
+	if l == nil {
+		return nil
+	}
+	return l.Progress
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElement) GetStarred() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Starred
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
+	if l == nil {
+		return nil
+	}
+	return l.Workflow
+}
+
 func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceID() *int64 {
 	if l == nil {
 		return nil
@@ -65,32 +93,4 @@ func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceName() *string {
 		return nil
 	}
 	return l.WorkspaceName
-}
-
-func (l *ListWorkflowsResponseListWorkflowsElement) GetLabels() []LabelDbDto {
-	if l == nil {
-		return nil
-	}
-	return l.Labels
-}
-
-func (l *ListWorkflowsResponseListWorkflowsElement) GetStarred() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.Starred
-}
-
-func (l *ListWorkflowsResponseListWorkflowsElement) GetOptimized() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.Optimized
-}
-
-func (l *ListWorkflowsResponseListWorkflowsElement) GetPipelineInfo() *PipelineMinInfoResponse {
-	if l == nil {
-		return nil
-	}
-	return l.PipelineInfo
 }

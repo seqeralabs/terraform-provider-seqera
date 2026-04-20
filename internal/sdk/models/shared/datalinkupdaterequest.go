@@ -3,16 +3,16 @@
 package shared
 
 type DataLinkUpdateRequest struct {
-	Name          *string `json:"name,omitempty"`
-	Description   *string `json:"description,omitempty"`
 	CredentialsID *string `json:"credentialsId,omitempty"`
+	Description   *string `json:"description,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
-func (d *DataLinkUpdateRequest) GetName() *string {
+func (d *DataLinkUpdateRequest) GetCredentialsID() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Name
+	return d.CredentialsID
 }
 
 func (d *DataLinkUpdateRequest) GetDescription() *string {
@@ -22,9 +22,9 @@ func (d *DataLinkUpdateRequest) GetDescription() *string {
 	return d.Description
 }
 
-func (d *DataLinkUpdateRequest) GetCredentialsID() *string {
+func (d *DataLinkUpdateRequest) GetName() *string {
 	if d == nil {
 		return nil
 	}
-	return d.CredentialsID
+	return d.Name
 }

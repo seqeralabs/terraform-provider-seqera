@@ -11,15 +11,15 @@ import (
 // Contains encrypted sensitive data such as API keys, passwords,
 // and configuration values used in workflows.
 type PipelineSecret struct {
-	// Unique numeric identifier for the secret
-	ID *int64 `json:"id,omitempty"`
-	// Secret name used to reference the secret in workflows (max 100 characters). Required.
-	Name string `json:"name"`
-	// Timestamp when the secret was last accessed by a workflow
-	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the secret was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Unique numeric identifier for the secret
+	ID          *int64     `json:"id,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Timestamp when the secret was last accessed by a workflow
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Secret name used to reference the secret in workflows (max 100 characters). Required.
+	Name string `json:"name"`
 }
 
 func (p PipelineSecret) MarshalJSON() ([]byte, error) {
@@ -33,6 +33,13 @@ func (p *PipelineSecret) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PipelineSecret) GetDateCreated() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.DateCreated
+}
+
 func (p *PipelineSecret) GetID() *int64 {
 	if p == nil {
 		return nil
@@ -40,11 +47,11 @@ func (p *PipelineSecret) GetID() *int64 {
 	return p.ID
 }
 
-func (p *PipelineSecret) GetName() string {
+func (p *PipelineSecret) GetLastUpdated() *time.Time {
 	if p == nil {
-		return ""
+		return nil
 	}
-	return p.Name
+	return p.LastUpdated
 }
 
 func (p *PipelineSecret) GetLastUsed() *time.Time {
@@ -54,16 +61,9 @@ func (p *PipelineSecret) GetLastUsed() *time.Time {
 	return p.LastUsed
 }
 
-func (p *PipelineSecret) GetDateCreated() *time.Time {
+func (p *PipelineSecret) GetName() string {
 	if p == nil {
-		return nil
+		return ""
 	}
-	return p.DateCreated
-}
-
-func (p *PipelineSecret) GetLastUpdated() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.LastUpdated
+	return p.Name
 }

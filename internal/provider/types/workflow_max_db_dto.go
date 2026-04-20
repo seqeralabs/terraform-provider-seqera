@@ -8,33 +8,33 @@ import (
 )
 
 type WorkflowMaxDbDto struct {
-	ID                types.String                    `tfsdk:"id"`
-	OwnerID           types.Int64                     `tfsdk:"owner_id"`
-	Submit            types.String                    `tfsdk:"submit"`
-	Start             types.String                    `tfsdk:"start"`
-	Complete          types.String                    `tfsdk:"complete"`
-	DateCreated       types.String                    `tfsdk:"date_created"`
-	LastUpdated       types.String                    `tfsdk:"last_updated"`
-	RunName           types.String                    `tfsdk:"run_name"`
-	SessionID         types.String                    `tfsdk:"session_id"`
-	Profile           types.String                    `tfsdk:"profile"`
-	WorkDir           types.String                    `tfsdk:"work_dir"`
-	Revision          types.String                    `tfsdk:"revision"`
 	CommandLine       types.String                    `tfsdk:"command_line"`
-	ProjectName       types.String                    `tfsdk:"project_name"`
-	ScriptName        types.String                    `tfsdk:"script_name"`
-	LaunchID          types.String                    `tfsdk:"launch_id"`
-	Status            types.String                    `tfsdk:"status"`
-	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
+	Complete          types.String                    `tfsdk:"complete"`
 	ConfigFiles       []types.String                  `tfsdk:"config_files"`
-	Params            map[string]jsontypes.Normalized `tfsdk:"params"`
 	ConfigText        types.String                    `tfsdk:"config_text"`
+	DateCreated       types.String                    `tfsdk:"date_created"`
 	Deleted           types.Bool                      `tfsdk:"deleted"`
+	ID                types.String                    `tfsdk:"id"`
+	LastUpdated       types.String                    `tfsdk:"last_updated"`
+	LaunchID          types.String                    `tfsdk:"launch_id"`
+	OwnerID           types.Int64                     `tfsdk:"owner_id"`
+	Params            map[string]jsontypes.Normalized `tfsdk:"params"`
+	Profile           types.String                    `tfsdk:"profile"`
+	ProjectName       types.String                    `tfsdk:"project_name"`
 	Repository        types.String                    `tfsdk:"repository"`
+	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
 	Resume            types.Bool                      `tfsdk:"resume"`
+	Revision          types.String                    `tfsdk:"revision"`
+	RunName           types.String                    `tfsdk:"run_name"`
+	ScriptName        types.String                    `tfsdk:"script_name"`
+	SessionID         types.String                    `tfsdk:"session_id"`
+	Start             types.String                    `tfsdk:"start"`
+	Status            types.String                    `tfsdk:"status"`
+	Submit            types.String                    `tfsdk:"submit"`
+	WorkDir           types.String                    `tfsdk:"work_dir"`
 	Fusion            *WfFusionMeta                   `tfsdk:"fusion"`
-	Wave              *WfWaveMeta                     `tfsdk:"wave"`
 	LogFile           types.String                    `tfsdk:"log_file"`
-	OutFile           types.String                    `tfsdk:"out_file"`
 	OperationID       types.String                    `tfsdk:"operation_id"`
+	OutFile           types.String                    `tfsdk:"out_file"`
+	Wave              *WfWaveMeta                     `tfsdk:"wave"`
 }

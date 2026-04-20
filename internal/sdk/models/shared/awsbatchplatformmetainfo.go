@@ -7,20 +7,20 @@ import (
 )
 
 type AwsBatchPlatformMetainfo struct {
+	AllocStrategy []string `json:"allocStrategy,omitempty"`
+	Buckets       []Bucket `json:"buckets,omitempty"`
 	// property to select the platform metainfo type
 	Discriminator    *string         `json:"discriminator,omitempty"`
-	Warnings         []string        `json:"warnings,omitempty"`
-	JobQueues        []JobQueue      `json:"jobQueues,omitempty"`
-	Buckets          []Bucket        `json:"buckets,omitempty"`
-	FileSystems      []FsxFileSystem `json:"fileSystems,omitempty"`
 	EfsFileSystems   []EfsFileSystem `json:"efsFileSystems,omitempty"`
-	KeyPairs         []string        `json:"keyPairs,omitempty"`
-	Vpcs             []Vpc           `json:"vpcs,omitempty"`
+	FileSystems      []FsxFileSystem `json:"fileSystems,omitempty"`
 	Images           []Image         `json:"images,omitempty"`
+	InstanceFamilies []string        `json:"instanceFamilies,omitempty"`
+	JobQueues        []JobQueue      `json:"jobQueues,omitempty"`
+	KeyPairs         []string        `json:"keyPairs,omitempty"`
 	SecurityGroups   []SecurityGroup `json:"securityGroups,omitempty"`
 	Subnets          []Subnet        `json:"subnets,omitempty"`
-	InstanceFamilies []string        `json:"instanceFamilies,omitempty"`
-	AllocStrategy    []string        `json:"allocStrategy,omitempty"`
+	Vpcs             []Vpc           `json:"vpcs,omitempty"`
+	Warnings         []string        `json:"warnings,omitempty"`
 }
 
 func (a AwsBatchPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -34,25 +34,11 @@ func (a *AwsBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AwsBatchPlatformMetainfo) GetDiscriminator() *string {
+func (a *AwsBatchPlatformMetainfo) GetAllocStrategy() []string {
 	if a == nil {
 		return nil
 	}
-	return a.Discriminator
-}
-
-func (a *AwsBatchPlatformMetainfo) GetWarnings() []string {
-	if a == nil {
-		return nil
-	}
-	return a.Warnings
-}
-
-func (a *AwsBatchPlatformMetainfo) GetJobQueues() []JobQueue {
-	if a == nil {
-		return nil
-	}
-	return a.JobQueues
+	return a.AllocStrategy
 }
 
 func (a *AwsBatchPlatformMetainfo) GetBuckets() []Bucket {
@@ -62,11 +48,11 @@ func (a *AwsBatchPlatformMetainfo) GetBuckets() []Bucket {
 	return a.Buckets
 }
 
-func (a *AwsBatchPlatformMetainfo) GetFileSystems() []FsxFileSystem {
+func (a *AwsBatchPlatformMetainfo) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
-	return a.FileSystems
+	return a.Discriminator
 }
 
 func (a *AwsBatchPlatformMetainfo) GetEfsFileSystems() []EfsFileSystem {
@@ -76,18 +62,11 @@ func (a *AwsBatchPlatformMetainfo) GetEfsFileSystems() []EfsFileSystem {
 	return a.EfsFileSystems
 }
 
-func (a *AwsBatchPlatformMetainfo) GetKeyPairs() []string {
+func (a *AwsBatchPlatformMetainfo) GetFileSystems() []FsxFileSystem {
 	if a == nil {
 		return nil
 	}
-	return a.KeyPairs
-}
-
-func (a *AwsBatchPlatformMetainfo) GetVpcs() []Vpc {
-	if a == nil {
-		return nil
-	}
-	return a.Vpcs
+	return a.FileSystems
 }
 
 func (a *AwsBatchPlatformMetainfo) GetImages() []Image {
@@ -95,6 +74,27 @@ func (a *AwsBatchPlatformMetainfo) GetImages() []Image {
 		return nil
 	}
 	return a.Images
+}
+
+func (a *AwsBatchPlatformMetainfo) GetInstanceFamilies() []string {
+	if a == nil {
+		return nil
+	}
+	return a.InstanceFamilies
+}
+
+func (a *AwsBatchPlatformMetainfo) GetJobQueues() []JobQueue {
+	if a == nil {
+		return nil
+	}
+	return a.JobQueues
+}
+
+func (a *AwsBatchPlatformMetainfo) GetKeyPairs() []string {
+	if a == nil {
+		return nil
+	}
+	return a.KeyPairs
 }
 
 func (a *AwsBatchPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
@@ -111,16 +111,16 @@ func (a *AwsBatchPlatformMetainfo) GetSubnets() []Subnet {
 	return a.Subnets
 }
 
-func (a *AwsBatchPlatformMetainfo) GetInstanceFamilies() []string {
+func (a *AwsBatchPlatformMetainfo) GetVpcs() []Vpc {
 	if a == nil {
 		return nil
 	}
-	return a.InstanceFamilies
+	return a.Vpcs
 }
 
-func (a *AwsBatchPlatformMetainfo) GetAllocStrategy() []string {
+func (a *AwsBatchPlatformMetainfo) GetWarnings() []string {
 	if a == nil {
 		return nil
 	}
-	return a.AllocStrategy
+	return a.Warnings
 }

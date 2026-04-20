@@ -3,193 +3,109 @@
 package shared
 
 type AwsBatchConfig struct {
-	// S3 bucket path for Nextflow work directory where intermediate files will be stored.
-	// Format: s3://bucket-name/path
+	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
-	WorkDir *string `json:"workDir,omitempty"`
-	// Bash script to run before workflow execution begins.
-	// Use for environment setup, loading modules, downloading reference data, etc.
-	//
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Bash script to run after workflow execution completes.
-	// Use for cleanup, archiving results, sending notifications, etc.
-	//
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Array of environment variables for the compute environment.
-	// Each variable can target the head node, compute nodes, or both.
-	//
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Nextflow configuration settings that override repository defaults.
-	// Applied globally to all pipelines launched in this compute environment.
-	//
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	StorageType *string `json:"storageType,omitempty"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID *string `json:"lustreId,omitempty"`
-	// List of volume mount specifications for compute instances.
-	// Format follows Docker volume mount syntax.
-	//
-	Volumes []string `json:"volumes,omitempty"`
-	// AWS region where the Batch compute environment will be created.
-	// Examples: us-east-1, eu-west-1, ap-southeast-2
-	//
-	Region string `json:"region"`
-	// Name of the AWS Batch compute queue
-	ComputeQueue *string `json:"computeQueue,omitempty"`
-	// Name of the AWS Batch queue for DRAGEN jobs.
-	// Only applicable when DRAGEN is enabled.
-	//
-	DragenQueue *string `json:"dragenQueue,omitempty"`
-	// EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
-	// Only applicable when DRAGEN is enabled.
-	//
-	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
+	CliPath *string `json:"cliPath,omitempty"`
 	// IAM role ARN for compute jobs. Jobs assume this role during execution.
 	// Must have permissions for S3, CloudWatch, etc.
 	// Format: arn:aws:iam::account-id:role/role-name
 	//
 	ComputeJobRole *string `json:"computeJobRole,omitempty"`
+	// Name of the AWS Batch compute queue
+	ComputeQueue *string `json:"computeQueue,omitempty"`
+	// property to select the compute config platform
+	Discriminator *string `json:"discriminator,omitempty"`
+	// EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+	// Only applicable when DRAGEN is enabled.
+	//
+	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
+	// Name of the AWS Batch queue for DRAGEN jobs.
+	// Only applicable when DRAGEN is enabled.
+	//
+	DragenQueue *string `json:"dragenQueue,omitempty"`
+	// Array of environment variables for the compute environment.
+	// Each variable can target the head node, compute nodes, or both.
+	//
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// IAM role ARN for Batch execution (pulling container images, writing logs).
 	// Must have permissions for ECR and CloudWatch Logs.
 	// Format: arn:aws:iam::account-id:role/role-name
 	//
-	ExecutionRole *string `json:"executionRole,omitempty"`
-	// Name of the head job queue
-	HeadQueue *string `json:"headQueue,omitempty"`
-	// IAM role ARN for the head job.
-	// Format: arn:aws:iam::account-id:role/role-name
-	//
-	HeadJobRole *string `json:"headJobRole,omitempty"`
-	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
-	//
-	CliPath *string `json:"cliPath,omitempty"`
-	// Number of CPUs allocated for the head job (default: 1)
-	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Memory allocation for the head job in MB (default: 1024)
-	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	ExecutionRole   *string          `json:"executionRole,omitempty"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
 	// Requires `enable_wave = true`.
 	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
-	// Allow the use of NVMe instance storage to speed up I/O and disk access operations.
-	//
-	// Requires `enable_fusion = true`.
-	//
-	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
-	// CloudWatch Log group name for pipeline execution logs.
-	// If specified, logs are sent to this existing log group instead of the default.
-	//
-	LogGroup *string `json:"logGroup,omitempty"`
 	// Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
 	// when it is interrupted by a spot reclamation.
 	//
 	// Requires `enable_fusion = true`.
 	//
-	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Number of CPUs allocated for the head job (default: 1)
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the head job in MB (default: 1024)
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+	// IAM role ARN for the head job.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	HeadJobRole *string `json:"headJobRole,omitempty"`
+	// Name of the head job queue
+	HeadQueue *string `json:"headQueue,omitempty"`
+	// CloudWatch Log group name for pipeline execution logs.
+	// If specified, logs are sent to this existing log group instead of the default.
+	//
+	LogGroup *string `json:"logGroup,omitempty"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	LustreID *string `json:"lustreId,omitempty"`
+	// Nextflow configuration settings that override repository defaults.
+	// Applied globally to all pipelines launched in this compute environment.
+	//
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Allow the use of NVMe instance storage to speed up I/O and disk access operations.
+	//
+	// Requires `enable_fusion = true`.
+	//
+	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
+	// Bash script to run after workflow execution completes.
+	// Use for cleanup, archiving results, sending notifications, etc.
+	//
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Bash script to run before workflow execution begins.
+	// Use for environment setup, loading modules, downloading reference data, etc.
+	//
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// AWS region where the Batch compute environment will be created.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region string `json:"region"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	StorageType *string `json:"storageType,omitempty"`
+	// List of volume mount specifications for compute instances.
+	// Format follows Docker volume mount syntax.
+	//
+	Volumes []string `json:"volumes,omitempty"`
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
+	//
+	// Required when `enable_fusion` is true.
+	//
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// S3 bucket path for Nextflow work directory where intermediate files will be stored.
+	// Format: s3://bucket-name/path
+	//
+	WorkDir *string `json:"workDir,omitempty"`
 }
 
-func (a *AwsBatchConfig) GetWorkDir() *string {
+func (a *AwsBatchConfig) GetCliPath() *string {
 	if a == nil {
 		return nil
 	}
-	return a.WorkDir
-}
-
-func (a *AwsBatchConfig) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AwsBatchConfig) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
-func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
-func (a *AwsBatchConfig) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
-func (a *AwsBatchConfig) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AwsBatchConfig) GetStorageType() *string {
-	if a == nil {
-		return nil
-	}
-	return a.StorageType
-}
-
-func (a *AwsBatchConfig) GetLustreID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.LustreID
-}
-
-func (a *AwsBatchConfig) GetVolumes() []string {
-	if a == nil {
-		return nil
-	}
-	return a.Volumes
-}
-
-func (a *AwsBatchConfig) GetRegion() string {
-	if a == nil {
-		return ""
-	}
-	return a.Region
-}
-
-func (a *AwsBatchConfig) GetComputeQueue() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ComputeQueue
-}
-
-func (a *AwsBatchConfig) GetDragenQueue() *string {
-	if a == nil {
-		return nil
-	}
-	return a.DragenQueue
-}
-
-func (a *AwsBatchConfig) GetDragenInstanceType() *string {
-	if a == nil {
-		return nil
-	}
-	return a.DragenInstanceType
+	return a.CliPath
 }
 
 func (a *AwsBatchConfig) GetComputeJobRole() *string {
@@ -199,6 +115,41 @@ func (a *AwsBatchConfig) GetComputeJobRole() *string {
 	return a.ComputeJobRole
 }
 
+func (a *AwsBatchConfig) GetComputeQueue() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ComputeQueue
+}
+
+func (a *AwsBatchConfig) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AwsBatchConfig) GetDragenInstanceType() *string {
+	if a == nil {
+		return nil
+	}
+	return a.DragenInstanceType
+}
+
+func (a *AwsBatchConfig) GetDragenQueue() *string {
+	if a == nil {
+		return nil
+	}
+	return a.DragenQueue
+}
+
+func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
 func (a *AwsBatchConfig) GetExecutionRole() *string {
 	if a == nil {
 		return nil
@@ -206,25 +157,32 @@ func (a *AwsBatchConfig) GetExecutionRole() *string {
 	return a.ExecutionRole
 }
 
-func (a *AwsBatchConfig) GetHeadQueue() *string {
+func (a *AwsBatchConfig) GetForge() *ForgeConfig {
 	if a == nil {
 		return nil
 	}
-	return a.HeadQueue
+	return a.Forge
 }
 
-func (a *AwsBatchConfig) GetHeadJobRole() *string {
+func (a *AwsBatchConfig) GetForgedResources() []map[string]any {
 	if a == nil {
 		return nil
 	}
-	return a.HeadJobRole
+	return a.ForgedResources
 }
 
-func (a *AwsBatchConfig) GetCliPath() *string {
+func (a *AwsBatchConfig) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.CliPath
+	return a.EnableFusion
+}
+
+func (a *AwsBatchConfig) GetFusionSnapshots() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionSnapshots
 }
 
 func (a *AwsBatchConfig) GetHeadJobCpus() *int {
@@ -241,25 +199,18 @@ func (a *AwsBatchConfig) GetHeadJobMemoryMb() *int {
 	return a.HeadJobMemoryMb
 }
 
-func (a *AwsBatchConfig) GetEnableWave() *bool {
+func (a *AwsBatchConfig) GetHeadJobRole() *string {
 	if a == nil {
 		return nil
 	}
-	return a.EnableWave
+	return a.HeadJobRole
 }
 
-func (a *AwsBatchConfig) GetEnableFusion() *bool {
+func (a *AwsBatchConfig) GetHeadQueue() *string {
 	if a == nil {
 		return nil
 	}
-	return a.EnableFusion
-}
-
-func (a *AwsBatchConfig) GetNvmeStorageEnabled() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.NvmeStorageEnabled
+	return a.HeadQueue
 }
 
 func (a *AwsBatchConfig) GetLogGroup() *string {
@@ -269,23 +220,72 @@ func (a *AwsBatchConfig) GetLogGroup() *string {
 	return a.LogGroup
 }
 
-func (a *AwsBatchConfig) GetFusionSnapshots() *bool {
+func (a *AwsBatchConfig) GetLustreID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.FusionSnapshots
+	return a.LustreID
 }
 
-func (a *AwsBatchConfig) GetForge() *ForgeConfig {
+func (a *AwsBatchConfig) GetNextflowConfig() *string {
 	if a == nil {
 		return nil
 	}
-	return a.Forge
+	return a.NextflowConfig
 }
 
-func (a *AwsBatchConfig) GetForgedResources() []map[string]any {
+func (a *AwsBatchConfig) GetNvmeStorageEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.ForgedResources
+	return a.NvmeStorageEnabled
+}
+
+func (a *AwsBatchConfig) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AwsBatchConfig) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AwsBatchConfig) GetRegion() string {
+	if a == nil {
+		return ""
+	}
+	return a.Region
+}
+
+func (a *AwsBatchConfig) GetStorageType() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageType
+}
+
+func (a *AwsBatchConfig) GetVolumes() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Volumes
+}
+
+func (a *AwsBatchConfig) GetEnableWave() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.EnableWave
+}
+
+func (a *AwsBatchConfig) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
 }

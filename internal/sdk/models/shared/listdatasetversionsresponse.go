@@ -3,15 +3,8 @@
 package shared
 
 type ListDatasetVersionsResponse struct {
-	Versions  []DatasetVersionDto `json:"versions,omitempty"`
 	TotalSize *int64              `json:"totalSize,omitempty"`
-}
-
-func (l *ListDatasetVersionsResponse) GetVersions() []DatasetVersionDto {
-	if l == nil {
-		return nil
-	}
-	return l.Versions
+	Versions  []DatasetVersionDto `json:"versions,omitempty"`
 }
 
 func (l *ListDatasetVersionsResponse) GetTotalSize() *int64 {
@@ -19,4 +12,11 @@ func (l *ListDatasetVersionsResponse) GetTotalSize() *int64 {
 		return nil
 	}
 	return l.TotalSize
+}
+
+func (l *ListDatasetVersionsResponse) GetVersions() []DatasetVersionDto {
+	if l == nil {
+		return nil
+	}
+	return l.Versions
 }

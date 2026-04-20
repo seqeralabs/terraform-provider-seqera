@@ -3,72 +3,16 @@
 package shared
 
 type WfManifest struct {
-	NextflowVersion *string `json:"nextflowVersion,omitempty"`
-	DefaultBranch   *string `json:"defaultBranch,omitempty"`
-	Version         *string `json:"version,omitempty"`
-	HomePage        *string `json:"homePage,omitempty"`
-	Gitmodules      *string `json:"gitmodules,omitempty"`
-	Description     *string `json:"description,omitempty"`
-	Name            *string `json:"name,omitempty"`
-	MainScript      *string `json:"mainScript,omitempty"`
 	Author          *string `json:"author,omitempty"`
+	DefaultBranch   *string `json:"defaultBranch,omitempty"`
+	Description     *string `json:"description,omitempty"`
+	Gitmodules      *string `json:"gitmodules,omitempty"`
+	HomePage        *string `json:"homePage,omitempty"`
 	Icon            *string `json:"icon,omitempty"`
-}
-
-func (w *WfManifest) GetNextflowVersion() *string {
-	if w == nil {
-		return nil
-	}
-	return w.NextflowVersion
-}
-
-func (w *WfManifest) GetDefaultBranch() *string {
-	if w == nil {
-		return nil
-	}
-	return w.DefaultBranch
-}
-
-func (w *WfManifest) GetVersion() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Version
-}
-
-func (w *WfManifest) GetHomePage() *string {
-	if w == nil {
-		return nil
-	}
-	return w.HomePage
-}
-
-func (w *WfManifest) GetGitmodules() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Gitmodules
-}
-
-func (w *WfManifest) GetDescription() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Description
-}
-
-func (w *WfManifest) GetName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Name
-}
-
-func (w *WfManifest) GetMainScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.MainScript
+	MainScript      *string `json:"mainScript,omitempty"`
+	Name            *string `json:"name,omitempty"`
+	NextflowVersion *string `json:"nextflowVersion,omitempty"`
+	Version         *string `json:"version,omitempty"`
 }
 
 func (w *WfManifest) GetAuthor() *string {
@@ -78,9 +22,65 @@ func (w *WfManifest) GetAuthor() *string {
 	return w.Author
 }
 
+func (w *WfManifest) GetDefaultBranch() *string {
+	if w == nil {
+		return nil
+	}
+	return w.DefaultBranch
+}
+
+func (w *WfManifest) GetDescription() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Description
+}
+
+func (w *WfManifest) GetGitmodules() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Gitmodules
+}
+
+func (w *WfManifest) GetHomePage() *string {
+	if w == nil {
+		return nil
+	}
+	return w.HomePage
+}
+
 func (w *WfManifest) GetIcon() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Icon
+}
+
+func (w *WfManifest) GetMainScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.MainScript
+}
+
+func (w *WfManifest) GetName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Name
+}
+
+func (w *WfManifest) GetNextflowVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.NextflowVersion
+}
+
+func (w *WfManifest) GetVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Version
 }

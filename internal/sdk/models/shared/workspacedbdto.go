@@ -6,15 +6,29 @@ package shared
 // Contains workspace configuration, member permissions, and resource
 // isolation settings for project organization.
 type WorkspaceDbDto struct {
+	// Detailed description of the workspace's purpose
+	Description *string `json:"description,omitempty"`
+	// Complete display name for the workspace
+	FullName *string `json:"fullName,omitempty"`
 	// Unique numeric identifier for the workspace
 	ID *int64 `json:"id,omitempty"`
 	// Short name or handle for the workspace
-	Name *string `json:"name,omitempty"`
-	// Complete display name for the workspace
-	FullName *string `json:"fullName,omitempty"`
-	// Detailed description of the workspace's purpose
-	Description *string     `json:"description,omitempty"`
-	Visibility  *Visibility `json:"visibility,omitempty"`
+	Name       *string     `json:"name,omitempty"`
+	Visibility *Visibility `json:"visibility,omitempty"`
+}
+
+func (w *WorkspaceDbDto) GetDescription() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Description
+}
+
+func (w *WorkspaceDbDto) GetFullName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.FullName
 }
 
 func (w *WorkspaceDbDto) GetID() *int64 {
@@ -29,20 +43,6 @@ func (w *WorkspaceDbDto) GetName() *string {
 		return nil
 	}
 	return w.Name
-}
-
-func (w *WorkspaceDbDto) GetFullName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.FullName
-}
-
-func (w *WorkspaceDbDto) GetDescription() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Description
 }
 
 func (w *WorkspaceDbDto) GetVisibility() *Visibility {

@@ -3,25 +3,32 @@
 package shared
 
 type ResourceData struct {
-	Warnings []string `json:"warnings,omitempty"`
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
 	Mean     *float32 `json:"mean,omitempty"`
 	Min      *float32 `json:"min,omitempty"`
-	Q1       *float32 `json:"q1,omitempty"`
-	Q2       *float32 `json:"q2,omitempty"`
-	Q3       *float32 `json:"q3,omitempty"`
-	Max      *float32 `json:"max,omitempty"`
 	MinLabel *string  `json:"minLabel,omitempty"`
-	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
 	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
 	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
 	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
 }
 
-func (r *ResourceData) GetWarnings() []string {
+func (r *ResourceData) GetMax() *float32 {
 	if r == nil {
 		return nil
 	}
-	return r.Warnings
+	return r.Max
+}
+
+func (r *ResourceData) GetMaxLabel() *string {
+	if r == nil {
+		return nil
+	}
+	return r.MaxLabel
 }
 
 func (r *ResourceData) GetMean() *float32 {
@@ -38,34 +45,6 @@ func (r *ResourceData) GetMin() *float32 {
 	return r.Min
 }
 
-func (r *ResourceData) GetQ1() *float32 {
-	if r == nil {
-		return nil
-	}
-	return r.Q1
-}
-
-func (r *ResourceData) GetQ2() *float32 {
-	if r == nil {
-		return nil
-	}
-	return r.Q2
-}
-
-func (r *ResourceData) GetQ3() *float32 {
-	if r == nil {
-		return nil
-	}
-	return r.Q3
-}
-
-func (r *ResourceData) GetMax() *float32 {
-	if r == nil {
-		return nil
-	}
-	return r.Max
-}
-
 func (r *ResourceData) GetMinLabel() *string {
 	if r == nil {
 		return nil
@@ -73,11 +52,11 @@ func (r *ResourceData) GetMinLabel() *string {
 	return r.MinLabel
 }
 
-func (r *ResourceData) GetMaxLabel() *string {
+func (r *ResourceData) GetQ1() *float32 {
 	if r == nil {
 		return nil
 	}
-	return r.MaxLabel
+	return r.Q1
 }
 
 func (r *ResourceData) GetQ1Label() *string {
@@ -87,6 +66,13 @@ func (r *ResourceData) GetQ1Label() *string {
 	return r.Q1Label
 }
 
+func (r *ResourceData) GetQ2() *float32 {
+	if r == nil {
+		return nil
+	}
+	return r.Q2
+}
+
 func (r *ResourceData) GetQ2Label() *string {
 	if r == nil {
 		return nil
@@ -94,9 +80,23 @@ func (r *ResourceData) GetQ2Label() *string {
 	return r.Q2Label
 }
 
+func (r *ResourceData) GetQ3() *float32 {
+	if r == nil {
+		return nil
+	}
+	return r.Q3
+}
+
 func (r *ResourceData) GetQ3Label() *string {
 	if r == nil {
 		return nil
 	}
 	return r.Q3Label
+}
+
+func (r *ResourceData) GetWarnings() []string {
+	if r == nil {
+		return nil
+	}
+	return r.Warnings
 }

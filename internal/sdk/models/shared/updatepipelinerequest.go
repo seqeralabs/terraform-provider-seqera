@@ -3,20 +3,13 @@
 package shared
 
 type UpdatePipelineRequest struct {
-	// Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
-	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
 	// Icon identifier or URL for visual representation
 	Icon     *string                `json:"icon,omitempty"`
-	Launch   *WorkflowLaunchRequest `json:"launch,omitempty"`
 	LabelIds []int64                `json:"labelIds,omitempty"`
-}
-
-func (u *UpdatePipelineRequest) GetName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Name
+	Launch   *WorkflowLaunchRequest `json:"launch,omitempty"`
+	// Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
+	Name *string `json:"name,omitempty"`
 }
 
 func (u *UpdatePipelineRequest) GetDescription() *string {
@@ -33,6 +26,13 @@ func (u *UpdatePipelineRequest) GetIcon() *string {
 	return u.Icon
 }
 
+func (u *UpdatePipelineRequest) GetLabelIds() []int64 {
+	if u == nil {
+		return nil
+	}
+	return u.LabelIds
+}
+
 func (u *UpdatePipelineRequest) GetLaunch() *WorkflowLaunchRequest {
 	if u == nil {
 		return nil
@@ -40,9 +40,9 @@ func (u *UpdatePipelineRequest) GetLaunch() *WorkflowLaunchRequest {
 	return u.Launch
 }
 
-func (u *UpdatePipelineRequest) GetLabelIds() []int64 {
+func (u *UpdatePipelineRequest) GetName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.LabelIds
+	return u.Name
 }

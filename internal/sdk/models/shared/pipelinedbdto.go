@@ -6,36 +6,22 @@ package shared
 // Contains pipeline metadata, configuration settings, and execution parameters
 // for Nextflow workflows.
 type PipelineDbDto struct {
-	// Unique numeric identifier for the pipeline
-	PipelineID *int64 `json:"pipelineId,omitempty"`
-	// Display name for the pipeline
-	Name *string `json:"name,omitempty"`
 	// Detailed description of the pipeline's purpose and functionality
 	Description *string `json:"description,omitempty"`
 	// Icon identifier or URL for visual representation
 	Icon *string `json:"icon,omitempty"`
+	// Display name for the pipeline
+	Name *string `json:"name,omitempty"`
+	// Unique numeric identifier for the pipeline
+	PipelineID *int64 `json:"pipelineId,omitempty"`
 	// Git repository URL containing the pipeline source code
 	Repository *string `json:"repository,omitempty"`
-	UserID     *int64  `json:"userId,omitempty"`
-	UserName   *string `json:"userName,omitempty"`
 	// User first name
 	UserFirstName *string                     `json:"userFirstName,omitempty"`
-	WorkspaceID   *int64                      `json:"workspaceId,omitempty"`
+	UserID        *int64                      `json:"userId,omitempty"`
+	UserName      *string                     `json:"userName,omitempty"`
 	Version       *PipelineVersionFullInfoDto `json:"version,omitempty"`
-}
-
-func (p *PipelineDbDto) GetPipelineID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.PipelineID
-}
-
-func (p *PipelineDbDto) GetName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.Name
+	WorkspaceID   *int64                      `json:"workspaceId,omitempty"`
 }
 
 func (p *PipelineDbDto) GetDescription() *string {
@@ -52,11 +38,32 @@ func (p *PipelineDbDto) GetIcon() *string {
 	return p.Icon
 }
 
+func (p *PipelineDbDto) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PipelineDbDto) GetPipelineID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.PipelineID
+}
+
 func (p *PipelineDbDto) GetRepository() *string {
 	if p == nil {
 		return nil
 	}
 	return p.Repository
+}
+
+func (p *PipelineDbDto) GetUserFirstName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserFirstName
 }
 
 func (p *PipelineDbDto) GetUserID() *int64 {
@@ -73,11 +80,11 @@ func (p *PipelineDbDto) GetUserName() *string {
 	return p.UserName
 }
 
-func (p *PipelineDbDto) GetUserFirstName() *string {
+func (p *PipelineDbDto) GetVersion() *PipelineVersionFullInfoDto {
 	if p == nil {
 		return nil
 	}
-	return p.UserFirstName
+	return p.Version
 }
 
 func (p *PipelineDbDto) GetWorkspaceID() *int64 {
@@ -85,11 +92,4 @@ func (p *PipelineDbDto) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return p.WorkspaceID
-}
-
-func (p *PipelineDbDto) GetVersion() *PipelineVersionFullInfoDto {
-	if p == nil {
-		return nil
-	}
-	return p.Version
 }

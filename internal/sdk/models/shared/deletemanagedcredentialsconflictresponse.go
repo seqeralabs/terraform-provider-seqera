@@ -3,15 +3,8 @@
 package shared
 
 type DeleteManagedCredentialsConflictResponse struct {
-	ManagedCredentialsID *string                                            `json:"managedCredentialsId,omitempty"`
 	Conflicts            []DeleteManagedCredentialsConflictResponseConflict `json:"conflicts,omitempty"`
-}
-
-func (d *DeleteManagedCredentialsConflictResponse) GetManagedCredentialsID() *string {
-	if d == nil {
-		return nil
-	}
-	return d.ManagedCredentialsID
+	ManagedCredentialsID *string                                            `json:"managedCredentialsId,omitempty"`
 }
 
 func (d *DeleteManagedCredentialsConflictResponse) GetConflicts() []DeleteManagedCredentialsConflictResponseConflict {
@@ -19,4 +12,11 @@ func (d *DeleteManagedCredentialsConflictResponse) GetConflicts() []DeleteManage
 		return nil
 	}
 	return d.Conflicts
+}
+
+func (d *DeleteManagedCredentialsConflictResponse) GetManagedCredentialsID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ManagedCredentialsID
 }

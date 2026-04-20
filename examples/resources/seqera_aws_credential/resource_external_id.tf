@@ -3,6 +3,7 @@ resource "seqera_aws_credential" "with_external_id" {
   workspace_id = seqera_workspace.main.id
 
   assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"
+  mode            = "role"
   use_external_id = true
 }
 

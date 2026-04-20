@@ -3,57 +3,15 @@
 package shared
 
 type WesServiceInfo struct {
-	WorkflowTypeVersions            map[string]WorkflowTypeVersion   `json:"workflow_type_versions,omitempty"`
-	SupportedWesVersions            []string                         `json:"supported_wes_versions,omitempty"`
-	SupportedFilesystemProtocols    []string                         `json:"supported_filesystem_protocols,omitempty"`
-	WorkflowEngineVersions          map[string]string                `json:"workflow_engine_versions,omitempty"`
-	DefaultWorkflowEngineParameters []DefaultWorkflowEngineParameter `json:"default_workflow_engine_parameters,omitempty"`
-	SystemStateCounts               map[string]int64                 `json:"system_state_counts,omitempty"`
 	AuthInstructionsURL             *string                          `json:"auth_instructions_url,omitempty"`
 	ContactInfoURL                  *string                          `json:"contact_info_url,omitempty"`
+	DefaultWorkflowEngineParameters []DefaultWorkflowEngineParameter `json:"default_workflow_engine_parameters,omitempty"`
+	SupportedFilesystemProtocols    []string                         `json:"supported_filesystem_protocols,omitempty"`
+	SupportedWesVersions            []string                         `json:"supported_wes_versions,omitempty"`
+	SystemStateCounts               map[string]int64                 `json:"system_state_counts,omitempty"`
 	Tags                            map[string]string                `json:"tags,omitempty"`
-}
-
-func (w *WesServiceInfo) GetWorkflowTypeVersions() map[string]WorkflowTypeVersion {
-	if w == nil {
-		return nil
-	}
-	return w.WorkflowTypeVersions
-}
-
-func (w *WesServiceInfo) GetSupportedWesVersions() []string {
-	if w == nil {
-		return nil
-	}
-	return w.SupportedWesVersions
-}
-
-func (w *WesServiceInfo) GetSupportedFilesystemProtocols() []string {
-	if w == nil {
-		return nil
-	}
-	return w.SupportedFilesystemProtocols
-}
-
-func (w *WesServiceInfo) GetWorkflowEngineVersions() map[string]string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkflowEngineVersions
-}
-
-func (w *WesServiceInfo) GetDefaultWorkflowEngineParameters() []DefaultWorkflowEngineParameter {
-	if w == nil {
-		return nil
-	}
-	return w.DefaultWorkflowEngineParameters
-}
-
-func (w *WesServiceInfo) GetSystemStateCounts() map[string]int64 {
-	if w == nil {
-		return nil
-	}
-	return w.SystemStateCounts
+	WorkflowEngineVersions          map[string]string                `json:"workflow_engine_versions,omitempty"`
+	WorkflowTypeVersions            map[string]WorkflowTypeVersion   `json:"workflow_type_versions,omitempty"`
 }
 
 func (w *WesServiceInfo) GetAuthInstructionsURL() *string {
@@ -70,9 +28,51 @@ func (w *WesServiceInfo) GetContactInfoURL() *string {
 	return w.ContactInfoURL
 }
 
+func (w *WesServiceInfo) GetDefaultWorkflowEngineParameters() []DefaultWorkflowEngineParameter {
+	if w == nil {
+		return nil
+	}
+	return w.DefaultWorkflowEngineParameters
+}
+
+func (w *WesServiceInfo) GetSupportedFilesystemProtocols() []string {
+	if w == nil {
+		return nil
+	}
+	return w.SupportedFilesystemProtocols
+}
+
+func (w *WesServiceInfo) GetSupportedWesVersions() []string {
+	if w == nil {
+		return nil
+	}
+	return w.SupportedWesVersions
+}
+
+func (w *WesServiceInfo) GetSystemStateCounts() map[string]int64 {
+	if w == nil {
+		return nil
+	}
+	return w.SystemStateCounts
+}
+
 func (w *WesServiceInfo) GetTags() map[string]string {
 	if w == nil {
 		return nil
 	}
 	return w.Tags
+}
+
+func (w *WesServiceInfo) GetWorkflowEngineVersions() map[string]string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkflowEngineVersions
+}
+
+func (w *WesServiceInfo) GetWorkflowTypeVersions() map[string]WorkflowTypeVersion {
+	if w == nil {
+		return nil
+	}
+	return w.WorkflowTypeVersions
 }

@@ -3,38 +3,17 @@
 package shared
 
 type DataStudioCreateRequest struct {
-	Name                string                  `json:"name"`
-	Description         *string                 `json:"description,omitempty"`
-	DataStudioToolURL   string                  `json:"dataStudioToolUrl"`
 	ComputeEnvID        string                  `json:"computeEnvId"`
-	InitialCheckpointID *int64                  `json:"initialCheckpointId,omitempty"`
 	Configuration       DataStudioConfiguration `json:"configuration"`
+	DataStudioToolURL   string                  `json:"dataStudioToolUrl"`
+	Description         *string                 `json:"description,omitempty"`
+	InitialCheckpointID *int64                  `json:"initialCheckpointId,omitempty"`
 	IsPrivate           *bool                   `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 	LabelIds []int64 `json:"labelIds,omitempty"`
+	Name     string  `json:"name"`
 	// Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
 	Spot *bool `json:"spot,omitempty"`
-}
-
-func (d *DataStudioCreateRequest) GetName() string {
-	if d == nil {
-		return ""
-	}
-	return d.Name
-}
-
-func (d *DataStudioCreateRequest) GetDescription() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Description
-}
-
-func (d *DataStudioCreateRequest) GetDataStudioToolURL() string {
-	if d == nil {
-		return ""
-	}
-	return d.DataStudioToolURL
 }
 
 func (d *DataStudioCreateRequest) GetComputeEnvID() string {
@@ -44,18 +23,32 @@ func (d *DataStudioCreateRequest) GetComputeEnvID() string {
 	return d.ComputeEnvID
 }
 
-func (d *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.InitialCheckpointID
-}
-
 func (d *DataStudioCreateRequest) GetConfiguration() DataStudioConfiguration {
 	if d == nil {
 		return DataStudioConfiguration{}
 	}
 	return d.Configuration
+}
+
+func (d *DataStudioCreateRequest) GetDataStudioToolURL() string {
+	if d == nil {
+		return ""
+	}
+	return d.DataStudioToolURL
+}
+
+func (d *DataStudioCreateRequest) GetDescription() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Description
+}
+
+func (d *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.InitialCheckpointID
 }
 
 func (d *DataStudioCreateRequest) GetIsPrivate() *bool {
@@ -70,6 +63,13 @@ func (d *DataStudioCreateRequest) GetLabelIds() []int64 {
 		return nil
 	}
 	return d.LabelIds
+}
+
+func (d *DataStudioCreateRequest) GetName() string {
+	if d == nil {
+		return ""
+	}
+	return d.Name
 }
 
 func (d *DataStudioCreateRequest) GetSpot() *bool {

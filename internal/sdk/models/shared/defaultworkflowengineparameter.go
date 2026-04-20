@@ -3,9 +3,16 @@
 package shared
 
 type DefaultWorkflowEngineParameter struct {
+	DefaultValue *string `json:"default_value,omitempty"`
 	Name         *string `json:"name,omitempty"`
 	Type         *string `json:"type,omitempty"`
-	DefaultValue *string `json:"default_value,omitempty"`
+}
+
+func (d *DefaultWorkflowEngineParameter) GetDefaultValue() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DefaultValue
 }
 
 func (d *DefaultWorkflowEngineParameter) GetName() *string {
@@ -20,11 +27,4 @@ func (d *DefaultWorkflowEngineParameter) GetType() *string {
 		return nil
 	}
 	return d.Type
-}
-
-func (d *DefaultWorkflowEngineParameter) GetDefaultValue() *string {
-	if d == nil {
-		return nil
-	}
-	return d.DefaultValue
 }

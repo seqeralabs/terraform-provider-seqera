@@ -11,18 +11,18 @@ import (
 // Provides metadata tagging capabilities for pipelines, workflows,
 // and other platform resources.
 type LabelDbDto struct {
-	// Unique numeric identifier for the label
-	ID *int64 `json:"id,omitempty"`
-	// Name or key of the label
-	Name *string `json:"name,omitempty"`
-	// Value associated with the label
-	Value *string `json:"value,omitempty"`
-	// Flag indicating if this is a resource-level label
-	Resource *bool `json:"resource,omitempty"`
-	// Flag indicating if this is a default system label
-	IsDefault *bool `json:"isDefault,omitempty"`
 	// Timestamp when the label was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Unique numeric identifier for the label
+	ID *int64 `json:"id,omitempty"`
+	// Flag indicating if this is a default system label
+	IsDefault *bool `json:"isDefault,omitempty"`
+	// Name or key of the label
+	Name *string `json:"name,omitempty"`
+	// Flag indicating if this is a resource-level label
+	Resource *bool `json:"resource,omitempty"`
+	// Value associated with the label
+	Value *string `json:"value,omitempty"`
 }
 
 func (l LabelDbDto) MarshalJSON() ([]byte, error) {
@@ -36,32 +36,18 @@ func (l *LabelDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *LabelDbDto) GetDateCreated() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.DateCreated
+}
+
 func (l *LabelDbDto) GetID() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.ID
-}
-
-func (l *LabelDbDto) GetName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Name
-}
-
-func (l *LabelDbDto) GetValue() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Value
-}
-
-func (l *LabelDbDto) GetResource() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.Resource
 }
 
 func (l *LabelDbDto) GetIsDefault() *bool {
@@ -71,9 +57,23 @@ func (l *LabelDbDto) GetIsDefault() *bool {
 	return l.IsDefault
 }
 
-func (l *LabelDbDto) GetDateCreated() *time.Time {
+func (l *LabelDbDto) GetName() *string {
 	if l == nil {
 		return nil
 	}
-	return l.DateCreated
+	return l.Name
+}
+
+func (l *LabelDbDto) GetResource() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Resource
+}
+
+func (l *LabelDbDto) GetValue() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Value
 }

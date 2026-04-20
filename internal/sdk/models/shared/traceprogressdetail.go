@@ -3,66 +3,31 @@
 package shared
 
 type TraceProgressDetail struct {
-	Index       *int    `json:"index,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	Pending     *int    `json:"pending,omitempty"`
-	Submitted   *int    `json:"submitted,omitempty"`
-	Running     *int    `json:"running,omitempty"`
-	Succeeded   *int    `json:"succeeded,omitempty"`
+	Aborted     *int    `json:"aborted,omitempty"`
 	Cached      *int    `json:"cached,omitempty"`
 	Failed      *int    `json:"failed,omitempty"`
-	Aborted     *int    `json:"aborted,omitempty"`
-	Stored      *int    `json:"stored,omitempty"`
 	Ignored     *int    `json:"ignored,omitempty"`
-	Retries     *int    `json:"retries,omitempty"`
-	Terminated  *bool   `json:"terminated,omitempty"`
+	Index       *int    `json:"index,omitempty"`
 	LoadCpus    *int64  `json:"loadCpus,omitempty"`
 	LoadMemory  *int64  `json:"loadMemory,omitempty"`
-	PeakRunning *int    `json:"peakRunning,omitempty"`
+	Name        *string `json:"name,omitempty"`
 	PeakCpus    *int64  `json:"peakCpus,omitempty"`
 	PeakMemory  *int64  `json:"peakMemory,omitempty"`
+	PeakRunning *int    `json:"peakRunning,omitempty"`
+	Pending     *int    `json:"pending,omitempty"`
+	Retries     *int    `json:"retries,omitempty"`
+	Running     *int    `json:"running,omitempty"`
+	Stored      *int    `json:"stored,omitempty"`
+	Submitted   *int    `json:"submitted,omitempty"`
+	Succeeded   *int    `json:"succeeded,omitempty"`
+	Terminated  *bool   `json:"terminated,omitempty"`
 }
 
-func (t *TraceProgressDetail) GetIndex() *int {
+func (t *TraceProgressDetail) GetAborted() *int {
 	if t == nil {
 		return nil
 	}
-	return t.Index
-}
-
-func (t *TraceProgressDetail) GetName() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Name
-}
-
-func (t *TraceProgressDetail) GetPending() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Pending
-}
-
-func (t *TraceProgressDetail) GetSubmitted() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Submitted
-}
-
-func (t *TraceProgressDetail) GetRunning() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Running
-}
-
-func (t *TraceProgressDetail) GetSucceeded() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Succeeded
+	return t.Aborted
 }
 
 func (t *TraceProgressDetail) GetCached() *int {
@@ -79,20 +44,6 @@ func (t *TraceProgressDetail) GetFailed() *int {
 	return t.Failed
 }
 
-func (t *TraceProgressDetail) GetAborted() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Aborted
-}
-
-func (t *TraceProgressDetail) GetStored() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Stored
-}
-
 func (t *TraceProgressDetail) GetIgnored() *int {
 	if t == nil {
 		return nil
@@ -100,18 +51,11 @@ func (t *TraceProgressDetail) GetIgnored() *int {
 	return t.Ignored
 }
 
-func (t *TraceProgressDetail) GetRetries() *int {
+func (t *TraceProgressDetail) GetIndex() *int {
 	if t == nil {
 		return nil
 	}
-	return t.Retries
-}
-
-func (t *TraceProgressDetail) GetTerminated() *bool {
-	if t == nil {
-		return nil
-	}
-	return t.Terminated
+	return t.Index
 }
 
 func (t *TraceProgressDetail) GetLoadCpus() *int64 {
@@ -128,11 +72,11 @@ func (t *TraceProgressDetail) GetLoadMemory() *int64 {
 	return t.LoadMemory
 }
 
-func (t *TraceProgressDetail) GetPeakRunning() *int {
+func (t *TraceProgressDetail) GetName() *string {
 	if t == nil {
 		return nil
 	}
-	return t.PeakRunning
+	return t.Name
 }
 
 func (t *TraceProgressDetail) GetPeakCpus() *int64 {
@@ -147,4 +91,60 @@ func (t *TraceProgressDetail) GetPeakMemory() *int64 {
 		return nil
 	}
 	return t.PeakMemory
+}
+
+func (t *TraceProgressDetail) GetPeakRunning() *int {
+	if t == nil {
+		return nil
+	}
+	return t.PeakRunning
+}
+
+func (t *TraceProgressDetail) GetPending() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Pending
+}
+
+func (t *TraceProgressDetail) GetRetries() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Retries
+}
+
+func (t *TraceProgressDetail) GetRunning() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Running
+}
+
+func (t *TraceProgressDetail) GetStored() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Stored
+}
+
+func (t *TraceProgressDetail) GetSubmitted() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Submitted
+}
+
+func (t *TraceProgressDetail) GetSucceeded() *int {
+	if t == nil {
+		return nil
+	}
+	return t.Succeeded
+}
+
+func (t *TraceProgressDetail) GetTerminated() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.Terminated
 }

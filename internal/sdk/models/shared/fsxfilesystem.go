@@ -7,8 +7,8 @@ import (
 )
 
 type FsxFileSystem struct {
-	ID    *string `json:"id,omitempty"`
 	DNS   *string `json:"dns,omitempty"`
+	ID    *string `json:"id,omitempty"`
 	Mount *string `json:"mount,omitempty"`
 }
 
@@ -23,18 +23,18 @@ func (f *FsxFileSystem) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (f *FsxFileSystem) GetID() *string {
-	if f == nil {
-		return nil
-	}
-	return f.ID
-}
-
 func (f *FsxFileSystem) GetDNS() *string {
 	if f == nil {
 		return nil
 	}
 	return f.DNS
+}
+
+func (f *FsxFileSystem) GetID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.ID
 }
 
 func (f *FsxFileSystem) GetMount() *string {

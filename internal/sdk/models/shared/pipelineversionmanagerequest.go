@@ -3,15 +3,8 @@
 package shared
 
 type PipelineVersionManageRequest struct {
-	Name      *string `json:"name,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
-}
-
-func (p *PipelineVersionManageRequest) GetName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.Name
+	Name      *string `json:"name,omitempty"`
 }
 
 func (p *PipelineVersionManageRequest) GetIsDefault() *bool {
@@ -19,4 +12,11 @@ func (p *PipelineVersionManageRequest) GetIsDefault() *bool {
 		return nil
 	}
 	return p.IsDefault
+}
+
+func (p *PipelineVersionManageRequest) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
 }

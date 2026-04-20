@@ -65,18 +65,18 @@ func (r *DatasetsResourceModel) ToOperationsCreateDatasetV2Request(ctx context.C
 func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context) (*shared.CreateDatasetRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
+	var name string
+	name = r.Name.ValueString()
+
 	out := shared.CreateDatasetRequest{
-		Name:        name,
 		Description: description,
+		Name:        name,
 	}
 
 	return &out, diags

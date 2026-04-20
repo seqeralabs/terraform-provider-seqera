@@ -3,20 +3,13 @@
 package shared
 
 type Log struct {
-	Name      *string  `json:"name,omitempty"`
 	Cmd       []string `json:"cmd,omitempty"`
-	StartTime *string  `json:"start_time,omitempty"`
 	EndTime   *string  `json:"end_time,omitempty"`
-	Stdout    *string  `json:"stdout,omitempty"`
-	Stderr    *string  `json:"stderr,omitempty"`
 	ExitCode  *int     `json:"exit_code,omitempty"`
-}
-
-func (l *Log) GetName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Name
+	Name      *string  `json:"name,omitempty"`
+	StartTime *string  `json:"start_time,omitempty"`
+	Stderr    *string  `json:"stderr,omitempty"`
+	Stdout    *string  `json:"stdout,omitempty"`
 }
 
 func (l *Log) GetCmd() []string {
@@ -26,13 +19,6 @@ func (l *Log) GetCmd() []string {
 	return l.Cmd
 }
 
-func (l *Log) GetStartTime() *string {
-	if l == nil {
-		return nil
-	}
-	return l.StartTime
-}
-
 func (l *Log) GetEndTime() *string {
 	if l == nil {
 		return nil
@@ -40,11 +26,25 @@ func (l *Log) GetEndTime() *string {
 	return l.EndTime
 }
 
-func (l *Log) GetStdout() *string {
+func (l *Log) GetExitCode() *int {
 	if l == nil {
 		return nil
 	}
-	return l.Stdout
+	return l.ExitCode
+}
+
+func (l *Log) GetName() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Name
+}
+
+func (l *Log) GetStartTime() *string {
+	if l == nil {
+		return nil
+	}
+	return l.StartTime
 }
 
 func (l *Log) GetStderr() *string {
@@ -54,9 +54,9 @@ func (l *Log) GetStderr() *string {
 	return l.Stderr
 }
 
-func (l *Log) GetExitCode() *int {
+func (l *Log) GetStdout() *string {
 	if l == nil {
 		return nil
 	}
-	return l.ExitCode
+	return l.Stdout
 }

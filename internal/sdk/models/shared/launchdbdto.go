@@ -3,184 +3,51 @@
 package shared
 
 type LaunchDbDto struct {
-	ID          *string `json:"id,omitempty"`
-	WorkspaceID *int64  `json:"workspaceId,omitempty"`
-	Pipeline    *string `json:"pipeline,omitempty"`
-	// Working directory
-	WorkDir *string `json:"workDir,omitempty"`
-	// Pipeline revision
-	Revision *string `json:"revision,omitempty"`
+	ConfigProfiles []string `json:"configProfiles,omitempty"`
 	// Nextflow configuration text
 	ConfigText *string `json:"configText,omitempty"`
-	// Tower-specific configuration
-	TowerConfig *string `json:"towerConfig,omitempty"`
-	// Pipeline parameters text
-	ParamsText *string `json:"paramsText,omitempty"`
-	// Script to run before pipeline execution
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Script to run after pipeline execution
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Main script path
-	MainScript *string `json:"mainScript,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
-	// Pipeline schema name
-	SchemaName *string `json:"schemaName,omitempty"`
-	Resume     *bool   `json:"resume,omitempty"`
-	// Launch ID to resume from
-	ResumeLaunchID *string `json:"resumeLaunchId,omitempty"`
-	PullLatest     *bool   `json:"pullLatest,omitempty"`
-	StubRun        *bool   `json:"stubRun,omitempty"`
-	// Session ID for resuming
-	SessionID *string `json:"sessionId,omitempty"`
-	// Custom run name
-	RunName          *string  `json:"runName,omitempty"`
-	ConfigProfiles   []string `json:"configProfiles,omitempty"`
-	UserSecrets      []string `json:"userSecrets,omitempty"`
-	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
+	// Head job CPU allocation
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Head job memory allocation in MB
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	ID              *string `json:"id,omitempty"`
+	LaunchContainer *string `json:"launchContainer,omitempty"`
+	// Main script path
+	MainScript *string `json:"mainScript,omitempty"`
 	// Optimization profile ID
 	OptimizationID *string `json:"optimizationId,omitempty"`
 	// Optimization targets
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
-	// Head job CPU allocation
-	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Head job memory allocation in MB
-	HeadJobMemoryMb  *int    `json:"headJobMemoryMb,omitempty"`
-	LaunchContainer  *string `json:"launchContainer,omitempty"`
+	// Pipeline parameters text
+	ParamsText       *string `json:"paramsText,omitempty"`
+	Pipeline         *string `json:"pipeline,omitempty"`
 	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
-}
-
-func (l *LaunchDbDto) GetID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.ID
-}
-
-func (l *LaunchDbDto) GetWorkspaceID() *int64 {
-	if l == nil {
-		return nil
-	}
-	return l.WorkspaceID
-}
-
-func (l *LaunchDbDto) GetPipeline() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Pipeline
-}
-
-func (l *LaunchDbDto) GetWorkDir() *string {
-	if l == nil {
-		return nil
-	}
-	return l.WorkDir
-}
-
-func (l *LaunchDbDto) GetRevision() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Revision
-}
-
-func (l *LaunchDbDto) GetConfigText() *string {
-	if l == nil {
-		return nil
-	}
-	return l.ConfigText
-}
-
-func (l *LaunchDbDto) GetTowerConfig() *string {
-	if l == nil {
-		return nil
-	}
-	return l.TowerConfig
-}
-
-func (l *LaunchDbDto) GetParamsText() *string {
-	if l == nil {
-		return nil
-	}
-	return l.ParamsText
-}
-
-func (l *LaunchDbDto) GetPreRunScript() *string {
-	if l == nil {
-		return nil
-	}
-	return l.PreRunScript
-}
-
-func (l *LaunchDbDto) GetPostRunScript() *string {
-	if l == nil {
-		return nil
-	}
-	return l.PostRunScript
-}
-
-func (l *LaunchDbDto) GetMainScript() *string {
-	if l == nil {
-		return nil
-	}
-	return l.MainScript
-}
-
-func (l *LaunchDbDto) GetEntryName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.EntryName
-}
-
-func (l *LaunchDbDto) GetSchemaName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.SchemaName
-}
-
-func (l *LaunchDbDto) GetResume() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.Resume
-}
-
-func (l *LaunchDbDto) GetResumeLaunchID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.ResumeLaunchID
-}
-
-func (l *LaunchDbDto) GetPullLatest() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.PullLatest
-}
-
-func (l *LaunchDbDto) GetStubRun() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.StubRun
-}
-
-func (l *LaunchDbDto) GetSessionID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.SessionID
-}
-
-func (l *LaunchDbDto) GetRunName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.RunName
+	// Script to run after pipeline execution
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Script to run before pipeline execution
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	PullLatest   *bool   `json:"pullLatest,omitempty"`
+	Resume       *bool   `json:"resume,omitempty"`
+	// Launch ID to resume from
+	ResumeLaunchID *string `json:"resumeLaunchId,omitempty"`
+	// Pipeline revision
+	Revision *string `json:"revision,omitempty"`
+	// Custom run name
+	RunName *string `json:"runName,omitempty"`
+	// Pipeline schema name
+	SchemaName *string `json:"schemaName,omitempty"`
+	// Session ID for resuming
+	SessionID *string `json:"sessionId,omitempty"`
+	StubRun   *bool   `json:"stubRun,omitempty"`
+	// Tower-specific configuration
+	TowerConfig *string  `json:"towerConfig,omitempty"`
+	UserSecrets []string `json:"userSecrets,omitempty"`
+	// Working directory
+	WorkDir          *string  `json:"workDir,omitempty"`
+	WorkspaceID      *int64   `json:"workspaceId,omitempty"`
+	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
 }
 
 func (l *LaunchDbDto) GetConfigProfiles() []string {
@@ -190,32 +57,18 @@ func (l *LaunchDbDto) GetConfigProfiles() []string {
 	return l.ConfigProfiles
 }
 
-func (l *LaunchDbDto) GetUserSecrets() []string {
+func (l *LaunchDbDto) GetConfigText() *string {
 	if l == nil {
 		return nil
 	}
-	return l.UserSecrets
+	return l.ConfigText
 }
 
-func (l *LaunchDbDto) GetWorkspaceSecrets() []string {
+func (l *LaunchDbDto) GetEntryName() *string {
 	if l == nil {
 		return nil
 	}
-	return l.WorkspaceSecrets
-}
-
-func (l *LaunchDbDto) GetOptimizationID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.OptimizationID
-}
-
-func (l *LaunchDbDto) GetOptimizationTargets() *string {
-	if l == nil {
-		return nil
-	}
-	return l.OptimizationTargets
+	return l.EntryName
 }
 
 func (l *LaunchDbDto) GetHeadJobCpus() *int {
@@ -232,6 +85,13 @@ func (l *LaunchDbDto) GetHeadJobMemoryMb() *int {
 	return l.HeadJobMemoryMb
 }
 
+func (l *LaunchDbDto) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
 func (l *LaunchDbDto) GetLaunchContainer() *string {
 	if l == nil {
 		return nil
@@ -239,9 +99,149 @@ func (l *LaunchDbDto) GetLaunchContainer() *string {
 	return l.LaunchContainer
 }
 
+func (l *LaunchDbDto) GetMainScript() *string {
+	if l == nil {
+		return nil
+	}
+	return l.MainScript
+}
+
+func (l *LaunchDbDto) GetOptimizationID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.OptimizationID
+}
+
+func (l *LaunchDbDto) GetOptimizationTargets() *string {
+	if l == nil {
+		return nil
+	}
+	return l.OptimizationTargets
+}
+
+func (l *LaunchDbDto) GetParamsText() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ParamsText
+}
+
+func (l *LaunchDbDto) GetPipeline() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Pipeline
+}
+
 func (l *LaunchDbDto) GetPipelineSchemaID() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.PipelineSchemaID
+}
+
+func (l *LaunchDbDto) GetPostRunScript() *string {
+	if l == nil {
+		return nil
+	}
+	return l.PostRunScript
+}
+
+func (l *LaunchDbDto) GetPreRunScript() *string {
+	if l == nil {
+		return nil
+	}
+	return l.PreRunScript
+}
+
+func (l *LaunchDbDto) GetPullLatest() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.PullLatest
+}
+
+func (l *LaunchDbDto) GetResume() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Resume
+}
+
+func (l *LaunchDbDto) GetResumeLaunchID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ResumeLaunchID
+}
+
+func (l *LaunchDbDto) GetRevision() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Revision
+}
+
+func (l *LaunchDbDto) GetRunName() *string {
+	if l == nil {
+		return nil
+	}
+	return l.RunName
+}
+
+func (l *LaunchDbDto) GetSchemaName() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SchemaName
+}
+
+func (l *LaunchDbDto) GetSessionID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SessionID
+}
+
+func (l *LaunchDbDto) GetStubRun() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.StubRun
+}
+
+func (l *LaunchDbDto) GetTowerConfig() *string {
+	if l == nil {
+		return nil
+	}
+	return l.TowerConfig
+}
+
+func (l *LaunchDbDto) GetUserSecrets() []string {
+	if l == nil {
+		return nil
+	}
+	return l.UserSecrets
+}
+
+func (l *LaunchDbDto) GetWorkDir() *string {
+	if l == nil {
+		return nil
+	}
+	return l.WorkDir
+}
+
+func (l *LaunchDbDto) GetWorkspaceID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.WorkspaceID
+}
+
+func (l *LaunchDbDto) GetWorkspaceSecrets() []string {
+	if l == nil {
+		return nil
+	}
+	return l.WorkspaceSecrets
 }

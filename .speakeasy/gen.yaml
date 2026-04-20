@@ -92,6 +92,7 @@ terraform:
   inferUnionDiscriminators: false
   packageName: seqera
   preApplyUnionDiscriminators: false
+  providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
   unionStrategy: populated-fields

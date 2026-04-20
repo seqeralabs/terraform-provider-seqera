@@ -8,36 +8,36 @@ import (
 )
 
 type WorkflowLaunchResponse struct {
-	ID                  *string                  `json:"id,omitempty"`
-	ComputeEnv          *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
-	Pipeline            *string                  `json:"pipeline,omitempty"`
-	PipelineID          *int64                   `json:"pipelineId,omitempty"`
-	WorkDir             *string                  `json:"workDir,omitempty"`
-	Revision            *string                  `json:"revision,omitempty"`
 	CommitID            *string                  `json:"commitId,omitempty"`
-	SessionID           *string                  `json:"sessionId,omitempty"`
+	ComputeEnv          *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
 	ConfigProfiles      []string                 `json:"configProfiles,omitempty"`
-	UserSecrets         []string                 `json:"userSecrets,omitempty"`
-	WorkspaceSecrets    []string                 `json:"workspaceSecrets,omitempty"`
 	ConfigText          *string                  `json:"configText,omitempty"`
-	TowerConfig         *string                  `json:"towerConfig,omitempty"`
-	ParamsText          *string                  `json:"paramsText,omitempty"`
-	PreRunScript        *string                  `json:"preRunScript,omitempty"`
-	PostRunScript       *string                  `json:"postRunScript,omitempty"`
-	MainScript          *string                  `json:"mainScript,omitempty"`
+	DateCreated         *time.Time               `json:"dateCreated,omitempty"`
 	EntryName           *string                  `json:"entryName,omitempty"`
-	SchemaName          *string                  `json:"schemaName,omitempty"`
-	PipelineSchemaID    *int64                   `json:"pipelineSchemaId,omitempty"`
-	Resume              *bool                    `json:"resume,omitempty"`
-	PullLatest          *bool                    `json:"pullLatest,omitempty"`
-	StubRun             *bool                    `json:"stubRun,omitempty"`
-	ResumeDir           *string                  `json:"resumeDir,omitempty"`
-	ResumeCommitID      *string                  `json:"resumeCommitId,omitempty"`
-	HeadJobMemoryMb     *int                     `json:"headJobMemoryMb,omitempty"`
 	HeadJobCpus         *int                     `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb     *int                     `json:"headJobMemoryMb,omitempty"`
+	ID                  *string                  `json:"id,omitempty"`
+	MainScript          *string                  `json:"mainScript,omitempty"`
 	OptimizationID      *string                  `json:"optimizationId,omitempty"`
 	OptimizationTargets *string                  `json:"optimizationTargets,omitempty"`
-	DateCreated         *time.Time               `json:"dateCreated,omitempty"`
+	ParamsText          *string                  `json:"paramsText,omitempty"`
+	Pipeline            *string                  `json:"pipeline,omitempty"`
+	PipelineID          *int64                   `json:"pipelineId,omitempty"`
+	PipelineSchemaID    *int64                   `json:"pipelineSchemaId,omitempty"`
+	PostRunScript       *string                  `json:"postRunScript,omitempty"`
+	PreRunScript        *string                  `json:"preRunScript,omitempty"`
+	PullLatest          *bool                    `json:"pullLatest,omitempty"`
+	Resume              *bool                    `json:"resume,omitempty"`
+	ResumeCommitID      *string                  `json:"resumeCommitId,omitempty"`
+	ResumeDir           *string                  `json:"resumeDir,omitempty"`
+	Revision            *string                  `json:"revision,omitempty"`
+	SchemaName          *string                  `json:"schemaName,omitempty"`
+	SessionID           *string                  `json:"sessionId,omitempty"`
+	StubRun             *bool                    `json:"stubRun,omitempty"`
+	TowerConfig         *string                  `json:"towerConfig,omitempty"`
+	UserSecrets         []string                 `json:"userSecrets,omitempty"`
+	WorkDir             *string                  `json:"workDir,omitempty"`
+	WorkspaceSecrets    []string                 `json:"workspaceSecrets,omitempty"`
 }
 
 func (w WorkflowLaunchResponse) MarshalJSON() ([]byte, error) {
@@ -51,11 +51,11 @@ func (w *WorkflowLaunchResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WorkflowLaunchResponse) GetID() *string {
+func (w *WorkflowLaunchResponse) GetCommitID() *string {
 	if w == nil {
 		return nil
 	}
-	return w.ID
+	return w.CommitID
 }
 
 func (w *WorkflowLaunchResponse) GetComputeEnv() *ComputeEnvComputeConfig {
@@ -65,67 +65,11 @@ func (w *WorkflowLaunchResponse) GetComputeEnv() *ComputeEnvComputeConfig {
 	return w.ComputeEnv
 }
 
-func (w *WorkflowLaunchResponse) GetPipeline() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Pipeline
-}
-
-func (w *WorkflowLaunchResponse) GetPipelineID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.PipelineID
-}
-
-func (w *WorkflowLaunchResponse) GetWorkDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkDir
-}
-
-func (w *WorkflowLaunchResponse) GetRevision() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Revision
-}
-
-func (w *WorkflowLaunchResponse) GetCommitID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.CommitID
-}
-
-func (w *WorkflowLaunchResponse) GetSessionID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.SessionID
-}
-
 func (w *WorkflowLaunchResponse) GetConfigProfiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigProfiles
-}
-
-func (w *WorkflowLaunchResponse) GetUserSecrets() []string {
-	if w == nil {
-		return nil
-	}
-	return w.UserSecrets
-}
-
-func (w *WorkflowLaunchResponse) GetWorkspaceSecrets() []string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkspaceSecrets
 }
 
 func (w *WorkflowLaunchResponse) GetConfigText() *string {
@@ -135,39 +79,11 @@ func (w *WorkflowLaunchResponse) GetConfigText() *string {
 	return w.ConfigText
 }
 
-func (w *WorkflowLaunchResponse) GetTowerConfig() *string {
+func (w *WorkflowLaunchResponse) GetDateCreated() *time.Time {
 	if w == nil {
 		return nil
 	}
-	return w.TowerConfig
-}
-
-func (w *WorkflowLaunchResponse) GetParamsText() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ParamsText
-}
-
-func (w *WorkflowLaunchResponse) GetPreRunScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.PreRunScript
-}
-
-func (w *WorkflowLaunchResponse) GetPostRunScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.PostRunScript
-}
-
-func (w *WorkflowLaunchResponse) GetMainScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.MainScript
+	return w.DateCreated
 }
 
 func (w *WorkflowLaunchResponse) GetEntryName() *string {
@@ -177,53 +93,11 @@ func (w *WorkflowLaunchResponse) GetEntryName() *string {
 	return w.EntryName
 }
 
-func (w *WorkflowLaunchResponse) GetSchemaName() *string {
+func (w *WorkflowLaunchResponse) GetHeadJobCpus() *int {
 	if w == nil {
 		return nil
 	}
-	return w.SchemaName
-}
-
-func (w *WorkflowLaunchResponse) GetPipelineSchemaID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.PipelineSchemaID
-}
-
-func (w *WorkflowLaunchResponse) GetResume() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.Resume
-}
-
-func (w *WorkflowLaunchResponse) GetPullLatest() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.PullLatest
-}
-
-func (w *WorkflowLaunchResponse) GetStubRun() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.StubRun
-}
-
-func (w *WorkflowLaunchResponse) GetResumeDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ResumeDir
-}
-
-func (w *WorkflowLaunchResponse) GetResumeCommitID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ResumeCommitID
+	return w.HeadJobCpus
 }
 
 func (w *WorkflowLaunchResponse) GetHeadJobMemoryMb() *int {
@@ -233,11 +107,18 @@ func (w *WorkflowLaunchResponse) GetHeadJobMemoryMb() *int {
 	return w.HeadJobMemoryMb
 }
 
-func (w *WorkflowLaunchResponse) GetHeadJobCpus() *int {
+func (w *WorkflowLaunchResponse) GetID() *string {
 	if w == nil {
 		return nil
 	}
-	return w.HeadJobCpus
+	return w.ID
+}
+
+func (w *WorkflowLaunchResponse) GetMainScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.MainScript
 }
 
 func (w *WorkflowLaunchResponse) GetOptimizationID() *string {
@@ -254,9 +135,128 @@ func (w *WorkflowLaunchResponse) GetOptimizationTargets() *string {
 	return w.OptimizationTargets
 }
 
-func (w *WorkflowLaunchResponse) GetDateCreated() *time.Time {
+func (w *WorkflowLaunchResponse) GetParamsText() *string {
 	if w == nil {
 		return nil
 	}
-	return w.DateCreated
+	return w.ParamsText
+}
+
+func (w *WorkflowLaunchResponse) GetPipeline() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Pipeline
+}
+
+func (w *WorkflowLaunchResponse) GetPipelineID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.PipelineID
+}
+
+func (w *WorkflowLaunchResponse) GetPipelineSchemaID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.PipelineSchemaID
+}
+
+func (w *WorkflowLaunchResponse) GetPostRunScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.PostRunScript
+}
+
+func (w *WorkflowLaunchResponse) GetPreRunScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.PreRunScript
+}
+
+func (w *WorkflowLaunchResponse) GetPullLatest() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.PullLatest
+}
+
+func (w *WorkflowLaunchResponse) GetResume() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Resume
+}
+
+func (w *WorkflowLaunchResponse) GetResumeCommitID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ResumeCommitID
+}
+
+func (w *WorkflowLaunchResponse) GetResumeDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ResumeDir
+}
+
+func (w *WorkflowLaunchResponse) GetRevision() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Revision
+}
+
+func (w *WorkflowLaunchResponse) GetSchemaName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SchemaName
+}
+
+func (w *WorkflowLaunchResponse) GetSessionID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SessionID
+}
+
+func (w *WorkflowLaunchResponse) GetStubRun() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.StubRun
+}
+
+func (w *WorkflowLaunchResponse) GetTowerConfig() *string {
+	if w == nil {
+		return nil
+	}
+	return w.TowerConfig
+}
+
+func (w *WorkflowLaunchResponse) GetUserSecrets() []string {
+	if w == nil {
+		return nil
+	}
+	return w.UserSecrets
+}
+
+func (w *WorkflowLaunchResponse) GetWorkDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkDir
+}
+
+func (w *WorkflowLaunchResponse) GetWorkspaceSecrets() []string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkspaceSecrets
 }

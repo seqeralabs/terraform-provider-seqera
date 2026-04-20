@@ -3,16 +3,9 @@
 package shared
 
 type DataLinkMultiPartUploadRequest struct {
-	FileName      *string `json:"fileName,omitempty"`
 	ContentLength *int64  `json:"contentLength,omitempty"`
 	ContentType   *string `json:"contentType,omitempty"`
-}
-
-func (d *DataLinkMultiPartUploadRequest) GetFileName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.FileName
+	FileName      *string `json:"fileName,omitempty"`
 }
 
 func (d *DataLinkMultiPartUploadRequest) GetContentLength() *int64 {
@@ -27,4 +20,11 @@ func (d *DataLinkMultiPartUploadRequest) GetContentType() *string {
 		return nil
 	}
 	return d.ContentType
+}
+
+func (d *DataLinkMultiPartUploadRequest) GetFileName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.FileName
 }

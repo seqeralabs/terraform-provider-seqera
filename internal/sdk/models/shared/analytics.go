@@ -4,8 +4,8 @@ package shared
 
 type Analytics struct {
 	HubspotID      *string `json:"hubspotId,omitempty"`
-	PosthogAPIKey  *string `json:"posthogApiKey,omitempty"`
 	PosthogAPIHost *string `json:"posthogApiHost,omitempty"`
+	PosthogAPIKey  *string `json:"posthogApiKey,omitempty"`
 }
 
 func (a *Analytics) GetHubspotID() *string {
@@ -15,16 +15,16 @@ func (a *Analytics) GetHubspotID() *string {
 	return a.HubspotID
 }
 
-func (a *Analytics) GetPosthogAPIKey() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PosthogAPIKey
-}
-
 func (a *Analytics) GetPosthogAPIHost() *string {
 	if a == nil {
 		return nil
 	}
 	return a.PosthogAPIHost
+}
+
+func (a *Analytics) GetPosthogAPIKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PosthogAPIKey
 }

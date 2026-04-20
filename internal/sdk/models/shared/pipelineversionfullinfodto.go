@@ -8,17 +8,17 @@ import (
 )
 
 type PipelineVersionFullInfoDto struct {
-	ID               *string    `json:"id,omitempty"`
-	CreatorUserID    *int64     `json:"creatorUserId,omitempty"`
-	CreatorUserName  *string    `json:"creatorUserName,omitempty"`
+	CreatorAvatarURL *string    `json:"creatorAvatarUrl,omitempty"`
 	CreatorFirstName *string    `json:"creatorFirstName,omitempty"`
 	CreatorLastName  *string    `json:"creatorLastName,omitempty"`
-	CreatorAvatarURL *string    `json:"creatorAvatarUrl,omitempty"`
-	Name             *string    `json:"name,omitempty"`
+	CreatorUserID    *int64     `json:"creatorUserId,omitempty"`
+	CreatorUserName  *string    `json:"creatorUserName,omitempty"`
 	DateCreated      *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
 	Hash             *string    `json:"hash,omitempty"`
+	ID               *string    `json:"id,omitempty"`
 	IsDefault        *bool      `json:"isDefault,omitempty"`
+	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Name             *string    `json:"name,omitempty"`
 }
 
 func (p PipelineVersionFullInfoDto) MarshalJSON() ([]byte, error) {
@@ -32,25 +32,11 @@ func (p *PipelineVersionFullInfoDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (p *PipelineVersionFullInfoDto) GetID() *string {
+func (p *PipelineVersionFullInfoDto) GetCreatorAvatarURL() *string {
 	if p == nil {
 		return nil
 	}
-	return p.ID
-}
-
-func (p *PipelineVersionFullInfoDto) GetCreatorUserID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.CreatorUserID
-}
-
-func (p *PipelineVersionFullInfoDto) GetCreatorUserName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.CreatorUserName
+	return p.CreatorAvatarURL
 }
 
 func (p *PipelineVersionFullInfoDto) GetCreatorFirstName() *string {
@@ -67,18 +53,18 @@ func (p *PipelineVersionFullInfoDto) GetCreatorLastName() *string {
 	return p.CreatorLastName
 }
 
-func (p *PipelineVersionFullInfoDto) GetCreatorAvatarURL() *string {
+func (p *PipelineVersionFullInfoDto) GetCreatorUserID() *int64 {
 	if p == nil {
 		return nil
 	}
-	return p.CreatorAvatarURL
+	return p.CreatorUserID
 }
 
-func (p *PipelineVersionFullInfoDto) GetName() *string {
+func (p *PipelineVersionFullInfoDto) GetCreatorUserName() *string {
 	if p == nil {
 		return nil
 	}
-	return p.Name
+	return p.CreatorUserName
 }
 
 func (p *PipelineVersionFullInfoDto) GetDateCreated() *time.Time {
@@ -88,13 +74,6 @@ func (p *PipelineVersionFullInfoDto) GetDateCreated() *time.Time {
 	return p.DateCreated
 }
 
-func (p *PipelineVersionFullInfoDto) GetLastUpdated() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.LastUpdated
-}
-
 func (p *PipelineVersionFullInfoDto) GetHash() *string {
 	if p == nil {
 		return nil
@@ -102,9 +81,30 @@ func (p *PipelineVersionFullInfoDto) GetHash() *string {
 	return p.Hash
 }
 
+func (p *PipelineVersionFullInfoDto) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
 func (p *PipelineVersionFullInfoDto) GetIsDefault() *bool {
 	if p == nil {
 		return nil
 	}
 	return p.IsDefault
+}
+
+func (p *PipelineVersionFullInfoDto) GetLastUpdated() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUpdated
+}
+
+func (p *PipelineVersionFullInfoDto) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
 }

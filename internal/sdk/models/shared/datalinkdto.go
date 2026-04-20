@@ -37,73 +37,24 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 // Provides access to cloud storage, file systems, and data repositories
 // for pipeline input/output operations.
 type DataLinkDto struct {
-	// Unique identifier for the data link
-	DataLinkID *string `json:"id,omitempty"`
-	// Display name for the data link connection
-	Name *string `json:"name,omitempty"`
+	// Array of credentials required to access the data link
+	Credentials []DataLinkCredentials `json:"credentials,omitempty"`
 	// Description of the data link's purpose and contents
 	Description *string `json:"description,omitempty"`
-	// Reference identifier for the external resource
-	ResourceRef  *string       `json:"resourceRef,omitempty"`
-	Type         *DataLinkType `json:"type,omitempty"`
-	ProviderType *ProviderType `json:"provider,omitempty"`
+	Hidden      *bool   `json:"hidden,omitempty"`
+	// Unique identifier for the data link
+	DataLinkID *string `json:"id,omitempty"`
+	Message    *string `json:"message,omitempty"`
+	// Display name for the data link connection
+	Name             *string       `json:"name,omitempty"`
+	ProviderType     *ProviderType `json:"provider,omitempty"`
+	PublicAccessible *bool         `json:"publicAccessible,omitempty"`
 	// Geographic region where the data link is hosted
 	Region *string `json:"region,omitempty"`
-	// Array of credentials required to access the data link
-	Credentials      []DataLinkCredentials `json:"credentials,omitempty"`
-	PublicAccessible *bool                 `json:"publicAccessible,omitempty"`
-	Hidden           *bool                 `json:"hidden,omitempty"`
-	Status           *DataLinkDtoStatus    `json:"status,omitempty"`
-	Message          *string               `json:"message,omitempty"`
-}
-
-func (d *DataLinkDto) GetDataLinkID() *string {
-	if d == nil {
-		return nil
-	}
-	return d.DataLinkID
-}
-
-func (d *DataLinkDto) GetName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Name
-}
-
-func (d *DataLinkDto) GetDescription() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Description
-}
-
-func (d *DataLinkDto) GetResourceRef() *string {
-	if d == nil {
-		return nil
-	}
-	return d.ResourceRef
-}
-
-func (d *DataLinkDto) GetType() *DataLinkType {
-	if d == nil {
-		return nil
-	}
-	return d.Type
-}
-
-func (d *DataLinkDto) GetProviderType() *ProviderType {
-	if d == nil {
-		return nil
-	}
-	return d.ProviderType
-}
-
-func (d *DataLinkDto) GetRegion() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Region
+	// Reference identifier for the external resource
+	ResourceRef *string            `json:"resourceRef,omitempty"`
+	Status      *DataLinkDtoStatus `json:"status,omitempty"`
+	Type        *DataLinkType      `json:"type,omitempty"`
 }
 
 func (d *DataLinkDto) GetCredentials() []DataLinkCredentials {
@@ -113,11 +64,11 @@ func (d *DataLinkDto) GetCredentials() []DataLinkCredentials {
 	return d.Credentials
 }
 
-func (d *DataLinkDto) GetPublicAccessible() *bool {
+func (d *DataLinkDto) GetDescription() *string {
 	if d == nil {
 		return nil
 	}
-	return d.PublicAccessible
+	return d.Description
 }
 
 func (d *DataLinkDto) GetHidden() *bool {
@@ -127,11 +78,11 @@ func (d *DataLinkDto) GetHidden() *bool {
 	return d.Hidden
 }
 
-func (d *DataLinkDto) GetStatus() *DataLinkDtoStatus {
+func (d *DataLinkDto) GetDataLinkID() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Status
+	return d.DataLinkID
 }
 
 func (d *DataLinkDto) GetMessage() *string {
@@ -139,4 +90,53 @@ func (d *DataLinkDto) GetMessage() *string {
 		return nil
 	}
 	return d.Message
+}
+
+func (d *DataLinkDto) GetName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Name
+}
+
+func (d *DataLinkDto) GetProviderType() *ProviderType {
+	if d == nil {
+		return nil
+	}
+	return d.ProviderType
+}
+
+func (d *DataLinkDto) GetPublicAccessible() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.PublicAccessible
+}
+
+func (d *DataLinkDto) GetRegion() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Region
+}
+
+func (d *DataLinkDto) GetResourceRef() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ResourceRef
+}
+
+func (d *DataLinkDto) GetStatus() *DataLinkDtoStatus {
+	if d == nil {
+		return nil
+	}
+	return d.Status
+}
+
+func (d *DataLinkDto) GetType() *DataLinkType {
+	if d == nil {
+		return nil
+	}
+	return d.Type
 }

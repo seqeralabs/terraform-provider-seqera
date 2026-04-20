@@ -7,8 +7,8 @@ import (
 )
 
 type InstanceType struct {
-	ID   *string `json:"id,omitempty"`
 	Arch string  `json:"arch"`
+	ID   *string `json:"id,omitempty"`
 }
 
 func (i InstanceType) MarshalJSON() ([]byte, error) {
@@ -22,16 +22,16 @@ func (i *InstanceType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *InstanceType) GetID() *string {
-	if i == nil {
-		return nil
-	}
-	return i.ID
-}
-
 func (i *InstanceType) GetArch() string {
 	if i == nil {
 		return ""
 	}
 	return i.Arch
+}
+
+func (i *InstanceType) GetID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ID
 }

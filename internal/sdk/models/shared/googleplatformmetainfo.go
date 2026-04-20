@@ -7,15 +7,15 @@ import (
 )
 
 type GooglePlatformMetainfo struct {
+	Buckets []GooglePlatformMetainfoBucket `json:"buckets,omitempty"`
 	// property to select the platform metainfo type
 	Discriminator *string                           `json:"discriminator,omitempty"`
+	Filestores    []GooglePlatformMetainfoFilestore `json:"filestores,omitempty"`
+	Images        []GoogleImage                     `json:"images,omitempty"`
+	InstanceTypes []GoogleInstanceType              `json:"instanceTypes,omitempty"`
 	Locations     []string                          `json:"locations,omitempty"`
 	Warnings      []string                          `json:"warnings,omitempty"`
 	Zones         []string                          `json:"zones,omitempty"`
-	Buckets       []GooglePlatformMetainfoBucket    `json:"buckets,omitempty"`
-	Filestores    []GooglePlatformMetainfoFilestore `json:"filestores,omitempty"`
-	InstanceTypes []GoogleInstanceType              `json:"instanceTypes,omitempty"`
-	Images        []GoogleImage                     `json:"images,omitempty"`
 }
 
 func (g GooglePlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -29,11 +29,39 @@ func (g *GooglePlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GooglePlatformMetainfo) GetBuckets() []GooglePlatformMetainfoBucket {
+	if g == nil {
+		return nil
+	}
+	return g.Buckets
+}
+
 func (g *GooglePlatformMetainfo) GetDiscriminator() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Discriminator
+}
+
+func (g *GooglePlatformMetainfo) GetFilestores() []GooglePlatformMetainfoFilestore {
+	if g == nil {
+		return nil
+	}
+	return g.Filestores
+}
+
+func (g *GooglePlatformMetainfo) GetImages() []GoogleImage {
+	if g == nil {
+		return nil
+	}
+	return g.Images
+}
+
+func (g *GooglePlatformMetainfo) GetInstanceTypes() []GoogleInstanceType {
+	if g == nil {
+		return nil
+	}
+	return g.InstanceTypes
 }
 
 func (g *GooglePlatformMetainfo) GetLocations() []string {
@@ -55,32 +83,4 @@ func (g *GooglePlatformMetainfo) GetZones() []string {
 		return nil
 	}
 	return g.Zones
-}
-
-func (g *GooglePlatformMetainfo) GetBuckets() []GooglePlatformMetainfoBucket {
-	if g == nil {
-		return nil
-	}
-	return g.Buckets
-}
-
-func (g *GooglePlatformMetainfo) GetFilestores() []GooglePlatformMetainfoFilestore {
-	if g == nil {
-		return nil
-	}
-	return g.Filestores
-}
-
-func (g *GooglePlatformMetainfo) GetInstanceTypes() []GoogleInstanceType {
-	if g == nil {
-		return nil
-	}
-	return g.InstanceTypes
-}
-
-func (g *GooglePlatformMetainfo) GetImages() []GoogleImage {
-	if g == nil {
-		return nil
-	}
-	return g.Images
 }

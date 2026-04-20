@@ -7,9 +7,9 @@ import (
 )
 
 type GooglePlatformMetainfoFilestore struct {
-	Target   *string `json:"target,omitempty"`
-	Name     *string `json:"name,omitempty"`
 	Location *string `json:"location,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Target   *string `json:"target,omitempty"`
 }
 
 func (g GooglePlatformMetainfoFilestore) MarshalJSON() ([]byte, error) {
@@ -23,11 +23,11 @@ func (g *GooglePlatformMetainfoFilestore) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GooglePlatformMetainfoFilestore) GetTarget() *string {
+func (g *GooglePlatformMetainfoFilestore) GetLocation() *string {
 	if g == nil {
 		return nil
 	}
-	return g.Target
+	return g.Location
 }
 
 func (g *GooglePlatformMetainfoFilestore) GetName() *string {
@@ -37,9 +37,9 @@ func (g *GooglePlatformMetainfoFilestore) GetName() *string {
 	return g.Name
 }
 
-func (g *GooglePlatformMetainfoFilestore) GetLocation() *string {
+func (g *GooglePlatformMetainfoFilestore) GetTarget() *string {
 	if g == nil {
 		return nil
 	}
-	return g.Location
+	return g.Target
 }

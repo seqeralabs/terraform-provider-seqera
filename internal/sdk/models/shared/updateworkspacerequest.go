@@ -3,17 +3,17 @@
 package shared
 
 type UpdateWorkspaceRequest struct {
-	Name        *string     `json:"name,omitempty"`
-	FullName    *string     `json:"fullName,omitempty"`
 	Description *string     `json:"description,omitempty"`
+	FullName    *string     `json:"fullName,omitempty"`
+	Name        *string     `json:"name,omitempty"`
 	Visibility  *Visibility `json:"visibility,omitempty"`
 }
 
-func (u *UpdateWorkspaceRequest) GetName() *string {
+func (u *UpdateWorkspaceRequest) GetDescription() *string {
 	if u == nil {
 		return nil
 	}
-	return u.Name
+	return u.Description
 }
 
 func (u *UpdateWorkspaceRequest) GetFullName() *string {
@@ -23,11 +23,11 @@ func (u *UpdateWorkspaceRequest) GetFullName() *string {
 	return u.FullName
 }
 
-func (u *UpdateWorkspaceRequest) GetDescription() *string {
+func (u *UpdateWorkspaceRequest) GetName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.Description
+	return u.Name
 }
 
 func (u *UpdateWorkspaceRequest) GetVisibility() *Visibility {

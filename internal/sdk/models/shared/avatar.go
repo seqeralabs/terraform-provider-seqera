@@ -8,8 +8,8 @@ import (
 )
 
 type Avatar struct {
-	ID          *string    `json:"id,omitempty"`
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	ID          *string    `json:"id,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }
 
@@ -24,18 +24,18 @@ func (a *Avatar) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *Avatar) GetID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ID
-}
-
 func (a *Avatar) GetDateCreated() *time.Time {
 	if a == nil {
 		return nil
 	}
 	return a.DateCreated
+}
+
+func (a *Avatar) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *Avatar) GetLastUpdated() *time.Time {

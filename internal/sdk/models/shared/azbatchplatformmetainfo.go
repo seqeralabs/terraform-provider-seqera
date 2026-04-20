@@ -7,12 +7,12 @@ import (
 )
 
 type AzBatchPlatformMetainfo struct {
+	Containers []string `json:"containers,omitempty"`
 	// property to select the platform metainfo type
 	Discriminator *string  `json:"discriminator,omitempty"`
-	Warnings      []string `json:"warnings,omitempty"`
 	Pools         []string `json:"pools,omitempty"`
-	Containers    []string `json:"containers,omitempty"`
 	VMTypes       []string `json:"vmTypes,omitempty"`
+	Warnings      []string `json:"warnings,omitempty"`
 }
 
 func (a AzBatchPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -26,18 +26,18 @@ func (a *AzBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AzBatchPlatformMetainfo) GetContainers() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Containers
+}
+
 func (a *AzBatchPlatformMetainfo) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Discriminator
-}
-
-func (a *AzBatchPlatformMetainfo) GetWarnings() []string {
-	if a == nil {
-		return nil
-	}
-	return a.Warnings
 }
 
 func (a *AzBatchPlatformMetainfo) GetPools() []string {
@@ -47,16 +47,16 @@ func (a *AzBatchPlatformMetainfo) GetPools() []string {
 	return a.Pools
 }
 
-func (a *AzBatchPlatformMetainfo) GetContainers() []string {
-	if a == nil {
-		return nil
-	}
-	return a.Containers
-}
-
 func (a *AzBatchPlatformMetainfo) GetVMTypes() []string {
 	if a == nil {
 		return nil
 	}
 	return a.VMTypes
+}
+
+func (a *AzBatchPlatformMetainfo) GetWarnings() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Warnings
 }

@@ -158,11 +158,11 @@ func (r *WorkspaceResourceModel) ToSharedCreateWorkspaceRequest(ctx context.Cont
 func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Context) (*shared.UpdateWorkspaceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
 	} else {
-		name = nil
+		description = nil
 	}
 	fullName := new(string)
 	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
@@ -170,11 +170,11 @@ func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Cont
 	} else {
 		fullName = nil
 	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
 	} else {
-		description = nil
+		name = nil
 	}
 	visibility := new(shared.Visibility)
 	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
@@ -183,9 +183,9 @@ func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Cont
 		visibility = nil
 	}
 	out := shared.UpdateWorkspaceRequest{
-		Name:        name,
-		FullName:    fullName,
 		Description: description,
+		FullName:    fullName,
+		Name:        name,
 		Visibility:  visibility,
 	}
 
@@ -195,30 +195,26 @@ func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Cont
 func (r *WorkspaceResourceModel) ToSharedWorkspace(ctx context.Context) (*shared.Workspace, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(int64)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueInt64()
+	dateCreated := new(time.Time)
+	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
 	} else {
-		id = nil
+		dateCreated = nil
 	}
-	var name string
-	name = r.Name.ValueString()
-
-	var fullName string
-	fullName = r.FullName.ValueString()
-
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
-	visibility := shared.Visibility(r.Visibility.ValueString())
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
+	var fullName string
+	fullName = r.FullName.ValueString()
+
+	id := new(int64)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueInt64()
 	} else {
-		dateCreated = nil
+		id = nil
 	}
 	lastUpdated := new(time.Time)
 	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
@@ -226,14 +222,18 @@ func (r *WorkspaceResourceModel) ToSharedWorkspace(ctx context.Context) (*shared
 	} else {
 		lastUpdated = nil
 	}
+	var name string
+	name = r.Name.ValueString()
+
+	visibility := shared.Visibility(r.Visibility.ValueString())
 	out := shared.Workspace{
-		ID:          id,
-		Name:        name,
-		FullName:    fullName,
-		Description: description,
-		Visibility:  visibility,
 		DateCreated: dateCreated,
+		Description: description,
+		FullName:    fullName,
+		ID:          id,
 		LastUpdated: lastUpdated,
+		Name:        name,
+		Visibility:  visibility,
 	}
 
 	return &out, diags

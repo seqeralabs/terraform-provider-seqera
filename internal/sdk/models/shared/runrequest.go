@@ -3,12 +3,26 @@
 package shared
 
 type RunRequest struct {
+	Tags                     map[string]string `json:"tags,omitempty" multipartForm:"name=tags,json"`
+	WorkflowEngineParameters map[string]string `json:"workflow_engine_parameters,omitempty" multipartForm:"name=workflow_engine_parameters,json"`
 	WorkflowParams           *string           `json:"workflow_params,omitempty" multipartForm:"name=workflow_params"`
 	WorkflowType             *string           `json:"workflow_type,omitempty" multipartForm:"name=workflow_type"`
 	WorkflowTypeVersion      *string           `json:"workflow_type_version,omitempty" multipartForm:"name=workflow_type_version"`
-	Tags                     map[string]string `json:"tags,omitempty" multipartForm:"name=tags,json"`
-	WorkflowEngineParameters map[string]string `json:"workflow_engine_parameters,omitempty" multipartForm:"name=workflow_engine_parameters,json"`
 	WorkflowURL              *string           `json:"workflow_url,omitempty" multipartForm:"name=workflow_url"`
+}
+
+func (r *RunRequest) GetTags() map[string]string {
+	if r == nil {
+		return nil
+	}
+	return r.Tags
+}
+
+func (r *RunRequest) GetWorkflowEngineParameters() map[string]string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowEngineParameters
 }
 
 func (r *RunRequest) GetWorkflowParams() *string {
@@ -30,20 +44,6 @@ func (r *RunRequest) GetWorkflowTypeVersion() *string {
 		return nil
 	}
 	return r.WorkflowTypeVersion
-}
-
-func (r *RunRequest) GetTags() map[string]string {
-	if r == nil {
-		return nil
-	}
-	return r.Tags
-}
-
-func (r *RunRequest) GetWorkflowEngineParameters() map[string]string {
-	if r == nil {
-		return nil
-	}
-	return r.WorkflowEngineParameters
 }
 
 func (r *RunRequest) GetWorkflowURL() *string {

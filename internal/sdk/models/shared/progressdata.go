@@ -3,16 +3,9 @@
 package shared
 
 type ProgressData struct {
-	WorkflowProgress  *WorkflowLoad `json:"workflowProgress,omitempty"`
 	ProcessesProgress []ProcessLoad `json:"processesProgress,omitempty"`
 	TotalProcesses    *int          `json:"totalProcesses,omitempty"`
-}
-
-func (p *ProgressData) GetWorkflowProgress() *WorkflowLoad {
-	if p == nil {
-		return nil
-	}
-	return p.WorkflowProgress
+	WorkflowProgress  *WorkflowLoad `json:"workflowProgress,omitempty"`
 }
 
 func (p *ProgressData) GetProcessesProgress() []ProcessLoad {
@@ -27,4 +20,11 @@ func (p *ProgressData) GetTotalProcesses() *int {
 		return nil
 	}
 	return p.TotalProcesses
+}
+
+func (p *ProgressData) GetWorkflowProgress() *WorkflowLoad {
+	if p == nil {
+		return nil
+	}
+	return p.WorkflowProgress
 }

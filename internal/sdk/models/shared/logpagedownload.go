@@ -3,16 +3,16 @@
 package shared
 
 type LogPageDownload struct {
-	SaveName    *string `json:"saveName,omitempty"`
-	FileName    *string `json:"fileName,omitempty"`
 	DisplayText *string `json:"displayText,omitempty"`
+	FileName    *string `json:"fileName,omitempty"`
+	SaveName    *string `json:"saveName,omitempty"`
 }
 
-func (l *LogPageDownload) GetSaveName() *string {
+func (l *LogPageDownload) GetDisplayText() *string {
 	if l == nil {
 		return nil
 	}
-	return l.SaveName
+	return l.DisplayText
 }
 
 func (l *LogPageDownload) GetFileName() *string {
@@ -22,9 +22,9 @@ func (l *LogPageDownload) GetFileName() *string {
 	return l.FileName
 }
 
-func (l *LogPageDownload) GetDisplayText() *string {
+func (l *LogPageDownload) GetSaveName() *string {
 	if l == nil {
 		return nil
 	}
-	return l.DisplayText
+	return l.SaveName
 }

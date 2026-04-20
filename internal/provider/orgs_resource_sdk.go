@@ -128,24 +128,24 @@ func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Contex
 func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.Organization, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	var fullName string
-	fullName = r.FullName.ValueString()
-
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
+	var fullName string
+	fullName = r.FullName.ValueString()
+
 	location := new(string)
 	if !r.Location.IsUnknown() && !r.Location.IsNull() {
 		*location = r.Location.ValueString()
 	} else {
 		location = nil
 	}
+	var name string
+	name = r.Name.ValueString()
+
 	website := new(string)
 	if !r.Website.IsUnknown() && !r.Website.IsNull() {
 		*website = r.Website.ValueString()
@@ -153,10 +153,10 @@ func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.O
 		website = nil
 	}
 	out := shared.Organization{
-		Name:        name,
-		FullName:    fullName,
 		Description: description,
+		FullName:    fullName,
 		Location:    location,
+		Name:        name,
 		Website:     website,
 	}
 
@@ -166,29 +166,29 @@ func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.O
 func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Context) (*shared.UpdateOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	fullName := new(string)
-	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
-		*fullName = r.FullName.ValueString()
-	} else {
-		fullName = nil
-	}
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
+	fullName := new(string)
+	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
+		*fullName = r.FullName.ValueString()
+	} else {
+		fullName = nil
+	}
 	location := new(string)
 	if !r.Location.IsUnknown() && !r.Location.IsNull() {
 		*location = r.Location.ValueString()
 	} else {
 		location = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
 	}
 	website := new(string)
 	if !r.Website.IsUnknown() && !r.Website.IsNull() {
@@ -197,10 +197,10 @@ func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Contex
 		website = nil
 	}
 	out := shared.UpdateOrganizationRequest{
-		FullName:    fullName,
-		Name:        name,
 		Description: description,
+		FullName:    fullName,
 		Location:    location,
+		Name:        name,
 		Website:     website,
 	}
 

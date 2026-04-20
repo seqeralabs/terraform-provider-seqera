@@ -5,11 +5,11 @@ package shared
 type WorkspaceParticipantResponseDto struct {
 	OrgID             *int64  `json:"orgId,omitempty"`
 	OrgName           *string `json:"orgName,omitempty"`
-	WorkspaceID       *int64  `json:"workspaceId,omitempty"`
-	WorkspaceName     *string `json:"workspaceName,omitempty"`
-	WorkspaceFullName *string `json:"workspaceFullName,omitempty"`
 	ParticipantID     *int64  `json:"participantId,omitempty"`
 	ParticipantRole   *string `json:"participantRole,omitempty"`
+	WorkspaceFullName *string `json:"workspaceFullName,omitempty"`
+	WorkspaceID       *int64  `json:"workspaceId,omitempty"`
+	WorkspaceName     *string `json:"workspaceName,omitempty"`
 }
 
 func (w *WorkspaceParticipantResponseDto) GetOrgID() *int64 {
@@ -26,27 +26,6 @@ func (w *WorkspaceParticipantResponseDto) GetOrgName() *string {
 	return w.OrgName
 }
 
-func (w *WorkspaceParticipantResponseDto) GetWorkspaceID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.WorkspaceID
-}
-
-func (w *WorkspaceParticipantResponseDto) GetWorkspaceName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkspaceName
-}
-
-func (w *WorkspaceParticipantResponseDto) GetWorkspaceFullName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkspaceFullName
-}
-
 func (w *WorkspaceParticipantResponseDto) GetParticipantID() *int64 {
 	if w == nil {
 		return nil
@@ -59,4 +38,25 @@ func (w *WorkspaceParticipantResponseDto) GetParticipantRole() *string {
 		return nil
 	}
 	return w.ParticipantRole
+}
+
+func (w *WorkspaceParticipantResponseDto) GetWorkspaceFullName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkspaceFullName
+}
+
+func (w *WorkspaceParticipantResponseDto) GetWorkspaceID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.WorkspaceID
+}
+
+func (w *WorkspaceParticipantResponseDto) GetWorkspaceName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkspaceName
 }

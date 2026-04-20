@@ -31,20 +31,13 @@ func (e *UpdateManagedCredentialsRequestProvider) UnmarshalJSON(data []byte) err
 }
 
 type UpdateManagedCredentialsRequest struct {
-	Provider *UpdateManagedCredentialsRequestProvider `json:"provider,omitempty"`
 	// Represents credentials used for authentication with various platforms and services.
 	// Contains authentication information for accessing cloud providers, Git repositories,
 	// and other external services within the Seqera Platform.
 	//
-	Credentials *CredentialsInput                `json:"credentials,omitempty"`
-	Metadata    *ManagedCredentialsMetadataInput `json:"metadata,omitempty"`
-}
-
-func (u *UpdateManagedCredentialsRequest) GetProvider() *UpdateManagedCredentialsRequestProvider {
-	if u == nil {
-		return nil
-	}
-	return u.Provider
+	Credentials *CredentialsInput                        `json:"credentials,omitempty"`
+	Metadata    *ManagedCredentialsMetadataInput         `json:"metadata,omitempty"`
+	Provider    *UpdateManagedCredentialsRequestProvider `json:"provider,omitempty"`
 }
 
 func (u *UpdateManagedCredentialsRequest) GetCredentials() *CredentialsInput {
@@ -59,4 +52,11 @@ func (u *UpdateManagedCredentialsRequest) GetMetadata() *ManagedCredentialsMetad
 		return nil
 	}
 	return u.Metadata
+}
+
+func (u *UpdateManagedCredentialsRequest) GetProvider() *UpdateManagedCredentialsRequestProvider {
+	if u == nil {
+		return nil
+	}
+	return u.Provider
 }

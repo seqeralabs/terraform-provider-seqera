@@ -3,30 +3,16 @@
 package shared
 
 type Organization struct {
-	// Short name or handle for the organization (used in URLs and resource paths). Required.
-	Name string `json:"name"`
-	// Complete formal display name of the organization. Required.
-	FullName string `json:"fullName"`
 	// Detailed description of the organization's purpose and activities.
 	Description *string `json:"description,omitempty"`
+	// Complete formal display name of the organization. Required.
+	FullName string `json:"fullName"`
 	// Geographic location or address of the organization.
 	Location *string `json:"location,omitempty"`
+	// Short name or handle for the organization (used in URLs and resource paths). Required.
+	Name string `json:"name"`
 	// Official website URL for the organization.
 	Website *string `json:"website,omitempty"`
-}
-
-func (o *Organization) GetName() string {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *Organization) GetFullName() string {
-	if o == nil {
-		return ""
-	}
-	return o.FullName
 }
 
 func (o *Organization) GetDescription() *string {
@@ -36,11 +22,25 @@ func (o *Organization) GetDescription() *string {
 	return o.Description
 }
 
+func (o *Organization) GetFullName() string {
+	if o == nil {
+		return ""
+	}
+	return o.FullName
+}
+
 func (o *Organization) GetLocation() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Location
+}
+
+func (o *Organization) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
 }
 
 func (o *Organization) GetWebsite() *string {

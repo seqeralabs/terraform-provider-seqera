@@ -3,22 +3,36 @@
 package shared
 
 type UpsertUserRequest struct {
-	UserName     string  `json:"userName"`
+	Avatar       *string `json:"avatar,omitempty"`
+	AvatarID     *string `json:"avatarId,omitempty"`
+	Description  *string `json:"description,omitempty"`
 	Email        string  `json:"email"`
 	FirstName    *string `json:"firstName,omitempty"`
 	LastName     *string `json:"lastName,omitempty"`
-	Organization *string `json:"organization,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	Avatar       *string `json:"avatar,omitempty"`
-	AvatarID     *string `json:"avatarId,omitempty"`
 	Notification *bool   `json:"notification,omitempty"`
+	Organization *string `json:"organization,omitempty"`
+	UserName     string  `json:"userName"`
 }
 
-func (u *UpsertUserRequest) GetUserName() string {
+func (u *UpsertUserRequest) GetAvatar() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
-	return u.UserName
+	return u.Avatar
+}
+
+func (u *UpsertUserRequest) GetAvatarID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.AvatarID
+}
+
+func (u *UpsertUserRequest) GetDescription() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Description
 }
 
 func (u *UpsertUserRequest) GetEmail() string {
@@ -42,6 +56,13 @@ func (u *UpsertUserRequest) GetLastName() *string {
 	return u.LastName
 }
 
+func (u *UpsertUserRequest) GetNotification() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.Notification
+}
+
 func (u *UpsertUserRequest) GetOrganization() *string {
 	if u == nil {
 		return nil
@@ -49,30 +70,9 @@ func (u *UpsertUserRequest) GetOrganization() *string {
 	return u.Organization
 }
 
-func (u *UpsertUserRequest) GetDescription() *string {
+func (u *UpsertUserRequest) GetUserName() string {
 	if u == nil {
-		return nil
+		return ""
 	}
-	return u.Description
-}
-
-func (u *UpsertUserRequest) GetAvatar() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Avatar
-}
-
-func (u *UpsertUserRequest) GetAvatarID() *string {
-	if u == nil {
-		return nil
-	}
-	return u.AvatarID
-}
-
-func (u *UpsertUserRequest) GetNotification() *bool {
-	if u == nil {
-		return nil
-	}
-	return u.Notification
+	return u.UserName
 }

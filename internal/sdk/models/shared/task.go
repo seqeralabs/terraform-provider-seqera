@@ -8,98 +8,98 @@ import (
 )
 
 type Task struct {
-	Hash *string `json:"hash,omitempty"`
-	Name *string `json:"name,omitempty"`
-	// Process name
-	Process *string `json:"process,omitempty"`
-	// Task tag
-	Tag *string `json:"tag,omitempty"`
-	// Task submission time
-	Submit *time.Time `json:"submit,omitempty"`
-	// Task start time
-	Start *time.Time `json:"start,omitempty"`
-	// Task completion time
-	Complete *time.Time `json:"complete,omitempty"`
-	Module   []string   `json:"module,omitempty"`
-	// Container image
-	Container *string `json:"container,omitempty"`
 	// Attempt number
 	Attempt *int `json:"attempt,omitempty"`
-	// Task script
-	Script *string `json:"script,omitempty"`
-	// Scratch directory
-	Scratch *string `json:"scratch,omitempty"`
-	// Working directory
-	Workdir *string `json:"workdir,omitempty"`
-	// Execution queue
-	Queue *string `json:"queue,omitempty"`
-	// CPU allocation
-	Cpus *int `json:"cpus,omitempty"`
-	// Memory allocation in bytes
-	Memory *int64 `json:"memory,omitempty"`
-	// Disk allocation in bytes
-	Disk *int64 `json:"disk,omitempty"`
-	// Time limit in milliseconds
-	Time *int64 `json:"time,omitempty"`
-	// Environment variables
-	Env *string `json:"env,omitempty"`
-	// Executor name
-	Executor *string `json:"executor,omitempty"`
-	// Cloud machine type
-	MachineType *string `json:"machineType,omitempty"`
 	// Cloud zone/region
-	CloudZone  *string          `json:"cloudZone,omitempty"`
-	PriceModel *CloudPriceModel `json:"priceModel,omitempty"`
+	CloudZone *string `json:"cloudZone,omitempty"`
+	// Task completion time
+	Complete *time.Time `json:"complete,omitempty"`
+	// Container image
+	Container *string `json:"container,omitempty"`
 	// Estimated cost
 	Cost *float64 `json:"cost,omitempty"`
-	// Error handling action
-	ErrorAction *string `json:"errorAction,omitempty"`
-	// Exit status code
-	ExitStatus *int `json:"exitStatus,omitempty"`
+	// CPU allocation
+	Cpus        *int       `json:"cpus,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Disk allocation in bytes
+	Disk *int64 `json:"disk,omitempty"`
 	// Task duration in milliseconds
 	Duration *int64 `json:"duration,omitempty"`
-	// Real execution time in milliseconds
-	Realtime *int64 `json:"realtime,omitempty"`
+	// Environment variables
+	Env *string `json:"env,omitempty"`
+	// Error handling action
+	ErrorAction  *string `json:"errorAction,omitempty"`
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	// Executor name
+	Executor *string `json:"executor,omitempty"`
+	// Task exit value (can be string)
+	Exit *string `json:"exit,omitempty"`
+	// Exit status code
+	ExitStatus *int    `json:"exitStatus,omitempty"`
+	Hash       *string `json:"hash,omitempty"`
+	ID         *int64  `json:"id,omitempty"`
+	// Involuntary context switches
+	InvCtxt     *int64     `json:"invCtxt,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	LogStreamID *string    `json:"logStreamId,omitempty"`
+	// Cloud machine type
+	MachineType *string `json:"machineType,omitempty"`
+	// Memory allocation in bytes
+	Memory *int64   `json:"memory,omitempty"`
+	Module []string `json:"module,omitempty"`
+	Name   *string  `json:"name,omitempty"`
 	// Native job ID from executor
-	NativeID *string `json:"nativeId,omitempty"`
+	NativeID             *string `json:"nativeId,omitempty"`
+	NumSpotInterruptions *int    `json:"numSpotInterruptions,omitempty"`
 	// CPU usage percentage
 	Pcpu *float64 `json:"pcpu,omitempty"`
-	// Memory usage percentage
-	Pmem *float64 `json:"pmem,omitempty"`
-	// Resident set size
-	Rss *int64 `json:"rss,omitempty"`
-	// Virtual memory size
-	Vmem *int64 `json:"vmem,omitempty"`
 	// Peak resident set size
 	PeakRss *int64 `json:"peakRss,omitempty"`
 	// Peak virtual memory size
 	PeakVmem *int64 `json:"peakVmem,omitempty"`
+	// Memory usage percentage
+	Pmem       *float64         `json:"pmem,omitempty"`
+	PriceModel *CloudPriceModel `json:"priceModel,omitempty"`
+	// Process name
+	Process *string `json:"process,omitempty"`
+	// Execution queue
+	Queue *string `json:"queue,omitempty"`
 	// Characters read
 	Rchar *int64 `json:"rchar,omitempty"`
-	// Characters written
-	Wchar *int64 `json:"wchar,omitempty"`
+	// Bytes read from disk
+	ReadBytes *int64 `json:"readBytes,omitempty"`
+	// Real execution time in milliseconds
+	Realtime *int64 `json:"realtime,omitempty"`
+	// Resident set size
+	Rss *int64 `json:"rss,omitempty"`
+	// Scratch directory
+	Scratch *string `json:"scratch,omitempty"`
+	// Task script
+	Script *string `json:"script,omitempty"`
+	// Task start time
+	Start  *time.Time `json:"start,omitempty"`
+	Status TaskStatus `json:"status"`
+	// Task submission time
+	Submit *time.Time `json:"submit,omitempty"`
 	// System read calls
 	Syscr *int64 `json:"syscr,omitempty"`
 	// System write calls
 	Syscw *int64 `json:"syscw,omitempty"`
-	// Bytes read from disk
-	ReadBytes *int64 `json:"readBytes,omitempty"`
-	// Bytes written to disk
-	WriteBytes *int64 `json:"writeBytes,omitempty"`
+	// Task tag
+	Tag    *string `json:"tag,omitempty"`
+	TaskID int64   `json:"taskId"`
+	// Time limit in milliseconds
+	Time *int64 `json:"time,omitempty"`
+	// Virtual memory size
+	Vmem *int64 `json:"vmem,omitempty"`
 	// Voluntary context switches
 	VolCtxt *int64 `json:"volCtxt,omitempty"`
-	// Involuntary context switches
-	InvCtxt              *int64  `json:"invCtxt,omitempty"`
-	LogStreamID          *string `json:"logStreamId,omitempty"`
-	NumSpotInterruptions *int    `json:"numSpotInterruptions,omitempty"`
-	// Task exit value (can be string)
-	Exit         *string    `json:"exit,omitempty"`
-	ID           *int64     `json:"id,omitempty"`
-	TaskID       int64      `json:"taskId"`
-	Status       TaskStatus `json:"status"`
-	DateCreated  *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated  *time.Time `json:"lastUpdated,omitempty"`
-	ErrorMessage *string    `json:"errorMessage,omitempty"`
+	// Characters written
+	Wchar *int64 `json:"wchar,omitempty"`
+	// Working directory
+	Workdir *string `json:"workdir,omitempty"`
+	// Bytes written to disk
+	WriteBytes *int64 `json:"writeBytes,omitempty"`
 }
 
 func (t Task) MarshalJSON() ([]byte, error) {
@@ -113,151 +113,11 @@ func (t *Task) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *Task) GetHash() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Hash
-}
-
-func (t *Task) GetName() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Name
-}
-
-func (t *Task) GetProcess() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Process
-}
-
-func (t *Task) GetTag() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Tag
-}
-
-func (t *Task) GetSubmit() *time.Time {
-	if t == nil {
-		return nil
-	}
-	return t.Submit
-}
-
-func (t *Task) GetStart() *time.Time {
-	if t == nil {
-		return nil
-	}
-	return t.Start
-}
-
-func (t *Task) GetComplete() *time.Time {
-	if t == nil {
-		return nil
-	}
-	return t.Complete
-}
-
-func (t *Task) GetModule() []string {
-	if t == nil {
-		return nil
-	}
-	return t.Module
-}
-
-func (t *Task) GetContainer() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Container
-}
-
 func (t *Task) GetAttempt() *int {
 	if t == nil {
 		return nil
 	}
 	return t.Attempt
-}
-
-func (t *Task) GetScript() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Script
-}
-
-func (t *Task) GetScratch() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Scratch
-}
-
-func (t *Task) GetWorkdir() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Workdir
-}
-
-func (t *Task) GetQueue() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Queue
-}
-
-func (t *Task) GetCpus() *int {
-	if t == nil {
-		return nil
-	}
-	return t.Cpus
-}
-
-func (t *Task) GetMemory() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.Memory
-}
-
-func (t *Task) GetDisk() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.Disk
-}
-
-func (t *Task) GetTime() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.Time
-}
-
-func (t *Task) GetEnv() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Env
-}
-
-func (t *Task) GetExecutor() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Executor
-}
-
-func (t *Task) GetMachineType() *string {
-	if t == nil {
-		return nil
-	}
-	return t.MachineType
 }
 
 func (t *Task) GetCloudZone() *string {
@@ -267,11 +127,18 @@ func (t *Task) GetCloudZone() *string {
 	return t.CloudZone
 }
 
-func (t *Task) GetPriceModel() *CloudPriceModel {
+func (t *Task) GetComplete() *time.Time {
 	if t == nil {
 		return nil
 	}
-	return t.PriceModel
+	return t.Complete
+}
+
+func (t *Task) GetContainer() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Container
 }
 
 func (t *Task) GetCost() *float64 {
@@ -281,18 +148,25 @@ func (t *Task) GetCost() *float64 {
 	return t.Cost
 }
 
-func (t *Task) GetErrorAction() *string {
+func (t *Task) GetCpus() *int {
 	if t == nil {
 		return nil
 	}
-	return t.ErrorAction
+	return t.Cpus
 }
 
-func (t *Task) GetExitStatus() *int {
+func (t *Task) GetDateCreated() *time.Time {
 	if t == nil {
 		return nil
 	}
-	return t.ExitStatus
+	return t.DateCreated
+}
+
+func (t *Task) GetDisk() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.Disk
 }
 
 func (t *Task) GetDuration() *int64 {
@@ -302,11 +176,109 @@ func (t *Task) GetDuration() *int64 {
 	return t.Duration
 }
 
-func (t *Task) GetRealtime() *int64 {
+func (t *Task) GetEnv() *string {
 	if t == nil {
 		return nil
 	}
-	return t.Realtime
+	return t.Env
+}
+
+func (t *Task) GetErrorAction() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ErrorAction
+}
+
+func (t *Task) GetErrorMessage() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ErrorMessage
+}
+
+func (t *Task) GetExecutor() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Executor
+}
+
+func (t *Task) GetExit() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Exit
+}
+
+func (t *Task) GetExitStatus() *int {
+	if t == nil {
+		return nil
+	}
+	return t.ExitStatus
+}
+
+func (t *Task) GetHash() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Hash
+}
+
+func (t *Task) GetID() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.ID
+}
+
+func (t *Task) GetInvCtxt() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.InvCtxt
+}
+
+func (t *Task) GetLastUpdated() *time.Time {
+	if t == nil {
+		return nil
+	}
+	return t.LastUpdated
+}
+
+func (t *Task) GetLogStreamID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.LogStreamID
+}
+
+func (t *Task) GetMachineType() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MachineType
+}
+
+func (t *Task) GetMemory() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.Memory
+}
+
+func (t *Task) GetModule() []string {
+	if t == nil {
+		return nil
+	}
+	return t.Module
+}
+
+func (t *Task) GetName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Name
 }
 
 func (t *Task) GetNativeID() *string {
@@ -316,32 +288,18 @@ func (t *Task) GetNativeID() *string {
 	return t.NativeID
 }
 
+func (t *Task) GetNumSpotInterruptions() *int {
+	if t == nil {
+		return nil
+	}
+	return t.NumSpotInterruptions
+}
+
 func (t *Task) GetPcpu() *float64 {
 	if t == nil {
 		return nil
 	}
 	return t.Pcpu
-}
-
-func (t *Task) GetPmem() *float64 {
-	if t == nil {
-		return nil
-	}
-	return t.Pmem
-}
-
-func (t *Task) GetRss() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.Rss
-}
-
-func (t *Task) GetVmem() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.Vmem
 }
 
 func (t *Task) GetPeakRss() *int64 {
@@ -358,6 +316,34 @@ func (t *Task) GetPeakVmem() *int64 {
 	return t.PeakVmem
 }
 
+func (t *Task) GetPmem() *float64 {
+	if t == nil {
+		return nil
+	}
+	return t.Pmem
+}
+
+func (t *Task) GetPriceModel() *CloudPriceModel {
+	if t == nil {
+		return nil
+	}
+	return t.PriceModel
+}
+
+func (t *Task) GetProcess() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Process
+}
+
+func (t *Task) GetQueue() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Queue
+}
+
 func (t *Task) GetRchar() *int64 {
 	if t == nil {
 		return nil
@@ -365,11 +351,60 @@ func (t *Task) GetRchar() *int64 {
 	return t.Rchar
 }
 
-func (t *Task) GetWchar() *int64 {
+func (t *Task) GetReadBytes() *int64 {
 	if t == nil {
 		return nil
 	}
-	return t.Wchar
+	return t.ReadBytes
+}
+
+func (t *Task) GetRealtime() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.Realtime
+}
+
+func (t *Task) GetRss() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.Rss
+}
+
+func (t *Task) GetScratch() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Scratch
+}
+
+func (t *Task) GetScript() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Script
+}
+
+func (t *Task) GetStart() *time.Time {
+	if t == nil {
+		return nil
+	}
+	return t.Start
+}
+
+func (t *Task) GetStatus() TaskStatus {
+	if t == nil {
+		return TaskStatus("")
+	}
+	return t.Status
+}
+
+func (t *Task) GetSubmit() *time.Time {
+	if t == nil {
+		return nil
+	}
+	return t.Submit
 }
 
 func (t *Task) GetSyscr() *int64 {
@@ -386,60 +421,11 @@ func (t *Task) GetSyscw() *int64 {
 	return t.Syscw
 }
 
-func (t *Task) GetReadBytes() *int64 {
+func (t *Task) GetTag() *string {
 	if t == nil {
 		return nil
 	}
-	return t.ReadBytes
-}
-
-func (t *Task) GetWriteBytes() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.WriteBytes
-}
-
-func (t *Task) GetVolCtxt() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.VolCtxt
-}
-
-func (t *Task) GetInvCtxt() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.InvCtxt
-}
-
-func (t *Task) GetLogStreamID() *string {
-	if t == nil {
-		return nil
-	}
-	return t.LogStreamID
-}
-
-func (t *Task) GetNumSpotInterruptions() *int {
-	if t == nil {
-		return nil
-	}
-	return t.NumSpotInterruptions
-}
-
-func (t *Task) GetExit() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Exit
-}
-
-func (t *Task) GetID() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.ID
+	return t.Tag
 }
 
 func (t *Task) GetTaskID() int64 {
@@ -449,30 +435,44 @@ func (t *Task) GetTaskID() int64 {
 	return t.TaskID
 }
 
-func (t *Task) GetStatus() TaskStatus {
-	if t == nil {
-		return TaskStatus("")
-	}
-	return t.Status
-}
-
-func (t *Task) GetDateCreated() *time.Time {
+func (t *Task) GetTime() *int64 {
 	if t == nil {
 		return nil
 	}
-	return t.DateCreated
+	return t.Time
 }
 
-func (t *Task) GetLastUpdated() *time.Time {
+func (t *Task) GetVmem() *int64 {
 	if t == nil {
 		return nil
 	}
-	return t.LastUpdated
+	return t.Vmem
 }
 
-func (t *Task) GetErrorMessage() *string {
+func (t *Task) GetVolCtxt() *int64 {
 	if t == nil {
 		return nil
 	}
-	return t.ErrorMessage
+	return t.VolCtxt
+}
+
+func (t *Task) GetWchar() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.Wchar
+}
+
+func (t *Task) GetWorkdir() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Workdir
+}
+
+func (t *Task) GetWriteBytes() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.WriteBytes
 }

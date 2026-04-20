@@ -4,14 +4,14 @@ package shared
 
 type OrgAndWorkspaceDto struct {
 	OrgID             *int64      `json:"orgId,omitempty"`
-	OrgName           *string     `json:"orgName,omitempty"`
 	OrgLogoURL        *string     `json:"orgLogoUrl,omitempty"`
+	OrgName           *string     `json:"orgName,omitempty"`
 	OrgType           *OrgType    `json:"orgType,omitempty"`
+	Roles             []string    `json:"roles,omitempty"`
+	Visibility        *Visibility `json:"visibility,omitempty"`
+	WorkspaceFullName *string     `json:"workspaceFullName,omitempty"`
 	WorkspaceID       *int64      `json:"workspaceId,omitempty"`
 	WorkspaceName     *string     `json:"workspaceName,omitempty"`
-	WorkspaceFullName *string     `json:"workspaceFullName,omitempty"`
-	Visibility        *Visibility `json:"visibility,omitempty"`
-	Roles             []string    `json:"roles,omitempty"`
 }
 
 func (o *OrgAndWorkspaceDto) GetOrgID() *int64 {
@@ -21,13 +21,6 @@ func (o *OrgAndWorkspaceDto) GetOrgID() *int64 {
 	return o.OrgID
 }
 
-func (o *OrgAndWorkspaceDto) GetOrgName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.OrgName
-}
-
 func (o *OrgAndWorkspaceDto) GetOrgLogoURL() *string {
 	if o == nil {
 		return nil
@@ -35,11 +28,39 @@ func (o *OrgAndWorkspaceDto) GetOrgLogoURL() *string {
 	return o.OrgLogoURL
 }
 
+func (o *OrgAndWorkspaceDto) GetOrgName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrgName
+}
+
 func (o *OrgAndWorkspaceDto) GetOrgType() *OrgType {
 	if o == nil {
 		return nil
 	}
 	return o.OrgType
+}
+
+func (o *OrgAndWorkspaceDto) GetRoles() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Roles
+}
+
+func (o *OrgAndWorkspaceDto) GetVisibility() *Visibility {
+	if o == nil {
+		return nil
+	}
+	return o.Visibility
+}
+
+func (o *OrgAndWorkspaceDto) GetWorkspaceFullName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.WorkspaceFullName
 }
 
 func (o *OrgAndWorkspaceDto) GetWorkspaceID() *int64 {
@@ -54,25 +75,4 @@ func (o *OrgAndWorkspaceDto) GetWorkspaceName() *string {
 		return nil
 	}
 	return o.WorkspaceName
-}
-
-func (o *OrgAndWorkspaceDto) GetWorkspaceFullName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.WorkspaceFullName
-}
-
-func (o *OrgAndWorkspaceDto) GetVisibility() *Visibility {
-	if o == nil {
-		return nil
-	}
-	return o.Visibility
-}
-
-func (o *OrgAndWorkspaceDto) GetRoles() []string {
-	if o == nil {
-		return nil
-	}
-	return o.Roles
 }

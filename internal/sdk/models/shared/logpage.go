@@ -3,22 +3,22 @@
 package shared
 
 type LogPage struct {
-	Truncated *bool `json:"truncated,omitempty"`
+	Downloads []LogPageDownload `json:"downloads,omitempty"`
 	// Log entries (can be null)
 	Entries      []string `json:"entries,omitempty"`
-	RewindToken  *string  `json:"rewindToken,omitempty"`
 	ForwardToken *string  `json:"forwardToken,omitempty"`
-	Pending      *bool    `json:"pending,omitempty"`
 	// Log message (can be null)
-	Message   *string           `json:"message,omitempty"`
-	Downloads []LogPageDownload `json:"downloads,omitempty"`
+	Message     *string `json:"message,omitempty"`
+	Pending     *bool   `json:"pending,omitempty"`
+	RewindToken *string `json:"rewindToken,omitempty"`
+	Truncated   *bool   `json:"truncated,omitempty"`
 }
 
-func (l *LogPage) GetTruncated() *bool {
+func (l *LogPage) GetDownloads() []LogPageDownload {
 	if l == nil {
 		return nil
 	}
-	return l.Truncated
+	return l.Downloads
 }
 
 func (l *LogPage) GetEntries() []string {
@@ -28,25 +28,11 @@ func (l *LogPage) GetEntries() []string {
 	return l.Entries
 }
 
-func (l *LogPage) GetRewindToken() *string {
-	if l == nil {
-		return nil
-	}
-	return l.RewindToken
-}
-
 func (l *LogPage) GetForwardToken() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ForwardToken
-}
-
-func (l *LogPage) GetPending() *bool {
-	if l == nil {
-		return nil
-	}
-	return l.Pending
 }
 
 func (l *LogPage) GetMessage() *string {
@@ -56,9 +42,23 @@ func (l *LogPage) GetMessage() *string {
 	return l.Message
 }
 
-func (l *LogPage) GetDownloads() []LogPageDownload {
+func (l *LogPage) GetPending() *bool {
 	if l == nil {
 		return nil
 	}
-	return l.Downloads
+	return l.Pending
+}
+
+func (l *LogPage) GetRewindToken() *string {
+	if l == nil {
+		return nil
+	}
+	return l.RewindToken
+}
+
+func (l *LogPage) GetTruncated() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Truncated
 }

@@ -7,10 +7,10 @@ import (
 )
 
 type Image struct {
+	Arch        string `json:"arch"`
+	Description string `json:"description"`
 	ID          string `json:"id"`
 	Name        string `json:"name"`
-	Description string `json:"description"`
-	Arch        string `json:"arch"`
 }
 
 func (i Image) MarshalJSON() ([]byte, error) {
@@ -22,6 +22,20 @@ func (i *Image) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (i *Image) GetArch() string {
+	if i == nil {
+		return ""
+	}
+	return i.Arch
+}
+
+func (i *Image) GetDescription() string {
+	if i == nil {
+		return ""
+	}
+	return i.Description
 }
 
 func (i *Image) GetID() string {
@@ -36,18 +50,4 @@ func (i *Image) GetName() string {
 		return ""
 	}
 	return i.Name
-}
-
-func (i *Image) GetDescription() string {
-	if i == nil {
-		return ""
-	}
-	return i.Description
-}
-
-func (i *Image) GetArch() string {
-	if i == nil {
-		return ""
-	}
-	return i.Arch
 }

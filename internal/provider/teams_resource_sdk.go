@@ -137,6 +137,12 @@ func (r *TeamsResourceModel) ToOperationsUpdateOrganizationTeamRequest(ctx conte
 func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*shared.CreateTeamRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	avatarID := new(string)
+	if !r.AvatarID.IsUnknown() && !r.AvatarID.IsNull() {
+		*avatarID = r.AvatarID.ValueString()
+	} else {
+		avatarID = nil
+	}
 	team, teamDiags := r.ToSharedTeam(ctx)
 	diags.Append(teamDiags...)
 
@@ -144,15 +150,9 @@ func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*sh
 		return nil, diags
 	}
 
-	avatarID := new(string)
-	if !r.AvatarID.IsUnknown() && !r.AvatarID.IsNull() {
-		*avatarID = r.AvatarID.ValueString()
-	} else {
-		avatarID = nil
-	}
 	out := shared.CreateTeamRequest{
-		Team:     team,
 		AvatarID: avatarID,
+		Team:     team,
 	}
 
 	return &out, diags
@@ -161,18 +161,18 @@ func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*sh
 func (r *TeamsResourceModel) ToSharedTeam(ctx context.Context) (*shared.Team, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
+	var name string
+	name = r.Name.ValueString()
+
 	out := shared.Team{
-		Name:        name,
 		Description: description,
+		Name:        name,
 	}
 
 	return &out, diags
@@ -181,11 +181,11 @@ func (r *TeamsResourceModel) ToSharedTeam(ctx context.Context) (*shared.Team, di
 func (r *TeamsResourceModel) ToSharedUpdateTeamRequest(ctx context.Context) (*shared.UpdateTeamRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
+	avatarID := new(string)
+	if !r.AvatarID.IsUnknown() && !r.AvatarID.IsNull() {
+		*avatarID = r.AvatarID.ValueString()
 	} else {
-		name = nil
+		avatarID = nil
 	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
@@ -193,16 +193,16 @@ func (r *TeamsResourceModel) ToSharedUpdateTeamRequest(ctx context.Context) (*sh
 	} else {
 		description = nil
 	}
-	avatarID := new(string)
-	if !r.AvatarID.IsUnknown() && !r.AvatarID.IsNull() {
-		*avatarID = r.AvatarID.ValueString()
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
 	} else {
-		avatarID = nil
+		name = nil
 	}
 	out := shared.UpdateTeamRequest{
-		Name:        name,
-		Description: description,
 		AvatarID:    avatarID,
+		Description: description,
+		Name:        name,
 	}
 
 	return &out, diags

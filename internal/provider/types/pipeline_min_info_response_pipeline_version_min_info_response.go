@@ -7,11 +7,11 @@ import (
 )
 
 type PipelineMinInfoResponsePipelineVersionMinInfoResponse struct {
-	ID             types.String `tfsdk:"id"`
-	Name           types.String `tfsdk:"name"`
 	DateCreated    types.String `tfsdk:"date_created"`
-	LastUpdated    types.String `tfsdk:"last_updated"`
 	Hash           types.String `tfsdk:"hash"`
+	ID             types.String `tfsdk:"id"`
 	IsDefault      types.Bool   `tfsdk:"is_default"`
 	IsDraftVersion types.Bool   `tfsdk:"is_draft_version"`
+	LastUpdated    types.String `tfsdk:"last_updated"`
+	Name           types.String `tfsdk:"name"`
 }

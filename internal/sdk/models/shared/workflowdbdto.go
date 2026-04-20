@@ -11,51 +11,51 @@ import (
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
 type WorkflowDbDto struct {
-	// Unique identifier for the workflow execution
-	ID *string `json:"id,omitempty"`
-	// Numeric identifier of the user who owns this workflow
-	OwnerID *int64 `json:"ownerId,omitempty"`
-	// Timestamp when the workflow was submitted for execution
-	Submit *time.Time `json:"submit,omitempty"`
-	// Timestamp when the workflow execution actually started
-	Start *time.Time `json:"start,omitempty"`
-	// Timestamp when the workflow execution completed
-	Complete    *time.Time `json:"complete,omitempty"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Run name
-	RunName *string `json:"runName,omitempty"`
-	// Session ID
-	SessionID *string `json:"sessionId,omitempty"`
-	// Profile
-	Profile *string `json:"profile,omitempty"`
-	// Work directory
-	WorkDir *string `json:"workDir,omitempty"`
-	// Revision
-	Revision *string `json:"revision,omitempty"`
 	// Command line
 	CommandLine *string `json:"commandLine,omitempty"`
-	// Project name
-	ProjectName *string `json:"projectName,omitempty"`
-	// Script name
-	ScriptName *string `json:"scriptName,omitempty"`
-	// Launch ID
-	LaunchID *string         `json:"launchId,omitempty"`
-	Status   *WorkflowStatus `json:"status,omitempty"`
-	// Requires attention flag
-	RequiresAttention *bool `json:"requiresAttention,omitempty"`
+	// Timestamp when the workflow execution completed
+	Complete *time.Time `json:"complete,omitempty"`
 	// Config files (can be null)
 	ConfigFiles []string `json:"configFiles,omitempty"`
-	// Workflow parameters (can be null)
-	Params map[string]any `json:"params,omitempty"`
 	// Config text
-	ConfigText *string `json:"configText,omitempty"`
+	ConfigText  *string    `json:"configText,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Whether the workflow is deleted
 	Deleted *bool `json:"deleted,omitempty"`
+	// Unique identifier for the workflow execution
+	ID          *string    `json:"id,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Launch ID
+	LaunchID *string `json:"launchId,omitempty"`
+	// Numeric identifier of the user who owns this workflow
+	OwnerID *int64 `json:"ownerId,omitempty"`
+	// Workflow parameters (can be null)
+	Params map[string]any `json:"params,omitempty"`
+	// Profile
+	Profile *string `json:"profile,omitempty"`
+	// Project name
+	ProjectName *string `json:"projectName,omitempty"`
 	// Repository
 	Repository *string `json:"repository,omitempty"`
+	// Requires attention flag
+	RequiresAttention *bool `json:"requiresAttention,omitempty"`
 	// Resume flag
 	Resume *bool `json:"resume,omitempty"`
+	// Revision
+	Revision *string `json:"revision,omitempty"`
+	// Run name
+	RunName *string `json:"runName,omitempty"`
+	// Script name
+	ScriptName *string `json:"scriptName,omitempty"`
+	// Session ID
+	SessionID *string `json:"sessionId,omitempty"`
+	// Timestamp when the workflow execution actually started
+	Start  *time.Time      `json:"start,omitempty"`
+	Status *WorkflowStatus `json:"status,omitempty"`
+	// Timestamp when the workflow was submitted for execution
+	Submit *time.Time `json:"submit,omitempty"`
+	// Work directory
+	WorkDir *string `json:"workDir,omitempty"`
 }
 
 func (w WorkflowDbDto) MarshalJSON() ([]byte, error) {
@@ -69,32 +69,11 @@ func (w *WorkflowDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WorkflowDbDto) GetID() *string {
+func (w *WorkflowDbDto) GetCommandLine() *string {
 	if w == nil {
 		return nil
 	}
-	return w.ID
-}
-
-func (w *WorkflowDbDto) GetOwnerID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.OwnerID
-}
-
-func (w *WorkflowDbDto) GetSubmit() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.Submit
-}
-
-func (w *WorkflowDbDto) GetStart() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.Start
+	return w.CommandLine
 }
 
 func (w *WorkflowDbDto) GetComplete() *time.Time {
@@ -104,109 +83,11 @@ func (w *WorkflowDbDto) GetComplete() *time.Time {
 	return w.Complete
 }
 
-func (w *WorkflowDbDto) GetDateCreated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.DateCreated
-}
-
-func (w *WorkflowDbDto) GetLastUpdated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.LastUpdated
-}
-
-func (w *WorkflowDbDto) GetRunName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.RunName
-}
-
-func (w *WorkflowDbDto) GetSessionID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.SessionID
-}
-
-func (w *WorkflowDbDto) GetProfile() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Profile
-}
-
-func (w *WorkflowDbDto) GetWorkDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkDir
-}
-
-func (w *WorkflowDbDto) GetRevision() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Revision
-}
-
-func (w *WorkflowDbDto) GetCommandLine() *string {
-	if w == nil {
-		return nil
-	}
-	return w.CommandLine
-}
-
-func (w *WorkflowDbDto) GetProjectName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ProjectName
-}
-
-func (w *WorkflowDbDto) GetScriptName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptName
-}
-
-func (w *WorkflowDbDto) GetLaunchID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.LaunchID
-}
-
-func (w *WorkflowDbDto) GetStatus() *WorkflowStatus {
-	if w == nil {
-		return nil
-	}
-	return w.Status
-}
-
-func (w *WorkflowDbDto) GetRequiresAttention() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.RequiresAttention
-}
-
 func (w *WorkflowDbDto) GetConfigFiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigFiles
-}
-
-func (w *WorkflowDbDto) GetParams() map[string]any {
-	if w == nil {
-		return nil
-	}
-	return w.Params
 }
 
 func (w *WorkflowDbDto) GetConfigText() *string {
@@ -216,11 +97,67 @@ func (w *WorkflowDbDto) GetConfigText() *string {
 	return w.ConfigText
 }
 
+func (w *WorkflowDbDto) GetDateCreated() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.DateCreated
+}
+
 func (w *WorkflowDbDto) GetDeleted() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Deleted
+}
+
+func (w *WorkflowDbDto) GetID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ID
+}
+
+func (w *WorkflowDbDto) GetLastUpdated() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.LastUpdated
+}
+
+func (w *WorkflowDbDto) GetLaunchID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchID
+}
+
+func (w *WorkflowDbDto) GetOwnerID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.OwnerID
+}
+
+func (w *WorkflowDbDto) GetParams() map[string]any {
+	if w == nil {
+		return nil
+	}
+	return w.Params
+}
+
+func (w *WorkflowDbDto) GetProfile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Profile
+}
+
+func (w *WorkflowDbDto) GetProjectName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ProjectName
 }
 
 func (w *WorkflowDbDto) GetRepository() *string {
@@ -230,9 +167,72 @@ func (w *WorkflowDbDto) GetRepository() *string {
 	return w.Repository
 }
 
+func (w *WorkflowDbDto) GetRequiresAttention() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.RequiresAttention
+}
+
 func (w *WorkflowDbDto) GetResume() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Resume
+}
+
+func (w *WorkflowDbDto) GetRevision() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Revision
+}
+
+func (w *WorkflowDbDto) GetRunName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.RunName
+}
+
+func (w *WorkflowDbDto) GetScriptName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptName
+}
+
+func (w *WorkflowDbDto) GetSessionID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SessionID
+}
+
+func (w *WorkflowDbDto) GetStart() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.Start
+}
+
+func (w *WorkflowDbDto) GetStatus() *WorkflowStatus {
+	if w == nil {
+		return nil
+	}
+	return w.Status
+}
+
+func (w *WorkflowDbDto) GetSubmit() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.Submit
+}
+
+func (w *WorkflowDbDto) GetWorkDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkDir
 }

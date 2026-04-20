@@ -7,11 +7,11 @@ import (
 )
 
 type AzBatchForgeConfig struct {
-	VMType            *string  `json:"vmType,omitempty"`
-	VMCount           int      `json:"vmCount"`
 	AutoScale         *bool    `json:"autoScale,omitempty"`
-	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
+	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
+	VMCount           int      `json:"vmCount"`
+	VMType            *string  `json:"vmType,omitempty"`
 }
 
 func (a AzBatchForgeConfig) MarshalJSON() ([]byte, error) {
@@ -25,25 +25,18 @@ func (a *AzBatchForgeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzBatchForgeConfig) GetVMType() *string {
-	if a == nil {
-		return nil
-	}
-	return a.VMType
-}
-
-func (a *AzBatchForgeConfig) GetVMCount() int {
-	if a == nil {
-		return 0
-	}
-	return a.VMCount
-}
-
 func (a *AzBatchForgeConfig) GetAutoScale() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.AutoScale
+}
+
+func (a *AzBatchForgeConfig) GetContainerRegIds() []string {
+	if a == nil {
+		return nil
+	}
+	return a.ContainerRegIds
 }
 
 func (a *AzBatchForgeConfig) GetDisposeOnDeletion() *bool {
@@ -53,9 +46,16 @@ func (a *AzBatchForgeConfig) GetDisposeOnDeletion() *bool {
 	return a.DisposeOnDeletion
 }
 
-func (a *AzBatchForgeConfig) GetContainerRegIds() []string {
+func (a *AzBatchForgeConfig) GetVMCount() int {
+	if a == nil {
+		return 0
+	}
+	return a.VMCount
+}
+
+func (a *AzBatchForgeConfig) GetVMType() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ContainerRegIds
+	return a.VMType
 }

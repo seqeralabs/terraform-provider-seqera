@@ -8,19 +8,19 @@ import (
 )
 
 type DatasetVersionDto struct {
+	CreatedBy          *UserInfo  `json:"createdBy,omitempty"`
+	DatasetDescription *string    `json:"datasetDescription,omitempty"`
 	DatasetID          *string    `json:"datasetId,omitempty"`
 	DatasetName        *string    `json:"datasetName,omitempty"`
-	DatasetDescription *string    `json:"datasetDescription,omitempty"`
-	HasHeader          *bool      `json:"hasHeader,omitempty"`
-	Version            *int64     `json:"version,omitempty"`
-	CreatedBy          *UserInfo  `json:"createdBy,omitempty"`
 	DateCreated        *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated        *time.Time `json:"lastUpdated,omitempty"`
-	FileName           *string    `json:"fileName,omitempty"`
-	MediaType          *string    `json:"mediaType,omitempty"`
-	WorkspaceID        *int64     `json:"workspaceId,omitempty"`
-	URL                *string    `json:"url,omitempty"`
 	Disabled           *bool      `json:"disabled,omitempty"`
+	FileName           *string    `json:"fileName,omitempty"`
+	HasHeader          *bool      `json:"hasHeader,omitempty"`
+	LastUpdated        *time.Time `json:"lastUpdated,omitempty"`
+	MediaType          *string    `json:"mediaType,omitempty"`
+	URL                *string    `json:"url,omitempty"`
+	Version            *int64     `json:"version,omitempty"`
+	WorkspaceID        *int64     `json:"workspaceId,omitempty"`
 }
 
 func (d DatasetVersionDto) MarshalJSON() ([]byte, error) {
@@ -32,6 +32,20 @@ func (d *DatasetVersionDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DatasetVersionDto) GetCreatedBy() *UserInfo {
+	if d == nil {
+		return nil
+	}
+	return d.CreatedBy
+}
+
+func (d *DatasetVersionDto) GetDatasetDescription() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DatasetDescription
 }
 
 func (d *DatasetVersionDto) GetDatasetID() *string {
@@ -48,34 +62,6 @@ func (d *DatasetVersionDto) GetDatasetName() *string {
 	return d.DatasetName
 }
 
-func (d *DatasetVersionDto) GetDatasetDescription() *string {
-	if d == nil {
-		return nil
-	}
-	return d.DatasetDescription
-}
-
-func (d *DatasetVersionDto) GetHasHeader() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.HasHeader
-}
-
-func (d *DatasetVersionDto) GetVersion() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.Version
-}
-
-func (d *DatasetVersionDto) GetCreatedBy() *UserInfo {
-	if d == nil {
-		return nil
-	}
-	return d.CreatedBy
-}
-
 func (d *DatasetVersionDto) GetDateCreated() *time.Time {
 	if d == nil {
 		return nil
@@ -83,11 +69,11 @@ func (d *DatasetVersionDto) GetDateCreated() *time.Time {
 	return d.DateCreated
 }
 
-func (d *DatasetVersionDto) GetLastUpdated() *time.Time {
+func (d *DatasetVersionDto) GetDisabled() *bool {
 	if d == nil {
 		return nil
 	}
-	return d.LastUpdated
+	return d.Disabled
 }
 
 func (d *DatasetVersionDto) GetFileName() *string {
@@ -97,18 +83,25 @@ func (d *DatasetVersionDto) GetFileName() *string {
 	return d.FileName
 }
 
+func (d *DatasetVersionDto) GetHasHeader() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.HasHeader
+}
+
+func (d *DatasetVersionDto) GetLastUpdated() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.LastUpdated
+}
+
 func (d *DatasetVersionDto) GetMediaType() *string {
 	if d == nil {
 		return nil
 	}
 	return d.MediaType
-}
-
-func (d *DatasetVersionDto) GetWorkspaceID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.WorkspaceID
 }
 
 func (d *DatasetVersionDto) GetURL() *string {
@@ -118,9 +111,16 @@ func (d *DatasetVersionDto) GetURL() *string {
 	return d.URL
 }
 
-func (d *DatasetVersionDto) GetDisabled() *bool {
+func (d *DatasetVersionDto) GetVersion() *int64 {
 	if d == nil {
 		return nil
 	}
-	return d.Disabled
+	return d.Version
+}
+
+func (d *DatasetVersionDto) GetWorkspaceID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.WorkspaceID
 }

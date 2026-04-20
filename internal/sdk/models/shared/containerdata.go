@@ -8,15 +8,15 @@ import (
 )
 
 type ContainerData struct {
-	RequestID   *string    `json:"requestId,omitempty"`
-	SourceImage *string    `json:"sourceImage,omitempty"`
-	TargetImage string     `json:"targetImage"`
 	BuildID     *string    `json:"buildId,omitempty"`
-	ScanID      *string    `json:"scanId,omitempty"`
-	MirrorID    *string    `json:"mirrorId,omitempty"`
 	Cached      *bool      `json:"cached,omitempty"`
 	Freeze      *bool      `json:"freeze,omitempty"`
+	MirrorID    *string    `json:"mirrorId,omitempty"`
+	RequestID   *string    `json:"requestId,omitempty"`
 	RequestTime *time.Time `json:"requestTime,omitempty"`
+	ScanID      *string    `json:"scanId,omitempty"`
+	SourceImage *string    `json:"sourceImage,omitempty"`
+	TargetImage string     `json:"targetImage"`
 }
 
 func (c ContainerData) MarshalJSON() ([]byte, error) {
@@ -30,46 +30,11 @@ func (c *ContainerData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ContainerData) GetRequestID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.RequestID
-}
-
-func (c *ContainerData) GetSourceImage() *string {
-	if c == nil {
-		return nil
-	}
-	return c.SourceImage
-}
-
-func (c *ContainerData) GetTargetImage() string {
-	if c == nil {
-		return ""
-	}
-	return c.TargetImage
-}
-
 func (c *ContainerData) GetBuildID() *string {
 	if c == nil {
 		return nil
 	}
 	return c.BuildID
-}
-
-func (c *ContainerData) GetScanID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ScanID
-}
-
-func (c *ContainerData) GetMirrorID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.MirrorID
 }
 
 func (c *ContainerData) GetCached() *bool {
@@ -86,9 +51,44 @@ func (c *ContainerData) GetFreeze() *bool {
 	return c.Freeze
 }
 
+func (c *ContainerData) GetMirrorID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.MirrorID
+}
+
+func (c *ContainerData) GetRequestID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.RequestID
+}
+
 func (c *ContainerData) GetRequestTime() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.RequestTime
+}
+
+func (c *ContainerData) GetScanID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ScanID
+}
+
+func (c *ContainerData) GetSourceImage() *string {
+	if c == nil {
+		return nil
+	}
+	return c.SourceImage
+}
+
+func (c *ContainerData) GetTargetImage() string {
+	if c == nil {
+		return ""
+	}
+	return c.TargetImage
 }

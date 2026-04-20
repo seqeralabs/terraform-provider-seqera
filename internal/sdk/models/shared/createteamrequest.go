@@ -3,15 +3,8 @@
 package shared
 
 type CreateTeamRequest struct {
-	Team     *Team   `json:"team,omitempty"`
 	AvatarID *string `json:"avatarId,omitempty"`
-}
-
-func (c *CreateTeamRequest) GetTeam() *Team {
-	if c == nil {
-		return nil
-	}
-	return c.Team
+	Team     *Team   `json:"team,omitempty"`
 }
 
 func (c *CreateTeamRequest) GetAvatarID() *string {
@@ -19,4 +12,11 @@ func (c *CreateTeamRequest) GetAvatarID() *string {
 		return nil
 	}
 	return c.AvatarID
+}
+
+func (c *CreateTeamRequest) GetTeam() *Team {
+	if c == nil {
+		return nil
+	}
+	return c.Team
 }

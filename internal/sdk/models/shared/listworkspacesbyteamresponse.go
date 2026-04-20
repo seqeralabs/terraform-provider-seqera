@@ -3,15 +3,8 @@
 package shared
 
 type ListWorkspacesByTeamResponse struct {
-	Workspaces []WorkspaceParticipantResponseDto `json:"workspaces,omitempty"`
 	TotalSize  *int64                            `json:"totalSize,omitempty"`
-}
-
-func (l *ListWorkspacesByTeamResponse) GetWorkspaces() []WorkspaceParticipantResponseDto {
-	if l == nil {
-		return nil
-	}
-	return l.Workspaces
+	Workspaces []WorkspaceParticipantResponseDto `json:"workspaces,omitempty"`
 }
 
 func (l *ListWorkspacesByTeamResponse) GetTotalSize() *int64 {
@@ -19,4 +12,11 @@ func (l *ListWorkspacesByTeamResponse) GetTotalSize() *int64 {
 		return nil
 	}
 	return l.TotalSize
+}
+
+func (l *ListWorkspacesByTeamResponse) GetWorkspaces() []WorkspaceParticipantResponseDto {
+	if l == nil {
+		return nil
+	}
+	return l.Workspaces
 }

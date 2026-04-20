@@ -3,15 +3,8 @@
 package shared
 
 type DataLinkDeleteItemRequest struct {
-	Files []string `json:"files,omitempty"`
 	Dirs  []string `json:"dirs,omitempty"`
-}
-
-func (d *DataLinkDeleteItemRequest) GetFiles() []string {
-	if d == nil {
-		return nil
-	}
-	return d.Files
+	Files []string `json:"files,omitempty"`
 }
 
 func (d *DataLinkDeleteItemRequest) GetDirs() []string {
@@ -19,4 +12,11 @@ func (d *DataLinkDeleteItemRequest) GetDirs() []string {
 		return nil
 	}
 	return d.Dirs
+}
+
+func (d *DataLinkDeleteItemRequest) GetFiles() []string {
+	if d == nil {
+		return nil
+	}
+	return d.Files
 }

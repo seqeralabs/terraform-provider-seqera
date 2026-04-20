@@ -3,15 +3,8 @@
 package shared
 
 type UploadEtag struct {
-	PartNumber *int    `json:"partNumber,omitempty"`
 	ETag       *string `json:"eTag,omitempty"`
-}
-
-func (u *UploadEtag) GetPartNumber() *int {
-	if u == nil {
-		return nil
-	}
-	return u.PartNumber
+	PartNumber *int    `json:"partNumber,omitempty"`
 }
 
 func (u *UploadEtag) GetETag() *string {
@@ -19,4 +12,11 @@ func (u *UploadEtag) GetETag() *string {
 		return nil
 	}
 	return u.ETag
+}
+
+func (u *UploadEtag) GetPartNumber() *int {
+	if u == nil {
+		return nil
+	}
+	return u.PartNumber
 }

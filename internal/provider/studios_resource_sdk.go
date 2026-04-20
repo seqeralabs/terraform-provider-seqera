@@ -160,26 +160,30 @@ func (r *StudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context
 func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Context) (*shared.DataStudioCreateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	var dataStudioToolURL string
-	dataStudioToolURL = r.DataStudioToolURL.ValueString()
-
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
-	initialCheckpointID := new(int64)
-	if !r.InitialCheckpointID.IsUnknown() && !r.InitialCheckpointID.IsNull() {
-		*initialCheckpointID = r.InitialCheckpointID.ValueInt64()
+	condaEnvironment := new(string)
+	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+		*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
 	} else {
-		initialCheckpointID = nil
+		condaEnvironment = nil
+	}
+	cpu := new(int)
+	if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+		*cpu = int(r.Configuration.CPU.ValueInt32())
+	} else {
+		cpu = nil
+	}
+	var environment map[string]string
+	if r.Configuration.Environment != nil {
+		environment = make(map[string]string)
+		for environmentKey := range r.Configuration.Environment {
+			var environmentInst string
+			environmentInst = r.Configuration.Environment[environmentKey].ValueString()
+
+			environment[environmentKey] = environmentInst
+		}
 	}
 	gpu := new(int)
 	if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
@@ -187,11 +191,11 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		gpu = nil
 	}
-	cpu := new(int)
-	if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
-		*cpu = int(r.Configuration.CPU.ValueInt32())
+	lifespanHours := new(int)
+	if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+		*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
 	} else {
-		cpu = nil
+		lifespanHours = nil
 	}
 	memory := new(int)
 	if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
@@ -228,28 +232,6 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 			})
 		}
 	}
-	var environment map[string]string
-	if r.Configuration.Environment != nil {
-		environment = make(map[string]string)
-		for environmentKey := range r.Configuration.Environment {
-			var environmentInst string
-			environmentInst = r.Configuration.Environment[environmentKey].ValueString()
-
-			environment[environmentKey] = environmentInst
-		}
-	}
-	condaEnvironment := new(string)
-	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
-		*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
-	} else {
-		condaEnvironment = nil
-	}
-	lifespanHours := new(int)
-	if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
-		*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
-	} else {
-		lifespanHours = nil
-	}
 	sshEnabled := new(bool)
 	if !r.Configuration.SSHEnabled.IsUnknown() && !r.Configuration.SSHEnabled.IsNull() {
 		*sshEnabled = r.Configuration.SSHEnabled.ValueBool()
@@ -257,15 +239,30 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		sshEnabled = nil
 	}
 	configuration := shared.DataStudioConfiguration{
-		Gpu:              gpu,
+		CondaEnvironment: condaEnvironment,
 		CPU:              cpu,
+		Environment:      environment,
+		Gpu:              gpu,
+		LifespanHours:    lifespanHours,
 		Memory:           memory,
 		MountData:        mountData,
 		MountDataV2:      mountDataV2,
-		Environment:      environment,
-		CondaEnvironment: condaEnvironment,
-		LifespanHours:    lifespanHours,
 		SSHEnabled:       sshEnabled,
+	}
+	var dataStudioToolURL string
+	dataStudioToolURL = r.DataStudioToolURL.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	initialCheckpointID := new(int64)
+	if !r.InitialCheckpointID.IsUnknown() && !r.InitialCheckpointID.IsNull() {
+		*initialCheckpointID = r.InitialCheckpointID.ValueInt64()
+	} else {
+		initialCheckpointID = nil
 	}
 	isPrivate := new(bool)
 	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
@@ -280,6 +277,9 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 			labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
 		}
 	}
+	var name string
+	name = r.Name.ValueString()
+
 	spot := new(bool)
 	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
 		*spot = r.Spot.ValueBool()
@@ -287,14 +287,14 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		spot = nil
 	}
 	out := shared.DataStudioCreateRequest{
-		Name:                name,
-		Description:         description,
-		DataStudioToolURL:   dataStudioToolURL,
 		ComputeEnvID:        computeEnvID,
-		InitialCheckpointID: initialCheckpointID,
 		Configuration:       configuration,
+		DataStudioToolURL:   dataStudioToolURL,
+		Description:         description,
+		InitialCheckpointID: initialCheckpointID,
 		IsPrivate:           isPrivate,
 		LabelIds:            labelIds,
+		Name:                name,
 		Spot:                spot,
 	}
 

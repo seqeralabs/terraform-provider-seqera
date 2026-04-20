@@ -3,17 +3,10 @@
 package shared
 
 type DataLinkFinishMultiPartUploadRequest struct {
-	UploadID  *string      `json:"uploadId,omitempty"`
 	FileName  *string      `json:"fileName,omitempty"`
 	Tags      []UploadEtag `json:"tags,omitempty"`
+	UploadID  *string      `json:"uploadId,omitempty"`
 	WithError *bool        `json:"withError,omitempty"`
-}
-
-func (d *DataLinkFinishMultiPartUploadRequest) GetUploadID() *string {
-	if d == nil {
-		return nil
-	}
-	return d.UploadID
 }
 
 func (d *DataLinkFinishMultiPartUploadRequest) GetFileName() *string {
@@ -28,6 +21,13 @@ func (d *DataLinkFinishMultiPartUploadRequest) GetTags() []UploadEtag {
 		return nil
 	}
 	return d.Tags
+}
+
+func (d *DataLinkFinishMultiPartUploadRequest) GetUploadID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.UploadID
 }
 
 func (d *DataLinkFinishMultiPartUploadRequest) GetWithError() *bool {

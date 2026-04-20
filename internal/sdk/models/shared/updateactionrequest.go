@@ -3,15 +3,8 @@
 package shared
 
 type UpdateActionRequest struct {
-	Name   *string                `json:"name,omitempty"`
 	Launch *WorkflowLaunchRequest `json:"launch,omitempty"`
-}
-
-func (u *UpdateActionRequest) GetName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Name
+	Name   *string                `json:"name,omitempty"`
 }
 
 func (u *UpdateActionRequest) GetLaunch() *WorkflowLaunchRequest {
@@ -19,4 +12,11 @@ func (u *UpdateActionRequest) GetLaunch() *WorkflowLaunchRequest {
 		return nil
 	}
 	return u.Launch
+}
+
+func (u *UpdateActionRequest) GetName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Name
 }

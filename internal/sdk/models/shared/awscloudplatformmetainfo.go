@@ -7,16 +7,16 @@ import (
 )
 
 type AwsCloudPlatformMetainfo struct {
+	Buckets []Bucket `json:"buckets,omitempty"`
 	// property to select the platform metainfo type
 	Discriminator  *string         `json:"discriminator,omitempty"`
-	Warnings       []string        `json:"warnings,omitempty"`
-	Buckets        []Bucket        `json:"buckets,omitempty"`
-	KeyPairs       []string        `json:"keyPairs,omitempty"`
-	Vpcs           []Vpc           `json:"vpcs,omitempty"`
 	Images         []Image         `json:"images,omitempty"`
+	InstanceTypes  []InstanceType  `json:"instanceTypes,omitempty"`
+	KeyPairs       []string        `json:"keyPairs,omitempty"`
 	SecurityGroups []SecurityGroup `json:"securityGroups,omitempty"`
 	Subnets        []Subnet        `json:"subnets,omitempty"`
-	InstanceTypes  []InstanceType  `json:"instanceTypes,omitempty"`
+	Vpcs           []Vpc           `json:"vpcs,omitempty"`
+	Warnings       []string        `json:"warnings,omitempty"`
 }
 
 func (a AwsCloudPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -30,20 +30,6 @@ func (a *AwsCloudPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AwsCloudPlatformMetainfo) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AwsCloudPlatformMetainfo) GetWarnings() []string {
-	if a == nil {
-		return nil
-	}
-	return a.Warnings
-}
-
 func (a *AwsCloudPlatformMetainfo) GetBuckets() []Bucket {
 	if a == nil {
 		return nil
@@ -51,18 +37,11 @@ func (a *AwsCloudPlatformMetainfo) GetBuckets() []Bucket {
 	return a.Buckets
 }
 
-func (a *AwsCloudPlatformMetainfo) GetKeyPairs() []string {
+func (a *AwsCloudPlatformMetainfo) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
-	return a.KeyPairs
-}
-
-func (a *AwsCloudPlatformMetainfo) GetVpcs() []Vpc {
-	if a == nil {
-		return nil
-	}
-	return a.Vpcs
+	return a.Discriminator
 }
 
 func (a *AwsCloudPlatformMetainfo) GetImages() []Image {
@@ -70,6 +49,20 @@ func (a *AwsCloudPlatformMetainfo) GetImages() []Image {
 		return nil
 	}
 	return a.Images
+}
+
+func (a *AwsCloudPlatformMetainfo) GetInstanceTypes() []InstanceType {
+	if a == nil {
+		return nil
+	}
+	return a.InstanceTypes
+}
+
+func (a *AwsCloudPlatformMetainfo) GetKeyPairs() []string {
+	if a == nil {
+		return nil
+	}
+	return a.KeyPairs
 }
 
 func (a *AwsCloudPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
@@ -86,9 +79,16 @@ func (a *AwsCloudPlatformMetainfo) GetSubnets() []Subnet {
 	return a.Subnets
 }
 
-func (a *AwsCloudPlatformMetainfo) GetInstanceTypes() []InstanceType {
+func (a *AwsCloudPlatformMetainfo) GetVpcs() []Vpc {
 	if a == nil {
 		return nil
 	}
-	return a.InstanceTypes
+	return a.Vpcs
+}
+
+func (a *AwsCloudPlatformMetainfo) GetWarnings() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Warnings
 }

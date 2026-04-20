@@ -3,32 +3,11 @@
 package shared
 
 type DataStudioWorkspaceSettingsResponse struct {
-	OrgID                  *int64  `json:"orgId,omitempty"`
-	WspID                  *int64  `json:"wspId,omitempty"`
-	LifespanHours          *int    `json:"lifespanHours,omitempty"`
 	ContainerRepository    *string `json:"containerRepository,omitempty"`
+	LifespanHours          *int    `json:"lifespanHours,omitempty"`
+	OrgID                  *int64  `json:"orgId,omitempty"`
 	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
-}
-
-func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.OrgID
-}
-
-func (d *DataStudioWorkspaceSettingsResponse) GetWspID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.WspID
-}
-
-func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() *int {
-	if d == nil {
-		return nil
-	}
-	return d.LifespanHours
+	WspID                  *int64  `json:"wspId,omitempty"`
 }
 
 func (d *DataStudioWorkspaceSettingsResponse) GetContainerRepository() *string {
@@ -38,9 +17,30 @@ func (d *DataStudioWorkspaceSettingsResponse) GetContainerRepository() *string {
 	return d.ContainerRepository
 }
 
+func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() *int {
+	if d == nil {
+		return nil
+	}
+	return d.LifespanHours
+}
+
+func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.OrgID
+}
+
 func (d *DataStudioWorkspaceSettingsResponse) GetPrivateStudioByDefault() *bool {
 	if d == nil {
 		return nil
 	}
 	return d.PrivateStudioByDefault
+}
+
+func (d *DataStudioWorkspaceSettingsResponse) GetWspID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.WspID
 }

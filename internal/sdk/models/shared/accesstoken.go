@@ -10,14 +10,14 @@ import (
 // AccessToken - API access token for platform authentication.
 // Contains the token ID, name, and usage metadata.
 type AccessToken struct {
-	// Unique identifier for the token
-	ID *int64 `json:"id,omitempty"`
-	// Display name for the token (1-50 characters). Used to identify the token's purpose.
-	Name string `json:"name"`
-	// Timestamp when the token was last used for authentication (null if never used)
-	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the token was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Unique identifier for the token
+	ID *int64 `json:"id,omitempty"`
+	// Timestamp when the token was last used for authentication (null if never used)
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Display name for the token (1-50 characters). Used to identify the token's purpose.
+	Name string `json:"name"`
 }
 
 func (a AccessToken) MarshalJSON() ([]byte, error) {
@@ -31,18 +31,18 @@ func (a *AccessToken) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *AccessToken) GetDateCreated() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.DateCreated
+}
+
 func (a *AccessToken) GetID() *int64 {
 	if a == nil {
 		return nil
 	}
 	return a.ID
-}
-
-func (a *AccessToken) GetName() string {
-	if a == nil {
-		return ""
-	}
-	return a.Name
 }
 
 func (a *AccessToken) GetLastUsed() *time.Time {
@@ -52,9 +52,9 @@ func (a *AccessToken) GetLastUsed() *time.Time {
 	return a.LastUsed
 }
 
-func (a *AccessToken) GetDateCreated() *time.Time {
+func (a *AccessToken) GetName() string {
 	if a == nil {
-		return nil
+		return ""
 	}
-	return a.DateCreated
+	return a.Name
 }

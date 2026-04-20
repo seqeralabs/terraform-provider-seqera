@@ -8,49 +8,49 @@ import (
 )
 
 type Workflow struct {
-	RequiresAttention *bool           `json:"requiresAttention,omitempty"`
-	Status            *WorkflowStatus `json:"status,omitempty"`
-	Repository        *string         `json:"repository,omitempty"`
-	ID                *string         `json:"id,omitempty"`
-	Submit            time.Time       `json:"submit"`
-	// Workflow start time (null if not started)
-	Start *time.Time `json:"start,omitempty"`
+	CommandLine string `json:"commandLine"`
 	// Workflow completion time (null if not completed)
-	Complete    *time.Time     `json:"complete,omitempty"`
-	RunName     string         `json:"runName"`
-	SessionID   string         `json:"sessionId"`
-	Profile     *string        `json:"profile,omitempty"`
-	WorkDir     string         `json:"workDir"`
-	UserName    string         `json:"userName"`
-	ScriptID    *string        `json:"scriptId,omitempty"`
-	Revision    *string        `json:"revision,omitempty"`
-	CommandLine string         `json:"commandLine"`
-	ProjectName string         `json:"projectName"`
-	ScriptName  *string        `json:"scriptName,omitempty"`
-	LaunchID    *string        `json:"launchId,omitempty"`
-	ConfigFiles []string       `json:"configFiles,omitempty"`
-	Params      map[string]any `json:"params,omitempty"`
-	ConfigText  *string        `json:"configText,omitempty"`
-	Manifest    *WfManifest    `json:"manifest,omitempty"`
-	Nextflow    *WfNextflow    `json:"nextflow,omitempty"`
-	Stats       *WfStats       `json:"stats,omitempty"`
+	Complete        *time.Time `json:"complete,omitempty"`
+	ConfigFiles     []string   `json:"configFiles,omitempty"`
+	ConfigText      *string    `json:"configText,omitempty"`
+	Container       *string    `json:"container,omitempty"`
+	ContainerEngine *string    `json:"containerEngine,omitempty"`
+	Duration        *int64     `json:"duration,omitempty"`
 	// Error message (null if no error)
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	// Error report (null if no error)
-	ErrorReport     *string `json:"errorReport,omitempty"`
-	ProjectDir      *string `json:"projectDir,omitempty"`
-	HomeDir         *string `json:"homeDir,omitempty"`
-	Container       *string `json:"container,omitempty"`
-	ContainerEngine *string `json:"containerEngine,omitempty"`
-	ScriptFile      *string `json:"scriptFile,omitempty"`
-	LaunchDir       *string `json:"launchDir,omitempty"`
-	Duration        *int64  `json:"duration,omitempty"`
-	ExitStatus      *int    `json:"exitStatus,omitempty"`
-	Resume          *bool   `json:"resume,omitempty"`
-	Success         *bool   `json:"success,omitempty"`
-	LogFile         *string `json:"logFile,omitempty"`
-	OutFile         *string `json:"outFile,omitempty"`
-	OperationID     *string `json:"operationId,omitempty"`
+	ErrorReport       *string        `json:"errorReport,omitempty"`
+	ExitStatus        *int           `json:"exitStatus,omitempty"`
+	HomeDir           *string        `json:"homeDir,omitempty"`
+	ID                *string        `json:"id,omitempty"`
+	LaunchDir         *string        `json:"launchDir,omitempty"`
+	LaunchID          *string        `json:"launchId,omitempty"`
+	LogFile           *string        `json:"logFile,omitempty"`
+	Manifest          *WfManifest    `json:"manifest,omitempty"`
+	Nextflow          *WfNextflow    `json:"nextflow,omitempty"`
+	OperationID       *string        `json:"operationId,omitempty"`
+	OutFile           *string        `json:"outFile,omitempty"`
+	Params            map[string]any `json:"params,omitempty"`
+	Profile           *string        `json:"profile,omitempty"`
+	ProjectDir        *string        `json:"projectDir,omitempty"`
+	ProjectName       string         `json:"projectName"`
+	Repository        *string        `json:"repository,omitempty"`
+	RequiresAttention *bool          `json:"requiresAttention,omitempty"`
+	Resume            *bool          `json:"resume,omitempty"`
+	Revision          *string        `json:"revision,omitempty"`
+	RunName           string         `json:"runName"`
+	ScriptFile        *string        `json:"scriptFile,omitempty"`
+	ScriptID          *string        `json:"scriptId,omitempty"`
+	ScriptName        *string        `json:"scriptName,omitempty"`
+	SessionID         string         `json:"sessionId"`
+	// Workflow start time (null if not started)
+	Start    *time.Time      `json:"start,omitempty"`
+	Stats    *WfStats        `json:"stats,omitempty"`
+	Status   *WorkflowStatus `json:"status,omitempty"`
+	Submit   time.Time       `json:"submit"`
+	Success  *bool           `json:"success,omitempty"`
+	UserName string          `json:"userName"`
+	WorkDir  string          `json:"workDir"`
 }
 
 func (w Workflow) MarshalJSON() ([]byte, error) {
@@ -64,46 +64,11 @@ func (w *Workflow) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *Workflow) GetRequiresAttention() *bool {
+func (w *Workflow) GetCommandLine() string {
 	if w == nil {
-		return nil
+		return ""
 	}
-	return w.RequiresAttention
-}
-
-func (w *Workflow) GetStatus() *WorkflowStatus {
-	if w == nil {
-		return nil
-	}
-	return w.Status
-}
-
-func (w *Workflow) GetRepository() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Repository
-}
-
-func (w *Workflow) GetID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ID
-}
-
-func (w *Workflow) GetSubmit() time.Time {
-	if w == nil {
-		return time.Time{}
-	}
-	return w.Submit
-}
-
-func (w *Workflow) GetStart() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.Start
+	return w.CommandLine
 }
 
 func (w *Workflow) GetComplete() *time.Time {
@@ -113,83 +78,6 @@ func (w *Workflow) GetComplete() *time.Time {
 	return w.Complete
 }
 
-func (w *Workflow) GetRunName() string {
-	if w == nil {
-		return ""
-	}
-	return w.RunName
-}
-
-func (w *Workflow) GetSessionID() string {
-	if w == nil {
-		return ""
-	}
-	return w.SessionID
-}
-
-func (w *Workflow) GetProfile() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Profile
-}
-
-func (w *Workflow) GetWorkDir() string {
-	if w == nil {
-		return ""
-	}
-	return w.WorkDir
-}
-
-func (w *Workflow) GetUserName() string {
-	if w == nil {
-		return ""
-	}
-	return w.UserName
-}
-
-func (w *Workflow) GetScriptID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptID
-}
-
-func (w *Workflow) GetRevision() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Revision
-}
-
-func (w *Workflow) GetCommandLine() string {
-	if w == nil {
-		return ""
-	}
-	return w.CommandLine
-}
-
-func (w *Workflow) GetProjectName() string {
-	if w == nil {
-		return ""
-	}
-	return w.ProjectName
-}
-
-func (w *Workflow) GetScriptName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptName
-}
-
-func (w *Workflow) GetLaunchID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.LaunchID
-}
-
 func (w *Workflow) GetConfigFiles() []string {
 	if w == nil {
 		return nil
@@ -197,67 +85,11 @@ func (w *Workflow) GetConfigFiles() []string {
 	return w.ConfigFiles
 }
 
-func (w *Workflow) GetParams() map[string]any {
-	if w == nil {
-		return nil
-	}
-	return w.Params
-}
-
 func (w *Workflow) GetConfigText() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigText
-}
-
-func (w *Workflow) GetManifest() *WfManifest {
-	if w == nil {
-		return nil
-	}
-	return w.Manifest
-}
-
-func (w *Workflow) GetNextflow() *WfNextflow {
-	if w == nil {
-		return nil
-	}
-	return w.Nextflow
-}
-
-func (w *Workflow) GetStats() *WfStats {
-	if w == nil {
-		return nil
-	}
-	return w.Stats
-}
-
-func (w *Workflow) GetErrorMessage() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ErrorMessage
-}
-
-func (w *Workflow) GetErrorReport() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ErrorReport
-}
-
-func (w *Workflow) GetProjectDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ProjectDir
-}
-
-func (w *Workflow) GetHomeDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.HomeDir
 }
 
 func (w *Workflow) GetContainer() *string {
@@ -274,25 +106,25 @@ func (w *Workflow) GetContainerEngine() *string {
 	return w.ContainerEngine
 }
 
-func (w *Workflow) GetScriptFile() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptFile
-}
-
-func (w *Workflow) GetLaunchDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.LaunchDir
-}
-
 func (w *Workflow) GetDuration() *int64 {
 	if w == nil {
 		return nil
 	}
 	return w.Duration
+}
+
+func (w *Workflow) GetErrorMessage() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ErrorMessage
+}
+
+func (w *Workflow) GetErrorReport() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ErrorReport
 }
 
 func (w *Workflow) GetExitStatus() *int {
@@ -302,18 +134,32 @@ func (w *Workflow) GetExitStatus() *int {
 	return w.ExitStatus
 }
 
-func (w *Workflow) GetResume() *bool {
+func (w *Workflow) GetHomeDir() *string {
 	if w == nil {
 		return nil
 	}
-	return w.Resume
+	return w.HomeDir
 }
 
-func (w *Workflow) GetSuccess() *bool {
+func (w *Workflow) GetID() *string {
 	if w == nil {
 		return nil
 	}
-	return w.Success
+	return w.ID
+}
+
+func (w *Workflow) GetLaunchDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchDir
+}
+
+func (w *Workflow) GetLaunchID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchID
 }
 
 func (w *Workflow) GetLogFile() *string {
@@ -323,11 +169,18 @@ func (w *Workflow) GetLogFile() *string {
 	return w.LogFile
 }
 
-func (w *Workflow) GetOutFile() *string {
+func (w *Workflow) GetManifest() *WfManifest {
 	if w == nil {
 		return nil
 	}
-	return w.OutFile
+	return w.Manifest
+}
+
+func (w *Workflow) GetNextflow() *WfNextflow {
+	if w == nil {
+		return nil
+	}
+	return w.Nextflow
 }
 
 func (w *Workflow) GetOperationID() *string {
@@ -335,4 +188,151 @@ func (w *Workflow) GetOperationID() *string {
 		return nil
 	}
 	return w.OperationID
+}
+
+func (w *Workflow) GetOutFile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.OutFile
+}
+
+func (w *Workflow) GetParams() map[string]any {
+	if w == nil {
+		return nil
+	}
+	return w.Params
+}
+
+func (w *Workflow) GetProfile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Profile
+}
+
+func (w *Workflow) GetProjectDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ProjectDir
+}
+
+func (w *Workflow) GetProjectName() string {
+	if w == nil {
+		return ""
+	}
+	return w.ProjectName
+}
+
+func (w *Workflow) GetRepository() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Repository
+}
+
+func (w *Workflow) GetRequiresAttention() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.RequiresAttention
+}
+
+func (w *Workflow) GetResume() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Resume
+}
+
+func (w *Workflow) GetRevision() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Revision
+}
+
+func (w *Workflow) GetRunName() string {
+	if w == nil {
+		return ""
+	}
+	return w.RunName
+}
+
+func (w *Workflow) GetScriptFile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptFile
+}
+
+func (w *Workflow) GetScriptID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptID
+}
+
+func (w *Workflow) GetScriptName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptName
+}
+
+func (w *Workflow) GetSessionID() string {
+	if w == nil {
+		return ""
+	}
+	return w.SessionID
+}
+
+func (w *Workflow) GetStart() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.Start
+}
+
+func (w *Workflow) GetStats() *WfStats {
+	if w == nil {
+		return nil
+	}
+	return w.Stats
+}
+
+func (w *Workflow) GetStatus() *WorkflowStatus {
+	if w == nil {
+		return nil
+	}
+	return w.Status
+}
+
+func (w *Workflow) GetSubmit() time.Time {
+	if w == nil {
+		return time.Time{}
+	}
+	return w.Submit
+}
+
+func (w *Workflow) GetSuccess() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Success
+}
+
+func (w *Workflow) GetUserName() string {
+	if w == nil {
+		return ""
+	}
+	return w.UserName
+}
+
+func (w *Workflow) GetWorkDir() string {
+	if w == nil {
+		return ""
+	}
+	return w.WorkDir
 }

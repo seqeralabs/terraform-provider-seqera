@@ -7,10 +7,10 @@ import (
 )
 
 type GoogleImage struct {
+	Arch          *string `json:"arch,omitempty"`
+	Description   *string `json:"description,omitempty"`
 	ID            *string `json:"id,omitempty"`
 	Name          *string `json:"name,omitempty"`
-	Description   *string `json:"description,omitempty"`
-	Arch          *string `json:"arch,omitempty"`
 	QualifiedName *string `json:"qualifiedName,omitempty"`
 }
 
@@ -25,6 +25,20 @@ func (g *GoogleImage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GoogleImage) GetArch() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Arch
+}
+
+func (g *GoogleImage) GetDescription() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Description
+}
+
 func (g *GoogleImage) GetID() *string {
 	if g == nil {
 		return nil
@@ -37,20 +51,6 @@ func (g *GoogleImage) GetName() *string {
 		return nil
 	}
 	return g.Name
-}
-
-func (g *GoogleImage) GetDescription() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Description
-}
-
-func (g *GoogleImage) GetArch() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Arch
 }
 
 func (g *GoogleImage) GetQualifiedName() *string {

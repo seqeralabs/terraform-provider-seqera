@@ -78,43 +78,15 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeEnvComputeConfigInput struct {
-	CredentialsID string                          `json:"credentialsId"`
-	Name          string                          `json:"name"`
-	Description   *string                         `json:"description,omitempty"`
-	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config  ComputeConfig `json:"config"`
-	Message *string       `json:"message,omitempty"`
-}
-
-func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
-	if c == nil {
-		return ""
-	}
-	return c.CredentialsID
-}
-
-func (c *ComputeEnvComputeConfigInput) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *ComputeEnvComputeConfigInput) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *ComputeEnvComputeConfigInput) GetPlatform() ComputeEnvComputeConfigPlatform {
-	if c == nil {
-		return ComputeEnvComputeConfigPlatform("")
-	}
-	return c.Platform
+	Config        ComputeConfig                   `json:"config"`
+	CredentialsID string                          `json:"credentialsId"`
+	Description   *string                         `json:"description,omitempty"`
+	Message       *string                         `json:"message,omitempty"`
+	Name          string                          `json:"name"`
+	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
 }
 
 func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
@@ -192,11 +164,39 @@ func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLife
 	return c.GetConfig().GoogleLifeSciencesConfigurationRetired
 }
 
+func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
+	if c == nil {
+		return ""
+	}
+	return c.CredentialsID
+}
+
+func (c *ComputeEnvComputeConfigInput) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
 func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Message
+}
+
+func (c *ComputeEnvComputeConfigInput) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *ComputeEnvComputeConfigInput) GetPlatform() ComputeEnvComputeConfigPlatform {
+	if c == nil {
+		return ComputeEnvComputeConfigPlatform("")
+	}
+	return c.Platform
 }
 
 type ComputeEnvComputeConfigStatus string
@@ -238,24 +238,24 @@ func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeEnvComputeConfig struct {
-	CredentialsID string                          `json:"credentialsId"`
-	OrgID         *int64                          `json:"orgId,omitempty"`
-	WorkspaceID   *int64                          `json:"workspaceId,omitempty"`
-	ComputeEnvID  *string                         `json:"id,omitempty"`
-	Name          string                          `json:"name"`
-	Description   *string                         `json:"description,omitempty"`
-	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config      ComputeConfig                  `json:"config"`
-	DateCreated *time.Time                     `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	LastUsed    *time.Time                     `json:"lastUsed,omitempty"`
-	Deleted     *bool                          `json:"deleted,omitempty"`
-	Status      *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
-	Message     *string                        `json:"message,omitempty"`
-	Primary     *bool                          `json:"primary,omitempty"`
+	Config        ComputeConfig                   `json:"config"`
+	CredentialsID string                          `json:"credentialsId"`
+	DateCreated   *time.Time                      `json:"dateCreated,omitempty"`
+	Deleted       *bool                           `json:"deleted,omitempty"`
+	Description   *string                         `json:"description,omitempty"`
+	ComputeEnvID  *string                         `json:"id,omitempty"`
+	LastUpdated   *time.Time                      `json:"lastUpdated,omitempty"`
+	LastUsed      *time.Time                      `json:"lastUsed,omitempty"`
+	Message       *string                         `json:"message,omitempty"`
+	Name          string                          `json:"name"`
+	OrgID         *int64                          `json:"orgId,omitempty"`
+	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
+	Primary       *bool                           `json:"primary,omitempty"`
+	Status        *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
+	WorkspaceID   *int64                          `json:"workspaceId,omitempty"`
 }
 
 func (c ComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {
@@ -267,55 +267,6 @@ func (c *ComputeEnvComputeConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (c *ComputeEnvComputeConfig) GetCredentialsID() string {
-	if c == nil {
-		return ""
-	}
-	return c.CredentialsID
-}
-
-func (c *ComputeEnvComputeConfig) GetOrgID() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.OrgID
-}
-
-func (c *ComputeEnvComputeConfig) GetWorkspaceID() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.WorkspaceID
-}
-
-func (c *ComputeEnvComputeConfig) GetComputeEnvID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ComputeEnvID
-}
-
-func (c *ComputeEnvComputeConfig) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *ComputeEnvComputeConfig) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *ComputeEnvComputeConfig) GetPlatform() ComputeEnvComputeConfigPlatform {
-	if c == nil {
-		return ComputeEnvComputeConfigPlatform("")
-	}
-	return c.Platform
 }
 
 func (c *ComputeEnvComputeConfig) GetConfig() ComputeConfig {
@@ -393,11 +344,39 @@ func (c *ComputeEnvComputeConfig) GetConfigGoogleLifesciences() *GoogleLifeScien
 	return c.GetConfig().GoogleLifeSciencesConfigurationRetired
 }
 
+func (c *ComputeEnvComputeConfig) GetCredentialsID() string {
+	if c == nil {
+		return ""
+	}
+	return c.CredentialsID
+}
+
 func (c *ComputeEnvComputeConfig) GetDateCreated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.DateCreated
+}
+
+func (c *ComputeEnvComputeConfig) GetDeleted() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Deleted
+}
+
+func (c *ComputeEnvComputeConfig) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *ComputeEnvComputeConfig) GetComputeEnvID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ComputeEnvID
 }
 
 func (c *ComputeEnvComputeConfig) GetLastUpdated() *time.Time {
@@ -414,11 +393,39 @@ func (c *ComputeEnvComputeConfig) GetLastUsed() *time.Time {
 	return c.LastUsed
 }
 
-func (c *ComputeEnvComputeConfig) GetDeleted() *bool {
+func (c *ComputeEnvComputeConfig) GetMessage() *string {
 	if c == nil {
 		return nil
 	}
-	return c.Deleted
+	return c.Message
+}
+
+func (c *ComputeEnvComputeConfig) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *ComputeEnvComputeConfig) GetOrgID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.OrgID
+}
+
+func (c *ComputeEnvComputeConfig) GetPlatform() ComputeEnvComputeConfigPlatform {
+	if c == nil {
+		return ComputeEnvComputeConfigPlatform("")
+	}
+	return c.Platform
+}
+
+func (c *ComputeEnvComputeConfig) GetPrimary() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Primary
 }
 
 func (c *ComputeEnvComputeConfig) GetStatus() *ComputeEnvComputeConfigStatus {
@@ -428,16 +435,9 @@ func (c *ComputeEnvComputeConfig) GetStatus() *ComputeEnvComputeConfigStatus {
 	return c.Status
 }
 
-func (c *ComputeEnvComputeConfig) GetMessage() *string {
+func (c *ComputeEnvComputeConfig) GetWorkspaceID() *int64 {
 	if c == nil {
 		return nil
 	}
-	return c.Message
-}
-
-func (c *ComputeEnvComputeConfig) GetPrimary() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.Primary
+	return c.WorkspaceID
 }

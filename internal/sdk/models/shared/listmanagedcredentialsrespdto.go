@@ -31,35 +31,21 @@ func (e *ListManagedCredentialsRespDtoProvider) UnmarshalJSON(data []byte) error
 }
 
 type ListManagedCredentialsRespDto struct {
-	ManagedCredentialsID *int64                                 `json:"managedCredentialsId,omitempty"`
-	UserID               *int64                                 `json:"userId,omitempty"`
-	UserName             *string                                `json:"userName,omitempty"`
+	AvatarURL            *string                                `json:"avatarUrl,omitempty"`
 	FirstName            *string                                `json:"firstName,omitempty"`
 	LastName             *string                                `json:"lastName,omitempty"`
-	AvatarURL            *string                                `json:"avatarUrl,omitempty"`
-	Provider             *ListManagedCredentialsRespDtoProvider `json:"provider,omitempty"`
+	ManagedCredentialsID *int64                                 `json:"managedCredentialsId,omitempty"`
 	Metadata             *ManagedCredentialsMetadata            `json:"metadata,omitempty"`
+	Provider             *ListManagedCredentialsRespDtoProvider `json:"provider,omitempty"`
+	UserID               *int64                                 `json:"userId,omitempty"`
+	UserName             *string                                `json:"userName,omitempty"`
 }
 
-func (l *ListManagedCredentialsRespDto) GetManagedCredentialsID() *int64 {
+func (l *ListManagedCredentialsRespDto) GetAvatarURL() *string {
 	if l == nil {
 		return nil
 	}
-	return l.ManagedCredentialsID
-}
-
-func (l *ListManagedCredentialsRespDto) GetUserID() *int64 {
-	if l == nil {
-		return nil
-	}
-	return l.UserID
-}
-
-func (l *ListManagedCredentialsRespDto) GetUserName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.UserName
+	return l.AvatarURL
 }
 
 func (l *ListManagedCredentialsRespDto) GetFirstName() *string {
@@ -76,11 +62,18 @@ func (l *ListManagedCredentialsRespDto) GetLastName() *string {
 	return l.LastName
 }
 
-func (l *ListManagedCredentialsRespDto) GetAvatarURL() *string {
+func (l *ListManagedCredentialsRespDto) GetManagedCredentialsID() *int64 {
 	if l == nil {
 		return nil
 	}
-	return l.AvatarURL
+	return l.ManagedCredentialsID
+}
+
+func (l *ListManagedCredentialsRespDto) GetMetadata() *ManagedCredentialsMetadata {
+	if l == nil {
+		return nil
+	}
+	return l.Metadata
 }
 
 func (l *ListManagedCredentialsRespDto) GetProvider() *ListManagedCredentialsRespDtoProvider {
@@ -90,9 +83,16 @@ func (l *ListManagedCredentialsRespDto) GetProvider() *ListManagedCredentialsRes
 	return l.Provider
 }
 
-func (l *ListManagedCredentialsRespDto) GetMetadata() *ManagedCredentialsMetadata {
+func (l *ListManagedCredentialsRespDto) GetUserID() *int64 {
 	if l == nil {
 		return nil
 	}
-	return l.Metadata
+	return l.UserID
+}
+
+func (l *ListManagedCredentialsRespDto) GetUserName() *string {
+	if l == nil {
+		return nil
+	}
+	return l.UserName
 }

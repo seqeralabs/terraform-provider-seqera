@@ -3,34 +3,13 @@
 package shared
 
 type CreateManagedIdentityResponse struct {
-	ID       *int64  `json:"id,omitempty"`
-	Name     *string `json:"name,omitempty"`
-	Platform *string `json:"platform,omitempty"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config *ComputeConfig `json:"config,omitempty"`
-}
-
-func (c *CreateManagedIdentityResponse) GetID() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.ID
-}
-
-func (c *CreateManagedIdentityResponse) GetName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Name
-}
-
-func (c *CreateManagedIdentityResponse) GetPlatform() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Platform
+	Config   *ComputeConfig `json:"config,omitempty"`
+	ID       *int64         `json:"id,omitempty"`
+	Name     *string        `json:"name,omitempty"`
+	Platform *string        `json:"platform,omitempty"`
 }
 
 func (c *CreateManagedIdentityResponse) GetConfig() *ComputeConfig {
@@ -157,4 +136,25 @@ func (c *CreateManagedIdentityResponse) GetConfigGoogleLifesciences() *GoogleLif
 		return v.GoogleLifeSciencesConfigurationRetired
 	}
 	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ID
+}
+
+func (c *CreateManagedIdentityResponse) GetName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Name
+}
+
+func (c *CreateManagedIdentityResponse) GetPlatform() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Platform
 }

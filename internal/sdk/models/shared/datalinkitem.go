@@ -3,17 +3,17 @@
 package shared
 
 type DataLinkItem struct {
-	Type     *DataLinkItemType `json:"type,omitempty"`
+	MimeType *string           `json:"mimeType,omitempty"`
 	Name     *string           `json:"name,omitempty"`
 	Size     *int64            `json:"size,omitempty"`
-	MimeType *string           `json:"mimeType,omitempty"`
+	Type     *DataLinkItemType `json:"type,omitempty"`
 }
 
-func (d *DataLinkItem) GetType() *DataLinkItemType {
+func (d *DataLinkItem) GetMimeType() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Type
+	return d.MimeType
 }
 
 func (d *DataLinkItem) GetName() *string {
@@ -30,9 +30,9 @@ func (d *DataLinkItem) GetSize() *int64 {
 	return d.Size
 }
 
-func (d *DataLinkItem) GetMimeType() *string {
+func (d *DataLinkItem) GetType() *DataLinkItemType {
 	if d == nil {
 		return nil
 	}
-	return d.MimeType
+	return d.Type
 }

@@ -8,35 +8,35 @@ import (
 )
 
 type WorkflowLoad struct {
-	Pending              int64      `json:"pending"`
-	Submitted            int64      `json:"submitted"`
-	Running              int64      `json:"running"`
-	Succeeded            int64      `json:"succeeded"`
-	Failed               int64      `json:"failed"`
-	Cached               int64      `json:"cached"`
 	Aborted              int64      `json:"aborted"`
-	MemoryEfficiency     *float32   `json:"memoryEfficiency,omitempty"`
+	Cached               int64      `json:"cached"`
+	Cost                 *float64   `json:"cost,omitempty"`
 	CPUEfficiency        *float32   `json:"cpuEfficiency,omitempty"`
-	DateCreated          *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated          *time.Time `json:"lastUpdated,omitempty"`
-	Executors            []string   `json:"executors,omitempty"`
+	CPULoad              int64      `json:"cpuLoad"`
 	Cpus                 int64      `json:"cpus"`
 	CPUTime              int64      `json:"cpuTime"`
-	CPULoad              int64      `json:"cpuLoad"`
-	MemoryRss            int64      `json:"memoryRss"`
-	MemoryReq            int64      `json:"memoryReq"`
-	ReadBytes            int64      `json:"readBytes"`
-	WriteBytes           int64      `json:"writeBytes"`
-	VolCtxSwitch         int64      `json:"volCtxSwitch"`
+	DateCreated          *time.Time `json:"dateCreated,omitempty"`
+	Executors            []string   `json:"executors,omitempty"`
+	Failed               int64      `json:"failed"`
 	InvCtxSwitch         int64      `json:"invCtxSwitch"`
-	LoadTasks            int64      `json:"loadTasks"`
+	LastUpdated          *time.Time `json:"lastUpdated,omitempty"`
 	LoadCpus             int64      `json:"loadCpus"`
 	LoadMemory           int64      `json:"loadMemory"`
-	PeakCpus             int64      `json:"peakCpus"`
-	PeakTasks            int64      `json:"peakTasks"`
-	PeakMemory           int64      `json:"peakMemory"`
+	LoadTasks            int64      `json:"loadTasks"`
+	MemoryEfficiency     *float32   `json:"memoryEfficiency,omitempty"`
+	MemoryReq            int64      `json:"memoryReq"`
+	MemoryRss            int64      `json:"memoryRss"`
 	NumSpotInterruptions *int       `json:"numSpotInterruptions,omitempty"`
-	Cost                 *float64   `json:"cost,omitempty"`
+	PeakCpus             int64      `json:"peakCpus"`
+	PeakMemory           int64      `json:"peakMemory"`
+	PeakTasks            int64      `json:"peakTasks"`
+	Pending              int64      `json:"pending"`
+	ReadBytes            int64      `json:"readBytes"`
+	Running              int64      `json:"running"`
+	Submitted            int64      `json:"submitted"`
+	Succeeded            int64      `json:"succeeded"`
+	VolCtxSwitch         int64      `json:"volCtxSwitch"`
+	WriteBytes           int64      `json:"writeBytes"`
 }
 
 func (w WorkflowLoad) MarshalJSON() ([]byte, error) {
@@ -50,39 +50,11 @@ func (w *WorkflowLoad) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WorkflowLoad) GetPending() int64 {
+func (w *WorkflowLoad) GetAborted() int64 {
 	if w == nil {
 		return 0
 	}
-	return w.Pending
-}
-
-func (w *WorkflowLoad) GetSubmitted() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Submitted
-}
-
-func (w *WorkflowLoad) GetRunning() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Running
-}
-
-func (w *WorkflowLoad) GetSucceeded() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Succeeded
-}
-
-func (w *WorkflowLoad) GetFailed() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Failed
+	return w.Aborted
 }
 
 func (w *WorkflowLoad) GetCached() int64 {
@@ -92,18 +64,11 @@ func (w *WorkflowLoad) GetCached() int64 {
 	return w.Cached
 }
 
-func (w *WorkflowLoad) GetAborted() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Aborted
-}
-
-func (w *WorkflowLoad) GetMemoryEfficiency() *float32 {
+func (w *WorkflowLoad) GetCost() *float64 {
 	if w == nil {
 		return nil
 	}
-	return w.MemoryEfficiency
+	return w.Cost
 }
 
 func (w *WorkflowLoad) GetCPUEfficiency() *float32 {
@@ -113,25 +78,11 @@ func (w *WorkflowLoad) GetCPUEfficiency() *float32 {
 	return w.CPUEfficiency
 }
 
-func (w *WorkflowLoad) GetDateCreated() *time.Time {
+func (w *WorkflowLoad) GetCPULoad() int64 {
 	if w == nil {
-		return nil
+		return 0
 	}
-	return w.DateCreated
-}
-
-func (w *WorkflowLoad) GetLastUpdated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.LastUpdated
-}
-
-func (w *WorkflowLoad) GetExecutors() []string {
-	if w == nil {
-		return nil
-	}
-	return w.Executors
+	return w.CPULoad
 }
 
 func (w *WorkflowLoad) GetCpus() int64 {
@@ -148,46 +99,25 @@ func (w *WorkflowLoad) GetCPUTime() int64 {
 	return w.CPUTime
 }
 
-func (w *WorkflowLoad) GetCPULoad() int64 {
+func (w *WorkflowLoad) GetDateCreated() *time.Time {
 	if w == nil {
-		return 0
+		return nil
 	}
-	return w.CPULoad
+	return w.DateCreated
 }
 
-func (w *WorkflowLoad) GetMemoryRss() int64 {
+func (w *WorkflowLoad) GetExecutors() []string {
 	if w == nil {
-		return 0
+		return nil
 	}
-	return w.MemoryRss
+	return w.Executors
 }
 
-func (w *WorkflowLoad) GetMemoryReq() int64 {
+func (w *WorkflowLoad) GetFailed() int64 {
 	if w == nil {
 		return 0
 	}
-	return w.MemoryReq
-}
-
-func (w *WorkflowLoad) GetReadBytes() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.ReadBytes
-}
-
-func (w *WorkflowLoad) GetWriteBytes() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.WriteBytes
-}
-
-func (w *WorkflowLoad) GetVolCtxSwitch() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.VolCtxSwitch
+	return w.Failed
 }
 
 func (w *WorkflowLoad) GetInvCtxSwitch() int64 {
@@ -197,11 +127,11 @@ func (w *WorkflowLoad) GetInvCtxSwitch() int64 {
 	return w.InvCtxSwitch
 }
 
-func (w *WorkflowLoad) GetLoadTasks() int64 {
+func (w *WorkflowLoad) GetLastUpdated() *time.Time {
 	if w == nil {
-		return 0
+		return nil
 	}
-	return w.LoadTasks
+	return w.LastUpdated
 }
 
 func (w *WorkflowLoad) GetLoadCpus() int64 {
@@ -218,25 +148,32 @@ func (w *WorkflowLoad) GetLoadMemory() int64 {
 	return w.LoadMemory
 }
 
-func (w *WorkflowLoad) GetPeakCpus() int64 {
+func (w *WorkflowLoad) GetLoadTasks() int64 {
 	if w == nil {
 		return 0
 	}
-	return w.PeakCpus
+	return w.LoadTasks
 }
 
-func (w *WorkflowLoad) GetPeakTasks() int64 {
+func (w *WorkflowLoad) GetMemoryEfficiency() *float32 {
 	if w == nil {
-		return 0
+		return nil
 	}
-	return w.PeakTasks
+	return w.MemoryEfficiency
 }
 
-func (w *WorkflowLoad) GetPeakMemory() int64 {
+func (w *WorkflowLoad) GetMemoryReq() int64 {
 	if w == nil {
 		return 0
 	}
-	return w.PeakMemory
+	return w.MemoryReq
+}
+
+func (w *WorkflowLoad) GetMemoryRss() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.MemoryRss
 }
 
 func (w *WorkflowLoad) GetNumSpotInterruptions() *int {
@@ -246,9 +183,72 @@ func (w *WorkflowLoad) GetNumSpotInterruptions() *int {
 	return w.NumSpotInterruptions
 }
 
-func (w *WorkflowLoad) GetCost() *float64 {
+func (w *WorkflowLoad) GetPeakCpus() int64 {
 	if w == nil {
-		return nil
+		return 0
 	}
-	return w.Cost
+	return w.PeakCpus
+}
+
+func (w *WorkflowLoad) GetPeakMemory() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.PeakMemory
+}
+
+func (w *WorkflowLoad) GetPeakTasks() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.PeakTasks
+}
+
+func (w *WorkflowLoad) GetPending() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.Pending
+}
+
+func (w *WorkflowLoad) GetReadBytes() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.ReadBytes
+}
+
+func (w *WorkflowLoad) GetRunning() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.Running
+}
+
+func (w *WorkflowLoad) GetSubmitted() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.Submitted
+}
+
+func (w *WorkflowLoad) GetSucceeded() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.Succeeded
+}
+
+func (w *WorkflowLoad) GetVolCtxSwitch() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.VolCtxSwitch
+}
+
+func (w *WorkflowLoad) GetWriteBytes() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.WriteBytes
 }

@@ -7,8 +7,8 @@ import (
 )
 
 type GoogleInstanceType struct {
-	ID   *string `json:"id,omitempty"`
 	Arch *string `json:"arch,omitempty"`
+	ID   *string `json:"id,omitempty"`
 }
 
 func (g GoogleInstanceType) MarshalJSON() ([]byte, error) {
@@ -22,16 +22,16 @@ func (g *GoogleInstanceType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GoogleInstanceType) GetID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ID
-}
-
 func (g *GoogleInstanceType) GetArch() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Arch
+}
+
+func (g *GoogleInstanceType) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }

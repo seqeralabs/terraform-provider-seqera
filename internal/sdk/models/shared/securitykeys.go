@@ -40,10 +40,10 @@ func (l *LocalSecurityKeys) GetPassword() *string {
 }
 
 type S3CompatibleCredentials struct {
-	Discriminator          *string `json:"discriminator,omitempty"`
 	AccessKey              *string `json:"accessKey,omitempty"`
-	SecretKey              *string `json:"secretKey,omitempty"`
+	Discriminator          *string `json:"discriminator,omitempty"`
 	PathStyleAccessEnabled *bool   `json:"pathStyleAccessEnabled,omitempty"`
+	SecretKey              *string `json:"secretKey,omitempty"`
 }
 
 func (s S3CompatibleCredentials) MarshalJSON() ([]byte, error) {
@@ -57,13 +57,6 @@ func (s *S3CompatibleCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *S3CompatibleCredentials) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
-}
-
 func (s *S3CompatibleCredentials) GetAccessKey() *string {
 	if s == nil {
 		return nil
@@ -71,11 +64,11 @@ func (s *S3CompatibleCredentials) GetAccessKey() *string {
 	return s.AccessKey
 }
 
-func (s *S3CompatibleCredentials) GetSecretKey() *string {
+func (s *S3CompatibleCredentials) GetDiscriminator() *string {
 	if s == nil {
 		return nil
 	}
-	return s.SecretKey
+	return s.Discriminator
 }
 
 func (s *S3CompatibleCredentials) GetPathStyleAccessEnabled() *bool {
@@ -85,14 +78,21 @@ func (s *S3CompatibleCredentials) GetPathStyleAccessEnabled() *bool {
 	return s.PathStyleAccessEnabled
 }
 
+func (s *S3CompatibleCredentials) GetSecretKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SecretKey
+}
+
 // #region class-body-s3compatiblecredentials
 // #endregion class-body-s3compatiblecredentials
 
 type SeqeraComputeCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
-	SecretKey     *string `json:"secretKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	SecretKey     *string `json:"secretKey,omitempty"`
 }
 
 func (s SeqeraComputeCredentials) MarshalJSON() ([]byte, error) {
@@ -106,25 +106,11 @@ func (s *SeqeraComputeCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SeqeraComputeCredentials) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
-}
-
 func (s *SeqeraComputeCredentials) GetAccessKey() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AccessKey
-}
-
-func (s *SeqeraComputeCredentials) GetSecretKey() *string {
-	if s == nil {
-		return nil
-	}
-	return s.SecretKey
 }
 
 func (s *SeqeraComputeCredentials) GetAssumeRoleArn() *string {
@@ -134,15 +120,29 @@ func (s *SeqeraComputeCredentials) GetAssumeRoleArn() *string {
 	return s.AssumeRoleArn
 }
 
+func (s *SeqeraComputeCredentials) GetDiscriminator() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Discriminator
+}
+
+func (s *SeqeraComputeCredentials) GetSecretKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SecretKey
+}
+
 type AzureEntraCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
-	BatchName     *string `json:"batchName,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
 	BatchKey      *string `json:"batchKey,omitempty"`
-	StorageKey    *string `json:"storageKey,omitempty"`
-	TenantID      *string `json:"tenantId,omitempty"`
+	BatchName     *string `json:"batchName,omitempty"`
 	ClientID      *string `json:"clientId,omitempty"`
 	ClientSecret  *string `json:"clientSecret,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	StorageKey    *string `json:"storageKey,omitempty"`
+	StorageName   *string `json:"storageName,omitempty"`
+	TenantID      *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureEntraCredentials) MarshalJSON() ([]byte, error) {
@@ -156,27 +156,6 @@ func (a *AzureEntraCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureEntraCredentials) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureEntraCredentials) GetBatchName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BatchName
-}
-
-func (a *AzureEntraCredentials) GetStorageName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.StorageName
-}
-
 func (a *AzureEntraCredentials) GetBatchKey() *string {
 	if a == nil {
 		return nil
@@ -184,18 +163,11 @@ func (a *AzureEntraCredentials) GetBatchKey() *string {
 	return a.BatchKey
 }
 
-func (a *AzureEntraCredentials) GetStorageKey() *string {
+func (a *AzureEntraCredentials) GetBatchName() *string {
 	if a == nil {
 		return nil
 	}
-	return a.StorageKey
-}
-
-func (a *AzureEntraCredentials) GetTenantID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.TenantID
+	return a.BatchName
 }
 
 func (a *AzureEntraCredentials) GetClientID() *string {
@@ -212,11 +184,39 @@ func (a *AzureEntraCredentials) GetClientSecret() *string {
 	return a.ClientSecret
 }
 
+func (a *AzureEntraCredentials) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AzureEntraCredentials) GetStorageKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageKey
+}
+
+func (a *AzureEntraCredentials) GetStorageName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageName
+}
+
+func (a *AzureEntraCredentials) GetTenantID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.TenantID
+}
+
 type AWSCodeCommitCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (a AWSCodeCommitCredentials) MarshalJSON() ([]byte, error) {
@@ -237,13 +237,6 @@ func (a *AWSCodeCommitCredentials) GetDiscriminator() *string {
 	return a.Discriminator
 }
 
-func (a *AWSCodeCommitCredentials) GetUsername() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Username
-}
-
 func (a *AWSCodeCommitCredentials) GetPassword() *string {
 	if a == nil {
 		return nil
@@ -258,11 +251,18 @@ func (a *AWSCodeCommitCredentials) GetToken() *string {
 	return a.Token
 }
 
+func (a *AWSCodeCommitCredentials) GetUsername() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Username
+}
+
 type TowerAgentCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	ConnectionID  *string `json:"connectionId,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 	Shared        *bool   `json:"shared,omitempty"`
+	WorkDir       *string `json:"workDir,omitempty"`
 }
 
 func (t TowerAgentCredentials) MarshalJSON() ([]byte, error) {
@@ -276,13 +276,6 @@ func (t *TowerAgentCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TowerAgentCredentials) GetDiscriminator() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Discriminator
-}
-
 func (t *TowerAgentCredentials) GetConnectionID() *string {
 	if t == nil {
 		return nil
@@ -290,11 +283,11 @@ func (t *TowerAgentCredentials) GetConnectionID() *string {
 	return t.ConnectionID
 }
 
-func (t *TowerAgentCredentials) GetWorkDir() *string {
+func (t *TowerAgentCredentials) GetDiscriminator() *string {
 	if t == nil {
 		return nil
 	}
-	return t.WorkDir
+	return t.Discriminator
 }
 
 func (t *TowerAgentCredentials) GetShared() *bool {
@@ -304,11 +297,18 @@ func (t *TowerAgentCredentials) GetShared() *bool {
 	return t.Shared
 }
 
+func (t *TowerAgentCredentials) GetWorkDir() *string {
+	if t == nil {
+		return nil
+	}
+	return t.WorkDir
+}
+
 type ContainerRegistryCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	UserName      *string `json:"userName,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Registry      *string `json:"registry,omitempty"`
+	UserName      *string `json:"userName,omitempty"`
 }
 
 func (c ContainerRegistryCredentials) MarshalJSON() ([]byte, error) {
@@ -329,13 +329,6 @@ func (c *ContainerRegistryCredentials) GetDiscriminator() *string {
 	return c.Discriminator
 }
 
-func (c *ContainerRegistryCredentials) GetUserName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UserName
-}
-
 func (c *ContainerRegistryCredentials) GetPassword() *string {
 	if c == nil {
 		return nil
@@ -350,11 +343,18 @@ func (c *ContainerRegistryCredentials) GetRegistry() *string {
 	return c.Registry
 }
 
+func (c *ContainerRegistryCredentials) GetUserName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.UserName
+}
+
 type AzureReposCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (a AzureReposCredentials) MarshalJSON() ([]byte, error) {
@@ -375,13 +375,6 @@ func (a *AzureReposCredentials) GetDiscriminator() *string {
 	return a.Discriminator
 }
 
-func (a *AzureReposCredentials) GetUsername() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Username
-}
-
 func (a *AzureReposCredentials) GetPassword() *string {
 	if a == nil {
 		return nil
@@ -396,16 +389,23 @@ func (a *AzureReposCredentials) GetToken() *string {
 	return a.Token
 }
 
+func (a *AzureReposCredentials) GetUsername() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Username
+}
+
 type AzureCloudCredentials struct {
-	Discriminator  *string `json:"discriminator,omitempty"`
-	BatchName      *string `json:"batchName,omitempty"`
-	StorageName    *string `json:"storageName,omitempty"`
 	BatchKey       *string `json:"batchKey,omitempty"`
-	StorageKey     *string `json:"storageKey,omitempty"`
-	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	TenantID       *string `json:"tenantId,omitempty"`
+	BatchName      *string `json:"batchName,omitempty"`
 	ClientID       *string `json:"clientId,omitempty"`
 	ClientSecret   *string `json:"clientSecret,omitempty"`
+	Discriminator  *string `json:"discriminator,omitempty"`
+	StorageKey     *string `json:"storageKey,omitempty"`
+	StorageName    *string `json:"storageName,omitempty"`
+	SubscriptionID *string `json:"subscriptionId,omitempty"`
+	TenantID       *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureCloudCredentials) MarshalJSON() ([]byte, error) {
@@ -419,27 +419,6 @@ func (a *AzureCloudCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCloudCredentials) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureCloudCredentials) GetBatchName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BatchName
-}
-
-func (a *AzureCloudCredentials) GetStorageName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.StorageName
-}
-
 func (a *AzureCloudCredentials) GetBatchKey() *string {
 	if a == nil {
 		return nil
@@ -447,25 +426,11 @@ func (a *AzureCloudCredentials) GetBatchKey() *string {
 	return a.BatchKey
 }
 
-func (a *AzureCloudCredentials) GetStorageKey() *string {
+func (a *AzureCloudCredentials) GetBatchName() *string {
 	if a == nil {
 		return nil
 	}
-	return a.StorageKey
-}
-
-func (a *AzureCloudCredentials) GetSubscriptionID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.SubscriptionID
-}
-
-func (a *AzureCloudCredentials) GetTenantID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.TenantID
+	return a.BatchName
 }
 
 func (a *AzureCloudCredentials) GetClientID() *string {
@@ -482,12 +447,47 @@ func (a *AzureCloudCredentials) GetClientSecret() *string {
 	return a.ClientSecret
 }
 
+func (a *AzureCloudCredentials) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AzureCloudCredentials) GetStorageKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageKey
+}
+
+func (a *AzureCloudCredentials) GetStorageName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageName
+}
+
+func (a *AzureCloudCredentials) GetSubscriptionID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SubscriptionID
+}
+
+func (a *AzureCloudCredentials) GetTenantID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.TenantID
+}
+
 type AzureCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
-	BatchName     *string `json:"batchName,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
 	BatchKey      *string `json:"batchKey,omitempty"`
+	BatchName     *string `json:"batchName,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 	StorageKey    *string `json:"storageKey,omitempty"`
+	StorageName   *string `json:"storageName,omitempty"`
 }
 
 func (a AzureCredentials) MarshalJSON() ([]byte, error) {
@@ -501,11 +501,11 @@ func (a *AzureCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredentials) GetDiscriminator() *string {
+func (a *AzureCredentials) GetBatchKey() *string {
 	if a == nil {
 		return nil
 	}
-	return a.Discriminator
+	return a.BatchKey
 }
 
 func (a *AzureCredentials) GetBatchName() *string {
@@ -515,18 +515,11 @@ func (a *AzureCredentials) GetBatchName() *string {
 	return a.BatchName
 }
 
-func (a *AzureCredentials) GetStorageName() *string {
+func (a *AzureCredentials) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
-	return a.StorageName
-}
-
-func (a *AzureCredentials) GetBatchKey() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BatchKey
+	return a.Discriminator
 }
 
 func (a *AzureCredentials) GetStorageKey() *string {
@@ -536,9 +529,16 @@ func (a *AzureCredentials) GetStorageKey() *string {
 	return a.StorageKey
 }
 
+func (a *AzureCredentials) GetStorageName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageName
+}
+
 type KubernetesCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	Certificate   *string `json:"certificate,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 	PrivateKey    *string `json:"privateKey,omitempty"`
 	Token         *string `json:"token,omitempty"`
 }
@@ -554,18 +554,18 @@ func (k *KubernetesCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (k *KubernetesCredentials) GetDiscriminator() *string {
-	if k == nil {
-		return nil
-	}
-	return k.Discriminator
-}
-
 func (k *KubernetesCredentials) GetCertificate() *string {
 	if k == nil {
 		return nil
 	}
 	return k.Certificate
+}
+
+func (k *KubernetesCredentials) GetDiscriminator() *string {
+	if k == nil {
+		return nil
+	}
+	return k.Discriminator
 }
 
 func (k *KubernetesCredentials) GetPrivateKey() *string {
@@ -584,8 +584,8 @@ func (k *KubernetesCredentials) GetToken() *string {
 
 type SSHCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	PrivateKey    *string `json:"privateKey,omitempty"`
 	Passphrase    *string `json:"passphrase,omitempty"`
+	PrivateKey    *string `json:"privateKey,omitempty"`
 }
 
 func (s SSHCredentials) MarshalJSON() ([]byte, error) {
@@ -606,13 +606,6 @@ func (s *SSHCredentials) GetDiscriminator() *string {
 	return s.Discriminator
 }
 
-func (s *SSHCredentials) GetPrivateKey() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PrivateKey
-}
-
 func (s *SSHCredentials) GetPassphrase() *string {
 	if s == nil {
 		return nil
@@ -620,11 +613,18 @@ func (s *SSHCredentials) GetPassphrase() *string {
 	return s.Passphrase
 }
 
+func (s *SSHCredentials) GetPrivateKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PrivateKey
+}
+
 type GiteaCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (g GiteaCredentials) MarshalJSON() ([]byte, error) {
@@ -645,13 +645,6 @@ func (g *GiteaCredentials) GetDiscriminator() *string {
 	return g.Discriminator
 }
 
-func (g *GiteaCredentials) GetUsername() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Username
-}
-
 func (g *GiteaCredentials) GetPassword() *string {
 	if g == nil {
 		return nil
@@ -666,11 +659,18 @@ func (g *GiteaCredentials) GetToken() *string {
 	return g.Token
 }
 
+func (g *GiteaCredentials) GetUsername() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Username
+}
+
 type BitBucketCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (b BitBucketCredentials) MarshalJSON() ([]byte, error) {
@@ -691,13 +691,6 @@ func (b *BitBucketCredentials) GetDiscriminator() *string {
 	return b.Discriminator
 }
 
-func (b *BitBucketCredentials) GetUsername() *string {
-	if b == nil {
-		return nil
-	}
-	return b.Username
-}
-
 func (b *BitBucketCredentials) GetPassword() *string {
 	if b == nil {
 		return nil
@@ -712,11 +705,18 @@ func (b *BitBucketCredentials) GetToken() *string {
 	return b.Token
 }
 
+func (b *BitBucketCredentials) GetUsername() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Username
+}
+
 type GitLabCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (g GitLabCredentials) MarshalJSON() ([]byte, error) {
@@ -737,13 +737,6 @@ func (g *GitLabCredentials) GetDiscriminator() *string {
 	return g.Discriminator
 }
 
-func (g *GitLabCredentials) GetUsername() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Username
-}
-
 func (g *GitLabCredentials) GetPassword() *string {
 	if g == nil {
 		return nil
@@ -758,11 +751,18 @@ func (g *GitLabCredentials) GetToken() *string {
 	return g.Token
 }
 
+func (g *GitLabCredentials) GetUsername() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Username
+}
+
 type GitHubCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (g GitHubCredentials) MarshalJSON() ([]byte, error) {
@@ -783,13 +783,6 @@ func (g *GitHubCredentials) GetDiscriminator() *string {
 	return g.Discriminator
 }
 
-func (g *GitHubCredentials) GetUsername() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Username
-}
-
 func (g *GitHubCredentials) GetPassword() *string {
 	if g == nil {
 		return nil
@@ -804,9 +797,16 @@ func (g *GitHubCredentials) GetToken() *string {
 	return g.Token
 }
 
+func (g *GitHubCredentials) GetUsername() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Username
+}
+
 type GoogleCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	Data          *string `json:"data,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 }
 
 func (g GoogleCredentials) MarshalJSON() ([]byte, error) {
@@ -820,13 +820,6 @@ func (g *GoogleCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GoogleCredentials) GetDiscriminator() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Discriminator
-}
-
 func (g *GoogleCredentials) GetData() *string {
 	if g == nil {
 		return nil
@@ -834,11 +827,18 @@ func (g *GoogleCredentials) GetData() *string {
 	return g.Data
 }
 
+func (g *GoogleCredentials) GetDiscriminator() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Discriminator
+}
+
 type AWSCredentials struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
-	SecretKey     *string `json:"secretKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	SecretKey     *string `json:"secretKey,omitempty"`
 }
 
 func (a AWSCredentials) MarshalJSON() ([]byte, error) {
@@ -852,13 +852,6 @@ func (a *AWSCredentials) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AWSCredentials) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
 func (a *AWSCredentials) GetAccessKey() *string {
 	if a == nil {
 		return nil
@@ -866,18 +859,25 @@ func (a *AWSCredentials) GetAccessKey() *string {
 	return a.AccessKey
 }
 
-func (a *AWSCredentials) GetSecretKey() *string {
-	if a == nil {
-		return nil
-	}
-	return a.SecretKey
-}
-
 func (a *AWSCredentials) GetAssumeRoleArn() *string {
 	if a == nil {
 		return nil
 	}
 	return a.AssumeRoleArn
+}
+
+func (a *AWSCredentials) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AWSCredentials) GetSecretKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SecretKey
 }
 
 type SecurityKeysType string
@@ -1420,8 +1420,8 @@ func (l *LocalSecurityKeysOutput) GetDiscriminator() *string {
 }
 
 type S3CompatibleCredentialsOutput struct {
-	Discriminator          *string `json:"discriminator,omitempty"`
 	AccessKey              *string `json:"accessKey,omitempty"`
+	Discriminator          *string `json:"discriminator,omitempty"`
 	PathStyleAccessEnabled *bool   `json:"pathStyleAccessEnabled,omitempty"`
 }
 
@@ -1436,18 +1436,18 @@ func (s *S3CompatibleCredentialsOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *S3CompatibleCredentialsOutput) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
-}
-
 func (s *S3CompatibleCredentialsOutput) GetAccessKey() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AccessKey
+}
+
+func (s *S3CompatibleCredentialsOutput) GetDiscriminator() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Discriminator
 }
 
 func (s *S3CompatibleCredentialsOutput) GetPathStyleAccessEnabled() *bool {
@@ -1461,9 +1461,9 @@ func (s *S3CompatibleCredentialsOutput) GetPathStyleAccessEnabled() *bool {
 // #endregion class-body-s3compatiblecredentialsoutput
 
 type SeqeraComputeCredentialsOutput struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 }
 
 func (s SeqeraComputeCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1475,13 +1475,6 @@ func (s *SeqeraComputeCredentialsOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (s *SeqeraComputeCredentialsOutput) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
 }
 
 func (s *SeqeraComputeCredentialsOutput) GetAccessKey() *string {
@@ -1498,12 +1491,19 @@ func (s *SeqeraComputeCredentialsOutput) GetAssumeRoleArn() *string {
 	return s.AssumeRoleArn
 }
 
+func (s *SeqeraComputeCredentialsOutput) GetDiscriminator() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Discriminator
+}
+
 type AzureEntraCredentialsOutput struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	BatchName     *string `json:"batchName,omitempty"`
+	ClientID      *string `json:"clientId,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 	StorageName   *string `json:"storageName,omitempty"`
 	TenantID      *string `json:"tenantId,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
 }
 
 func (a AzureEntraCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1517,18 +1517,25 @@ func (a *AzureEntraCredentialsOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureEntraCredentialsOutput) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
 func (a *AzureEntraCredentialsOutput) GetBatchName() *string {
 	if a == nil {
 		return nil
 	}
 	return a.BatchName
+}
+
+func (a *AzureEntraCredentialsOutput) GetClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientID
+}
+
+func (a *AzureEntraCredentialsOutput) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AzureEntraCredentialsOutput) GetStorageName() *string {
@@ -1545,17 +1552,10 @@ func (a *AzureEntraCredentialsOutput) GetTenantID() *string {
 	return a.TenantID
 }
 
-func (a *AzureEntraCredentialsOutput) GetClientID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ClientID
-}
-
 type AWSCodeCommitCredentialsOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
 	Token         *string `json:"token,omitempty"`
+	Username      *string `json:"username,omitempty"`
 }
 
 func (a AWSCodeCommitCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1576,13 +1576,6 @@ func (a *AWSCodeCommitCredentialsOutput) GetDiscriminator() *string {
 	return a.Discriminator
 }
 
-func (a *AWSCodeCommitCredentialsOutput) GetUsername() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Username
-}
-
 func (a *AWSCodeCommitCredentialsOutput) GetToken() *string {
 	if a == nil {
 		return nil
@@ -1590,10 +1583,17 @@ func (a *AWSCodeCommitCredentialsOutput) GetToken() *string {
 	return a.Token
 }
 
+func (a *AWSCodeCommitCredentialsOutput) GetUsername() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Username
+}
+
 type ContainerRegistryCredentialsOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	UserName      *string `json:"userName,omitempty"`
 	Registry      *string `json:"registry,omitempty"`
+	UserName      *string `json:"userName,omitempty"`
 }
 
 func (c ContainerRegistryCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1614,18 +1614,18 @@ func (c *ContainerRegistryCredentialsOutput) GetDiscriminator() *string {
 	return c.Discriminator
 }
 
-func (c *ContainerRegistryCredentialsOutput) GetUserName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.UserName
-}
-
 func (c *ContainerRegistryCredentialsOutput) GetRegistry() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Registry
+}
+
+func (c *ContainerRegistryCredentialsOutput) GetUserName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.UserName
 }
 
 type AzureReposCredentialsOutput struct {
@@ -1659,12 +1659,12 @@ func (a *AzureReposCredentialsOutput) GetUsername() *string {
 }
 
 type AzureCloudCredentialsOutput struct {
-	Discriminator  *string `json:"discriminator,omitempty"`
 	BatchName      *string `json:"batchName,omitempty"`
+	ClientID       *string `json:"clientId,omitempty"`
+	Discriminator  *string `json:"discriminator,omitempty"`
 	StorageName    *string `json:"storageName,omitempty"`
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
 	TenantID       *string `json:"tenantId,omitempty"`
-	ClientID       *string `json:"clientId,omitempty"`
 }
 
 func (a AzureCloudCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1678,18 +1678,25 @@ func (a *AzureCloudCredentialsOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCloudCredentialsOutput) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
 func (a *AzureCloudCredentialsOutput) GetBatchName() *string {
 	if a == nil {
 		return nil
 	}
 	return a.BatchName
+}
+
+func (a *AzureCloudCredentialsOutput) GetClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientID
+}
+
+func (a *AzureCloudCredentialsOutput) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AzureCloudCredentialsOutput) GetStorageName() *string {
@@ -1713,16 +1720,9 @@ func (a *AzureCloudCredentialsOutput) GetTenantID() *string {
 	return a.TenantID
 }
 
-func (a *AzureCloudCredentialsOutput) GetClientID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ClientID
-}
-
 type AzureCredentialsOutput struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	BatchName     *string `json:"batchName,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 	StorageName   *string `json:"storageName,omitempty"`
 }
 
@@ -1737,18 +1737,18 @@ func (a *AzureCredentialsOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredentialsOutput) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
 func (a *AzureCredentialsOutput) GetBatchName() *string {
 	if a == nil {
 		return nil
 	}
 	return a.BatchName
+}
+
+func (a *AzureCredentialsOutput) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AzureCredentialsOutput) GetStorageName() *string {
@@ -1945,9 +1945,9 @@ func (g *GoogleCredentialsOutput) GetDiscriminator() *string {
 }
 
 type AWSCredentialsOutput struct {
-	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 }
 
 func (a AWSCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1959,13 +1959,6 @@ func (a *AWSCredentialsOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (a *AWSCredentialsOutput) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
 }
 
 func (a *AWSCredentialsOutput) GetAccessKey() *string {
@@ -1980,6 +1973,13 @@ func (a *AWSCredentialsOutput) GetAssumeRoleArn() *string {
 		return nil
 	}
 	return a.AssumeRoleArn
+}
+
+func (a *AWSCredentialsOutput) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 type SecurityKeysOutputType string

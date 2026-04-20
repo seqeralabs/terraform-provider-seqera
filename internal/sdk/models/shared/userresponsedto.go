@@ -8,22 +8,22 @@ import (
 )
 
 type UserResponseDto struct {
-	ID                *int64     `json:"id,omitempty"`
-	UserName          *string    `json:"userName,omitempty"`
-	Email             *string    `json:"email,omitempty"`
-	FirstName         *string    `json:"firstName,omitempty"`
-	LastName          *string    `json:"lastName,omitempty"`
-	Organization      *string    `json:"organization,omitempty"`
-	Description       *string    `json:"description,omitempty"`
 	Avatar            *string    `json:"avatar,omitempty"`
 	AvatarID          *string    `json:"avatarId,omitempty"`
-	Notification      *bool      `json:"notification,omitempty"`
-	TermsOfUseConsent *bool      `json:"termsOfUseConsent,omitempty"`
-	MarketingConsent  *bool      `json:"marketingConsent,omitempty"`
-	LastAccess        *time.Time `json:"lastAccess,omitempty"`
 	DateCreated       *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time `json:"lastUpdated,omitempty"`
 	Deleted           *bool      `json:"deleted,omitempty"`
+	Description       *string    `json:"description,omitempty"`
+	Email             *string    `json:"email,omitempty"`
+	FirstName         *string    `json:"firstName,omitempty"`
+	ID                *int64     `json:"id,omitempty"`
+	LastAccess        *time.Time `json:"lastAccess,omitempty"`
+	LastName          *string    `json:"lastName,omitempty"`
+	LastUpdated       *time.Time `json:"lastUpdated,omitempty"`
+	MarketingConsent  *bool      `json:"marketingConsent,omitempty"`
+	Notification      *bool      `json:"notification,omitempty"`
+	Organization      *string    `json:"organization,omitempty"`
+	TermsOfUseConsent *bool      `json:"termsOfUseConsent,omitempty"`
+	UserName          *string    `json:"userName,omitempty"`
 }
 
 func (u UserResponseDto) MarshalJSON() ([]byte, error) {
@@ -35,55 +35,6 @@ func (u *UserResponseDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (u *UserResponseDto) GetID() *int64 {
-	if u == nil {
-		return nil
-	}
-	return u.ID
-}
-
-func (u *UserResponseDto) GetUserName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.UserName
-}
-
-func (u *UserResponseDto) GetEmail() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Email
-}
-
-func (u *UserResponseDto) GetFirstName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.FirstName
-}
-
-func (u *UserResponseDto) GetLastName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.LastName
-}
-
-func (u *UserResponseDto) GetOrganization() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Organization
-}
-
-func (u *UserResponseDto) GetDescription() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Description
 }
 
 func (u *UserResponseDto) GetAvatar() *string {
@@ -100,25 +51,46 @@ func (u *UserResponseDto) GetAvatarID() *string {
 	return u.AvatarID
 }
 
-func (u *UserResponseDto) GetNotification() *bool {
+func (u *UserResponseDto) GetDateCreated() *time.Time {
 	if u == nil {
 		return nil
 	}
-	return u.Notification
+	return u.DateCreated
 }
 
-func (u *UserResponseDto) GetTermsOfUseConsent() *bool {
+func (u *UserResponseDto) GetDeleted() *bool {
 	if u == nil {
 		return nil
 	}
-	return u.TermsOfUseConsent
+	return u.Deleted
 }
 
-func (u *UserResponseDto) GetMarketingConsent() *bool {
+func (u *UserResponseDto) GetDescription() *string {
 	if u == nil {
 		return nil
 	}
-	return u.MarketingConsent
+	return u.Description
+}
+
+func (u *UserResponseDto) GetEmail() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Email
+}
+
+func (u *UserResponseDto) GetFirstName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.FirstName
+}
+
+func (u *UserResponseDto) GetID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.ID
 }
 
 func (u *UserResponseDto) GetLastAccess() *time.Time {
@@ -128,11 +100,11 @@ func (u *UserResponseDto) GetLastAccess() *time.Time {
 	return u.LastAccess
 }
 
-func (u *UserResponseDto) GetDateCreated() *time.Time {
+func (u *UserResponseDto) GetLastName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.DateCreated
+	return u.LastName
 }
 
 func (u *UserResponseDto) GetLastUpdated() *time.Time {
@@ -142,9 +114,37 @@ func (u *UserResponseDto) GetLastUpdated() *time.Time {
 	return u.LastUpdated
 }
 
-func (u *UserResponseDto) GetDeleted() *bool {
+func (u *UserResponseDto) GetMarketingConsent() *bool {
 	if u == nil {
 		return nil
 	}
-	return u.Deleted
+	return u.MarketingConsent
+}
+
+func (u *UserResponseDto) GetNotification() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.Notification
+}
+
+func (u *UserResponseDto) GetOrganization() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Organization
+}
+
+func (u *UserResponseDto) GetTermsOfUseConsent() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.TermsOfUseConsent
+}
+
+func (u *UserResponseDto) GetUserName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.UserName
 }

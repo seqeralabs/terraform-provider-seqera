@@ -3,15 +3,8 @@
 package shared
 
 type PipelineSchemaResponse struct {
-	Schema string  `json:"schema"`
 	Params *string `json:"params,omitempty"`
-}
-
-func (p *PipelineSchemaResponse) GetSchema() string {
-	if p == nil {
-		return ""
-	}
-	return p.Schema
+	Schema string  `json:"schema"`
 }
 
 func (p *PipelineSchemaResponse) GetParams() *string {
@@ -19,4 +12,11 @@ func (p *PipelineSchemaResponse) GetParams() *string {
 		return nil
 	}
 	return p.Params
+}
+
+func (p *PipelineSchemaResponse) GetSchema() string {
+	if p == nil {
+		return ""
+	}
+	return p.Schema
 }

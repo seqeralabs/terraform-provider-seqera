@@ -3,31 +3,17 @@
 package shared
 
 type WorkflowMetrics struct {
-	ID        *int64        `json:"id,omitempty"`
-	Process   string        `json:"process"`
 	CPU       *ResourceData `json:"cpu,omitempty"`
-	Mem       *ResourceData `json:"mem,omitempty"`
-	Vmem      *ResourceData `json:"vmem,omitempty"`
-	Time      *ResourceData `json:"time,omitempty"`
-	Reads     *ResourceData `json:"reads,omitempty"`
-	Writes    *ResourceData `json:"writes,omitempty"`
 	CPUUsage  *ResourceData `json:"cpuUsage,omitempty"`
+	ID        *int64        `json:"id,omitempty"`
+	Mem       *ResourceData `json:"mem,omitempty"`
 	MemUsage  *ResourceData `json:"memUsage,omitempty"`
+	Process   string        `json:"process"`
+	Reads     *ResourceData `json:"reads,omitempty"`
+	Time      *ResourceData `json:"time,omitempty"`
 	TimeUsage *ResourceData `json:"timeUsage,omitempty"`
-}
-
-func (w *WorkflowMetrics) GetID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.ID
-}
-
-func (w *WorkflowMetrics) GetProcess() string {
-	if w == nil {
-		return ""
-	}
-	return w.Process
+	Vmem      *ResourceData `json:"vmem,omitempty"`
+	Writes    *ResourceData `json:"writes,omitempty"`
 }
 
 func (w *WorkflowMetrics) GetCPU() *ResourceData {
@@ -37,46 +23,25 @@ func (w *WorkflowMetrics) GetCPU() *ResourceData {
 	return w.CPU
 }
 
-func (w *WorkflowMetrics) GetMem() *ResourceData {
-	if w == nil {
-		return nil
-	}
-	return w.Mem
-}
-
-func (w *WorkflowMetrics) GetVmem() *ResourceData {
-	if w == nil {
-		return nil
-	}
-	return w.Vmem
-}
-
-func (w *WorkflowMetrics) GetTime() *ResourceData {
-	if w == nil {
-		return nil
-	}
-	return w.Time
-}
-
-func (w *WorkflowMetrics) GetReads() *ResourceData {
-	if w == nil {
-		return nil
-	}
-	return w.Reads
-}
-
-func (w *WorkflowMetrics) GetWrites() *ResourceData {
-	if w == nil {
-		return nil
-	}
-	return w.Writes
-}
-
 func (w *WorkflowMetrics) GetCPUUsage() *ResourceData {
 	if w == nil {
 		return nil
 	}
 	return w.CPUUsage
+}
+
+func (w *WorkflowMetrics) GetID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.ID
+}
+
+func (w *WorkflowMetrics) GetMem() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.Mem
 }
 
 func (w *WorkflowMetrics) GetMemUsage() *ResourceData {
@@ -86,9 +51,44 @@ func (w *WorkflowMetrics) GetMemUsage() *ResourceData {
 	return w.MemUsage
 }
 
+func (w *WorkflowMetrics) GetProcess() string {
+	if w == nil {
+		return ""
+	}
+	return w.Process
+}
+
+func (w *WorkflowMetrics) GetReads() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.Reads
+}
+
+func (w *WorkflowMetrics) GetTime() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.Time
+}
+
 func (w *WorkflowMetrics) GetTimeUsage() *ResourceData {
 	if w == nil {
 		return nil
 	}
 	return w.TimeUsage
+}
+
+func (w *WorkflowMetrics) GetVmem() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.Vmem
+}
+
+func (w *WorkflowMetrics) GetWrites() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.Writes
 }

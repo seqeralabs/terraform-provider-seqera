@@ -82,11 +82,11 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 
 type ComputeEnvResponseDtoResources struct {
 	Cpus           *int     `json:"cpus,omitempty"`
-	Memory         *int     `json:"memory,omitempty"`
-	Gpus           *int     `json:"gpus,omitempty"`
 	DiskSize       *int     `json:"diskSize,omitempty"`
 	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	Gpus           *int     `json:"gpus,omitempty"`
 	InstanceType   *string  `json:"instanceType,omitempty"`
+	Memory         *int     `json:"memory,omitempty"`
 }
 
 func (c *ComputeEnvResponseDtoResources) GetCpus() *int {
@@ -94,20 +94,6 @@ func (c *ComputeEnvResponseDtoResources) GetCpus() *int {
 		return nil
 	}
 	return c.Cpus
-}
-
-func (c *ComputeEnvResponseDtoResources) GetMemory() *int {
-	if c == nil {
-		return nil
-	}
-	return c.Memory
-}
-
-func (c *ComputeEnvResponseDtoResources) GetGpus() *int {
-	if c == nil {
-		return nil
-	}
-	return c.Gpus
 }
 
 func (c *ComputeEnvResponseDtoResources) GetDiskSize() *int {
@@ -124,6 +110,13 @@ func (c *ComputeEnvResponseDtoResources) GetEstimatedPrice() *float32 {
 	return c.EstimatedPrice
 }
 
+func (c *ComputeEnvResponseDtoResources) GetGpus() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Gpus
+}
+
 func (c *ComputeEnvResponseDtoResources) GetInstanceType() *string {
 	if c == nil {
 		return nil
@@ -131,36 +124,43 @@ func (c *ComputeEnvResponseDtoResources) GetInstanceType() *string {
 	return c.InstanceType
 }
 
+func (c *ComputeEnvResponseDtoResources) GetMemory() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Memory
+}
+
 type ComputeEnvResponseDto struct {
-	ComputeEnvID *string `json:"id,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	// Compute environment description
-	Description *string                        `json:"description,omitempty"`
-	Platform    *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
+	AwsAccountID *string `json:"awsAccountId,omitempty"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config      *ComputeConfig `json:"config,omitempty"`
-	DateCreated *time.Time     `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time     `json:"lastUpdated,omitempty"`
+	Config *ComputeConfig `json:"config,omitempty"`
+	// Associated credentials ID (null if using managed identity or none)
+	CredentialsID *string    `json:"credentialsId,omitempty"`
+	DateCreated   *time.Time `json:"dateCreated,omitempty"`
+	// Whether compute environment is deleted (null means not deleted)
+	Deleted *bool `json:"deleted,omitempty"`
+	// Compute environment description
+	Description  *string      `json:"description,omitempty"`
+	ComputeEnvID *string      `json:"id,omitempty"`
+	Labels       []LabelDbDto `json:"labels,omitempty"`
+	LastUpdated  *time.Time   `json:"lastUpdated,omitempty"`
 	// Last time this compute environment was used (null if never used)
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
-	// Whether compute environment is deleted (null means not deleted)
-	Deleted *bool             `json:"deleted,omitempty"`
-	Status  *ComputeEnvStatus `json:"status,omitempty"`
-	// Status message (null if no message)
-	Message *string `json:"message,omitempty"`
-	// Whether this is the primary compute environment
-	Primary *bool `json:"primary,omitempty"`
-	// Associated credentials ID (null if using managed identity or none)
-	CredentialsID *string `json:"credentialsId,omitempty"`
 	// Associated managed identity ID (null if using credentials or none)
-	ManagedIdentityID *string                         `json:"managedIdentityId,omitempty"`
-	OrgID             *int64                          `json:"orgId,omitempty"`
-	WorkspaceID       *int64                          `json:"workspaceId,omitempty"`
-	Labels            []LabelDbDto                    `json:"labels,omitempty"`
-	Resources         *ComputeEnvResponseDtoResources `json:"resources,omitempty"`
-	AwsAccountID      *string                         `json:"awsAccountId,omitempty"`
+	ManagedIdentityID *string `json:"managedIdentityId,omitempty"`
+	// Status message (null if no message)
+	Message  *string                        `json:"message,omitempty"`
+	Name     *string                        `json:"name,omitempty"`
+	OrgID    *int64                         `json:"orgId,omitempty"`
+	Platform *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
+	// Whether this is the primary compute environment
+	Primary     *bool                           `json:"primary,omitempty"`
+	Resources   *ComputeEnvResponseDtoResources `json:"resources,omitempty"`
+	Status      *ComputeEnvStatus               `json:"status,omitempty"`
+	WorkspaceID *int64                          `json:"workspaceId,omitempty"`
 }
 
 func (c ComputeEnvResponseDto) MarshalJSON() ([]byte, error) {
@@ -174,32 +174,11 @@ func (c *ComputeEnvResponseDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetComputeEnvID() *string {
+func (c *ComputeEnvResponseDto) GetAwsAccountID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.ComputeEnvID
-}
-
-func (c *ComputeEnvResponseDto) GetName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Name
-}
-
-func (c *ComputeEnvResponseDto) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *ComputeEnvResponseDto) GetPlatform() *ComputeEnvResponseDtoPlatform {
-	if c == nil {
-		return nil
-	}
-	return c.Platform
+	return c.AwsAccountID
 }
 
 func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
@@ -328,11 +307,46 @@ func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeScience
 	return nil
 }
 
+func (c *ComputeEnvResponseDto) GetCredentialsID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CredentialsID
+}
+
 func (c *ComputeEnvResponseDto) GetDateCreated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.DateCreated
+}
+
+func (c *ComputeEnvResponseDto) GetDeleted() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Deleted
+}
+
+func (c *ComputeEnvResponseDto) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *ComputeEnvResponseDto) GetComputeEnvID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ComputeEnvID
+}
+
+func (c *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
+	if c == nil {
+		return nil
+	}
+	return c.Labels
 }
 
 func (c *ComputeEnvResponseDto) GetLastUpdated() *time.Time {
@@ -349,18 +363,11 @@ func (c *ComputeEnvResponseDto) GetLastUsed() *time.Time {
 	return c.LastUsed
 }
 
-func (c *ComputeEnvResponseDto) GetDeleted() *bool {
+func (c *ComputeEnvResponseDto) GetManagedIdentityID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.Deleted
-}
-
-func (c *ComputeEnvResponseDto) GetStatus() *ComputeEnvStatus {
-	if c == nil {
-		return nil
-	}
-	return c.Status
+	return c.ManagedIdentityID
 }
 
 func (c *ComputeEnvResponseDto) GetMessage() *string {
@@ -370,25 +377,11 @@ func (c *ComputeEnvResponseDto) GetMessage() *string {
 	return c.Message
 }
 
-func (c *ComputeEnvResponseDto) GetPrimary() *bool {
+func (c *ComputeEnvResponseDto) GetName() *string {
 	if c == nil {
 		return nil
 	}
-	return c.Primary
-}
-
-func (c *ComputeEnvResponseDto) GetCredentialsID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.CredentialsID
-}
-
-func (c *ComputeEnvResponseDto) GetManagedIdentityID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ManagedIdentityID
+	return c.Name
 }
 
 func (c *ComputeEnvResponseDto) GetOrgID() *int64 {
@@ -398,18 +391,18 @@ func (c *ComputeEnvResponseDto) GetOrgID() *int64 {
 	return c.OrgID
 }
 
-func (c *ComputeEnvResponseDto) GetWorkspaceID() *int64 {
+func (c *ComputeEnvResponseDto) GetPlatform() *ComputeEnvResponseDtoPlatform {
 	if c == nil {
 		return nil
 	}
-	return c.WorkspaceID
+	return c.Platform
 }
 
-func (c *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
+func (c *ComputeEnvResponseDto) GetPrimary() *bool {
 	if c == nil {
 		return nil
 	}
-	return c.Labels
+	return c.Primary
 }
 
 func (c *ComputeEnvResponseDto) GetResources() *ComputeEnvResponseDtoResources {
@@ -419,9 +412,16 @@ func (c *ComputeEnvResponseDto) GetResources() *ComputeEnvResponseDtoResources {
 	return c.Resources
 }
 
-func (c *ComputeEnvResponseDto) GetAwsAccountID() *string {
+func (c *ComputeEnvResponseDto) GetStatus() *ComputeEnvStatus {
 	if c == nil {
 		return nil
 	}
-	return c.AwsAccountID
+	return c.Status
+}
+
+func (c *ComputeEnvResponseDto) GetWorkspaceID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.WorkspaceID
 }

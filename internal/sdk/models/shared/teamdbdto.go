@@ -6,37 +6,16 @@ package shared
 // Contains team membership, permissions, and access controls
 // for collaborative workspace management.
 type TeamDbDto struct {
-	// Unique numeric identifier for the team
-	TeamID *int64 `json:"teamId,omitempty"`
-	// Display name for the team
-	Name *string `json:"name,omitempty"`
-	// Description of the team's purpose and responsibilities
-	Description *string `json:"description,omitempty"`
 	// URL to the team's avatar or profile image
 	AvatarURL *string `json:"avatarUrl,omitempty"`
+	// Description of the team's purpose and responsibilities
+	Description *string `json:"description,omitempty"`
 	// Total number of members in the team
 	MembersCount *int64 `json:"membersCount,omitempty"`
-}
-
-func (t *TeamDbDto) GetTeamID() *int64 {
-	if t == nil {
-		return nil
-	}
-	return t.TeamID
-}
-
-func (t *TeamDbDto) GetName() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Name
-}
-
-func (t *TeamDbDto) GetDescription() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Description
+	// Display name for the team
+	Name *string `json:"name,omitempty"`
+	// Unique numeric identifier for the team
+	TeamID *int64 `json:"teamId,omitempty"`
 }
 
 func (t *TeamDbDto) GetAvatarURL() *string {
@@ -46,9 +25,30 @@ func (t *TeamDbDto) GetAvatarURL() *string {
 	return t.AvatarURL
 }
 
+func (t *TeamDbDto) GetDescription() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Description
+}
+
 func (t *TeamDbDto) GetMembersCount() *int64 {
 	if t == nil {
 		return nil
 	}
 	return t.MembersCount
+}
+
+func (t *TeamDbDto) GetName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Name
+}
+
+func (t *TeamDbDto) GetTeamID() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.TeamID
 }

@@ -3,20 +3,13 @@
 package shared
 
 type CreatePipelineRequest struct {
-	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Icon identifier or URL for visual representation
 	Icon     *string                       `json:"icon,omitempty"`
-	Launch   WorkflowLaunchRequest         `json:"launch"`
 	LabelIds []int64                       `json:"labelIds,omitempty"`
+	Launch   WorkflowLaunchRequest         `json:"launch"`
+	Name     string                        `json:"name"`
 	Version  *CreatePipelineVersionRequest `json:"version,omitempty"`
-}
-
-func (c *CreatePipelineRequest) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
 }
 
 func (c *CreatePipelineRequest) GetDescription() *string {
@@ -33,6 +26,13 @@ func (c *CreatePipelineRequest) GetIcon() *string {
 	return c.Icon
 }
 
+func (c *CreatePipelineRequest) GetLabelIds() []int64 {
+	if c == nil {
+		return nil
+	}
+	return c.LabelIds
+}
+
 func (c *CreatePipelineRequest) GetLaunch() WorkflowLaunchRequest {
 	if c == nil {
 		return WorkflowLaunchRequest{}
@@ -40,11 +40,11 @@ func (c *CreatePipelineRequest) GetLaunch() WorkflowLaunchRequest {
 	return c.Launch
 }
 
-func (c *CreatePipelineRequest) GetLabelIds() []int64 {
+func (c *CreatePipelineRequest) GetName() string {
 	if c == nil {
-		return nil
+		return ""
 	}
-	return c.LabelIds
+	return c.Name
 }
 
 func (c *CreatePipelineRequest) GetVersion() *CreatePipelineVersionRequest {

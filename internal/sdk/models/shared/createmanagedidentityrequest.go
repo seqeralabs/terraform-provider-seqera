@@ -43,9 +43,16 @@ func (e *CreateManagedIdentityRequestPlatform) UnmarshalJSON(data []byte) error 
 }
 
 type CreateManagedIdentityRequest struct {
+	Config   *AbstractGridConfig                   `json:"config,omitempty"`
 	Name     *string                               `json:"name,omitempty"`
 	Platform *CreateManagedIdentityRequestPlatform `json:"platform,omitempty"`
-	Config   *AbstractGridConfig                   `json:"config,omitempty"`
+}
+
+func (c *CreateManagedIdentityRequest) GetConfig() *AbstractGridConfig {
+	if c == nil {
+		return nil
+	}
+	return c.Config
 }
 
 func (c *CreateManagedIdentityRequest) GetName() *string {
@@ -60,11 +67,4 @@ func (c *CreateManagedIdentityRequest) GetPlatform() *CreateManagedIdentityReque
 		return nil
 	}
 	return c.Platform
-}
-
-func (c *CreateManagedIdentityRequest) GetConfig() *AbstractGridConfig {
-	if c == nil {
-		return nil
-	}
-	return c.Config
 }

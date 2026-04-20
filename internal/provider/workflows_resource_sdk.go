@@ -210,53 +210,15 @@ func (r *WorkflowsResourceModel) ToSharedSubmitWorkflowLaunchRequest(ctx context
 func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Context) (*shared.WorkflowLaunchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	schemaName := new(string)
-	if !r.SchemaName.IsUnknown() && !r.SchemaName.IsNull() {
-		*schemaName = r.SchemaName.ValueString()
-	} else {
-		schemaName = nil
-	}
 	computeEnvID := new(string)
 	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
 		*computeEnvID = r.ComputeEnvID.ValueString()
 	} else {
 		computeEnvID = nil
 	}
-	runName := new(string)
-	if !r.RunName.IsUnknown() && !r.RunName.IsNull() {
-		*runName = r.RunName.ValueString()
-	} else {
-		runName = nil
-	}
-	pipeline := new(string)
-	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
-		*pipeline = r.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
-	workDir := new(string)
-	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
-		*workDir = r.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
-	revision := new(string)
-	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {
-		*revision = r.Revision.ValueString()
-	} else {
-		revision = nil
-	}
 	configProfiles := make([]string, 0, len(r.ConfigProfiles))
 	for configProfilesIndex := range r.ConfigProfiles {
 		configProfiles = append(configProfiles, r.ConfigProfiles[configProfilesIndex].ValueString())
-	}
-	userSecrets := make([]string, 0, len(r.UserSecrets))
-	for userSecretsIndex := range r.UserSecrets {
-		userSecrets = append(userSecrets, r.UserSecrets[userSecretsIndex].ValueString())
-	}
-	workspaceSecrets := make([]string, 0, len(r.WorkspaceSecrets))
-	for workspaceSecretsIndex := range r.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, r.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
 	configText := new(string)
 	if !r.ConfigText.IsUnknown() && !r.ConfigText.IsNull() {
@@ -264,69 +226,11 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		configText = nil
 	}
-	towerConfig := new(string)
-	if !r.TowerConfig.IsUnknown() && !r.TowerConfig.IsNull() {
-		*towerConfig = r.TowerConfig.ValueString()
-	} else {
-		towerConfig = nil
-	}
-	paramsText := new(string)
-	if !r.ParamsText.IsUnknown() && !r.ParamsText.IsNull() {
-		*paramsText = r.ParamsText.ValueString()
-	} else {
-		paramsText = nil
-	}
-	preRunScript := new(string)
-	if !r.PreRunScript.IsUnknown() && !r.PreRunScript.IsNull() {
-		*preRunScript = r.PreRunScript.ValueString()
-	} else {
-		preRunScript = nil
-	}
-	postRunScript := new(string)
-	if !r.PostRunScript.IsUnknown() && !r.PostRunScript.IsNull() {
-		*postRunScript = r.PostRunScript.ValueString()
-	} else {
-		postRunScript = nil
-	}
-	mainScript := new(string)
-	if !r.MainScript.IsUnknown() && !r.MainScript.IsNull() {
-		*mainScript = r.MainScript.ValueString()
-	} else {
-		mainScript = nil
-	}
 	entryName := new(string)
 	if !r.EntryName.IsUnknown() && !r.EntryName.IsNull() {
 		*entryName = r.EntryName.ValueString()
 	} else {
 		entryName = nil
-	}
-	pipelineSchemaID := new(int64)
-	if !r.PipelineSchemaID.IsUnknown() && !r.PipelineSchemaID.IsNull() {
-		*pipelineSchemaID = r.PipelineSchemaID.ValueInt64()
-	} else {
-		pipelineSchemaID = nil
-	}
-	resume := new(bool)
-	if !r.Resume.IsUnknown() && !r.Resume.IsNull() {
-		*resume = r.Resume.ValueBool()
-	} else {
-		resume = nil
-	}
-	pullLatest := new(bool)
-	if !r.PullLatest.IsUnknown() && !r.PullLatest.IsNull() {
-		*pullLatest = r.PullLatest.ValueBool()
-	} else {
-		pullLatest = nil
-	}
-	stubRun := new(bool)
-	if !r.StubRun.IsUnknown() && !r.StubRun.IsNull() {
-		*stubRun = r.StubRun.ValueBool()
-	} else {
-		stubRun = nil
-	}
-	labelIds := make([]int64, 0, len(r.LabelIds))
-	for labelIdsIndex := range r.LabelIds {
-		labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
 	}
 	headJobCpus := new(int)
 	if !r.HeadJobCpus.IsUnknown() && !r.HeadJobCpus.IsNull() {
@@ -340,30 +244,126 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		headJobMemoryMb = nil
 	}
+	labelIds := make([]int64, 0, len(r.LabelIds))
+	for labelIdsIndex := range r.LabelIds {
+		labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
+	}
+	mainScript := new(string)
+	if !r.MainScript.IsUnknown() && !r.MainScript.IsNull() {
+		*mainScript = r.MainScript.ValueString()
+	} else {
+		mainScript = nil
+	}
+	paramsText := new(string)
+	if !r.ParamsText.IsUnknown() && !r.ParamsText.IsNull() {
+		*paramsText = r.ParamsText.ValueString()
+	} else {
+		paramsText = nil
+	}
+	pipeline := new(string)
+	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
+		*pipeline = r.Pipeline.ValueString()
+	} else {
+		pipeline = nil
+	}
+	pipelineSchemaID := new(int64)
+	if !r.PipelineSchemaID.IsUnknown() && !r.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.PipelineSchemaID.ValueInt64()
+	} else {
+		pipelineSchemaID = nil
+	}
+	postRunScript := new(string)
+	if !r.PostRunScript.IsUnknown() && !r.PostRunScript.IsNull() {
+		*postRunScript = r.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	preRunScript := new(string)
+	if !r.PreRunScript.IsUnknown() && !r.PreRunScript.IsNull() {
+		*preRunScript = r.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	pullLatest := new(bool)
+	if !r.PullLatest.IsUnknown() && !r.PullLatest.IsNull() {
+		*pullLatest = r.PullLatest.ValueBool()
+	} else {
+		pullLatest = nil
+	}
+	resume := new(bool)
+	if !r.Resume.IsUnknown() && !r.Resume.IsNull() {
+		*resume = r.Resume.ValueBool()
+	} else {
+		resume = nil
+	}
+	revision := new(string)
+	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {
+		*revision = r.Revision.ValueString()
+	} else {
+		revision = nil
+	}
+	runName := new(string)
+	if !r.RunName.IsUnknown() && !r.RunName.IsNull() {
+		*runName = r.RunName.ValueString()
+	} else {
+		runName = nil
+	}
+	schemaName := new(string)
+	if !r.SchemaName.IsUnknown() && !r.SchemaName.IsNull() {
+		*schemaName = r.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
+	stubRun := new(bool)
+	if !r.StubRun.IsUnknown() && !r.StubRun.IsNull() {
+		*stubRun = r.StubRun.ValueBool()
+	} else {
+		stubRun = nil
+	}
+	towerConfig := new(string)
+	if !r.TowerConfig.IsUnknown() && !r.TowerConfig.IsNull() {
+		*towerConfig = r.TowerConfig.ValueString()
+	} else {
+		towerConfig = nil
+	}
+	userSecrets := make([]string, 0, len(r.UserSecrets))
+	for userSecretsIndex := range r.UserSecrets {
+		userSecrets = append(userSecrets, r.UserSecrets[userSecretsIndex].ValueString())
+	}
+	workDir := new(string)
+	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
+		*workDir = r.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
+	workspaceSecrets := make([]string, 0, len(r.WorkspaceSecrets))
+	for workspaceSecretsIndex := range r.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, r.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
+	}
 	out := shared.WorkflowLaunchRequest{
-		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
-		RunName:          runName,
-		Pipeline:         pipeline,
-		WorkDir:          workDir,
-		Revision:         revision,
 		ConfigProfiles:   configProfiles,
-		UserSecrets:      userSecrets,
-		WorkspaceSecrets: workspaceSecrets,
 		ConfigText:       configText,
-		TowerConfig:      towerConfig,
-		ParamsText:       paramsText,
-		PreRunScript:     preRunScript,
-		PostRunScript:    postRunScript,
-		MainScript:       mainScript,
 		EntryName:        entryName,
-		PipelineSchemaID: pipelineSchemaID,
-		Resume:           resume,
-		PullLatest:       pullLatest,
-		StubRun:          stubRun,
-		LabelIds:         labelIds,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		LabelIds:         labelIds,
+		MainScript:       mainScript,
+		ParamsText:       paramsText,
+		Pipeline:         pipeline,
+		PipelineSchemaID: pipelineSchemaID,
+		PostRunScript:    postRunScript,
+		PreRunScript:     preRunScript,
+		PullLatest:       pullLatest,
+		Resume:           resume,
+		Revision:         revision,
+		RunName:          runName,
+		SchemaName:       schemaName,
+		StubRun:          stubRun,
+		TowerConfig:      towerConfig,
+		UserSecrets:      userSecrets,
+		WorkDir:          workDir,
+		WorkspaceSecrets: workspaceSecrets,
 	}
 
 	return &out, diags

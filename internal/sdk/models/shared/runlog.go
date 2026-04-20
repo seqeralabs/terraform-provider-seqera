@@ -3,19 +3,19 @@
 package shared
 
 type RunLog struct {
-	RunID    *string     `json:"run_id,omitempty"`
-	Request  *RunRequest `json:"request,omitempty"`
-	State    *State      `json:"state,omitempty"`
-	RunLog   *Log        `json:"run_log,omitempty"`
-	TaskLogs []Log       `json:"task_logs,omitempty"`
 	Outputs  any         `json:"outputs,omitempty"`
+	Request  *RunRequest `json:"request,omitempty"`
+	RunID    *string     `json:"run_id,omitempty"`
+	RunLog   *Log        `json:"run_log,omitempty"`
+	State    *State      `json:"state,omitempty"`
+	TaskLogs []Log       `json:"task_logs,omitempty"`
 }
 
-func (r *RunLog) GetRunID() *string {
+func (r *RunLog) GetOutputs() any {
 	if r == nil {
 		return nil
 	}
-	return r.RunID
+	return r.Outputs
 }
 
 func (r *RunLog) GetRequest() *RunRequest {
@@ -25,11 +25,11 @@ func (r *RunLog) GetRequest() *RunRequest {
 	return r.Request
 }
 
-func (r *RunLog) GetState() *State {
+func (r *RunLog) GetRunID() *string {
 	if r == nil {
 		return nil
 	}
-	return r.State
+	return r.RunID
 }
 
 func (r *RunLog) GetRunLog() *Log {
@@ -39,16 +39,16 @@ func (r *RunLog) GetRunLog() *Log {
 	return r.RunLog
 }
 
+func (r *RunLog) GetState() *State {
+	if r == nil {
+		return nil
+	}
+	return r.State
+}
+
 func (r *RunLog) GetTaskLogs() []Log {
 	if r == nil {
 		return nil
 	}
 	return r.TaskLogs
-}
-
-func (r *RunLog) GetOutputs() any {
-	if r == nil {
-		return nil
-	}
-	return r.Outputs
 }

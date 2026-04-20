@@ -210,6 +210,18 @@ func (r *ManagedComputeCEResourceModel) ToSharedConfig(ctx context.Context) (*sh
 	}
 	environment := make([]shared.ConfigEnvVariable, 0, len(r.Environment))
 	for environmentIndex := range r.Environment {
+		compute := new(bool)
+		if !r.Environment[environmentIndex].Compute.IsUnknown() && !r.Environment[environmentIndex].Compute.IsNull() {
+			*compute = r.Environment[environmentIndex].Compute.ValueBool()
+		} else {
+			compute = nil
+		}
+		head := new(bool)
+		if !r.Environment[environmentIndex].Head.IsUnknown() && !r.Environment[environmentIndex].Head.IsNull() {
+			*head = r.Environment[environmentIndex].Head.ValueBool()
+		} else {
+			head = nil
+		}
 		name := new(string)
 		if !r.Environment[environmentIndex].Name.IsUnknown() && !r.Environment[environmentIndex].Name.IsNull() {
 			*name = r.Environment[environmentIndex].Name.ValueString()
@@ -222,23 +234,11 @@ func (r *ManagedComputeCEResourceModel) ToSharedConfig(ctx context.Context) (*sh
 		} else {
 			value = nil
 		}
-		head := new(bool)
-		if !r.Environment[environmentIndex].Head.IsUnknown() && !r.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		compute := new(bool)
-		if !r.Environment[environmentIndex].Compute.IsUnknown() && !r.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
-		}
 		environment = append(environment, shared.ConfigEnvVariable{
+			Compute: compute,
+			Head:    head,
 			Name:    name,
 			Value:   value,
-			Head:    head,
-			Compute: compute,
 		})
 	}
 	out := shared.Config{

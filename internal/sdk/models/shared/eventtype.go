@@ -3,24 +3,10 @@
 package shared
 
 type EventType struct {
-	Source      *string `json:"source,omitempty"`
-	Display     *string `json:"display,omitempty"`
 	Description *string `json:"description,omitempty"`
+	Display     *string `json:"display,omitempty"`
 	Enabled     *bool   `json:"enabled,omitempty"`
-}
-
-func (e *EventType) GetSource() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Source
-}
-
-func (e *EventType) GetDisplay() *string {
-	if e == nil {
-		return nil
-	}
-	return e.Display
+	Source      *string `json:"source,omitempty"`
 }
 
 func (e *EventType) GetDescription() *string {
@@ -30,9 +16,23 @@ func (e *EventType) GetDescription() *string {
 	return e.Description
 }
 
+func (e *EventType) GetDisplay() *string {
+	if e == nil {
+		return nil
+	}
+	return e.Display
+}
+
 func (e *EventType) GetEnabled() *bool {
 	if e == nil {
 		return nil
 	}
 	return e.Enabled
+}
+
+func (e *EventType) GetSource() *string {
+	if e == nil {
+		return nil
+	}
+	return e.Source
 }

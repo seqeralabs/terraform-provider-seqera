@@ -4,14 +4,21 @@ package shared
 
 // SSHDetails - SSH connection details for a Studio session
 type SSHDetails struct {
+	// The full SSH command to execute
+	Command string `json:"command"`
 	// The hostname to connect to
 	Host string `json:"host"`
 	// The SSH port number
 	Port int `json:"port"`
 	// The user in the format 'username@sessionId'
 	User string `json:"user"`
-	// The full SSH command to execute
-	Command string `json:"command"`
+}
+
+func (s *SSHDetails) GetCommand() string {
+	if s == nil {
+		return ""
+	}
+	return s.Command
 }
 
 func (s *SSHDetails) GetHost() string {
@@ -35,63 +42,21 @@ func (s *SSHDetails) GetUser() string {
 	return s.User
 }
 
-func (s *SSHDetails) GetCommand() string {
-	if s == nil {
-		return ""
-	}
-	return s.Command
-}
-
 // DataStudioDto - Represents a Studio session for interactive data analysis.
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
-	// Unique identifier for the Studio session
-	SessionID *string `json:"sessionId,omitempty"`
-	// Numeric identifier of the workspace containing the Studio
-	WorkspaceID *int64 `json:"workspaceId,omitempty"`
+	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
+	// Description of the Studio session's purpose
+	Description *string `json:"description,omitempty"`
+	IsPrivate   *bool   `json:"isPrivate,omitempty"`
 	// Display name for the Studio session
 	Name *string `json:"name,omitempty"`
-	// Description of the Studio session's purpose
-	Description   *string                  `json:"description,omitempty"`
-	SSHDetails    *SSHDetails              `json:"sshDetails,omitempty"`
-	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
-	IsPrivate     *bool                    `json:"isPrivate,omitempty"`
-}
-
-func (d *DataStudioDto) GetSessionID() *string {
-	if d == nil {
-		return nil
-	}
-	return d.SessionID
-}
-
-func (d *DataStudioDto) GetWorkspaceID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.WorkspaceID
-}
-
-func (d *DataStudioDto) GetName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Name
-}
-
-func (d *DataStudioDto) GetDescription() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Description
-}
-
-func (d *DataStudioDto) GetSSHDetails() *SSHDetails {
-	if d == nil {
-		return nil
-	}
-	return d.SSHDetails
+	// Unique identifier for the Studio session
+	SessionID  *string     `json:"sessionId,omitempty"`
+	SSHDetails *SSHDetails `json:"sshDetails,omitempty"`
+	// Numeric identifier of the workspace containing the Studio
+	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 }
 
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
@@ -101,9 +66,44 @@ func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
 	return d.Configuration
 }
 
+func (d *DataStudioDto) GetDescription() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Description
+}
+
 func (d *DataStudioDto) GetIsPrivate() *bool {
 	if d == nil {
 		return nil
 	}
 	return d.IsPrivate
+}
+
+func (d *DataStudioDto) GetName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Name
+}
+
+func (d *DataStudioDto) GetSessionID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.SessionID
+}
+
+func (d *DataStudioDto) GetSSHDetails() *SSHDetails {
+	if d == nil {
+		return nil
+	}
+	return d.SSHDetails
+}
+
+func (d *DataStudioDto) GetWorkspaceID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.WorkspaceID
 }

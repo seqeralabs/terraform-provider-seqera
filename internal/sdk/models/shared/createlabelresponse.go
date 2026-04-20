@@ -4,10 +4,10 @@ package shared
 
 type CreateLabelResponse struct {
 	LabelID   *int64  `json:"id,omitempty"`
-	Name      *string `json:"name,omitempty"`
-	Value     *string `json:"value,omitempty"`
-	Resource  *bool   `json:"resource,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
+	Name      *string `json:"name,omitempty"`
+	Resource  *bool   `json:"resource,omitempty"`
+	Value     *string `json:"value,omitempty"`
 }
 
 func (c *CreateLabelResponse) GetLabelID() *int64 {
@@ -17,18 +17,18 @@ func (c *CreateLabelResponse) GetLabelID() *int64 {
 	return c.LabelID
 }
 
+func (c *CreateLabelResponse) GetIsDefault() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IsDefault
+}
+
 func (c *CreateLabelResponse) GetName() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Name
-}
-
-func (c *CreateLabelResponse) GetValue() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Value
 }
 
 func (c *CreateLabelResponse) GetResource() *bool {
@@ -38,9 +38,9 @@ func (c *CreateLabelResponse) GetResource() *bool {
 	return c.Resource
 }
 
-func (c *CreateLabelResponse) GetIsDefault() *bool {
+func (c *CreateLabelResponse) GetValue() *string {
 	if c == nil {
 		return nil
 	}
-	return c.IsDefault
+	return c.Value
 }

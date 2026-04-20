@@ -8,9 +8,9 @@ import (
 )
 
 type WfNextflow struct {
-	Version   *string    `json:"version,omitempty"`
 	Build     *string    `json:"build,omitempty"`
 	Timestamp *time.Time `json:"timestamp,omitempty"`
+	Version   *string    `json:"version,omitempty"`
 }
 
 func (w WfNextflow) MarshalJSON() ([]byte, error) {
@@ -22,13 +22,6 @@ func (w *WfNextflow) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (w *WfNextflow) GetVersion() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Version
 }
 
 func (w *WfNextflow) GetBuild() *string {
@@ -43,4 +36,11 @@ func (w *WfNextflow) GetTimestamp() *time.Time {
 		return nil
 	}
 	return w.Timestamp
+}
+
+func (w *WfNextflow) GetVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Version
 }

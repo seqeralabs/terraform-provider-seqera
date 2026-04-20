@@ -3,15 +3,8 @@
 package shared
 
 type UpdateDatasetRequest struct {
-	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-}
-
-func (u *UpdateDatasetRequest) GetName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Name
+	Name        *string `json:"name,omitempty"`
 }
 
 func (u *UpdateDatasetRequest) GetDescription() *string {
@@ -19,4 +12,11 @@ func (u *UpdateDatasetRequest) GetDescription() *string {
 		return nil
 	}
 	return u.Description
+}
+
+func (u *UpdateDatasetRequest) GetName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Name
 }

@@ -3,9 +3,16 @@
 package shared
 
 type CreateActionRequest struct {
+	Launch WorkflowLaunchRequest `json:"launch"`
 	Name   string                `json:"name"`
 	Source *ActionSource         `json:"source,omitempty"`
-	Launch WorkflowLaunchRequest `json:"launch"`
+}
+
+func (c *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
+	if c == nil {
+		return WorkflowLaunchRequest{}
+	}
+	return c.Launch
 }
 
 func (c *CreateActionRequest) GetName() string {
@@ -20,11 +27,4 @@ func (c *CreateActionRequest) GetSource() *ActionSource {
 		return nil
 	}
 	return c.Source
-}
-
-func (c *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
-	if c == nil {
-		return WorkflowLaunchRequest{}
-	}
-	return c.Launch
 }

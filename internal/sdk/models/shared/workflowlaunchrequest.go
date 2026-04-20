@@ -3,49 +3,42 @@
 package shared
 
 type WorkflowLaunchRequest struct {
-	// Pipeline schema name
-	SchemaName   *string `json:"schemaName,omitempty"`
-	ComputeEnvID *string `json:"computeEnvId,omitempty"`
-	// Custom run name
-	RunName  *string `json:"runName,omitempty"`
-	Pipeline *string `json:"pipeline,omitempty"`
-	// Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
-	WorkDir *string `json:"workDir"`
-	// Pipeline revision
-	Revision         *string  `json:"revision,omitempty"`
-	ConfigProfiles   []string `json:"configProfiles,omitempty"`
-	UserSecrets      []string `json:"userSecrets,omitempty"`
-	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
+	ComputeEnvID   *string  `json:"computeEnvId,omitempty"`
+	ConfigProfiles []string `json:"configProfiles,omitempty"`
 	// Nextflow configuration text
 	ConfigText *string `json:"configText,omitempty"`
-	// Tower-specific configuration
-	TowerConfig *string `json:"towerConfig,omitempty"`
-	// Pipeline parameters text
-	ParamsText *string `json:"paramsText,omitempty"`
-	// Script to run before pipeline execution
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Script to run after pipeline execution
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Main script path
-	MainScript *string `json:"mainScript,omitempty"`
 	// Entry workflow name
-	EntryName        *string `json:"entryName,omitempty"`
-	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
-	Resume           *bool   `json:"resume,omitempty"`
-	PullLatest       *bool   `json:"pullLatest,omitempty"`
-	StubRun          *bool   `json:"stubRun,omitempty"`
-	LabelIds         []int64 `json:"labelIds,omitempty"`
+	EntryName *string `json:"entryName,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
-	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-}
-
-func (w *WorkflowLaunchRequest) GetSchemaName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.SchemaName
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	LabelIds        []int64 `json:"labelIds,omitempty"`
+	// Main script path
+	MainScript *string `json:"mainScript,omitempty"`
+	// Pipeline parameters text
+	ParamsText       *string `json:"paramsText,omitempty"`
+	Pipeline         *string `json:"pipeline,omitempty"`
+	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
+	// Script to run after pipeline execution
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Script to run before pipeline execution
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	PullLatest   *bool   `json:"pullLatest,omitempty"`
+	Resume       *bool   `json:"resume,omitempty"`
+	// Pipeline revision
+	Revision *string `json:"revision,omitempty"`
+	// Custom run name
+	RunName *string `json:"runName,omitempty"`
+	// Pipeline schema name
+	SchemaName *string `json:"schemaName,omitempty"`
+	StubRun    *bool   `json:"stubRun,omitempty"`
+	// Tower-specific configuration
+	TowerConfig *string  `json:"towerConfig,omitempty"`
+	UserSecrets []string `json:"userSecrets,omitempty"`
+	// Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
+	WorkDir          *string  `json:"workDir"`
+	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
 }
 
 func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
@@ -55,53 +48,11 @@ func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
 	return w.ComputeEnvID
 }
 
-func (w *WorkflowLaunchRequest) GetRunName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.RunName
-}
-
-func (w *WorkflowLaunchRequest) GetPipeline() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Pipeline
-}
-
-func (w *WorkflowLaunchRequest) GetWorkDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkDir
-}
-
-func (w *WorkflowLaunchRequest) GetRevision() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Revision
-}
-
 func (w *WorkflowLaunchRequest) GetConfigProfiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigProfiles
-}
-
-func (w *WorkflowLaunchRequest) GetUserSecrets() []string {
-	if w == nil {
-		return nil
-	}
-	return w.UserSecrets
-}
-
-func (w *WorkflowLaunchRequest) GetWorkspaceSecrets() []string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkspaceSecrets
 }
 
 func (w *WorkflowLaunchRequest) GetConfigText() *string {
@@ -111,81 +62,11 @@ func (w *WorkflowLaunchRequest) GetConfigText() *string {
 	return w.ConfigText
 }
 
-func (w *WorkflowLaunchRequest) GetTowerConfig() *string {
-	if w == nil {
-		return nil
-	}
-	return w.TowerConfig
-}
-
-func (w *WorkflowLaunchRequest) GetParamsText() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ParamsText
-}
-
-func (w *WorkflowLaunchRequest) GetPreRunScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.PreRunScript
-}
-
-func (w *WorkflowLaunchRequest) GetPostRunScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.PostRunScript
-}
-
-func (w *WorkflowLaunchRequest) GetMainScript() *string {
-	if w == nil {
-		return nil
-	}
-	return w.MainScript
-}
-
 func (w *WorkflowLaunchRequest) GetEntryName() *string {
 	if w == nil {
 		return nil
 	}
 	return w.EntryName
-}
-
-func (w *WorkflowLaunchRequest) GetPipelineSchemaID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.PipelineSchemaID
-}
-
-func (w *WorkflowLaunchRequest) GetResume() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.Resume
-}
-
-func (w *WorkflowLaunchRequest) GetPullLatest() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.PullLatest
-}
-
-func (w *WorkflowLaunchRequest) GetStubRun() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.StubRun
-}
-
-func (w *WorkflowLaunchRequest) GetLabelIds() []int64 {
-	if w == nil {
-		return nil
-	}
-	return w.LabelIds
 }
 
 func (w *WorkflowLaunchRequest) GetHeadJobCpus() *int {
@@ -200,4 +81,123 @@ func (w *WorkflowLaunchRequest) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return w.HeadJobMemoryMb
+}
+
+func (w *WorkflowLaunchRequest) GetLabelIds() []int64 {
+	if w == nil {
+		return nil
+	}
+	return w.LabelIds
+}
+
+func (w *WorkflowLaunchRequest) GetMainScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.MainScript
+}
+
+func (w *WorkflowLaunchRequest) GetParamsText() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ParamsText
+}
+
+func (w *WorkflowLaunchRequest) GetPipeline() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Pipeline
+}
+
+func (w *WorkflowLaunchRequest) GetPipelineSchemaID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.PipelineSchemaID
+}
+
+func (w *WorkflowLaunchRequest) GetPostRunScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.PostRunScript
+}
+
+func (w *WorkflowLaunchRequest) GetPreRunScript() *string {
+	if w == nil {
+		return nil
+	}
+	return w.PreRunScript
+}
+
+func (w *WorkflowLaunchRequest) GetPullLatest() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.PullLatest
+}
+
+func (w *WorkflowLaunchRequest) GetResume() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Resume
+}
+
+func (w *WorkflowLaunchRequest) GetRevision() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Revision
+}
+
+func (w *WorkflowLaunchRequest) GetRunName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.RunName
+}
+
+func (w *WorkflowLaunchRequest) GetSchemaName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SchemaName
+}
+
+func (w *WorkflowLaunchRequest) GetStubRun() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.StubRun
+}
+
+func (w *WorkflowLaunchRequest) GetTowerConfig() *string {
+	if w == nil {
+		return nil
+	}
+	return w.TowerConfig
+}
+
+func (w *WorkflowLaunchRequest) GetUserSecrets() []string {
+	if w == nil {
+		return nil
+	}
+	return w.UserSecrets
+}
+
+func (w *WorkflowLaunchRequest) GetWorkDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkDir
+}
+
+func (w *WorkflowLaunchRequest) GetWorkspaceSecrets() []string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkspaceSecrets
 }

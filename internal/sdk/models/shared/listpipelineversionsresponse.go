@@ -3,15 +3,8 @@
 package shared
 
 type ListPipelineVersionsResponse struct {
-	Versions  []PipelineDbDto `json:"versions,omitempty"`
 	TotalSize *int64          `json:"totalSize,omitempty"`
-}
-
-func (l *ListPipelineVersionsResponse) GetVersions() []PipelineDbDto {
-	if l == nil {
-		return nil
-	}
-	return l.Versions
+	Versions  []PipelineDbDto `json:"versions,omitempty"`
 }
 
 func (l *ListPipelineVersionsResponse) GetTotalSize() *int64 {
@@ -19,4 +12,11 @@ func (l *ListPipelineVersionsResponse) GetTotalSize() *int64 {
 		return nil
 	}
 	return l.TotalSize
+}
+
+func (l *ListPipelineVersionsResponse) GetVersions() []PipelineDbDto {
+	if l == nil {
+		return nil
+	}
+	return l.Versions
 }

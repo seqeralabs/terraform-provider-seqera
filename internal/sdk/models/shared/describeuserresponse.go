@@ -3,16 +3,16 @@
 package shared
 
 type DescribeUserResponse struct {
-	User               *UserResponseDto `json:"user,omitempty"`
-	NeedConsent        *bool            `json:"needConsent,omitempty"`
 	DefaultWorkspaceID *int64           `json:"defaultWorkspaceId,omitempty"`
+	NeedConsent        *bool            `json:"needConsent,omitempty"`
+	User               *UserResponseDto `json:"user,omitempty"`
 }
 
-func (d *DescribeUserResponse) GetUser() *UserResponseDto {
+func (d *DescribeUserResponse) GetDefaultWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
-	return d.User
+	return d.DefaultWorkspaceID
 }
 
 func (d *DescribeUserResponse) GetNeedConsent() *bool {
@@ -22,9 +22,9 @@ func (d *DescribeUserResponse) GetNeedConsent() *bool {
 	return d.NeedConsent
 }
 
-func (d *DescribeUserResponse) GetDefaultWorkspaceID() *int64 {
+func (d *DescribeUserResponse) GetUser() *UserResponseDto {
 	if d == nil {
 		return nil
 	}
-	return d.DefaultWorkspaceID
+	return d.User
 }

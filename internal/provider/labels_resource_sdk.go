@@ -134,17 +134,17 @@ func (r *LabelsResourceModel) ToOperationsUpdateLabelRequest(ctx context.Context
 func (r *LabelsResourceModel) ToSharedCreateLabelRequest(ctx context.Context) (*shared.CreateLabelRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	isDefault := new(bool)
+	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
+		*isDefault = r.IsDefault.ValueBool()
+	} else {
+		isDefault = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
 	} else {
 		name = nil
-	}
-	value := new(string)
-	if !r.Value.IsUnknown() && !r.Value.IsNull() {
-		*value = r.Value.ValueString()
-	} else {
-		value = nil
 	}
 	resource := new(bool)
 	if !r.Resource.IsUnknown() && !r.Resource.IsNull() {
@@ -152,17 +152,17 @@ func (r *LabelsResourceModel) ToSharedCreateLabelRequest(ctx context.Context) (*
 	} else {
 		resource = nil
 	}
-	isDefault := new(bool)
-	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
-		*isDefault = r.IsDefault.ValueBool()
+	value := new(string)
+	if !r.Value.IsUnknown() && !r.Value.IsNull() {
+		*value = r.Value.ValueString()
 	} else {
-		isDefault = nil
+		value = nil
 	}
 	out := shared.CreateLabelRequest{
-		Name:      name,
-		Value:     value,
-		Resource:  resource,
 		IsDefault: isDefault,
+		Name:      name,
+		Resource:  resource,
+		Value:     value,
 	}
 
 	return &out, diags
@@ -171,6 +171,12 @@ func (r *LabelsResourceModel) ToSharedCreateLabelRequest(ctx context.Context) (*
 func (r *LabelsResourceModel) ToSharedUpdateLabelRequest(ctx context.Context) (*shared.UpdateLabelRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	isDefault := new(bool)
+	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
+		*isDefault = r.IsDefault.ValueBool()
+	} else {
+		isDefault = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -183,16 +189,10 @@ func (r *LabelsResourceModel) ToSharedUpdateLabelRequest(ctx context.Context) (*
 	} else {
 		value = nil
 	}
-	isDefault := new(bool)
-	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
-		*isDefault = r.IsDefault.ValueBool()
-	} else {
-		isDefault = nil
-	}
 	out := shared.UpdateLabelRequest{
+		IsDefault: isDefault,
 		Name:      name,
 		Value:     value,
-		IsDefault: isDefault,
 	}
 
 	return &out, diags

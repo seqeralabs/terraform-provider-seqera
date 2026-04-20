@@ -6,76 +6,20 @@ package shared
 // Contains action configuration, triggers, and execution settings
 // for automated pipeline workflows.
 type ActionResponseDto struct {
-	// Unique identifier for the action
-	ID     *string      `json:"id,omitempty"`
-	Launch *LaunchDbDto `json:"launch,omitempty"`
-	// Human-readable name for the action
-	Name *string `json:"name,omitempty"`
+	Config *ActionConfigType `json:"config,omitempty"`
 	// Identifier for the webhook associated with this action
 	HookID *string `json:"hookId,omitempty"`
 	// URL endpoint for the webhook that triggers this action
 	HookURL *string `json:"hookUrl,omitempty"`
+	// Unique identifier for the action
+	ID     *string      `json:"id,omitempty"`
+	Launch *LaunchDbDto `json:"launch,omitempty"`
 	// Status or informational message about the action
-	Message *string           `json:"message,omitempty"`
-	Source  *ActionSource     `json:"source,omitempty"`
-	Status  *ActionStatus     `json:"status,omitempty"`
-	Config  *ActionConfigType `json:"config,omitempty"`
-}
-
-func (a *ActionResponseDto) GetID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ID
-}
-
-func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {
-	if a == nil {
-		return nil
-	}
-	return a.Launch
-}
-
-func (a *ActionResponseDto) GetName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Name
-}
-
-func (a *ActionResponseDto) GetHookID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.HookID
-}
-
-func (a *ActionResponseDto) GetHookURL() *string {
-	if a == nil {
-		return nil
-	}
-	return a.HookURL
-}
-
-func (a *ActionResponseDto) GetMessage() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Message
-}
-
-func (a *ActionResponseDto) GetSource() *ActionSource {
-	if a == nil {
-		return nil
-	}
-	return a.Source
-}
-
-func (a *ActionResponseDto) GetStatus() *ActionStatus {
-	if a == nil {
-		return nil
-	}
-	return a.Status
+	Message *string `json:"message,omitempty"`
+	// Human-readable name for the action
+	Name   *string       `json:"name,omitempty"`
+	Source *ActionSource `json:"source,omitempty"`
+	Status *ActionStatus `json:"status,omitempty"`
 }
 
 func (a *ActionResponseDto) GetConfig() *ActionConfigType {
@@ -97,4 +41,60 @@ func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
 		return v.ActionTowerActionConfig
 	}
 	return nil
+}
+
+func (a *ActionResponseDto) GetHookID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.HookID
+}
+
+func (a *ActionResponseDto) GetHookURL() *string {
+	if a == nil {
+		return nil
+	}
+	return a.HookURL
+}
+
+func (a *ActionResponseDto) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
+}
+
+func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {
+	if a == nil {
+		return nil
+	}
+	return a.Launch
+}
+
+func (a *ActionResponseDto) GetMessage() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Message
+}
+
+func (a *ActionResponseDto) GetName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Name
+}
+
+func (a *ActionResponseDto) GetSource() *ActionSource {
+	if a == nil {
+		return nil
+	}
+	return a.Source
+}
+
+func (a *ActionResponseDto) GetStatus() *ActionStatus {
+	if a == nil {
+		return nil
+	}
+	return a.Status
 }

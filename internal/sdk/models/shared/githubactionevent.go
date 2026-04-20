@@ -8,13 +8,13 @@ import (
 )
 
 type GithubActionEvent struct {
-	Discriminator *string    `json:"discriminator,omitempty"`
-	Timestamp     *time.Time `json:"timestamp,omitempty"`
-	Ref           *string    `json:"ref,omitempty"`
 	CommitID      *string    `json:"commitId,omitempty"`
 	CommitMessage *string    `json:"commitMessage,omitempty"`
-	PusherName    *string    `json:"pusherName,omitempty"`
+	Discriminator *string    `json:"discriminator,omitempty"`
 	PusherEmail   *string    `json:"pusherEmail,omitempty"`
+	PusherName    *string    `json:"pusherName,omitempty"`
+	Ref           *string    `json:"ref,omitempty"`
+	Timestamp     *time.Time `json:"timestamp,omitempty"`
 }
 
 func (g GithubActionEvent) MarshalJSON() ([]byte, error) {
@@ -26,27 +26,6 @@ func (g *GithubActionEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (g *GithubActionEvent) GetDiscriminator() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Discriminator
-}
-
-func (g *GithubActionEvent) GetTimestamp() *time.Time {
-	if g == nil {
-		return nil
-	}
-	return g.Timestamp
-}
-
-func (g *GithubActionEvent) GetRef() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Ref
 }
 
 func (g *GithubActionEvent) GetCommitID() *string {
@@ -63,11 +42,11 @@ func (g *GithubActionEvent) GetCommitMessage() *string {
 	return g.CommitMessage
 }
 
-func (g *GithubActionEvent) GetPusherName() *string {
+func (g *GithubActionEvent) GetDiscriminator() *string {
 	if g == nil {
 		return nil
 	}
-	return g.PusherName
+	return g.Discriminator
 }
 
 func (g *GithubActionEvent) GetPusherEmail() *string {
@@ -75,4 +54,25 @@ func (g *GithubActionEvent) GetPusherEmail() *string {
 		return nil
 	}
 	return g.PusherEmail
+}
+
+func (g *GithubActionEvent) GetPusherName() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PusherName
+}
+
+func (g *GithubActionEvent) GetRef() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Ref
+}
+
+func (g *GithubActionEvent) GetTimestamp() *time.Time {
+	if g == nil {
+		return nil
+	}
+	return g.Timestamp
 }

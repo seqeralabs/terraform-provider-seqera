@@ -168,34 +168,34 @@ func (r *DataLinkResourceModel) ToOperationsUpdateCustomDataLinkRequest(ctx cont
 func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Context) (*shared.DataLinkCreateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	var description string
-	description = r.Description.ValueString()
-
-	typeVar := shared.DataLinkType(r.Type.ValueString())
-	providerType := shared.ProviderType(r.ProviderType.ValueString())
-	var resourceRef string
-	resourceRef = r.ResourceRef.ValueString()
-
-	var publicAccessible bool
-	publicAccessible = r.PublicAccessible.ValueBool()
-
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
 	} else {
 		credentialsID = nil
 	}
+	var description string
+	description = r.Description.ValueString()
+
+	var name string
+	name = r.Name.ValueString()
+
+	providerType := shared.ProviderType(r.ProviderType.ValueString())
+	var publicAccessible bool
+	publicAccessible = r.PublicAccessible.ValueBool()
+
+	var resourceRef string
+	resourceRef = r.ResourceRef.ValueString()
+
+	typeVar := shared.DataLinkType(r.Type.ValueString())
 	out := shared.DataLinkCreateRequest{
-		Name:             name,
-		Description:      description,
-		Type:             typeVar,
-		ProviderType:     providerType,
-		ResourceRef:      resourceRef,
-		PublicAccessible: publicAccessible,
 		CredentialsID:    credentialsID,
+		Description:      description,
+		Name:             name,
+		ProviderType:     providerType,
+		PublicAccessible: publicAccessible,
+		ResourceRef:      resourceRef,
+		Type:             typeVar,
 	}
 
 	return &out, diags
@@ -204,11 +204,11 @@ func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Contex
 func (r *DataLinkResourceModel) ToSharedDataLinkUpdateRequest(ctx context.Context) (*shared.DataLinkUpdateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		name = nil
+		credentialsID = nil
 	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
@@ -216,16 +216,16 @@ func (r *DataLinkResourceModel) ToSharedDataLinkUpdateRequest(ctx context.Contex
 	} else {
 		description = nil
 	}
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
 	} else {
-		credentialsID = nil
+		name = nil
 	}
 	out := shared.DataLinkUpdateRequest{
-		Name:          name,
-		Description:   description,
 		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

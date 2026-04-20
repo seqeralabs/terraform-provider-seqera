@@ -3,18 +3,11 @@
 package shared
 
 type DataStudioTemplate struct {
-	Repository *string `json:"repository,omitempty"`
 	// Icon identifier or URL for visual representation
-	Icon   *string                  `json:"icon,omitempty"`
-	Status *DataStudioVersionStatus `json:"status,omitempty"`
-	Tool   *string                  `json:"tool,omitempty"`
-}
-
-func (d *DataStudioTemplate) GetRepository() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Repository
+	Icon       *string                  `json:"icon,omitempty"`
+	Repository *string                  `json:"repository,omitempty"`
+	Status     *DataStudioVersionStatus `json:"status,omitempty"`
+	Tool       *string                  `json:"tool,omitempty"`
 }
 
 func (d *DataStudioTemplate) GetIcon() *string {
@@ -22,6 +15,13 @@ func (d *DataStudioTemplate) GetIcon() *string {
 		return nil
 	}
 	return d.Icon
+}
+
+func (d *DataStudioTemplate) GetRepository() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Repository
 }
 
 func (d *DataStudioTemplate) GetStatus() *DataStudioVersionStatus {

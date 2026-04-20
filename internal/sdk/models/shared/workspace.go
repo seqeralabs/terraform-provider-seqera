@@ -8,14 +8,14 @@ import (
 )
 
 type Workspace struct {
-	ID       *int64 `json:"id,omitempty"`
-	Name     string `json:"name"`
-	FullName string `json:"fullName"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Workspace description
 	Description *string    `json:"description,omitempty"`
-	Visibility  Visibility `json:"visibility"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	FullName    string     `json:"fullName"`
+	ID          *int64     `json:"id,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	Name        string     `json:"name"`
+	Visibility  Visibility `json:"visibility"`
 }
 
 func (w Workspace) MarshalJSON() ([]byte, error) {
@@ -29,25 +29,11 @@ func (w *Workspace) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *Workspace) GetID() *int64 {
+func (w *Workspace) GetDateCreated() *time.Time {
 	if w == nil {
 		return nil
 	}
-	return w.ID
-}
-
-func (w *Workspace) GetName() string {
-	if w == nil {
-		return ""
-	}
-	return w.Name
-}
-
-func (w *Workspace) GetFullName() string {
-	if w == nil {
-		return ""
-	}
-	return w.FullName
+	return w.DateCreated
 }
 
 func (w *Workspace) GetDescription() *string {
@@ -57,18 +43,18 @@ func (w *Workspace) GetDescription() *string {
 	return w.Description
 }
 
-func (w *Workspace) GetVisibility() Visibility {
+func (w *Workspace) GetFullName() string {
 	if w == nil {
-		return Visibility("")
+		return ""
 	}
-	return w.Visibility
+	return w.FullName
 }
 
-func (w *Workspace) GetDateCreated() *time.Time {
+func (w *Workspace) GetID() *int64 {
 	if w == nil {
 		return nil
 	}
-	return w.DateCreated
+	return w.ID
 }
 
 func (w *Workspace) GetLastUpdated() *time.Time {
@@ -76,4 +62,18 @@ func (w *Workspace) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return w.LastUpdated
+}
+
+func (w *Workspace) GetName() string {
+	if w == nil {
+		return ""
+	}
+	return w.Name
+}
+
+func (w *Workspace) GetVisibility() Visibility {
+	if w == nil {
+		return Visibility("")
+	}
+	return w.Visibility
 }

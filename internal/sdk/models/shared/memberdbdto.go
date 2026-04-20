@@ -3,35 +3,21 @@
 package shared
 
 type MemberDbDto struct {
-	MemberID  *int64   `json:"memberId,omitempty"`
-	UserID    *int64   `json:"userId,omitempty"`
-	UserName  *string  `json:"userName,omitempty"`
+	Avatar    *string  `json:"avatar,omitempty"`
 	Email     *string  `json:"email,omitempty"`
 	FirstName *string  `json:"firstName,omitempty"`
 	LastName  *string  `json:"lastName,omitempty"`
-	Avatar    *string  `json:"avatar,omitempty"`
+	MemberID  *int64   `json:"memberId,omitempty"`
 	Role      *OrgRole `json:"role,omitempty"`
+	UserID    *int64   `json:"userId,omitempty"`
+	UserName  *string  `json:"userName,omitempty"`
 }
 
-func (m *MemberDbDto) GetMemberID() *int64 {
+func (m *MemberDbDto) GetAvatar() *string {
 	if m == nil {
 		return nil
 	}
-	return m.MemberID
-}
-
-func (m *MemberDbDto) GetUserID() *int64 {
-	if m == nil {
-		return nil
-	}
-	return m.UserID
-}
-
-func (m *MemberDbDto) GetUserName() *string {
-	if m == nil {
-		return nil
-	}
-	return m.UserName
+	return m.Avatar
 }
 
 func (m *MemberDbDto) GetEmail() *string {
@@ -55,11 +41,11 @@ func (m *MemberDbDto) GetLastName() *string {
 	return m.LastName
 }
 
-func (m *MemberDbDto) GetAvatar() *string {
+func (m *MemberDbDto) GetMemberID() *int64 {
 	if m == nil {
 		return nil
 	}
-	return m.Avatar
+	return m.MemberID
 }
 
 func (m *MemberDbDto) GetRole() *OrgRole {
@@ -67,4 +53,18 @@ func (m *MemberDbDto) GetRole() *OrgRole {
 		return nil
 	}
 	return m.Role
+}
+
+func (m *MemberDbDto) GetUserID() *int64 {
+	if m == nil {
+		return nil
+	}
+	return m.UserID
+}
+
+func (m *MemberDbDto) GetUserName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.UserName
 }

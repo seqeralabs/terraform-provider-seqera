@@ -8,8 +8,8 @@ import (
 
 type Subnet struct {
 	ID    *string `json:"id,omitempty"`
-	Zone  *string `json:"zone,omitempty"`
 	VpcID *string `json:"vpcId,omitempty"`
+	Zone  *string `json:"zone,omitempty"`
 }
 
 func (s Subnet) MarshalJSON() ([]byte, error) {
@@ -30,16 +30,16 @@ func (s *Subnet) GetID() *string {
 	return s.ID
 }
 
-func (s *Subnet) GetZone() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Zone
-}
-
 func (s *Subnet) GetVpcID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.VpcID
+}
+
+func (s *Subnet) GetZone() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Zone
 }

@@ -3,9 +3,16 @@
 package shared
 
 type DescribeWorkflowResponse struct {
+	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
 	Workflow     *WorkflowMaxDbDto        `json:"workflow,omitempty"`
 	WorkspaceID  *int64                   `json:"workspaceId,omitempty"`
-	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
+}
+
+func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
+	if d == nil {
+		return nil
+	}
+	return d.PipelineInfo
 }
 
 func (d *DescribeWorkflowResponse) GetWorkflow() *WorkflowMaxDbDto {
@@ -20,11 +27,4 @@ func (d *DescribeWorkflowResponse) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
-}
-
-func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
-	if d == nil {
-		return nil
-	}
-	return d.PipelineInfo
 }

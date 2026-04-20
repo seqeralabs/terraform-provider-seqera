@@ -3,15 +3,8 @@
 package shared
 
 type DeleteDatasetsResponse struct {
-	Success []string `json:"success,omitempty"`
 	Failed  []string `json:"failed,omitempty"`
-}
-
-func (d *DeleteDatasetsResponse) GetSuccess() []string {
-	if d == nil {
-		return nil
-	}
-	return d.Success
+	Success []string `json:"success,omitempty"`
 }
 
 func (d *DeleteDatasetsResponse) GetFailed() []string {
@@ -19,4 +12,11 @@ func (d *DeleteDatasetsResponse) GetFailed() []string {
 		return nil
 	}
 	return d.Failed
+}
+
+func (d *DeleteDatasetsResponse) GetSuccess() []string {
+	if d == nil {
+		return nil
+	}
+	return d.Success
 }

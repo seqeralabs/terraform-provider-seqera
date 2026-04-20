@@ -8,11 +8,11 @@ import (
 )
 
 type UserSSHPublicKeyDto struct {
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	ID          *int64     `json:"id,omitempty"`
+	LastUsed    *time.Time `json:"lastUsed,omitempty"`
 	Name        *string    `json:"name,omitempty"`
 	PublicKey   *string    `json:"publicKey,omitempty"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
-	LastUsed    *time.Time `json:"lastUsed,omitempty"`
 }
 
 func (u UserSSHPublicKeyDto) MarshalJSON() ([]byte, error) {
@@ -26,11 +26,25 @@ func (u *UserSSHPublicKeyDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (u *UserSSHPublicKeyDto) GetDateCreated() *time.Time {
+	if u == nil {
+		return nil
+	}
+	return u.DateCreated
+}
+
 func (u *UserSSHPublicKeyDto) GetID() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.ID
+}
+
+func (u *UserSSHPublicKeyDto) GetLastUsed() *time.Time {
+	if u == nil {
+		return nil
+	}
+	return u.LastUsed
 }
 
 func (u *UserSSHPublicKeyDto) GetName() *string {
@@ -45,18 +59,4 @@ func (u *UserSSHPublicKeyDto) GetPublicKey() *string {
 		return nil
 	}
 	return u.PublicKey
-}
-
-func (u *UserSSHPublicKeyDto) GetDateCreated() *time.Time {
-	if u == nil {
-		return nil
-	}
-	return u.DateCreated
-}
-
-func (u *UserSSHPublicKeyDto) GetLastUsed() *time.Time {
-	if u == nil {
-		return nil
-	}
-	return u.LastUsed
 }

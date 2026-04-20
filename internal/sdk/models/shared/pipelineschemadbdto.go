@@ -3,15 +3,8 @@
 package shared
 
 type PipelineSchemaDbDto struct {
-	ID      *int64  `json:"id,omitempty"`
 	Content *string `json:"content,omitempty"`
-}
-
-func (p *PipelineSchemaDbDto) GetID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.ID
+	ID      *int64  `json:"id,omitempty"`
 }
 
 func (p *PipelineSchemaDbDto) GetContent() *string {
@@ -19,4 +12,11 @@ func (p *PipelineSchemaDbDto) GetContent() *string {
 		return nil
 	}
 	return p.Content
+}
+
+func (p *PipelineSchemaDbDto) GetID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }

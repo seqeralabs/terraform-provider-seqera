@@ -3,16 +3,16 @@
 package shared
 
 type TraceProgressRequest struct {
-	Tasks      []Task             `json:"tasks,omitempty"`
-	Progress   *TraceProgressData `json:"progress,omitempty"`
 	Containers []ContainerData    `json:"containers,omitempty"`
+	Progress   *TraceProgressData `json:"progress,omitempty"`
+	Tasks      []Task             `json:"tasks,omitempty"`
 }
 
-func (t *TraceProgressRequest) GetTasks() []Task {
+func (t *TraceProgressRequest) GetContainers() []ContainerData {
 	if t == nil {
 		return nil
 	}
-	return t.Tasks
+	return t.Containers
 }
 
 func (t *TraceProgressRequest) GetProgress() *TraceProgressData {
@@ -22,9 +22,9 @@ func (t *TraceProgressRequest) GetProgress() *TraceProgressData {
 	return t.Progress
 }
 
-func (t *TraceProgressRequest) GetContainers() []ContainerData {
+func (t *TraceProgressRequest) GetTasks() []Task {
 	if t == nil {
 		return nil
 	}
-	return t.Containers
+	return t.Tasks
 }

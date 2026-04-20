@@ -3,90 +3,34 @@
 package shared
 
 type ServiceInfo struct {
-	Version                  *string       `json:"version,omitempty"`
-	APIVersion               *string       `json:"apiVersion,omitempty"`
-	CommitID                 *string       `json:"commitId,omitempty"`
-	AuthTypes                []string      `json:"authTypes,omitempty"`
-	LoginPath                *string       `json:"loginPath,omitempty"`
-	Navbar                   *NavbarConfig `json:"navbar,omitempty"`
-	HeartbeatInterval        *int          `json:"heartbeatInterval,omitempty"`
-	UserWorkspaceEnabled     *bool         `json:"userWorkspaceEnabled,omitempty"`
-	AllowInstanceCredentials *bool         `json:"allowInstanceCredentials,omitempty"`
-	LandingURL               *string       `json:"landingUrl,omitempty"`
-	TermsOfUseURL            *string       `json:"termsOfUseUrl,omitempty"`
-	ContentURL               *string       `json:"contentUrl,omitempty"`
-	Analytics                *Analytics    `json:"analytics,omitempty"`
+	AllowInstanceCredentials *bool `json:"allowInstanceCredentials,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AllowLocalRepos              *bool   `json:"allowLocalRepos,omitempty"`
-	ContentMaxFileSize           *int64  `json:"contentMaxFileSize,omitempty"`
-	WaveEnabled                  *bool   `json:"waveEnabled,omitempty"`
-	GroundswellEnabled           *bool   `json:"groundswellEnabled,omitempty"`
-	GroundswellAllowedWorkspaces []int64 `json:"groundswellAllowedWorkspaces,omitempty"`
-	SeqeraComputeEnabled         *bool   `json:"seqeraComputeEnabled,omitempty"`
-	ForgePrefix                  *string `json:"forgePrefix,omitempty"`
-	SeqeraCloud                  *bool   `json:"seqeraCloud,omitempty"`
-	EvalWorkspaceIds             []int64 `json:"evalWorkspaceIds,omitempty"`
-	ContactEmail                 *string `json:"contactEmail,omitempty"`
-	AllowNextflowCliLogs         *bool   `json:"allowNextflowCliLogs,omitempty"`
-	LogoutURL                    *string `json:"logoutUrl,omitempty"`
-	SeqeraAiBaseURL              *string `json:"seqeraAiBaseUrl,omitempty"`
-	LaunchParamsTextMaxSize      *int    `json:"launchParamsTextMaxSize,omitempty"`
-}
-
-func (s *ServiceInfo) GetVersion() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Version
-}
-
-func (s *ServiceInfo) GetAPIVersion() *string {
-	if s == nil {
-		return nil
-	}
-	return s.APIVersion
-}
-
-func (s *ServiceInfo) GetCommitID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.CommitID
-}
-
-func (s *ServiceInfo) GetAuthTypes() []string {
-	if s == nil {
-		return nil
-	}
-	return s.AuthTypes
-}
-
-func (s *ServiceInfo) GetLoginPath() *string {
-	if s == nil {
-		return nil
-	}
-	return s.LoginPath
-}
-
-func (s *ServiceInfo) GetNavbar() *NavbarConfig {
-	if s == nil {
-		return nil
-	}
-	return s.Navbar
-}
-
-func (s *ServiceInfo) GetHeartbeatInterval() *int {
-	if s == nil {
-		return nil
-	}
-	return s.HeartbeatInterval
-}
-
-func (s *ServiceInfo) GetUserWorkspaceEnabled() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.UserWorkspaceEnabled
+	AllowLocalRepos              *bool         `json:"allowLocalRepos,omitempty"`
+	AllowNextflowCliLogs         *bool         `json:"allowNextflowCliLogs,omitempty"`
+	Analytics                    *Analytics    `json:"analytics,omitempty"`
+	APIVersion                   *string       `json:"apiVersion,omitempty"`
+	AuthTypes                    []string      `json:"authTypes,omitempty"`
+	CommitID                     *string       `json:"commitId,omitempty"`
+	ContactEmail                 *string       `json:"contactEmail,omitempty"`
+	ContentMaxFileSize           *int64        `json:"contentMaxFileSize,omitempty"`
+	ContentURL                   *string       `json:"contentUrl,omitempty"`
+	EvalWorkspaceIds             []int64       `json:"evalWorkspaceIds,omitempty"`
+	ForgePrefix                  *string       `json:"forgePrefix,omitempty"`
+	GroundswellAllowedWorkspaces []int64       `json:"groundswellAllowedWorkspaces,omitempty"`
+	GroundswellEnabled           *bool         `json:"groundswellEnabled,omitempty"`
+	HeartbeatInterval            *int          `json:"heartbeatInterval,omitempty"`
+	LandingURL                   *string       `json:"landingUrl,omitempty"`
+	LaunchParamsTextMaxSize      *int          `json:"launchParamsTextMaxSize,omitempty"`
+	LoginPath                    *string       `json:"loginPath,omitempty"`
+	LogoutURL                    *string       `json:"logoutUrl,omitempty"`
+	Navbar                       *NavbarConfig `json:"navbar,omitempty"`
+	SeqeraAiBaseURL              *string       `json:"seqeraAiBaseUrl,omitempty"`
+	SeqeraCloud                  *bool         `json:"seqeraCloud,omitempty"`
+	SeqeraComputeEnabled         *bool         `json:"seqeraComputeEnabled,omitempty"`
+	TermsOfUseURL                *string       `json:"termsOfUseUrl,omitempty"`
+	UserWorkspaceEnabled         *bool         `json:"userWorkspaceEnabled,omitempty"`
+	Version                      *string       `json:"version,omitempty"`
+	WaveEnabled                  *bool         `json:"waveEnabled,omitempty"`
 }
 
 func (s *ServiceInfo) GetAllowInstanceCredentials() *bool {
@@ -96,102 +40,11 @@ func (s *ServiceInfo) GetAllowInstanceCredentials() *bool {
 	return s.AllowInstanceCredentials
 }
 
-func (s *ServiceInfo) GetLandingURL() *string {
-	if s == nil {
-		return nil
-	}
-	return s.LandingURL
-}
-
-func (s *ServiceInfo) GetTermsOfUseURL() *string {
-	if s == nil {
-		return nil
-	}
-	return s.TermsOfUseURL
-}
-
-func (s *ServiceInfo) GetContentURL() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ContentURL
-}
-
-func (s *ServiceInfo) GetAnalytics() *Analytics {
-	if s == nil {
-		return nil
-	}
-	return s.Analytics
-}
-
 func (s *ServiceInfo) GetAllowLocalRepos() *bool {
 	if s == nil {
 		return nil
 	}
 	return s.AllowLocalRepos
-}
-
-func (s *ServiceInfo) GetContentMaxFileSize() *int64 {
-	if s == nil {
-		return nil
-	}
-	return s.ContentMaxFileSize
-}
-
-func (s *ServiceInfo) GetWaveEnabled() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.WaveEnabled
-}
-
-func (s *ServiceInfo) GetGroundswellEnabled() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.GroundswellEnabled
-}
-
-func (s *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
-	if s == nil {
-		return nil
-	}
-	return s.GroundswellAllowedWorkspaces
-}
-
-func (s *ServiceInfo) GetSeqeraComputeEnabled() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.SeqeraComputeEnabled
-}
-
-func (s *ServiceInfo) GetForgePrefix() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ForgePrefix
-}
-
-func (s *ServiceInfo) GetSeqeraCloud() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.SeqeraCloud
-}
-
-func (s *ServiceInfo) GetEvalWorkspaceIds() []int64 {
-	if s == nil {
-		return nil
-	}
-	return s.EvalWorkspaceIds
-}
-
-func (s *ServiceInfo) GetContactEmail() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ContactEmail
 }
 
 func (s *ServiceInfo) GetAllowNextflowCliLogs() *bool {
@@ -201,11 +54,123 @@ func (s *ServiceInfo) GetAllowNextflowCliLogs() *bool {
 	return s.AllowNextflowCliLogs
 }
 
+func (s *ServiceInfo) GetAnalytics() *Analytics {
+	if s == nil {
+		return nil
+	}
+	return s.Analytics
+}
+
+func (s *ServiceInfo) GetAPIVersion() *string {
+	if s == nil {
+		return nil
+	}
+	return s.APIVersion
+}
+
+func (s *ServiceInfo) GetAuthTypes() []string {
+	if s == nil {
+		return nil
+	}
+	return s.AuthTypes
+}
+
+func (s *ServiceInfo) GetCommitID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CommitID
+}
+
+func (s *ServiceInfo) GetContactEmail() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ContactEmail
+}
+
+func (s *ServiceInfo) GetContentMaxFileSize() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.ContentMaxFileSize
+}
+
+func (s *ServiceInfo) GetContentURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ContentURL
+}
+
+func (s *ServiceInfo) GetEvalWorkspaceIds() []int64 {
+	if s == nil {
+		return nil
+	}
+	return s.EvalWorkspaceIds
+}
+
+func (s *ServiceInfo) GetForgePrefix() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ForgePrefix
+}
+
+func (s *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
+	if s == nil {
+		return nil
+	}
+	return s.GroundswellAllowedWorkspaces
+}
+
+func (s *ServiceInfo) GetGroundswellEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.GroundswellEnabled
+}
+
+func (s *ServiceInfo) GetHeartbeatInterval() *int {
+	if s == nil {
+		return nil
+	}
+	return s.HeartbeatInterval
+}
+
+func (s *ServiceInfo) GetLandingURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.LandingURL
+}
+
+func (s *ServiceInfo) GetLaunchParamsTextMaxSize() *int {
+	if s == nil {
+		return nil
+	}
+	return s.LaunchParamsTextMaxSize
+}
+
+func (s *ServiceInfo) GetLoginPath() *string {
+	if s == nil {
+		return nil
+	}
+	return s.LoginPath
+}
+
 func (s *ServiceInfo) GetLogoutURL() *string {
 	if s == nil {
 		return nil
 	}
 	return s.LogoutURL
+}
+
+func (s *ServiceInfo) GetNavbar() *NavbarConfig {
+	if s == nil {
+		return nil
+	}
+	return s.Navbar
 }
 
 func (s *ServiceInfo) GetSeqeraAiBaseURL() *string {
@@ -215,9 +180,44 @@ func (s *ServiceInfo) GetSeqeraAiBaseURL() *string {
 	return s.SeqeraAiBaseURL
 }
 
-func (s *ServiceInfo) GetLaunchParamsTextMaxSize() *int {
+func (s *ServiceInfo) GetSeqeraCloud() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.LaunchParamsTextMaxSize
+	return s.SeqeraCloud
+}
+
+func (s *ServiceInfo) GetSeqeraComputeEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.SeqeraComputeEnabled
+}
+
+func (s *ServiceInfo) GetTermsOfUseURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.TermsOfUseURL
+}
+
+func (s *ServiceInfo) GetUserWorkspaceEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.UserWorkspaceEnabled
+}
+
+func (s *ServiceInfo) GetVersion() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Version
+}
+
+func (s *ServiceInfo) GetWaveEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.WaveEnabled
 }

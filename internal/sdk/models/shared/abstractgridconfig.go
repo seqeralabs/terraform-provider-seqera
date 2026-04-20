@@ -3,102 +3,25 @@
 package shared
 
 type AbstractGridConfig struct {
+	ComputeQueue *string `json:"computeQueue,omitempty"`
+	// property to select the compute config platform
+	Discriminator  *string             `json:"discriminator,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobOptions *string             `json:"headJobOptions,omitempty"`
+	HeadQueue      *string             `json:"headQueue,omitempty"`
+	HostName       *string             `json:"hostName,omitempty"`
+	LaunchDir      *string             `json:"launchDir,omitempty"`
+	MaxQueueSize   *int                `json:"maxQueueSize,omitempty"`
+	NextflowConfig *string             `json:"nextflowConfig,omitempty"`
+	Port           *int                `json:"port,omitempty"`
+	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	PreRunScript            *string `json:"preRunScript,omitempty"`
+	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
+	UserName                *string `json:"userName,omitempty"`
 	// Compute environment working directory
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript  *string             `json:"postRunScript,omitempty"`
-	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
-	NextflowConfig *string             `json:"nextflowConfig,omitempty"`
-	// property to select the compute config platform
-	Discriminator           *string `json:"discriminator,omitempty"`
-	LaunchDir               *string `json:"launchDir,omitempty"`
-	UserName                *string `json:"userName,omitempty"`
-	HostName                *string `json:"hostName,omitempty"`
-	Port                    *int    `json:"port,omitempty"`
-	HeadQueue               *string `json:"headQueue,omitempty"`
-	ComputeQueue            *string `json:"computeQueue,omitempty"`
-	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
-	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
-	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-}
-
-func (a *AbstractGridConfig) GetWorkDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkDir
-}
-
-func (a *AbstractGridConfig) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AbstractGridConfig) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
-func (a *AbstractGridConfig) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
-func (a *AbstractGridConfig) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
-func (a *AbstractGridConfig) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AbstractGridConfig) GetLaunchDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.LaunchDir
-}
-
-func (a *AbstractGridConfig) GetUserName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.UserName
-}
-
-func (a *AbstractGridConfig) GetHostName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.HostName
-}
-
-func (a *AbstractGridConfig) GetPort() *int {
-	if a == nil {
-		return nil
-	}
-	return a.Port
-}
-
-func (a *AbstractGridConfig) GetHeadQueue() *string {
-	if a == nil {
-		return nil
-	}
-	return a.HeadQueue
 }
 
 func (a *AbstractGridConfig) GetComputeQueue() *string {
@@ -108,11 +31,18 @@ func (a *AbstractGridConfig) GetComputeQueue() *string {
 	return a.ComputeQueue
 }
 
-func (a *AbstractGridConfig) GetMaxQueueSize() *int {
+func (a *AbstractGridConfig) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
-	return a.MaxQueueSize
+	return a.Discriminator
+}
+
+func (a *AbstractGridConfig) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
 }
 
 func (a *AbstractGridConfig) GetHeadJobOptions() *string {
@@ -122,9 +52,79 @@ func (a *AbstractGridConfig) GetHeadJobOptions() *string {
 	return a.HeadJobOptions
 }
 
+func (a *AbstractGridConfig) GetHeadQueue() *string {
+	if a == nil {
+		return nil
+	}
+	return a.HeadQueue
+}
+
+func (a *AbstractGridConfig) GetHostName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.HostName
+}
+
+func (a *AbstractGridConfig) GetLaunchDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.LaunchDir
+}
+
+func (a *AbstractGridConfig) GetMaxQueueSize() *int {
+	if a == nil {
+		return nil
+	}
+	return a.MaxQueueSize
+}
+
+func (a *AbstractGridConfig) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AbstractGridConfig) GetPort() *int {
+	if a == nil {
+		return nil
+	}
+	return a.Port
+}
+
+func (a *AbstractGridConfig) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AbstractGridConfig) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
 func (a *AbstractGridConfig) GetPropagateHeadJobOptions() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.PropagateHeadJobOptions
+}
+
+func (a *AbstractGridConfig) GetUserName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.UserName
+}
+
+func (a *AbstractGridConfig) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
 }

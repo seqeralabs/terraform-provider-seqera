@@ -43,29 +43,15 @@ func (e *UpdateOrganizationRequestType) UnmarshalJSON(data []byte) error {
 }
 
 type UpdateOrganizationRequest struct {
-	FullName    *string `json:"fullName,omitempty"`
-	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
+	FullName    *string `json:"fullName,omitempty"`
 	Location    *string `json:"location,omitempty"`
-	Website     *string `json:"website,omitempty"`
 	LogoID      *string `json:"logoId,omitempty"`
+	Name        *string `json:"name,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Paying *bool                          `json:"paying,omitempty"`
-	Type   *UpdateOrganizationRequestType `json:"type,omitempty"`
-}
-
-func (u *UpdateOrganizationRequest) GetFullName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.FullName
-}
-
-func (u *UpdateOrganizationRequest) GetName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Name
+	Paying  *bool                          `json:"paying,omitempty"`
+	Type    *UpdateOrganizationRequestType `json:"type,omitempty"`
+	Website *string                        `json:"website,omitempty"`
 }
 
 func (u *UpdateOrganizationRequest) GetDescription() *string {
@@ -75,6 +61,13 @@ func (u *UpdateOrganizationRequest) GetDescription() *string {
 	return u.Description
 }
 
+func (u *UpdateOrganizationRequest) GetFullName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.FullName
+}
+
 func (u *UpdateOrganizationRequest) GetLocation() *string {
 	if u == nil {
 		return nil
@@ -82,18 +75,18 @@ func (u *UpdateOrganizationRequest) GetLocation() *string {
 	return u.Location
 }
 
-func (u *UpdateOrganizationRequest) GetWebsite() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Website
-}
-
 func (u *UpdateOrganizationRequest) GetLogoID() *string {
 	if u == nil {
 		return nil
 	}
 	return u.LogoID
+}
+
+func (u *UpdateOrganizationRequest) GetName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Name
 }
 
 func (u *UpdateOrganizationRequest) GetPaying() *bool {
@@ -108,4 +101,11 @@ func (u *UpdateOrganizationRequest) GetType() *UpdateOrganizationRequestType {
 		return nil
 	}
 	return u.Type
+}
+
+func (u *UpdateOrganizationRequest) GetWebsite() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Website
 }

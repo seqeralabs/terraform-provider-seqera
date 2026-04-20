@@ -3,40 +3,26 @@
 package shared
 
 type ParticipantResponseDto struct {
-	ParticipantID *int64           `json:"participantId,omitempty"`
-	MemberID      *int64           `json:"memberId,omitempty"`
-	UserName      *string          `json:"userName,omitempty"`
+	Email         *string          `json:"email,omitempty"`
 	FirstName     *string          `json:"firstName,omitempty"`
 	LastName      *string          `json:"lastName,omitempty"`
-	Email         *string          `json:"email,omitempty"`
+	MemberID      *int64           `json:"memberId,omitempty"`
 	OrgRole       *OrgRole         `json:"orgRole,omitempty"`
+	ParticipantID *int64           `json:"participantId,omitempty"`
+	TeamAvatarURL *string          `json:"teamAvatarUrl,omitempty"`
 	TeamID        *int64           `json:"teamId,omitempty"`
 	TeamName      *string          `json:"teamName,omitempty"`
-	WspRole       *string          `json:"wspRole,omitempty"`
 	Type          *ParticipantType `json:"type,omitempty"`
-	TeamAvatarURL *string          `json:"teamAvatarUrl,omitempty"`
 	UserAvatarURL *string          `json:"userAvatarUrl,omitempty"`
+	UserName      *string          `json:"userName,omitempty"`
+	WspRole       *string          `json:"wspRole,omitempty"`
 }
 
-func (p *ParticipantResponseDto) GetParticipantID() *int64 {
+func (p *ParticipantResponseDto) GetEmail() *string {
 	if p == nil {
 		return nil
 	}
-	return p.ParticipantID
-}
-
-func (p *ParticipantResponseDto) GetMemberID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.MemberID
-}
-
-func (p *ParticipantResponseDto) GetUserName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.UserName
+	return p.Email
 }
 
 func (p *ParticipantResponseDto) GetFirstName() *string {
@@ -53,11 +39,11 @@ func (p *ParticipantResponseDto) GetLastName() *string {
 	return p.LastName
 }
 
-func (p *ParticipantResponseDto) GetEmail() *string {
+func (p *ParticipantResponseDto) GetMemberID() *int64 {
 	if p == nil {
 		return nil
 	}
-	return p.Email
+	return p.MemberID
 }
 
 func (p *ParticipantResponseDto) GetOrgRole() *OrgRole {
@@ -65,6 +51,20 @@ func (p *ParticipantResponseDto) GetOrgRole() *OrgRole {
 		return nil
 	}
 	return p.OrgRole
+}
+
+func (p *ParticipantResponseDto) GetParticipantID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ParticipantID
+}
+
+func (p *ParticipantResponseDto) GetTeamAvatarURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TeamAvatarURL
 }
 
 func (p *ParticipantResponseDto) GetTeamID() *int64 {
@@ -81,13 +81,6 @@ func (p *ParticipantResponseDto) GetTeamName() *string {
 	return p.TeamName
 }
 
-func (p *ParticipantResponseDto) GetWspRole() *string {
-	if p == nil {
-		return nil
-	}
-	return p.WspRole
-}
-
 func (p *ParticipantResponseDto) GetType() *ParticipantType {
 	if p == nil {
 		return nil
@@ -95,16 +88,23 @@ func (p *ParticipantResponseDto) GetType() *ParticipantType {
 	return p.Type
 }
 
-func (p *ParticipantResponseDto) GetTeamAvatarURL() *string {
-	if p == nil {
-		return nil
-	}
-	return p.TeamAvatarURL
-}
-
 func (p *ParticipantResponseDto) GetUserAvatarURL() *string {
 	if p == nil {
 		return nil
 	}
 	return p.UserAvatarURL
+}
+
+func (p *ParticipantResponseDto) GetUserName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserName
+}
+
+func (p *ParticipantResponseDto) GetWspRole() *string {
+	if p == nil {
+		return nil
+	}
+	return p.WspRole
 }

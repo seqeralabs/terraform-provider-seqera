@@ -3,16 +3,9 @@
 package shared
 
 type DataStudioWorkspaceSettingsRequest struct {
-	LifespanHours          *int    `json:"lifespanHours,omitempty"`
 	ContainerRepository    *string `json:"containerRepository,omitempty"`
+	LifespanHours          *int    `json:"lifespanHours,omitempty"`
 	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
-}
-
-func (d *DataStudioWorkspaceSettingsRequest) GetLifespanHours() *int {
-	if d == nil {
-		return nil
-	}
-	return d.LifespanHours
 }
 
 func (d *DataStudioWorkspaceSettingsRequest) GetContainerRepository() *string {
@@ -20,6 +13,13 @@ func (d *DataStudioWorkspaceSettingsRequest) GetContainerRepository() *string {
 		return nil
 	}
 	return d.ContainerRepository
+}
+
+func (d *DataStudioWorkspaceSettingsRequest) GetLifespanHours() *int {
+	if d == nil {
+		return nil
+	}
+	return d.LifespanHours
 }
 
 func (d *DataStudioWorkspaceSettingsRequest) GetPrivateStudioByDefault() *bool {

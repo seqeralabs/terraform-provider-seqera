@@ -4,8 +4,8 @@ package shared
 
 type TraceCreateResponse struct {
 	Message    *string `json:"message,omitempty"`
-	WorkflowID *string `json:"workflowId,omitempty"`
 	WatchURL   *string `json:"watchUrl,omitempty"`
+	WorkflowID *string `json:"workflowId,omitempty"`
 }
 
 func (t *TraceCreateResponse) GetMessage() *string {
@@ -15,16 +15,16 @@ func (t *TraceCreateResponse) GetMessage() *string {
 	return t.Message
 }
 
-func (t *TraceCreateResponse) GetWorkflowID() *string {
-	if t == nil {
-		return nil
-	}
-	return t.WorkflowID
-}
-
 func (t *TraceCreateResponse) GetWatchURL() *string {
 	if t == nil {
 		return nil
 	}
 	return t.WatchURL
+}
+
+func (t *TraceCreateResponse) GetWorkflowID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.WorkflowID
 }

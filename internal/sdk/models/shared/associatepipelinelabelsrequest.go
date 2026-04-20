@@ -3,15 +3,8 @@
 package shared
 
 type AssociatePipelineLabelsRequest struct {
-	PipelineIds []int64 `json:"pipelineIds,omitempty"`
 	LabelIds    []int64 `json:"labelIds,omitempty"`
-}
-
-func (a *AssociatePipelineLabelsRequest) GetPipelineIds() []int64 {
-	if a == nil {
-		return nil
-	}
-	return a.PipelineIds
+	PipelineIds []int64 `json:"pipelineIds,omitempty"`
 }
 
 func (a *AssociatePipelineLabelsRequest) GetLabelIds() []int64 {
@@ -19,4 +12,11 @@ func (a *AssociatePipelineLabelsRequest) GetLabelIds() []int64 {
 		return nil
 	}
 	return a.LabelIds
+}
+
+func (a *AssociatePipelineLabelsRequest) GetPipelineIds() []int64 {
+	if a == nil {
+		return nil
+	}
+	return a.PipelineIds
 }

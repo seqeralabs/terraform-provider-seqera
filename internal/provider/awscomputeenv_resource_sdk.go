@@ -264,26 +264,50 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		deleted = nil
 	}
-	workDir := new(string)
-	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
-		*workDir = r.Config.WorkDir.ValueString()
+	cliPath := new(string)
+	if !r.Config.CliPath.IsUnknown() && !r.Config.CliPath.IsNull() {
+		*cliPath = r.Config.CliPath.ValueString()
 	} else {
-		workDir = nil
+		cliPath = nil
 	}
-	preRunScript := new(string)
-	if !r.Config.PreRunScript.IsUnknown() && !r.Config.PreRunScript.IsNull() {
-		*preRunScript = r.Config.PreRunScript.ValueString()
+	computeJobRole := new(string)
+	if !r.Config.ComputeJobRole.IsUnknown() && !r.Config.ComputeJobRole.IsNull() {
+		*computeJobRole = r.Config.ComputeJobRole.ValueString()
 	} else {
-		preRunScript = nil
+		computeJobRole = nil
 	}
-	postRunScript := new(string)
-	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
-		*postRunScript = r.Config.PostRunScript.ValueString()
+	computeQueue := new(string)
+	if !r.Config.ComputeQueue.IsUnknown() && !r.Config.ComputeQueue.IsNull() {
+		*computeQueue = r.Config.ComputeQueue.ValueString()
 	} else {
-		postRunScript = nil
+		computeQueue = nil
+	}
+	dragenInstanceType := new(string)
+	if !r.Config.DragenInstanceType.IsUnknown() && !r.Config.DragenInstanceType.IsNull() {
+		*dragenInstanceType = r.Config.DragenInstanceType.ValueString()
+	} else {
+		dragenInstanceType = nil
+	}
+	dragenQueue := new(string)
+	if !r.Config.DragenQueue.IsUnknown() && !r.Config.DragenQueue.IsNull() {
+		*dragenQueue = r.Config.DragenQueue.ValueString()
+	} else {
+		dragenQueue = nil
 	}
 	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
 	for environmentIndex := range r.Config.Environment {
+		compute := new(bool)
+		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+		} else {
+			compute = nil
+		}
+		head := new(bool)
+		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+		} else {
+			head = nil
+		}
 		name1 := new(string)
 		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
 			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
@@ -296,73 +320,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			value = nil
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
-		}
 		environment = append(environment, shared.ConfigEnvVariable{
+			Compute: compute,
+			Head:    head,
 			Name:    name1,
 			Value:   value,
-			Head:    head,
-			Compute: compute,
 		})
-	}
-	nextflowConfig := new(string)
-	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
-		*nextflowConfig = r.Config.NextflowConfig.ValueString()
-	} else {
-		nextflowConfig = nil
-	}
-	storageType := new(string)
-	if !r.Config.StorageType.IsUnknown() && !r.Config.StorageType.IsNull() {
-		*storageType = r.Config.StorageType.ValueString()
-	} else {
-		storageType = nil
-	}
-	lustreID := new(string)
-	if !r.Config.LustreID.IsUnknown() && !r.Config.LustreID.IsNull() {
-		*lustreID = r.Config.LustreID.ValueString()
-	} else {
-		lustreID = nil
-	}
-	volumes := make([]string, 0, len(r.Config.Volumes))
-	for volumesIndex := range r.Config.Volumes {
-		volumes = append(volumes, r.Config.Volumes[volumesIndex].ValueString())
-	}
-	var region string
-	region = r.Config.Region.ValueString()
-
-	computeQueue := new(string)
-	if !r.Config.ComputeQueue.IsUnknown() && !r.Config.ComputeQueue.IsNull() {
-		*computeQueue = r.Config.ComputeQueue.ValueString()
-	} else {
-		computeQueue = nil
-	}
-	dragenQueue := new(string)
-	if !r.Config.DragenQueue.IsUnknown() && !r.Config.DragenQueue.IsNull() {
-		*dragenQueue = r.Config.DragenQueue.ValueString()
-	} else {
-		dragenQueue = nil
-	}
-	dragenInstanceType := new(string)
-	if !r.Config.DragenInstanceType.IsUnknown() && !r.Config.DragenInstanceType.IsNull() {
-		*dragenInstanceType = r.Config.DragenInstanceType.ValueString()
-	} else {
-		dragenInstanceType = nil
-	}
-	computeJobRole := new(string)
-	if !r.Config.ComputeJobRole.IsUnknown() && !r.Config.ComputeJobRole.IsNull() {
-		*computeJobRole = r.Config.ComputeJobRole.ValueString()
-	} else {
-		computeJobRole = nil
 	}
 	executionRole := new(string)
 	if !r.Config.ExecutionRole.IsUnknown() && !r.Config.ExecutionRole.IsNull() {
@@ -370,134 +333,29 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		executionRole = nil
 	}
-	headQueue := new(string)
-	if !r.Config.HeadQueue.IsUnknown() && !r.Config.HeadQueue.IsNull() {
-		*headQueue = r.Config.HeadQueue.ValueString()
-	} else {
-		headQueue = nil
-	}
-	headJobRole := new(string)
-	if !r.Config.HeadJobRole.IsUnknown() && !r.Config.HeadJobRole.IsNull() {
-		*headJobRole = r.Config.HeadJobRole.ValueString()
-	} else {
-		headJobRole = nil
-	}
-	cliPath := new(string)
-	if !r.Config.CliPath.IsUnknown() && !r.Config.CliPath.IsNull() {
-		*cliPath = r.Config.CliPath.ValueString()
-	} else {
-		cliPath = nil
-	}
-	headJobCpus := new(int)
-	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
-		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
-	} else {
-		headJobCpus = nil
-	}
-	headJobMemoryMb := new(int)
-	if !r.Config.HeadJobMemoryMb.IsUnknown() && !r.Config.HeadJobMemoryMb.IsNull() {
-		*headJobMemoryMb = int(r.Config.HeadJobMemoryMb.ValueInt32())
-	} else {
-		headJobMemoryMb = nil
-	}
-	enableWave := new(bool)
-	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
-		*enableWave = r.Config.EnableWave.ValueBool()
-	} else {
-		enableWave = nil
-	}
-	enableFusion := new(bool)
-	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
-		*enableFusion = r.Config.EnableFusion.ValueBool()
-	} else {
-		enableFusion = nil
-	}
-	nvmeStorageEnabled := new(bool)
-	if !r.Config.NvmeStorageEnabled.IsUnknown() && !r.Config.NvmeStorageEnabled.IsNull() {
-		*nvmeStorageEnabled = r.Config.NvmeStorageEnabled.ValueBool()
-	} else {
-		nvmeStorageEnabled = nil
-	}
-	logGroup := new(string)
-	if !r.Config.LogGroup.IsUnknown() && !r.Config.LogGroup.IsNull() {
-		*logGroup = r.Config.LogGroup.ValueString()
-	} else {
-		logGroup = nil
-	}
-	fusionSnapshots := new(bool)
-	if !r.Config.FusionSnapshots.IsUnknown() && !r.Config.FusionSnapshots.IsNull() {
-		*fusionSnapshots = r.Config.FusionSnapshots.ValueBool()
-	} else {
-		fusionSnapshots = nil
-	}
 	var forge *shared.ForgeConfig
 	if r.Config.Forge != nil {
-		typeVar := shared.ForgeConfigType(r.Config.Forge.Type.ValueString())
-		var minCpus int
-		minCpus = int(r.Config.Forge.MinCpus.ValueInt32())
-
-		var maxCpus int
-		maxCpus = int(r.Config.Forge.MaxCpus.ValueInt32())
-
-		gpuEnabled := new(bool)
-		if !r.Config.Forge.GpuEnabled.IsUnknown() && !r.Config.Forge.GpuEnabled.IsNull() {
-			*gpuEnabled = r.Config.Forge.GpuEnabled.ValueBool()
-		} else {
-			gpuEnabled = nil
-		}
-		ebsAutoScale := new(bool)
-		if !r.Config.Forge.EbsAutoScale.IsUnknown() && !r.Config.Forge.EbsAutoScale.IsNull() {
-			*ebsAutoScale = r.Config.Forge.EbsAutoScale.ValueBool()
-		} else {
-			ebsAutoScale = nil
-		}
-		instanceTypes := make([]string, 0, len(r.Config.Forge.InstanceTypes))
-		for instanceTypesIndex := range r.Config.Forge.InstanceTypes {
-			instanceTypes = append(instanceTypes, r.Config.Forge.InstanceTypes[instanceTypesIndex].ValueString())
-		}
 		allocStrategy := new(shared.AllocStrategy)
 		if !r.Config.Forge.AllocStrategy.IsUnknown() && !r.Config.Forge.AllocStrategy.IsNull() {
 			*allocStrategy = shared.AllocStrategy(r.Config.Forge.AllocStrategy.ValueString())
 		} else {
 			allocStrategy = nil
 		}
-		imageID := new(string)
-		if !r.Config.Forge.ImageID.IsUnknown() && !r.Config.Forge.ImageID.IsNull() {
-			*imageID = r.Config.Forge.ImageID.ValueString()
+		allowBuckets := make([]string, 0, len(r.Config.Forge.AllowBuckets))
+		for allowBucketsIndex := range r.Config.Forge.AllowBuckets {
+			allowBuckets = append(allowBuckets, r.Config.Forge.AllowBuckets[allowBucketsIndex].ValueString())
+		}
+		arm64Enabled := new(bool)
+		if !r.Config.Forge.Arm64Enabled.IsUnknown() && !r.Config.Forge.Arm64Enabled.IsNull() {
+			*arm64Enabled = r.Config.Forge.Arm64Enabled.ValueBool()
 		} else {
-			imageID = nil
+			arm64Enabled = nil
 		}
-		vpcID := new(string)
-		if !r.Config.Forge.VpcID.IsUnknown() && !r.Config.Forge.VpcID.IsNull() {
-			*vpcID = r.Config.Forge.VpcID.ValueString()
+		bidPercentage := new(int)
+		if !r.Config.Forge.BidPercentage.IsUnknown() && !r.Config.Forge.BidPercentage.IsNull() {
+			*bidPercentage = int(r.Config.Forge.BidPercentage.ValueInt32())
 		} else {
-			vpcID = nil
-		}
-		subnets := make([]string, 0, len(r.Config.Forge.Subnets))
-		for subnetsIndex := range r.Config.Forge.Subnets {
-			subnets = append(subnets, r.Config.Forge.Subnets[subnetsIndex].ValueString())
-		}
-		securityGroups := make([]string, 0, len(r.Config.Forge.SecurityGroups))
-		for securityGroupsIndex := range r.Config.Forge.SecurityGroups {
-			securityGroups = append(securityGroups, r.Config.Forge.SecurityGroups[securityGroupsIndex].ValueString())
-		}
-		fsxMount := new(string)
-		if !r.Config.Forge.FsxMount.IsUnknown() && !r.Config.Forge.FsxMount.IsNull() {
-			*fsxMount = r.Config.Forge.FsxMount.ValueString()
-		} else {
-			fsxMount = nil
-		}
-		fsxName := new(string)
-		if !r.Config.Forge.FsxName.IsUnknown() && !r.Config.Forge.FsxName.IsNull() {
-			*fsxName = r.Config.Forge.FsxName.ValueString()
-		} else {
-			fsxName = nil
-		}
-		fsxSize := new(int)
-		if !r.Config.Forge.FsxSize.IsUnknown() && !r.Config.Forge.FsxSize.IsNull() {
-			*fsxSize = int(r.Config.Forge.FsxSize.ValueInt32())
-		} else {
-			fsxSize = nil
+			bidPercentage = nil
 		}
 		disposeOnDeletion := new(bool)
 		if !r.Config.Forge.DisposeOnDeletion.IsUnknown() && !r.Config.Forge.DisposeOnDeletion.IsNull() {
@@ -505,15 +363,29 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			disposeOnDeletion = nil
 		}
-		ec2KeyPair := new(string)
-		if !r.Config.Forge.Ec2KeyPair.IsUnknown() && !r.Config.Forge.Ec2KeyPair.IsNull() {
-			*ec2KeyPair = r.Config.Forge.Ec2KeyPair.ValueString()
+		dragenAmiID := new(string)
+		if !r.Config.Forge.DragenAmiID.IsUnknown() && !r.Config.Forge.DragenAmiID.IsNull() {
+			*dragenAmiID = r.Config.Forge.DragenAmiID.ValueString()
 		} else {
-			ec2KeyPair = nil
+			dragenAmiID = nil
 		}
-		allowBuckets := make([]string, 0, len(r.Config.Forge.AllowBuckets))
-		for allowBucketsIndex := range r.Config.Forge.AllowBuckets {
-			allowBuckets = append(allowBuckets, r.Config.Forge.AllowBuckets[allowBucketsIndex].ValueString())
+		dragenEnabled := new(bool)
+		if !r.Config.Forge.DragenEnabled.IsUnknown() && !r.Config.Forge.DragenEnabled.IsNull() {
+			*dragenEnabled = r.Config.Forge.DragenEnabled.ValueBool()
+		} else {
+			dragenEnabled = nil
+		}
+		dragenInstanceType1 := new(string)
+		if !r.Config.Forge.DragenInstanceType.IsUnknown() && !r.Config.Forge.DragenInstanceType.IsNull() {
+			*dragenInstanceType1 = r.Config.Forge.DragenInstanceType.ValueString()
+		} else {
+			dragenInstanceType1 = nil
+		}
+		ebsAutoScale := new(bool)
+		if !r.Config.Forge.EbsAutoScale.IsUnknown() && !r.Config.Forge.EbsAutoScale.IsNull() {
+			*ebsAutoScale = r.Config.Forge.EbsAutoScale.ValueBool()
+		} else {
+			ebsAutoScale = nil
 		}
 		ebsBlockSize := new(int)
 		if !r.Config.Forge.EbsBlockSize.IsUnknown() && !r.Config.Forge.EbsBlockSize.IsNull() {
@@ -521,11 +393,23 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			ebsBlockSize = nil
 		}
-		bidPercentage := new(int)
-		if !r.Config.Forge.BidPercentage.IsUnknown() && !r.Config.Forge.BidPercentage.IsNull() {
-			*bidPercentage = int(r.Config.Forge.BidPercentage.ValueInt32())
+		ebsBootSize := new(int)
+		if !r.Config.Forge.EbsBootSize.IsUnknown() && !r.Config.Forge.EbsBootSize.IsNull() {
+			*ebsBootSize = int(r.Config.Forge.EbsBootSize.ValueInt32())
 		} else {
-			bidPercentage = nil
+			ebsBootSize = nil
+		}
+		ec2KeyPair := new(string)
+		if !r.Config.Forge.Ec2KeyPair.IsUnknown() && !r.Config.Forge.Ec2KeyPair.IsNull() {
+			*ec2KeyPair = r.Config.Forge.Ec2KeyPair.ValueString()
+		} else {
+			ec2KeyPair = nil
+		}
+		ecsConfig := new(string)
+		if !r.Config.Forge.EcsConfig.IsUnknown() && !r.Config.Forge.EcsConfig.IsNull() {
+			*ecsConfig = r.Config.Forge.EcsConfig.ValueString()
+		} else {
+			ecsConfig = nil
 		}
 		efsCreate := new(bool)
 		if !r.Config.Forge.EfsCreate.IsUnknown() && !r.Config.Forge.EfsCreate.IsNull() {
@@ -545,106 +429,222 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			efsMount = nil
 		}
-		dragenEnabled := new(bool)
-		if !r.Config.Forge.DragenEnabled.IsUnknown() && !r.Config.Forge.DragenEnabled.IsNull() {
-			*dragenEnabled = r.Config.Forge.DragenEnabled.ValueBool()
-		} else {
-			dragenEnabled = nil
-		}
-		dragenAmiID := new(string)
-		if !r.Config.Forge.DragenAmiID.IsUnknown() && !r.Config.Forge.DragenAmiID.IsNull() {
-			*dragenAmiID = r.Config.Forge.DragenAmiID.ValueString()
-		} else {
-			dragenAmiID = nil
-		}
-		ebsBootSize := new(int)
-		if !r.Config.Forge.EbsBootSize.IsUnknown() && !r.Config.Forge.EbsBootSize.IsNull() {
-			*ebsBootSize = int(r.Config.Forge.EbsBootSize.ValueInt32())
-		} else {
-			ebsBootSize = nil
-		}
-		ecsConfig := new(string)
-		if !r.Config.Forge.EcsConfig.IsUnknown() && !r.Config.Forge.EcsConfig.IsNull() {
-			*ecsConfig = r.Config.Forge.EcsConfig.ValueString()
-		} else {
-			ecsConfig = nil
-		}
 		fargateHeadEnabled := new(bool)
 		if !r.Config.Forge.FargateHeadEnabled.IsUnknown() && !r.Config.Forge.FargateHeadEnabled.IsNull() {
 			*fargateHeadEnabled = r.Config.Forge.FargateHeadEnabled.ValueBool()
 		} else {
 			fargateHeadEnabled = nil
 		}
-		arm64Enabled := new(bool)
-		if !r.Config.Forge.Arm64Enabled.IsUnknown() && !r.Config.Forge.Arm64Enabled.IsNull() {
-			*arm64Enabled = r.Config.Forge.Arm64Enabled.ValueBool()
+		fsxMount := new(string)
+		if !r.Config.Forge.FsxMount.IsUnknown() && !r.Config.Forge.FsxMount.IsNull() {
+			*fsxMount = r.Config.Forge.FsxMount.ValueString()
 		} else {
-			arm64Enabled = nil
+			fsxMount = nil
 		}
-		dragenInstanceType1 := new(string)
-		if !r.Config.Forge.DragenInstanceType.IsUnknown() && !r.Config.Forge.DragenInstanceType.IsNull() {
-			*dragenInstanceType1 = r.Config.Forge.DragenInstanceType.ValueString()
+		fsxName := new(string)
+		if !r.Config.Forge.FsxName.IsUnknown() && !r.Config.Forge.FsxName.IsNull() {
+			*fsxName = r.Config.Forge.FsxName.ValueString()
 		} else {
-			dragenInstanceType1 = nil
+			fsxName = nil
+		}
+		fsxSize := new(int)
+		if !r.Config.Forge.FsxSize.IsUnknown() && !r.Config.Forge.FsxSize.IsNull() {
+			*fsxSize = int(r.Config.Forge.FsxSize.ValueInt32())
+		} else {
+			fsxSize = nil
+		}
+		gpuEnabled := new(bool)
+		if !r.Config.Forge.GpuEnabled.IsUnknown() && !r.Config.Forge.GpuEnabled.IsNull() {
+			*gpuEnabled = r.Config.Forge.GpuEnabled.ValueBool()
+		} else {
+			gpuEnabled = nil
+		}
+		imageID := new(string)
+		if !r.Config.Forge.ImageID.IsUnknown() && !r.Config.Forge.ImageID.IsNull() {
+			*imageID = r.Config.Forge.ImageID.ValueString()
+		} else {
+			imageID = nil
+		}
+		instanceTypes := make([]string, 0, len(r.Config.Forge.InstanceTypes))
+		for instanceTypesIndex := range r.Config.Forge.InstanceTypes {
+			instanceTypes = append(instanceTypes, r.Config.Forge.InstanceTypes[instanceTypesIndex].ValueString())
+		}
+		var maxCpus int
+		maxCpus = int(r.Config.Forge.MaxCpus.ValueInt32())
+
+		var minCpus int
+		minCpus = int(r.Config.Forge.MinCpus.ValueInt32())
+
+		securityGroups := make([]string, 0, len(r.Config.Forge.SecurityGroups))
+		for securityGroupsIndex := range r.Config.Forge.SecurityGroups {
+			securityGroups = append(securityGroups, r.Config.Forge.SecurityGroups[securityGroupsIndex].ValueString())
+		}
+		subnets := make([]string, 0, len(r.Config.Forge.Subnets))
+		for subnetsIndex := range r.Config.Forge.Subnets {
+			subnets = append(subnets, r.Config.Forge.Subnets[subnetsIndex].ValueString())
+		}
+		typeVar := shared.ForgeConfigType(r.Config.Forge.Type.ValueString())
+		vpcID := new(string)
+		if !r.Config.Forge.VpcID.IsUnknown() && !r.Config.Forge.VpcID.IsNull() {
+			*vpcID = r.Config.Forge.VpcID.ValueString()
+		} else {
+			vpcID = nil
 		}
 		forge = &shared.ForgeConfig{
-			Type:               typeVar,
-			MinCpus:            minCpus,
-			MaxCpus:            maxCpus,
-			GpuEnabled:         gpuEnabled,
-			EbsAutoScale:       ebsAutoScale,
-			InstanceTypes:      instanceTypes,
 			AllocStrategy:      allocStrategy,
-			ImageID:            imageID,
-			VpcID:              vpcID,
-			Subnets:            subnets,
-			SecurityGroups:     securityGroups,
-			FsxMount:           fsxMount,
-			FsxName:            fsxName,
-			FsxSize:            fsxSize,
-			DisposeOnDeletion:  disposeOnDeletion,
-			Ec2KeyPair:         ec2KeyPair,
 			AllowBuckets:       allowBuckets,
-			EbsBlockSize:       ebsBlockSize,
+			Arm64Enabled:       arm64Enabled,
 			BidPercentage:      bidPercentage,
+			DisposeOnDeletion:  disposeOnDeletion,
+			DragenAmiID:        dragenAmiID,
+			DragenEnabled:      dragenEnabled,
+			DragenInstanceType: dragenInstanceType1,
+			EbsAutoScale:       ebsAutoScale,
+			EbsBlockSize:       ebsBlockSize,
+			EbsBootSize:        ebsBootSize,
+			Ec2KeyPair:         ec2KeyPair,
+			EcsConfig:          ecsConfig,
 			EfsCreate:          efsCreate,
 			EfsID:              efsID,
 			EfsMount:           efsMount,
-			DragenEnabled:      dragenEnabled,
-			DragenAmiID:        dragenAmiID,
-			EbsBootSize:        ebsBootSize,
-			EcsConfig:          ecsConfig,
 			FargateHeadEnabled: fargateHeadEnabled,
-			Arm64Enabled:       arm64Enabled,
-			DragenInstanceType: dragenInstanceType1,
+			FsxMount:           fsxMount,
+			FsxName:            fsxName,
+			FsxSize:            fsxSize,
+			GpuEnabled:         gpuEnabled,
+			ImageID:            imageID,
+			InstanceTypes:      instanceTypes,
+			MaxCpus:            maxCpus,
+			MinCpus:            minCpus,
+			SecurityGroups:     securityGroups,
+			Subnets:            subnets,
+			Type:               typeVar,
+			VpcID:              vpcID,
 		}
 	}
+	enableFusion := new(bool)
+	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
+		*enableFusion = r.Config.EnableFusion.ValueBool()
+	} else {
+		enableFusion = nil
+	}
+	fusionSnapshots := new(bool)
+	if !r.Config.FusionSnapshots.IsUnknown() && !r.Config.FusionSnapshots.IsNull() {
+		*fusionSnapshots = r.Config.FusionSnapshots.ValueBool()
+	} else {
+		fusionSnapshots = nil
+	}
+	headJobCpus := new(int)
+	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
+		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
+	} else {
+		headJobCpus = nil
+	}
+	headJobMemoryMb := new(int)
+	if !r.Config.HeadJobMemoryMb.IsUnknown() && !r.Config.HeadJobMemoryMb.IsNull() {
+		*headJobMemoryMb = int(r.Config.HeadJobMemoryMb.ValueInt32())
+	} else {
+		headJobMemoryMb = nil
+	}
+	headJobRole := new(string)
+	if !r.Config.HeadJobRole.IsUnknown() && !r.Config.HeadJobRole.IsNull() {
+		*headJobRole = r.Config.HeadJobRole.ValueString()
+	} else {
+		headJobRole = nil
+	}
+	headQueue := new(string)
+	if !r.Config.HeadQueue.IsUnknown() && !r.Config.HeadQueue.IsNull() {
+		*headQueue = r.Config.HeadQueue.ValueString()
+	} else {
+		headQueue = nil
+	}
+	logGroup := new(string)
+	if !r.Config.LogGroup.IsUnknown() && !r.Config.LogGroup.IsNull() {
+		*logGroup = r.Config.LogGroup.ValueString()
+	} else {
+		logGroup = nil
+	}
+	lustreID := new(string)
+	if !r.Config.LustreID.IsUnknown() && !r.Config.LustreID.IsNull() {
+		*lustreID = r.Config.LustreID.ValueString()
+	} else {
+		lustreID = nil
+	}
+	nextflowConfig := new(string)
+	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
+		*nextflowConfig = r.Config.NextflowConfig.ValueString()
+	} else {
+		nextflowConfig = nil
+	}
+	nvmeStorageEnabled := new(bool)
+	if !r.Config.NvmeStorageEnabled.IsUnknown() && !r.Config.NvmeStorageEnabled.IsNull() {
+		*nvmeStorageEnabled = r.Config.NvmeStorageEnabled.ValueBool()
+	} else {
+		nvmeStorageEnabled = nil
+	}
+	postRunScript := new(string)
+	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
+		*postRunScript = r.Config.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	preRunScript := new(string)
+	if !r.Config.PreRunScript.IsUnknown() && !r.Config.PreRunScript.IsNull() {
+		*preRunScript = r.Config.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	var region string
+	region = r.Config.Region.ValueString()
+
+	storageType := new(string)
+	if !r.Config.StorageType.IsUnknown() && !r.Config.StorageType.IsNull() {
+		*storageType = r.Config.StorageType.ValueString()
+	} else {
+		storageType = nil
+	}
+	volumes := make([]string, 0, len(r.Config.Volumes))
+	for volumesIndex := range r.Config.Volumes {
+		volumes = append(volumes, r.Config.Volumes[volumesIndex].ValueString())
+	}
+	enableWave := new(bool)
+	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
+		*enableWave = r.Config.EnableWave.ValueBool()
+	} else {
+		enableWave = nil
+	}
+	workDir := new(string)
+	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
+		*workDir = r.Config.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	config := shared.AwsBatchConfig{
-		WorkDir:            workDir,
-		PreRunScript:       preRunScript,
-		PostRunScript:      postRunScript,
-		Environment:        environment,
-		NextflowConfig:     nextflowConfig,
-		StorageType:        storageType,
-		LustreID:           lustreID,
-		Volumes:            volumes,
-		Region:             region,
-		ComputeQueue:       computeQueue,
-		DragenQueue:        dragenQueue,
-		DragenInstanceType: dragenInstanceType,
-		ComputeJobRole:     computeJobRole,
-		ExecutionRole:      executionRole,
-		HeadQueue:          headQueue,
-		HeadJobRole:        headJobRole,
 		CliPath:            cliPath,
+		ComputeJobRole:     computeJobRole,
+		ComputeQueue:       computeQueue,
+		DragenInstanceType: dragenInstanceType,
+		DragenQueue:        dragenQueue,
+		Environment:        environment,
+		ExecutionRole:      executionRole,
+		Forge:              forge,
+		EnableFusion:       enableFusion,
+		FusionSnapshots:    fusionSnapshots,
 		HeadJobCpus:        headJobCpus,
 		HeadJobMemoryMb:    headJobMemoryMb,
-		EnableWave:         enableWave,
-		EnableFusion:       enableFusion,
-		NvmeStorageEnabled: nvmeStorageEnabled,
+		HeadJobRole:        headJobRole,
+		HeadQueue:          headQueue,
 		LogGroup:           logGroup,
-		FusionSnapshots:    fusionSnapshots,
-		Forge:              forge,
+		LustreID:           lustreID,
+		NextflowConfig:     nextflowConfig,
+		NvmeStorageEnabled: nvmeStorageEnabled,
+		PostRunScript:      postRunScript,
+		PreRunScript:       preRunScript,
+		Region:             region,
+		StorageType:        storageType,
+		Volumes:            volumes,
+		EnableWave:         enableWave,
+		WorkDir:            workDir,
 	}
 	out := shared.AWSComputeEnvComputeConfigInput{
 		CredentialsID: credentialsID,

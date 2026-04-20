@@ -3,55 +3,27 @@
 package shared
 
 type OrganizationQuotas struct {
-	MaxWorkspaces               *int64 `json:"maxWorkspaces,omitempty"`
-	MaxMembers                  *int64 `json:"maxMembers,omitempty"`
-	MaxTeams                    *int64 `json:"maxTeams,omitempty"`
-	MaxPipelinesPerWorkspace    *int64 `json:"maxPipelinesPerWorkspace,omitempty"`
-	MaxParticipantsPerWorkspace *int64 `json:"maxParticipantsPerWorkspace,omitempty"`
-	MaxDatasetsPerWorkspace     *int64 `json:"maxDatasetsPerWorkspace,omitempty"`
-	MaxVersionsPerDataset       *int64 `json:"maxVersionsPerDataset,omitempty"`
-	MaxRuns                     *int64 `json:"maxRuns,omitempty"`
-	MaxRunHistory               *int64 `json:"maxRunHistory,omitempty"`
-	MaxLabelsPerWorkspace       *int64 `json:"maxLabelsPerWorkspace,omitempty"`
-	MaxDataStudiosRunning       *int64 `json:"maxDataStudiosRunning,omitempty"`
-	MaxSeqeraComputeComputeEnvs *int64 `json:"maxSeqeraComputeComputeEnvs,omitempty"`
-	MaxFusionThroughputBytes    *int64 `json:"maxFusionThroughputBytes,omitempty"`
 	MaxCustomRolesPerOrg        *int64 `json:"maxCustomRolesPerOrg,omitempty"`
+	MaxDatasetsPerWorkspace     *int64 `json:"maxDatasetsPerWorkspace,omitempty"`
+	MaxDataStudiosRunning       *int64 `json:"maxDataStudiosRunning,omitempty"`
+	MaxFusionThroughputBytes    *int64 `json:"maxFusionThroughputBytes,omitempty"`
+	MaxLabelsPerWorkspace       *int64 `json:"maxLabelsPerWorkspace,omitempty"`
+	MaxMembers                  *int64 `json:"maxMembers,omitempty"`
+	MaxParticipantsPerWorkspace *int64 `json:"maxParticipantsPerWorkspace,omitempty"`
+	MaxPipelinesPerWorkspace    *int64 `json:"maxPipelinesPerWorkspace,omitempty"`
+	MaxRunHistory               *int64 `json:"maxRunHistory,omitempty"`
+	MaxRuns                     *int64 `json:"maxRuns,omitempty"`
+	MaxSeqeraComputeComputeEnvs *int64 `json:"maxSeqeraComputeComputeEnvs,omitempty"`
+	MaxTeams                    *int64 `json:"maxTeams,omitempty"`
+	MaxVersionsPerDataset       *int64 `json:"maxVersionsPerDataset,omitempty"`
+	MaxWorkspaces               *int64 `json:"maxWorkspaces,omitempty"`
 }
 
-func (o *OrganizationQuotas) GetMaxWorkspaces() *int64 {
+func (o *OrganizationQuotas) GetMaxCustomRolesPerOrg() *int64 {
 	if o == nil {
 		return nil
 	}
-	return o.MaxWorkspaces
-}
-
-func (o *OrganizationQuotas) GetMaxMembers() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxMembers
-}
-
-func (o *OrganizationQuotas) GetMaxTeams() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxTeams
-}
-
-func (o *OrganizationQuotas) GetMaxPipelinesPerWorkspace() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxPipelinesPerWorkspace
-}
-
-func (o *OrganizationQuotas) GetMaxParticipantsPerWorkspace() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxParticipantsPerWorkspace
+	return o.MaxCustomRolesPerOrg
 }
 
 func (o *OrganizationQuotas) GetMaxDatasetsPerWorkspace() *int64 {
@@ -61,46 +33,11 @@ func (o *OrganizationQuotas) GetMaxDatasetsPerWorkspace() *int64 {
 	return o.MaxDatasetsPerWorkspace
 }
 
-func (o *OrganizationQuotas) GetMaxVersionsPerDataset() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxVersionsPerDataset
-}
-
-func (o *OrganizationQuotas) GetMaxRuns() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxRuns
-}
-
-func (o *OrganizationQuotas) GetMaxRunHistory() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxRunHistory
-}
-
-func (o *OrganizationQuotas) GetMaxLabelsPerWorkspace() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxLabelsPerWorkspace
-}
-
 func (o *OrganizationQuotas) GetMaxDataStudiosRunning() *int64 {
 	if o == nil {
 		return nil
 	}
 	return o.MaxDataStudiosRunning
-}
-
-func (o *OrganizationQuotas) GetMaxSeqeraComputeComputeEnvs() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.MaxSeqeraComputeComputeEnvs
 }
 
 func (o *OrganizationQuotas) GetMaxFusionThroughputBytes() *int64 {
@@ -110,9 +47,72 @@ func (o *OrganizationQuotas) GetMaxFusionThroughputBytes() *int64 {
 	return o.MaxFusionThroughputBytes
 }
 
-func (o *OrganizationQuotas) GetMaxCustomRolesPerOrg() *int64 {
+func (o *OrganizationQuotas) GetMaxLabelsPerWorkspace() *int64 {
 	if o == nil {
 		return nil
 	}
-	return o.MaxCustomRolesPerOrg
+	return o.MaxLabelsPerWorkspace
+}
+
+func (o *OrganizationQuotas) GetMaxMembers() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxMembers
+}
+
+func (o *OrganizationQuotas) GetMaxParticipantsPerWorkspace() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxParticipantsPerWorkspace
+}
+
+func (o *OrganizationQuotas) GetMaxPipelinesPerWorkspace() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxPipelinesPerWorkspace
+}
+
+func (o *OrganizationQuotas) GetMaxRunHistory() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxRunHistory
+}
+
+func (o *OrganizationQuotas) GetMaxRuns() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxRuns
+}
+
+func (o *OrganizationQuotas) GetMaxSeqeraComputeComputeEnvs() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxSeqeraComputeComputeEnvs
+}
+
+func (o *OrganizationQuotas) GetMaxTeams() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxTeams
+}
+
+func (o *OrganizationQuotas) GetMaxVersionsPerDataset() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxVersionsPerDataset
+}
+
+func (o *OrganizationQuotas) GetMaxWorkspaces() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxWorkspaces
 }

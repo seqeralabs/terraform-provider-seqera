@@ -3,10 +3,24 @@
 package shared
 
 type UserInfo struct {
+	Avatar   *string `json:"avatar,omitempty"`
+	Email    *string `json:"email,omitempty"`
 	ID       *int64  `json:"id,omitempty"`
 	UserName *string `json:"userName,omitempty"`
-	Email    *string `json:"email,omitempty"`
-	Avatar   *string `json:"avatar,omitempty"`
+}
+
+func (u *UserInfo) GetAvatar() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Avatar
+}
+
+func (u *UserInfo) GetEmail() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Email
 }
 
 func (u *UserInfo) GetID() *int64 {
@@ -21,18 +35,4 @@ func (u *UserInfo) GetUserName() *string {
 		return nil
 	}
 	return u.UserName
-}
-
-func (u *UserInfo) GetEmail() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Email
-}
-
-func (u *UserInfo) GetAvatar() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Avatar
 }

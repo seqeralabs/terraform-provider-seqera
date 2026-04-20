@@ -11,56 +11,56 @@ import (
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
 type WorkflowMaxDbDto struct {
-	// Unique identifier for the workflow execution
-	ID *string `json:"id,omitempty"`
-	// Numeric identifier of the user who owns this workflow
-	OwnerID *int64 `json:"ownerId,omitempty"`
-	// Timestamp when the workflow was submitted for execution
-	Submit *time.Time `json:"submit,omitempty"`
-	// Timestamp when the workflow execution actually started
-	Start *time.Time `json:"start,omitempty"`
-	// Timestamp when the workflow execution completed
-	Complete    *time.Time `json:"complete,omitempty"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Run name
-	RunName *string `json:"runName,omitempty"`
-	// Session ID
-	SessionID *string `json:"sessionId,omitempty"`
-	// Profile
-	Profile *string `json:"profile,omitempty"`
-	// Work directory
-	WorkDir *string `json:"workDir,omitempty"`
-	// Revision
-	Revision *string `json:"revision,omitempty"`
 	// Command line
 	CommandLine *string `json:"commandLine,omitempty"`
-	// Project name
-	ProjectName *string `json:"projectName,omitempty"`
-	// Script name
-	ScriptName *string `json:"scriptName,omitempty"`
-	// Launch ID
-	LaunchID *string         `json:"launchId,omitempty"`
-	Status   *WorkflowStatus `json:"status,omitempty"`
-	// Requires attention flag
-	RequiresAttention *bool `json:"requiresAttention,omitempty"`
+	// Timestamp when the workflow execution completed
+	Complete *time.Time `json:"complete,omitempty"`
 	// Config files (can be null)
 	ConfigFiles []string `json:"configFiles,omitempty"`
-	// Workflow parameters (can be null)
-	Params map[string]any `json:"params,omitempty"`
 	// Config text
-	ConfigText *string `json:"configText,omitempty"`
+	ConfigText  *string    `json:"configText,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Whether the workflow is deleted
 	Deleted *bool `json:"deleted,omitempty"`
+	// Unique identifier for the workflow execution
+	ID          *string    `json:"id,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Launch ID
+	LaunchID *string `json:"launchId,omitempty"`
+	// Numeric identifier of the user who owns this workflow
+	OwnerID *int64 `json:"ownerId,omitempty"`
+	// Workflow parameters (can be null)
+	Params map[string]any `json:"params,omitempty"`
+	// Profile
+	Profile *string `json:"profile,omitempty"`
+	// Project name
+	ProjectName *string `json:"projectName,omitempty"`
 	// Repository
 	Repository *string `json:"repository,omitempty"`
+	// Requires attention flag
+	RequiresAttention *bool `json:"requiresAttention,omitempty"`
 	// Resume flag
-	Resume      *bool         `json:"resume,omitempty"`
+	Resume *bool `json:"resume,omitempty"`
+	// Revision
+	Revision *string `json:"revision,omitempty"`
+	// Run name
+	RunName *string `json:"runName,omitempty"`
+	// Script name
+	ScriptName *string `json:"scriptName,omitempty"`
+	// Session ID
+	SessionID *string `json:"sessionId,omitempty"`
+	// Timestamp when the workflow execution actually started
+	Start  *time.Time      `json:"start,omitempty"`
+	Status *WorkflowStatus `json:"status,omitempty"`
+	// Timestamp when the workflow was submitted for execution
+	Submit *time.Time `json:"submit,omitempty"`
+	// Work directory
+	WorkDir     *string       `json:"workDir,omitempty"`
 	Fusion      *WfFusionMeta `json:"fusion,omitempty"`
-	Wave        *WfWaveMeta   `json:"wave,omitempty"`
 	LogFile     *string       `json:"logFile,omitempty"`
-	OutFile     *string       `json:"outFile,omitempty"`
 	OperationID *string       `json:"operationId,omitempty"`
+	OutFile     *string       `json:"outFile,omitempty"`
+	Wave        *WfWaveMeta   `json:"wave,omitempty"`
 }
 
 func (w WorkflowMaxDbDto) MarshalJSON() ([]byte, error) {
@@ -74,32 +74,11 @@ func (w *WorkflowMaxDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WorkflowMaxDbDto) GetID() *string {
+func (w *WorkflowMaxDbDto) GetCommandLine() *string {
 	if w == nil {
 		return nil
 	}
-	return w.ID
-}
-
-func (w *WorkflowMaxDbDto) GetOwnerID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.OwnerID
-}
-
-func (w *WorkflowMaxDbDto) GetSubmit() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.Submit
-}
-
-func (w *WorkflowMaxDbDto) GetStart() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.Start
+	return w.CommandLine
 }
 
 func (w *WorkflowMaxDbDto) GetComplete() *time.Time {
@@ -109,109 +88,11 @@ func (w *WorkflowMaxDbDto) GetComplete() *time.Time {
 	return w.Complete
 }
 
-func (w *WorkflowMaxDbDto) GetDateCreated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.DateCreated
-}
-
-func (w *WorkflowMaxDbDto) GetLastUpdated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.LastUpdated
-}
-
-func (w *WorkflowMaxDbDto) GetRunName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.RunName
-}
-
-func (w *WorkflowMaxDbDto) GetSessionID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.SessionID
-}
-
-func (w *WorkflowMaxDbDto) GetProfile() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Profile
-}
-
-func (w *WorkflowMaxDbDto) GetWorkDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.WorkDir
-}
-
-func (w *WorkflowMaxDbDto) GetRevision() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Revision
-}
-
-func (w *WorkflowMaxDbDto) GetCommandLine() *string {
-	if w == nil {
-		return nil
-	}
-	return w.CommandLine
-}
-
-func (w *WorkflowMaxDbDto) GetProjectName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ProjectName
-}
-
-func (w *WorkflowMaxDbDto) GetScriptName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptName
-}
-
-func (w *WorkflowMaxDbDto) GetLaunchID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.LaunchID
-}
-
-func (w *WorkflowMaxDbDto) GetStatus() *WorkflowStatus {
-	if w == nil {
-		return nil
-	}
-	return w.Status
-}
-
-func (w *WorkflowMaxDbDto) GetRequiresAttention() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.RequiresAttention
-}
-
 func (w *WorkflowMaxDbDto) GetConfigFiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigFiles
-}
-
-func (w *WorkflowMaxDbDto) GetParams() map[string]any {
-	if w == nil {
-		return nil
-	}
-	return w.Params
 }
 
 func (w *WorkflowMaxDbDto) GetConfigText() *string {
@@ -221,11 +102,67 @@ func (w *WorkflowMaxDbDto) GetConfigText() *string {
 	return w.ConfigText
 }
 
+func (w *WorkflowMaxDbDto) GetDateCreated() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.DateCreated
+}
+
 func (w *WorkflowMaxDbDto) GetDeleted() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Deleted
+}
+
+func (w *WorkflowMaxDbDto) GetID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ID
+}
+
+func (w *WorkflowMaxDbDto) GetLastUpdated() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.LastUpdated
+}
+
+func (w *WorkflowMaxDbDto) GetLaunchID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchID
+}
+
+func (w *WorkflowMaxDbDto) GetOwnerID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.OwnerID
+}
+
+func (w *WorkflowMaxDbDto) GetParams() map[string]any {
+	if w == nil {
+		return nil
+	}
+	return w.Params
+}
+
+func (w *WorkflowMaxDbDto) GetProfile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Profile
+}
+
+func (w *WorkflowMaxDbDto) GetProjectName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ProjectName
 }
 
 func (w *WorkflowMaxDbDto) GetRepository() *string {
@@ -235,11 +172,74 @@ func (w *WorkflowMaxDbDto) GetRepository() *string {
 	return w.Repository
 }
 
+func (w *WorkflowMaxDbDto) GetRequiresAttention() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.RequiresAttention
+}
+
 func (w *WorkflowMaxDbDto) GetResume() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Resume
+}
+
+func (w *WorkflowMaxDbDto) GetRevision() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Revision
+}
+
+func (w *WorkflowMaxDbDto) GetRunName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.RunName
+}
+
+func (w *WorkflowMaxDbDto) GetScriptName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptName
+}
+
+func (w *WorkflowMaxDbDto) GetSessionID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SessionID
+}
+
+func (w *WorkflowMaxDbDto) GetStart() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.Start
+}
+
+func (w *WorkflowMaxDbDto) GetStatus() *WorkflowStatus {
+	if w == nil {
+		return nil
+	}
+	return w.Status
+}
+
+func (w *WorkflowMaxDbDto) GetSubmit() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.Submit
+}
+
+func (w *WorkflowMaxDbDto) GetWorkDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.WorkDir
 }
 
 func (w *WorkflowMaxDbDto) GetFusion() *WfFusionMeta {
@@ -249,18 +249,18 @@ func (w *WorkflowMaxDbDto) GetFusion() *WfFusionMeta {
 	return w.Fusion
 }
 
-func (w *WorkflowMaxDbDto) GetWave() *WfWaveMeta {
-	if w == nil {
-		return nil
-	}
-	return w.Wave
-}
-
 func (w *WorkflowMaxDbDto) GetLogFile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.LogFile
+}
+
+func (w *WorkflowMaxDbDto) GetOperationID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.OperationID
 }
 
 func (w *WorkflowMaxDbDto) GetOutFile() *string {
@@ -270,9 +270,9 @@ func (w *WorkflowMaxDbDto) GetOutFile() *string {
 	return w.OutFile
 }
 
-func (w *WorkflowMaxDbDto) GetOperationID() *string {
+func (w *WorkflowMaxDbDto) GetWave() *WfWaveMeta {
 	if w == nil {
 		return nil
 	}
-	return w.OperationID
+	return w.Wave
 }

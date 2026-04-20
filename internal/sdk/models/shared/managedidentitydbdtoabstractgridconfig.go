@@ -43,10 +43,17 @@ func (e *ManagedIdentityDbDtoAbstractGridConfigPlatform) UnmarshalJSON(data []by
 }
 
 type ManagedIdentityDbDtoAbstractGridConfig struct {
+	Config   *AbstractGridConfig                             `json:"config,omitempty"`
 	ID       *int64                                          `json:"id,omitempty"`
 	Name     *string                                         `json:"name,omitempty"`
 	Platform *ManagedIdentityDbDtoAbstractGridConfigPlatform `json:"platform,omitempty"`
-	Config   *AbstractGridConfig                             `json:"config,omitempty"`
+}
+
+func (m *ManagedIdentityDbDtoAbstractGridConfig) GetConfig() *AbstractGridConfig {
+	if m == nil {
+		return nil
+	}
+	return m.Config
 }
 
 func (m *ManagedIdentityDbDtoAbstractGridConfig) GetID() *int64 {
@@ -68,11 +75,4 @@ func (m *ManagedIdentityDbDtoAbstractGridConfig) GetPlatform() *ManagedIdentityD
 		return nil
 	}
 	return m.Platform
-}
-
-func (m *ManagedIdentityDbDtoAbstractGridConfig) GetConfig() *AbstractGridConfig {
-	if m == nil {
-		return nil
-	}
-	return m.Config
 }

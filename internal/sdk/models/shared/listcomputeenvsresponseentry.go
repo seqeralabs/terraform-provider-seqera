@@ -9,11 +9,11 @@ import (
 
 type ListComputeEnvsResponseEntryResources struct {
 	Cpus           *int     `json:"cpus,omitempty"`
-	Memory         *int     `json:"memory,omitempty"`
-	Gpus           *int     `json:"gpus,omitempty"`
 	DiskSize       *int     `json:"diskSize,omitempty"`
 	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	Gpus           *int     `json:"gpus,omitempty"`
 	InstanceType   *string  `json:"instanceType,omitempty"`
+	Memory         *int     `json:"memory,omitempty"`
 }
 
 func (l *ListComputeEnvsResponseEntryResources) GetCpus() *int {
@@ -21,20 +21,6 @@ func (l *ListComputeEnvsResponseEntryResources) GetCpus() *int {
 		return nil
 	}
 	return l.Cpus
-}
-
-func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
-	if l == nil {
-		return nil
-	}
-	return l.Memory
-}
-
-func (l *ListComputeEnvsResponseEntryResources) GetGpus() *int {
-	if l == nil {
-		return nil
-	}
-	return l.Gpus
 }
 
 func (l *ListComputeEnvsResponseEntryResources) GetDiskSize() *int {
@@ -51,6 +37,13 @@ func (l *ListComputeEnvsResponseEntryResources) GetEstimatedPrice() *float32 {
 	return l.EstimatedPrice
 }
 
+func (l *ListComputeEnvsResponseEntryResources) GetGpus() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Gpus
+}
+
 func (l *ListComputeEnvsResponseEntryResources) GetInstanceType() *string {
 	if l == nil {
 		return nil
@@ -58,21 +51,28 @@ func (l *ListComputeEnvsResponseEntryResources) GetInstanceType() *string {
 	return l.InstanceType
 }
 
+func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Memory
+}
+
 type ListComputeEnvsResponseEntry struct {
+	CredentialsID *string                                `json:"credentialsId,omitempty"`
 	ID            *string                                `json:"id,omitempty"`
+	Labels        []LabelDbDto                           `json:"labels,omitempty"`
+	LastUsed      *time.Time                             `json:"lastUsed,omitempty"`
+	Message       *string                                `json:"message,omitempty"`
 	Name          *string                                `json:"name,omitempty"`
 	Platform      *string                                `json:"platform,omitempty"`
-	Status        *ComputeEnvStatus                      `json:"status,omitempty"`
-	Message       *string                                `json:"message,omitempty"`
-	LastUsed      *time.Time                             `json:"lastUsed,omitempty"`
 	Primary       *bool                                  `json:"primary,omitempty"`
-	WorkspaceName *string                                `json:"workspaceName,omitempty"`
+	Region        *string                                `json:"region,omitempty"`
+	Resources     *ListComputeEnvsResponseEntryResources `json:"resources,omitempty"`
+	Status        *ComputeEnvStatus                      `json:"status,omitempty"`
 	Visibility    *string                                `json:"visibility,omitempty"`
 	WorkDir       *string                                `json:"workDir,omitempty"`
-	CredentialsID *string                                `json:"credentialsId,omitempty"`
-	Region        *string                                `json:"region,omitempty"`
-	Labels        []LabelDbDto                           `json:"labels,omitempty"`
-	Resources     *ListComputeEnvsResponseEntryResources `json:"resources,omitempty"`
+	WorkspaceName *string                                `json:"workspaceName,omitempty"`
 }
 
 func (l ListComputeEnvsResponseEntry) MarshalJSON() ([]byte, error) {
@@ -86,11 +86,39 @@ func (l *ListComputeEnvsResponseEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListComputeEnvsResponseEntry) GetCredentialsID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CredentialsID
+}
+
 func (l *ListComputeEnvsResponseEntry) GetID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ID
+}
+
+func (l *ListComputeEnvsResponseEntry) GetLabels() []LabelDbDto {
+	if l == nil {
+		return nil
+	}
+	return l.Labels
+}
+
+func (l *ListComputeEnvsResponseEntry) GetLastUsed() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.LastUsed
+}
+
+func (l *ListComputeEnvsResponseEntry) GetMessage() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Message
 }
 
 func (l *ListComputeEnvsResponseEntry) GetName() *string {
@@ -107,27 +135,6 @@ func (l *ListComputeEnvsResponseEntry) GetPlatform() *string {
 	return l.Platform
 }
 
-func (l *ListComputeEnvsResponseEntry) GetStatus() *ComputeEnvStatus {
-	if l == nil {
-		return nil
-	}
-	return l.Status
-}
-
-func (l *ListComputeEnvsResponseEntry) GetMessage() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Message
-}
-
-func (l *ListComputeEnvsResponseEntry) GetLastUsed() *time.Time {
-	if l == nil {
-		return nil
-	}
-	return l.LastUsed
-}
-
 func (l *ListComputeEnvsResponseEntry) GetPrimary() *bool {
 	if l == nil {
 		return nil
@@ -135,11 +142,25 @@ func (l *ListComputeEnvsResponseEntry) GetPrimary() *bool {
 	return l.Primary
 }
 
-func (l *ListComputeEnvsResponseEntry) GetWorkspaceName() *string {
+func (l *ListComputeEnvsResponseEntry) GetRegion() *string {
 	if l == nil {
 		return nil
 	}
-	return l.WorkspaceName
+	return l.Region
+}
+
+func (l *ListComputeEnvsResponseEntry) GetResources() *ListComputeEnvsResponseEntryResources {
+	if l == nil {
+		return nil
+	}
+	return l.Resources
+}
+
+func (l *ListComputeEnvsResponseEntry) GetStatus() *ComputeEnvStatus {
+	if l == nil {
+		return nil
+	}
+	return l.Status
 }
 
 func (l *ListComputeEnvsResponseEntry) GetVisibility() *string {
@@ -156,30 +177,9 @@ func (l *ListComputeEnvsResponseEntry) GetWorkDir() *string {
 	return l.WorkDir
 }
 
-func (l *ListComputeEnvsResponseEntry) GetCredentialsID() *string {
+func (l *ListComputeEnvsResponseEntry) GetWorkspaceName() *string {
 	if l == nil {
 		return nil
 	}
-	return l.CredentialsID
-}
-
-func (l *ListComputeEnvsResponseEntry) GetRegion() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Region
-}
-
-func (l *ListComputeEnvsResponseEntry) GetLabels() []LabelDbDto {
-	if l == nil {
-		return nil
-	}
-	return l.Labels
-}
-
-func (l *ListComputeEnvsResponseEntry) GetResources() *ListComputeEnvsResponseEntryResources {
-	if l == nil {
-		return nil
-	}
-	return l.Resources
+	return l.WorkspaceName
 }

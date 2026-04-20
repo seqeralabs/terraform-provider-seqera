@@ -3,15 +3,8 @@
 package shared
 
 type RunListResponse struct {
-	Runs          []RunStatus `json:"runs,omitempty"`
 	NextPageToken *string     `json:"next_page_token,omitempty"`
-}
-
-func (r *RunListResponse) GetRuns() []RunStatus {
-	if r == nil {
-		return nil
-	}
-	return r.Runs
+	Runs          []RunStatus `json:"runs,omitempty"`
 }
 
 func (r *RunListResponse) GetNextPageToken() *string {
@@ -19,4 +12,11 @@ func (r *RunListResponse) GetNextPageToken() *string {
 		return nil
 	}
 	return r.NextPageToken
+}
+
+func (r *RunListResponse) GetRuns() []RunStatus {
+	if r == nil {
+		return nil
+	}
+	return r.Runs
 }

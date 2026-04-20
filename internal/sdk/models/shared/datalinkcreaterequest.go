@@ -3,20 +3,20 @@
 package shared
 
 type DataLinkCreateRequest struct {
-	Name             string       `json:"name"`
-	Description      string       `json:"description"`
-	Type             DataLinkType `json:"type"`
-	ProviderType     ProviderType `json:"provider"`
-	ResourceRef      string       `json:"resourceRef"`
-	PublicAccessible bool         `json:"publicAccessible"`
 	CredentialsID    *string      `json:"credentialsId,omitempty"`
+	Description      string       `json:"description"`
+	Name             string       `json:"name"`
+	ProviderType     ProviderType `json:"provider"`
+	PublicAccessible bool         `json:"publicAccessible"`
+	ResourceRef      string       `json:"resourceRef"`
+	Type             DataLinkType `json:"type"`
 }
 
-func (d *DataLinkCreateRequest) GetName() string {
+func (d *DataLinkCreateRequest) GetCredentialsID() *string {
 	if d == nil {
-		return ""
+		return nil
 	}
-	return d.Name
+	return d.CredentialsID
 }
 
 func (d *DataLinkCreateRequest) GetDescription() string {
@@ -26,11 +26,11 @@ func (d *DataLinkCreateRequest) GetDescription() string {
 	return d.Description
 }
 
-func (d *DataLinkCreateRequest) GetType() DataLinkType {
+func (d *DataLinkCreateRequest) GetName() string {
 	if d == nil {
-		return DataLinkType("")
+		return ""
 	}
-	return d.Type
+	return d.Name
 }
 
 func (d *DataLinkCreateRequest) GetProviderType() ProviderType {
@@ -40,13 +40,6 @@ func (d *DataLinkCreateRequest) GetProviderType() ProviderType {
 	return d.ProviderType
 }
 
-func (d *DataLinkCreateRequest) GetResourceRef() string {
-	if d == nil {
-		return ""
-	}
-	return d.ResourceRef
-}
-
 func (d *DataLinkCreateRequest) GetPublicAccessible() bool {
 	if d == nil {
 		return false
@@ -54,9 +47,16 @@ func (d *DataLinkCreateRequest) GetPublicAccessible() bool {
 	return d.PublicAccessible
 }
 
-func (d *DataLinkCreateRequest) GetCredentialsID() *string {
+func (d *DataLinkCreateRequest) GetResourceRef() string {
 	if d == nil {
-		return nil
+		return ""
 	}
-	return d.CredentialsID
+	return d.ResourceRef
+}
+
+func (d *DataLinkCreateRequest) GetType() DataLinkType {
+	if d == nil {
+		return DataLinkType("")
+	}
+	return d.Type
 }

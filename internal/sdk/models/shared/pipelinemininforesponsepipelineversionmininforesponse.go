@@ -8,13 +8,13 @@ import (
 )
 
 type PipelineMinInfoResponsePipelineVersionMinInfoResponse struct {
-	ID             *string    `json:"id,omitempty"`
-	Name           *string    `json:"name,omitempty"`
 	DateCreated    *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated    *time.Time `json:"lastUpdated,omitempty"`
 	Hash           *string    `json:"hash,omitempty"`
+	ID             *string    `json:"id,omitempty"`
 	IsDefault      *bool      `json:"isDefault,omitempty"`
 	IsDraftVersion *bool      `json:"isDraftVersion,omitempty"`
+	LastUpdated    *time.Time `json:"lastUpdated,omitempty"`
+	Name           *string    `json:"name,omitempty"`
 }
 
 func (p PipelineMinInfoResponsePipelineVersionMinInfoResponse) MarshalJSON() ([]byte, error) {
@@ -28,20 +28,6 @@ func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) UnmarshalJSON(da
 	return nil
 }
 
-func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetID() *string {
-	if p == nil {
-		return nil
-	}
-	return p.ID
-}
-
-func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.Name
-}
-
 func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetDateCreated() *time.Time {
 	if p == nil {
 		return nil
@@ -49,18 +35,18 @@ func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetDateCreated()
 	return p.DateCreated
 }
 
-func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetLastUpdated() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.LastUpdated
-}
-
 func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetHash() *string {
 	if p == nil {
 		return nil
 	}
 	return p.Hash
+}
+
+func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }
 
 func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetIsDefault() *bool {
@@ -75,4 +61,18 @@ func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetIsDraftVersio
 		return nil
 	}
 	return p.IsDraftVersion
+}
+
+func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetLastUpdated() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUpdated
+}
+
+func (p *PipelineMinInfoResponsePipelineVersionMinInfoResponse) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
 }

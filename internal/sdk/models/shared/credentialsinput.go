@@ -79,47 +79,19 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 // Contains authentication information for accessing cloud providers, Git repositories,
 // and other external services within the Seqera Platform.
 type CredentialsInput struct {
-	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
-	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
-	ProviderType CredentialsProviderType `json:"provider"`
 	// Base URL for the credential provider
 	BaseURL *string `json:"baseUrl,omitempty"`
 	// Credentials category
-	Category *string      `json:"category,omitempty"`
-	Keys     SecurityKeys `json:"keys"`
-}
-
-func (c *CredentialsInput) GetID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ID
-}
-
-func (c *CredentialsInput) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CredentialsInput) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *CredentialsInput) GetProviderType() CredentialsProviderType {
-	if c == nil {
-		return CredentialsProviderType("")
-	}
-	return c.ProviderType
+	Category *string `json:"category,omitempty"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Unique identifier for the credential (max 22 characters)
+	ID   *string      `json:"id,omitempty"`
+	Keys SecurityKeys `json:"keys"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
+	ProviderType CredentialsProviderType `json:"provider"`
 }
 
 func (c *CredentialsInput) GetBaseURL() *string {
@@ -134,6 +106,20 @@ func (c *CredentialsInput) GetCategory() *string {
 		return nil
 	}
 	return c.Category
+}
+
+func (c *CredentialsInput) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *CredentialsInput) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *CredentialsInput) GetKeys() SecurityKeys {
@@ -215,30 +201,44 @@ func (c *CredentialsInput) GetKeysAzure() *AzureCredentials {
 	return c.GetKeys().AzureCredentials
 }
 
+func (c *CredentialsInput) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CredentialsInput) GetProviderType() CredentialsProviderType {
+	if c == nil {
+		return CredentialsProviderType("")
+	}
+	return c.ProviderType
+}
+
 // CredentialsOutput - Represents credentials used for authentication with various platforms and services.
 // Contains authentication information for accessing cloud providers, Git repositories,
 // and other external services within the Seqera Platform.
 type CredentialsOutput struct {
-	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
-	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
-	ProviderType CredentialsProviderType `json:"provider"`
 	// Base URL for the credential provider
 	BaseURL *string `json:"baseUrl,omitempty"`
 	// Credentials category
 	Category *string `json:"category,omitempty"`
+	// Timestamp when the credential was created
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Unique identifier for the credential (max 22 characters)
+	ID          *string            `json:"id,omitempty"`
+	Keys        SecurityKeysOutput `json:"keys"`
+	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
 	// Timestamp when the credential was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
-	// Timestamp when the credential was created
-	DateCreated *time.Time         `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
-	Keys        SecurityKeysOutput `json:"keys"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
+	ProviderType CredentialsProviderType `json:"provider"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -250,34 +250,6 @@ func (c *CredentialsOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (c *CredentialsOutput) GetID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ID
-}
-
-func (c *CredentialsOutput) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *CredentialsOutput) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *CredentialsOutput) GetProviderType() CredentialsProviderType {
-	if c == nil {
-		return CredentialsProviderType("")
-	}
-	return c.ProviderType
 }
 
 func (c *CredentialsOutput) GetBaseURL() *string {
@@ -294,20 +266,6 @@ func (c *CredentialsOutput) GetCategory() *string {
 	return c.Category
 }
 
-func (c *CredentialsOutput) GetDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.Deleted
-}
-
-func (c *CredentialsOutput) GetLastUsed() *time.Time {
-	if c == nil {
-		return nil
-	}
-	return c.LastUsed
-}
-
 func (c *CredentialsOutput) GetDateCreated() *time.Time {
 	if c == nil {
 		return nil
@@ -315,11 +273,25 @@ func (c *CredentialsOutput) GetDateCreated() *time.Time {
 	return c.DateCreated
 }
 
-func (c *CredentialsOutput) GetLastUpdated() *time.Time {
+func (c *CredentialsOutput) GetDeleted() *bool {
 	if c == nil {
 		return nil
 	}
-	return c.LastUpdated
+	return c.Deleted
+}
+
+func (c *CredentialsOutput) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *CredentialsOutput) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *CredentialsOutput) GetKeys() SecurityKeysOutput {
@@ -399,4 +371,32 @@ func (c *CredentialsOutput) GetKeysAws() *AWSCredentialsOutput {
 
 func (c *CredentialsOutput) GetKeysAzure() *AzureCredentialsOutput {
 	return c.GetKeys().AzureCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetLastUpdated() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.LastUpdated
+}
+
+func (c *CredentialsOutput) GetLastUsed() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.LastUsed
+}
+
+func (c *CredentialsOutput) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *CredentialsOutput) GetProviderType() CredentialsProviderType {
+	if c == nil {
+		return CredentialsProviderType("")
+	}
+	return c.ProviderType
 }

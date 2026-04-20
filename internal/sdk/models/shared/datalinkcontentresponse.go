@@ -3,16 +3,16 @@
 package shared
 
 type DataLinkContentResponse struct {
-	OriginalPath  *string        `json:"originalPath,omitempty"`
-	Objects       []DataLinkItem `json:"objects,omitempty"`
 	NextPageToken *string        `json:"nextPageToken,omitempty"`
+	Objects       []DataLinkItem `json:"objects,omitempty"`
+	OriginalPath  *string        `json:"originalPath,omitempty"`
 }
 
-func (d *DataLinkContentResponse) GetOriginalPath() *string {
+func (d *DataLinkContentResponse) GetNextPageToken() *string {
 	if d == nil {
 		return nil
 	}
-	return d.OriginalPath
+	return d.NextPageToken
 }
 
 func (d *DataLinkContentResponse) GetObjects() []DataLinkItem {
@@ -22,9 +22,9 @@ func (d *DataLinkContentResponse) GetObjects() []DataLinkItem {
 	return d.Objects
 }
 
-func (d *DataLinkContentResponse) GetNextPageToken() *string {
+func (d *DataLinkContentResponse) GetOriginalPath() *string {
 	if d == nil {
 		return nil
 	}
-	return d.NextPageToken
+	return d.OriginalPath
 }

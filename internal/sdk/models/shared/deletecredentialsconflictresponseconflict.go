@@ -3,17 +3,10 @@
 package shared
 
 type DeleteCredentialsConflictResponseConflict struct {
-	Type *string `json:"type,omitempty"`
 	ID   *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
+	Type *string `json:"type,omitempty"`
 	URL  *string `json:"url,omitempty"`
-}
-
-func (d *DeleteCredentialsConflictResponseConflict) GetType() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Type
 }
 
 func (d *DeleteCredentialsConflictResponseConflict) GetID() *string {
@@ -28,6 +21,13 @@ func (d *DeleteCredentialsConflictResponseConflict) GetName() *string {
 		return nil
 	}
 	return d.Name
+}
+
+func (d *DeleteCredentialsConflictResponseConflict) GetType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Type
 }
 
 func (d *DeleteCredentialsConflictResponseConflict) GetURL() *string {

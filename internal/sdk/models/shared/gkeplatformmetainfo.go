@@ -7,10 +7,10 @@ import (
 )
 
 type GkePlatformMetaInfo struct {
+	Clusters []string `json:"clusters,omitempty"`
 	// property to select the platform metainfo type
 	Discriminator *string  `json:"discriminator,omitempty"`
 	Warnings      []string `json:"warnings,omitempty"`
-	Clusters      []string `json:"clusters,omitempty"`
 }
 
 func (g GkePlatformMetaInfo) MarshalJSON() ([]byte, error) {
@@ -22,6 +22,13 @@ func (g *GkePlatformMetaInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (g *GkePlatformMetaInfo) GetClusters() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Clusters
 }
 
 func (g *GkePlatformMetaInfo) GetDiscriminator() *string {
@@ -36,11 +43,4 @@ func (g *GkePlatformMetaInfo) GetWarnings() []string {
 		return nil
 	}
 	return g.Warnings
-}
-
-func (g *GkePlatformMetaInfo) GetClusters() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Clusters
 }

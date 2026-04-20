@@ -4,8 +4,8 @@ package shared
 
 type PipelineMinInfoResponse struct {
 	ID          *int64                                                 `json:"id,omitempty"`
-	WorkspaceID *int64                                                 `json:"workspaceId,omitempty"`
 	Version     *PipelineMinInfoResponsePipelineVersionMinInfoResponse `json:"version,omitempty"`
+	WorkspaceID *int64                                                 `json:"workspaceId,omitempty"`
 }
 
 func (p *PipelineMinInfoResponse) GetID() *int64 {
@@ -15,16 +15,16 @@ func (p *PipelineMinInfoResponse) GetID() *int64 {
 	return p.ID
 }
 
-func (p *PipelineMinInfoResponse) GetWorkspaceID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.WorkspaceID
-}
-
 func (p *PipelineMinInfoResponse) GetVersion() *PipelineMinInfoResponsePipelineVersionMinInfoResponse {
 	if p == nil {
 		return nil
 	}
 	return p.Version
+}
+
+func (p *PipelineMinInfoResponse) GetWorkspaceID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.WorkspaceID
 }

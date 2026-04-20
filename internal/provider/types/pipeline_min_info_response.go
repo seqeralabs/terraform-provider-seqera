@@ -8,6 +8,6 @@ import (
 
 type PipelineMinInfoResponse struct {
 	ID          types.Int64                                            `tfsdk:"id"`
-	WorkspaceID types.Int64                                            `tfsdk:"workspace_id"`
 	Version     *PipelineMinInfoResponsePipelineVersionMinInfoResponse `tfsdk:"version"`
+	WorkspaceID types.Int64                                            `tfsdk:"workspace_id"`
 }

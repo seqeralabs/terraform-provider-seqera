@@ -3,12 +3,19 @@
 package shared
 
 type UpdateLabelRequest struct {
+	// Whether this label is automatically applied to new resources. Can only be true when resource=true.
+	IsDefault *bool `json:"isDefault,omitempty"`
 	// Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'
 	Name *string `json:"name,omitempty"`
 	// Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'
 	Value *string `json:"value,omitempty"`
-	// Whether this label is automatically applied to new resources. Can only be true when resource=true.
-	IsDefault *bool `json:"isDefault,omitempty"`
+}
+
+func (u *UpdateLabelRequest) GetIsDefault() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.IsDefault
 }
 
 func (u *UpdateLabelRequest) GetName() *string {
@@ -23,11 +30,4 @@ func (u *UpdateLabelRequest) GetValue() *string {
 		return nil
 	}
 	return u.Value
-}
-
-func (u *UpdateLabelRequest) GetIsDefault() *bool {
-	if u == nil {
-		return nil
-	}
-	return u.IsDefault
 }

@@ -8,19 +8,19 @@ import (
 )
 
 type ListActionsResponseActionInfo struct {
-	ID   *string `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
+	DateCreated *time.Time       `json:"dateCreated,omitempty"`
+	Endpoint    *string          `json:"endpoint,omitempty"`
+	Event       *ActionEventType `json:"event,omitempty"`
+	ID          *string          `json:"id,omitempty"`
+	Labels      []LabelDbDto     `json:"labels,omitempty"`
+	// Last seen timestamp (null if never seen)
+	LastSeen *time.Time `json:"lastSeen,omitempty"`
+	Name     *string    `json:"name,omitempty"`
 	// Pipeline name
 	Pipeline *string       `json:"pipeline,omitempty"`
 	Source   *ActionSource `json:"source,omitempty"`
 	Status   *ActionStatus `json:"status,omitempty"`
-	// Last seen timestamp (null if never seen)
-	LastSeen    *time.Time       `json:"lastSeen,omitempty"`
-	DateCreated *time.Time       `json:"dateCreated,omitempty"`
-	Event       *ActionEventType `json:"event,omitempty"`
-	Endpoint    *string          `json:"endpoint,omitempty"`
-	Labels      []LabelDbDto     `json:"labels,omitempty"`
-	UsageCmd    *string          `json:"usageCmd,omitempty"`
+	UsageCmd *string       `json:"usageCmd,omitempty"`
 }
 
 func (l ListActionsResponseActionInfo) MarshalJSON() ([]byte, error) {
@@ -34,11 +34,60 @@ func (l *ListActionsResponseActionInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (l *ListActionsResponseActionInfo) GetDateCreated() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.DateCreated
+}
+
+func (l *ListActionsResponseActionInfo) GetEndpoint() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Endpoint
+}
+
+func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
+	if l == nil {
+		return nil
+	}
+	return l.Event
+}
+
+func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.ActionTowerActionEvent
+	}
+	return nil
+}
+
 func (l *ListActionsResponseActionInfo) GetID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ID
+}
+
+func (l *ListActionsResponseActionInfo) GetLabels() []LabelDbDto {
+	if l == nil {
+		return nil
+	}
+	return l.Labels
+}
+
+func (l *ListActionsResponseActionInfo) GetLastSeen() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.LastSeen
 }
 
 func (l *ListActionsResponseActionInfo) GetName() *string {
@@ -67,55 +116,6 @@ func (l *ListActionsResponseActionInfo) GetStatus() *ActionStatus {
 		return nil
 	}
 	return l.Status
-}
-
-func (l *ListActionsResponseActionInfo) GetLastSeen() *time.Time {
-	if l == nil {
-		return nil
-	}
-	return l.LastSeen
-}
-
-func (l *ListActionsResponseActionInfo) GetDateCreated() *time.Time {
-	if l == nil {
-		return nil
-	}
-	return l.DateCreated
-}
-
-func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
-	if l == nil {
-		return nil
-	}
-	return l.Event
-}
-
-func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.GithubActionEvent
-	}
-	return nil
-}
-
-func (l *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.ActionTowerActionEvent
-	}
-	return nil
-}
-
-func (l *ListActionsResponseActionInfo) GetEndpoint() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Endpoint
-}
-
-func (l *ListActionsResponseActionInfo) GetLabels() []LabelDbDto {
-	if l == nil {
-		return nil
-	}
-	return l.Labels
 }
 
 func (l *ListActionsResponseActionInfo) GetUsageCmd() *string {

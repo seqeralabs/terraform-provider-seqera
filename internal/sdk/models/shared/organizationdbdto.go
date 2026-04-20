@@ -41,43 +41,22 @@ func (e *MemberRole) UnmarshalJSON(data []byte) error {
 // Contains organizational metadata, settings, and member management
 // information for multi-tenant environments.
 type OrganizationDbDto struct {
-	// Unique numeric identifier for the organization
-	OrgID *int64 `json:"orgId,omitempty"`
-	// Short name or handle for the organization (used in URLs and paths)
-	Name *string `json:"name,omitempty"`
-	// Complete formal display name of the organization
-	FullName *string `json:"fullName,omitempty"`
 	// Detailed description of the organization's purpose and activities
 	Description *string `json:"description,omitempty"`
+	// Complete formal display name of the organization
+	FullName *string `json:"fullName,omitempty"`
 	// Geographic location or address of the organization
 	Location *string `json:"location,omitempty"`
-	// Official website URL for the organization
-	Website *string `json:"website,omitempty"`
 	// Member ID (can be null for collaborators)
 	MemberID *int64 `json:"memberId,omitempty"`
 	// Member role (can be null for collaborators)
 	MemberRole *MemberRole `json:"memberRole,omitempty"`
-}
-
-func (o *OrganizationDbDto) GetOrgID() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.OrgID
-}
-
-func (o *OrganizationDbDto) GetName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Name
-}
-
-func (o *OrganizationDbDto) GetFullName() *string {
-	if o == nil {
-		return nil
-	}
-	return o.FullName
+	// Short name or handle for the organization (used in URLs and paths)
+	Name *string `json:"name,omitempty"`
+	// Unique numeric identifier for the organization
+	OrgID *int64 `json:"orgId,omitempty"`
+	// Official website URL for the organization
+	Website *string `json:"website,omitempty"`
 }
 
 func (o *OrganizationDbDto) GetDescription() *string {
@@ -87,18 +66,18 @@ func (o *OrganizationDbDto) GetDescription() *string {
 	return o.Description
 }
 
+func (o *OrganizationDbDto) GetFullName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.FullName
+}
+
 func (o *OrganizationDbDto) GetLocation() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Location
-}
-
-func (o *OrganizationDbDto) GetWebsite() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Website
 }
 
 func (o *OrganizationDbDto) GetMemberID() *int64 {
@@ -113,4 +92,25 @@ func (o *OrganizationDbDto) GetMemberRole() *MemberRole {
 		return nil
 	}
 	return o.MemberRole
+}
+
+func (o *OrganizationDbDto) GetName() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Name
+}
+
+func (o *OrganizationDbDto) GetOrgID() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.OrgID
+}
+
+func (o *OrganizationDbDto) GetWebsite() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Website
 }

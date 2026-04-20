@@ -8,43 +8,43 @@ import (
 )
 
 type ProcessLoad struct {
-	Pending          int64      `json:"pending"`
-	Submitted        int64      `json:"submitted"`
-	Running          int64      `json:"running"`
-	Succeeded        int64      `json:"succeeded"`
-	Failed           int64      `json:"failed"`
-	Cached           int64      `json:"cached"`
-	Aborted          int64      `json:"aborted"`
-	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
-	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
-	DateCreated      *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
-	Process          string     `json:"process"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Cpus int64 `json:"cpus"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	CPUTime int64 `json:"cpuTime"`
+	Aborted       int64    `json:"aborted"`
+	Cached        int64    `json:"cached"`
+	CPUEfficiency *float32 `json:"cpuEfficiency,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	CPULoad int64 `json:"cpuLoad"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	MemoryRss int64 `json:"memoryRss"`
+	Cpus int64 `json:"cpus"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	CPUTime     int64      `json:"cpuTime"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	Failed      int64      `json:"failed"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	InvCtxSwitch int64      `json:"invCtxSwitch"`
+	LastUpdated  *time.Time `json:"lastUpdated,omitempty"`
+	LoadCpus     int64      `json:"loadCpus"`
+	LoadMemory   int64      `json:"loadMemory"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	LoadTasks        int64    `json:"loadTasks"`
+	MemoryEfficiency *float32 `json:"memoryEfficiency,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	MemoryReq int64 `json:"memoryReq"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	ReadBytes int64 `json:"readBytes"`
+	MemoryRss  int64  `json:"memoryRss"`
+	PeakCpus   int64  `json:"peakCpus"`
+	PeakMemory int64  `json:"peakMemory"`
+	PeakTasks  int64  `json:"peakTasks"`
+	Pending    int64  `json:"pending"`
+	Process    string `json:"process"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	WriteBytes int64 `json:"writeBytes"`
+	ReadBytes int64 `json:"readBytes"`
+	Running   int64 `json:"running"`
+	Submitted int64 `json:"submitted"`
+	Succeeded int64 `json:"succeeded"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	VolCtxSwitch int64 `json:"volCtxSwitch"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	InvCtxSwitch int64 `json:"invCtxSwitch"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LoadTasks  int64 `json:"loadTasks"`
-	LoadCpus   int64 `json:"loadCpus"`
-	LoadMemory int64 `json:"loadMemory"`
-	PeakCpus   int64 `json:"peakCpus"`
-	PeakTasks  int64 `json:"peakTasks"`
-	PeakMemory int64 `json:"peakMemory"`
+	WriteBytes int64 `json:"writeBytes"`
 }
 
 func (p ProcessLoad) MarshalJSON() ([]byte, error) {
@@ -58,39 +58,11 @@ func (p *ProcessLoad) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (p *ProcessLoad) GetPending() int64 {
+func (p *ProcessLoad) GetAborted() int64 {
 	if p == nil {
 		return 0
 	}
-	return p.Pending
-}
-
-func (p *ProcessLoad) GetSubmitted() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Submitted
-}
-
-func (p *ProcessLoad) GetRunning() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Running
-}
-
-func (p *ProcessLoad) GetSucceeded() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Succeeded
-}
-
-func (p *ProcessLoad) GetFailed() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Failed
+	return p.Aborted
 }
 
 func (p *ProcessLoad) GetCached() int64 {
@@ -100,20 +72,6 @@ func (p *ProcessLoad) GetCached() int64 {
 	return p.Cached
 }
 
-func (p *ProcessLoad) GetAborted() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Aborted
-}
-
-func (p *ProcessLoad) GetMemoryEfficiency() *float32 {
-	if p == nil {
-		return nil
-	}
-	return p.MemoryEfficiency
-}
-
 func (p *ProcessLoad) GetCPUEfficiency() *float32 {
 	if p == nil {
 		return nil
@@ -121,25 +79,11 @@ func (p *ProcessLoad) GetCPUEfficiency() *float32 {
 	return p.CPUEfficiency
 }
 
-func (p *ProcessLoad) GetDateCreated() *time.Time {
+func (p *ProcessLoad) GetCPULoad() int64 {
 	if p == nil {
-		return nil
+		return 0
 	}
-	return p.DateCreated
-}
-
-func (p *ProcessLoad) GetLastUpdated() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.LastUpdated
-}
-
-func (p *ProcessLoad) GetProcess() string {
-	if p == nil {
-		return ""
-	}
-	return p.Process
+	return p.CPULoad
 }
 
 func (p *ProcessLoad) GetCpus() int64 {
@@ -156,46 +100,18 @@ func (p *ProcessLoad) GetCPUTime() int64 {
 	return p.CPUTime
 }
 
-func (p *ProcessLoad) GetCPULoad() int64 {
+func (p *ProcessLoad) GetDateCreated() *time.Time {
 	if p == nil {
-		return 0
+		return nil
 	}
-	return p.CPULoad
+	return p.DateCreated
 }
 
-func (p *ProcessLoad) GetMemoryRss() int64 {
+func (p *ProcessLoad) GetFailed() int64 {
 	if p == nil {
 		return 0
 	}
-	return p.MemoryRss
-}
-
-func (p *ProcessLoad) GetMemoryReq() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.MemoryReq
-}
-
-func (p *ProcessLoad) GetReadBytes() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.ReadBytes
-}
-
-func (p *ProcessLoad) GetWriteBytes() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.WriteBytes
-}
-
-func (p *ProcessLoad) GetVolCtxSwitch() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.VolCtxSwitch
+	return p.Failed
 }
 
 func (p *ProcessLoad) GetInvCtxSwitch() int64 {
@@ -205,11 +121,11 @@ func (p *ProcessLoad) GetInvCtxSwitch() int64 {
 	return p.InvCtxSwitch
 }
 
-func (p *ProcessLoad) GetLoadTasks() int64 {
+func (p *ProcessLoad) GetLastUpdated() *time.Time {
 	if p == nil {
-		return 0
+		return nil
 	}
-	return p.LoadTasks
+	return p.LastUpdated
 }
 
 func (p *ProcessLoad) GetLoadCpus() int64 {
@@ -226,11 +142,46 @@ func (p *ProcessLoad) GetLoadMemory() int64 {
 	return p.LoadMemory
 }
 
+func (p *ProcessLoad) GetLoadTasks() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.LoadTasks
+}
+
+func (p *ProcessLoad) GetMemoryEfficiency() *float32 {
+	if p == nil {
+		return nil
+	}
+	return p.MemoryEfficiency
+}
+
+func (p *ProcessLoad) GetMemoryReq() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.MemoryReq
+}
+
+func (p *ProcessLoad) GetMemoryRss() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.MemoryRss
+}
+
 func (p *ProcessLoad) GetPeakCpus() int64 {
 	if p == nil {
 		return 0
 	}
 	return p.PeakCpus
+}
+
+func (p *ProcessLoad) GetPeakMemory() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.PeakMemory
 }
 
 func (p *ProcessLoad) GetPeakTasks() int64 {
@@ -240,9 +191,58 @@ func (p *ProcessLoad) GetPeakTasks() int64 {
 	return p.PeakTasks
 }
 
-func (p *ProcessLoad) GetPeakMemory() int64 {
+func (p *ProcessLoad) GetPending() int64 {
 	if p == nil {
 		return 0
 	}
-	return p.PeakMemory
+	return p.Pending
+}
+
+func (p *ProcessLoad) GetProcess() string {
+	if p == nil {
+		return ""
+	}
+	return p.Process
+}
+
+func (p *ProcessLoad) GetReadBytes() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.ReadBytes
+}
+
+func (p *ProcessLoad) GetRunning() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.Running
+}
+
+func (p *ProcessLoad) GetSubmitted() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.Submitted
+}
+
+func (p *ProcessLoad) GetSucceeded() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.Succeeded
+}
+
+func (p *ProcessLoad) GetVolCtxSwitch() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.VolCtxSwitch
+}
+
+func (p *ProcessLoad) GetWriteBytes() int64 {
+	if p == nil {
+		return 0
+	}
+	return p.WriteBytes
 }

@@ -3,16 +3,16 @@
 package shared
 
 type UpdateTeamRequest struct {
-	Name        *string `json:"name,omitempty"`
-	Description *string `json:"description,omitempty"`
 	AvatarID    *string `json:"avatarId,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
 }
 
-func (u *UpdateTeamRequest) GetName() *string {
+func (u *UpdateTeamRequest) GetAvatarID() *string {
 	if u == nil {
 		return nil
 	}
-	return u.Name
+	return u.AvatarID
 }
 
 func (u *UpdateTeamRequest) GetDescription() *string {
@@ -22,9 +22,9 @@ func (u *UpdateTeamRequest) GetDescription() *string {
 	return u.Description
 }
 
-func (u *UpdateTeamRequest) GetAvatarID() *string {
+func (u *UpdateTeamRequest) GetName() *string {
 	if u == nil {
 		return nil
 	}
-	return u.AvatarID
+	return u.Name
 }

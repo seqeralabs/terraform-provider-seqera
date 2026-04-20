@@ -8,9 +8,9 @@ import (
 )
 
 type DataStudioStatusInfo struct {
-	Status     *DataStudioStatus     `json:"status,omitempty"`
-	Message    *string               `json:"message,omitempty"`
 	LastUpdate *time.Time            `json:"lastUpdate,omitempty"`
+	Message    *string               `json:"message,omitempty"`
+	Status     *DataStudioStatus     `json:"status,omitempty"`
 	StopReason *DataStudioStopReason `json:"stopReason,omitempty"`
 }
 
@@ -25,11 +25,11 @@ func (d *DataStudioStatusInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (d *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
+func (d *DataStudioStatusInfo) GetLastUpdate() *time.Time {
 	if d == nil {
 		return nil
 	}
-	return d.Status
+	return d.LastUpdate
 }
 
 func (d *DataStudioStatusInfo) GetMessage() *string {
@@ -39,11 +39,11 @@ func (d *DataStudioStatusInfo) GetMessage() *string {
 	return d.Message
 }
 
-func (d *DataStudioStatusInfo) GetLastUpdate() *time.Time {
+func (d *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
 	if d == nil {
 		return nil
 	}
-	return d.LastUpdate
+	return d.Status
 }
 
 func (d *DataStudioStatusInfo) GetStopReason() *DataStudioStopReason {

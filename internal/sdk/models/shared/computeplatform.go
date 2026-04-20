@@ -3,9 +3,16 @@
 package shared
 
 type ComputePlatform struct {
+	CredentialsProviders []string `json:"credentialsProviders,omitempty"`
 	ID                   *string  `json:"id,omitempty"`
 	Name                 *string  `json:"name,omitempty"`
-	CredentialsProviders []string `json:"credentialsProviders,omitempty"`
+}
+
+func (c *ComputePlatform) GetCredentialsProviders() []string {
+	if c == nil {
+		return nil
+	}
+	return c.CredentialsProviders
 }
 
 func (c *ComputePlatform) GetID() *string {
@@ -20,11 +27,4 @@ func (c *ComputePlatform) GetName() *string {
 		return nil
 	}
 	return c.Name
-}
-
-func (c *ComputePlatform) GetCredentialsProviders() []string {
-	if c == nil {
-		return nil
-	}
-	return c.CredentialsProviders
 }

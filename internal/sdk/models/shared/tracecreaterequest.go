@@ -5,10 +5,10 @@ package shared
 type TraceCreateRequest struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LaunchID    *string `json:"launchId,omitempty"`
-	SessionID   *string `json:"sessionId,omitempty"`
-	RunName     *string `json:"runName,omitempty"`
 	ProjectName *string `json:"projectName,omitempty"`
 	Repository  *string `json:"repository,omitempty"`
+	RunName     *string `json:"runName,omitempty"`
+	SessionID   *string `json:"sessionId,omitempty"`
 	WorkflowID  *string `json:"workflowId,omitempty"`
 }
 
@@ -17,20 +17,6 @@ func (t *TraceCreateRequest) GetLaunchID() *string {
 		return nil
 	}
 	return t.LaunchID
-}
-
-func (t *TraceCreateRequest) GetSessionID() *string {
-	if t == nil {
-		return nil
-	}
-	return t.SessionID
-}
-
-func (t *TraceCreateRequest) GetRunName() *string {
-	if t == nil {
-		return nil
-	}
-	return t.RunName
 }
 
 func (t *TraceCreateRequest) GetProjectName() *string {
@@ -45,6 +31,20 @@ func (t *TraceCreateRequest) GetRepository() *string {
 		return nil
 	}
 	return t.Repository
+}
+
+func (t *TraceCreateRequest) GetRunName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.RunName
+}
+
+func (t *TraceCreateRequest) GetSessionID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.SessionID
 }
 
 func (t *TraceCreateRequest) GetWorkflowID() *string {

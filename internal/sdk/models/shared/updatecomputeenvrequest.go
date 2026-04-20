@@ -3,15 +3,8 @@
 package shared
 
 type UpdateComputeEnvRequest struct {
-	Name          *string `json:"name,omitempty"`
 	CredentialsID *string `json:"credentialsId,omitempty"`
-}
-
-func (u *UpdateComputeEnvRequest) GetName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Name
+	Name          *string `json:"name,omitempty"`
 }
 
 func (u *UpdateComputeEnvRequest) GetCredentialsID() *string {
@@ -19,4 +12,11 @@ func (u *UpdateComputeEnvRequest) GetCredentialsID() *string {
 		return nil
 	}
 	return u.CredentialsID
+}
+
+func (u *UpdateComputeEnvRequest) GetName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Name
 }

@@ -4,9 +4,9 @@ package shared
 
 type UpdateLabelResponse struct {
 	ID        *int64  `json:"id,omitempty"`
+	IsDefault *bool   `json:"isDefault,omitempty"`
 	Name      *string `json:"name,omitempty"`
 	Value     *string `json:"value,omitempty"`
-	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
 func (u *UpdateLabelResponse) GetID() *int64 {
@@ -14,6 +14,13 @@ func (u *UpdateLabelResponse) GetID() *int64 {
 		return nil
 	}
 	return u.ID
+}
+
+func (u *UpdateLabelResponse) GetIsDefault() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.IsDefault
 }
 
 func (u *UpdateLabelResponse) GetName() *string {
@@ -28,11 +35,4 @@ func (u *UpdateLabelResponse) GetValue() *string {
 		return nil
 	}
 	return u.Value
-}
-
-func (u *UpdateLabelResponse) GetIsDefault() *bool {
-	if u == nil {
-		return nil
-	}
-	return u.IsDefault
 }
