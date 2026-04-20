@@ -3,7 +3,6 @@ resource "seqera_azure_credential" "azure_credential" {
   name         = "azure_credential"
   workspace_id = var.workspace_id
 
-  # Flattened Azure credential structure
   batch_key    = var.batch_key
   batch_name   = var.batch_name
   storage_key  = var.storage_key

@@ -11122,7 +11122,7 @@ paths:
     post:
       x-speakeasy-entity-operation:
         terraform-datasource: null
-        terraform-resource: GoogleCredential#create
+        terraform-resource: GoogleCredential#create#1
       x-speakeasy-name-override: CreateGoogleCredentials
       summary: Create Google credentials
       description: Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -11171,7 +11171,9 @@ paths:
     get:
       x-speakeasy-entity-operation:
         terraform-datasource: null
-        terraform-resource: GoogleCredential#read
+        terraform-resource:
+          - GoogleCredential#read
+          - GoogleCredential#create#2
       x-speakeasy-name-override: DescribeGoogleCredentials
       summary: Describe Google credentials
       description: Retrieves the details of the Google credentials identified by the given `credentialsId`.
@@ -21461,18 +21463,14 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: AzureCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Azure credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: |
+            Manage Azure credentials in Seqera platform using this resource.
 
-
-            Azure credentials support three authentication modes:
-
-            - Shared key: Use batch_key and storage_key (discriminator=''azure'')
-
-            - Entra: Use tenant_id, client_id, client_secret (discriminator=''azure-entra'')
-
-            - Cloud: Use tenant_id, client_id, client_secret (discriminator=''azure-cloud'')
-
-'
+            Azure credentials support three authentication modes: shared key
+            (batch_key and storage_key, discriminator 'azure'), Entra service
+            principal (tenant_id, client_id, client_secret, discriminator
+            'azure-entra'), and Cloud service principal (same fields as Entra,
+            discriminator 'azure-cloud').
           type: object
           required:
             - batchName
@@ -21944,25 +21942,45 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: GoogleCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Google credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: |
+            Manage Google credentials in Seqera platform using this resource.
 
-
-            Google credentials store authentication information for accessing Google Cloud services
-
-            within the Seqera Platform workflows.
-
-'
+            Google credentials authenticate to Google Cloud either with a service account
+            key (`data`) or via Workload Identity Federation (`workload_identity_provider`
+            and `service_account_email`). WIF is the recommended path — no long-lived key
+            is stored in the platform.
           type: object
-          required:
-            - data
           properties:
             data:
               type: string
-              description: Google Cloud service account key JSON (required, sensitive).
+              description: Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
               example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
               writeOnly: true
+            workloadIdentityProvider:
+              type: string
+              pattern: '^projects/[0-9]+/locations/global/workloadIdentityPools/[^/]+/providers/[^/]+$'
+              description: 'Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.'
+              example: projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: workload_identity_provider
+              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
+            serviceAccountEmail:
+              type: string
+              pattern: '^[^@]+@[^.]+\.iam\.gserviceaccount\.com$'
+              description: Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
+              example: seqera-runner@my-project.iam.gserviceaccount.com
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: service_account_email
+              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
+            tokenAudience:
+              type: string
+              description: OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: token_audience
             keyType:
               type: string
               description: Type of key (always "google") - not exposed in Terraform

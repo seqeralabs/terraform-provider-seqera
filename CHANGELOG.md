@@ -1,5 +1,4 @@
-# v0.31.0
-
+# v0.40.0
 
 ENHANCEMENTS:
 
@@ -12,6 +11,10 @@ ENHANCEMENTS:
 - **Studios** - Added `ssh_details` read-only block with SSH connection information (`host`, `port`, `user`, `command`). Added `mount_data_v2` structured block (deprecating the `mount_data` string list) and `ssh_enabled` option in configuration.
 
 - **Credentials** - AWS credential resource (`seqera_aws_credential`) now supports `mode` (`keys` or `role`), `external_id`, and `use_external_id` fields for IAM role-based authentication with cross-account external ID support.
+
+- **Credentials** - Google credential resource (`seqera_google_credential`) now supports Workload Identity Federation via `workload_identity_provider`, `service_account_email`, and `token_audience` fields. WIF is the recommended path — no long-lived service account key is stored in the platform. See the new guide at [GCP Credentials with Workload Identity Federation](docs/guides/gcp-workload-identity-federation.md).
+
+- **Credentials** - Azure credential resource (`seqera_azure_credential`) now supports Microsoft Entra ID (service principal) authentication via `tenant_id`, `client_id`, and `client_secret`, alongside the existing shared key flow. Removes the need for long-lived Azure access keys when using Batch Forge environments.
 
 - **Validation** - Compute environment configuration now validates feature dependencies at plan time, matching the Seqera Platform UI. You'll get clear errors during `terraform plan` instead of unexpected failures at apply time.
 

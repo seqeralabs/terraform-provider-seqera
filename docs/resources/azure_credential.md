@@ -3,18 +3,22 @@ page_title: "seqera_azure_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
   Manage Azure credentials in Seqera platform using this resource.
-  Azure credentials support three authentication modes:
-  Shared key: Use batch_key and storage_key (discriminator='azure')Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')
+  Azure credentials support three authentication modes: shared key
+  (batch_key and storage_key, discriminator 'azure'), Entra service
+  principal (tenant_id, client_id, client_secret, discriminator
+  'azure-entra'), and Cloud service principal (same fields as Entra,
+  discriminator 'azure-cloud').
 ---
 
 # seqera_azure_credential (Resource)
 
 Manage Azure credentials in Seqera platform using this resource.
 
-Azure credentials support three authentication modes:
-- Shared key: Use batch_key and storage_key (discriminator='azure')
-- Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')
-- Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')
+Azure credentials support three authentication modes: shared key
+(batch_key and storage_key, discriminator 'azure'), Entra service
+principal (tenant_id, client_id, client_secret, discriminator
+'azure-entra'), and Cloud service principal (same fields as Entra,
+discriminator 'azure-cloud').
 
 ## Example Usage
 

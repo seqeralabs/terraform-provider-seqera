@@ -3,16 +3,20 @@ page_title: "seqera_google_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
   Manage Google credentials in Seqera platform using this resource.
-  Google credentials store authentication information for accessing Google Cloud services
-  within the Seqera Platform workflows.
+  Google credentials authenticate to Google Cloud either with a service account
+  key (data) or via Workload Identity Federation (workload_identity_provider
+  and service_account_email). WIF is the recommended path — no long-lived key
+  is stored in the platform.
 ---
 
 # seqera_google_credential (Resource)
 
 Manage Google credentials in Seqera platform using this resource.
 
-Google credentials store authentication information for accessing Google Cloud services
-within the Seqera Platform workflows.
+Google credentials authenticate to Google Cloud either with a service account
+key (`data`) or via Workload Identity Federation (`workload_identity_provider`
+and `service_account_email`). WIF is the recommended path — no long-lived key
+is stored in the platform.
 
 ## Example Usage
 
@@ -26,7 +30,19 @@ resource "seqera_google_credential" "example" {
   name         = "gcp-main"
   workspace_id = seqera_workspace.main.id
 
-  key = var.gcp_service_account_key
+  data = var.gcp_service_account_key
+}
+```
+
+### Wif
+
+```terraform
+resource "seqera_google_credential" "wif" {
+  name         = "gcp-wif"
+  workspace_id = seqera_workspace.main.id
+
+  workload_identity_provider = "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider"
+  service_account_email      = "seqera-runner@my-project.iam.gserviceaccount.com"
 }
 ```
 
@@ -35,18 +51,21 @@ resource "seqera_google_credential" "example" {
 
 ### Required
 
-> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
-
-- `data` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Google Cloud service account key JSON (required, sensitive).
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 
 ### Optional
 
-- `workspace_id` (Number) Workspace numeric identifier where the credentials will be stored. Requires replacement if changed.
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `data` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
+- `service_account_email` (String) Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
+- `token_audience` (String) OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+- `workload_identity_provider` (String) Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Credentials string identifier
 - `provider_type` (String) Cloud provider type (automatically set to "google"). Default: "google"
 
 ## Import
@@ -56,12 +75,9 @@ Import is supported using the following syntax:
 In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
 
 ```terraform
-# Note: Import only works for user-level credentials
-# For workspace-level credentials, you must also set workspace_id in the config
-
 import {
   to = seqera_google_credential.my_seqera_google_credential
-  id = "1a2b3c4d5e6f7g8h9i0j"
+  id = "..."
 }
 ```
 

@@ -19,6 +19,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -38,11 +39,14 @@ type GoogleCredentialResource struct {
 
 // GoogleCredentialResourceModel describes the resource data model.
 type GoogleCredentialResourceModel struct {
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	Data          types.String `tfsdk:"data"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID            types.String `tfsdk:"credentials_id"`
+	Data                     types.String `tfsdk:"data"`
+	Name                     types.String `tfsdk:"name"`
+	ProviderType             types.String `tfsdk:"provider_type"`
+	ServiceAccountEmail      types.String `tfsdk:"service_account_email"`
+	TokenAudience            types.String `tfsdk:"token_audience"`
+	WorkloadIdentityProvider types.String `tfsdk:"workload_identity_provider"`
+	WorkspaceID              types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -51,7 +55,7 @@ func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.Me
 
 func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials authenticate to Google Cloud either with a service account\nkey (`data`) or via Workload Identity Federation (`workload_identity_provider`\nand `service_account_email`). WIF is the recommended path — no long-lived key\nis stored in the platform.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
@@ -59,13 +63,16 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Unique identifier for the credential (max 22 characters)`,
+				Description: `Credentials string identifier`,
 			},
 			"data": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Google Cloud service account key JSON (required, sensitive).`,
+				Description: `Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.`,
+				Validators: []validator.String{
+					custom_stringvalidators.GoogleCredentialKeysValidator(),
+				},
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -84,12 +91,35 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Default:     stringdefault.StaticString(`google`),
 				Description: `Cloud provider type (automatically set to "google"). Default: "google"`,
 			},
+			"service_account_email": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[^@]+@[^.]+\.iam\.gserviceaccount\.com$`), "must match pattern "+regexp.MustCompile(`^[^@]+@[^.]+\.iam\.gserviceaccount\.com$`).String()),
+					custom_stringvalidators.GoogleCredentialKeysValidator(),
+				},
+			},
+			"token_audience": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `OIDC audience claim embedded in the Seqera-issued JWT. Defaults to ` + "`" + `//iam.googleapis.com/<workload_identity_provider>` + "`" + `, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.`,
+			},
+			"workload_identity_provider": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^projects/[0-9]+/locations/global/workloadIdentityPools/[^/]+/providers/[^/]+$`), "must match pattern "+regexp.MustCompile(`^projects/[0-9]+/locations/global/workloadIdentityPools/[^/]+/providers/[^/]+$`).String()),
+					custom_stringvalidators.GoogleCredentialKeysValidator(),
+				},
+			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Workspace numeric identifier where the credentials will be stored. Requires replacement if changed.`,
+				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
 		},
 	}
@@ -180,6 +210,43 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedCreateGoogleCredentialsResponse(ctx, res.CreateGoogleCredentialsResponse)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribeGoogleCredentialsRequest(ctx, opts)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DescribeGoogleCredentialsResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGoogleCredentialsResponse(ctx, res1.DescribeGoogleCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

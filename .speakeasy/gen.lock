@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: aae2387e61ac154ebc58ad9f7eb4d759
+  docChecksum: b6394e43666033dd666fce465c844a31
   docVersion: 1.144.0
   speakeasyVersion: 1.761.8
   generationVersion: 2.881.2
@@ -173,6 +173,8 @@ trackedFiles:
     id: 1f454dbdee03
     last_write_checksum: sha1:1dd66315d501dd2762569a3cb198cbe0991424de
     pristine_git_object: b4d7dfacb838d9a2fcd47d30f9214606a274aa55
+  examples/resources/seqera_google_credential/import-by-string-id.tf:
+    last_write_checksum: sha1:0d4abe0935e36ce0613f01dbee8a933f45838522
   examples/resources/seqera_kubernetes_credential/import-by-string-id.tf:
     id: 351dcc957fb0
     last_write_checksum: sha1:0d6c88f4893c8ce6a4c5ed9551cc1c164a5ff4b9
@@ -431,7 +433,7 @@ trackedFiles:
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
   internal/provider/azurecredential_resource.go:
     id: 4e14a60d78ce
-    last_write_checksum: sha1:81554baba7fb494cca614d18d197728c3b1feb8f
+    last_write_checksum: sha1:3b839c12645a6b32d1c8e9c318a2bb39601c998c
     pristine_git_object: 0eb0896ee9fe4eed104d1d66e3c5b72221a8e8c1
   internal/provider/azurecredential_resource_sdk.go:
     id: 1cff49867392
@@ -535,11 +537,11 @@ trackedFiles:
     pristine_git_object: 0f3d5604b62f838d2b0b79919f08bc65e5c9cf5b
   internal/provider/googlecredential_resource.go:
     id: 8822521a4af3
-    last_write_checksum: sha1:f91fc8539a9c9a57ffc521ac72c84e46ffc846f9
+    last_write_checksum: sha1:a4fbf9619ce7fd9ec8a82d0c60cd2f0acc905667
     pristine_git_object: 026226dc9ef3d464025bca768181bcaa0a4e6f7f
   internal/provider/googlecredential_resource_sdk.go:
     id: b4c881561996
-    last_write_checksum: sha1:94a408ab42ed46267e6317caab3970f90139f4a3
+    last_write_checksum: sha1:92b207ac477c5e3ad00ab51099150bf23b31ae09
     pristine_git_object: a25a2b110b86b9bffc9496f89bf92a4e5e452bce
   internal/provider/kubernetescredential_resource.go:
     id: 9cca06635b9e
@@ -3013,7 +3015,7 @@ trackedFiles:
     pristine_git_object: d93e4f9224bfcf068b716b3e11f95edf7cf26158
   internal/sdk/models/shared/googlecredential.go:
     id: a084779f2e36
-    last_write_checksum: sha1:9f4bdfafa50f0fdaa66c89d8409d2e6136142845
+    last_write_checksum: sha1:02e2fac2d95b1916bac34bced6fb980519dea102
     pristine_git_object: 8fa752a4783e5b119cbcdb50b6dc72cd4c5a29f5
   internal/sdk/models/shared/googleimage.go:
     last_write_checksum: sha1:33a6a88c16b3df789e3e1a63b171b2245ffa312c
@@ -4514,7 +4516,7 @@ examples:
   CreateGoogleCredentials:
     speakeasy-default-create-google-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
       responses:
         "200":
           application/json: {}
@@ -4527,7 +4529,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGoogleCredentials:
@@ -4536,7 +4538,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}

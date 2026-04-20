@@ -32,7 +32,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.30.5
+  version: 0.40.0
   additionalActions: []
   additionalDataSources:
     - datasource: organization_data.NewDataSource

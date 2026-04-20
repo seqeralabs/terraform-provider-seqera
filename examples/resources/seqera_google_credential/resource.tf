@@ -7,5 +7,5 @@ resource "seqera_google_credential" "example" {
   name         = "gcp-main"
   workspace_id = seqera_workspace.main.id
 
-  key = var.gcp_service_account_key
+  data = var.gcp_service_account_key
 }

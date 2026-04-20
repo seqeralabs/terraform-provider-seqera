@@ -34,8 +34,14 @@ func (e *GoogleCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type GoogleCredentialKeys struct {
-	// Google Cloud service account key JSON (required, sensitive).
-	Data string `json:"data"`
+	// Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
+	Data *string `json:"data,omitempty"`
+	// Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.
+	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
+	// Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
+	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
+	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+	TokenAudience *string `json:"tokenAudience,omitempty"`
 	// Type of key (always "google") - not exposed in Terraform
 	KeyType *string `default:"google" json:"keyType"`
 }
@@ -51,11 +57,32 @@ func (g *GoogleCredentialKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GoogleCredentialKeys) GetData() string {
+func (g *GoogleCredentialKeys) GetData() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.Data
+}
+
+func (g *GoogleCredentialKeys) GetWorkloadIdentityProvider() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkloadIdentityProvider
+}
+
+func (g *GoogleCredentialKeys) GetServiceAccountEmail() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCredentialKeys) GetTokenAudience() *string {
+	if g == nil {
+		return nil
+	}
+	return g.TokenAudience
 }
 
 func (g *GoogleCredentialKeys) GetKeyType() *string {
@@ -151,6 +178,12 @@ func (g *GoogleCredential) GetKeys() GoogleCredentialKeys {
 }
 
 type GoogleCredentialKeysOutput struct {
+	// Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.
+	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
+	// Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
+	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
+	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+	TokenAudience *string `json:"tokenAudience,omitempty"`
 	// Type of key (always "google") - not exposed in Terraform
 	KeyType *string `default:"google" json:"keyType"`
 }
@@ -164,6 +197,27 @@ func (g *GoogleCredentialKeysOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (g *GoogleCredentialKeysOutput) GetWorkloadIdentityProvider() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkloadIdentityProvider
+}
+
+func (g *GoogleCredentialKeysOutput) GetServiceAccountEmail() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCredentialKeysOutput) GetTokenAudience() *string {
+	if g == nil {
+		return nil
+	}
+	return g.TokenAudience
 }
 
 func (g *GoogleCredentialKeysOutput) GetKeyType() *string {

@@ -4,9 +4,9 @@ This document shows the compatibility between Seqera platform versions, Seqera p
 
 ## Version Compatibility
 
-| Platform Type | Platform Version | API Version | Terraform Provider Version |
-|---------------|------------------|-------------|----------------------------|
-| **Seqera Platform** | Latest | Latest | 0.25.2  |
+| Platform Type       | Platform Version | API Version | Terraform Provider Version |
+| ------------------- | ---------------- | ----------- | -------------------------- |
+| **Seqera Platform** | Latest           | Latest      | 0.25.2                     |
 
 ## Additional Information
 
@@ -24,17 +24,17 @@ The API and Terraform provider uses the semantic versioning convention (major.mi
 
 ### The following do NOT constitute breaking changes:
 
-* Adding new resources or data sources
-* Adding new optional attributes to existing resources or data sources
-* Adding new values to existing enum attributes or string constants
-* Expanding accepted input formats or value ranges for attributes
-* Adding new optional provider configuration parameters
-* Improving error messages or adding new error codes
-* Adding new computed attributes to existing resources
-* Adding new import capabilities to existing resources
-* Deprecation warnings (without removal)
-* Bug fixes that don't change the resource schema
-* Performance improvements to provider operations
+- Adding new resources or data sources
+- Adding new optional attributes to existing resources or data sources
+- Adding new values to existing enum attributes or string constants
+- Expanding accepted input formats or value ranges for attributes
+- Adding new optional provider configuration parameters
+- Improving error messages or adding new error codes
+- Adding new computed attributes to existing resources
+- Adding new import capabilities to existing resources
+- Deprecation warnings (without removal)
+- Bug fixes that don't change the resource schema
+- Performance improvements to provider operations
 
 ### Best Practices
 

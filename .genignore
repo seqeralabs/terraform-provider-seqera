@@ -14,6 +14,7 @@ internal/sdk/internal/hooks/token_list_error_hook.go
 internal/validators/mapvalidators/studio_environment_variable_validator.go
 internal/validators/objectvalidators/config_env_variable_validator.go
 internal/validators/stringvalidators/aws_credential_keys_validator.go
+internal/validators/stringvalidators/google_credential_keys_validator.go
 internal/validators/stringvalidators/instance_type_size_validator.go
 internal/validators/stringvalidators/seqera_compute_region_validator.go
 internal/validators/boolvalidators/requires_sibling_true.go
@@ -39,9 +40,8 @@ examples/resources/seqera_primary_compute_env/resource*.tf
 examples/resources/seqera_pipeline_secret/resource*.tf
 examples/resources/seqera_studios/resource*.tf
 examples/resources/seqera_tokens/resource*.tf
-examples/resources/seqera_google_credential/resource.tf
+examples/resources/seqera_google_credential/resource*.tf
 examples/resources/seqera_google_credential/import.sh
-examples/resources/seqera_google_credential/import-by-string-id.tf
 examples/resources/seqera_aws_credential/resource*.tf
 examples/resources/seqera_azure_credential/resource.tf
 examples/resources/seqera_credential/resource.tf
@@ -65,6 +65,7 @@ internal/seqera/
 
 # Guide pages
 docs/guides/aws-iam-role-with-external-id.md
+docs/guides/gcp-workload-identity-federation.md
 
 # Custom workspace_participant examples
 examples/resources/seqera_workspace_participant/resource*.tf

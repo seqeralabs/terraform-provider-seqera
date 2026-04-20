@@ -41,11 +41,27 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedDescribeGoogleCredentia
 	return diags
 }
 
+func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialKeysOutput(ctx context.Context, resp *shared.GoogleCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.ServiceAccountEmail = types.StringPointerValue(resp.ServiceAccountEmail)
+	r.TokenAudience = types.StringPointerValue(resp.TokenAudience)
+	r.WorkloadIdentityProvider = types.StringPointerValue(resp.WorkloadIdentityProvider)
+
+	return diags
+}
+
 func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(ctx context.Context, resp *shared.GoogleCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		diags.Append(r.RefreshFromSharedGoogleCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -204,11 +220,35 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*shared.GoogleCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var data string
-	data = opts.Config.Data.ValueString()
-
+	data := new(string)
+	if !opts.Config.Data.IsUnknown() && !opts.Config.Data.IsNull() {
+		*data = opts.Config.Data.ValueString()
+	} else {
+		data = nil
+	}
+	workloadIdentityProvider := new(string)
+	if !r.WorkloadIdentityProvider.IsUnknown() && !r.WorkloadIdentityProvider.IsNull() {
+		*workloadIdentityProvider = r.WorkloadIdentityProvider.ValueString()
+	} else {
+		workloadIdentityProvider = nil
+	}
+	serviceAccountEmail := new(string)
+	if !r.ServiceAccountEmail.IsUnknown() && !r.ServiceAccountEmail.IsNull() {
+		*serviceAccountEmail = r.ServiceAccountEmail.ValueString()
+	} else {
+		serviceAccountEmail = nil
+	}
+	tokenAudience := new(string)
+	if !r.TokenAudience.IsUnknown() && !r.TokenAudience.IsNull() {
+		*tokenAudience = r.TokenAudience.ValueString()
+	} else {
+		tokenAudience = nil
+	}
 	out := shared.GoogleCredentialKeys{
-		Data: data,
+		Data:                     data,
+		WorkloadIdentityProvider: workloadIdentityProvider,
+		ServiceAccountEmail:      serviceAccountEmail,
+		TokenAudience:            tokenAudience,
 	}
 
 	return &out, diags

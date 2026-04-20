@@ -3,8 +3,7 @@ resource "seqera_google_credential" "gcp_credential" {
   name         = "gcp_credential"
   workspace_id = var.workspace_id
 
-  # Flattened Google Cloud credential structure
-  service_account_key = var.service_account_key
+  data = var.service_account_key
 }
 
 
