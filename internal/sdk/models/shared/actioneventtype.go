@@ -12,6 +12,7 @@ import (
 type ActionEventTypeType string
 
 const (
+	ActionEventTypeTypeBucket ActionEventTypeType = "bucket"
 	ActionEventTypeTypeGithub ActionEventTypeType = "github"
 	ActionEventTypeTypeTower  ActionEventTypeType = "tower"
 )
@@ -19,8 +20,21 @@ const (
 type ActionEventType struct {
 	GithubActionEvent      *GithubActionEvent      `queryParam:"inline" union:"member"`
 	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline" union:"member"`
+	BucketActionEvent      *BucketActionEvent      `queryParam:"inline" union:"member"`
 
 	Type ActionEventTypeType
+}
+
+func CreateActionEventTypeBucket(bucket BucketActionEvent) ActionEventType {
+	typ := ActionEventTypeTypeBucket
+
+	typStr := string(typ)
+	bucket.Discriminator = &typStr
+
+	return ActionEventType{
+		BucketActionEvent: &bucket,
+		Type:              typ,
+	}
 }
 
 func CreateActionEventTypeGithub(github GithubActionEvent) ActionEventType {
@@ -59,6 +73,15 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
+	case "bucket":
+		bucketActionEvent := new(BucketActionEvent)
+		if err := utils.UnmarshalJSON(data, &bucketActionEvent, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bucket) type BucketActionEvent within ActionEventType: %w", string(data), err)
+		}
+
+		u.BucketActionEvent = bucketActionEvent
+		u.Type = ActionEventTypeTypeBucket
+		return nil
 	case "github":
 		githubActionEvent := new(GithubActionEvent)
 		if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, nil); err != nil {
@@ -89,6 +112,10 @@ func (u ActionEventType) MarshalJSON() ([]byte, error) {
 
 	if u.ActionTowerActionEvent != nil {
 		return utils.MarshalJSON(u.ActionTowerActionEvent, "", true)
+	}
+
+	if u.BucketActionEvent != nil {
+		return utils.MarshalJSON(u.BucketActionEvent, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionEventType: all fields are null")

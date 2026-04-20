@@ -7,5 +7,8 @@ import (
 )
 
 type GoogleCredentials struct {
-	Data types.String `tfsdk:"data"`
+	Data                     types.String `tfsdk:"data"`
+	ServiceAccountEmail      types.String `tfsdk:"service_account_email"`
+	TokenAudience            types.String `tfsdk:"token_audience"`
+	WorkloadIdentityProvider types.String `tfsdk:"workload_identity_provider"`
 }

@@ -12,6 +12,7 @@ import (
 type ActionConfigTypeType string
 
 const (
+	ActionConfigTypeTypeBucket ActionConfigTypeType = "bucket"
 	ActionConfigTypeTypeGithub ActionConfigTypeType = "github"
 	ActionConfigTypeTypeTower  ActionConfigTypeType = "tower"
 )
@@ -19,8 +20,21 @@ const (
 type ActionConfigType struct {
 	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline" union:"member"`
 	GithubActionConfig      *GithubActionConfig      `queryParam:"inline" union:"member"`
+	BucketActionConfig      *BucketActionConfig      `queryParam:"inline" union:"member"`
 
 	Type ActionConfigTypeType
+}
+
+func CreateActionConfigTypeBucket(bucket BucketActionConfig) ActionConfigType {
+	typ := ActionConfigTypeTypeBucket
+
+	typStr := string(typ)
+	bucket.Discriminator = &typStr
+
+	return ActionConfigType{
+		BucketActionConfig: &bucket,
+		Type:               typ,
+	}
 }
 
 func CreateActionConfigTypeGithub(github GithubActionConfig) ActionConfigType {
@@ -59,6 +73,15 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
+	case "bucket":
+		bucketActionConfig := new(BucketActionConfig)
+		if err := utils.UnmarshalJSON(data, &bucketActionConfig, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bucket) type BucketActionConfig within ActionConfigType: %w", string(data), err)
+		}
+
+		u.BucketActionConfig = bucketActionConfig
+		u.Type = ActionConfigTypeTypeBucket
+		return nil
 	case "github":
 		githubActionConfig := new(GithubActionConfig)
 		if err := utils.UnmarshalJSON(data, &githubActionConfig, "", true, nil); err != nil {
@@ -89,6 +112,10 @@ func (u ActionConfigType) MarshalJSON() ([]byte, error) {
 
 	if u.GithubActionConfig != nil {
 		return utils.MarshalJSON(u.GithubActionConfig, "", true)
+	}
+
+	if u.BucketActionConfig != nil {
+		return utils.MarshalJSON(u.BucketActionConfig, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionConfigType: all fields are null")

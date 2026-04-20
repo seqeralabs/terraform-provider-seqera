@@ -57,6 +57,7 @@ resource "seqera_compute_env" "my_computeenv" {
     name           = "...my_name..."
     platform       = "google-lifesciences"
   }
+  force = true
   label_ids = [
     6
   ]
@@ -74,6 +75,7 @@ resource "seqera_compute_env" "my_computeenv" {
 
 ### Optional
 
+- `force` (Boolean) Force-delete a stuck compute environment, bypassing active-job checks. Only valid for environments in ERRORED, INVALID, or DELETING status.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -427,6 +429,7 @@ Requires replacement if changed.
 - `region` (String) AWS region where the compute environment will be created.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
+- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--sched_config))
 - `sched_enabled` (Boolean) Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
@@ -453,6 +456,14 @@ Default: false; Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
+<a id="nestedatt--compute_env--config--aws_cloud--sched_config"></a>
+### Nested Schema for `compute_env.config.aws_cloud.sched_config`
+
+Optional:
+
+- `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+
 
 <a id="nestedatt--compute_env--config--azure_batch"></a>
 ### Nested Schema for `compute_env.config.azure_batch`
@@ -460,8 +471,9 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
-- `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
+- `delete_jobs_on_completion_enabled` (Boolean) Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
+- `delete_tasks_on_completion` (Boolean) Requires replacement if changed.
 - `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
 speeding up most operations.
 
@@ -474,14 +486,27 @@ Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
+- `head_job_cpus` (Number) Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
+- `job_max_wall_clock_time` (String) Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days. Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
+- `managed_identity_head_resource_id` (String) Requires replacement if changed.
+- `managed_identity_pool_client_id` (String) Requires replacement if changed.
+- `managed_identity_pool_resource_id` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.
+- `subnet_id` (String) Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials. Requires replacement if changed.
+- `terminate_jobs_on_completion` (Boolean) Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+- `worker_pool` (String) Requires replacement if changed.
+
+Read-Only:
+
+- `delete_jobs_on_completion` (String)
 
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`
@@ -508,8 +533,31 @@ Optional:
 - `auto_scale` (Boolean) Requires replacement if changed.
 - `container_reg_ids` (List of String) Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
+- `dual_pool_config` (Boolean) Requires replacement if changed.
+- `head_pool` (Attributes) Head pool configuration for dual pool mode. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge--head_pool))
 - `vm_count` (Number) Not Null; Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
+- `worker_pool` (Attributes) Worker pool configuration for dual pool mode. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge--worker_pool))
+
+<a id="nestedatt--compute_env--config--azure_batch--forge--head_pool"></a>
+### Nested Schema for `compute_env.config.azure_batch.forge.head_pool`
+
+Optional:
+
+- `auto_scale` (Boolean) Requires replacement if changed.
+- `vm_count` (Number) Requires replacement if changed.
+- `vm_type` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--compute_env--config--azure_batch--forge--worker_pool"></a>
+### Nested Schema for `compute_env.config.azure_batch.forge.worker_pool`
+
+Optional:
+
+- `auto_scale` (Boolean) Requires replacement if changed.
+- `vm_count` (Number) Requires replacement if changed.
+- `vm_type` (String) Requires replacement if changed.
+
 
 
 
@@ -687,7 +735,7 @@ Optional:
 - `compute_jobs_instance_template` (String) Google Cloud instance template name or self-link for compute job VMs.
 Overrides other VM configuration settings for compute jobs.
 Requires replacement if changed.
-- `compute_jobs_machine_type` (String) Requires replacement if changed.
+- `compute_jobs_machine_type` (List of String) Requires replacement if changed.
 - `copy_image` (String) Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.
 - `cpu_platform` (String) Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").
 See Google Cloud documentation for available CPU platforms per region.
@@ -706,6 +754,7 @@ Nextflow pipelines via the Wave containers service.
 Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
+- `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.
@@ -772,7 +821,7 @@ Optional:
 - `arm64_enabled` (Boolean) Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--environment))
-- `forged_resources` (List of Map of String) Requires replacement if changed.
+- `forged_resources` (List of Map of Object) Requires replacement if changed.
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `gpu_enabled` (Boolean) Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
@@ -913,6 +962,7 @@ Optional:
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
+- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--sched_config))
 - `sched_enabled` (Boolean) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
@@ -932,6 +982,14 @@ Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--compute_env--config--local_platform--sched_config"></a>
+### Nested Schema for `compute_env.config.local_platform.sched_config`
+
+Optional:
+
+- `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
 
 

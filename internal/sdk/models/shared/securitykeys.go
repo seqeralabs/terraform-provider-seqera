@@ -758,6 +758,76 @@ func (g *GitLabCredentials) GetUsername() *string {
 	return g.Username
 }
 
+type GitHubAppSecurityKeys struct {
+	AppID         *string `json:"appId,omitempty"`
+	ClientID      *string `json:"clientId,omitempty"`
+	ClientSecret  *string `json:"clientSecret,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	PrivateKey    *string `json:"privateKey,omitempty"`
+	Slug          *string `json:"slug,omitempty"`
+	WebhookSecret *string `json:"webhookSecret,omitempty"`
+}
+
+func (g GitHubAppSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitHubAppSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *GitHubAppSecurityKeys) GetAppID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.AppID
+}
+
+func (g *GitHubAppSecurityKeys) GetClientID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ClientID
+}
+
+func (g *GitHubAppSecurityKeys) GetClientSecret() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ClientSecret
+}
+
+func (g *GitHubAppSecurityKeys) GetDiscriminator() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Discriminator
+}
+
+func (g *GitHubAppSecurityKeys) GetPrivateKey() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PrivateKey
+}
+
+func (g *GitHubAppSecurityKeys) GetSlug() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Slug
+}
+
+func (g *GitHubAppSecurityKeys) GetWebhookSecret() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WebhookSecret
+}
+
 type GitHubCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	Password      *string `json:"password,omitempty"`
@@ -805,8 +875,11 @@ func (g *GitHubCredentials) GetUsername() *string {
 }
 
 type GoogleCredentials struct {
-	Data          *string `json:"data,omitempty"`
-	Discriminator *string `json:"discriminator,omitempty"`
+	Data                     *string `json:"data,omitempty"`
+	Discriminator            *string `json:"discriminator,omitempty"`
+	ServiceAccountEmail      *string `json:"serviceAccountEmail,omitempty"`
+	TokenAudience            *string `json:"tokenAudience,omitempty"`
+	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
 }
 
 func (g GoogleCredentials) MarshalJSON() ([]byte, error) {
@@ -832,6 +905,27 @@ func (g *GoogleCredentials) GetDiscriminator() *string {
 		return nil
 	}
 	return g.Discriminator
+}
+
+func (g *GoogleCredentials) GetServiceAccountEmail() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCredentials) GetTokenAudience() *string {
+	if g == nil {
+		return nil
+	}
+	return g.TokenAudience
+}
+
+func (g *GoogleCredentials) GetWorkloadIdentityProvider() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkloadIdentityProvider
 }
 
 type AWSCredentials struct {
@@ -883,30 +977,32 @@ func (a *AWSCredentials) GetSecretKey() *string {
 type SecurityKeysType string
 
 const (
-	SecurityKeysTypeS3            SecurityKeysType = "s3"
-	SecurityKeysTypeGithub        SecurityKeysType = "github"
-	SecurityKeysTypeAzurerepos    SecurityKeysType = "azurerepos"
-	SecurityKeysTypeAzureEntra    SecurityKeysType = "azure_entra"
-	SecurityKeysTypeContainerReg  SecurityKeysType = "container-reg"
-	SecurityKeysTypeTwAgent       SecurityKeysType = "tw-agent"
-	SecurityKeysTypeK8s           SecurityKeysType = "k8s"
-	SecurityKeysTypeSSH           SecurityKeysType = "ssh"
-	SecurityKeysTypeGoogle        SecurityKeysType = "google"
-	SecurityKeysTypeBitbucket     SecurityKeysType = "bitbucket"
-	SecurityKeysTypeAzureCloud    SecurityKeysType = "azure-cloud"
-	SecurityKeysTypeLocal         SecurityKeysType = "local"
-	SecurityKeysTypeGitea         SecurityKeysType = "gitea"
-	SecurityKeysTypeSeqeracompute SecurityKeysType = "seqeracompute"
-	SecurityKeysTypeCodecommit    SecurityKeysType = "codecommit"
-	SecurityKeysTypeGitlab        SecurityKeysType = "gitlab"
 	SecurityKeysTypeAws           SecurityKeysType = "aws"
 	SecurityKeysTypeAzure         SecurityKeysType = "azure"
+	SecurityKeysTypeAzureCloud    SecurityKeysType = "azure-cloud"
+	SecurityKeysTypeAzureEntra    SecurityKeysType = "azure_entra"
+	SecurityKeysTypeAzurerepos    SecurityKeysType = "azurerepos"
+	SecurityKeysTypeBitbucket     SecurityKeysType = "bitbucket"
+	SecurityKeysTypeCodecommit    SecurityKeysType = "codecommit"
+	SecurityKeysTypeContainerReg  SecurityKeysType = "container-reg"
+	SecurityKeysTypeGitea         SecurityKeysType = "gitea"
+	SecurityKeysTypeGithub        SecurityKeysType = "github"
+	SecurityKeysTypeGithubApp     SecurityKeysType = "github_app"
+	SecurityKeysTypeGitlab        SecurityKeysType = "gitlab"
+	SecurityKeysTypeGoogle        SecurityKeysType = "google"
+	SecurityKeysTypeK8s           SecurityKeysType = "k8s"
+	SecurityKeysTypeLocal         SecurityKeysType = "local"
+	SecurityKeysTypeS3            SecurityKeysType = "s3"
+	SecurityKeysTypeSeqeracompute SecurityKeysType = "seqeracompute"
+	SecurityKeysTypeSSH           SecurityKeysType = "ssh"
+	SecurityKeysTypeTwAgent       SecurityKeysType = "tw-agent"
 )
 
 type SecurityKeys struct {
 	AWSCredentials               *AWSCredentials               `queryParam:"inline" union:"member"`
 	GoogleCredentials            *GoogleCredentials            `queryParam:"inline" union:"member"`
 	GitHubCredentials            *GitHubCredentials            `queryParam:"inline" union:"member"`
+	GitHubAppSecurityKeys        *GitHubAppSecurityKeys        `queryParam:"inline" union:"member"`
 	GitLabCredentials            *GitLabCredentials            `queryParam:"inline" union:"member"`
 	BitBucketCredentials         *BitBucketCredentials         `queryParam:"inline" union:"member"`
 	GiteaCredentials             *GiteaCredentials             `queryParam:"inline" union:"member"`
@@ -924,198 +1020,6 @@ type SecurityKeys struct {
 	LocalSecurityKeys            *LocalSecurityKeys            `queryParam:"inline" union:"member"`
 
 	Type SecurityKeysType
-}
-
-func CreateSecurityKeysS3(s3 S3CompatibleCredentials) SecurityKeys {
-	typ := SecurityKeysTypeS3
-
-	typStr := string(typ)
-	s3.Discriminator = &typStr
-
-	return SecurityKeys{
-		S3CompatibleCredentials: &s3,
-		Type:                    typ,
-	}
-}
-
-func CreateSecurityKeysGithub(github GitHubCredentials) SecurityKeys {
-	typ := SecurityKeysTypeGithub
-
-	typStr := string(typ)
-	github.Discriminator = &typStr
-
-	return SecurityKeys{
-		GitHubCredentials: &github,
-		Type:              typ,
-	}
-}
-
-func CreateSecurityKeysAzurerepos(azurerepos AzureReposCredentials) SecurityKeys {
-	typ := SecurityKeysTypeAzurerepos
-
-	typStr := string(typ)
-	azurerepos.Discriminator = &typStr
-
-	return SecurityKeys{
-		AzureReposCredentials: &azurerepos,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysAzureEntra(azureEntra AzureEntraCredentials) SecurityKeys {
-	typ := SecurityKeysTypeAzureEntra
-
-	typStr := string(typ)
-	azureEntra.Discriminator = &typStr
-
-	return SecurityKeys{
-		AzureEntraCredentials: &azureEntra,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysContainerReg(containerReg ContainerRegistryCredentials) SecurityKeys {
-	typ := SecurityKeysTypeContainerReg
-
-	typStr := string(typ)
-	containerReg.Discriminator = &typStr
-
-	return SecurityKeys{
-		ContainerRegistryCredentials: &containerReg,
-		Type:                         typ,
-	}
-}
-
-func CreateSecurityKeysTwAgent(twAgent TowerAgentCredentials) SecurityKeys {
-	typ := SecurityKeysTypeTwAgent
-
-	typStr := string(typ)
-	twAgent.Discriminator = &typStr
-
-	return SecurityKeys{
-		TowerAgentCredentials: &twAgent,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysK8s(k8s KubernetesCredentials) SecurityKeys {
-	typ := SecurityKeysTypeK8s
-
-	typStr := string(typ)
-	k8s.Discriminator = &typStr
-
-	return SecurityKeys{
-		KubernetesCredentials: &k8s,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysSSH(ssh SSHCredentials) SecurityKeys {
-	typ := SecurityKeysTypeSSH
-
-	typStr := string(typ)
-	ssh.Discriminator = &typStr
-
-	return SecurityKeys{
-		SSHCredentials: &ssh,
-		Type:           typ,
-	}
-}
-
-func CreateSecurityKeysGoogle(google GoogleCredentials) SecurityKeys {
-	typ := SecurityKeysTypeGoogle
-
-	typStr := string(typ)
-	google.Discriminator = &typStr
-
-	return SecurityKeys{
-		GoogleCredentials: &google,
-		Type:              typ,
-	}
-}
-
-func CreateSecurityKeysBitbucket(bitbucket BitBucketCredentials) SecurityKeys {
-	typ := SecurityKeysTypeBitbucket
-
-	typStr := string(typ)
-	bitbucket.Discriminator = &typStr
-
-	return SecurityKeys{
-		BitBucketCredentials: &bitbucket,
-		Type:                 typ,
-	}
-}
-
-func CreateSecurityKeysAzureCloud(azureCloud AzureCloudCredentials) SecurityKeys {
-	typ := SecurityKeysTypeAzureCloud
-
-	typStr := string(typ)
-	azureCloud.Discriminator = &typStr
-
-	return SecurityKeys{
-		AzureCloudCredentials: &azureCloud,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysLocal(local LocalSecurityKeys) SecurityKeys {
-	typ := SecurityKeysTypeLocal
-
-	typStr := string(typ)
-	local.Discriminator = &typStr
-
-	return SecurityKeys{
-		LocalSecurityKeys: &local,
-		Type:              typ,
-	}
-}
-
-func CreateSecurityKeysGitea(gitea GiteaCredentials) SecurityKeys {
-	typ := SecurityKeysTypeGitea
-
-	typStr := string(typ)
-	gitea.Discriminator = &typStr
-
-	return SecurityKeys{
-		GiteaCredentials: &gitea,
-		Type:             typ,
-	}
-}
-
-func CreateSecurityKeysSeqeracompute(seqeracompute SeqeraComputeCredentials) SecurityKeys {
-	typ := SecurityKeysTypeSeqeracompute
-
-	typStr := string(typ)
-	seqeracompute.Discriminator = &typStr
-
-	return SecurityKeys{
-		SeqeraComputeCredentials: &seqeracompute,
-		Type:                     typ,
-	}
-}
-
-func CreateSecurityKeysCodecommit(codecommit AWSCodeCommitCredentials) SecurityKeys {
-	typ := SecurityKeysTypeCodecommit
-
-	typStr := string(typ)
-	codecommit.Discriminator = &typStr
-
-	return SecurityKeys{
-		AWSCodeCommitCredentials: &codecommit,
-		Type:                     typ,
-	}
-}
-
-func CreateSecurityKeysGitlab(gitlab GitLabCredentials) SecurityKeys {
-	typ := SecurityKeysTypeGitlab
-
-	typStr := string(typ)
-	gitlab.Discriminator = &typStr
-
-	return SecurityKeys{
-		GitLabCredentials: &gitlab,
-		Type:              typ,
-	}
 }
 
 func CreateSecurityKeysAws(aws AWSCredentials) SecurityKeys {
@@ -1142,6 +1046,210 @@ func CreateSecurityKeysAzure(azure AzureCredentials) SecurityKeys {
 	}
 }
 
+func CreateSecurityKeysAzureCloud(azureCloud AzureCloudCredentials) SecurityKeys {
+	typ := SecurityKeysTypeAzureCloud
+
+	typStr := string(typ)
+	azureCloud.Discriminator = &typStr
+
+	return SecurityKeys{
+		AzureCloudCredentials: &azureCloud,
+		Type:                  typ,
+	}
+}
+
+func CreateSecurityKeysAzureEntra(azureEntra AzureEntraCredentials) SecurityKeys {
+	typ := SecurityKeysTypeAzureEntra
+
+	typStr := string(typ)
+	azureEntra.Discriminator = &typStr
+
+	return SecurityKeys{
+		AzureEntraCredentials: &azureEntra,
+		Type:                  typ,
+	}
+}
+
+func CreateSecurityKeysAzurerepos(azurerepos AzureReposCredentials) SecurityKeys {
+	typ := SecurityKeysTypeAzurerepos
+
+	typStr := string(typ)
+	azurerepos.Discriminator = &typStr
+
+	return SecurityKeys{
+		AzureReposCredentials: &azurerepos,
+		Type:                  typ,
+	}
+}
+
+func CreateSecurityKeysBitbucket(bitbucket BitBucketCredentials) SecurityKeys {
+	typ := SecurityKeysTypeBitbucket
+
+	typStr := string(typ)
+	bitbucket.Discriminator = &typStr
+
+	return SecurityKeys{
+		BitBucketCredentials: &bitbucket,
+		Type:                 typ,
+	}
+}
+
+func CreateSecurityKeysCodecommit(codecommit AWSCodeCommitCredentials) SecurityKeys {
+	typ := SecurityKeysTypeCodecommit
+
+	typStr := string(typ)
+	codecommit.Discriminator = &typStr
+
+	return SecurityKeys{
+		AWSCodeCommitCredentials: &codecommit,
+		Type:                     typ,
+	}
+}
+
+func CreateSecurityKeysContainerReg(containerReg ContainerRegistryCredentials) SecurityKeys {
+	typ := SecurityKeysTypeContainerReg
+
+	typStr := string(typ)
+	containerReg.Discriminator = &typStr
+
+	return SecurityKeys{
+		ContainerRegistryCredentials: &containerReg,
+		Type:                         typ,
+	}
+}
+
+func CreateSecurityKeysGitea(gitea GiteaCredentials) SecurityKeys {
+	typ := SecurityKeysTypeGitea
+
+	typStr := string(typ)
+	gitea.Discriminator = &typStr
+
+	return SecurityKeys{
+		GiteaCredentials: &gitea,
+		Type:             typ,
+	}
+}
+
+func CreateSecurityKeysGithub(github GitHubCredentials) SecurityKeys {
+	typ := SecurityKeysTypeGithub
+
+	typStr := string(typ)
+	github.Discriminator = &typStr
+
+	return SecurityKeys{
+		GitHubCredentials: &github,
+		Type:              typ,
+	}
+}
+
+func CreateSecurityKeysGithubApp(githubApp GitHubAppSecurityKeys) SecurityKeys {
+	typ := SecurityKeysTypeGithubApp
+
+	typStr := string(typ)
+	githubApp.Discriminator = &typStr
+
+	return SecurityKeys{
+		GitHubAppSecurityKeys: &githubApp,
+		Type:                  typ,
+	}
+}
+
+func CreateSecurityKeysGitlab(gitlab GitLabCredentials) SecurityKeys {
+	typ := SecurityKeysTypeGitlab
+
+	typStr := string(typ)
+	gitlab.Discriminator = &typStr
+
+	return SecurityKeys{
+		GitLabCredentials: &gitlab,
+		Type:              typ,
+	}
+}
+
+func CreateSecurityKeysGoogle(google GoogleCredentials) SecurityKeys {
+	typ := SecurityKeysTypeGoogle
+
+	typStr := string(typ)
+	google.Discriminator = &typStr
+
+	return SecurityKeys{
+		GoogleCredentials: &google,
+		Type:              typ,
+	}
+}
+
+func CreateSecurityKeysK8s(k8s KubernetesCredentials) SecurityKeys {
+	typ := SecurityKeysTypeK8s
+
+	typStr := string(typ)
+	k8s.Discriminator = &typStr
+
+	return SecurityKeys{
+		KubernetesCredentials: &k8s,
+		Type:                  typ,
+	}
+}
+
+func CreateSecurityKeysLocal(local LocalSecurityKeys) SecurityKeys {
+	typ := SecurityKeysTypeLocal
+
+	typStr := string(typ)
+	local.Discriminator = &typStr
+
+	return SecurityKeys{
+		LocalSecurityKeys: &local,
+		Type:              typ,
+	}
+}
+
+func CreateSecurityKeysS3(s3 S3CompatibleCredentials) SecurityKeys {
+	typ := SecurityKeysTypeS3
+
+	typStr := string(typ)
+	s3.Discriminator = &typStr
+
+	return SecurityKeys{
+		S3CompatibleCredentials: &s3,
+		Type:                    typ,
+	}
+}
+
+func CreateSecurityKeysSeqeracompute(seqeracompute SeqeraComputeCredentials) SecurityKeys {
+	typ := SecurityKeysTypeSeqeracompute
+
+	typStr := string(typ)
+	seqeracompute.Discriminator = &typStr
+
+	return SecurityKeys{
+		SeqeraComputeCredentials: &seqeracompute,
+		Type:                     typ,
+	}
+}
+
+func CreateSecurityKeysSSH(ssh SSHCredentials) SecurityKeys {
+	typ := SecurityKeysTypeSSH
+
+	typStr := string(typ)
+	ssh.Discriminator = &typStr
+
+	return SecurityKeys{
+		SSHCredentials: &ssh,
+		Type:           typ,
+	}
+}
+
+func CreateSecurityKeysTwAgent(twAgent TowerAgentCredentials) SecurityKeys {
+	typ := SecurityKeysTypeTwAgent
+
+	typStr := string(typ)
+	twAgent.Discriminator = &typStr
+
+	return SecurityKeys{
+		TowerAgentCredentials: &twAgent,
+		Type:                  typ,
+	}
+}
+
 func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
@@ -1154,150 +1262,6 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
-	case "s3":
-		s3CompatibleCredentials := new(S3CompatibleCredentials)
-		if err := utils.UnmarshalJSON(data, &s3CompatibleCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == s3) type S3CompatibleCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.S3CompatibleCredentials = s3CompatibleCredentials
-		u.Type = SecurityKeysTypeS3
-		return nil
-	case "github":
-		gitHubCredentials := new(GitHubCredentials)
-		if err := utils.UnmarshalJSON(data, &gitHubCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.GitHubCredentials = gitHubCredentials
-		u.Type = SecurityKeysTypeGithub
-		return nil
-	case "azurerepos":
-		azureReposCredentials := new(AzureReposCredentials)
-		if err := utils.UnmarshalJSON(data, &azureReposCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.AzureReposCredentials = azureReposCredentials
-		u.Type = SecurityKeysTypeAzurerepos
-		return nil
-	case "azure_entra":
-		azureEntraCredentials := new(AzureEntraCredentials)
-		if err := utils.UnmarshalJSON(data, &azureEntraCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.AzureEntraCredentials = azureEntraCredentials
-		u.Type = SecurityKeysTypeAzureEntra
-		return nil
-	case "container-reg":
-		containerRegistryCredentials := new(ContainerRegistryCredentials)
-		if err := utils.UnmarshalJSON(data, &containerRegistryCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.ContainerRegistryCredentials = containerRegistryCredentials
-		u.Type = SecurityKeysTypeContainerReg
-		return nil
-	case "tw-agent":
-		towerAgentCredentials := new(TowerAgentCredentials)
-		if err := utils.UnmarshalJSON(data, &towerAgentCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type TowerAgentCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.TowerAgentCredentials = towerAgentCredentials
-		u.Type = SecurityKeysTypeTwAgent
-		return nil
-	case "k8s":
-		kubernetesCredentials := new(KubernetesCredentials)
-		if err := utils.UnmarshalJSON(data, &kubernetesCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type KubernetesCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.KubernetesCredentials = kubernetesCredentials
-		u.Type = SecurityKeysTypeK8s
-		return nil
-	case "ssh":
-		sshCredentials := new(SSHCredentials)
-		if err := utils.UnmarshalJSON(data, &sshCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.SSHCredentials = sshCredentials
-		u.Type = SecurityKeysTypeSSH
-		return nil
-	case "google":
-		googleCredentials := new(GoogleCredentials)
-		if err := utils.UnmarshalJSON(data, &googleCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type GoogleCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.GoogleCredentials = googleCredentials
-		u.Type = SecurityKeysTypeGoogle
-		return nil
-	case "bitbucket":
-		bitBucketCredentials := new(BitBucketCredentials)
-		if err := utils.UnmarshalJSON(data, &bitBucketCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.BitBucketCredentials = bitBucketCredentials
-		u.Type = SecurityKeysTypeBitbucket
-		return nil
-	case "azure-cloud":
-		azureCloudCredentials := new(AzureCloudCredentials)
-		if err := utils.UnmarshalJSON(data, &azureCloudCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.AzureCloudCredentials = azureCloudCredentials
-		u.Type = SecurityKeysTypeAzureCloud
-		return nil
-	case "local":
-		localSecurityKeys := new(LocalSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &localSecurityKeys, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local) type LocalSecurityKeys within SecurityKeys: %w", string(data), err)
-		}
-
-		u.LocalSecurityKeys = localSecurityKeys
-		u.Type = SecurityKeysTypeLocal
-		return nil
-	case "gitea":
-		giteaCredentials := new(GiteaCredentials)
-		if err := utils.UnmarshalJSON(data, &giteaCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.GiteaCredentials = giteaCredentials
-		u.Type = SecurityKeysTypeGitea
-		return nil
-	case "seqeracompute":
-		seqeraComputeCredentials := new(SeqeraComputeCredentials)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.SeqeraComputeCredentials = seqeraComputeCredentials
-		u.Type = SecurityKeysTypeSeqeracompute
-		return nil
-	case "codecommit":
-		awsCodeCommitCredentials := new(AWSCodeCommitCredentials)
-		if err := utils.UnmarshalJSON(data, &awsCodeCommitCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type AWSCodeCommitCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.AWSCodeCommitCredentials = awsCodeCommitCredentials
-		u.Type = SecurityKeysTypeCodecommit
-		return nil
-	case "gitlab":
-		gitLabCredentials := new(GitLabCredentials)
-		if err := utils.UnmarshalJSON(data, &gitLabCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabCredentials within SecurityKeys: %w", string(data), err)
-		}
-
-		u.GitLabCredentials = gitLabCredentials
-		u.Type = SecurityKeysTypeGitlab
-		return nil
 	case "aws":
 		awsCredentials := new(AWSCredentials)
 		if err := utils.UnmarshalJSON(data, &awsCredentials, "", true, nil); err != nil {
@@ -1316,6 +1280,159 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		u.AzureCredentials = azureCredentials
 		u.Type = SecurityKeysTypeAzure
 		return nil
+	case "azure-cloud":
+		azureCloudCredentials := new(AzureCloudCredentials)
+		if err := utils.UnmarshalJSON(data, &azureCloudCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.AzureCloudCredentials = azureCloudCredentials
+		u.Type = SecurityKeysTypeAzureCloud
+		return nil
+	case "azure_entra":
+		azureEntraCredentials := new(AzureEntraCredentials)
+		if err := utils.UnmarshalJSON(data, &azureEntraCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.AzureEntraCredentials = azureEntraCredentials
+		u.Type = SecurityKeysTypeAzureEntra
+		return nil
+	case "azurerepos":
+		azureReposCredentials := new(AzureReposCredentials)
+		if err := utils.UnmarshalJSON(data, &azureReposCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.AzureReposCredentials = azureReposCredentials
+		u.Type = SecurityKeysTypeAzurerepos
+		return nil
+	case "bitbucket":
+		bitBucketCredentials := new(BitBucketCredentials)
+		if err := utils.UnmarshalJSON(data, &bitBucketCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.BitBucketCredentials = bitBucketCredentials
+		u.Type = SecurityKeysTypeBitbucket
+		return nil
+	case "codecommit":
+		awsCodeCommitCredentials := new(AWSCodeCommitCredentials)
+		if err := utils.UnmarshalJSON(data, &awsCodeCommitCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type AWSCodeCommitCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.AWSCodeCommitCredentials = awsCodeCommitCredentials
+		u.Type = SecurityKeysTypeCodecommit
+		return nil
+	case "container-reg":
+		containerRegistryCredentials := new(ContainerRegistryCredentials)
+		if err := utils.UnmarshalJSON(data, &containerRegistryCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.ContainerRegistryCredentials = containerRegistryCredentials
+		u.Type = SecurityKeysTypeContainerReg
+		return nil
+	case "gitea":
+		giteaCredentials := new(GiteaCredentials)
+		if err := utils.UnmarshalJSON(data, &giteaCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.GiteaCredentials = giteaCredentials
+		u.Type = SecurityKeysTypeGitea
+		return nil
+	case "github":
+		gitHubCredentials := new(GitHubCredentials)
+		if err := utils.UnmarshalJSON(data, &gitHubCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.GitHubCredentials = gitHubCredentials
+		u.Type = SecurityKeysTypeGithub
+		return nil
+	case "github_app":
+		gitHubAppSecurityKeys := new(GitHubAppSecurityKeys)
+		if err := utils.UnmarshalJSON(data, &gitHubAppSecurityKeys, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppSecurityKeys within SecurityKeys: %w", string(data), err)
+		}
+
+		u.GitHubAppSecurityKeys = gitHubAppSecurityKeys
+		u.Type = SecurityKeysTypeGithubApp
+		return nil
+	case "gitlab":
+		gitLabCredentials := new(GitLabCredentials)
+		if err := utils.UnmarshalJSON(data, &gitLabCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.GitLabCredentials = gitLabCredentials
+		u.Type = SecurityKeysTypeGitlab
+		return nil
+	case "google":
+		googleCredentials := new(GoogleCredentials)
+		if err := utils.UnmarshalJSON(data, &googleCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type GoogleCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.GoogleCredentials = googleCredentials
+		u.Type = SecurityKeysTypeGoogle
+		return nil
+	case "k8s":
+		kubernetesCredentials := new(KubernetesCredentials)
+		if err := utils.UnmarshalJSON(data, &kubernetesCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type KubernetesCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.KubernetesCredentials = kubernetesCredentials
+		u.Type = SecurityKeysTypeK8s
+		return nil
+	case "local":
+		localSecurityKeys := new(LocalSecurityKeys)
+		if err := utils.UnmarshalJSON(data, &localSecurityKeys, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local) type LocalSecurityKeys within SecurityKeys: %w", string(data), err)
+		}
+
+		u.LocalSecurityKeys = localSecurityKeys
+		u.Type = SecurityKeysTypeLocal
+		return nil
+	case "s3":
+		s3CompatibleCredentials := new(S3CompatibleCredentials)
+		if err := utils.UnmarshalJSON(data, &s3CompatibleCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == s3) type S3CompatibleCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.S3CompatibleCredentials = s3CompatibleCredentials
+		u.Type = SecurityKeysTypeS3
+		return nil
+	case "seqeracompute":
+		seqeraComputeCredentials := new(SeqeraComputeCredentials)
+		if err := utils.UnmarshalJSON(data, &seqeraComputeCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.SeqeraComputeCredentials = seqeraComputeCredentials
+		u.Type = SecurityKeysTypeSeqeracompute
+		return nil
+	case "ssh":
+		sshCredentials := new(SSHCredentials)
+		if err := utils.UnmarshalJSON(data, &sshCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.SSHCredentials = sshCredentials
+		u.Type = SecurityKeysTypeSSH
+		return nil
+	case "tw-agent":
+		towerAgentCredentials := new(TowerAgentCredentials)
+		if err := utils.UnmarshalJSON(data, &towerAgentCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type TowerAgentCredentials within SecurityKeys: %w", string(data), err)
+		}
+
+		u.TowerAgentCredentials = towerAgentCredentials
+		u.Type = SecurityKeysTypeTwAgent
+		return nil
 	}
 
 	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SecurityKeys", string(data))
@@ -1332,6 +1449,10 @@ func (u SecurityKeys) MarshalJSON() ([]byte, error) {
 
 	if u.GitHubCredentials != nil {
 		return utils.MarshalJSON(u.GitHubCredentials, "", true)
+	}
+
+	if u.GitHubAppSecurityKeys != nil {
+		return utils.MarshalJSON(u.GitHubAppSecurityKeys, "", true)
 	}
 
 	if u.GitLabCredentials != nil {
@@ -1892,6 +2013,52 @@ func (g *GitLabCredentialsOutput) GetUsername() *string {
 	return g.Username
 }
 
+type GitHubAppSecurityKeysOutput struct {
+	AppID         *string `json:"appId,omitempty"`
+	ClientID      *string `json:"clientId,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	Slug          *string `json:"slug,omitempty"`
+}
+
+func (g GitHubAppSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitHubAppSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *GitHubAppSecurityKeysOutput) GetAppID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.AppID
+}
+
+func (g *GitHubAppSecurityKeysOutput) GetClientID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ClientID
+}
+
+func (g *GitHubAppSecurityKeysOutput) GetDiscriminator() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Discriminator
+}
+
+func (g *GitHubAppSecurityKeysOutput) GetSlug() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Slug
+}
+
 type GitHubCredentialsOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	Username      *string `json:"username,omitempty"`
@@ -1923,7 +2090,10 @@ func (g *GitHubCredentialsOutput) GetUsername() *string {
 }
 
 type GoogleCredentialsOutput struct {
-	Discriminator *string `json:"discriminator,omitempty"`
+	Discriminator            *string `json:"discriminator,omitempty"`
+	ServiceAccountEmail      *string `json:"serviceAccountEmail,omitempty"`
+	TokenAudience            *string `json:"tokenAudience,omitempty"`
+	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
 }
 
 func (g GoogleCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1942,6 +2112,27 @@ func (g *GoogleCredentialsOutput) GetDiscriminator() *string {
 		return nil
 	}
 	return g.Discriminator
+}
+
+func (g *GoogleCredentialsOutput) GetServiceAccountEmail() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCredentialsOutput) GetTokenAudience() *string {
+	if g == nil {
+		return nil
+	}
+	return g.TokenAudience
+}
+
+func (g *GoogleCredentialsOutput) GetWorkloadIdentityProvider() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkloadIdentityProvider
 }
 
 type AWSCredentialsOutput struct {
@@ -1985,30 +2176,32 @@ func (a *AWSCredentialsOutput) GetDiscriminator() *string {
 type SecurityKeysOutputType string
 
 const (
-	SecurityKeysOutputTypeS3            SecurityKeysOutputType = "s3"
-	SecurityKeysOutputTypeGithub        SecurityKeysOutputType = "github"
-	SecurityKeysOutputTypeAzurerepos    SecurityKeysOutputType = "azurerepos"
-	SecurityKeysOutputTypeAzureEntra    SecurityKeysOutputType = "azure_entra"
-	SecurityKeysOutputTypeContainerReg  SecurityKeysOutputType = "container-reg"
-	SecurityKeysOutputTypeTwAgent       SecurityKeysOutputType = "tw-agent"
-	SecurityKeysOutputTypeK8s           SecurityKeysOutputType = "k8s"
-	SecurityKeysOutputTypeSSH           SecurityKeysOutputType = "ssh"
-	SecurityKeysOutputTypeGoogle        SecurityKeysOutputType = "google"
-	SecurityKeysOutputTypeBitbucket     SecurityKeysOutputType = "bitbucket"
-	SecurityKeysOutputTypeAzureCloud    SecurityKeysOutputType = "azure-cloud"
-	SecurityKeysOutputTypeLocal         SecurityKeysOutputType = "local"
-	SecurityKeysOutputTypeGitea         SecurityKeysOutputType = "gitea"
-	SecurityKeysOutputTypeSeqeracompute SecurityKeysOutputType = "seqeracompute"
-	SecurityKeysOutputTypeCodecommit    SecurityKeysOutputType = "codecommit"
-	SecurityKeysOutputTypeGitlab        SecurityKeysOutputType = "gitlab"
 	SecurityKeysOutputTypeAws           SecurityKeysOutputType = "aws"
 	SecurityKeysOutputTypeAzure         SecurityKeysOutputType = "azure"
+	SecurityKeysOutputTypeAzureCloud    SecurityKeysOutputType = "azure-cloud"
+	SecurityKeysOutputTypeAzureEntra    SecurityKeysOutputType = "azure_entra"
+	SecurityKeysOutputTypeAzurerepos    SecurityKeysOutputType = "azurerepos"
+	SecurityKeysOutputTypeBitbucket     SecurityKeysOutputType = "bitbucket"
+	SecurityKeysOutputTypeCodecommit    SecurityKeysOutputType = "codecommit"
+	SecurityKeysOutputTypeContainerReg  SecurityKeysOutputType = "container-reg"
+	SecurityKeysOutputTypeGitea         SecurityKeysOutputType = "gitea"
+	SecurityKeysOutputTypeGithub        SecurityKeysOutputType = "github"
+	SecurityKeysOutputTypeGithubApp     SecurityKeysOutputType = "github_app"
+	SecurityKeysOutputTypeGitlab        SecurityKeysOutputType = "gitlab"
+	SecurityKeysOutputTypeGoogle        SecurityKeysOutputType = "google"
+	SecurityKeysOutputTypeK8s           SecurityKeysOutputType = "k8s"
+	SecurityKeysOutputTypeLocal         SecurityKeysOutputType = "local"
+	SecurityKeysOutputTypeS3            SecurityKeysOutputType = "s3"
+	SecurityKeysOutputTypeSeqeracompute SecurityKeysOutputType = "seqeracompute"
+	SecurityKeysOutputTypeSSH           SecurityKeysOutputType = "ssh"
+	SecurityKeysOutputTypeTwAgent       SecurityKeysOutputType = "tw-agent"
 )
 
 type SecurityKeysOutput struct {
 	AWSCredentialsOutput               *AWSCredentialsOutput               `queryParam:"inline" union:"member"`
 	GoogleCredentialsOutput            *GoogleCredentialsOutput            `queryParam:"inline" union:"member"`
 	GitHubCredentialsOutput            *GitHubCredentialsOutput            `queryParam:"inline" union:"member"`
+	GitHubAppSecurityKeysOutput        *GitHubAppSecurityKeysOutput        `queryParam:"inline" union:"member"`
 	GitLabCredentialsOutput            *GitLabCredentialsOutput            `queryParam:"inline" union:"member"`
 	BitBucketCredentialsOutput         *BitBucketCredentialsOutput         `queryParam:"inline" union:"member"`
 	GiteaCredentialsOutput             *GiteaCredentialsOutput             `queryParam:"inline" union:"member"`
@@ -2026,198 +2219,6 @@ type SecurityKeysOutput struct {
 	LocalSecurityKeysOutput            *LocalSecurityKeysOutput            `queryParam:"inline" union:"member"`
 
 	Type SecurityKeysOutputType
-}
-
-func CreateSecurityKeysOutputS3(s3 S3CompatibleCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeS3
-
-	typStr := string(typ)
-	s3.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		S3CompatibleCredentialsOutput: &s3,
-		Type:                          typ,
-	}
-}
-
-func CreateSecurityKeysOutputGithub(github GitHubCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeGithub
-
-	typStr := string(typ)
-	github.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		GitHubCredentialsOutput: &github,
-		Type:                    typ,
-	}
-}
-
-func CreateSecurityKeysOutputAzurerepos(azurerepos AzureReposCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeAzurerepos
-
-	typStr := string(typ)
-	azurerepos.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		AzureReposCredentialsOutput: &azurerepos,
-		Type:                        typ,
-	}
-}
-
-func CreateSecurityKeysOutputAzureEntra(azureEntra AzureEntraCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeAzureEntra
-
-	typStr := string(typ)
-	azureEntra.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		AzureEntraCredentialsOutput: &azureEntra,
-		Type:                        typ,
-	}
-}
-
-func CreateSecurityKeysOutputContainerReg(containerReg ContainerRegistryCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeContainerReg
-
-	typStr := string(typ)
-	containerReg.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		ContainerRegistryCredentialsOutput: &containerReg,
-		Type:                               typ,
-	}
-}
-
-func CreateSecurityKeysOutputTwAgent(twAgent TowerAgentCredentials) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeTwAgent
-
-	typStr := string(typ)
-	twAgent.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		TowerAgentCredentials: &twAgent,
-		Type:                  typ,
-	}
-}
-
-func CreateSecurityKeysOutputK8s(k8s KubernetesCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeK8s
-
-	typStr := string(typ)
-	k8s.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		KubernetesCredentialsOutput: &k8s,
-		Type:                        typ,
-	}
-}
-
-func CreateSecurityKeysOutputSSH(ssh SSHCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeSSH
-
-	typStr := string(typ)
-	ssh.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		SSHCredentialsOutput: &ssh,
-		Type:                 typ,
-	}
-}
-
-func CreateSecurityKeysOutputGoogle(google GoogleCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeGoogle
-
-	typStr := string(typ)
-	google.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		GoogleCredentialsOutput: &google,
-		Type:                    typ,
-	}
-}
-
-func CreateSecurityKeysOutputBitbucket(bitbucket BitBucketCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeBitbucket
-
-	typStr := string(typ)
-	bitbucket.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		BitBucketCredentialsOutput: &bitbucket,
-		Type:                       typ,
-	}
-}
-
-func CreateSecurityKeysOutputAzureCloud(azureCloud AzureCloudCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeAzureCloud
-
-	typStr := string(typ)
-	azureCloud.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		AzureCloudCredentialsOutput: &azureCloud,
-		Type:                        typ,
-	}
-}
-
-func CreateSecurityKeysOutputLocal(local LocalSecurityKeysOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeLocal
-
-	typStr := string(typ)
-	local.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		LocalSecurityKeysOutput: &local,
-		Type:                    typ,
-	}
-}
-
-func CreateSecurityKeysOutputGitea(gitea GiteaCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeGitea
-
-	typStr := string(typ)
-	gitea.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		GiteaCredentialsOutput: &gitea,
-		Type:                   typ,
-	}
-}
-
-func CreateSecurityKeysOutputSeqeracompute(seqeracompute SeqeraComputeCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeSeqeracompute
-
-	typStr := string(typ)
-	seqeracompute.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		SeqeraComputeCredentialsOutput: &seqeracompute,
-		Type:                           typ,
-	}
-}
-
-func CreateSecurityKeysOutputCodecommit(codecommit AWSCodeCommitCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeCodecommit
-
-	typStr := string(typ)
-	codecommit.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		AWSCodeCommitCredentialsOutput: &codecommit,
-		Type:                           typ,
-	}
-}
-
-func CreateSecurityKeysOutputGitlab(gitlab GitLabCredentialsOutput) SecurityKeysOutput {
-	typ := SecurityKeysOutputTypeGitlab
-
-	typStr := string(typ)
-	gitlab.Discriminator = &typStr
-
-	return SecurityKeysOutput{
-		GitLabCredentialsOutput: &gitlab,
-		Type:                    typ,
-	}
 }
 
 func CreateSecurityKeysOutputAws(aws AWSCredentialsOutput) SecurityKeysOutput {
@@ -2244,6 +2245,210 @@ func CreateSecurityKeysOutputAzure(azure AzureCredentialsOutput) SecurityKeysOut
 	}
 }
 
+func CreateSecurityKeysOutputAzureCloud(azureCloud AzureCloudCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeAzureCloud
+
+	typStr := string(typ)
+	azureCloud.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		AzureCloudCredentialsOutput: &azureCloud,
+		Type:                        typ,
+	}
+}
+
+func CreateSecurityKeysOutputAzureEntra(azureEntra AzureEntraCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeAzureEntra
+
+	typStr := string(typ)
+	azureEntra.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		AzureEntraCredentialsOutput: &azureEntra,
+		Type:                        typ,
+	}
+}
+
+func CreateSecurityKeysOutputAzurerepos(azurerepos AzureReposCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeAzurerepos
+
+	typStr := string(typ)
+	azurerepos.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		AzureReposCredentialsOutput: &azurerepos,
+		Type:                        typ,
+	}
+}
+
+func CreateSecurityKeysOutputBitbucket(bitbucket BitBucketCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeBitbucket
+
+	typStr := string(typ)
+	bitbucket.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		BitBucketCredentialsOutput: &bitbucket,
+		Type:                       typ,
+	}
+}
+
+func CreateSecurityKeysOutputCodecommit(codecommit AWSCodeCommitCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeCodecommit
+
+	typStr := string(typ)
+	codecommit.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		AWSCodeCommitCredentialsOutput: &codecommit,
+		Type:                           typ,
+	}
+}
+
+func CreateSecurityKeysOutputContainerReg(containerReg ContainerRegistryCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeContainerReg
+
+	typStr := string(typ)
+	containerReg.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		ContainerRegistryCredentialsOutput: &containerReg,
+		Type:                               typ,
+	}
+}
+
+func CreateSecurityKeysOutputGitea(gitea GiteaCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeGitea
+
+	typStr := string(typ)
+	gitea.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		GiteaCredentialsOutput: &gitea,
+		Type:                   typ,
+	}
+}
+
+func CreateSecurityKeysOutputGithub(github GitHubCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeGithub
+
+	typStr := string(typ)
+	github.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		GitHubCredentialsOutput: &github,
+		Type:                    typ,
+	}
+}
+
+func CreateSecurityKeysOutputGithubApp(githubApp GitHubAppSecurityKeysOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeGithubApp
+
+	typStr := string(typ)
+	githubApp.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		GitHubAppSecurityKeysOutput: &githubApp,
+		Type:                        typ,
+	}
+}
+
+func CreateSecurityKeysOutputGitlab(gitlab GitLabCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeGitlab
+
+	typStr := string(typ)
+	gitlab.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		GitLabCredentialsOutput: &gitlab,
+		Type:                    typ,
+	}
+}
+
+func CreateSecurityKeysOutputGoogle(google GoogleCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeGoogle
+
+	typStr := string(typ)
+	google.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		GoogleCredentialsOutput: &google,
+		Type:                    typ,
+	}
+}
+
+func CreateSecurityKeysOutputK8s(k8s KubernetesCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeK8s
+
+	typStr := string(typ)
+	k8s.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		KubernetesCredentialsOutput: &k8s,
+		Type:                        typ,
+	}
+}
+
+func CreateSecurityKeysOutputLocal(local LocalSecurityKeysOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeLocal
+
+	typStr := string(typ)
+	local.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		LocalSecurityKeysOutput: &local,
+		Type:                    typ,
+	}
+}
+
+func CreateSecurityKeysOutputS3(s3 S3CompatibleCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeS3
+
+	typStr := string(typ)
+	s3.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		S3CompatibleCredentialsOutput: &s3,
+		Type:                          typ,
+	}
+}
+
+func CreateSecurityKeysOutputSeqeracompute(seqeracompute SeqeraComputeCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeSeqeracompute
+
+	typStr := string(typ)
+	seqeracompute.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		SeqeraComputeCredentialsOutput: &seqeracompute,
+		Type:                           typ,
+	}
+}
+
+func CreateSecurityKeysOutputSSH(ssh SSHCredentialsOutput) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeSSH
+
+	typStr := string(typ)
+	ssh.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		SSHCredentialsOutput: &ssh,
+		Type:                 typ,
+	}
+}
+
+func CreateSecurityKeysOutputTwAgent(twAgent TowerAgentCredentials) SecurityKeysOutput {
+	typ := SecurityKeysOutputTypeTwAgent
+
+	typStr := string(typ)
+	twAgent.Discriminator = &typStr
+
+	return SecurityKeysOutput{
+		TowerAgentCredentials: &twAgent,
+		Type:                  typ,
+	}
+}
+
 func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
@@ -2256,150 +2461,6 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
-	case "s3":
-		s3CompatibleCredentialsOutput := new(S3CompatibleCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &s3CompatibleCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == s3) type S3CompatibleCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.S3CompatibleCredentialsOutput = s3CompatibleCredentialsOutput
-		u.Type = SecurityKeysOutputTypeS3
-		return nil
-	case "github":
-		gitHubCredentialsOutput := new(GitHubCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &gitHubCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.GitHubCredentialsOutput = gitHubCredentialsOutput
-		u.Type = SecurityKeysOutputTypeGithub
-		return nil
-	case "azurerepos":
-		azureReposCredentialsOutput := new(AzureReposCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &azureReposCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.AzureReposCredentialsOutput = azureReposCredentialsOutput
-		u.Type = SecurityKeysOutputTypeAzurerepos
-		return nil
-	case "azure_entra":
-		azureEntraCredentialsOutput := new(AzureEntraCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &azureEntraCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.AzureEntraCredentialsOutput = azureEntraCredentialsOutput
-		u.Type = SecurityKeysOutputTypeAzureEntra
-		return nil
-	case "container-reg":
-		containerRegistryCredentialsOutput := new(ContainerRegistryCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &containerRegistryCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.ContainerRegistryCredentialsOutput = containerRegistryCredentialsOutput
-		u.Type = SecurityKeysOutputTypeContainerReg
-		return nil
-	case "tw-agent":
-		towerAgentCredentials := new(TowerAgentCredentials)
-		if err := utils.UnmarshalJSON(data, &towerAgentCredentials, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type TowerAgentCredentials within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.TowerAgentCredentials = towerAgentCredentials
-		u.Type = SecurityKeysOutputTypeTwAgent
-		return nil
-	case "k8s":
-		kubernetesCredentialsOutput := new(KubernetesCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &kubernetesCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type KubernetesCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.KubernetesCredentialsOutput = kubernetesCredentialsOutput
-		u.Type = SecurityKeysOutputTypeK8s
-		return nil
-	case "ssh":
-		sshCredentialsOutput := new(SSHCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &sshCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.SSHCredentialsOutput = sshCredentialsOutput
-		u.Type = SecurityKeysOutputTypeSSH
-		return nil
-	case "google":
-		googleCredentialsOutput := new(GoogleCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &googleCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type GoogleCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.GoogleCredentialsOutput = googleCredentialsOutput
-		u.Type = SecurityKeysOutputTypeGoogle
-		return nil
-	case "bitbucket":
-		bitBucketCredentialsOutput := new(BitBucketCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &bitBucketCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.BitBucketCredentialsOutput = bitBucketCredentialsOutput
-		u.Type = SecurityKeysOutputTypeBitbucket
-		return nil
-	case "azure-cloud":
-		azureCloudCredentialsOutput := new(AzureCloudCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &azureCloudCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.AzureCloudCredentialsOutput = azureCloudCredentialsOutput
-		u.Type = SecurityKeysOutputTypeAzureCloud
-		return nil
-	case "local":
-		localSecurityKeysOutput := new(LocalSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &localSecurityKeysOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local) type LocalSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.LocalSecurityKeysOutput = localSecurityKeysOutput
-		u.Type = SecurityKeysOutputTypeLocal
-		return nil
-	case "gitea":
-		giteaCredentialsOutput := new(GiteaCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &giteaCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.GiteaCredentialsOutput = giteaCredentialsOutput
-		u.Type = SecurityKeysOutputTypeGitea
-		return nil
-	case "seqeracompute":
-		seqeraComputeCredentialsOutput := new(SeqeraComputeCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.SeqeraComputeCredentialsOutput = seqeraComputeCredentialsOutput
-		u.Type = SecurityKeysOutputTypeSeqeracompute
-		return nil
-	case "codecommit":
-		awsCodeCommitCredentialsOutput := new(AWSCodeCommitCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &awsCodeCommitCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type AWSCodeCommitCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.AWSCodeCommitCredentialsOutput = awsCodeCommitCredentialsOutput
-		u.Type = SecurityKeysOutputTypeCodecommit
-		return nil
-	case "gitlab":
-		gitLabCredentialsOutput := new(GitLabCredentialsOutput)
-		if err := utils.UnmarshalJSON(data, &gitLabCredentialsOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
-		}
-
-		u.GitLabCredentialsOutput = gitLabCredentialsOutput
-		u.Type = SecurityKeysOutputTypeGitlab
-		return nil
 	case "aws":
 		awsCredentialsOutput := new(AWSCredentialsOutput)
 		if err := utils.UnmarshalJSON(data, &awsCredentialsOutput, "", true, nil); err != nil {
@@ -2418,6 +2479,159 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		u.AzureCredentialsOutput = azureCredentialsOutput
 		u.Type = SecurityKeysOutputTypeAzure
 		return nil
+	case "azure-cloud":
+		azureCloudCredentialsOutput := new(AzureCloudCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &azureCloudCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.AzureCloudCredentialsOutput = azureCloudCredentialsOutput
+		u.Type = SecurityKeysOutputTypeAzureCloud
+		return nil
+	case "azure_entra":
+		azureEntraCredentialsOutput := new(AzureEntraCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &azureEntraCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.AzureEntraCredentialsOutput = azureEntraCredentialsOutput
+		u.Type = SecurityKeysOutputTypeAzureEntra
+		return nil
+	case "azurerepos":
+		azureReposCredentialsOutput := new(AzureReposCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &azureReposCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.AzureReposCredentialsOutput = azureReposCredentialsOutput
+		u.Type = SecurityKeysOutputTypeAzurerepos
+		return nil
+	case "bitbucket":
+		bitBucketCredentialsOutput := new(BitBucketCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &bitBucketCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.BitBucketCredentialsOutput = bitBucketCredentialsOutput
+		u.Type = SecurityKeysOutputTypeBitbucket
+		return nil
+	case "codecommit":
+		awsCodeCommitCredentialsOutput := new(AWSCodeCommitCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &awsCodeCommitCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type AWSCodeCommitCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.AWSCodeCommitCredentialsOutput = awsCodeCommitCredentialsOutput
+		u.Type = SecurityKeysOutputTypeCodecommit
+		return nil
+	case "container-reg":
+		containerRegistryCredentialsOutput := new(ContainerRegistryCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &containerRegistryCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.ContainerRegistryCredentialsOutput = containerRegistryCredentialsOutput
+		u.Type = SecurityKeysOutputTypeContainerReg
+		return nil
+	case "gitea":
+		giteaCredentialsOutput := new(GiteaCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &giteaCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.GiteaCredentialsOutput = giteaCredentialsOutput
+		u.Type = SecurityKeysOutputTypeGitea
+		return nil
+	case "github":
+		gitHubCredentialsOutput := new(GitHubCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &gitHubCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.GitHubCredentialsOutput = gitHubCredentialsOutput
+		u.Type = SecurityKeysOutputTypeGithub
+		return nil
+	case "github_app":
+		gitHubAppSecurityKeysOutput := new(GitHubAppSecurityKeysOutput)
+		if err := utils.UnmarshalJSON(data, &gitHubAppSecurityKeysOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.GitHubAppSecurityKeysOutput = gitHubAppSecurityKeysOutput
+		u.Type = SecurityKeysOutputTypeGithubApp
+		return nil
+	case "gitlab":
+		gitLabCredentialsOutput := new(GitLabCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &gitLabCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.GitLabCredentialsOutput = gitLabCredentialsOutput
+		u.Type = SecurityKeysOutputTypeGitlab
+		return nil
+	case "google":
+		googleCredentialsOutput := new(GoogleCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &googleCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type GoogleCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.GoogleCredentialsOutput = googleCredentialsOutput
+		u.Type = SecurityKeysOutputTypeGoogle
+		return nil
+	case "k8s":
+		kubernetesCredentialsOutput := new(KubernetesCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &kubernetesCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type KubernetesCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.KubernetesCredentialsOutput = kubernetesCredentialsOutput
+		u.Type = SecurityKeysOutputTypeK8s
+		return nil
+	case "local":
+		localSecurityKeysOutput := new(LocalSecurityKeysOutput)
+		if err := utils.UnmarshalJSON(data, &localSecurityKeysOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local) type LocalSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.LocalSecurityKeysOutput = localSecurityKeysOutput
+		u.Type = SecurityKeysOutputTypeLocal
+		return nil
+	case "s3":
+		s3CompatibleCredentialsOutput := new(S3CompatibleCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &s3CompatibleCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == s3) type S3CompatibleCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.S3CompatibleCredentialsOutput = s3CompatibleCredentialsOutput
+		u.Type = SecurityKeysOutputTypeS3
+		return nil
+	case "seqeracompute":
+		seqeraComputeCredentialsOutput := new(SeqeraComputeCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &seqeraComputeCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.SeqeraComputeCredentialsOutput = seqeraComputeCredentialsOutput
+		u.Type = SecurityKeysOutputTypeSeqeracompute
+		return nil
+	case "ssh":
+		sshCredentialsOutput := new(SSHCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &sshCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.SSHCredentialsOutput = sshCredentialsOutput
+		u.Type = SecurityKeysOutputTypeSSH
+		return nil
+	case "tw-agent":
+		towerAgentCredentials := new(TowerAgentCredentials)
+		if err := utils.UnmarshalJSON(data, &towerAgentCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type TowerAgentCredentials within SecurityKeysOutput: %w", string(data), err)
+		}
+
+		u.TowerAgentCredentials = towerAgentCredentials
+		u.Type = SecurityKeysOutputTypeTwAgent
+		return nil
 	}
 
 	return fmt.Errorf("could not unmarshal `%s` into any supported union types for SecurityKeysOutput", string(data))
@@ -2434,6 +2648,10 @@ func (u SecurityKeysOutput) MarshalJSON() ([]byte, error) {
 
 	if u.GitHubCredentialsOutput != nil {
 		return utils.MarshalJSON(u.GitHubCredentialsOutput, "", true)
+	}
+
+	if u.GitHubAppSecurityKeysOutput != nil {
+		return utils.MarshalJSON(u.GitHubAppSecurityKeysOutput, "", true)
 	}
 
 	if u.GitLabCredentialsOutput != nil {

@@ -5,6 +5,7 @@ package shared
 type DataStudioWorkspaceSettingsResponse struct {
 	ContainerRepository    *string `json:"containerRepository,omitempty"`
 	LifespanHours          *int    `json:"lifespanHours,omitempty"`
+	NameStrategy           *string `json:"nameStrategy,omitempty"`
 	OrgID                  *int64  `json:"orgId,omitempty"`
 	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
 	WspID                  *int64  `json:"wspId,omitempty"`
@@ -22,6 +23,13 @@ func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() *int {
 		return nil
 	}
 	return d.LifespanHours
+}
+
+func (d *DataStudioWorkspaceSettingsResponse) GetNameStrategy() *string {
+	if d == nil {
+		return nil
+	}
+	return d.NameStrategy
 }
 
 func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {

@@ -7,19 +7,30 @@ import (
 )
 
 type AzureBatchConfiguration struct {
-	AutoPoolMode            types.Bool          `tfsdk:"auto_pool_mode"`
-	DeleteJobsOnCompletion  types.String        `tfsdk:"delete_jobs_on_completion"`
-	DeletePoolsOnCompletion types.Bool          `tfsdk:"delete_pools_on_completion"`
-	EnableFusion            types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave              types.Bool          `tfsdk:"enable_wave"`
-	Environment             []ConfigEnvVariable `tfsdk:"environment"`
-	Forge                   *AzBatchForgeConfig `tfsdk:"forge"`
-	HeadPool                types.String        `tfsdk:"head_pool"`
-	ManagedIdentityClientID types.String        `tfsdk:"managed_identity_client_id"`
-	NextflowConfig          types.String        `tfsdk:"nextflow_config"`
-	PostRunScript           types.String        `tfsdk:"post_run_script"`
-	PreRunScript            types.String        `tfsdk:"pre_run_script"`
-	Region                  types.String        `tfsdk:"region"`
-	TokenDuration           types.String        `tfsdk:"token_duration"`
-	WorkDir                 types.String        `tfsdk:"work_dir"`
+	AutoPoolMode                  types.Bool          `tfsdk:"auto_pool_mode"`
+	DeleteJobsOnCompletion        types.String        `tfsdk:"delete_jobs_on_completion"`
+	DeleteJobsOnCompletionEnabled types.Bool          `tfsdk:"delete_jobs_on_completion_enabled"`
+	DeletePoolsOnCompletion       types.Bool          `tfsdk:"delete_pools_on_completion"`
+	DeleteTasksOnCompletion       types.Bool          `tfsdk:"delete_tasks_on_completion"`
+	EnableFusion                  types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave                    types.Bool          `tfsdk:"enable_wave"`
+	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
+	Forge                         *AzBatchForgeConfig `tfsdk:"forge"`
+	HeadJobCpus                   types.Int32         `tfsdk:"head_job_cpus"`
+	HeadJobMemoryMb               types.Int32         `tfsdk:"head_job_memory_mb"`
+	HeadPool                      types.String        `tfsdk:"head_pool"`
+	JobMaxWallClockTime           types.String        `tfsdk:"job_max_wall_clock_time"`
+	ManagedIdentityClientID       types.String        `tfsdk:"managed_identity_client_id"`
+	ManagedIdentityHeadResourceID types.String        `tfsdk:"managed_identity_head_resource_id"`
+	ManagedIdentityPoolClientID   types.String        `tfsdk:"managed_identity_pool_client_id"`
+	ManagedIdentityPoolResourceID types.String        `tfsdk:"managed_identity_pool_resource_id"`
+	NextflowConfig                types.String        `tfsdk:"nextflow_config"`
+	PostRunScript                 types.String        `tfsdk:"post_run_script"`
+	PreRunScript                  types.String        `tfsdk:"pre_run_script"`
+	Region                        types.String        `tfsdk:"region"`
+	SubnetID                      types.String        `tfsdk:"subnet_id"`
+	TerminateJobsOnCompletion     types.Bool          `tfsdk:"terminate_jobs_on_completion"`
+	TokenDuration                 types.String        `tfsdk:"token_duration"`
+	WorkDir                       types.String        `tfsdk:"work_dir"`
+	WorkerPool                    types.String        `tfsdk:"worker_pool"`
 }

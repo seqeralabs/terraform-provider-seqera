@@ -2,11 +2,14 @@
 
 package shared
 
-type LaunchActionRequest struct {
-	Params map[string]any `json:"params,omitempty"`
+type Params struct {
 }
 
-func (l *LaunchActionRequest) GetParams() map[string]any {
+type LaunchActionRequest struct {
+	Params map[string]Params `json:"params,omitempty"`
+}
+
+func (l *LaunchActionRequest) GetParams() map[string]Params {
 	if l == nil {
 		return nil
 	}

@@ -5,11 +5,13 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
@@ -38,6 +40,7 @@ type DatasetsResourceModel struct {
 	LastUpdated types.String `tfsdk:"last_updated"`
 	MediaType   types.String `tfsdk:"media_type"`
 	Name        types.String `tfsdk:"name"`
+	SourceType  types.String `tfsdk:"source_type"`
 	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -77,6 +80,21 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Dataset name following naming conventions (1-100 characters). Requires replacement if changed.`,
+			},
+			"source_type": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `must be one of ["UPLOADED", "LINKED"]; Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"UPLOADED",
+						"LINKED",
+					),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,

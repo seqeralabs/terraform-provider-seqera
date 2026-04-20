@@ -12,6 +12,7 @@ type LocalExecutionConfiguration struct {
 	NextflowConfig types.String        `tfsdk:"nextflow_config"`
 	PostRunScript  types.String        `tfsdk:"post_run_script"`
 	PreRunScript   types.String        `tfsdk:"pre_run_script"`
+	SchedConfig    *SchedConfig        `tfsdk:"sched_config"`
 	SchedEnabled   types.Bool          `tfsdk:"sched_enabled"`
 	WaveEnabled    types.Bool          `tfsdk:"wave_enabled"`
 	WorkDir        types.String        `tfsdk:"work_dir"`

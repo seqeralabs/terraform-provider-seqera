@@ -3,8 +3,9 @@
 package shared
 
 type CreateDatasetRequest struct {
-	Description *string `json:"description,omitempty"`
-	Name        string  `json:"name"`
+	Description *string     `json:"description,omitempty"`
+	Name        string      `json:"name"`
+	SourceType  *SourceType `json:"sourceType,omitempty"`
 }
 
 func (c *CreateDatasetRequest) GetDescription() *string {
@@ -19,4 +20,11 @@ func (c *CreateDatasetRequest) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateDatasetRequest) GetSourceType() *SourceType {
+	if c == nil {
+		return nil
+	}
+	return c.SourceType
 }

@@ -106,6 +106,7 @@ Optional:
 - `container_reg` (Attributes) (see [below for nested schema](#nestedatt--keys--container_reg))
 - `gitea` (Attributes) (see [below for nested schema](#nestedatt--keys--gitea))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--keys--github))
+- `github_app` (Attributes) (see [below for nested schema](#nestedatt--keys--github_app))
 - `gitlab` (Attributes) (see [below for nested schema](#nestedatt--keys--gitlab))
 - `google` (Attributes) (see [below for nested schema](#nestedatt--keys--google))
 - `k8s` (Attributes) (see [below for nested schema](#nestedatt--keys--k8s))
@@ -225,6 +226,19 @@ Optional:
 - `username` (String)
 
 
+<a id="nestedatt--keys--github_app"></a>
+### Nested Schema for `keys.github_app`
+
+Optional:
+
+- `app_id` (String)
+- `client_id` (String)
+- `client_secret` (String)
+- `private_key` (String)
+- `slug` (String)
+- `webhook_secret` (String)
+
+
 <a id="nestedatt--keys--gitlab"></a>
 ### Nested Schema for `keys.gitlab`
 
@@ -241,6 +255,9 @@ Optional:
 Optional:
 
 - `data` (String, Sensitive)
+- `service_account_email` (String)
+- `token_audience` (String)
+- `workload_identity_provider` (String)
 
 
 <a id="nestedatt--keys--k8s"></a>

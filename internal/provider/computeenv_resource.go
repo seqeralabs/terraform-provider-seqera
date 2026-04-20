@@ -7,11 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -62,6 +62,7 @@ type ComputeEnvResource struct {
 type ComputeEnvResourceModel struct {
 	ComputeEnv   *tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
 	ComputeEnvID types.String                     `tfsdk:"compute_env_id"`
+	Force        types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
 	LabelIds     []types.Int64                    `tfsdk:"label_ids"`
 	WorkspaceID  types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
@@ -1228,6 +1229,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
+									"sched_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"sched_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
@@ -1308,20 +1334,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"delete_jobs_on_completion": schema.StringAttribute{
 										Computed: true,
+									},
+									"delete_jobs_on_completion_enabled": schema.BoolAttribute{
+										Computed: true,
 										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"on_success",
-												"always",
-												"never",
-											),
-										},
+										Description: `Requires replacement if changed.`,
 									},
 									"delete_pools_on_completion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"delete_tasks_on_completion": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
@@ -1447,6 +1477,48 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 												Description: `Requires replacement if changed.`,
 											},
+											"dual_pool_config": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Requires replacement if changed.`,
+											},
+											"head_pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"auto_scale": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+													"vm_count": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+													"vm_type": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															stringplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+												},
+												Description: `Head pool configuration for dual pool mode. Requires replacement if changed.`,
+											},
 											"vm_count": schema.Int32Attribute{
 												Computed: true,
 												Optional: true,
@@ -1466,8 +1538,58 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 												Description: `Requires replacement if changed.`,
 											},
+											"worker_pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"auto_scale": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+													"vm_count": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+													"vm_type": schema.StringAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															stringplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Requires replacement if changed.`,
+													},
+												},
+												Description: `Worker pool configuration for dual pool mode. Requires replacement if changed.`,
+											},
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"head_job_cpus": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.`,
+									},
+									"head_job_memory_mb": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.`,
 									},
 									"head_pool": schema.StringAttribute{
 										Computed: true,
@@ -1477,7 +1599,39 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"job_max_wall_clock_time": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days. Requires replacement if changed.`,
+									},
 									"managed_identity_client_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"managed_identity_head_resource_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"managed_identity_pool_client_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"managed_identity_pool_resource_id": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
@@ -1520,6 +1674,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
+									"subnet_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials. Requires replacement if changed.`,
+									},
+									"terminate_jobs_on_completion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"token_duration": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1538,6 +1708,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
+									},
+									"worker_pool": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2411,12 +2589,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Overrides other VM configuration settings for compute jobs.` + "\n" +
 											`Requires replacement if changed.`,
 									},
-									"compute_jobs_machine_type": schema.StringAttribute{
+									"compute_jobs_machine_type": schema.ListAttribute{
 										Computed: true,
 										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
+										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
 									},
 									"copy_image": schema.StringAttribute{
@@ -2532,6 +2711,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"fusion_snapshots": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -2838,7 +3025,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.MapType{
-											ElemType: jsontypes.NormalizedType{},
+											ElemType: types.ObjectType{
+												AttrTypes: map[string]attr.Type{},
+											},
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3574,6 +3763,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"sched_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
 									},
 									"sched_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -4826,6 +5040,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"compute_env_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Compute environment string identifier`,
+			},
+			"force": schema.BoolAttribute{
+				Optional:    true,
+				Description: `Force-delete a stuck compute environment, bypassing active-job checks. Only valid for environments in ERRORED, INVALID, or DELETING status.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,

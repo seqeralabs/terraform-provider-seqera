@@ -3,8 +3,16 @@
 package shared
 
 type UpdateActionRequest struct {
+	Bucket *BucketActionRequest   `json:"bucket,omitempty"`
 	Launch *WorkflowLaunchRequest `json:"launch,omitempty"`
 	Name   *string                `json:"name,omitempty"`
+}
+
+func (u *UpdateActionRequest) GetBucket() *BucketActionRequest {
+	if u == nil {
+		return nil
+	}
+	return u.Bucket
 }
 
 func (u *UpdateActionRequest) GetLaunch() *WorkflowLaunchRequest {

@@ -69,7 +69,8 @@ type Task struct {
 	// Bytes read from disk
 	ReadBytes *int64 `json:"readBytes,omitempty"`
 	// Real execution time in milliseconds
-	Realtime *int64 `json:"realtime,omitempty"`
+	Realtime           *int64              `json:"realtime,omitempty"`
+	ResourceAllocation *ResourceAllocation `json:"resourceAllocation,omitempty"`
 	// Resident set size
 	Rss *int64 `json:"rss,omitempty"`
 	// Scratch directory
@@ -363,6 +364,13 @@ func (t *Task) GetRealtime() *int64 {
 		return nil
 	}
 	return t.Realtime
+}
+
+func (t *Task) GetResourceAllocation() *ResourceAllocation {
+	if t == nil {
+		return nil
+	}
+	return t.ResourceAllocation
 }
 
 func (t *Task) GetRss() *int64 {

@@ -12,8 +12,8 @@ type DescribePlatformRequest struct {
 	PlatformID string `pathParam:"style=simple,explode=false,name=platformId"`
 	// Workspace numeric identifier
 	WorkspaceID   *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	RegionID      string `queryParam:"style=form,explode=true,name=regionId"`
-	CredentialsID string `queryParam:"style=form,explode=true,name=credentialsId"`
+	RegionID      string `queryParam:"style=form,explode=false,name=regionId"`
+	CredentialsID string `queryParam:"style=form,explode=false,name=credentialsId"`
 }
 
 func (d *DescribePlatformRequest) GetPlatformID() string {

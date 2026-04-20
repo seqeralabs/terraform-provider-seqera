@@ -18,6 +18,8 @@ type GenerateDownloadURLDataLinkRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Whether to generate the URL for preview purposes or direct download (default: false)
 	Preview *bool `queryParam:"style=form,explode=true,name=preview"`
+	// When true, treats the file as a Fusion symlink and resolves its target (default: false)
+	ResolveSymlink *bool `queryParam:"style=form,explode=true,name=resolveSymlink"`
 }
 
 func (g *GenerateDownloadURLDataLinkRequest) GetDataLinkID() string {
@@ -53,6 +55,13 @@ func (g *GenerateDownloadURLDataLinkRequest) GetPreview() *bool {
 		return nil
 	}
 	return g.Preview
+}
+
+func (g *GenerateDownloadURLDataLinkRequest) GetResolveSymlink() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.ResolveSymlink
 }
 
 type GenerateDownloadURLDataLinkResponse struct {

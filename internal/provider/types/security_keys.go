@@ -12,6 +12,7 @@ type SecurityKeys struct {
 	Bitbucket     *BitBucketCredentials         `queryParam:"inline" tfsdk:"bitbucket"`
 	ContainerReg  *ContainerRegistryCredentials `queryParam:"inline" tfsdk:"container_reg"`
 	Github        *GitHubCredentials            `queryParam:"inline" tfsdk:"github"`
+	GithubApp     *GitHubAppSecurityKeys        `queryParam:"inline" tfsdk:"github_app"`
 	Gitlab        *GitLabCredentials            `queryParam:"inline" tfsdk:"gitlab"`
 	Gitea         *GiteaCredentials             `queryParam:"inline" tfsdk:"gitea"`
 	Google        *GoogleCredentials            `queryParam:"inline" tfsdk:"google"`
