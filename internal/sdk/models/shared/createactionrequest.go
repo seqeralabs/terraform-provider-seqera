@@ -3,9 +3,17 @@
 package shared
 
 type CreateActionRequest struct {
+	Bucket *BucketActionRequest  `json:"bucket,omitempty"`
 	Launch WorkflowLaunchRequest `json:"launch"`
 	Name   string                `json:"name"`
 	Source *ActionSource         `json:"source,omitempty"`
+}
+
+func (c *CreateActionRequest) GetBucket() *BucketActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Bucket
 }
 
 func (c *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {

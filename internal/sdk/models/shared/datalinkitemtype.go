@@ -10,8 +10,9 @@ import (
 type DataLinkItemType string
 
 const (
-	DataLinkItemTypeFolder DataLinkItemType = "FOLDER"
-	DataLinkItemTypeFile   DataLinkItemType = "FILE"
+	DataLinkItemTypeFolder            DataLinkItemType = "FOLDER"
+	DataLinkItemTypeFile              DataLinkItemType = "FILE"
+	DataLinkItemTypeFusionSymlinkFile DataLinkItemType = "FUSION_SYMLINK_FILE"
 )
 
 func (e DataLinkItemType) ToPointer() *DataLinkItemType {
@@ -26,6 +27,8 @@ func (e *DataLinkItemType) UnmarshalJSON(data []byte) error {
 	case "FOLDER":
 		fallthrough
 	case "FILE":
+		fallthrough
+	case "FUSION_SYMLINK_FILE":
 		*e = DataLinkItemType(v)
 		return nil
 	default:

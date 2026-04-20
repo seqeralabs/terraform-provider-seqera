@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
@@ -32,7 +30,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 			r.ComputeEnv.AwsAccountID = types.StringPointerValue(resp.ComputeEnv.AwsAccountID)
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
 			if resp.ComputeEnv.Config != nil {
-				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
+				r.ComputeEnv.Config = &tfTypes.ComputeConfigInput{}
 				if resp.ComputeEnv.Config.AWSBatchConfiguration != nil {
 					r.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
 					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
@@ -156,6 +154,16 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Region)
+					if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig == nil {
+						r.ComputeEnv.Config.AwsCloud.SchedConfig = nil
+					} else {
+						r.ComputeEnv.Config.AwsCloud.SchedConfig = &tfTypes.SchedConfig{}
+						if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel))
+						} else {
+							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringNull()
+						}
+					}
 					r.ComputeEnv.Config.AwsCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.AwsCloud.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups))
 					for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups {
@@ -239,7 +247,9 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
 					}
+					r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletionEnabled)
 					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
+					r.ComputeEnv.Config.AzureBatch.DeleteTasksOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteTasksOnCompletion)
 					r.ComputeEnv.Config.AzureBatch.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableFusion)
 					r.ComputeEnv.Config.AzureBatch.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableWave)
 					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
@@ -264,17 +274,43 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
 						}
 						r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
+						r.ComputeEnv.Config.AzureBatch.Forge.DualPoolConfig = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DualPoolConfig)
+						if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool == nil {
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool = nil
+						} else {
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool = &tfTypes.AzBatchPoolConfig{}
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.AutoScale)
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMCount))
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMType)
+						}
 						r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
 						r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
+						if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool == nil {
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool = nil
+						} else {
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool = &tfTypes.AzBatchPoolConfig{}
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.AutoScale)
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMCount))
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMType)
+						}
 					}
+					r.ComputeEnv.Config.AzureBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
+					r.ComputeEnv.Config.AzureBatch.JobMaxWallClockTime = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.JobMaxWallClockTime)
 					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
+					r.ComputeEnv.Config.AzureBatch.ManagedIdentityHeadResourceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityHeadResourceID)
+					r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityPoolClientID)
+					r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolResourceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityPoolResourceID)
 					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
+					r.ComputeEnv.Config.AzureBatch.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.SubnetID)
+					r.ComputeEnv.Config.AzureBatch.TerminateJobsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TerminateJobsOnCompletion)
 					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
 					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
+					r.ComputeEnv.Config.AzureBatch.WorkerPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkerPool)
 				}
 				if resp.ComputeEnv.Config.AzureCloudConfiguration != nil {
 					r.ComputeEnv.Config.AzureCloud = &tfTypes.AzureCloudConfiguration{}
@@ -323,7 +359,10 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleBatch.BootDiskImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskImage)
 					r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
 					r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
-					r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType)
+					r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType))
+					for _, v := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType {
+						r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType = append(r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType, types.StringValue(v))
+					}
 					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
 					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
@@ -341,6 +380,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 
 						r.ComputeEnv.Config.GoogleBatch.Environment = append(r.ComputeEnv.Config.GoogleBatch.Environment, environment6)
 					}
+					r.ComputeEnv.Config.GoogleBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.FusionSnapshots)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
@@ -389,12 +429,13 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					}
 					r.ComputeEnv.Config.GoogleCloud.ForgedResources = nil
 					for _, forgedResourcesItem1 := range resp.ComputeEnv.Config.GoogleCloudConfiguration.ForgedResources {
-						var forgedResources1 map[string]jsontypes.Normalized
+						var forgedResources1 map[string]tfTypes.GoogleCloudConfigForgedResource
 						if len(forgedResourcesItem1) > 0 {
-							forgedResources1 = make(map[string]jsontypes.Normalized, len(forgedResourcesItem1))
-							for key1, value1 := range forgedResourcesItem1 {
-								result, _ := json.Marshal(value1)
-								forgedResources1[key1] = jsontypes.NewNormalizedValue(string(result))
+							forgedResources1 = make(map[string]tfTypes.GoogleCloudConfigForgedResource, len(forgedResourcesItem1))
+							for googleCloudConfigForgedResourceKey, _ := range forgedResourcesItem1 {
+								var googleCloudConfigForgedResourceResult tfTypes.GoogleCloudConfigForgedResource
+
+								forgedResources1[googleCloudConfigForgedResourceKey] = googleCloudConfigForgedResourceResult
 							}
 						}
 						r.ComputeEnv.Config.GoogleCloud.ForgedResources = append(r.ComputeEnv.Config.GoogleCloud.ForgedResources, forgedResources1)
@@ -473,8 +514,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.HeadJobMemoryMb))
 					if len(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels) > 0 {
 						r.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels))
-						for key2, value2 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels {
-							r.ComputeEnv.Config.GoogleLifesciences.Labels[key2] = types.StringValue(value2)
+						for key1, value1 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels {
+							r.ComputeEnv.Config.GoogleLifesciences.Labels[key1] = types.StringValue(value1)
 						}
 					}
 					r.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Location)
@@ -579,6 +620,16 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.LocalPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.LocalPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PostRunScript)
 					r.ComputeEnv.Config.LocalPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PreRunScript)
+					if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig == nil {
+						r.ComputeEnv.Config.LocalPlatform.SchedConfig = nil
+					} else {
+						r.ComputeEnv.Config.LocalPlatform.SchedConfig = &tfTypes.SchedConfig{}
+						if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel))
+						} else {
+							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringNull()
+						}
+					}
 					r.ComputeEnv.Config.LocalPlatform.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.LocalPlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.WaveEnabled)
 					r.ComputeEnv.Config.LocalPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.WorkDir)
@@ -780,9 +831,16 @@ func (r *ComputeEnvResourceModel) ToOperationsDeleteComputeEnvRequest(ctx contex
 	} else {
 		workspaceID = nil
 	}
+	force := new(bool)
+	if !r.Force.IsUnknown() && !r.Force.IsNull() {
+		*force = r.Force.ValueBool()
+	} else {
+		force = nil
+	}
 	out := operations.DeleteComputeEnvRequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,
+		Force:        force,
 	}
 
 	return &out, diags
@@ -836,7 +894,7 @@ func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx contex
 func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var config shared.ComputeConfig
+	var config shared.ComputeConfigInput
 	var awsBatchConfiguration *shared.AWSBatchConfiguration
 	if r.ComputeEnv.Config.AwsBatch != nil {
 		cliPath := new(string)
@@ -1223,7 +1281,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsBatchConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			AWSBatchConfiguration: awsBatchConfiguration,
 		}
 	}
@@ -1341,6 +1399,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var region1 string
 		region1 = r.ComputeEnv.Config.AwsCloud.Region.ValueString()
 
+		var schedConfig *shared.SchedConfig
+		if r.ComputeEnv.Config.AwsCloud.SchedConfig != nil {
+			provisioningModel := new(shared.ProvisioningModel)
+			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsNull() {
+				*provisioningModel = shared.ProvisioningModel(r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.ValueString())
+			} else {
+				provisioningModel = nil
+			}
+			schedConfig = &shared.SchedConfig{
+				ProvisioningModel: provisioningModel,
+			}
+		}
 		schedEnabled := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedEnabled.IsNull() {
 			*schedEnabled = r.ComputeEnv.Config.AwsCloud.SchedEnabled.ValueBool()
@@ -1385,6 +1455,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PostRunScript:      postRunScript1,
 			PreRunScript:       preRunScript1,
 			Region:             region1,
+			SchedConfig:        schedConfig,
 			SchedEnabled:       schedEnabled,
 			SecurityGroups:     securityGroups1,
 			SubnetID:           subnetID,
@@ -1393,7 +1464,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsCloudConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			AWSCloudConfiguration: awsCloudConfiguration,
 		}
 	}
@@ -1483,7 +1554,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if seqeraComputeConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			SeqeraComputeConfiguration: seqeraComputeConfiguration,
 		}
 	}
@@ -1507,11 +1578,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			computeJobsInstanceTemplate = nil
 		}
-		computeJobsMachineType := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.IsNull() {
-			*computeJobsMachineType = r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.ValueString()
-		} else {
-			computeJobsMachineType = nil
+		computeJobsMachineType := make([]string, 0, len(r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType))
+		for computeJobsMachineTypeIndex := range r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType {
+			computeJobsMachineType = append(computeJobsMachineType, r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType[computeJobsMachineTypeIndex].ValueString())
 		}
 		copyImage := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsNull() {
@@ -1569,6 +1638,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*enableFusion2 = r.ComputeEnv.Config.GoogleBatch.EnableFusion.ValueBool()
 		} else {
 			enableFusion2 = nil
+		}
+		fusionSnapshots1 := new(bool)
+		if !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsNull() {
+			*fusionSnapshots1 = r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots1 = nil
 		}
 		headJobCpus1 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
@@ -1708,6 +1783,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DebugMode:                   debugMode,
 			Environment:                 environment3,
 			EnableFusion:                enableFusion2,
+			FusionSnapshots:             fusionSnapshots1,
 			HeadJobCpus:                 headJobCpus1,
 			HeadJobInstanceTemplate:     headJobInstanceTemplate,
 			HeadJobMemoryMb:             headJobMemoryMb1,
@@ -1733,7 +1809,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleBatchServiceConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			GoogleBatchServiceConfiguration: googleBatchServiceConfiguration,
 		}
 	}
@@ -1784,12 +1860,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value4,
 			})
 		}
-		forgedResources := make([]map[string]interface{}, 0, len(r.ComputeEnv.Config.GoogleCloud.ForgedResources))
+		forgedResources := make([]map[string]shared.GoogleCloudConfigForgedResource, 0, len(r.ComputeEnv.Config.GoogleCloud.ForgedResources))
 		for forgedResourcesIndex := range r.ComputeEnv.Config.GoogleCloud.ForgedResources {
-			forgedResourcesTmp := make(map[string]interface{})
+			forgedResourcesTmp := make(map[string]shared.GoogleCloudConfigForgedResource)
 			for key := range r.ComputeEnv.Config.GoogleCloud.ForgedResources[forgedResourcesIndex] {
-				var inst interface{}
-				_ = json.Unmarshal([]byte(r.ComputeEnv.Config.GoogleCloud.ForgedResources[forgedResourcesIndex][key].ValueString()), &inst)
+				inst := shared.GoogleCloudConfigForgedResource{}
 				forgedResourcesTmp[key] = inst
 			}
 			forgedResources = append(forgedResources, forgedResourcesTmp)
@@ -1893,11 +1968,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleCloudConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			GoogleCloudConfiguration: googleCloudConfiguration,
 		}
 	}
-	var azureBatchConfiguration *shared.AzureBatchConfiguration
+	var azureBatchConfigurationInput *shared.AzureBatchConfigurationInput
 	if r.ComputeEnv.Config.AzureBatch != nil {
 		autoPoolMode := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsNull() {
@@ -1905,17 +1980,23 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			autoPoolMode = nil
 		}
-		deleteJobsOnCompletion := new(shared.JobCleanupPolicy)
-		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
-			*deleteJobsOnCompletion = shared.JobCleanupPolicy(r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
+		deleteJobsOnCompletionEnabled := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsNull() {
+			*deleteJobsOnCompletionEnabled = r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.ValueBool()
 		} else {
-			deleteJobsOnCompletion = nil
+			deleteJobsOnCompletionEnabled = nil
 		}
 		deletePoolsOnCompletion := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsNull() {
 			*deletePoolsOnCompletion = r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.ValueBool()
 		} else {
 			deletePoolsOnCompletion = nil
+		}
+		deleteTasksOnCompletion := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.DeleteTasksOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteTasksOnCompletion.IsNull() {
+			*deleteTasksOnCompletion = r.ComputeEnv.Config.AzureBatch.DeleteTasksOnCompletion.ValueBool()
+		} else {
+			deleteTasksOnCompletion = nil
 		}
 		environment5 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AzureBatch.Environment))
 		for environmentIndex5 := range r.ComputeEnv.Config.AzureBatch.Environment {
@@ -1968,21 +2049,82 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				disposeOnDeletion1 = nil
 			}
-			var vmCount int
-			vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
-
-			vmType := new(string)
-			if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
-				*vmType = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
+			dualPoolConfig := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.DualPoolConfig.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DualPoolConfig.IsNull() {
+				*dualPoolConfig = r.ComputeEnv.Config.AzureBatch.Forge.DualPoolConfig.ValueBool()
 			} else {
-				vmType = nil
+				dualPoolConfig = nil
+			}
+			var headPool *shared.AzBatchPoolConfig
+			if r.ComputeEnv.Config.AzureBatch.Forge.HeadPool != nil {
+				autoScale1 := new(bool)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale.IsNull() {
+					*autoScale1 = r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale.ValueBool()
+				} else {
+					autoScale1 = nil
+				}
+				vmCount := new(int)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsNull() {
+					*vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.ValueInt32())
+				} else {
+					vmCount = nil
+				}
+				vmType := new(string)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType.IsNull() {
+					*vmType = r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType.ValueString()
+				} else {
+					vmType = nil
+				}
+				headPool = &shared.AzBatchPoolConfig{
+					AutoScale: autoScale1,
+					VMCount:   vmCount,
+					VMType:    vmType,
+				}
+			}
+			var vmCount1 int
+			vmCount1 = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
+
+			vmType1 := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
+				*vmType1 = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
+			} else {
+				vmType1 = nil
+			}
+			var workerPool *shared.AzBatchPoolConfig
+			if r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool != nil {
+				autoScale2 := new(bool)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale.IsNull() {
+					*autoScale2 = r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale.ValueBool()
+				} else {
+					autoScale2 = nil
+				}
+				vmCount2 := new(int)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsNull() {
+					*vmCount2 = int(r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.ValueInt32())
+				} else {
+					vmCount2 = nil
+				}
+				vmType2 := new(string)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType.IsNull() {
+					*vmType2 = r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType.ValueString()
+				} else {
+					vmType2 = nil
+				}
+				workerPool = &shared.AzBatchPoolConfig{
+					AutoScale: autoScale2,
+					VMCount:   vmCount2,
+					VMType:    vmType2,
+				}
 			}
 			forge1 = &shared.AzBatchForgeConfig{
 				AutoScale:         autoScale,
 				ContainerRegIds:   containerRegIds,
 				DisposeOnDeletion: disposeOnDeletion1,
-				VMCount:           vmCount,
-				VMType:            vmType,
+				DualPoolConfig:    dualPoolConfig,
+				HeadPool:          headPool,
+				VMCount:           vmCount1,
+				VMType:            vmType1,
+				WorkerPool:        workerPool,
 			}
 		}
 		enableFusion3 := new(bool)
@@ -1991,17 +2133,53 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion3 = nil
 		}
-		headPool := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.HeadPool.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadPool.IsNull() {
-			*headPool = r.ComputeEnv.Config.AzureBatch.HeadPool.ValueString()
+		headJobCpus2 := new(int)
+		if !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsNull() {
+			*headJobCpus2 = int(r.ComputeEnv.Config.AzureBatch.HeadJobCpus.ValueInt32())
 		} else {
-			headPool = nil
+			headJobCpus2 = nil
+		}
+		headJobMemoryMb2 := new(int)
+		if !r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb2 = int(r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb.ValueInt32())
+		} else {
+			headJobMemoryMb2 = nil
+		}
+		headPool1 := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.HeadPool.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadPool.IsNull() {
+			*headPool1 = r.ComputeEnv.Config.AzureBatch.HeadPool.ValueString()
+		} else {
+			headPool1 = nil
+		}
+		jobMaxWallClockTime := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.JobMaxWallClockTime.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.JobMaxWallClockTime.IsNull() {
+			*jobMaxWallClockTime = r.ComputeEnv.Config.AzureBatch.JobMaxWallClockTime.ValueString()
+		} else {
+			jobMaxWallClockTime = nil
 		}
 		managedIdentityClientID := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsNull() {
 			*managedIdentityClientID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.ValueString()
 		} else {
 			managedIdentityClientID = nil
+		}
+		managedIdentityHeadResourceID := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityHeadResourceID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityHeadResourceID.IsNull() {
+			*managedIdentityHeadResourceID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityHeadResourceID.ValueString()
+		} else {
+			managedIdentityHeadResourceID = nil
+		}
+		managedIdentityPoolClientID := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolClientID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolClientID.IsNull() {
+			*managedIdentityPoolClientID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolClientID.ValueString()
+		} else {
+			managedIdentityPoolClientID = nil
+		}
+		managedIdentityPoolResourceID := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolResourceID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolResourceID.IsNull() {
+			*managedIdentityPoolResourceID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolResourceID.ValueString()
+		} else {
+			managedIdentityPoolResourceID = nil
 		}
 		nextflowConfig5 := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsNull() {
@@ -2024,6 +2202,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var region4 string
 		region4 = r.ComputeEnv.Config.AzureBatch.Region.ValueString()
 
+		subnetId1 := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.SubnetID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.SubnetID.IsNull() {
+			*subnetId1 = r.ComputeEnv.Config.AzureBatch.SubnetID.ValueString()
+		} else {
+			subnetId1 = nil
+		}
+		terminateJobsOnCompletion := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.TerminateJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.TerminateJobsOnCompletion.IsNull() {
+			*terminateJobsOnCompletion = r.ComputeEnv.Config.AzureBatch.TerminateJobsOnCompletion.ValueBool()
+		} else {
+			terminateJobsOnCompletion = nil
+		}
 		tokenDuration := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsNull() {
 			*tokenDuration = r.ComputeEnv.Config.AzureBatch.TokenDuration.ValueString()
@@ -2042,27 +2232,43 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			workDir5 = nil
 		}
-		azureBatchConfiguration = &shared.AzureBatchConfiguration{
-			AutoPoolMode:            autoPoolMode,
-			DeleteJobsOnCompletion:  deleteJobsOnCompletion,
-			DeletePoolsOnCompletion: deletePoolsOnCompletion,
-			Environment:             environment5,
-			Forge:                   forge1,
-			EnableFusion:            enableFusion3,
-			HeadPool:                headPool,
-			ManagedIdentityClientID: managedIdentityClientID,
-			NextflowConfig:          nextflowConfig5,
-			PostRunScript:           postRunScript5,
-			PreRunScript:            preRunScript5,
-			Region:                  region4,
-			TokenDuration:           tokenDuration,
-			EnableWave:              enableWave3,
-			WorkDir:                 workDir5,
+		workerPool1 := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.WorkerPool.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WorkerPool.IsNull() {
+			*workerPool1 = r.ComputeEnv.Config.AzureBatch.WorkerPool.ValueString()
+		} else {
+			workerPool1 = nil
+		}
+		azureBatchConfigurationInput = &shared.AzureBatchConfigurationInput{
+			AutoPoolMode:                  autoPoolMode,
+			DeleteJobsOnCompletionEnabled: deleteJobsOnCompletionEnabled,
+			DeletePoolsOnCompletion:       deletePoolsOnCompletion,
+			DeleteTasksOnCompletion:       deleteTasksOnCompletion,
+			Environment:                   environment5,
+			Forge:                         forge1,
+			EnableFusion:                  enableFusion3,
+			HeadJobCpus:                   headJobCpus2,
+			HeadJobMemoryMb:               headJobMemoryMb2,
+			HeadPool:                      headPool1,
+			JobMaxWallClockTime:           jobMaxWallClockTime,
+			ManagedIdentityClientID:       managedIdentityClientID,
+			ManagedIdentityHeadResourceID: managedIdentityHeadResourceID,
+			ManagedIdentityPoolClientID:   managedIdentityPoolClientID,
+			ManagedIdentityPoolResourceID: managedIdentityPoolResourceID,
+			NextflowConfig:                nextflowConfig5,
+			PostRunScript:                 postRunScript5,
+			PreRunScript:                  preRunScript5,
+			Region:                        region4,
+			SubnetID:                      subnetId1,
+			TerminateJobsOnCompletion:     terminateJobsOnCompletion,
+			TokenDuration:                 tokenDuration,
+			EnableWave:                    enableWave3,
+			WorkDir:                       workDir5,
+			WorkerPool:                    workerPool1,
 		}
 	}
-	if azureBatchConfiguration != nil {
-		config = shared.ComputeConfig{
-			AzureBatchConfiguration: azureBatchConfiguration,
+	if azureBatchConfigurationInput != nil {
+		config = shared.ComputeConfigInput{
+			AzureBatchConfigurationInput: azureBatchConfigurationInput,
 		}
 	}
 	var azureCloudConfiguration *shared.AzureCloudConfiguration
@@ -2244,7 +2450,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if azureCloudConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			AzureCloudConfiguration: azureCloudConfiguration,
 		}
 	}
@@ -2397,7 +2603,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if ibmLSFConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			IBMLSFConfiguration: ibmLSFConfiguration,
 		}
 	}
@@ -2529,7 +2735,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if slurmConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			SlurmConfiguration: slurmConfiguration,
 		}
 	}
@@ -2574,17 +2780,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value10,
 			})
 		}
-		headJobCpus2 := new(int)
+		headJobCpus3 := new(int)
 		if !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus2 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus2 = nil
+			headJobCpus3 = nil
 		}
-		headJobMemoryMb2 := new(int)
+		headJobMemoryMb3 := new(int)
 		if !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb2 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb2 = nil
+			headJobMemoryMb3 = nil
 		}
 		headPodSpec := new(string)
 		if !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsNull() {
@@ -2652,8 +2858,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		kubernetesComputeConfiguration = &shared.KubernetesComputeConfiguration{
 			ComputeServiceAccount: computeServiceAccount,
 			Environment:           environment9,
-			HeadJobCpus:           headJobCpus2,
-			HeadJobMemoryMb:       headJobMemoryMb2,
+			HeadJobCpus:           headJobCpus3,
+			HeadJobMemoryMb:       headJobMemoryMb3,
 			HeadPodSpec:           headPodSpec,
 			HeadServiceAccount:    headServiceAccount,
 			Namespace:             namespace,
@@ -2670,7 +2876,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if kubernetesComputeConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			KubernetesComputeConfiguration: kubernetesComputeConfiguration,
 		}
 	}
@@ -2724,17 +2930,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion4 = nil
 		}
-		headJobCpus3 := new(int)
+		headJobCpus4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus3 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus3 = nil
+			headJobCpus4 = nil
 		}
-		headJobMemoryMb3 := new(int)
+		headJobMemoryMb4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb3 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb3 = nil
+			headJobMemoryMb4 = nil
 		}
 		headPodSpec1 := new(string)
 		if !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsNull() {
@@ -2828,8 +3034,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ComputeServiceAccount: computeServiceAccount1,
 			Environment:           environment10,
 			EnableFusion:          enableFusion4,
-			HeadJobCpus:           headJobCpus3,
-			HeadJobMemoryMb:       headJobMemoryMb3,
+			HeadJobCpus:           headJobCpus4,
+			HeadJobMemoryMb:       headJobMemoryMb4,
 			HeadPodSpec:           headPodSpec1,
 			HeadServiceAccount:    headServiceAccount1,
 			Namespace:             namespace1,
@@ -2848,7 +3054,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			AmazonEKSClusterConfiguration: amazonEKSClusterConfiguration,
 		}
 	}
@@ -2902,17 +3108,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion5 = nil
 		}
-		headJobCpus4 := new(int)
+		headJobCpus5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
-			*headJobCpus4 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus4 = nil
+			headJobCpus5 = nil
 		}
-		headJobMemoryMb4 := new(int)
+		headJobMemoryMb5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb4 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb4 = nil
+			headJobMemoryMb5 = nil
 		}
 		headPodSpec2 := new(string)
 		if !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsNull() {
@@ -3006,8 +3212,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ComputeServiceAccount: computeServiceAccount2,
 			Environment:           environment11,
 			EnableFusion:          enableFusion5,
-			HeadJobCpus:           headJobCpus4,
-			HeadJobMemoryMb:       headJobMemoryMb4,
+			HeadJobCpus:           headJobCpus5,
+			HeadJobMemoryMb:       headJobMemoryMb5,
 			HeadPodSpec:           headPodSpec2,
 			HeadServiceAccount:    headServiceAccount2,
 			Namespace:             namespace2,
@@ -3026,7 +3232,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			GoogleGKEClusterConfiguration: googleGKEClusterConfiguration,
 		}
 	}
@@ -3158,7 +3364,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if univaGridEngineConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			UnivaGridEngineConfiguration: univaGridEngineConfiguration,
 		}
 	}
@@ -3290,7 +3496,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if altairPBSConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			AltairPBSConfiguration: altairPBSConfiguration,
 		}
 	}
@@ -3422,7 +3628,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if moabConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			MoabConfiguration: moabConfiguration,
 		}
 	}
@@ -3485,6 +3691,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			preRunScript15 = nil
 		}
+		var schedConfig1 *shared.SchedConfig
+		if r.ComputeEnv.Config.LocalPlatform.SchedConfig != nil {
+			provisioningModel1 := new(shared.ProvisioningModel)
+			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsNull() {
+				*provisioningModel1 = shared.ProvisioningModel(r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.ValueString())
+			} else {
+				provisioningModel1 = nil
+			}
+			schedConfig1 = &shared.SchedConfig{
+				ProvisioningModel: provisioningModel1,
+			}
+		}
 		schedEnabled1 := new(bool)
 		if !r.ComputeEnv.Config.LocalPlatform.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedEnabled.IsNull() {
 			*schedEnabled1 = r.ComputeEnv.Config.LocalPlatform.SchedEnabled.ValueBool()
@@ -3506,13 +3724,14 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			NextflowConfig: nextflowConfig15,
 			PostRunScript:  postRunScript15,
 			PreRunScript:   preRunScript15,
+			SchedConfig:    schedConfig1,
 			SchedEnabled:   schedEnabled1,
 			WaveEnabled:    waveEnabled2,
 			WorkDir:        workDir15,
 		}
 	}
 	if localExecutionConfiguration != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			LocalExecutionConfiguration: localExecutionConfiguration,
 		}
 	}
@@ -3569,17 +3788,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value17,
 			})
 		}
-		headJobCpus5 := new(int)
+		headJobCpus6 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsNull() {
-			*headJobCpus5 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
+			*headJobCpus6 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus5 = nil
+			headJobCpus6 = nil
 		}
-		headJobMemoryMb5 := new(int)
+		headJobMemoryMb6 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb5 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb6 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb5 = nil
+			headJobMemoryMb6 = nil
 		}
 		labels1 := make(map[string]string)
 		for labelsKey1 := range r.ComputeEnv.Config.GoogleLifesciences.Labels {
@@ -3675,8 +3894,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			CopyImage:         copyImage1,
 			DebugMode:         debugMode1,
 			Environment:       environment16,
-			HeadJobCpus:       headJobCpus5,
-			HeadJobMemoryMb:   headJobMemoryMb5,
+			HeadJobCpus:       headJobCpus6,
+			HeadJobMemoryMb:   headJobMemoryMb6,
 			Labels:            labels1,
 			Location:          location1,
 			NextflowConfig:    nextflowConfig16,
@@ -3695,7 +3914,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleLifeSciencesConfigurationRetired != nil {
-		config = shared.ComputeConfig{
+		config = shared.ComputeConfigInput{
 			GoogleLifeSciencesConfigurationRetired: googleLifeSciencesConfigurationRetired,
 		}
 	}

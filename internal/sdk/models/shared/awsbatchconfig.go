@@ -2,6 +2,9 @@
 
 package shared
 
+type AwsBatchConfigForgedResource struct {
+}
+
 type AwsBatchConfig struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
@@ -31,9 +34,9 @@ type AwsBatchConfig struct {
 	// Must have permissions for ECR and CloudWatch Logs.
 	// Format: arn:aws:iam::account-id:role/role-name
 	//
-	ExecutionRole   *string          `json:"executionRole,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+	ExecutionRole   *string                                   `json:"executionRole,omitempty"`
+	Forge           *ForgeConfig                              `json:"forge,omitempty"`
+	ForgedResources []map[string]AwsBatchConfigForgedResource `json:"forgedResources,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -164,7 +167,7 @@ func (a *AwsBatchConfig) GetForge() *ForgeConfig {
 	return a.Forge
 }
 
-func (a *AwsBatchConfig) GetForgedResources() []map[string]any {
+func (a *AwsBatchConfig) GetForgedResources() []map[string]AwsBatchConfigForgedResource {
 	if a == nil {
 		return nil
 	}

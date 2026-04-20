@@ -7,6 +7,7 @@ package shared
 // for automated pipeline workflows.
 type ActionResponseDto struct {
 	Config *ActionConfigType `json:"config,omitempty"`
+	Error  *string           `json:"error,omitempty"`
 	// Identifier for the webhook associated with this action
 	HookID *string `json:"hookId,omitempty"`
 	// URL endpoint for the webhook that triggers this action
@@ -14,8 +15,6 @@ type ActionResponseDto struct {
 	// Unique identifier for the action
 	ID     *string      `json:"id,omitempty"`
 	Launch *LaunchDbDto `json:"launch,omitempty"`
-	// Status or informational message about the action
-	Message *string `json:"message,omitempty"`
 	// Human-readable name for the action
 	Name   *string       `json:"name,omitempty"`
 	Source *ActionSource `json:"source,omitempty"`
@@ -27,6 +26,13 @@ func (a *ActionResponseDto) GetConfig() *ActionConfigType {
 		return nil
 	}
 	return a.Config
+}
+
+func (a *ActionResponseDto) GetConfigBucket() *BucketActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
 }
 
 func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
@@ -41,6 +47,13 @@ func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
 		return v.ActionTowerActionConfig
 	}
 	return nil
+}
+
+func (a *ActionResponseDto) GetError() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Error
 }
 
 func (a *ActionResponseDto) GetHookID() *string {
@@ -69,13 +82,6 @@ func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {
 		return nil
 	}
 	return a.Launch
-}
-
-func (a *ActionResponseDto) GetMessage() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Message
 }
 
 func (a *ActionResponseDto) GetName() *string {

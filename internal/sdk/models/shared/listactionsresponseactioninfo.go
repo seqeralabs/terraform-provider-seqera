@@ -10,7 +10,9 @@ import (
 type ListActionsResponseActionInfo struct {
 	DateCreated *time.Time       `json:"dateCreated,omitempty"`
 	Endpoint    *string          `json:"endpoint,omitempty"`
+	Error       *string          `json:"error,omitempty"`
 	Event       *ActionEventType `json:"event,omitempty"`
+	Hint        *string          `json:"hint,omitempty"`
 	ID          *string          `json:"id,omitempty"`
 	Labels      []LabelDbDto     `json:"labels,omitempty"`
 	// Last seen timestamp (null if never seen)
@@ -48,11 +50,25 @@ func (l *ListActionsResponseActionInfo) GetEndpoint() *string {
 	return l.Endpoint
 }
 
+func (l *ListActionsResponseActionInfo) GetError() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Error
+}
+
 func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
 	if l == nil {
 		return nil
 	}
 	return l.Event
+}
+
+func (l *ListActionsResponseActionInfo) GetEventBucket() *BucketActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
 }
 
 func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
@@ -67,6 +83,13 @@ func (l *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent 
 		return v.ActionTowerActionEvent
 	}
 	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetHint() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Hint
 }
 
 func (l *ListActionsResponseActionInfo) GetID() *string {

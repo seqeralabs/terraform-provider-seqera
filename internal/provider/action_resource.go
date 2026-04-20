@@ -38,12 +38,13 @@ type ActionResource struct {
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
 	ActionID    types.String                   `tfsdk:"action_id"`
+	Bucket      *tfTypes.BucketActionRequest   `tfsdk:"bucket"`
 	Config      *tfTypes.ActionConfigType      `tfsdk:"config"`
+	Error       types.String                   `tfsdk:"error"`
 	HookID      types.String                   `tfsdk:"hook_id"`
 	HookURL     types.String                   `tfsdk:"hook_url"`
 	ID          types.String                   `tfsdk:"id"`
 	Launch      *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Message     types.String                   `tfsdk:"message"`
 	Name        types.String                   `tfsdk:"name"`
 	Source      types.String                   `tfsdk:"source"`
 	Status      types.String                   `tfsdk:"status"`
@@ -63,9 +64,63 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `Action string identifier`,
 			},
+			"bucket": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"data_link_id": schema.StringAttribute{
+						Optional: true,
+					},
+					"dataset_id": schema.StringAttribute{
+						Optional: true,
+					},
+					"events": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+					},
+					"filter": schema.StringAttribute{
+						Optional: true,
+					},
+					"marker_file": schema.StringAttribute{
+						Optional: true,
+					},
+				},
+			},
 			"config": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"bucket": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"bucket_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"data_link_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"dataset_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"events": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+							},
+							"filter": schema.StringAttribute{
+								Computed: true,
+							},
+							"marker_file": schema.StringAttribute{
+								Computed: true,
+							},
+							"subscription_arn": schema.StringAttribute{
+								Computed: true,
+							},
+							"topic_arn": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -83,6 +138,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 				},
+			},
+			"error": schema.StringAttribute{
+				Computed: true,
 			},
 			"hook_id": schema.StringAttribute{
 				Computed:    true,
@@ -251,10 +309,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"message": schema.StringAttribute{
-				Computed:    true,
-				Description: `Status or informational message about the action`,
-			},
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `Human-readable name for the action`,
@@ -266,11 +320,12 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `must be one of ["github", "tower"]; Requires replacement if changed.`,
+				Description: `must be one of ["github", "tower", "bucket"]; Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"github",
 						"tower",
+						"bucket",
 					),
 				},
 			},

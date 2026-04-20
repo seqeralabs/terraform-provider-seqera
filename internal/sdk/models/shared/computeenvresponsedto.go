@@ -188,9 +188,9 @@ func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
 	return c.Config
 }
 
-func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.MoabConfiguration
+		return v.AltairPBSConfiguration
 	}
 	return nil
 }
@@ -202,16 +202,16 @@ func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.GoogleCloudConfiguration
+		return v.AWSCloudConfiguration
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.LocalExecutionConfiguration
+		return v.AzureBatchConfiguration
 	}
 	return nil
 }
@@ -219,6 +219,13 @@ func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfigur
 func (c *ComputeEnvResponseDto) GetConfigAzureCloud() *AzureCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
 		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
 	}
 	return nil
 }
@@ -237,16 +244,16 @@ func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfig
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigGoogleCloud() *GoogleCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AWSCloudConfiguration
+		return v.GoogleCloudConfiguration
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
 	if v := c.GetConfig(); v != nil {
-		return v.SlurmConfiguration
+		return v.GoogleLifeSciencesConfigurationRetired
 	}
 	return nil
 }
@@ -258,9 +265,9 @@ func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfigu
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AltairPBSConfiguration
+		return v.LocalExecutionConfiguration
 	}
 	return nil
 }
@@ -272,9 +279,9 @@ func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AzureBatchConfiguration
+		return v.MoabConfiguration
 	}
 	return nil
 }
@@ -286,9 +293,9 @@ func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeC
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AmazonEKSClusterConfiguration
+		return v.SlurmConfiguration
 	}
 	return nil
 }
@@ -296,13 +303,6 @@ func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfigur
 func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
 	if v := c.GetConfig(); v != nil {
 		return v.UnivaGridEngineConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleLifeSciencesConfigurationRetired
 	}
 	return nil
 }

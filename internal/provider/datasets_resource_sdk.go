@@ -35,6 +35,11 @@ func (r *DatasetsResourceModel) RefreshFromSharedDatasetDto(ctx context.Context,
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.MediaType = types.StringPointerValue(resp.MediaType)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.SourceType != nil {
+			r.SourceType = types.StringValue(string(*resp.SourceType))
+		} else {
+			r.SourceType = types.StringNull()
+		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -74,9 +79,16 @@ func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context
 	var name string
 	name = r.Name.ValueString()
 
+	sourceType := new(shared.SourceType)
+	if !r.SourceType.IsUnknown() && !r.SourceType.IsNull() {
+		*sourceType = shared.SourceType(r.SourceType.ValueString())
+	} else {
+		sourceType = nil
+	}
 	out := shared.CreateDatasetRequest{
 		Description: description,
 		Name:        name,
+		SourceType:  sourceType,
 	}
 
 	return &out, diags

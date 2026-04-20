@@ -20,7 +20,8 @@ type DatasetDto struct {
 	// MIME type or media type of the dataset content (max 80 characters)
 	MediaType *string `json:"mediaType,omitempty"`
 	// Dataset name following naming conventions (1-100 characters)
-	Name *string `json:"name,omitempty"`
+	Name       *string     `json:"name,omitempty"`
+	SourceType *SourceType `json:"sourceType,omitempty"`
 	// Numeric identifier of the workspace containing this dataset
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 }
@@ -69,6 +70,13 @@ func (d *DatasetDto) GetName() *string {
 		return nil
 	}
 	return d.Name
+}
+
+func (d *DatasetDto) GetSourceType() *SourceType {
+	if d == nil {
+		return nil
+	}
+	return d.SourceType
 }
 
 func (d *DatasetDto) GetWorkspaceID() *int64 {

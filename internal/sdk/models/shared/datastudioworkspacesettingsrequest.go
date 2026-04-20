@@ -2,10 +2,50 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// NameStrategy - Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
+type NameStrategy string
+
+const (
+	NameStrategyNone        NameStrategy = "none"
+	NameStrategyTagPrefix   NameStrategy = "tagPrefix"
+	NameStrategyImageSuffix NameStrategy = "imageSuffix"
+)
+
+func (e NameStrategy) ToPointer() *NameStrategy {
+	return &e
+}
+func (e *NameStrategy) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "none":
+		fallthrough
+	case "tagPrefix":
+		fallthrough
+	case "imageSuffix":
+		*e = NameStrategy(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for NameStrategy: %v", v)
+	}
+}
+
 type DataStudioWorkspaceSettingsRequest struct {
-	ContainerRepository    *string `json:"containerRepository,omitempty"`
-	LifespanHours          *int    `json:"lifespanHours,omitempty"`
-	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
+	// Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+	ContainerRepository *string `json:"containerRepository,omitempty"`
+	// Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
+	LifespanHours *int `json:"lifespanHours,omitempty"`
+	// Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
+	NameStrategy *NameStrategy `json:"nameStrategy,omitempty"`
+	// When true, newly created Studio sessions are private by default and only accessible to their creator.
+	PrivateStudioByDefault *bool `json:"privateStudioByDefault,omitempty"`
 }
 
 func (d *DataStudioWorkspaceSettingsRequest) GetContainerRepository() *string {
@@ -20,6 +60,13 @@ func (d *DataStudioWorkspaceSettingsRequest) GetLifespanHours() *int {
 		return nil
 	}
 	return d.LifespanHours
+}
+
+func (d *DataStudioWorkspaceSettingsRequest) GetNameStrategy() *NameStrategy {
+	if d == nil {
+		return nil
+	}
+	return d.NameStrategy
 }
 
 func (d *DataStudioWorkspaceSettingsRequest) GetPrivateStudioByDefault() *bool {

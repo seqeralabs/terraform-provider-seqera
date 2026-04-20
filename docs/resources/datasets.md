@@ -25,6 +25,7 @@ minimize user data-input errors, and facilitate reproducible workflows.
 resource "seqera_datasets" "my_datasets" {
   description  = "Dataset containing sample genomic data"
   name         = "my-dataset"
+  source_type  = "LINKED"
   workspace_id = 7
 }
 ```
@@ -40,6 +41,7 @@ resource "seqera_datasets" "my_datasets" {
 ### Optional
 
 - `description` (String) Detailed description of the dataset contents and purpose (max 1000 characters). Requires replacement if changed.
+- `source_type` (String) must be one of ["UPLOADED", "LINKED"]; Requires replacement if changed.
 
 ### Read-Only
 

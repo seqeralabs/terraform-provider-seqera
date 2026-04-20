@@ -2,8 +2,11 @@
 
 package shared
 
+type Outputs struct {
+}
+
 type RunLog struct {
-	Outputs  any         `json:"outputs,omitempty"`
+	Outputs  *Outputs    `json:"outputs,omitempty"`
 	Request  *RunRequest `json:"request,omitempty"`
 	RunID    *string     `json:"run_id,omitempty"`
 	RunLog   *Log        `json:"run_log,omitempty"`
@@ -11,7 +14,7 @@ type RunLog struct {
 	TaskLogs []Log       `json:"task_logs,omitempty"`
 }
 
-func (r *RunLog) GetOutputs() any {
+func (r *RunLog) GetOutputs() *Outputs {
 	if r == nil {
 		return nil
 	}

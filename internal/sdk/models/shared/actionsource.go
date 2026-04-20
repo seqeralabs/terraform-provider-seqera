@@ -12,6 +12,7 @@ type ActionSource string
 const (
 	ActionSourceGithub ActionSource = "github"
 	ActionSourceTower  ActionSource = "tower"
+	ActionSourceBucket ActionSource = "bucket"
 )
 
 func (e ActionSource) ToPointer() *ActionSource {
@@ -26,6 +27,8 @@ func (e *ActionSource) UnmarshalJSON(data []byte) error {
 	case "github":
 		fallthrough
 	case "tower":
+		fallthrough
+	case "bucket":
 		*e = ActionSource(v)
 		return nil
 	default:

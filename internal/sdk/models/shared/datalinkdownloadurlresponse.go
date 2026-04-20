@@ -3,7 +3,24 @@
 package shared
 
 type DataLinkDownloadURLResponse struct {
-	URL *string `json:"url,omitempty"`
+	ResolvedMimeType *string `json:"resolvedMimeType,omitempty"`
+	ResolvedPath     *string `json:"resolvedPath,omitempty"`
+	URL              *string `json:"url,omitempty"`
+	Warning          *string `json:"warning,omitempty"`
+}
+
+func (d *DataLinkDownloadURLResponse) GetResolvedMimeType() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ResolvedMimeType
+}
+
+func (d *DataLinkDownloadURLResponse) GetResolvedPath() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ResolvedPath
 }
 
 func (d *DataLinkDownloadURLResponse) GetURL() *string {
@@ -11,4 +28,11 @@ func (d *DataLinkDownloadURLResponse) GetURL() *string {
 		return nil
 	}
 	return d.URL
+}
+
+func (d *DataLinkDownloadURLResponse) GetWarning() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Warning
 }

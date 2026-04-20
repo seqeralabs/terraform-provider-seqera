@@ -10,7 +10,7 @@ import (
 type ListWorkspaceDatasetVersionsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID int64   `pathParam:"style=simple,explode=false,name=workspaceId"`
-	MimeType    *string `queryParam:"style=form,explode=true,name=mimeType"`
+	MimeType    *string `queryParam:"style=form,explode=false,name=mimeType"`
 }
 
 func (l *ListWorkspaceDatasetVersionsRequest) GetWorkspaceID() int64 {

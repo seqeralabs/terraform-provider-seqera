@@ -19,9 +19,9 @@ func (c *CreateManagedIdentityResponse) GetConfig() *ComputeConfig {
 	return c.Config
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigMoabPlatform() *MoabConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigAltairPlatform() *AltairPBSConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.MoabConfiguration
+		return v.AltairPBSConfiguration
 	}
 	return nil
 }
@@ -33,16 +33,16 @@ func (c *CreateManagedIdentityResponse) GetConfigAwsBatch() *AWSBatchConfigurati
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigAwsCloud() *AWSCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.GoogleCloudConfiguration
+		return v.AWSCloudConfiguration
 	}
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigAzureBatch() *AzureBatchConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.LocalExecutionConfiguration
+		return v.AzureBatchConfiguration
 	}
 	return nil
 }
@@ -50,6 +50,13 @@ func (c *CreateManagedIdentityResponse) GetConfigLocalPlatform() *LocalExecution
 func (c *CreateManagedIdentityResponse) GetConfigAzureCloud() *AzureCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
 		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
 	}
 	return nil
 }
@@ -68,16 +75,16 @@ func (c *CreateManagedIdentityResponse) GetConfigGoogleBatch() *GoogleBatchServi
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigAwsCloud() *AWSCloudConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigGoogleCloud() *GoogleCloudConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AWSCloudConfiguration
+		return v.GoogleCloudConfiguration
 	}
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigSlurmPlatform() *SlurmConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
 	if v := c.GetConfig(); v != nil {
-		return v.SlurmConfiguration
+		return v.GoogleLifeSciencesConfigurationRetired
 	}
 	return nil
 }
@@ -89,9 +96,9 @@ func (c *CreateManagedIdentityResponse) GetConfigK8sPlatform() *KubernetesComput
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigAltairPlatform() *AltairPBSConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigLocalPlatform() *LocalExecutionConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AltairPBSConfiguration
+		return v.LocalExecutionConfiguration
 	}
 	return nil
 }
@@ -103,9 +110,9 @@ func (c *CreateManagedIdentityResponse) GetConfigLsfPlatform() *IBMLSFConfigurat
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigAzureBatch() *AzureBatchConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigMoabPlatform() *MoabConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AzureBatchConfiguration
+		return v.MoabConfiguration
 	}
 	return nil
 }
@@ -117,9 +124,9 @@ func (c *CreateManagedIdentityResponse) GetConfigSeqeracomputePlatform() *Seqera
 	return nil
 }
 
-func (c *CreateManagedIdentityResponse) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+func (c *CreateManagedIdentityResponse) GetConfigSlurmPlatform() *SlurmConfiguration {
 	if v := c.GetConfig(); v != nil {
-		return v.AmazonEKSClusterConfiguration
+		return v.SlurmConfiguration
 	}
 	return nil
 }
@@ -127,13 +134,6 @@ func (c *CreateManagedIdentityResponse) GetConfigEksPlatform() *AmazonEKSCluster
 func (c *CreateManagedIdentityResponse) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
 	if v := c.GetConfig(); v != nil {
 		return v.UnivaGridEngineConfiguration
-	}
-	return nil
-}
-
-func (c *CreateManagedIdentityResponse) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleLifeSciencesConfigurationRetired
 	}
 	return nil
 }

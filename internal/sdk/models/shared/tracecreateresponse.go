@@ -2,10 +2,134 @@
 
 package shared
 
+type Metadata struct {
+	CommitID           *string  `json:"commitId,omitempty"`
+	ComputeEnvID       *string  `json:"computeEnvId,omitempty"`
+	ComputeEnvName     *string  `json:"computeEnvName,omitempty"`
+	ComputeEnvPlatform *string  `json:"computeEnvPlatform,omitempty"`
+	Labels             []string `json:"labels,omitempty"`
+	OrgName            *string  `json:"orgName,omitempty"`
+	PipelineID         *int64   `json:"pipelineId,omitempty"`
+	PipelineName       *string  `json:"pipelineName,omitempty"`
+	Revision           *string  `json:"revision,omitempty"`
+	UserID             *int64   `json:"userId,omitempty"`
+	UserName           *string  `json:"userName,omitempty"`
+	UserOrganization   *string  `json:"userOrganization,omitempty"`
+	WorkspaceFullName  *string  `json:"workspaceFullName,omitempty"`
+	WorkspaceID        *int64   `json:"workspaceId,omitempty"`
+	WorkspaceName      *string  `json:"workspaceName,omitempty"`
+}
+
+func (m *Metadata) GetCommitID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.CommitID
+}
+
+func (m *Metadata) GetComputeEnvID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ComputeEnvID
+}
+
+func (m *Metadata) GetComputeEnvName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ComputeEnvName
+}
+
+func (m *Metadata) GetComputeEnvPlatform() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ComputeEnvPlatform
+}
+
+func (m *Metadata) GetLabels() []string {
+	if m == nil {
+		return nil
+	}
+	return m.Labels
+}
+
+func (m *Metadata) GetOrgName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.OrgName
+}
+
+func (m *Metadata) GetPipelineID() *int64 {
+	if m == nil {
+		return nil
+	}
+	return m.PipelineID
+}
+
+func (m *Metadata) GetPipelineName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.PipelineName
+}
+
+func (m *Metadata) GetRevision() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Revision
+}
+
+func (m *Metadata) GetUserID() *int64 {
+	if m == nil {
+		return nil
+	}
+	return m.UserID
+}
+
+func (m *Metadata) GetUserName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.UserName
+}
+
+func (m *Metadata) GetUserOrganization() *string {
+	if m == nil {
+		return nil
+	}
+	return m.UserOrganization
+}
+
+func (m *Metadata) GetWorkspaceFullName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.WorkspaceFullName
+}
+
+func (m *Metadata) GetWorkspaceID() *int64 {
+	if m == nil {
+		return nil
+	}
+	return m.WorkspaceID
+}
+
+func (m *Metadata) GetWorkspaceName() *string {
+	if m == nil {
+		return nil
+	}
+	return m.WorkspaceName
+}
+
 type TraceCreateResponse struct {
-	Message    *string `json:"message,omitempty"`
-	WatchURL   *string `json:"watchUrl,omitempty"`
-	WorkflowID *string `json:"workflowId,omitempty"`
+	Message    *string   `json:"message,omitempty"`
+	Metadata   *Metadata `json:"metadata,omitempty"`
+	WatchURL   *string   `json:"watchUrl,omitempty"`
+	WorkflowID *string   `json:"workflowId,omitempty"`
 }
 
 func (t *TraceCreateResponse) GetMessage() *string {
@@ -13,6 +137,13 @@ func (t *TraceCreateResponse) GetMessage() *string {
 		return nil
 	}
 	return t.Message
+}
+
+func (t *TraceCreateResponse) GetMetadata() *Metadata {
+	if t == nil {
+		return nil
+	}
+	return t.Metadata
 }
 
 func (t *TraceCreateResponse) GetWatchURL() *string {

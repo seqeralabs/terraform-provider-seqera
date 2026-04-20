@@ -26,7 +26,23 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Config.Github = &tfTypes.GithubActionConfig{}
 				r.Config.Github.Discriminator = types.StringPointerValue(resp.Config.GithubActionConfig.Discriminator)
 			}
+			if resp.Config.BucketActionConfig != nil {
+				r.Config.Bucket = &tfTypes.BucketActionConfig{}
+				r.Config.Bucket.BucketName = types.StringPointerValue(resp.Config.BucketActionConfig.BucketName)
+				r.Config.Bucket.DataLinkID = types.StringPointerValue(resp.Config.BucketActionConfig.DataLinkID)
+				r.Config.Bucket.DatasetID = types.StringPointerValue(resp.Config.BucketActionConfig.DatasetID)
+				r.Config.Bucket.Discriminator = types.StringPointerValue(resp.Config.BucketActionConfig.Discriminator)
+				r.Config.Bucket.Events = make([]types.String, 0, len(resp.Config.BucketActionConfig.Events))
+				for _, v := range resp.Config.BucketActionConfig.Events {
+					r.Config.Bucket.Events = append(r.Config.Bucket.Events, types.StringValue(v))
+				}
+				r.Config.Bucket.Filter = types.StringPointerValue(resp.Config.BucketActionConfig.Filter)
+				r.Config.Bucket.MarkerFile = types.StringPointerValue(resp.Config.BucketActionConfig.MarkerFile)
+				r.Config.Bucket.SubscriptionArn = types.StringPointerValue(resp.Config.BucketActionConfig.SubscriptionArn)
+				r.Config.Bucket.TopicArn = types.StringPointerValue(resp.Config.BucketActionConfig.TopicArn)
+			}
 		}
+		r.Error = types.StringPointerValue(resp.Error)
 		r.HookID = types.StringPointerValue(resp.HookID)
 		r.HookURL = types.StringPointerValue(resp.HookURL)
 		r.ID = types.StringPointerValue(resp.ID)
@@ -75,7 +91,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Launch.LabelIds = launchPriorData.LabelIds
 			}
 		}
-		r.Message = types.StringPointerValue(resp.Message)
 		r.Name = types.StringPointerValue(resp.Name)
 		if resp.Source != nil {
 			r.Source = types.StringValue(string(*resp.Source))
@@ -209,6 +224,44 @@ func (r *ActionResourceModel) ToOperationsUpdateActionRequest(ctx context.Contex
 func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (*shared.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	var bucket *shared.BucketActionRequest
+	if r.Bucket != nil {
+		dataLinkID := new(string)
+		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
+			*dataLinkID = r.Bucket.DataLinkID.ValueString()
+		} else {
+			dataLinkID = nil
+		}
+		datasetID := new(string)
+		if !r.Bucket.DatasetID.IsUnknown() && !r.Bucket.DatasetID.IsNull() {
+			*datasetID = r.Bucket.DatasetID.ValueString()
+		} else {
+			datasetID = nil
+		}
+		events := make([]string, 0, len(r.Bucket.Events))
+		for eventsIndex := range r.Bucket.Events {
+			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
+		}
+		filter := new(string)
+		if !r.Bucket.Filter.IsUnknown() && !r.Bucket.Filter.IsNull() {
+			*filter = r.Bucket.Filter.ValueString()
+		} else {
+			filter = nil
+		}
+		markerFile := new(string)
+		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
+			*markerFile = r.Bucket.MarkerFile.ValueString()
+		} else {
+			markerFile = nil
+		}
+		bucket = &shared.BucketActionRequest{
+			DataLinkID: dataLinkID,
+			DatasetID:  datasetID,
+			Events:     events,
+			Filter:     filter,
+			MarkerFile: markerFile,
+		}
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -374,6 +427,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		source = nil
 	}
 	out := shared.CreateActionRequest{
+		Bucket: bucket,
 		Launch: launch,
 		Name:   name,
 		Source: source,
@@ -385,6 +439,44 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (*shared.UpdateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	var bucket *shared.BucketActionRequest
+	if r.Bucket != nil {
+		dataLinkID := new(string)
+		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
+			*dataLinkID = r.Bucket.DataLinkID.ValueString()
+		} else {
+			dataLinkID = nil
+		}
+		datasetID := new(string)
+		if !r.Bucket.DatasetID.IsUnknown() && !r.Bucket.DatasetID.IsNull() {
+			*datasetID = r.Bucket.DatasetID.ValueString()
+		} else {
+			datasetID = nil
+		}
+		events := make([]string, 0, len(r.Bucket.Events))
+		for eventsIndex := range r.Bucket.Events {
+			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
+		}
+		filter := new(string)
+		if !r.Bucket.Filter.IsUnknown() && !r.Bucket.Filter.IsNull() {
+			*filter = r.Bucket.Filter.ValueString()
+		} else {
+			filter = nil
+		}
+		markerFile := new(string)
+		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
+			*markerFile = r.Bucket.MarkerFile.ValueString()
+		} else {
+			markerFile = nil
+		}
+		bucket = &shared.BucketActionRequest{
+			DataLinkID: dataLinkID,
+			DatasetID:  datasetID,
+			Events:     events,
+			Filter:     filter,
+			MarkerFile: markerFile,
+		}
+	}
 	var launch *shared.WorkflowLaunchRequest
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
@@ -548,6 +640,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		name = nil
 	}
 	out := shared.UpdateActionRequest{
+		Bucket: bucket,
 		Launch: launch,
 		Name:   name,
 	}

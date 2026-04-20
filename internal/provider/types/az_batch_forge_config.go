@@ -7,9 +7,12 @@ import (
 )
 
 type AzBatchForgeConfig struct {
-	AutoScale         types.Bool     `tfsdk:"auto_scale"`
-	ContainerRegIds   []types.String `tfsdk:"container_reg_ids"`
-	DisposeOnDeletion types.Bool     `tfsdk:"dispose_on_deletion"`
-	VMCount           types.Int32    `tfsdk:"vm_count"`
-	VMType            types.String   `tfsdk:"vm_type"`
+	AutoScale         types.Bool         `tfsdk:"auto_scale"`
+	ContainerRegIds   []types.String     `tfsdk:"container_reg_ids"`
+	DisposeOnDeletion types.Bool         `tfsdk:"dispose_on_deletion"`
+	DualPoolConfig    types.Bool         `tfsdk:"dual_pool_config"`
+	HeadPool          *AzBatchPoolConfig `tfsdk:"head_pool"`
+	VMCount           types.Int32        `tfsdk:"vm_count"`
+	VMType            types.String       `tfsdk:"vm_type"`
+	WorkerPool        *AzBatchPoolConfig `tfsdk:"worker_pool"`
 }

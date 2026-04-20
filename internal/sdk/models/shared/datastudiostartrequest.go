@@ -6,7 +6,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-type Configuration struct {
+type DataStudioStartRequestConfiguration struct {
 	CondaEnvironment *string `json:"condaEnvironment,omitempty"`
 	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
 	CPU *int `default:"2" json:"cpu"`
@@ -24,88 +24,89 @@ type Configuration struct {
 	SSHEnabled  *bool       `json:"sshEnabled,omitempty"`
 }
 
-func (c Configuration) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+func (d DataStudioStartRequestConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
 }
 
-func (c *Configuration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+func (d *DataStudioStartRequestConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Configuration) GetCondaEnvironment() *string {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetCondaEnvironment() *string {
+	if d == nil {
 		return nil
 	}
-	return c.CondaEnvironment
+	return d.CondaEnvironment
 }
 
-func (c *Configuration) GetCPU() *int {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetCPU() *int {
+	if d == nil {
 		return nil
 	}
-	return c.CPU
+	return d.CPU
 }
 
-func (c *Configuration) GetEnvironment() map[string]string {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetEnvironment() map[string]string {
+	if d == nil {
 		return nil
 	}
-	return c.Environment
+	return d.Environment
 }
 
-func (c *Configuration) GetGpu() *int {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetGpu() *int {
+	if d == nil {
 		return nil
 	}
-	return c.Gpu
+	return d.Gpu
 }
 
-func (c *Configuration) GetLifespanHours() *int {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetLifespanHours() *int {
+	if d == nil {
 		return nil
 	}
-	return c.LifespanHours
+	return d.LifespanHours
 }
 
-func (c *Configuration) GetMemory() *int {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetMemory() *int {
+	if d == nil {
 		return nil
 	}
-	return c.Memory
+	return d.Memory
 }
 
-func (c *Configuration) GetMountData() []string {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetMountData() []string {
+	if d == nil {
 		return nil
 	}
-	return c.MountData
+	return d.MountData
 }
 
-func (c *Configuration) GetMountDataV2() []MountData {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetMountDataV2() []MountData {
+	if d == nil {
 		return nil
 	}
-	return c.MountDataV2
+	return d.MountDataV2
 }
 
-func (c *Configuration) GetSSHEnabled() *bool {
-	if c == nil {
+func (d *DataStudioStartRequestConfiguration) GetSSHEnabled() *bool {
+	if d == nil {
 		return nil
 	}
-	return c.SSHEnabled
+	return d.SSHEnabled
 }
 
 type DataStudioStartRequest struct {
-	Configuration *Configuration `json:"configuration,omitempty"`
-	Description   *string        `json:"description,omitempty"`
-	LabelIds      []int64        `json:"labelIds,omitempty"`
-	Spot          *bool          `json:"spot,omitempty"`
+	Configuration *DataStudioStartRequestConfiguration `json:"configuration,omitempty"`
+	Description   *string                              `json:"description,omitempty"`
+	LabelIds      []int64                              `json:"labelIds,omitempty"`
+	Name          *string                              `json:"name,omitempty"`
+	Spot          *bool                                `json:"spot,omitempty"`
 }
 
-func (d *DataStudioStartRequest) GetConfiguration() *Configuration {
+func (d *DataStudioStartRequest) GetConfiguration() *DataStudioStartRequestConfiguration {
 	if d == nil {
 		return nil
 	}
@@ -124,6 +125,13 @@ func (d *DataStudioStartRequest) GetLabelIds() []int64 {
 		return nil
 	}
 	return d.LabelIds
+}
+
+func (d *DataStudioStartRequest) GetName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Name
 }
 
 func (d *DataStudioStartRequest) GetSpot() *bool {

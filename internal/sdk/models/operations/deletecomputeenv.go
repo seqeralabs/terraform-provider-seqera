@@ -12,6 +12,8 @@ type DeleteComputeEnvRequest struct {
 	ComputeEnvID string `pathParam:"style=simple,explode=false,name=computeEnvId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Force-delete a stuck compute environment, bypassing active-job checks. Only valid for environments in ERRORED, INVALID, or DELETING status.
+	Force *bool `queryParam:"style=form,explode=true,name=force"`
 }
 
 func (d *DeleteComputeEnvRequest) GetComputeEnvID() string {
@@ -26,6 +28,13 @@ func (d *DeleteComputeEnvRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
+}
+
+func (d *DeleteComputeEnvRequest) GetForce() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Force
 }
 
 type DeleteComputeEnvResponse struct {

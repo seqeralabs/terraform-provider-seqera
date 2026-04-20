@@ -151,6 +151,21 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 				r.Keys.Github.Token = githubPriorData.Token
 			}
 		}
+		if resp.Keys.GitHubAppSecurityKeysOutput != nil {
+			var githubAppPriorData *tfTypes.GitHubAppSecurityKeys
+			if keysPriorData != nil {
+				githubAppPriorData = keysPriorData.GithubApp
+			}
+			r.Keys.GithubApp = &tfTypes.GitHubAppSecurityKeys{}
+			r.Keys.GithubApp.AppID = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.AppID)
+			r.Keys.GithubApp.ClientID = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.ClientID)
+			r.Keys.GithubApp.Slug = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.Slug)
+			if githubAppPriorData != nil {
+				r.Keys.GithubApp.ClientSecret = githubAppPriorData.ClientSecret
+				r.Keys.GithubApp.PrivateKey = githubAppPriorData.PrivateKey
+				r.Keys.GithubApp.WebhookSecret = githubAppPriorData.WebhookSecret
+			}
+		}
 		if resp.Keys.GitLabCredentialsOutput != nil {
 			var gitlabPriorData *tfTypes.GitLabCredentials
 			if keysPriorData != nil {
@@ -181,6 +196,9 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 				googlePriorData = keysPriorData.Google
 			}
 			r.Keys.Google = &tfTypes.GoogleCredentials{}
+			r.Keys.Google.ServiceAccountEmail = types.StringPointerValue(resp.Keys.GoogleCredentialsOutput.ServiceAccountEmail)
+			r.Keys.Google.TokenAudience = types.StringPointerValue(resp.Keys.GoogleCredentialsOutput.TokenAudience)
+			r.Keys.Google.WorkloadIdentityProvider = types.StringPointerValue(resp.Keys.GoogleCredentialsOutput.WorkloadIdentityProvider)
 			if googlePriorData != nil {
 				r.Keys.Google.Data = googlePriorData.Data
 			}
@@ -450,8 +468,29 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			data = nil
 		}
+		serviceAccountEmail := new(string)
+		if !r.Keys.Google.ServiceAccountEmail.IsUnknown() && !r.Keys.Google.ServiceAccountEmail.IsNull() {
+			*serviceAccountEmail = r.Keys.Google.ServiceAccountEmail.ValueString()
+		} else {
+			serviceAccountEmail = nil
+		}
+		tokenAudience := new(string)
+		if !r.Keys.Google.TokenAudience.IsUnknown() && !r.Keys.Google.TokenAudience.IsNull() {
+			*tokenAudience = r.Keys.Google.TokenAudience.ValueString()
+		} else {
+			tokenAudience = nil
+		}
+		workloadIdentityProvider := new(string)
+		if !r.Keys.Google.WorkloadIdentityProvider.IsUnknown() && !r.Keys.Google.WorkloadIdentityProvider.IsNull() {
+			*workloadIdentityProvider = r.Keys.Google.WorkloadIdentityProvider.ValueString()
+		} else {
+			workloadIdentityProvider = nil
+		}
 		googleCredentials = &shared.GoogleCredentials{
-			Data: data,
+			Data:                     data,
+			ServiceAccountEmail:      serviceAccountEmail,
+			TokenAudience:            tokenAudience,
+			WorkloadIdentityProvider: workloadIdentityProvider,
 		}
 	}
 	if googleCredentials != nil {
@@ -488,6 +527,58 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	if gitHubCredentials != nil {
 		keys = shared.SecurityKeys{
 			GitHubCredentials: gitHubCredentials,
+		}
+	}
+	var gitHubAppSecurityKeys *shared.GitHubAppSecurityKeys
+	if r.Keys.GithubApp != nil {
+		appID := new(string)
+		if !r.Keys.GithubApp.AppID.IsUnknown() && !r.Keys.GithubApp.AppID.IsNull() {
+			*appID = r.Keys.GithubApp.AppID.ValueString()
+		} else {
+			appID = nil
+		}
+		clientID := new(string)
+		if !r.Keys.GithubApp.ClientID.IsUnknown() && !r.Keys.GithubApp.ClientID.IsNull() {
+			*clientID = r.Keys.GithubApp.ClientID.ValueString()
+		} else {
+			clientID = nil
+		}
+		clientSecret := new(string)
+		if !r.Keys.GithubApp.ClientSecret.IsUnknown() && !r.Keys.GithubApp.ClientSecret.IsNull() {
+			*clientSecret = r.Keys.GithubApp.ClientSecret.ValueString()
+		} else {
+			clientSecret = nil
+		}
+		privateKey := new(string)
+		if !r.Keys.GithubApp.PrivateKey.IsUnknown() && !r.Keys.GithubApp.PrivateKey.IsNull() {
+			*privateKey = r.Keys.GithubApp.PrivateKey.ValueString()
+		} else {
+			privateKey = nil
+		}
+		slug := new(string)
+		if !r.Keys.GithubApp.Slug.IsUnknown() && !r.Keys.GithubApp.Slug.IsNull() {
+			*slug = r.Keys.GithubApp.Slug.ValueString()
+		} else {
+			slug = nil
+		}
+		webhookSecret := new(string)
+		if !r.Keys.GithubApp.WebhookSecret.IsUnknown() && !r.Keys.GithubApp.WebhookSecret.IsNull() {
+			*webhookSecret = r.Keys.GithubApp.WebhookSecret.ValueString()
+		} else {
+			webhookSecret = nil
+		}
+		gitHubAppSecurityKeys = &shared.GitHubAppSecurityKeys{
+			AppID:         appID,
+			ClientID:      clientID,
+			ClientSecret:  clientSecret,
+			PrivateKey:    privateKey,
+			Slug:          slug,
+			WebhookSecret: webhookSecret,
+		}
+	}
+	if gitHubAppSecurityKeys != nil {
+		keys = shared.SecurityKeys{
+			GitHubAppSecurityKeys: gitHubAppSecurityKeys,
 		}
 	}
 	var gitLabCredentials *shared.GitLabCredentials
@@ -591,15 +682,15 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			passphrase = nil
 		}
-		privateKey := new(string)
+		privateKey1 := new(string)
 		if !r.Keys.SSH.PrivateKey.IsUnknown() && !r.Keys.SSH.PrivateKey.IsNull() {
-			*privateKey = r.Keys.SSH.PrivateKey.ValueString()
+			*privateKey1 = r.Keys.SSH.PrivateKey.ValueString()
 		} else {
-			privateKey = nil
+			privateKey1 = nil
 		}
 		sshCredentials = &shared.SSHCredentials{
 			Passphrase: passphrase,
-			PrivateKey: privateKey,
+			PrivateKey: privateKey1,
 		}
 	}
 	if sshCredentials != nil {
@@ -615,11 +706,11 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			certificate = nil
 		}
-		privateKey1 := new(string)
+		privateKey2 := new(string)
 		if !r.Keys.K8s.PrivateKey.IsUnknown() && !r.Keys.K8s.PrivateKey.IsNull() {
-			*privateKey1 = r.Keys.K8s.PrivateKey.ValueString()
+			*privateKey2 = r.Keys.K8s.PrivateKey.ValueString()
 		} else {
-			privateKey1 = nil
+			privateKey2 = nil
 		}
 		token4 := new(string)
 		if !r.Keys.K8s.Token.IsUnknown() && !r.Keys.K8s.Token.IsNull() {
@@ -629,7 +720,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		}
 		kubernetesCredentials = &shared.KubernetesCredentials{
 			Certificate: certificate,
-			PrivateKey:  privateKey1,
+			PrivateKey:  privateKey2,
 			Token:       token4,
 		}
 	}
@@ -690,17 +781,17 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			batchName1 = nil
 		}
-		clientID := new(string)
+		clientId1 := new(string)
 		if !r.Keys.AzureCloud.ClientID.IsUnknown() && !r.Keys.AzureCloud.ClientID.IsNull() {
-			*clientID = r.Keys.AzureCloud.ClientID.ValueString()
+			*clientId1 = r.Keys.AzureCloud.ClientID.ValueString()
 		} else {
-			clientID = nil
+			clientId1 = nil
 		}
-		clientSecret := new(string)
+		clientSecret1 := new(string)
 		if !r.Keys.AzureCloud.ClientSecret.IsUnknown() && !r.Keys.AzureCloud.ClientSecret.IsNull() {
-			*clientSecret = r.Keys.AzureCloud.ClientSecret.ValueString()
+			*clientSecret1 = r.Keys.AzureCloud.ClientSecret.ValueString()
 		} else {
-			clientSecret = nil
+			clientSecret1 = nil
 		}
 		storageKey1 := new(string)
 		if !r.Keys.AzureCloud.StorageKey.IsUnknown() && !r.Keys.AzureCloud.StorageKey.IsNull() {
@@ -729,8 +820,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		azureCloudCredentials = &shared.AzureCloudCredentials{
 			BatchKey:       batchKey1,
 			BatchName:      batchName1,
-			ClientID:       clientID,
-			ClientSecret:   clientSecret,
+			ClientID:       clientId1,
+			ClientSecret:   clientSecret1,
 			StorageKey:     storageKey1,
 			StorageName:    storageName1,
 			SubscriptionID: subscriptionID,
@@ -880,17 +971,17 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			batchName2 = nil
 		}
-		clientId1 := new(string)
+		clientId2 := new(string)
 		if !r.Keys.AzureEntra.ClientID.IsUnknown() && !r.Keys.AzureEntra.ClientID.IsNull() {
-			*clientId1 = r.Keys.AzureEntra.ClientID.ValueString()
+			*clientId2 = r.Keys.AzureEntra.ClientID.ValueString()
 		} else {
-			clientId1 = nil
+			clientId2 = nil
 		}
-		clientSecret1 := new(string)
+		clientSecret2 := new(string)
 		if !r.Keys.AzureEntra.ClientSecret.IsUnknown() && !r.Keys.AzureEntra.ClientSecret.IsNull() {
-			*clientSecret1 = r.Keys.AzureEntra.ClientSecret.ValueString()
+			*clientSecret2 = r.Keys.AzureEntra.ClientSecret.ValueString()
 		} else {
-			clientSecret1 = nil
+			clientSecret2 = nil
 		}
 		storageKey2 := new(string)
 		if !r.Keys.AzureEntra.StorageKey.IsUnknown() && !r.Keys.AzureEntra.StorageKey.IsNull() {
@@ -913,8 +1004,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		azureEntraCredentials = &shared.AzureEntraCredentials{
 			BatchKey:     batchKey2,
 			BatchName:    batchName2,
-			ClientID:     clientId1,
-			ClientSecret: clientSecret1,
+			ClientID:     clientId2,
+			ClientSecret: clientSecret2,
 			StorageKey:   storageKey2,
 			StorageName:  storageName2,
 			TenantID:     tenantId1,

@@ -254,9 +254,10 @@ type LocalExecutionConfiguration struct {
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	SchedEnabled *bool   `json:"schedEnabled,omitempty"`
-	WaveEnabled  *bool   `json:"waveEnabled,omitempty"`
+	PreRunScript *string      `json:"preRunScript,omitempty"`
+	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
+	WaveEnabled  *bool        `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
 }
@@ -312,6 +313,13 @@ func (l *LocalExecutionConfiguration) GetPreRunScript() *string {
 		return nil
 	}
 	return l.PreRunScript
+}
+
+func (l *LocalExecutionConfiguration) GetSchedConfig() *SchedConfig {
+	if l == nil {
+		return nil
+	}
+	return l.SchedConfig
 }
 
 func (l *LocalExecutionConfiguration) GetSchedEnabled() *bool {
@@ -1844,11 +1852,12 @@ func (a *AzureCloudConfiguration) GetWorkDir() *string {
 	return a.WorkDir
 }
 
-type AzureBatchConfiguration struct {
+type AzureBatchConfigurationInput struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode            *bool             `json:"autoPoolMode,omitempty"`
-	DeleteJobsOnCompletion  *JobCleanupPolicy `json:"deleteJobsOnCompletion,omitempty"`
-	DeletePoolsOnCompletion *bool             `json:"deletePoolsOnCompletion,omitempty"`
+	AutoPoolMode                  *bool `json:"autoPoolMode,omitempty"`
+	DeleteJobsOnCompletionEnabled *bool `json:"deleteJobsOnCompletionEnabled,omitempty"`
+	DeletePoolsOnCompletion       *bool `json:"deletePoolsOnCompletion,omitempty"`
+	DeleteTasksOnCompletion       *bool `json:"deleteTasksOnCompletion,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
@@ -1859,17 +1868,29 @@ type AzureBatchConfiguration struct {
 	//
 	// Requires `enable_wave = true`.
 	//
-	EnableFusion            *bool   `json:"fusion2Enabled,omitempty"`
-	HeadPool                *string `json:"headPool,omitempty"`
-	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	HeadPool        *string `json:"headPool,omitempty"`
+	// Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days.
+	JobMaxWallClockTime           *string `json:"jobMaxWallClockTime,omitempty"`
+	ManagedIdentityClientID       *string `json:"managedIdentityClientId,omitempty"`
+	ManagedIdentityHeadResourceID *string `json:"managedIdentityHeadResourceId,omitempty"`
+	ManagedIdentityPoolClientID   *string `json:"managedIdentityPoolClientId,omitempty"`
+	ManagedIdentityPoolResourceID *string `json:"managedIdentityPoolResourceId,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
-	PreRunScript  *string `json:"preRunScript,omitempty"`
-	Region        string  `json:"region"`
-	TokenDuration *string `json:"tokenDuration,omitempty"`
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	Region       string  `json:"region"`
+	// Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials.
+	SubnetID                  *string `json:"subnetId,omitempty"`
+	TerminateJobsOnCompletion *bool   `json:"terminateJobsOnCompletion,omitempty"`
+	TokenDuration             *string `json:"tokenDuration,omitempty"`
 	// Allow access to private container repositories and the provisioning of containers in your
 	// Nextflow pipelines via the Wave containers service.
 	//
@@ -1877,130 +1898,215 @@ type AzureBatchConfiguration struct {
 	//
 	EnableWave *bool `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir    *string `json:"workDir,omitempty"`
+	WorkerPool *string `json:"workerPool,omitempty"`
 }
 
-func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
+func (a AzureBatchConfigurationInput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(a, "", false)
 }
 
-func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
+func (a *AzureBatchConfigurationInput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
+func (a *AzureBatchConfigurationInput) GetAutoPoolMode() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.AutoPoolMode
 }
 
-func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *JobCleanupPolicy {
+func (a *AzureBatchConfigurationInput) GetDeleteJobsOnCompletionEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.DeleteJobsOnCompletion
+	return a.DeleteJobsOnCompletionEnabled
 }
 
-func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
+func (a *AzureBatchConfigurationInput) GetDeletePoolsOnCompletion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.DeletePoolsOnCompletion
 }
 
-func (a *AzureBatchConfiguration) GetDiscriminator() *string {
+func (a *AzureBatchConfigurationInput) GetDeleteTasksOnCompletion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DeleteTasksOnCompletion
+}
+
+func (a *AzureBatchConfigurationInput) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Discriminator
 }
 
-func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+func (a *AzureBatchConfigurationInput) GetEnvironment() []ConfigEnvVariable {
 	if a == nil {
 		return nil
 	}
 	return a.Environment
 }
 
-func (a *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
+func (a *AzureBatchConfigurationInput) GetForge() *AzBatchForgeConfig {
 	if a == nil {
 		return nil
 	}
 	return a.Forge
 }
 
-func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
+func (a *AzureBatchConfigurationInput) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.EnableFusion
 }
 
-func (a *AzureBatchConfiguration) GetHeadPool() *string {
+func (a *AzureBatchConfigurationInput) GetHeadJobCpus() *int {
+	if a == nil {
+		return nil
+	}
+	return a.HeadJobCpus
+}
+
+func (a *AzureBatchConfigurationInput) GetHeadJobMemoryMb() *int {
+	if a == nil {
+		return nil
+	}
+	return a.HeadJobMemoryMb
+}
+
+func (a *AzureBatchConfigurationInput) GetHeadPool() *string {
 	if a == nil {
 		return nil
 	}
 	return a.HeadPool
 }
 
-func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
+func (a *AzureBatchConfigurationInput) GetJobMaxWallClockTime() *string {
+	if a == nil {
+		return nil
+	}
+	return a.JobMaxWallClockTime
+}
+
+func (a *AzureBatchConfigurationInput) GetManagedIdentityClientID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ManagedIdentityClientID
 }
 
-func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
+func (a *AzureBatchConfigurationInput) GetManagedIdentityHeadResourceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityHeadResourceID
+}
+
+func (a *AzureBatchConfigurationInput) GetManagedIdentityPoolClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityPoolClientID
+}
+
+func (a *AzureBatchConfigurationInput) GetManagedIdentityPoolResourceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityPoolResourceID
+}
+
+func (a *AzureBatchConfigurationInput) GetNextflowConfig() *string {
 	if a == nil {
 		return nil
 	}
 	return a.NextflowConfig
 }
 
-func (a *AzureBatchConfiguration) GetPostRunScript() *string {
+func (a *AzureBatchConfigurationInput) GetPostRunScript() *string {
 	if a == nil {
 		return nil
 	}
 	return a.PostRunScript
 }
 
-func (a *AzureBatchConfiguration) GetPreRunScript() *string {
+func (a *AzureBatchConfigurationInput) GetPreRunScript() *string {
 	if a == nil {
 		return nil
 	}
 	return a.PreRunScript
 }
 
-func (a *AzureBatchConfiguration) GetRegion() string {
+func (a *AzureBatchConfigurationInput) GetRegion() string {
 	if a == nil {
 		return ""
 	}
 	return a.Region
 }
 
-func (a *AzureBatchConfiguration) GetTokenDuration() *string {
+func (a *AzureBatchConfigurationInput) GetSubnetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SubnetID
+}
+
+func (a *AzureBatchConfigurationInput) GetTerminateJobsOnCompletion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.TerminateJobsOnCompletion
+}
+
+func (a *AzureBatchConfigurationInput) GetTokenDuration() *string {
 	if a == nil {
 		return nil
 	}
 	return a.TokenDuration
 }
 
-func (a *AzureBatchConfiguration) GetEnableWave() *bool {
+func (a *AzureBatchConfigurationInput) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.EnableWave
 }
 
-func (a *AzureBatchConfiguration) GetWorkDir() *string {
+func (a *AzureBatchConfigurationInput) GetWorkDir() *string {
 	if a == nil {
 		return nil
 	}
 	return a.WorkDir
+}
+
+func (a *AzureBatchConfigurationInput) GetWorkerPool() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkerPool
+}
+
+type GoogleCloudConfigForgedResource struct {
+}
+
+func (g GoogleCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 type GoogleCloudConfiguration struct {
@@ -2009,12 +2115,12 @@ type GoogleCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
-	ForgedResources []map[string]any    `json:"forgedResources,omitempty"`
-	Fusion2Enabled  *bool               `json:"fusion2Enabled,omitempty"`
-	GpuEnabled      *bool               `json:"gpuEnabled,omitempty"`
-	ImageID         *string             `json:"imageId,omitempty"`
-	InstanceType    *string             `json:"instanceType,omitempty"`
+	Environment     []ConfigEnvVariable                          `json:"environment,omitempty"`
+	ForgedResources []map[string]GoogleCloudConfigForgedResource `json:"forgedResources,omitempty"`
+	Fusion2Enabled  *bool                                        `json:"fusion2Enabled,omitempty"`
+	GpuEnabled      *bool                                        `json:"gpuEnabled,omitempty"`
+	ImageID         *string                                      `json:"imageId,omitempty"`
+	InstanceType    *string                                      `json:"instanceType,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Shell script to execute after workflow completes
@@ -2069,7 +2175,7 @@ func (g *GoogleCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return g.Environment
 }
 
-func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]any {
+func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]GoogleCloudConfigForgedResource {
 	if g == nil {
 		return nil
 	}
@@ -2175,8 +2281,8 @@ type GoogleBatchServiceConfiguration struct {
 	// Google Cloud instance template name or self-link for compute job VMs.
 	// Overrides other VM configuration settings for compute jobs.
 	//
-	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
-	ComputeJobsMachineType      *string `json:"computeJobsMachineType,omitempty"`
+	ComputeJobsInstanceTemplate *string  `json:"computeJobsInstanceTemplate,omitempty"`
+	ComputeJobsMachineType      []string `json:"computeJobsMachineType,omitempty"`
 	// Container image used for file staging (copying data to/from Cloud Storage).
 	//
 	CopyImage *string `json:"copyImage,omitempty"`
@@ -2197,7 +2303,8 @@ type GoogleBatchServiceConfiguration struct {
 	//
 	// Requires `enable_wave = true`.
 	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	EnableFusion    *bool `json:"fusion2Enabled,omitempty"`
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Number of CPUs allocated for the Nextflow head job.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -2304,7 +2411,7 @@ func (g *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *stri
 	return g.ComputeJobsInstanceTemplate
 }
 
-func (g *GoogleBatchServiceConfiguration) GetComputeJobsMachineType() *string {
+func (g *GoogleBatchServiceConfiguration) GetComputeJobsMachineType() []string {
 	if g == nil {
 		return nil
 	}
@@ -2351,6 +2458,13 @@ func (g *GoogleBatchServiceConfiguration) GetEnableFusion() *bool {
 		return nil
 	}
 	return g.EnableFusion
+}
+
+func (g *GoogleBatchServiceConfiguration) GetFusionSnapshots() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.FusionSnapshots
 }
 
 func (g *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
@@ -2600,6 +2714,20 @@ func (s *SeqeraComputeConfiguration) GetWorkDir() *string {
 	return s.WorkDir
 }
 
+type AwsCloudConfigForgedResource struct {
+}
+
+func (a AwsCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AwsCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type AWSCloudConfiguration struct {
 	// List of additional S3 bucket names that compute jobs are allowed to access.
 	// The work directory bucket is automatically included.
@@ -2620,8 +2748,8 @@ type AWSCloudConfiguration struct {
 	//
 	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
-	ForgedResources []map[string]any    `json:"forgedResources,omitempty"`
+	Environment     []ConfigEnvVariable                       `json:"environment,omitempty"`
+	ForgedResources []map[string]AwsCloudConfigForgedResource `json:"forgedResources,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -2656,8 +2784,9 @@ type AWSCloudConfiguration struct {
 	// AWS region where the compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
-	Region       string `json:"region"`
-	SchedEnabled *bool  `json:"schedEnabled,omitempty"`
+	Region       string       `json:"region"`
+	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//
@@ -2729,7 +2858,7 @@ func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AWSCloudConfiguration) GetForgedResources() []map[string]any {
+func (a *AWSCloudConfiguration) GetForgedResources() []map[string]AwsCloudConfigForgedResource {
 	if a == nil {
 		return nil
 	}
@@ -2806,6 +2935,13 @@ func (a *AWSCloudConfiguration) GetRegion() string {
 	return a.Region
 }
 
+func (a *AWSCloudConfiguration) GetSchedConfig() *SchedConfig {
+	if a == nil {
+		return nil
+	}
+	return a.SchedConfig
+}
+
 func (a *AWSCloudConfiguration) GetSchedEnabled() *bool {
 	if a == nil {
 		return nil
@@ -2841,6 +2977,20 @@ func (a *AWSCloudConfiguration) GetWorkDir() *string {
 	return a.WorkDir
 }
 
+type ComputeConfigAwsBatchConfigForgedResource struct {
+}
+
+func (c ComputeConfigAwsBatchConfigForgedResource) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ComputeConfigAwsBatchConfigForgedResource) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 type AWSBatchConfiguration struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
@@ -2868,9 +3018,9 @@ type AWSBatchConfiguration struct {
 	// Must have permissions for ECR and CloudWatch Logs.
 	// Format: arn:aws:iam::account-id:role/role-name
 	//
-	ExecutionRole   *string          `json:"executionRole,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+	ExecutionRole   *string                                                `json:"executionRole,omitempty"`
+	Forge           *ForgeConfig                                           `json:"forge,omitempty"`
+	ForgedResources []map[string]ComputeConfigAwsBatchConfigForgedResource `json:"forgedResources,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -3004,7 +3154,7 @@ func (a *AWSBatchConfiguration) GetForge() *ForgeConfig {
 	return a.Forge
 }
 
-func (a *AWSBatchConfiguration) GetForgedResources() []map[string]any {
+func (a *AWSBatchConfiguration) GetForgedResources() []map[string]ComputeConfigAwsBatchConfigForgedResource {
 	if a == nil {
 		return nil
 	}
@@ -3130,26 +3280,798 @@ func (a *AWSBatchConfiguration) GetWorkDir() *string {
 	return a.WorkDir
 }
 
+type ComputeConfigInputType string
+
+const (
+	ComputeConfigInputTypeAltairPlatform        ComputeConfigInputType = "altair-platform"
+	ComputeConfigInputTypeAwsBatch              ComputeConfigInputType = "aws-batch"
+	ComputeConfigInputTypeAwsCloud              ComputeConfigInputType = "aws-cloud"
+	ComputeConfigInputTypeAzureBatch            ComputeConfigInputType = "azure-batch"
+	ComputeConfigInputTypeAzureCloud            ComputeConfigInputType = "azure-cloud"
+	ComputeConfigInputTypeEksPlatform           ComputeConfigInputType = "eks-platform"
+	ComputeConfigInputTypeGkePlatform           ComputeConfigInputType = "gke-platform"
+	ComputeConfigInputTypeGoogleBatch           ComputeConfigInputType = "google-batch"
+	ComputeConfigInputTypeGoogleCloud           ComputeConfigInputType = "google-cloud"
+	ComputeConfigInputTypeGoogleLifesciences    ComputeConfigInputType = "google-lifesciences"
+	ComputeConfigInputTypeK8sPlatform           ComputeConfigInputType = "k8s-platform"
+	ComputeConfigInputTypeLocalPlatform         ComputeConfigInputType = "local-platform"
+	ComputeConfigInputTypeLsfPlatform           ComputeConfigInputType = "lsf-platform"
+	ComputeConfigInputTypeMoabPlatform          ComputeConfigInputType = "moab-platform"
+	ComputeConfigInputTypeSeqeracomputePlatform ComputeConfigInputType = "seqeracompute-platform"
+	ComputeConfigInputTypeSlurmPlatform         ComputeConfigInputType = "slurm-platform"
+	ComputeConfigInputTypeUgePlatform           ComputeConfigInputType = "uge-platform"
+)
+
+// ComputeConfigInput - Configuration settings for compute environments including work directories,
+// pre/post run scripts, and environment-specific parameters.
+type ComputeConfigInput struct {
+	AWSBatchConfiguration                  *AWSBatchConfiguration                  `queryParam:"inline" union:"member"`
+	AWSCloudConfiguration                  *AWSCloudConfiguration                  `queryParam:"inline" union:"member"`
+	SeqeraComputeConfiguration             *SeqeraComputeConfiguration             `queryParam:"inline" union:"member"`
+	GoogleBatchServiceConfiguration        *GoogleBatchServiceConfiguration        `queryParam:"inline" union:"member"`
+	GoogleCloudConfiguration               *GoogleCloudConfiguration               `queryParam:"inline" union:"member"`
+	AzureBatchConfigurationInput           *AzureBatchConfigurationInput           `queryParam:"inline" union:"member"`
+	AzureCloudConfiguration                *AzureCloudConfiguration                `queryParam:"inline" union:"member"`
+	IBMLSFConfiguration                    *IBMLSFConfiguration                    `queryParam:"inline" union:"member"`
+	SlurmConfiguration                     *SlurmConfiguration                     `queryParam:"inline" union:"member"`
+	KubernetesComputeConfiguration         *KubernetesComputeConfiguration         `queryParam:"inline" union:"member"`
+	AmazonEKSClusterConfiguration          *AmazonEKSClusterConfiguration          `queryParam:"inline" union:"member"`
+	GoogleGKEClusterConfiguration          *GoogleGKEClusterConfiguration          `queryParam:"inline" union:"member"`
+	UnivaGridEngineConfiguration           *UnivaGridEngineConfiguration           `queryParam:"inline" union:"member"`
+	AltairPBSConfiguration                 *AltairPBSConfiguration                 `queryParam:"inline" union:"member"`
+	MoabConfiguration                      *MoabConfiguration                      `queryParam:"inline" union:"member"`
+	LocalExecutionConfiguration            *LocalExecutionConfiguration            `queryParam:"inline" union:"member"`
+	GoogleLifeSciencesConfigurationRetired *GoogleLifeSciencesConfigurationRetired `queryParam:"inline" union:"member"`
+
+	Type ComputeConfigInputType
+}
+
+func CreateComputeConfigInputAltairPlatform(altairPlatform AltairPBSConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeAltairPlatform
+
+	typStr := string(typ)
+	altairPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AltairPBSConfiguration: &altairPlatform,
+		Type:                   typ,
+	}
+}
+
+func CreateComputeConfigInputAwsBatch(awsBatch AWSBatchConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeAwsBatch
+
+	typStr := string(typ)
+	awsBatch.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AWSBatchConfiguration: &awsBatch,
+		Type:                  typ,
+	}
+}
+
+func CreateComputeConfigInputAwsCloud(awsCloud AWSCloudConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeAwsCloud
+
+	typStr := string(typ)
+	awsCloud.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AWSCloudConfiguration: &awsCloud,
+		Type:                  typ,
+	}
+}
+
+func CreateComputeConfigInputAzureBatch(azureBatch AzureBatchConfigurationInput) ComputeConfigInput {
+	typ := ComputeConfigInputTypeAzureBatch
+
+	typStr := string(typ)
+	azureBatch.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AzureBatchConfigurationInput: &azureBatch,
+		Type:                         typ,
+	}
+}
+
+func CreateComputeConfigInputAzureCloud(azureCloud AzureCloudConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeAzureCloud
+
+	typStr := string(typ)
+	azureCloud.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AzureCloudConfiguration: &azureCloud,
+		Type:                    typ,
+	}
+}
+
+func CreateComputeConfigInputEksPlatform(eksPlatform AmazonEKSClusterConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeEksPlatform
+
+	typStr := string(typ)
+	eksPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		AmazonEKSClusterConfiguration: &eksPlatform,
+		Type:                          typ,
+	}
+}
+
+func CreateComputeConfigInputGkePlatform(gkePlatform GoogleGKEClusterConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeGkePlatform
+
+	typStr := string(typ)
+	gkePlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		GoogleGKEClusterConfiguration: &gkePlatform,
+		Type:                          typ,
+	}
+}
+
+func CreateComputeConfigInputGoogleBatch(googleBatch GoogleBatchServiceConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeGoogleBatch
+
+	typStr := string(typ)
+	googleBatch.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		GoogleBatchServiceConfiguration: &googleBatch,
+		Type:                            typ,
+	}
+}
+
+func CreateComputeConfigInputGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeGoogleCloud
+
+	typStr := string(typ)
+	googleCloud.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		GoogleCloudConfiguration: &googleCloud,
+		Type:                     typ,
+	}
+}
+
+func CreateComputeConfigInputGoogleLifesciences(googleLifesciences GoogleLifeSciencesConfigurationRetired) ComputeConfigInput {
+	typ := ComputeConfigInputTypeGoogleLifesciences
+
+	typStr := string(typ)
+	googleLifesciences.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		GoogleLifeSciencesConfigurationRetired: &googleLifesciences,
+		Type:                                   typ,
+	}
+}
+
+func CreateComputeConfigInputK8sPlatform(k8sPlatform KubernetesComputeConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeK8sPlatform
+
+	typStr := string(typ)
+	k8sPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		KubernetesComputeConfiguration: &k8sPlatform,
+		Type:                           typ,
+	}
+}
+
+func CreateComputeConfigInputLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeLocalPlatform
+
+	typStr := string(typ)
+	localPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		LocalExecutionConfiguration: &localPlatform,
+		Type:                        typ,
+	}
+}
+
+func CreateComputeConfigInputLsfPlatform(lsfPlatform IBMLSFConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeLsfPlatform
+
+	typStr := string(typ)
+	lsfPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		IBMLSFConfiguration: &lsfPlatform,
+		Type:                typ,
+	}
+}
+
+func CreateComputeConfigInputMoabPlatform(moabPlatform MoabConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeMoabPlatform
+
+	typStr := string(typ)
+	moabPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		MoabConfiguration: &moabPlatform,
+		Type:              typ,
+	}
+}
+
+func CreateComputeConfigInputSeqeracomputePlatform(seqeracomputePlatform SeqeraComputeConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeSeqeracomputePlatform
+
+	typStr := string(typ)
+	seqeracomputePlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		SeqeraComputeConfiguration: &seqeracomputePlatform,
+		Type:                       typ,
+	}
+}
+
+func CreateComputeConfigInputSlurmPlatform(slurmPlatform SlurmConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeSlurmPlatform
+
+	typStr := string(typ)
+	slurmPlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		SlurmConfiguration: &slurmPlatform,
+		Type:               typ,
+	}
+}
+
+func CreateComputeConfigInputUgePlatform(ugePlatform UnivaGridEngineConfiguration) ComputeConfigInput {
+	typ := ComputeConfigInputTypeUgePlatform
+
+	typStr := string(typ)
+	ugePlatform.Discriminator = &typStr
+
+	return ComputeConfigInput{
+		UnivaGridEngineConfiguration: &ugePlatform,
+		Type:                         typ,
+	}
+}
+
+func (u *ComputeConfigInput) UnmarshalJSON(data []byte) error {
+
+	type discriminator struct {
+		Discriminator string `json:"discriminator"`
+	}
+
+	dis := new(discriminator)
+	if err := json.Unmarshal(data, &dis); err != nil {
+		return fmt.Errorf("could not unmarshal discriminator: %w", err)
+	}
+
+	switch dis.Discriminator {
+	case "altair-platform":
+		altairPBSConfiguration := new(AltairPBSConfiguration)
+		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AltairPBSConfiguration = altairPBSConfiguration
+		u.Type = ComputeConfigInputTypeAltairPlatform
+		return nil
+	case "aws-batch":
+		awsBatchConfiguration := new(AWSBatchConfiguration)
+		if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AWSBatchConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AWSBatchConfiguration = awsBatchConfiguration
+		u.Type = ComputeConfigInputTypeAwsBatch
+		return nil
+	case "aws-cloud":
+		awsCloudConfiguration := new(AWSCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AWSCloudConfiguration = awsCloudConfiguration
+		u.Type = ComputeConfigInputTypeAwsCloud
+		return nil
+	case "azure-batch":
+		azureBatchConfigurationInput := new(AzureBatchConfigurationInput)
+		if err := utils.UnmarshalJSON(data, &azureBatchConfigurationInput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfigurationInput within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AzureBatchConfigurationInput = azureBatchConfigurationInput
+		u.Type = ComputeConfigInputTypeAzureBatch
+		return nil
+	case "azure-cloud":
+		azureCloudConfiguration := new(AzureCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &azureCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AzureCloudConfiguration = azureCloudConfiguration
+		u.Type = ComputeConfigInputTypeAzureCloud
+		return nil
+	case "eks-platform":
+		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
+		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.AmazonEKSClusterConfiguration = amazonEKSClusterConfiguration
+		u.Type = ComputeConfigInputTypeEksPlatform
+		return nil
+	case "gke-platform":
+		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
+		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GoogleGKEClusterConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.GoogleGKEClusterConfiguration = googleGKEClusterConfiguration
+		u.Type = ComputeConfigInputTypeGkePlatform
+		return nil
+	case "google-batch":
+		googleBatchServiceConfiguration := new(GoogleBatchServiceConfiguration)
+		if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-batch) type GoogleBatchServiceConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.GoogleBatchServiceConfiguration = googleBatchServiceConfiguration
+		u.Type = ComputeConfigInputTypeGoogleBatch
+		return nil
+	case "google-cloud":
+		googleCloudConfiguration := new(GoogleCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.GoogleCloudConfiguration = googleCloudConfiguration
+		u.Type = ComputeConfigInputTypeGoogleCloud
+		return nil
+	case "google-lifesciences":
+		googleLifeSciencesConfigurationRetired := new(GoogleLifeSciencesConfigurationRetired)
+		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfigurationRetired, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfigurationRetired within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.GoogleLifeSciencesConfigurationRetired = googleLifeSciencesConfigurationRetired
+		u.Type = ComputeConfigInputTypeGoogleLifesciences
+		return nil
+	case "k8s-platform":
+		kubernetesComputeConfiguration := new(KubernetesComputeConfiguration)
+		if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type KubernetesComputeConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.KubernetesComputeConfiguration = kubernetesComputeConfiguration
+		u.Type = ComputeConfigInputTypeK8sPlatform
+		return nil
+	case "local-platform":
+		localExecutionConfiguration := new(LocalExecutionConfiguration)
+		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.LocalExecutionConfiguration = localExecutionConfiguration
+		u.Type = ComputeConfigInputTypeLocalPlatform
+		return nil
+	case "lsf-platform":
+		ibmLSFConfiguration := new(IBMLSFConfiguration)
+		if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == lsf-platform) type IBMLSFConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.IBMLSFConfiguration = ibmLSFConfiguration
+		u.Type = ComputeConfigInputTypeLsfPlatform
+		return nil
+	case "moab-platform":
+		moabConfiguration := new(MoabConfiguration)
+		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.MoabConfiguration = moabConfiguration
+		u.Type = ComputeConfigInputTypeMoabPlatform
+		return nil
+	case "seqeracompute-platform":
+		seqeraComputeConfiguration := new(SeqeraComputeConfiguration)
+		if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute-platform) type SeqeraComputeConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.SeqeraComputeConfiguration = seqeraComputeConfiguration
+		u.Type = ComputeConfigInputTypeSeqeracomputePlatform
+		return nil
+	case "slurm-platform":
+		slurmConfiguration := new(SlurmConfiguration)
+		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.SlurmConfiguration = slurmConfiguration
+		u.Type = ComputeConfigInputTypeSlurmPlatform
+		return nil
+	case "uge-platform":
+		univaGridEngineConfiguration := new(UnivaGridEngineConfiguration)
+		if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == uge-platform) type UnivaGridEngineConfiguration within ComputeConfigInput: %w", string(data), err)
+		}
+
+		u.UnivaGridEngineConfiguration = univaGridEngineConfiguration
+		u.Type = ComputeConfigInputTypeUgePlatform
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for ComputeConfigInput", string(data))
+}
+
+func (u ComputeConfigInput) MarshalJSON() ([]byte, error) {
+	if u.AWSBatchConfiguration != nil {
+		return utils.MarshalJSON(u.AWSBatchConfiguration, "", true)
+	}
+
+	if u.AWSCloudConfiguration != nil {
+		return utils.MarshalJSON(u.AWSCloudConfiguration, "", true)
+	}
+
+	if u.SeqeraComputeConfiguration != nil {
+		return utils.MarshalJSON(u.SeqeraComputeConfiguration, "", true)
+	}
+
+	if u.GoogleBatchServiceConfiguration != nil {
+		return utils.MarshalJSON(u.GoogleBatchServiceConfiguration, "", true)
+	}
+
+	if u.GoogleCloudConfiguration != nil {
+		return utils.MarshalJSON(u.GoogleCloudConfiguration, "", true)
+	}
+
+	if u.AzureBatchConfigurationInput != nil {
+		return utils.MarshalJSON(u.AzureBatchConfigurationInput, "", true)
+	}
+
+	if u.AzureCloudConfiguration != nil {
+		return utils.MarshalJSON(u.AzureCloudConfiguration, "", true)
+	}
+
+	if u.IBMLSFConfiguration != nil {
+		return utils.MarshalJSON(u.IBMLSFConfiguration, "", true)
+	}
+
+	if u.SlurmConfiguration != nil {
+		return utils.MarshalJSON(u.SlurmConfiguration, "", true)
+	}
+
+	if u.KubernetesComputeConfiguration != nil {
+		return utils.MarshalJSON(u.KubernetesComputeConfiguration, "", true)
+	}
+
+	if u.AmazonEKSClusterConfiguration != nil {
+		return utils.MarshalJSON(u.AmazonEKSClusterConfiguration, "", true)
+	}
+
+	if u.GoogleGKEClusterConfiguration != nil {
+		return utils.MarshalJSON(u.GoogleGKEClusterConfiguration, "", true)
+	}
+
+	if u.UnivaGridEngineConfiguration != nil {
+		return utils.MarshalJSON(u.UnivaGridEngineConfiguration, "", true)
+	}
+
+	if u.AltairPBSConfiguration != nil {
+		return utils.MarshalJSON(u.AltairPBSConfiguration, "", true)
+	}
+
+	if u.MoabConfiguration != nil {
+		return utils.MarshalJSON(u.MoabConfiguration, "", true)
+	}
+
+	if u.LocalExecutionConfiguration != nil {
+		return utils.MarshalJSON(u.LocalExecutionConfiguration, "", true)
+	}
+
+	if u.GoogleLifeSciencesConfigurationRetired != nil {
+		return utils.MarshalJSON(u.GoogleLifeSciencesConfigurationRetired, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type ComputeConfigInput: all fields are null")
+}
+
+type DeleteJobsOnCompletion string
+
+const (
+	DeleteJobsOnCompletionOnSuccess DeleteJobsOnCompletion = "on_success"
+	DeleteJobsOnCompletionAlways    DeleteJobsOnCompletion = "always"
+	DeleteJobsOnCompletionNever     DeleteJobsOnCompletion = "never"
+)
+
+func (e DeleteJobsOnCompletion) ToPointer() *DeleteJobsOnCompletion {
+	return &e
+}
+func (e *DeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "on_success":
+		fallthrough
+	case "always":
+		fallthrough
+	case "never":
+		*e = DeleteJobsOnCompletion(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for DeleteJobsOnCompletion: %v", v)
+	}
+}
+
+type AzureBatchConfiguration struct {
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	AutoPoolMode                  *bool                   `json:"autoPoolMode,omitempty"`
+	DeleteJobsOnCompletion        *DeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
+	DeleteJobsOnCompletionEnabled *bool                   `json:"deleteJobsOnCompletionEnabled,omitempty"`
+	DeletePoolsOnCompletion       *bool                   `json:"deletePoolsOnCompletion,omitempty"`
+	DeleteTasksOnCompletion       *bool                   `json:"deleteTasksOnCompletion,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	Forge       *AzBatchForgeConfig `json:"forge,omitempty"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	HeadPool        *string `json:"headPool,omitempty"`
+	// Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days.
+	JobMaxWallClockTime           *string `json:"jobMaxWallClockTime,omitempty"`
+	ManagedIdentityClientID       *string `json:"managedIdentityClientId,omitempty"`
+	ManagedIdentityHeadResourceID *string `json:"managedIdentityHeadResourceId,omitempty"`
+	ManagedIdentityPoolClientID   *string `json:"managedIdentityPoolClientId,omitempty"`
+	ManagedIdentityPoolResourceID *string `json:"managedIdentityPoolResourceId,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	Region       string  `json:"region"`
+	// Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials.
+	SubnetID                  *string `json:"subnetId,omitempty"`
+	TerminateJobsOnCompletion *bool   `json:"terminateJobsOnCompletion,omitempty"`
+	TokenDuration             *string `json:"tokenDuration,omitempty"`
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
+	//
+	// Required when `enable_fusion` is true.
+	//
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Working directory path for workflow execution
+	WorkDir    *string `json:"workDir,omitempty"`
+	WorkerPool *string `json:"workerPool,omitempty"`
+}
+
+func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AutoPoolMode
+}
+
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *DeleteJobsOnCompletion {
+	if a == nil {
+		return nil
+	}
+	return a.DeleteJobsOnCompletion
+}
+
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DeleteJobsOnCompletionEnabled
+}
+
+func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DeletePoolsOnCompletion
+}
+
+func (a *AzureBatchConfiguration) GetDeleteTasksOnCompletion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DeleteTasksOnCompletion
+}
+
+func (a *AzureBatchConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
+	if a == nil {
+		return nil
+	}
+	return a.Forge
+}
+
+func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.EnableFusion
+}
+
+func (a *AzureBatchConfiguration) GetHeadJobCpus() *int {
+	if a == nil {
+		return nil
+	}
+	return a.HeadJobCpus
+}
+
+func (a *AzureBatchConfiguration) GetHeadJobMemoryMb() *int {
+	if a == nil {
+		return nil
+	}
+	return a.HeadJobMemoryMb
+}
+
+func (a *AzureBatchConfiguration) GetHeadPool() *string {
+	if a == nil {
+		return nil
+	}
+	return a.HeadPool
+}
+
+func (a *AzureBatchConfiguration) GetJobMaxWallClockTime() *string {
+	if a == nil {
+		return nil
+	}
+	return a.JobMaxWallClockTime
+}
+
+func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityClientID
+}
+
+func (a *AzureBatchConfiguration) GetManagedIdentityHeadResourceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityHeadResourceID
+}
+
+func (a *AzureBatchConfiguration) GetManagedIdentityPoolClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityPoolClientID
+}
+
+func (a *AzureBatchConfiguration) GetManagedIdentityPoolResourceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityPoolResourceID
+}
+
+func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AzureBatchConfiguration) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AzureBatchConfiguration) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AzureBatchConfiguration) GetRegion() string {
+	if a == nil {
+		return ""
+	}
+	return a.Region
+}
+
+func (a *AzureBatchConfiguration) GetSubnetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SubnetID
+}
+
+func (a *AzureBatchConfiguration) GetTerminateJobsOnCompletion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.TerminateJobsOnCompletion
+}
+
+func (a *AzureBatchConfiguration) GetTokenDuration() *string {
+	if a == nil {
+		return nil
+	}
+	return a.TokenDuration
+}
+
+func (a *AzureBatchConfiguration) GetEnableWave() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.EnableWave
+}
+
+func (a *AzureBatchConfiguration) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
+}
+
+func (a *AzureBatchConfiguration) GetWorkerPool() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkerPool
+}
+
 type ComputeConfigType string
 
 const (
-	ComputeConfigTypeMoabPlatform          ComputeConfigType = "moab-platform"
+	ComputeConfigTypeAltairPlatform        ComputeConfigType = "altair-platform"
 	ComputeConfigTypeAwsBatch              ComputeConfigType = "aws-batch"
-	ComputeConfigTypeGoogleCloud           ComputeConfigType = "google-cloud"
-	ComputeConfigTypeLocalPlatform         ComputeConfigType = "local-platform"
+	ComputeConfigTypeAwsCloud              ComputeConfigType = "aws-cloud"
+	ComputeConfigTypeAzureBatch            ComputeConfigType = "azure-batch"
 	ComputeConfigTypeAzureCloud            ComputeConfigType = "azure-cloud"
+	ComputeConfigTypeEksPlatform           ComputeConfigType = "eks-platform"
 	ComputeConfigTypeGkePlatform           ComputeConfigType = "gke-platform"
 	ComputeConfigTypeGoogleBatch           ComputeConfigType = "google-batch"
-	ComputeConfigTypeAwsCloud              ComputeConfigType = "aws-cloud"
-	ComputeConfigTypeSlurmPlatform         ComputeConfigType = "slurm-platform"
-	ComputeConfigTypeK8sPlatform           ComputeConfigType = "k8s-platform"
-	ComputeConfigTypeAltairPlatform        ComputeConfigType = "altair-platform"
-	ComputeConfigTypeLsfPlatform           ComputeConfigType = "lsf-platform"
-	ComputeConfigTypeAzureBatch            ComputeConfigType = "azure-batch"
-	ComputeConfigTypeSeqeracomputePlatform ComputeConfigType = "seqeracompute-platform"
-	ComputeConfigTypeEksPlatform           ComputeConfigType = "eks-platform"
-	ComputeConfigTypeUgePlatform           ComputeConfigType = "uge-platform"
+	ComputeConfigTypeGoogleCloud           ComputeConfigType = "google-cloud"
 	ComputeConfigTypeGoogleLifesciences    ComputeConfigType = "google-lifesciences"
+	ComputeConfigTypeK8sPlatform           ComputeConfigType = "k8s-platform"
+	ComputeConfigTypeLocalPlatform         ComputeConfigType = "local-platform"
+	ComputeConfigTypeLsfPlatform           ComputeConfigType = "lsf-platform"
+	ComputeConfigTypeMoabPlatform          ComputeConfigType = "moab-platform"
+	ComputeConfigTypeSeqeracomputePlatform ComputeConfigType = "seqeracompute-platform"
+	ComputeConfigTypeSlurmPlatform         ComputeConfigType = "slurm-platform"
+	ComputeConfigTypeUgePlatform           ComputeConfigType = "uge-platform"
 )
 
 // ComputeConfig - Configuration settings for compute environments including work directories,
@@ -3176,15 +4098,15 @@ type ComputeConfig struct {
 	Type ComputeConfigType
 }
 
-func CreateComputeConfigMoabPlatform(moabPlatform MoabConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeMoabPlatform
+func CreateComputeConfigAltairPlatform(altairPlatform AltairPBSConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAltairPlatform
 
 	typStr := string(typ)
-	moabPlatform.Discriminator = &typStr
+	altairPlatform.Discriminator = &typStr
 
 	return ComputeConfig{
-		MoabConfiguration: &moabPlatform,
-		Type:              typ,
+		AltairPBSConfiguration: &altairPlatform,
+		Type:                   typ,
 	}
 }
 
@@ -3200,27 +4122,27 @@ func CreateComputeConfigAwsBatch(awsBatch AWSBatchConfiguration) ComputeConfig {
 	}
 }
 
-func CreateComputeConfigGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeGoogleCloud
+func CreateComputeConfigAwsCloud(awsCloud AWSCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAwsCloud
 
 	typStr := string(typ)
-	googleCloud.Discriminator = &typStr
+	awsCloud.Discriminator = &typStr
 
 	return ComputeConfig{
-		GoogleCloudConfiguration: &googleCloud,
-		Type:                     typ,
+		AWSCloudConfiguration: &awsCloud,
+		Type:                  typ,
 	}
 }
 
-func CreateComputeConfigLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeLocalPlatform
+func CreateComputeConfigAzureBatch(azureBatch AzureBatchConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAzureBatch
 
 	typStr := string(typ)
-	localPlatform.Discriminator = &typStr
+	azureBatch.Discriminator = &typStr
 
 	return ComputeConfig{
-		LocalExecutionConfiguration: &localPlatform,
-		Type:                        typ,
+		AzureBatchConfiguration: &azureBatch,
+		Type:                    typ,
 	}
 }
 
@@ -3233,6 +4155,18 @@ func CreateComputeConfigAzureCloud(azureCloud AzureCloudConfiguration) ComputeCo
 	return ComputeConfig{
 		AzureCloudConfiguration: &azureCloud,
 		Type:                    typ,
+	}
+}
+
+func CreateComputeConfigEksPlatform(eksPlatform AmazonEKSClusterConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeEksPlatform
+
+	typStr := string(typ)
+	eksPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		AmazonEKSClusterConfiguration: &eksPlatform,
+		Type:                          typ,
 	}
 }
 
@@ -3260,111 +4194,15 @@ func CreateComputeConfigGoogleBatch(googleBatch GoogleBatchServiceConfiguration)
 	}
 }
 
-func CreateComputeConfigAwsCloud(awsCloud AWSCloudConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAwsCloud
+func CreateComputeConfigGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeGoogleCloud
 
 	typStr := string(typ)
-	awsCloud.Discriminator = &typStr
+	googleCloud.Discriminator = &typStr
 
 	return ComputeConfig{
-		AWSCloudConfiguration: &awsCloud,
-		Type:                  typ,
-	}
-}
-
-func CreateComputeConfigSlurmPlatform(slurmPlatform SlurmConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeSlurmPlatform
-
-	typStr := string(typ)
-	slurmPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		SlurmConfiguration: &slurmPlatform,
-		Type:               typ,
-	}
-}
-
-func CreateComputeConfigK8sPlatform(k8sPlatform KubernetesComputeConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeK8sPlatform
-
-	typStr := string(typ)
-	k8sPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		KubernetesComputeConfiguration: &k8sPlatform,
-		Type:                           typ,
-	}
-}
-
-func CreateComputeConfigAltairPlatform(altairPlatform AltairPBSConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAltairPlatform
-
-	typStr := string(typ)
-	altairPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		AltairPBSConfiguration: &altairPlatform,
-		Type:                   typ,
-	}
-}
-
-func CreateComputeConfigLsfPlatform(lsfPlatform IBMLSFConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeLsfPlatform
-
-	typStr := string(typ)
-	lsfPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		IBMLSFConfiguration: &lsfPlatform,
-		Type:                typ,
-	}
-}
-
-func CreateComputeConfigAzureBatch(azureBatch AzureBatchConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAzureBatch
-
-	typStr := string(typ)
-	azureBatch.Discriminator = &typStr
-
-	return ComputeConfig{
-		AzureBatchConfiguration: &azureBatch,
-		Type:                    typ,
-	}
-}
-
-func CreateComputeConfigSeqeracomputePlatform(seqeracomputePlatform SeqeraComputeConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeSeqeracomputePlatform
-
-	typStr := string(typ)
-	seqeracomputePlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		SeqeraComputeConfiguration: &seqeracomputePlatform,
-		Type:                       typ,
-	}
-}
-
-func CreateComputeConfigEksPlatform(eksPlatform AmazonEKSClusterConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeEksPlatform
-
-	typStr := string(typ)
-	eksPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		AmazonEKSClusterConfiguration: &eksPlatform,
-		Type:                          typ,
-	}
-}
-
-func CreateComputeConfigUgePlatform(ugePlatform UnivaGridEngineConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeUgePlatform
-
-	typStr := string(typ)
-	ugePlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		UnivaGridEngineConfiguration: &ugePlatform,
-		Type:                         typ,
+		GoogleCloudConfiguration: &googleCloud,
+		Type:                     typ,
 	}
 }
 
@@ -3380,6 +4218,90 @@ func CreateComputeConfigGoogleLifesciences(googleLifesciences GoogleLifeSciences
 	}
 }
 
+func CreateComputeConfigK8sPlatform(k8sPlatform KubernetesComputeConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeK8sPlatform
+
+	typStr := string(typ)
+	k8sPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		KubernetesComputeConfiguration: &k8sPlatform,
+		Type:                           typ,
+	}
+}
+
+func CreateComputeConfigLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeLocalPlatform
+
+	typStr := string(typ)
+	localPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		LocalExecutionConfiguration: &localPlatform,
+		Type:                        typ,
+	}
+}
+
+func CreateComputeConfigLsfPlatform(lsfPlatform IBMLSFConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeLsfPlatform
+
+	typStr := string(typ)
+	lsfPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		IBMLSFConfiguration: &lsfPlatform,
+		Type:                typ,
+	}
+}
+
+func CreateComputeConfigMoabPlatform(moabPlatform MoabConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeMoabPlatform
+
+	typStr := string(typ)
+	moabPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		MoabConfiguration: &moabPlatform,
+		Type:              typ,
+	}
+}
+
+func CreateComputeConfigSeqeracomputePlatform(seqeracomputePlatform SeqeraComputeConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeSeqeracomputePlatform
+
+	typStr := string(typ)
+	seqeracomputePlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		SeqeraComputeConfiguration: &seqeracomputePlatform,
+		Type:                       typ,
+	}
+}
+
+func CreateComputeConfigSlurmPlatform(slurmPlatform SlurmConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeSlurmPlatform
+
+	typStr := string(typ)
+	slurmPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		SlurmConfiguration: &slurmPlatform,
+		Type:               typ,
+	}
+}
+
+func CreateComputeConfigUgePlatform(ugePlatform UnivaGridEngineConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeUgePlatform
+
+	typStr := string(typ)
+	ugePlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		UnivaGridEngineConfiguration: &ugePlatform,
+		Type:                         typ,
+	}
+}
+
 func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
@@ -3392,14 +4314,14 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
-	case "moab-platform":
-		moabConfiguration := new(MoabConfiguration)
-		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfig: %w", string(data), err)
+	case "altair-platform":
+		altairPBSConfiguration := new(AltairPBSConfiguration)
+		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.MoabConfiguration = moabConfiguration
-		u.Type = ComputeConfigTypeMoabPlatform
+		u.AltairPBSConfiguration = altairPBSConfiguration
+		u.Type = ComputeConfigTypeAltairPlatform
 		return nil
 	case "aws-batch":
 		awsBatchConfiguration := new(AWSBatchConfiguration)
@@ -3410,23 +4332,23 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.AWSBatchConfiguration = awsBatchConfiguration
 		u.Type = ComputeConfigTypeAwsBatch
 		return nil
-	case "google-cloud":
-		googleCloudConfiguration := new(GoogleCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfig: %w", string(data), err)
+	case "aws-cloud":
+		awsCloudConfiguration := new(AWSCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.GoogleCloudConfiguration = googleCloudConfiguration
-		u.Type = ComputeConfigTypeGoogleCloud
+		u.AWSCloudConfiguration = awsCloudConfiguration
+		u.Type = ComputeConfigTypeAwsCloud
 		return nil
-	case "local-platform":
-		localExecutionConfiguration := new(LocalExecutionConfiguration)
-		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfig: %w", string(data), err)
+	case "azure-batch":
+		azureBatchConfiguration := new(AzureBatchConfiguration)
+		if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.LocalExecutionConfiguration = localExecutionConfiguration
-		u.Type = ComputeConfigTypeLocalPlatform
+		u.AzureBatchConfiguration = azureBatchConfiguration
+		u.Type = ComputeConfigTypeAzureBatch
 		return nil
 	case "azure-cloud":
 		azureCloudConfiguration := new(AzureCloudConfiguration)
@@ -3436,6 +4358,15 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 
 		u.AzureCloudConfiguration = azureCloudConfiguration
 		u.Type = ComputeConfigTypeAzureCloud
+		return nil
+	case "eks-platform":
+		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
+		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfig: %w", string(data), err)
+		}
+
+		u.AmazonEKSClusterConfiguration = amazonEKSClusterConfiguration
+		u.Type = ComputeConfigTypeEksPlatform
 		return nil
 	case "gke-platform":
 		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
@@ -3455,23 +4386,23 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.GoogleBatchServiceConfiguration = googleBatchServiceConfiguration
 		u.Type = ComputeConfigTypeGoogleBatch
 		return nil
-	case "aws-cloud":
-		awsCloudConfiguration := new(AWSCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfig: %w", string(data), err)
+	case "google-cloud":
+		googleCloudConfiguration := new(GoogleCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.AWSCloudConfiguration = awsCloudConfiguration
-		u.Type = ComputeConfigTypeAwsCloud
+		u.GoogleCloudConfiguration = googleCloudConfiguration
+		u.Type = ComputeConfigTypeGoogleCloud
 		return nil
-	case "slurm-platform":
-		slurmConfiguration := new(SlurmConfiguration)
-		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfig: %w", string(data), err)
+	case "google-lifesciences":
+		googleLifeSciencesConfigurationRetired := new(GoogleLifeSciencesConfigurationRetired)
+		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfigurationRetired, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfigurationRetired within ComputeConfig: %w", string(data), err)
 		}
 
-		u.SlurmConfiguration = slurmConfiguration
-		u.Type = ComputeConfigTypeSlurmPlatform
+		u.GoogleLifeSciencesConfigurationRetired = googleLifeSciencesConfigurationRetired
+		u.Type = ComputeConfigTypeGoogleLifesciences
 		return nil
 	case "k8s-platform":
 		kubernetesComputeConfiguration := new(KubernetesComputeConfiguration)
@@ -3482,14 +4413,14 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.KubernetesComputeConfiguration = kubernetesComputeConfiguration
 		u.Type = ComputeConfigTypeK8sPlatform
 		return nil
-	case "altair-platform":
-		altairPBSConfiguration := new(AltairPBSConfiguration)
-		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfig: %w", string(data), err)
+	case "local-platform":
+		localExecutionConfiguration := new(LocalExecutionConfiguration)
+		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.AltairPBSConfiguration = altairPBSConfiguration
-		u.Type = ComputeConfigTypeAltairPlatform
+		u.LocalExecutionConfiguration = localExecutionConfiguration
+		u.Type = ComputeConfigTypeLocalPlatform
 		return nil
 	case "lsf-platform":
 		ibmLSFConfiguration := new(IBMLSFConfiguration)
@@ -3500,14 +4431,14 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.IBMLSFConfiguration = ibmLSFConfiguration
 		u.Type = ComputeConfigTypeLsfPlatform
 		return nil
-	case "azure-batch":
-		azureBatchConfiguration := new(AzureBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfiguration within ComputeConfig: %w", string(data), err)
+	case "moab-platform":
+		moabConfiguration := new(MoabConfiguration)
+		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.AzureBatchConfiguration = azureBatchConfiguration
-		u.Type = ComputeConfigTypeAzureBatch
+		u.MoabConfiguration = moabConfiguration
+		u.Type = ComputeConfigTypeMoabPlatform
 		return nil
 	case "seqeracompute-platform":
 		seqeraComputeConfiguration := new(SeqeraComputeConfiguration)
@@ -3518,14 +4449,14 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.SeqeraComputeConfiguration = seqeraComputeConfiguration
 		u.Type = ComputeConfigTypeSeqeracomputePlatform
 		return nil
-	case "eks-platform":
-		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfig: %w", string(data), err)
+	case "slurm-platform":
+		slurmConfiguration := new(SlurmConfiguration)
+		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
-		u.AmazonEKSClusterConfiguration = amazonEKSClusterConfiguration
-		u.Type = ComputeConfigTypeEksPlatform
+		u.SlurmConfiguration = slurmConfiguration
+		u.Type = ComputeConfigTypeSlurmPlatform
 		return nil
 	case "uge-platform":
 		univaGridEngineConfiguration := new(UnivaGridEngineConfiguration)
@@ -3535,15 +4466,6 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 
 		u.UnivaGridEngineConfiguration = univaGridEngineConfiguration
 		u.Type = ComputeConfigTypeUgePlatform
-		return nil
-	case "google-lifesciences":
-		googleLifeSciencesConfigurationRetired := new(GoogleLifeSciencesConfigurationRetired)
-		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfigurationRetired, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfigurationRetired within ComputeConfig: %w", string(data), err)
-		}
-
-		u.GoogleLifeSciencesConfigurationRetired = googleLifeSciencesConfigurationRetired
-		u.Type = ComputeConfigTypeGoogleLifesciences
 		return nil
 	}
 

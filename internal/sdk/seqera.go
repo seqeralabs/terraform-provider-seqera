@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.119.0 and generator version 2.881.2
+// Generated from OpenAPI doc version 1.144.0 and generator version 2.881.2
 
 import (
 	"context"
@@ -83,6 +83,7 @@ type Seqera struct {
 	PipelineVersions *PipelineVersions
 	// Computing platforms
 	Platforms *Platforms
+	Roles     *Roles
 	// Seqera Platform API service information
 	ServiceInfo *ServiceInfo
 	SSHKeys     *SSHKeys
@@ -174,7 +175,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.30.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.881.2 1.119.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.881.2 1.144.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -213,6 +214,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PipelineVersions = newPipelineVersions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Platforms = newPlatforms(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ServiceInfo = newServiceInfo(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SSHKeys = newSSHKeys(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Studios = newStudios(sdk, sdk.sdkConfiguration, sdk.hooks)

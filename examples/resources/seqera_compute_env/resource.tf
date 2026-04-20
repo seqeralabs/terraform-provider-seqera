@@ -31,6 +31,7 @@ resource "seqera_compute_env" "my_computeenv" {
     name           = "...my_name..."
     platform       = "google-lifesciences"
   }
+  force = true
   label_ids = [
     6
   ]

@@ -16,7 +16,7 @@ type ListOrganizationTeamMembersRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int    `queryParam:"style=form,explode=true,name=offset"`
-	Search *string `queryParam:"style=form,explode=true,name=search"`
+	Search *string `queryParam:"style=form,explode=false,name=search"`
 }
 
 func (l *ListOrganizationTeamMembersRequest) GetOrgID() int64 {

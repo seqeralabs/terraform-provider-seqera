@@ -129,76 +129,80 @@ func (c *CredentialsInput) GetKeys() SecurityKeys {
 	return c.Keys
 }
 
-func (c *CredentialsInput) GetKeysS3() *S3CompatibleCredentials {
-	return c.GetKeys().S3CompatibleCredentials
-}
-
-func (c *CredentialsInput) GetKeysGithub() *GitHubCredentials {
-	return c.GetKeys().GitHubCredentials
-}
-
-func (c *CredentialsInput) GetKeysAzurerepos() *AzureReposCredentials {
-	return c.GetKeys().AzureReposCredentials
-}
-
-func (c *CredentialsInput) GetKeysAzureEntra() *AzureEntraCredentials {
-	return c.GetKeys().AzureEntraCredentials
-}
-
-func (c *CredentialsInput) GetKeysContainerReg() *ContainerRegistryCredentials {
-	return c.GetKeys().ContainerRegistryCredentials
-}
-
-func (c *CredentialsInput) GetKeysTwAgent() *TowerAgentCredentials {
-	return c.GetKeys().TowerAgentCredentials
-}
-
-func (c *CredentialsInput) GetKeysK8s() *KubernetesCredentials {
-	return c.GetKeys().KubernetesCredentials
-}
-
-func (c *CredentialsInput) GetKeysSSH() *SSHCredentials {
-	return c.GetKeys().SSHCredentials
-}
-
-func (c *CredentialsInput) GetKeysGoogle() *GoogleCredentials {
-	return c.GetKeys().GoogleCredentials
-}
-
-func (c *CredentialsInput) GetKeysBitbucket() *BitBucketCredentials {
-	return c.GetKeys().BitBucketCredentials
-}
-
-func (c *CredentialsInput) GetKeysAzureCloud() *AzureCloudCredentials {
-	return c.GetKeys().AzureCloudCredentials
-}
-
-func (c *CredentialsInput) GetKeysLocal() *LocalSecurityKeys {
-	return c.GetKeys().LocalSecurityKeys
-}
-
-func (c *CredentialsInput) GetKeysGitea() *GiteaCredentials {
-	return c.GetKeys().GiteaCredentials
-}
-
-func (c *CredentialsInput) GetKeysSeqeracompute() *SeqeraComputeCredentials {
-	return c.GetKeys().SeqeraComputeCredentials
-}
-
-func (c *CredentialsInput) GetKeysCodecommit() *AWSCodeCommitCredentials {
-	return c.GetKeys().AWSCodeCommitCredentials
-}
-
-func (c *CredentialsInput) GetKeysGitlab() *GitLabCredentials {
-	return c.GetKeys().GitLabCredentials
-}
-
 func (c *CredentialsInput) GetKeysAws() *AWSCredentials {
 	return c.GetKeys().AWSCredentials
 }
 
 func (c *CredentialsInput) GetKeysAzure() *AzureCredentials {
 	return c.GetKeys().AzureCredentials
+}
+
+func (c *CredentialsInput) GetKeysAzureCloud() *AzureCloudCredentials {
+	return c.GetKeys().AzureCloudCredentials
+}
+
+func (c *CredentialsInput) GetKeysAzureEntra() *AzureEntraCredentials {
+	return c.GetKeys().AzureEntraCredentials
+}
+
+func (c *CredentialsInput) GetKeysAzurerepos() *AzureReposCredentials {
+	return c.GetKeys().AzureReposCredentials
+}
+
+func (c *CredentialsInput) GetKeysBitbucket() *BitBucketCredentials {
+	return c.GetKeys().BitBucketCredentials
+}
+
+func (c *CredentialsInput) GetKeysCodecommit() *AWSCodeCommitCredentials {
+	return c.GetKeys().AWSCodeCommitCredentials
+}
+
+func (c *CredentialsInput) GetKeysContainerReg() *ContainerRegistryCredentials {
+	return c.GetKeys().ContainerRegistryCredentials
+}
+
+func (c *CredentialsInput) GetKeysGitea() *GiteaCredentials {
+	return c.GetKeys().GiteaCredentials
+}
+
+func (c *CredentialsInput) GetKeysGithub() *GitHubCredentials {
+	return c.GetKeys().GitHubCredentials
+}
+
+func (c *CredentialsInput) GetKeysGithubApp() *GitHubAppSecurityKeys {
+	return c.GetKeys().GitHubAppSecurityKeys
+}
+
+func (c *CredentialsInput) GetKeysGitlab() *GitLabCredentials {
+	return c.GetKeys().GitLabCredentials
+}
+
+func (c *CredentialsInput) GetKeysGoogle() *GoogleCredentials {
+	return c.GetKeys().GoogleCredentials
+}
+
+func (c *CredentialsInput) GetKeysK8s() *KubernetesCredentials {
+	return c.GetKeys().KubernetesCredentials
+}
+
+func (c *CredentialsInput) GetKeysLocal() *LocalSecurityKeys {
+	return c.GetKeys().LocalSecurityKeys
+}
+
+func (c *CredentialsInput) GetKeysS3() *S3CompatibleCredentials {
+	return c.GetKeys().S3CompatibleCredentials
+}
+
+func (c *CredentialsInput) GetKeysSeqeracompute() *SeqeraComputeCredentials {
+	return c.GetKeys().SeqeraComputeCredentials
+}
+
+func (c *CredentialsInput) GetKeysSSH() *SSHCredentials {
+	return c.GetKeys().SSHCredentials
+}
+
+func (c *CredentialsInput) GetKeysTwAgent() *TowerAgentCredentials {
+	return c.GetKeys().TowerAgentCredentials
 }
 
 func (c *CredentialsInput) GetName() string {
@@ -301,76 +305,80 @@ func (c *CredentialsOutput) GetKeys() SecurityKeysOutput {
 	return c.Keys
 }
 
-func (c *CredentialsOutput) GetKeysS3() *S3CompatibleCredentialsOutput {
-	return c.GetKeys().S3CompatibleCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysGithub() *GitHubCredentialsOutput {
-	return c.GetKeys().GitHubCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysAzurerepos() *AzureReposCredentialsOutput {
-	return c.GetKeys().AzureReposCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysAzureEntra() *AzureEntraCredentialsOutput {
-	return c.GetKeys().AzureEntraCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysContainerReg() *ContainerRegistryCredentialsOutput {
-	return c.GetKeys().ContainerRegistryCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysTwAgent() *TowerAgentCredentials {
-	return c.GetKeys().TowerAgentCredentials
-}
-
-func (c *CredentialsOutput) GetKeysK8s() *KubernetesCredentialsOutput {
-	return c.GetKeys().KubernetesCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysSSH() *SSHCredentialsOutput {
-	return c.GetKeys().SSHCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysGoogle() *GoogleCredentialsOutput {
-	return c.GetKeys().GoogleCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysBitbucket() *BitBucketCredentialsOutput {
-	return c.GetKeys().BitBucketCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysAzureCloud() *AzureCloudCredentialsOutput {
-	return c.GetKeys().AzureCloudCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysLocal() *LocalSecurityKeysOutput {
-	return c.GetKeys().LocalSecurityKeysOutput
-}
-
-func (c *CredentialsOutput) GetKeysGitea() *GiteaCredentialsOutput {
-	return c.GetKeys().GiteaCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysSeqeracompute() *SeqeraComputeCredentialsOutput {
-	return c.GetKeys().SeqeraComputeCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysCodecommit() *AWSCodeCommitCredentialsOutput {
-	return c.GetKeys().AWSCodeCommitCredentialsOutput
-}
-
-func (c *CredentialsOutput) GetKeysGitlab() *GitLabCredentialsOutput {
-	return c.GetKeys().GitLabCredentialsOutput
-}
-
 func (c *CredentialsOutput) GetKeysAws() *AWSCredentialsOutput {
 	return c.GetKeys().AWSCredentialsOutput
 }
 
 func (c *CredentialsOutput) GetKeysAzure() *AzureCredentialsOutput {
 	return c.GetKeys().AzureCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysAzureCloud() *AzureCloudCredentialsOutput {
+	return c.GetKeys().AzureCloudCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysAzureEntra() *AzureEntraCredentialsOutput {
+	return c.GetKeys().AzureEntraCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysAzurerepos() *AzureReposCredentialsOutput {
+	return c.GetKeys().AzureReposCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysBitbucket() *BitBucketCredentialsOutput {
+	return c.GetKeys().BitBucketCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysCodecommit() *AWSCodeCommitCredentialsOutput {
+	return c.GetKeys().AWSCodeCommitCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysContainerReg() *ContainerRegistryCredentialsOutput {
+	return c.GetKeys().ContainerRegistryCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysGitea() *GiteaCredentialsOutput {
+	return c.GetKeys().GiteaCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysGithub() *GitHubCredentialsOutput {
+	return c.GetKeys().GitHubCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysGithubApp() *GitHubAppSecurityKeysOutput {
+	return c.GetKeys().GitHubAppSecurityKeysOutput
+}
+
+func (c *CredentialsOutput) GetKeysGitlab() *GitLabCredentialsOutput {
+	return c.GetKeys().GitLabCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysGoogle() *GoogleCredentialsOutput {
+	return c.GetKeys().GoogleCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysK8s() *KubernetesCredentialsOutput {
+	return c.GetKeys().KubernetesCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysLocal() *LocalSecurityKeysOutput {
+	return c.GetKeys().LocalSecurityKeysOutput
+}
+
+func (c *CredentialsOutput) GetKeysS3() *S3CompatibleCredentialsOutput {
+	return c.GetKeys().S3CompatibleCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysSeqeracompute() *SeqeraComputeCredentialsOutput {
+	return c.GetKeys().SeqeraComputeCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysSSH() *SSHCredentialsOutput {
+	return c.GetKeys().SSHCredentialsOutput
+}
+
+func (c *CredentialsOutput) GetKeysTwAgent() *TowerAgentCredentials {
+	return c.GetKeys().TowerAgentCredentials
 }
 
 func (c *CredentialsOutput) GetLastUpdated() *time.Time {

@@ -8,19 +8,20 @@ import (
 )
 
 type DatasetVersionDto struct {
-	CreatedBy          *UserInfo  `json:"createdBy,omitempty"`
-	DatasetDescription *string    `json:"datasetDescription,omitempty"`
-	DatasetID          *string    `json:"datasetId,omitempty"`
-	DatasetName        *string    `json:"datasetName,omitempty"`
-	DateCreated        *time.Time `json:"dateCreated,omitempty"`
-	Disabled           *bool      `json:"disabled,omitempty"`
-	FileName           *string    `json:"fileName,omitempty"`
-	HasHeader          *bool      `json:"hasHeader,omitempty"`
-	LastUpdated        *time.Time `json:"lastUpdated,omitempty"`
-	MediaType          *string    `json:"mediaType,omitempty"`
-	URL                *string    `json:"url,omitempty"`
-	Version            *int64     `json:"version,omitempty"`
-	WorkspaceID        *int64     `json:"workspaceId,omitempty"`
+	CreatedBy          *UserInfo        `json:"createdBy,omitempty"`
+	DatasetDescription *string          `json:"datasetDescription,omitempty"`
+	DatasetID          *string          `json:"datasetId,omitempty"`
+	DatasetName        *string          `json:"datasetName,omitempty"`
+	DateCreated        *time.Time       `json:"dateCreated,omitempty"`
+	Disabled           *bool            `json:"disabled,omitempty"`
+	FileName           *string          `json:"fileName,omitempty"`
+	HasHeader          *bool            `json:"hasHeader,omitempty"`
+	LastUpdated        *time.Time       `json:"lastUpdated,omitempty"`
+	LinkedSource       *LinkedSourceDto `json:"linkedSource,omitempty"`
+	MediaType          *string          `json:"mediaType,omitempty"`
+	URL                *string          `json:"url,omitempty"`
+	Version            *int64           `json:"version,omitempty"`
+	WorkspaceID        *int64           `json:"workspaceId,omitempty"`
 }
 
 func (d DatasetVersionDto) MarshalJSON() ([]byte, error) {
@@ -95,6 +96,13 @@ func (d *DatasetVersionDto) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return d.LastUpdated
+}
+
+func (d *DatasetVersionDto) GetLinkedSource() *LinkedSourceDto {
+	if d == nil {
+		return nil
+	}
+	return d.LinkedSource
 }
 
 func (d *DatasetVersionDto) GetMediaType() *string {

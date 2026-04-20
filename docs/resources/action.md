@@ -128,16 +128,17 @@ resource "seqera_action" "tower_advanced" {
 
 ### Optional
 
-- `source` (String) must be one of ["github", "tower"]; Requires replacement if changed.
+- `bucket` (Attributes) (see [below for nested schema](#nestedatt--bucket))
+- `source` (String) must be one of ["github", "tower", "bucket"]; Requires replacement if changed.
 
 ### Read-Only
 
 - `action_id` (String) Action string identifier
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
+- `error` (String)
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
-- `message` (String) Status or informational message about the action
 - `status` (String)
 
 <a id="nestedatt--launch"></a>
@@ -180,13 +181,42 @@ Read-Only:
 - `workspace_id` (Number)
 
 
+<a id="nestedatt--bucket"></a>
+### Nested Schema for `bucket`
+
+Optional:
+
+- `data_link_id` (String)
+- `dataset_id` (String)
+- `events` (List of String)
+- `filter` (String)
+- `marker_file` (String)
+
+
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Read-Only:
 
+- `bucket` (Attributes) (see [below for nested schema](#nestedatt--config--bucket))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
 - `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
+
+<a id="nestedatt--config--bucket"></a>
+### Nested Schema for `config.bucket`
+
+Read-Only:
+
+- `bucket_name` (String)
+- `data_link_id` (String)
+- `dataset_id` (String)
+- `discriminator` (String)
+- `events` (List of String)
+- `filter` (String)
+- `marker_file` (String)
+- `subscription_arn` (String)
+- `topic_arn` (String)
+
 
 <a id="nestedatt--config--github"></a>
 ### Nested Schema for `config.github`

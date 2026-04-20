@@ -10,8 +10,13 @@ type AzBatchForgeConfig struct {
 	AutoScale         *bool    `json:"autoScale,omitempty"`
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
 	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
-	VMCount           int      `json:"vmCount"`
-	VMType            *string  `json:"vmType,omitempty"`
+	DualPoolConfig    *bool    `json:"dualPoolConfig,omitempty"`
+	// Head pool configuration for dual pool mode
+	HeadPool *AzBatchPoolConfig `json:"headPool,omitempty"`
+	VMCount  int                `json:"vmCount"`
+	VMType   *string            `json:"vmType,omitempty"`
+	// Worker pool configuration for dual pool mode
+	WorkerPool *AzBatchPoolConfig `json:"workerPool,omitempty"`
 }
 
 func (a AzBatchForgeConfig) MarshalJSON() ([]byte, error) {
@@ -46,6 +51,20 @@ func (a *AzBatchForgeConfig) GetDisposeOnDeletion() *bool {
 	return a.DisposeOnDeletion
 }
 
+func (a *AzBatchForgeConfig) GetDualPoolConfig() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.DualPoolConfig
+}
+
+func (a *AzBatchForgeConfig) GetHeadPool() *AzBatchPoolConfig {
+	if a == nil {
+		return nil
+	}
+	return a.HeadPool
+}
+
 func (a *AzBatchForgeConfig) GetVMCount() int {
 	if a == nil {
 		return 0
@@ -58,4 +77,11 @@ func (a *AzBatchForgeConfig) GetVMType() *string {
 		return nil
 	}
 	return a.VMType
+}
+
+func (a *AzBatchForgeConfig) GetWorkerPool() *AzBatchPoolConfig {
+	if a == nil {
+		return nil
+	}
+	return a.WorkerPool
 }
