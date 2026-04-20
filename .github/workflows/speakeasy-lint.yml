@@ -36,6 +36,12 @@ jobs:
     - name: Verify Speakeasy Installation
       run: speakeasy --version
 
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd #v3.1.2
+      with:
+        terraform_version: "1.14.8"
+        terraform_wrapper: false
+
     - name: Lint OpenAPI Schema
       run: |
         speakeasy lint openapi -s .speakeasy/out.openapi.yaml > lint_output.txt 2>&1 || true
