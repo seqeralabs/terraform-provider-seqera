@@ -8,16 +8,18 @@ import (
 )
 
 type ListActionsResponseActionInfo struct {
-	DateCreated *time.Time       `json:"dateCreated,omitempty"`
-	Endpoint    *string          `json:"endpoint,omitempty"`
-	Error       *string          `json:"error,omitempty"`
-	Event       *ActionEventType `json:"event,omitempty"`
-	Hint        *string          `json:"hint,omitempty"`
-	ID          *string          `json:"id,omitempty"`
-	Labels      []LabelDbDto     `json:"labels,omitempty"`
+	Config      *ActionConfigType `json:"config,omitempty"`
+	DateCreated *time.Time        `json:"dateCreated,omitempty"`
+	Endpoint    *string           `json:"endpoint,omitempty"`
+	Error       *string           `json:"error,omitempty"`
+	Event       *ActionEventType  `json:"event,omitempty"`
+	Hint        *string           `json:"hint,omitempty"`
+	ID          *string           `json:"id,omitempty"`
+	Labels      []LabelDbDto      `json:"labels,omitempty"`
 	// Last seen timestamp (null if never seen)
-	LastSeen *time.Time `json:"lastSeen,omitempty"`
-	Name     *string    `json:"name,omitempty"`
+	LastSeen      *time.Time `json:"lastSeen,omitempty"`
+	Name          *string    `json:"name,omitempty"`
+	NextExecution *time.Time `json:"nextExecution,omitempty"`
 	// Pipeline name
 	Pipeline *string       `json:"pipeline,omitempty"`
 	Source   *ActionSource `json:"source,omitempty"`
@@ -32,6 +34,41 @@ func (l ListActionsResponseActionInfo) MarshalJSON() ([]byte, error) {
 func (l *ListActionsResponseActionInfo) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
 		return err
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfig() *ActionConfigType {
+	if l == nil {
+		return nil
+	}
+	return l.Config
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigBucket() *BucketActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigCron() *CronActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigGithub() *GithubActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigTower() *ActionTowerActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.ActionTowerActionConfig
 	}
 	return nil
 }
@@ -67,6 +104,13 @@ func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
 func (l *ListActionsResponseActionInfo) GetEventBucket() *BucketActionEvent {
 	if v := l.GetEvent(); v != nil {
 		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetEventCron() *CronActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.CronActionEvent
 	}
 	return nil
 }
@@ -118,6 +162,13 @@ func (l *ListActionsResponseActionInfo) GetName() *string {
 		return nil
 	}
 	return l.Name
+}
+
+func (l *ListActionsResponseActionInfo) GetNextExecution() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.NextExecution
 }
 
 func (l *ListActionsResponseActionInfo) GetPipeline() *string {

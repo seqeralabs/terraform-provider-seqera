@@ -13,6 +13,7 @@ type ActionEventTypeType string
 
 const (
 	ActionEventTypeTypeBucket ActionEventTypeType = "bucket"
+	ActionEventTypeTypeCron   ActionEventTypeType = "cron"
 	ActionEventTypeTypeGithub ActionEventTypeType = "github"
 	ActionEventTypeTypeTower  ActionEventTypeType = "tower"
 )
@@ -21,6 +22,7 @@ type ActionEventType struct {
 	GithubActionEvent      *GithubActionEvent      `queryParam:"inline" union:"member"`
 	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline" union:"member"`
 	BucketActionEvent      *BucketActionEvent      `queryParam:"inline" union:"member"`
+	CronActionEvent        *CronActionEvent        `queryParam:"inline" union:"member"`
 
 	Type ActionEventTypeType
 }
@@ -34,6 +36,18 @@ func CreateActionEventTypeBucket(bucket BucketActionEvent) ActionEventType {
 	return ActionEventType{
 		BucketActionEvent: &bucket,
 		Type:              typ,
+	}
+}
+
+func CreateActionEventTypeCron(cron CronActionEvent) ActionEventType {
+	typ := ActionEventTypeTypeCron
+
+	typStr := string(typ)
+	cron.Discriminator = &typStr
+
+	return ActionEventType{
+		CronActionEvent: &cron,
+		Type:            typ,
 	}
 }
 
@@ -82,6 +96,15 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 		u.BucketActionEvent = bucketActionEvent
 		u.Type = ActionEventTypeTypeBucket
 		return nil
+	case "cron":
+		cronActionEvent := new(CronActionEvent)
+		if err := utils.UnmarshalJSON(data, &cronActionEvent, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == cron) type CronActionEvent within ActionEventType: %w", string(data), err)
+		}
+
+		u.CronActionEvent = cronActionEvent
+		u.Type = ActionEventTypeTypeCron
+		return nil
 	case "github":
 		githubActionEvent := new(GithubActionEvent)
 		if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, nil); err != nil {
@@ -116,6 +139,10 @@ func (u ActionEventType) MarshalJSON() ([]byte, error) {
 
 	if u.BucketActionEvent != nil {
 		return utils.MarshalJSON(u.BucketActionEvent, "", true)
+	}
+
+	if u.CronActionEvent != nil {
+		return utils.MarshalJSON(u.CronActionEvent, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionEventType: all fields are null")

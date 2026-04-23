@@ -2,6 +2,11 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
+)
+
 // ActionResponseDto - Represents a pipeline action in the Seqera Platform.
 // Contains action configuration, triggers, and execution settings
 // for automated pipeline workflows.
@@ -16,9 +21,21 @@ type ActionResponseDto struct {
 	ID     *string      `json:"id,omitempty"`
 	Launch *LaunchDbDto `json:"launch,omitempty"`
 	// Human-readable name for the action
-	Name   *string       `json:"name,omitempty"`
-	Source *ActionSource `json:"source,omitempty"`
-	Status *ActionStatus `json:"status,omitempty"`
+	Name          *string       `json:"name,omitempty"`
+	NextExecution *time.Time    `json:"nextExecution,omitempty"`
+	Source        *ActionSource `json:"source,omitempty"`
+	Status        *ActionStatus `json:"status,omitempty"`
+}
+
+func (a ActionResponseDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *ActionResponseDto) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *ActionResponseDto) GetConfig() *ActionConfigType {
@@ -31,6 +48,13 @@ func (a *ActionResponseDto) GetConfig() *ActionConfigType {
 func (a *ActionResponseDto) GetConfigBucket() *BucketActionConfig {
 	if v := a.GetConfig(); v != nil {
 		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetConfigCron() *CronActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.CronActionConfig
 	}
 	return nil
 }
@@ -89,6 +113,13 @@ func (a *ActionResponseDto) GetName() *string {
 		return nil
 	}
 	return a.Name
+}
+
+func (a *ActionResponseDto) GetNextExecution() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.NextExecution
 }
 
 func (a *ActionResponseDto) GetSource() *ActionSource {

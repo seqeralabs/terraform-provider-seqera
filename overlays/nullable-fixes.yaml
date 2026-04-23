@@ -70,14 +70,6 @@ actions:
       nullable: true
       description: Last time this compute environment was used (null if never used)
 
-  # ComputeEnvDbDto
-  - target: $.components.schemas.ComputeEnvDbDto.properties.lastUsed
-    update:
-      type: string
-      format: date-time
-      nullable: true
-      description: Last time this compute environment was used (null if never used)
-
   # WorkflowDbDto - start/complete timestamps
   - target: $.components.schemas.WorkflowDbDto.properties.start
     update:
@@ -312,12 +304,6 @@ actions:
       nullable: true
       description: Work directory
 
-  - target: $.components.schemas.WorkflowDbDto.properties.icon
-    update:
-      type: string
-      nullable: true
-      description: Icon
-
   - target: $.components.schemas.WorkflowDbDto.properties.deleted
     update:
       type: boolean
@@ -477,19 +463,6 @@ actions:
       nullable: true
       description: Whether this is the primary compute environment
 
-  # ComputeEnvDbDto
-  - target: $.components.schemas.ComputeEnvDbDto.properties.deleted
-    update:
-      type: boolean
-      nullable: true
-      description: Whether compute environment is deleted (null means not deleted)
-
-  - target: $.components.schemas.ComputeEnvDbDto.properties.primary
-    update:
-      type: boolean
-      nullable: true
-      description: Whether this is the primary compute environment
-
   # Credentials
   - target: $.components.schemas.Credentials.properties.deleted
     update:
@@ -497,13 +470,6 @@ actions:
       nullable: true
       readOnly: true
       description: Whether credentials are deleted (null means not deleted)
-
-  # ActionResponseDto
-  - target: $.components.schemas.ActionResponseDto.properties.deleted
-    update:
-      type: boolean
-      nullable: true
-      description: Whether action is deleted (null means not deleted)
 
   # DatasetDto
   - target: $.components.schemas.DatasetDto.properties.deleted
@@ -575,24 +541,6 @@ actions:
       description: Compute environment description
 
   # ComputeEnvDbDto
-  - target: $.components.schemas.ComputeEnvDbDto.properties.credentialsId
-    update:
-      type: string
-      nullable: true
-      description: Associated credentials ID
-
-  - target: $.components.schemas.ComputeEnvDbDto.properties.message
-    update:
-      type: string
-      nullable: true
-      description: Status message
-
-  - target: $.components.schemas.ComputeEnvDbDto.properties.description
-    update:
-      type: string
-      nullable: true
-      description: Compute environment description
-
   - target: $.components.schemas.ComputeEnvDbDto.properties.region
     update:
       type: string
@@ -1275,13 +1223,6 @@ actions:
       writeOnly: true
       nullable: true
 
-  # TwSecurityKeys
-  - target: "$.components.schemas.TwSecurityKeys.properties.token"
-    update:
-      type: string
-      writeOnly: true
-      nullable: true
-
   # AgentSecurityKeys
   - target: "$.components.schemas.AgentSecurityKeys.properties.connectionId"
     update:
@@ -1344,12 +1285,6 @@ actions:
       type: string
       nullable: true
       description: Webhook URL
-
-  - target: $.components.schemas.ActionResponseDto.properties.message
-    update:
-      type: string
-      nullable: true
-      description: Action status message
 
   # ListActionsResponse.ActionInfo optional fields
   - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.lastSeen"
@@ -1528,13 +1463,6 @@ actions:
       type: integer
       format: int32
       minimum: 0
-      nullable: true
-
-  - target: $.components.schemas.DataStudioConfiguration.properties.mountData
-    update:
-      type: array
-      items:
-        type: string
       nullable: true
 
   - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
@@ -1888,17 +1816,6 @@ actions:
       description: Last time secret was accessed
 
   # =============================================================================
-  # CloudPrice optional fields
-  # =============================================================================
-
-  - target: $.components.schemas.CloudPrice.properties.gpus
-    update:
-      type: integer
-      format: int32
-      nullable: true
-      description: Number of GPUs (null if not applicable)
-
-  # =============================================================================
   # Team optional fields
   # =============================================================================
 
@@ -2005,15 +1922,6 @@ actions:
       items:
         type: string
 
-  # Fix ListActionsResponse.ActionInfo.event - change oneOf to nullable object
-  # The oneOf/discriminator causes issues when the field is null
-  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.event"
-    update:
-      type: object
-      nullable: true
-      additionalProperties: true
-      description: Action event configuration (tower or github)
-
   - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.labels"
     update:
       type: array
@@ -2031,67 +1939,9 @@ actions:
       type: string
       nullable: true
 
-  # =============================================================================
-  # Task.priceModel - enum can be null
-  # =============================================================================
-
-  - target: $.components.schemas.Task.properties.priceModel
-    update:
-      $ref: "#/components/schemas/CloudPriceModel"
-      nullable: true
-
   # Make CloudPriceModel enum nullable
   - target: $.components.schemas.CloudPriceModel
     update:
-      nullable: true
-
-  # =============================================================================
-  # WorkflowMetrics - ALL ResourceData fields can be null
-  # =============================================================================
-
-  - target: $.components.schemas.WorkflowMetrics.properties.cpu
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.mem
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.vmem
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.time
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.reads
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.writes
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.cpuUsage
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.memUsage
-    update:
-      $ref: "#/components/schemas/ResourceData"
-      nullable: true
-
-  - target: $.components.schemas.WorkflowMetrics.properties.timeUsage
-    update:
-      $ref: "#/components/schemas/ResourceData"
       nullable: true
 
   # Make ResourceData itself nullable
@@ -2166,12 +2016,6 @@ actions:
     update:
       nullable: true
 
-  # DataStudioStatusInfo.status can be null
-  - target: $.components.schemas.DataStudioStatusInfo.properties.status
-    update:
-      $ref: "#/components/schemas/DataStudioStatus"
-      nullable: true
-
   # DataStudioStatusInfo.message can be null
   - target: $.components.schemas.DataStudioStatusInfo.properties.message
     update:
@@ -2208,16 +2052,6 @@ actions:
       type: string
       nullable: true
 
-  - target: $.components.schemas.ActionResponseDto.properties.pipeline
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.ActionResponseDto.properties.source
-    update:
-      type: string
-      nullable: true
-
   # ListActionsResponse.ActionInfo additional nullable fields
   - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.name"
     update:
@@ -2246,135 +2080,10 @@ actions:
       type: string
       nullable: true
 
-  - target: $.components.schemas.DataLinkDto.properties.provider
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.DataLinkDto.properties.credentialsId
-    update:
-      type: string
-      nullable: true
-
-  # =============================================================================
-  # RunLog and GA4GH types that may have nullable fields
-  # =============================================================================
-
-  - target: $.components.schemas.RunLog.properties.cmd
-    update:
-      type: array
-      nullable: true
-      items:
-        type: string
-
-  - target: $.components.schemas.RunLog.properties.exit_code
-    update:
-      type: integer
-      format: int32
-      nullable: true
-
-  - target: $.components.schemas.RunLog.properties.stdout
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.RunLog.properties.stderr
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.RunLog.properties.start_time
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.RunLog.properties.end_time
-    update:
-      type: string
-      nullable: true
-
-  # RunStatus nullable fields
-  - target: $.components.schemas.RunStatus.properties.state
-    update:
-      $ref: "#/components/schemas/State"
-      nullable: true
-
   # State enum can be null
   - target: $.components.schemas.State
     update:
       nullable: true
-
-  # =============================================================================
-  # Additional common nullable patterns
-  # =============================================================================
-
-  # Make email fields nullable (often not set)
-  - target: $.components.schemas.User.properties.email
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.UserDbDto.properties.email
-    update:
-      type: string
-      nullable: true
-
-  # Make avatar fields nullable
-  - target: $.components.schemas.User.properties.avatar
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.UserDbDto.properties.avatar
-    update:
-      type: string
-      nullable: true
-
-  # Make firstName/lastName nullable
-  - target: $.components.schemas.User.properties.firstName
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.User.properties.lastName
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.UserDbDto.properties.firstName
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.UserDbDto.properties.lastName
-    update:
-      type: string
-      nullable: true
-
-  # =============================================================================
-  # Download endpoint content type fixes
-  # The API returns text/plain but the spec says application/json
-  # =============================================================================
-
-  # Fix DownloadWorkflowLog response content type
-  - target: $.paths["/workflow/{workflowId}/download"].get.responses["200"].content["application/json"]
-    remove: true
-
-  - target: $.paths["/workflow/{workflowId}/download"].get.responses["200"].content
-    update:
-      text/plain:
-        schema:
-          type: string
-
-  # Fix DownloadWorkflowTaskLog response content type
-  - target: $.paths["/workflow/{workflowId}/download/{taskId}"].get.responses["200"].content["application/json"]
-    remove: true
-
-  - target: $.paths["/workflow/{workflowId}/download/{taskId}"].get.responses["200"].content
-    update:
-      text/plain:
-        schema:
-          type: string
 
   # OrganizationDbDto.memberId can be null
   - target: $.components.schemas.OrganizationDbDto.properties.memberId
@@ -2407,40 +2116,3 @@ actions:
       items:
         type: string
       description: Step warnings (can be null)
-
-  # =============================================================================
-  # Additional download endpoint content type fixes
-  # These endpoints return binary/text content, not JSON
-  # =============================================================================
-
-  # Fix DownloadAvatar - returns image content
-  - target: $.paths["/avatars/{avatarId}"].get.responses["200"].content["application/json"]
-    remove: true
-
-  - target: $.paths["/avatars/{avatarId}"].get.responses["200"].content
-    update:
-      application/octet-stream:
-        schema:
-          type: string
-          format: binary
-
-  # Fix DownloadDataLink - returns file content
-  - target: $.paths["/data-links/{dataLinkId}/download/{filePath}"].get.responses["200"].content["application/json"]
-    remove: true
-
-  - target: $.paths["/data-links/{dataLinkId}/download/{filePath}"].get.responses["200"].content
-    update:
-      application/octet-stream:
-        schema:
-          type: string
-          format: binary
-
-  # Fix DownloadDataset - returns CSV/text content  
-  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"].get.responses["200"].content["application/json"]
-    remove: true
-
-  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"].get.responses["200"].content
-    update:
-      text/plain:
-        schema:
-          type: string

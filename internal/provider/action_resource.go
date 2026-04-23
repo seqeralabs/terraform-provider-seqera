@@ -37,18 +37,20 @@ type ActionResource struct {
 
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
-	ActionID    types.String                   `tfsdk:"action_id"`
-	Bucket      *tfTypes.BucketActionRequest   `tfsdk:"bucket"`
-	Config      *tfTypes.ActionConfigType      `tfsdk:"config"`
-	Error       types.String                   `tfsdk:"error"`
-	HookID      types.String                   `tfsdk:"hook_id"`
-	HookURL     types.String                   `tfsdk:"hook_url"`
-	ID          types.String                   `tfsdk:"id"`
-	Launch      *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Name        types.String                   `tfsdk:"name"`
-	Source      types.String                   `tfsdk:"source"`
-	Status      types.String                   `tfsdk:"status"`
-	WorkspaceID types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActionID      types.String                   `tfsdk:"action_id"`
+	Bucket        *tfTypes.BucketActionRequest   `tfsdk:"bucket"`
+	Config        *tfTypes.ActionConfigType      `tfsdk:"config"`
+	Cron          *tfTypes.CronActionRequest     `tfsdk:"cron"`
+	Error         types.String                   `tfsdk:"error"`
+	HookID        types.String                   `tfsdk:"hook_id"`
+	HookURL       types.String                   `tfsdk:"hook_url"`
+	ID            types.String                   `tfsdk:"id"`
+	Launch        *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
+	Name          types.String                   `tfsdk:"name"`
+	NextExecution types.String                   `tfsdk:"next_execution"`
+	Source        types.String                   `tfsdk:"source"`
+	Status        types.String                   `tfsdk:"status"`
+	WorkspaceID   types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -121,6 +123,23 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 					},
+					"cron": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"expression": schema.StringAttribute{
+								Computed: true,
+							},
+							"preset": schema.StringAttribute{
+								Computed: true,
+							},
+							"timezone": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -136,6 +155,20 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 							},
 						},
+					},
+				},
+			},
+			"cron": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"expression": schema.StringAttribute{
+						Optional: true,
+					},
+					"preset": schema.StringAttribute{
+						Optional: true,
+					},
+					"timezone": schema.StringAttribute{
+						Optional: true,
 					},
 				},
 			},
@@ -313,6 +346,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required:    true,
 				Description: `Human-readable name for the action`,
 			},
+			"next_execution": schema.StringAttribute{
+				Computed: true,
+			},
 			"source": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -320,12 +356,13 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `must be one of ["github", "tower", "bucket"]; Requires replacement if changed.`,
+				Description: `must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"github",
 						"tower",
 						"bucket",
+						"cron",
 					),
 				},
 			},
