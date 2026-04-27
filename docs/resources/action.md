@@ -129,7 +129,8 @@ resource "seqera_action" "tower_advanced" {
 ### Optional
 
 - `bucket` (Attributes) (see [below for nested schema](#nestedatt--bucket))
-- `source` (String) must be one of ["github", "tower", "bucket"]; Requires replacement if changed.
+- `cron` (Attributes) (see [below for nested schema](#nestedatt--cron))
+- `source` (String) must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.
 
 ### Read-Only
 
@@ -139,6 +140,7 @@ resource "seqera_action" "tower_advanced" {
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
+- `next_execution` (String)
 - `status` (String)
 
 <a id="nestedatt--launch"></a>
@@ -193,12 +195,23 @@ Optional:
 - `marker_file` (String)
 
 
+<a id="nestedatt--cron"></a>
+### Nested Schema for `cron`
+
+Optional:
+
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
+
+
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Read-Only:
 
 - `bucket` (Attributes) (see [below for nested schema](#nestedatt--config--bucket))
+- `cron` (Attributes) (see [below for nested schema](#nestedatt--config--cron))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
 - `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
 
@@ -216,6 +229,17 @@ Read-Only:
 - `marker_file` (String)
 - `subscription_arn` (String)
 - `topic_arn` (String)
+
+
+<a id="nestedatt--config--cron"></a>
+### Nested Schema for `config.cron`
+
+Read-Only:
+
+- `discriminator` (String)
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
 
 
 <a id="nestedatt--config--github"></a>

@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.144.0
+  version: 1.147.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -121,6 +121,37 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/cron/resolve:
+    post:
+      operationId: ResolveCronExpression
+      summary: Resolve a schedule description to a cron expression
+      parameters:
+        - name: workspaceId
+          in: query
+          schema:
+            type: integer
+            format: int64
+            nullable: true
+          explode: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        '200':
+          description: ResolveCronExpression 200 response
+          content:
+            application/json:
+              schema:
+                type: object
       security:
         - BearerAuth: []
       tags:
@@ -527,7 +558,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -1745,7 +1776,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -2831,7 +2862,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -8697,7 +8728,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
                 format: binary
@@ -8747,7 +8778,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
                 format: binary
@@ -9609,6 +9640,7 @@ components:
       discriminator:
         mapping:
           bucket: '#/components/schemas/BucketActionConfig'
+          cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
@@ -9616,6 +9648,7 @@ components:
         - $ref: '#/components/schemas/Action.TowerActionConfig'
         - $ref: '#/components/schemas/GithubActionConfig'
         - $ref: '#/components/schemas/BucketActionConfig'
+        - $ref: '#/components/schemas/CronActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -9627,6 +9660,7 @@ components:
       discriminator:
         mapping:
           bucket: '#/components/schemas/BucketActionEvent'
+          cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
@@ -9634,16 +9668,19 @@ components:
         - $ref: '#/components/schemas/GithubActionEvent'
         - $ref: '#/components/schemas/Action.TowerActionEvent'
         - $ref: '#/components/schemas/BucketActionEvent'
+        - $ref: '#/components/schemas/CronActionEvent'
     Action.Source:
       type: string
       enum:
         - github
         - tower
         - bucket
+        - cron
       x-enum-varnames:
         - github
         - tower
         - bucket
+        - cron
     Action.Status:
       type: string
       enum:
@@ -9706,6 +9743,9 @@ components:
           $ref: '#/components/schemas/LaunchDbDto'
         name:
           type: string
+        nextExecution:
+          type: string
+          format: date-time
         source:
           $ref: '#/components/schemas/Action.Source'
         status:
@@ -10896,6 +10936,8 @@ components:
       properties:
         bucket:
           $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -11217,6 +11259,41 @@ components:
       required:
         - name
         - provider
+    CronActionConfig:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
+      title: Cron action config
+    CronActionEvent:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        scheduledTime:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+        workflowId:
+          type: string
+      title: Cron action event
+    CronActionRequest:
+      type: object
+      properties:
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
     DataLink.Status:
       type: string
       enum:
@@ -12908,6 +12985,43 @@ components:
         workloadIdentityProvider:
           type: string
       title: Google credentials
+    GpuMetrics:
+      type: object
+      properties:
+        active_time:
+          type: integer
+          format: int64
+        avg_mem:
+          type: integer
+          format: int64
+        avg_mem_bw_util:
+          type: number
+          format: double
+        driver:
+          type: string
+        mem:
+          type: integer
+          format: int64
+        name:
+          type: string
+        pct:
+          type: number
+          format: double
+        pct_mem:
+          type: number
+          format: double
+        peak:
+          type: number
+          format: double
+        peak_mem:
+          type: number
+          format: double
+        peak_mem_bw_util:
+          type: number
+          format: double
+        peak_mem_used:
+          type: integer
+          format: int64
     GridPlatformMetainfo:
       type: object
       properties:
@@ -13204,6 +13318,8 @@ components:
     ListActionsResponse.ActionInfo:
       type: object
       properties:
+        config:
+          $ref: '#/components/schemas/Action.ConfigType'
         dateCreated:
           type: string
           format: date-time
@@ -13226,6 +13342,9 @@ components:
           format: date-time
         name:
           type: string
+        nextExecution:
+          type: string
+          format: date-time
         pipeline:
           type: string
         source:
@@ -13246,6 +13365,9 @@ components:
       properties:
         credentialsId:
           type: string
+        description:
+          type: string
+          nullable: true
         id:
           type: string
         labels:
@@ -14845,6 +14967,8 @@ components:
         launchParamsTextMaxSize:
           type: integer
           format: int32
+        llmEnabled:
+          type: boolean
         loginPath:
           type: string
         logoutUrl:
@@ -15042,6 +15166,10 @@ components:
         exitStatus:
           type: integer
           format: int32
+        gpuMetrics:
+          allOf:
+            - $ref: '#/components/schemas/GpuMetrics'
+          nullable: true
         hash:
           type: string
         id:
@@ -15519,6 +15647,8 @@ components:
       properties:
         bucket:
           $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -15528,6 +15658,9 @@ components:
       properties:
         credentialsId:
           type: string
+        description:
+          type: string
+          maxLength: 2000
         name:
           type: string
     UpdateCredentialsRequest:
@@ -16570,6 +16703,12 @@ components:
         cpu:
           $ref: '#/components/schemas/ResourceData'
         cpuUsage:
+          $ref: '#/components/schemas/ResourceData'
+        gpuMemAvg:
+          $ref: '#/components/schemas/ResourceData'
+        gpuMemPeak:
+          $ref: '#/components/schemas/ResourceData'
+        gpuUsage:
           $ref: '#/components/schemas/ResourceData'
         id:
           type: integer

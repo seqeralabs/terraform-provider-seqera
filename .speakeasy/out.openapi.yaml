@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.144.0
+  version: 1.147.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -130,6 +130,37 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Action#create
+  /actions/cron/resolve:
+    post:
+      operationId: ResolveCronExpression
+      summary: Resolve a schedule description to a cron expression
+      parameters:
+        - name: workspaceId
+          in: query
+          schema:
+            type: integer
+            format: int64
+            nullable: true
+          explode: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+      responses:
+        '200':
+          description: ResolveCronExpression 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
   /actions/labels/add:
     post:
       operationId: AddLabelsToActions
@@ -2903,7 +2934,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            application/octet-stream:
               schema:
                 type: string
                 format: binary
@@ -8916,6 +8947,7 @@ paths:
             text/plain:
               schema:
                 type: string
+                format: binary
         '400':
           description: Bad request
           content:
@@ -8965,6 +8997,7 @@ paths:
             text/plain:
               schema:
                 type: string
+                format: binary
         '400':
           description: Bad request
           content:
@@ -12447,6 +12480,7 @@ components:
       discriminator:
         mapping:
           bucket: '#/components/schemas/BucketActionConfig'
+          cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
@@ -12454,6 +12488,7 @@ components:
         - $ref: '#/components/schemas/Action.TowerActionConfig'
         - $ref: '#/components/schemas/GithubActionConfig'
         - $ref: '#/components/schemas/BucketActionConfig'
+        - $ref: '#/components/schemas/CronActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -12465,6 +12500,7 @@ components:
       discriminator:
         mapping:
           bucket: '#/components/schemas/BucketActionEvent'
+          cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
@@ -12472,16 +12508,19 @@ components:
         - $ref: '#/components/schemas/GithubActionEvent'
         - $ref: '#/components/schemas/Action.TowerActionEvent'
         - $ref: '#/components/schemas/BucketActionEvent'
+        - $ref: '#/components/schemas/CronActionEvent'
     Action.Source:
       type: string
       enum:
         - github
         - tower
         - bucket
+        - cron
       x-enum-varnames:
         - github
         - tower
         - bucket
+        - cron
     Action.Status:
       type: string
       enum:
@@ -12547,10 +12586,11 @@ components:
           nullable: true
           description: Human-readable name for the action
           x-speakeasy-param-ordering: 2
+        nextExecution:
+          type: string
+          format: date-time
         source:
           $ref: '#/components/schemas/Action.Source'
-          type: string
-          nullable: true
           description: "Event source that triggers this action. Defaults to 'tower' (programmatic webhook). Use 'github' for GitHub webhook events (requires linked GitHub account)."
           x-speakeasy-param-ordering: 3
         status:
@@ -14074,6 +14114,8 @@ components:
       properties:
         bucket:
           $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -14504,6 +14546,41 @@ components:
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
         and other external services within the Seqera Platform.
+    CronActionConfig:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
+      title: Cron action config
+    CronActionEvent:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        scheduledTime:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+        workflowId:
+          type: string
+      title: Cron action event
+    CronActionRequest:
+      type: object
+      properties:
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
     DataLink.Status:
       type: string
       enum:
@@ -14635,8 +14712,6 @@ components:
           description: Display name for the data link connection
         provider:
           $ref: '#/components/schemas/DataLinkProvider'
-          type: string
-          nullable: true
           description: Cloud provider hosting the data link
         publicAccessible:
           type: boolean
@@ -15129,7 +15204,6 @@ components:
           nullable: true
         status:
           $ref: '#/components/schemas/DataStudioStatus'
-          nullable: true
         stopReason:
           $ref: '#/components/schemas/DataStudioStopReason'
     DataStudioStopReason:
@@ -16723,6 +16797,43 @@ components:
           type: string
       title: Google credentials
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
+    GpuMetrics:
+      type: object
+      properties:
+        active_time:
+          type: integer
+          format: int64
+        avg_mem:
+          type: integer
+          format: int64
+        avg_mem_bw_util:
+          type: number
+          format: double
+        driver:
+          type: string
+        mem:
+          type: integer
+          format: int64
+        name:
+          type: string
+        pct:
+          type: number
+          format: double
+        pct_mem:
+          type: number
+          format: double
+        peak:
+          type: number
+          format: double
+        peak_mem:
+          type: number
+          format: double
+        peak_mem_bw_util:
+          type: number
+          format: double
+        peak_mem_used:
+          type: integer
+          format: int64
     GridPlatformMetainfo:
       type: object
       properties:
@@ -17085,6 +17196,8 @@ components:
     ListActionsResponse.ActionInfo:
       type: object
       properties:
+        config:
+          $ref: '#/components/schemas/Action.ConfigType'
         dateCreated:
           type: string
           format: date-time
@@ -17095,10 +17208,6 @@ components:
           type: string
         event:
           $ref: '#/components/schemas/Action.EventType'
-          type: object
-          nullable: true
-          additionalProperties: true
-          description: Action event configuration (tower or github)
         hint:
           type: string
         id:
@@ -17116,6 +17225,9 @@ components:
         name:
           type: string
           nullable: true
+        nextExecution:
+          type: string
+          format: date-time
         pipeline:
           type: string
           nullable: true
@@ -17141,6 +17253,9 @@ components:
       properties:
         credentialsId:
           type: string
+        description:
+          type: string
+          nullable: true
         id:
           type: string
         labels:
@@ -18537,7 +18652,6 @@ components:
           type: string
         state:
           $ref: '#/components/schemas/State'
-          nullable: true
     S3SecurityKeys:
       type: object
       properties:
@@ -18737,6 +18851,8 @@ components:
         launchParamsTextMaxSize:
           type: integer
           format: int32
+        llmEnabled:
+          type: boolean
         loginPath:
           type: string
         logoutUrl:
@@ -18967,6 +19083,10 @@ components:
           format: int32
           nullable: true
           description: Exit status code
+        gpuMetrics:
+          allOf:
+            - $ref: '#/components/schemas/GpuMetrics'
+          nullable: true
         hash:
           type: string
         id:
@@ -19028,7 +19148,6 @@ components:
           description: Memory usage percentage
         priceModel:
           $ref: '#/components/schemas/CloudPriceModel'
-          nullable: true
         process:
           type: string
           nullable: true
@@ -19529,6 +19648,8 @@ components:
       properties:
         bucket:
           $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -19538,6 +19659,9 @@ components:
       properties:
         credentialsId:
           type: string
+        description:
+          type: string
+          maxLength: 2000
         name:
           type: string
     UpdateCredentialsRequest:
@@ -20676,38 +20800,35 @@ components:
       properties:
         cpu:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         cpuUsage:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
+        gpuMemAvg:
+          $ref: '#/components/schemas/ResourceData'
+        gpuMemPeak:
+          $ref: '#/components/schemas/ResourceData'
+        gpuUsage:
+          $ref: '#/components/schemas/ResourceData'
         id:
           type: integer
           format: int64
           nullable: true
         mem:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         memUsage:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         process:
           type: string
           maxLength: 255
         reads:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         time:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         timeUsage:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         vmem:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
         writes:
           $ref: '#/components/schemas/ResourceData'
-          nullable: true
       required:
         - process
     WorkflowQueryAttribute:

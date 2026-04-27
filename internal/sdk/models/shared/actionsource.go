@@ -13,6 +13,7 @@ const (
 	ActionSourceGithub ActionSource = "github"
 	ActionSourceTower  ActionSource = "tower"
 	ActionSourceBucket ActionSource = "bucket"
+	ActionSourceCron   ActionSource = "cron"
 )
 
 func (e ActionSource) ToPointer() *ActionSource {
@@ -29,6 +30,8 @@ func (e *ActionSource) UnmarshalJSON(data []byte) error {
 	case "tower":
 		fallthrough
 	case "bucket":
+		fallthrough
+	case "cron":
 		*e = ActionSource(v)
 		return nil
 	default:

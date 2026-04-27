@@ -21,6 +21,7 @@ type ServiceInfo struct {
 	HeartbeatInterval            *int          `json:"heartbeatInterval,omitempty"`
 	LandingURL                   *string       `json:"landingUrl,omitempty"`
 	LaunchParamsTextMaxSize      *int          `json:"launchParamsTextMaxSize,omitempty"`
+	LlmEnabled                   *bool         `json:"llmEnabled,omitempty"`
 	LoginPath                    *string       `json:"loginPath,omitempty"`
 	LogoutURL                    *string       `json:"logoutUrl,omitempty"`
 	Navbar                       *NavbarConfig `json:"navbar,omitempty"`
@@ -150,6 +151,13 @@ func (s *ServiceInfo) GetLaunchParamsTextMaxSize() *int {
 		return nil
 	}
 	return s.LaunchParamsTextMaxSize
+}
+
+func (s *ServiceInfo) GetLlmEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.LlmEnabled
 }
 
 func (s *ServiceInfo) GetLoginPath() *string {

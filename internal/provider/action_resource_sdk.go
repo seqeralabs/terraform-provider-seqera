@@ -41,6 +41,13 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Config.Bucket.SubscriptionArn = types.StringPointerValue(resp.Config.BucketActionConfig.SubscriptionArn)
 				r.Config.Bucket.TopicArn = types.StringPointerValue(resp.Config.BucketActionConfig.TopicArn)
 			}
+			if resp.Config.CronActionConfig != nil {
+				r.Config.Cron = &tfTypes.CronActionConfig{}
+				r.Config.Cron.Discriminator = types.StringPointerValue(resp.Config.CronActionConfig.Discriminator)
+				r.Config.Cron.Expression = types.StringPointerValue(resp.Config.CronActionConfig.Expression)
+				r.Config.Cron.Preset = types.StringPointerValue(resp.Config.CronActionConfig.Preset)
+				r.Config.Cron.Timezone = types.StringPointerValue(resp.Config.CronActionConfig.Timezone)
+			}
 		}
 		r.Error = types.StringPointerValue(resp.Error)
 		r.HookID = types.StringPointerValue(resp.HookID)
@@ -92,6 +99,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			}
 		}
 		r.Name = types.StringPointerValue(resp.Name)
+		r.NextExecution = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.NextExecution))
 		if resp.Source != nil {
 			r.Source = types.StringValue(string(*resp.Source))
 		} else {
@@ -262,6 +270,32 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 			MarkerFile: markerFile,
 		}
 	}
+	var cron *shared.CronActionRequest
+	if r.Cron != nil {
+		expression := new(string)
+		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
+			*expression = r.Cron.Expression.ValueString()
+		} else {
+			expression = nil
+		}
+		preset := new(string)
+		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
+			*preset = r.Cron.Preset.ValueString()
+		} else {
+			preset = nil
+		}
+		timezone := new(string)
+		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
+			*timezone = r.Cron.Timezone.ValueString()
+		} else {
+			timezone = nil
+		}
+		cron = &shared.CronActionRequest{
+			Expression: expression,
+			Preset:     preset,
+			Timezone:   timezone,
+		}
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -428,6 +462,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	}
 	out := shared.CreateActionRequest{
 		Bucket: bucket,
+		Cron:   cron,
 		Launch: launch,
 		Name:   name,
 		Source: source,
@@ -475,6 +510,32 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 			Events:     events,
 			Filter:     filter,
 			MarkerFile: markerFile,
+		}
+	}
+	var cron *shared.CronActionRequest
+	if r.Cron != nil {
+		expression := new(string)
+		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
+			*expression = r.Cron.Expression.ValueString()
+		} else {
+			expression = nil
+		}
+		preset := new(string)
+		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
+			*preset = r.Cron.Preset.ValueString()
+		} else {
+			preset = nil
+		}
+		timezone := new(string)
+		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
+			*timezone = r.Cron.Timezone.ValueString()
+		} else {
+			timezone = nil
+		}
+		cron = &shared.CronActionRequest{
+			Expression: expression,
+			Preset:     preset,
+			Timezone:   timezone,
 		}
 	}
 	var launch *shared.WorkflowLaunchRequest
@@ -641,6 +702,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	}
 	out := shared.UpdateActionRequest{
 		Bucket: bucket,
+		Cron:   cron,
 		Launch: launch,
 		Name:   name,
 	}

@@ -60,6 +60,7 @@ func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
 
 type ListComputeEnvsResponseEntry struct {
 	CredentialsID *string                                `json:"credentialsId,omitempty"`
+	Description   *string                                `json:"description,omitempty"`
 	ID            *string                                `json:"id,omitempty"`
 	Labels        []LabelDbDto                           `json:"labels,omitempty"`
 	LastUsed      *time.Time                             `json:"lastUsed,omitempty"`
@@ -91,6 +92,13 @@ func (l *ListComputeEnvsResponseEntry) GetCredentialsID() *string {
 		return nil
 	}
 	return l.CredentialsID
+}
+
+func (l *ListComputeEnvsResponseEntry) GetDescription() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Description
 }
 
 func (l *ListComputeEnvsResponseEntry) GetID() *string {

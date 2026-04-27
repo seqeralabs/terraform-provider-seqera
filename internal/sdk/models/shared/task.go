@@ -7,6 +7,105 @@ import (
 	"time"
 )
 
+type GpuMetrics struct {
+	ActiveTime    *int64   `json:"active_time,omitempty"`
+	AvgMem        *int64   `json:"avg_mem,omitempty"`
+	AvgMemBwUtil  *float64 `json:"avg_mem_bw_util,omitempty"`
+	Driver        *string  `json:"driver,omitempty"`
+	Mem           *int64   `json:"mem,omitempty"`
+	Name          *string  `json:"name,omitempty"`
+	Pct           *float64 `json:"pct,omitempty"`
+	PctMem        *float64 `json:"pct_mem,omitempty"`
+	Peak          *float64 `json:"peak,omitempty"`
+	PeakMem       *float64 `json:"peak_mem,omitempty"`
+	PeakMemBwUtil *float64 `json:"peak_mem_bw_util,omitempty"`
+	PeakMemUsed   *int64   `json:"peak_mem_used,omitempty"`
+}
+
+func (g *GpuMetrics) GetActiveTime() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.ActiveTime
+}
+
+func (g *GpuMetrics) GetAvgMem() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.AvgMem
+}
+
+func (g *GpuMetrics) GetAvgMemBwUtil() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.AvgMemBwUtil
+}
+
+func (g *GpuMetrics) GetDriver() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Driver
+}
+
+func (g *GpuMetrics) GetMem() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.Mem
+}
+
+func (g *GpuMetrics) GetName() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Name
+}
+
+func (g *GpuMetrics) GetPct() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.Pct
+}
+
+func (g *GpuMetrics) GetPctMem() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.PctMem
+}
+
+func (g *GpuMetrics) GetPeak() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.Peak
+}
+
+func (g *GpuMetrics) GetPeakMem() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.PeakMem
+}
+
+func (g *GpuMetrics) GetPeakMemBwUtil() *float64 {
+	if g == nil {
+		return nil
+	}
+	return g.PeakMemBwUtil
+}
+
+func (g *GpuMetrics) GetPeakMemUsed() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.PeakMemUsed
+}
+
 type Task struct {
 	// Attempt number
 	Attempt *int `json:"attempt,omitempty"`
@@ -35,9 +134,10 @@ type Task struct {
 	// Task exit value (can be string)
 	Exit *string `json:"exit,omitempty"`
 	// Exit status code
-	ExitStatus *int    `json:"exitStatus,omitempty"`
-	Hash       *string `json:"hash,omitempty"`
-	ID         *int64  `json:"id,omitempty"`
+	ExitStatus *int        `json:"exitStatus,omitempty"`
+	GpuMetrics *GpuMetrics `json:"gpuMetrics,omitempty"`
+	Hash       *string     `json:"hash,omitempty"`
+	ID         *int64      `json:"id,omitempty"`
 	// Involuntary context switches
 	InvCtxt     *int64     `json:"invCtxt,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
@@ -217,6 +317,13 @@ func (t *Task) GetExitStatus() *int {
 		return nil
 	}
 	return t.ExitStatus
+}
+
+func (t *Task) GetGpuMetrics() *GpuMetrics {
+	if t == nil {
+		return nil
+	}
+	return t.GpuMetrics
 }
 
 func (t *Task) GetHash() *string {

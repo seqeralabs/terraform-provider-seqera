@@ -1415,8 +1415,7 @@ func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.
 				return nil, err
 			}
 
-			out := string(rawBody)
-			res.Res = &out
+			res.Bytes = rawBody
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1574,8 +1573,7 @@ func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operati
 				return nil, err
 			}
 
-			out := string(rawBody)
-			res.Res = &out
+			res.Bytes = rawBody
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

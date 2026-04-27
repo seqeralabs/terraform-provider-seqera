@@ -3,17 +3,20 @@
 package shared
 
 type WorkflowMetrics struct {
-	CPU       *ResourceData `json:"cpu,omitempty"`
-	CPUUsage  *ResourceData `json:"cpuUsage,omitempty"`
-	ID        *int64        `json:"id,omitempty"`
-	Mem       *ResourceData `json:"mem,omitempty"`
-	MemUsage  *ResourceData `json:"memUsage,omitempty"`
-	Process   string        `json:"process"`
-	Reads     *ResourceData `json:"reads,omitempty"`
-	Time      *ResourceData `json:"time,omitempty"`
-	TimeUsage *ResourceData `json:"timeUsage,omitempty"`
-	Vmem      *ResourceData `json:"vmem,omitempty"`
-	Writes    *ResourceData `json:"writes,omitempty"`
+	CPU        *ResourceData `json:"cpu,omitempty"`
+	CPUUsage   *ResourceData `json:"cpuUsage,omitempty"`
+	GpuMemAvg  *ResourceData `json:"gpuMemAvg,omitempty"`
+	GpuMemPeak *ResourceData `json:"gpuMemPeak,omitempty"`
+	GpuUsage   *ResourceData `json:"gpuUsage,omitempty"`
+	ID         *int64        `json:"id,omitempty"`
+	Mem        *ResourceData `json:"mem,omitempty"`
+	MemUsage   *ResourceData `json:"memUsage,omitempty"`
+	Process    string        `json:"process"`
+	Reads      *ResourceData `json:"reads,omitempty"`
+	Time       *ResourceData `json:"time,omitempty"`
+	TimeUsage  *ResourceData `json:"timeUsage,omitempty"`
+	Vmem       *ResourceData `json:"vmem,omitempty"`
+	Writes     *ResourceData `json:"writes,omitempty"`
 }
 
 func (w *WorkflowMetrics) GetCPU() *ResourceData {
@@ -28,6 +31,27 @@ func (w *WorkflowMetrics) GetCPUUsage() *ResourceData {
 		return nil
 	}
 	return w.CPUUsage
+}
+
+func (w *WorkflowMetrics) GetGpuMemAvg() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.GpuMemAvg
+}
+
+func (w *WorkflowMetrics) GetGpuMemPeak() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.GpuMemPeak
+}
+
+func (w *WorkflowMetrics) GetGpuUsage() *ResourceData {
+	if w == nil {
+		return nil
+	}
+	return w.GpuUsage
 }
 
 func (w *WorkflowMetrics) GetID() *int64 {
