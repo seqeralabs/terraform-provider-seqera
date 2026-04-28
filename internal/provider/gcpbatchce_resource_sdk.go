@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -46,10 +47,11 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		r.Config.BootDiskImage = types.StringPointerValue(resp.Config.BootDiskImage)
 		r.Config.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGb))
 		r.Config.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.Config.ComputeJobsInstanceTemplate)
-		r.Config.ComputeJobsMachineType = make([]types.String, 0, len(resp.Config.ComputeJobsMachineType))
-		for _, v := range resp.Config.ComputeJobsMachineType {
-			r.Config.ComputeJobsMachineType = append(r.Config.ComputeJobsMachineType, types.StringValue(v))
-		}
+		computeJobsMachineTypeValue, computeJobsMachineTypeDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.ComputeJobsMachineType)
+		diags.Append(computeJobsMachineTypeDiags...)
+		computeJobsMachineTypeValuable, computeJobsMachineTypeDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, computeJobsMachineTypeValue)
+		diags.Append(computeJobsMachineTypeDiags...)
+		r.Config.ComputeJobsMachineType, _ = computeJobsMachineTypeValuable.(basetypes.ListValue)
 		r.Config.CopyImage = types.StringPointerValue(resp.Config.CopyImage)
 		r.Config.CPUPlatform = types.StringPointerValue(resp.Config.CPUPlatform)
 		r.Config.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.DebugMode))
@@ -80,10 +82,11 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		r.Config.Location = types.StringValue(resp.Config.Location)
 		r.Config.MachineType = types.StringPointerValue(resp.Config.MachineType)
 		r.Config.Network = types.StringPointerValue(resp.Config.Network)
-		r.Config.NetworkTags = make([]types.String, 0, len(resp.Config.NetworkTags))
-		for _, v := range resp.Config.NetworkTags {
-			r.Config.NetworkTags = append(r.Config.NetworkTags, types.StringValue(v))
-		}
+		networkTagsValue, networkTagsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.NetworkTags)
+		diags.Append(networkTagsDiags...)
+		networkTagsValuable, networkTagsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, networkTagsValue)
+		diags.Append(networkTagsDiags...)
+		r.Config.NetworkTags, _ = networkTagsValuable.(basetypes.ListValue)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.NfsMount = types.StringPointerValue(resp.Config.NfsMount)
 		r.Config.NfsTarget = types.StringPointerValue(resp.Config.NfsTarget)
@@ -270,9 +273,9 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		computeJobsInstanceTemplate = nil
 	}
-	computeJobsMachineType := make([]string, 0, len(r.Config.ComputeJobsMachineType))
-	for computeJobsMachineTypeIndex := range r.Config.ComputeJobsMachineType {
-		computeJobsMachineType = append(computeJobsMachineType, r.Config.ComputeJobsMachineType[computeJobsMachineTypeIndex].ValueString())
+	var computeJobsMachineType []string
+	if !r.Config.ComputeJobsMachineType.IsUnknown() && !r.Config.ComputeJobsMachineType.IsNull() {
+		diags.Append(r.Config.ComputeJobsMachineType.ElementsAs(ctx, &computeJobsMachineType, true)...)
 	}
 	copyImage := new(string)
 	if !r.Config.CopyImage.IsUnknown() && !r.Config.CopyImage.IsNull() {
@@ -377,9 +380,9 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		network = nil
 	}
-	networkTags := make([]string, 0, len(r.Config.NetworkTags))
-	for networkTagsIndex := range r.Config.NetworkTags {
-		networkTags = append(networkTags, r.Config.NetworkTags[networkTagsIndex].ValueString())
+	var networkTags []string
+	if !r.Config.NetworkTags.IsUnknown() && !r.Config.NetworkTags.IsNull() {
+		diags.Append(r.Config.NetworkTags.ElementsAs(ctx, &networkTags, true)...)
 	}
 	nextflowConfig := new(string)
 	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {

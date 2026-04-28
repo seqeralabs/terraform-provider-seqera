@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -46,10 +47,11 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 		} else {
 			r.Config.Forge = &tfTypes.AzBatchForgeConfig{}
 			r.Config.Forge.AutoScale = types.BoolPointerValue(resp.Config.Forge.AutoScale)
-			r.Config.Forge.ContainerRegIds = make([]types.String, 0, len(resp.Config.Forge.ContainerRegIds))
-			for _, v := range resp.Config.Forge.ContainerRegIds {
-				r.Config.Forge.ContainerRegIds = append(r.Config.Forge.ContainerRegIds, types.StringValue(v))
-			}
+			containerRegIdsValue, containerRegIdsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.ContainerRegIds)
+			diags.Append(containerRegIdsDiags...)
+			containerRegIdsValuable, containerRegIdsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, containerRegIdsValue)
+			diags.Append(containerRegIdsDiags...)
+			r.Config.Forge.ContainerRegIds, _ = containerRegIdsValuable.(basetypes.ListValue)
 			r.Config.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Config.Forge.DisposeOnDeletion)
 			r.Config.Forge.DualPoolConfig = types.BoolPointerValue(resp.Config.Forge.DualPoolConfig)
 			if resp.Config.Forge.HeadPool == nil {
@@ -311,9 +313,9 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		} else {
 			autoScale = nil
 		}
-		containerRegIds := make([]string, 0, len(r.Config.Forge.ContainerRegIds))
-		for containerRegIdsIndex := range r.Config.Forge.ContainerRegIds {
-			containerRegIds = append(containerRegIds, r.Config.Forge.ContainerRegIds[containerRegIdsIndex].ValueString())
+		var containerRegIds []string
+		if !r.Config.Forge.ContainerRegIds.IsUnknown() && !r.Config.Forge.ContainerRegIds.IsNull() {
+			diags.Append(r.Config.Forge.ContainerRegIds.ElementsAs(ctx, &containerRegIds, true)...)
 		}
 		disposeOnDeletion := new(bool)
 		if !r.Config.Forge.DisposeOnDeletion.IsUnknown() && !r.Config.Forge.DisposeOnDeletion.IsNull() {

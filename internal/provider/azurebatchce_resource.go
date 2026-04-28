@@ -243,14 +243,15 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 								Description: `Requires replacement if changed.`,
 							},
 							"container_reg_ids": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.List{
 									listplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								ElementType: types.StringType,
-								Description: `Requires replacement if changed.`,
+								Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
 							},
 							"dispose_on_deletion": schema.BoolAttribute{
 								Computed: true,

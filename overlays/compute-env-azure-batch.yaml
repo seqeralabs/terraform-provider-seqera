@@ -333,3 +333,21 @@ actions:
   - target: $.components.schemas.AzureBatchCE_ComputeConfig.properties.config
     update:
       x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # AZBATCHFORGECONFIG LIST-OF-STRING CUSTOM TYPES
+  # ============================================================================
+  # Without this Speakeasy generates `[]types.String`, which the framework
+  # cannot decode when the whole list is unknown at plan time (e.g. fed from a
+  # data source).
+
+  - target: $.components.schemas.AzBatchForgeConfig.properties.containerRegIds
+    update:
+      description: |
+        List of Azure Container Registry IDs whose images compute jobs may pull.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
