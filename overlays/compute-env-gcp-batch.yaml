@@ -1,0 +1,352 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: GCP Batch Compute Environment Overlay
+  version: 0.0.1
+
+# ==============================================================================
+# GCP BATCH COMPUTE ENVIRONMENT RESOURCE OVERLAY
+# ==============================================================================
+#
+# Defines the `seqera_gcp_batch_ce` resource — the Google Cloud Batch parallel
+# of `seqera_aws_batch_ce`. Splits Google Batch out of the generic
+# `seqera_compute_env` resource into its own first-class entity.
+#
+# Field-level descriptions for `GoogleBatchConfig` already live in
+# `overlays/compute-env.yaml` (shared with the generic resource); this overlay
+# only adds the entity, the path operations, and resource-level annotations.
+#
+# TERRAFORM EXAMPLE:
+# ------------------
+#
+# resource "seqera_gcp_batch_ce" "basic" {
+#   name           = "gcp-batch-basic"
+#   workspace_id   = 123
+#   platform       = "google-batch"
+#   credentials_id = seqera_google_credential.main.credentials_id
+#
+#   config = {
+#     location  = "us-central1"
+#     work_dir  = "gs://my-bucket/work"
+#     project_id = "my-gcp-project"
+#   }
+# }
+#
+# ==============================================================================
+
+actions:
+  - target: $.paths
+    update:
+      "/compute-envs#gcp-batch":
+        post:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: GCPBatchCE#create
+          x-speakeasy-name-override: CreateGCPBatchCE
+          summary: Create GCP Batch compute environment
+          description: Creates a new Google Cloud Batch compute environment. Append `?workspaceId` to create the environment in a workspace context.
+          x-speakeasy-retries:
+            strategy: backoff
+            backoff:
+              initialInterval: 5000
+              maxInterval: 5000
+              maxElapsedTime: 30000
+              exponent: 1.0
+            statusCodes:
+              - 429
+              - 500
+              - 502
+              - 503
+              - 504
+          tags:
+            - compute-envs
+          operationId: CreateGCPBatchCE
+          parameters:
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+          requestBody:
+            description: GCP Batch compute environment create request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CreateGCPBatchCERequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CreateGCPBatchCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Conflict - resource already exists
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+
+      "/compute-envs/{computeEnvId}#gcp-batch":
+        get:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: GCPBatchCE#read
+          x-speakeasy-name-override: DescribeGCPBatchCE
+          summary: Describe GCP Batch compute environment
+          description: Retrieves the details of the Google Cloud Batch compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DescribeGCPBatchCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+            - name: attributes
+              in: query
+              description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DescribeGCPBatchCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "404":
+              description: Compute environment not found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+        delete:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: GCPBatchCE#delete
+          x-speakeasy-name-override: DeleteGCPBatchCE
+          summary: Delete GCP Batch compute environment
+          description: Deletes the Google Cloud Batch compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DeleteGCPBatchCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+
+  - target: $.components.schemas
+    update:
+      # GCP Batch compute environment schema
+      GCPBatchCE_ComputeConfig:
+        x-speakeasy-entity: GCPBatchCE
+        x-speakeasy-entity-version: 1
+        x-speakeasy-entity-description: |
+          Manage Google Cloud Batch compute environments in Seqera platform.
+
+          GCP Batch compute environments execute Nextflow pipelines on Google Cloud Batch
+          using Google-managed VMs. Use this resource for batch-style workloads where
+          Google Cloud schedules and manages the underlying compute instances.
+        required:
+          - config
+          - name
+          - platform
+          - credentialsId
+        type: object
+        properties:
+          credentialsId:
+            type: string
+            description: Google Cloud credentials identifier
+          orgId:
+            type: integer
+            format: int64
+            readOnly: true
+            x-speakeasy-param-readonly: true
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace numeric identifier
+          id:
+            type: string
+            description: Unique identifier for the compute environment
+            x-speakeasy-param-readonly: true
+          name:
+            maxLength: 100
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+            x-speakeasy-param-force-new: true
+          description:
+            type: string
+            description: Optional description of the compute environment
+            x-speakeasy-param-computed: false
+          platform:
+            type: string
+            enum:
+              - google-batch
+            description: GCP platform type
+            x-speakeasy-param-optional: false
+          status:
+            type: string
+            description: Compute environment status
+            x-speakeasy-param-readonly: true
+          dateCreated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was created
+            x-speakeasy-param-readonly: true
+          lastUpdated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last updated
+            x-speakeasy-param-readonly: true
+          lastUsed:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last used
+            x-speakeasy-param-readonly: true
+          deleted:
+            type: boolean
+            description: Flag indicating if the compute environment has been deleted
+            x-speakeasy-param-readonly: true
+          config:
+            description: Google Cloud Batch compute environment configuration
+            $ref: '#/components/schemas/GoogleBatchConfig'
+
+      # GCP Batch request/response schemas
+      CreateGCPBatchCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/GCPBatchCE_ComputeConfig'
+          labelIds:
+            type: array
+            items:
+              type: integer
+              format: int64
+
+      CreateGCPBatchCEResponse:
+        type: object
+        properties:
+          computeEnvId:
+            type: string
+
+      UpdateGCPBatchCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/GCPBatchCE_ComputeConfig'
+
+      DescribeGCPBatchCEResponse:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/GCPBatchCE_ComputeConfig'
+
+      ListGCPBatchCEsResponse:
+        type: object
+        properties:
+          computeEnvs:
+            type: array
+            items:
+              $ref: '#/components/schemas/GCPBatchCE_ComputeConfig'
+          totalSize:
+            type: integer
+            format: int64
+
+  # ============================================================================
+  # FORCE-REPLACEMENT ON TOP-LEVEL FIELDS
+  # ============================================================================
+  # NOTE: name field does NOT have force-new — it can be updated in-place.
+  # All other top-level fields force replacement on change.
+
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.description
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.platform
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.credentialsId
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.workspaceId
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.config
+    update:
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # GOOGLEBATCHCONFIG FIELD ANNOTATIONS
+  # ============================================================================
+  # Field descriptions and per-field force-new annotations for `GoogleBatchConfig`
+  # are maintained in `overlays/compute-env.yaml` (shared with the generic
+  # `seqera_compute_env` resource). Add GCP-Batch-specific overrides here only.
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.workDir
+    update:
+      description: |
+        Google Cloud Storage bucket path for Nextflow work directory where intermediate
+        files will be stored.
+        Format: gs://bucket-name/path
+      example: "gs://my-nextflow-bucket/work"
+      pattern: "^gs://.+"
+      x-speakeasy-param-force-new: true
+      x-speakeasy-param-optional: false

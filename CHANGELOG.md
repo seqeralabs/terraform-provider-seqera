@@ -1,16 +1,27 @@
-# v0.40.1
-
-DEPRECATIONS:
-
-- **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
-
-BUGFIXES:
-
-- [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
-
 # v0.40.0
 
+FEATURES:
+
+- **New Resources:** Platform-specific Google Cloud and Azure compute environment resources, mirroring `seqera_aws_batch_ce`. Splits the relevant platforms out of the catch-all `seqera_compute_env` resource into first-class resources with their own typed schemas, validators, and registry doc pages:
+  - `seqera_gcp_batch_ce` — Google Cloud Batch (managed batch service)
+  - `seqera_gcp_cloud_ce` — Google Cloud (Compute Engine VMs managed directly by Seqera)
+  - `seqera_azure_batch_ce` — Azure Batch (managed pools)
+  - `seqera_azure_cloud_ce` — Azure Cloud (VMs managed directly by Seqera)
+
+  Each resource ships with a sidecar `MoveState` implementation, so existing `seqera_compute_env` deployments can migrate without re-creating the resource:
+
+  ```terraform
+  moved {
+    from = seqera_compute_env.example
+    to   = seqera_gcp_batch_ce.example
+  }
+  ```
+
+  Migrations are only supported from the generic `seqera_compute_env` (no cross-cloud or cross-platform moves).
+
 ENHANCEMENTS:
+
+- **Compute Environment field documentation** - Added missing field-level descriptions, force-replacement annotations, and `enable_fusion`/`enable_wave` rename consistency for `GoogleCloudConfig` and `AzCloudConfig`. Brings them in line with `AwsCloudConfig` and `GoogleBatchConfig`, which already had this treatment.
 
 - **Compute Environments** - New configuration blocks added: `azure_cloud`, `google_cloud`.
 
@@ -36,9 +47,13 @@ ENHANCEMENTS:
 
 DEPRECATIONS:
 
+- **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
+
 - **EBS Auto Scale** - `ebs_auto_scale` and `ebs_block_size` fields in AWS Batch Forge configuration are now marked as deprecated, matching the Seqera Platform documentation. These features are not compatible with Fusion v2. Use `ebs_boot_size` to configure a larger root volume instead.
 
 BUGFIXES:
+
+- [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
 
 - [#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159) - Fixed EBS field descriptions in AWS compute environments. `ebs_block_size` was incorrectly described as "Size of EBS root volume" when it is actually the auto-expandable block size. `ebs_boot_size` (the actual root/boot volume size) had no description at all.
 

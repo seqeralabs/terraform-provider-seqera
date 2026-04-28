@@ -566,25 +566,40 @@ Optional:
 
 Optional:
 
-- `data_collection_endpoint` (String) Requires replacement if changed.
-- `data_collection_rule_id` (String) Requires replacement if changed.
+- `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.
+- `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
+- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
+
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
-- `forged_resources` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--forged_resources))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
-- `instance_type` (String) Requires replacement if changed.
-- `log_table_name` (String) Requires replacement if changed.
-- `log_workspace_id` (String) Requires replacement if changed.
-- `managed_identity_client_id` (String) Requires replacement if changed.
-- `managed_identity_id` (String) Requires replacement if changed.
-- `network_id` (String) Requires replacement if changed.
+- `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
+- `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
+- `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
+- `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
+- `managed_identity_id` (String) Azure managed identity resource ID for compute instances. Requires replacement if changed.
+- `network_id` (String) Azure VNet resource ID for compute instance networking.
+Required when using private network isolation.
+Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
-- `resource_group` (String) Requires replacement if changed.
-- `subscription_id` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
+- `region` (String) Azure region where the compute environment will be created.
+Examples: eastus, westus2, northeurope
+Not Null; Requires replacement if changed.
+- `resource_group` (String) Azure resource group where compute instances will be provisioned. Requires replacement if changed.
+- `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+Read-Only:
+
+- `forged_resources` (Attributes List) Read-only list of resources provisioned for this compute environment. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--forged_resources))
 
 <a id="nestedatt--compute_env--config--azure_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.azure_cloud.environment`
@@ -818,23 +833,46 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `arm64_enabled` (Boolean) Requires replacement if changed.
-- `boot_disk_size_gb` (Number) Requires replacement if changed.
+- `arm64_enabled` (Boolean) Enable ARM64 (Tau T2A) machine types for compute instances.
+When enabled, ARM-based machines will be selected for cost savings.
+Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances. Requires replacement if changed.
+- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
+
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--environment))
-- `forged_resources` (List of Map of Object) Requires replacement if changed.
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
-- `gpu_enabled` (Boolean) Requires replacement if changed.
-- `image_id` (String) Requires replacement if changed.
-- `instance_type` (String) Requires replacement if changed.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable machine types will be selected.
+Requires replacement if changed.
+- `image_id` (String) Custom VM image self-link or family for compute instances.
+If not specified, the default Seqera-managed image is used.
+Requires replacement if changed.
+- `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `project_id` (String) Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
-- `service_account_email` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
+- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
+- `region` (String) Google Cloud region where the compute environment will be created.
+Examples: us-central1, europe-west1, asia-east1
+Not Null; Requires replacement if changed.
+- `service_account_email` (String) Google Cloud service account email for compute instances.
+If not specified, the default compute service account is used.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
-- `zone` (String) Requires replacement if changed.
+- `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
+If not specified, the platform selects a zone automatically.
+Requires replacement if changed.
+
+Read-Only:
+
+- `forged_resources` (List of Map of Object) Read-only list of resources provisioned for this compute environment.
 
 <a id="nestedatt--compute_env--config--google_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.google_cloud.environment`

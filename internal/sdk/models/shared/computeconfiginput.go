@@ -1673,30 +1673,66 @@ func (i *IBMLSFConfiguration) GetWorkDir() string {
 }
 
 type AzureCloudConfiguration struct {
+	// Azure Monitor data collection endpoint URL for diagnostic telemetry.
+	//
 	DataCollectionEndpoint *string `json:"dataCollectionEndpoint,omitempty"`
-	DataCollectionRuleID   *string `json:"dataCollectionRuleId,omitempty"`
+	// Azure Monitor data collection rule resource ID associated with the endpoint.
+	//
+	DataCollectionRuleID *string `json:"dataCollectionRuleId,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment             []ConfigEnvVariable    `json:"environment,omitempty"`
-	ForgedResources         []MapEntryStringString `json:"forgedResources,omitempty"`
-	Fusion2Enabled          *bool                  `json:"fusion2Enabled,omitempty"`
-	InstanceType            *string                `json:"instanceType,omitempty"`
-	LogTableName            *string                `json:"logTableName,omitempty"`
-	LogWorkspaceID          *string                `json:"logWorkspaceId,omitempty"`
-	ManagedIdentityClientID *string                `json:"managedIdentityClientId,omitempty"`
-	ManagedIdentityID       *string                `json:"managedIdentityId,omitempty"`
-	NetworkID               *string                `json:"networkId,omitempty"`
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only list of resources provisioned for this compute environment.
+	//
+	ForgedResources []MapEntryStringString `json:"forgedResources,omitempty"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
+	//
+	InstanceType *string `json:"instanceType,omitempty"`
+	// Azure Log Analytics table name for execution logs.
+	//
+	LogTableName *string `json:"logTableName,omitempty"`
+	// Azure Log Analytics workspace ID for execution logs.
+	//
+	LogWorkspaceID *string `json:"logWorkspaceId,omitempty"`
+	// Azure managed identity client ID for compute instances.
+	//
+	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
+	// Azure managed identity resource ID for compute instances.
+	//
+	ManagedIdentityID *string `json:"managedIdentityId,omitempty"`
+	// Azure VNet resource ID for compute instance networking.
+	// Required when using private network isolation.
+	//
+	NetworkID *string `json:"networkId,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
-	PreRunScript   *string `json:"preRunScript,omitempty"`
-	Region         *string `json:"region,omitempty"`
-	ResourceGroup  *string `json:"resourceGroup,omitempty"`
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Azure region where the compute environment will be created.
+	// Examples: eastus, westus2, northeurope
+	//
+	Region *string `json:"region,omitempty"`
+	// Azure resource group where compute instances will be provisioned.
+	//
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// Azure subscription ID where compute resources will be created.
+	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
+	//
+	// Required when `enable_fusion` is true.
+	//
+	EnableWave *bool `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 }
@@ -1747,11 +1783,11 @@ func (a *AzureCloudConfiguration) GetForgedResources() []MapEntryStringString {
 	return a.ForgedResources
 }
 
-func (a *AzureCloudConfiguration) GetFusion2Enabled() *bool {
+func (a *AzureCloudConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
 func (a *AzureCloudConfiguration) GetInstanceType() *string {
@@ -1838,11 +1874,11 @@ func (a *AzureCloudConfiguration) GetSubscriptionID() *string {
 	return a.SubscriptionID
 }
 
-func (a *AzureCloudConfiguration) GetWaveEnabled() *bool {
+func (a *AzureCloudConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
 func (a *AzureCloudConfiguration) GetWorkDir() *string {
@@ -2095,45 +2131,81 @@ func (a *AzureBatchConfigurationInput) GetWorkerPool() *string {
 	return a.WorkerPool
 }
 
-type GoogleCloudConfigForgedResource struct {
+type ComputeConfigGoogleCloudConfigForgedResource struct {
 }
 
-func (g GoogleCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+func (c ComputeConfigGoogleCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
 }
 
-func (g *GoogleCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+func (c *ComputeConfigGoogleCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
 type GoogleCloudConfiguration struct {
-	Arm64Enabled   *bool `json:"arm64Enabled,omitempty"`
-	BootDiskSizeGb *int  `json:"bootDiskSizeGb,omitempty"`
+	// Enable ARM64 (Tau T2A) machine types for compute instances.
+	// When enabled, ARM-based machines will be selected for cost savings.
+	//
+	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
+	// Size of the boot disk in GB for compute instances.
+	//
+	BootDiskSizeGb *int `json:"bootDiskSizeGb,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable                          `json:"environment,omitempty"`
-	ForgedResources []map[string]GoogleCloudConfigForgedResource `json:"forgedResources,omitempty"`
-	Fusion2Enabled  *bool                                        `json:"fusion2Enabled,omitempty"`
-	GpuEnabled      *bool                                        `json:"gpuEnabled,omitempty"`
-	ImageID         *string                                      `json:"imageId,omitempty"`
-	InstanceType    *string                                      `json:"instanceType,omitempty"`
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only list of resources provisioned for this compute environment.
+	//
+	ForgedResources []map[string]ComputeConfigGoogleCloudConfigForgedResource `json:"forgedResources,omitempty"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable GPU support for compute instances.
+	// When enabled, GPU-capable machine types will be selected.
+	//
+	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
+	// Custom VM image self-link or family for compute instances.
+	// If not specified, the default Seqera-managed image is used.
+	//
+	ImageID *string `json:"imageId,omitempty"`
+	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
+	//
+	InstanceType *string `json:"instanceType,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
-	PreRunScript        *string `json:"preRunScript,omitempty"`
-	ProjectID           *string `json:"projectId,omitempty"`
-	Region              *string `json:"region,omitempty"`
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Google Cloud project ID where compute resources will be created.
+	//
+	ProjectID *string `json:"projectId,omitempty"`
+	// Google Cloud region where the compute environment will be created.
+	// Examples: us-central1, europe-west1, asia-east1
+	//
+	Region *string `json:"region,omitempty"`
+	// Google Cloud service account email for compute instances.
+	// If not specified, the default compute service account is used.
+	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	WaveEnabled         *bool   `json:"waveEnabled,omitempty"`
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
+	//
+	// Required when `enable_fusion` is true.
+	//
+	EnableWave *bool `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	Zone    *string `json:"zone,omitempty"`
+	// Google Cloud zone within the configured region (e.g., us-central1-a).
+	// If not specified, the platform selects a zone automatically.
+	//
+	Zone *string `json:"zone,omitempty"`
 }
 
 func (g GoogleCloudConfiguration) MarshalJSON() ([]byte, error) {
@@ -2175,18 +2247,18 @@ func (g *GoogleCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return g.Environment
 }
 
-func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]GoogleCloudConfigForgedResource {
+func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]ComputeConfigGoogleCloudConfigForgedResource {
 	if g == nil {
 		return nil
 	}
 	return g.ForgedResources
 }
 
-func (g *GoogleCloudConfiguration) GetFusion2Enabled() *bool {
+func (g *GoogleCloudConfiguration) GetEnableFusion() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.Fusion2Enabled
+	return g.EnableFusion
 }
 
 func (g *GoogleCloudConfiguration) GetGpuEnabled() *bool {
@@ -2252,11 +2324,11 @@ func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
 	return g.ServiceAccountEmail
 }
 
-func (g *GoogleCloudConfiguration) GetWaveEnabled() *bool {
+func (g *GoogleCloudConfiguration) GetEnableWave() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.WaveEnabled
+	return g.EnableWave
 }
 
 func (g *GoogleCloudConfiguration) GetWorkDir() *string {
@@ -3772,18 +3844,18 @@ func (u ComputeConfigInput) MarshalJSON() ([]byte, error) {
 	return nil, errors.New("could not marshal union type ComputeConfigInput: all fields are null")
 }
 
-type DeleteJobsOnCompletion string
+type ComputeConfigDeleteJobsOnCompletion string
 
 const (
-	DeleteJobsOnCompletionOnSuccess DeleteJobsOnCompletion = "on_success"
-	DeleteJobsOnCompletionAlways    DeleteJobsOnCompletion = "always"
-	DeleteJobsOnCompletionNever     DeleteJobsOnCompletion = "never"
+	ComputeConfigDeleteJobsOnCompletionOnSuccess ComputeConfigDeleteJobsOnCompletion = "on_success"
+	ComputeConfigDeleteJobsOnCompletionAlways    ComputeConfigDeleteJobsOnCompletion = "always"
+	ComputeConfigDeleteJobsOnCompletionNever     ComputeConfigDeleteJobsOnCompletion = "never"
 )
 
-func (e DeleteJobsOnCompletion) ToPointer() *DeleteJobsOnCompletion {
+func (e ComputeConfigDeleteJobsOnCompletion) ToPointer() *ComputeConfigDeleteJobsOnCompletion {
 	return &e
 }
-func (e *DeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
+func (e *ComputeConfigDeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -3794,20 +3866,20 @@ func (e *DeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
 	case "always":
 		fallthrough
 	case "never":
-		*e = DeleteJobsOnCompletion(v)
+		*e = ComputeConfigDeleteJobsOnCompletion(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for DeleteJobsOnCompletion: %v", v)
+		return fmt.Errorf("invalid value for ComputeConfigDeleteJobsOnCompletion: %v", v)
 	}
 }
 
 type AzureBatchConfiguration struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode                  *bool                   `json:"autoPoolMode,omitempty"`
-	DeleteJobsOnCompletion        *DeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
-	DeleteJobsOnCompletionEnabled *bool                   `json:"deleteJobsOnCompletionEnabled,omitempty"`
-	DeletePoolsOnCompletion       *bool                   `json:"deletePoolsOnCompletion,omitempty"`
-	DeleteTasksOnCompletion       *bool                   `json:"deleteTasksOnCompletion,omitempty"`
+	AutoPoolMode                  *bool                                `json:"autoPoolMode,omitempty"`
+	DeleteJobsOnCompletion        *ComputeConfigDeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
+	DeleteJobsOnCompletionEnabled *bool                                `json:"deleteJobsOnCompletionEnabled,omitempty"`
+	DeletePoolsOnCompletion       *bool                                `json:"deletePoolsOnCompletion,omitempty"`
+	DeleteTasksOnCompletion       *bool                                `json:"deleteTasksOnCompletion,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
@@ -3870,7 +3942,7 @@ func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
 	return a.AutoPoolMode
 }
 
-func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *DeleteJobsOnCompletion {
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *ComputeConfigDeleteJobsOnCompletion {
 	if a == nil {
 		return nil
 	}
