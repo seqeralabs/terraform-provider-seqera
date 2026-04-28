@@ -53,6 +53,8 @@ DEPRECATIONS:
 
 BUGFIXES:
 
+- **`seqera_aws_batch_ce` plan validation** - Fixed three `Invalid Path Expression for Schema` errors that blocked `terraform validate` and `terraform plan` whenever a real-world AWS Batch config touched DRAGEN, forge-managed EFS, or Fusion snapshots. The schema-level `x-speakeasy-required-with` / `x-speakeasy-conflicts-with` directives Speakeasy emits for `forge.dragen_ami_id`, `forge.dragen_instance_type`, `forge.ebs_block_size`, `forge.efs_create`, and `awsbatchconfig.fusion_snapshots` produced one too many `AtParent()` calls (and used the pre-rename `fusion2_enabled` name instead of `enable_fusion`). The directives have been removed; the same dependency rules are now enforced by the existing `awsForgeValidator` and `FusionSnapshotsValidator` custom validators.
+
 - [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
 
 - [#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159) - Fixed EBS field descriptions in AWS compute environments. `ebs_block_size` was incorrectly described as "Size of EBS root volume" when it is actually the auto-expandable block size. `ebs_boot_size` (the actual root/boot volume size) had no description at all.
