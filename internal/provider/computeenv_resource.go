@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -557,12 +556,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												MarkdownDescription: `Custom AMI ID for DRAGEN-enabled instances.` + "\n" +
 													`Only applicable when dragen_enabled is true.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-													}...),
-												},
 											},
 											"dragen_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -583,12 +576,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												MarkdownDescription: `EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).` + "\n" +
 													`Only applicable when dragen_enabled is true.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-													}...),
-												},
 											},
 											"ebs_auto_scale": schema.BoolAttribute{
 												Computed: true,
@@ -615,12 +602,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`This is NOT the root/boot volume size — use ebs_boot_size for that.` + "\n" +
 													`This feature is deprecated and is not compatible with Fusion v2.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.Int32{
-													int32validator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
-														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
-													}...),
-												},
 											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
@@ -659,12 +640,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
-												Validators: []validator.Bool{
-													boolvalidator.ConflictsWith(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
-														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
-													}...),
-												},
 											},
 											"efs_id": schema.StringAttribute{
 												Computed: true,
@@ -850,9 +825,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
-											boolvalidator.AlsoRequires(path.Expressions{
-												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
-											}...),
 											custom_boolvalidators.FusionSnapshotsValidator(),
 										},
 									},

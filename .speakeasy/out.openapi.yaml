@@ -13473,8 +13473,13 @@ components:
             Requires `enable_fusion = true`.
           example: false
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../fusion2Enabled
+          # NOTE: enable_fusion dependency is enforced by `FusionSnapshotsValidator`
+          # (internal/validators/boolvalidators/fusion_snapshots_validator.go).
+          # Speakeasy emits an over-deep AtParent path for the schema-level
+          # `x-speakeasy-required-with: [../fusion2Enabled]` directive AND uses
+          # the pre-rename name (`fusion2_enabled`) instead of the renamed
+          # `enable_fusion`, so we rely on the custom validator instead.
+
           x-speakeasy-plan-validators: FusionSnapshotsValidator
         headJobCpus:
           type: integer
@@ -16537,9 +16542,7 @@ components:
             Custom AMI ID for DRAGEN-enabled instances.
             Only applicable when dragen_enabled is true.
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../dragenEnabled
-            - ../dragenEnabled
+          # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         dragenEnabled:
           type: boolean
           description: |
@@ -16553,9 +16556,7 @@ components:
             EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
             Only applicable when dragen_enabled is true.
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../dragenEnabled
-            - ../dragenEnabled
+          # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         ebsAutoScale:
           type: boolean
           description: |
@@ -16577,9 +16578,7 @@ components:
           deprecated: true
           example: 100
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../ebsAutoScale
-            - ../ebsAutoScale
+          # NOTE: dependency on ebs_auto_scale is enforced by `awsForgeValidator`.
         ebsBootSize:
           type: integer
           format: int32
@@ -16606,9 +16605,7 @@ components:
           description: Automatically create an EFS file system
           example: false
           x-speakeasy-param-force-new: true
-          x-speakeasy-conflicts-with:
-            - ../efsId
-            - ../efsId
+          # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
         efsId:
           type: string
           description: |

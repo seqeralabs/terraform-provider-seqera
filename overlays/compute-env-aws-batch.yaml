@@ -525,8 +525,11 @@ actions:
       deprecated: true
       example: 100
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../ebsAutoScale
+      # NOTE: dependency on ebs_auto_scale is enforced by `awsForgeValidator`
+      # (internal/validators/objectvalidators/aws_forge_validator.go).
+      # Speakeasy emits an over-deep AtParent path for the schema-level
+      # `x-speakeasy-required-with: [../ebsAutoScale]` directive, so we
+      # validate at the parent object level instead.
 
   - target: $.components.schemas.ForgeConfig.properties.ebsBootSize
     update:
@@ -609,8 +612,7 @@ actions:
       description: Automatically create an EFS file system
       example: false
       x-speakeasy-param-force-new: true
-      x-speakeasy-conflicts-with:
-        - ../efsId
+      # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.efsId
     update:
@@ -683,8 +685,7 @@ actions:
         Custom AMI ID for DRAGEN-enabled instances.
         Only applicable when dragen_enabled is true.
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../dragenEnabled
+      # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.dragenInstanceType
     update:
@@ -692,8 +693,7 @@ actions:
         EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
         Only applicable when dragen_enabled is true.
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../dragenEnabled
+      # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.ecsConfig
     update:
