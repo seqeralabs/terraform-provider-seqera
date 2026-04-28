@@ -471,6 +471,7 @@ Optional:
 Optional:
 
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
+- `delete_jobs_on_completion` (String, Deprecated) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_jobs_on_completion_enabled` (Boolean) Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `delete_tasks_on_completion` (Boolean) Requires replacement if changed.
@@ -503,10 +504,6 @@ Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `worker_pool` (String) Requires replacement if changed.
-
-Read-Only:
-
-- `delete_jobs_on_completion` (String)
 
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`

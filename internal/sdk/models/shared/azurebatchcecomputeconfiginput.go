@@ -55,8 +55,8 @@ type AzureBatchCEComputeConfigInput struct {
 	// Timestamp when the compute environment was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Flag indicating if the compute environment has been deleted
-	Deleted *bool              `json:"deleted,omitempty"`
-	Config  AzBatchConfigInput `json:"config"`
+	Deleted *bool         `json:"deleted,omitempty"`
+	Config  AzBatchConfig `json:"config"`
 }
 
 func (a AzureBatchCEComputeConfigInput) MarshalJSON() ([]byte, error) {
@@ -147,9 +147,9 @@ func (a *AzureBatchCEComputeConfigInput) GetDeleted() *bool {
 	return a.Deleted
 }
 
-func (a *AzureBatchCEComputeConfigInput) GetConfig() AzBatchConfigInput {
+func (a *AzureBatchCEComputeConfigInput) GetConfig() AzBatchConfig {
 	if a == nil {
-		return AzBatchConfigInput{}
+		return AzBatchConfig{}
 	}
 	return a.Config
 }

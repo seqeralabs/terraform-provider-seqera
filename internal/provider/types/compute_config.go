@@ -2,7 +2,7 @@
 
 package types
 
-type ComputeConfigInput struct {
+type ComputeConfig struct {
 	AwsBatch              *AWSBatchConfiguration                  `queryParam:"inline" tfsdk:"aws_batch"`
 	AwsCloud              *AWSCloudConfiguration                  `queryParam:"inline" tfsdk:"aws_cloud"`
 	AltairPlatform        *AltairPBSConfiguration                 `queryParam:"inline" tfsdk:"altair_platform"`
