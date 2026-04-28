@@ -45,6 +45,19 @@ ENHANCEMENTS:
   - Graviton (ARM64) requires Fargate, Wave, and Fusion v2
   - Additional field-level validations for EBS, EFS, and DRAGEN dependencies
 
+BREAKING CHANGES:
+
+- **Azure Batch `delete_jobs_on_completion` is now read-only.** In v0.30.x this was a settable string (e.g. `"on_success"`). It has been replaced by three boolean fields on Azure Batch compute configurations: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old field name still exists in the schema but is read-only — easy to miss because the rename is partial.
+
+  User migration:
+
+  ```diff
+  - delete_jobs_on_completion       = "on_success"
+  + delete_jobs_on_completion_enabled = true
+  ```
+
+  A state upgrader (v1 → v2) is included for `seqera_compute_env` so users coming from v0.30.x state will have `delete_jobs_on_completion_enabled = true` automatically set whenever the old field had a non-empty value. This avoids a spurious `null -> true` diff that would otherwise force a resource replacement after the user updates their config. The upgrader only touches `config.azure_batch`; other platforms are unaffected.
+
 DEPRECATIONS:
 
 - **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
