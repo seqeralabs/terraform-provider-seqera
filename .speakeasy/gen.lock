@@ -5,8 +5,8 @@ management:
   docVersion: 1.147.0
   speakeasyVersion: 1.761.9
   generationVersion: 2.881.4
-  releaseVersion: 0.40.1
-  configChecksum: 4fce3b743d29a33226888931f6ef5c0c
+  releaseVersion: 0.40.0-RC2
+  configChecksum: c77908dbe8aa95c668e0cdc1862e3c7f
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -39,7 +39,7 @@ trackedFiles:
     pristine_git_object: 8e707bb129af1da185ba30b4c289b0160819c437
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:3d9d475afad3a33be2638932cac7a05e408a7e45
+    last_write_checksum: sha1:7ffbc2116b34fbfda54390c05f0bce3f6911e543
     pristine_git_object: 7b241353e887cd10c08b0653d13c2227ce91f456
   examples/resources/seqera_action/import-by-string-id.tf:
     id: 7b9e1b28088a
@@ -3913,7 +3913,7 @@ trackedFiles:
     last_write_checksum: sha1:84fef173ddc771401f52a4c084d5a3e1b07f776e
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:29bd4c29f916236c2bb7ed1a017aab73806c0b16
+    last_write_checksum: sha1:973300f124fc25552584224ab5d338d68e06b140
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
