@@ -13473,8 +13473,13 @@ components:
             Requires `enable_fusion = true`.
           example: false
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../fusion2Enabled
+          # NOTE: enable_fusion dependency is enforced by `FusionSnapshotsValidator`
+          # (internal/validators/boolvalidators/fusion_snapshots_validator.go).
+          # Speakeasy emits an over-deep AtParent path for the schema-level
+          # `x-speakeasy-required-with: [../fusion2Enabled]` directive AND uses
+          # the pre-rename name (`fusion2_enabled`) instead of the renamed
+          # `enable_fusion`, so we rely on the custom validator instead.
+
           x-speakeasy-plan-validators: FusionSnapshotsValidator
         headJobCpus:
           type: integer
@@ -13644,6 +13649,11 @@ components:
             List of additional S3 bucket names that compute jobs are allowed to access.
             The work directory bucket is automatically included.
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         arm64Enabled:
           type: boolean
           description: |
@@ -13752,6 +13762,11 @@ components:
             Security groups must allow necessary network access.
           example: ["sg-12345678"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         subnetId:
           type: string
           description: |
@@ -13967,6 +13982,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            List of Azure Container Registry IDs whose images compute jobs may pull.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         disposeOnDeletion:
           type: boolean
         dualPoolConfig:
@@ -14585,7 +14608,7 @@ components:
           type: integer
           format: int64
       x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-version: 2
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -16527,9 +16550,7 @@ components:
             Custom AMI ID for DRAGEN-enabled instances.
             Only applicable when dragen_enabled is true.
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../dragenEnabled
-            - ../dragenEnabled
+          # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         dragenEnabled:
           type: boolean
           description: |
@@ -16543,9 +16564,7 @@ components:
             EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
             Only applicable when dragen_enabled is true.
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../dragenEnabled
-            - ../dragenEnabled
+          # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         ebsAutoScale:
           type: boolean
           description: |
@@ -16567,9 +16586,7 @@ components:
           deprecated: true
           example: 100
           x-speakeasy-param-force-new: true
-          x-speakeasy-required-with:
-            - ../ebsAutoScale
-            - ../ebsAutoScale
+          # NOTE: dependency on ebs_auto_scale is enforced by `awsForgeValidator`.
         ebsBootSize:
           type: integer
           format: int32
@@ -16596,9 +16613,7 @@ components:
           description: Automatically create an EFS file system
           example: false
           x-speakeasy-param-force-new: true
-          x-speakeasy-conflicts-with:
-            - ../efsId
-            - ../efsId
+          # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
         efsId:
           type: string
           description: |
@@ -17038,6 +17053,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            List of Google Cloud machine types compute jobs may use.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         copyImage:
           type: string
           description: |
@@ -17128,6 +17151,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            Network tags applied to compute instances for VPC firewall rule targeting.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         nextflowConfig:
           type: string
         nfsMount:

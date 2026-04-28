@@ -155,7 +155,7 @@ actions:
   - target: $.components.schemas.ComputeEnvResponseDto
     update:
       x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-version: 2
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -580,6 +580,11 @@ actions:
         List of additional S3 bucket names that compute jobs are allowed to access.
         The work directory bucket is automatically included.
       x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
 
   - target: $.components.schemas.AwsCloudConfig.properties.instanceType
     update:
@@ -651,6 +656,11 @@ actions:
         Security groups must allow necessary network access.
       example: ["sg-12345678"]
       x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
 
   # ============================================================================
   # GOOGLE BATCH CONFIG FIELD DESCRIPTIONS
