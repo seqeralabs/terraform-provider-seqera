@@ -2353,8 +2353,10 @@ type GoogleBatchServiceConfiguration struct {
 	// Google Cloud instance template name or self-link for compute job VMs.
 	// Overrides other VM configuration settings for compute jobs.
 	//
-	ComputeJobsInstanceTemplate *string  `json:"computeJobsInstanceTemplate,omitempty"`
-	ComputeJobsMachineType      []string `json:"computeJobsMachineType,omitempty"`
+	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
+	// List of Google Cloud machine types compute jobs may use.
+	//
+	ComputeJobsMachineType []string `json:"computeJobsMachineType,omitempty"`
 	// Container image used for file staging (copying data to/from Cloud Storage).
 	//
 	CopyImage *string `json:"copyImage,omitempty"`
@@ -2400,7 +2402,9 @@ type GoogleBatchServiceConfiguration struct {
 	MachineType *string `json:"machineType,omitempty"`
 	// Google Cloud VPC network name or self-link for compute instances.
 	//
-	Network     *string  `json:"network,omitempty"`
+	Network *string `json:"network,omitempty"`
+	// Network tags applied to compute instances for VPC firewall rule targeting.
+	//
 	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`

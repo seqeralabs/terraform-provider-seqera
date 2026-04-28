@@ -4,10 +4,11 @@ package types
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 type AWSCloudConfiguration struct {
-	AllowBuckets       []types.String      `tfsdk:"allow_buckets"`
+	AllowBuckets       basetypes.ListValue `tfsdk:"allow_buckets"`
 	Arm64Enabled       types.Bool          `tfsdk:"arm64_enabled"`
 	EbsBootSize        types.Int32         `tfsdk:"ebs_boot_size"`
 	Ec2KeyPair         types.String        `tfsdk:"ec2_key_pair"`
@@ -25,7 +26,7 @@ type AWSCloudConfiguration struct {
 	Region             types.String        `tfsdk:"region"`
 	SchedConfig        *SchedConfig        `tfsdk:"sched_config"`
 	SchedEnabled       types.Bool          `tfsdk:"sched_enabled"`
-	SecurityGroups     []types.String      `tfsdk:"security_groups"`
+	SecurityGroups     basetypes.ListValue `tfsdk:"security_groups"`
 	SubnetID           types.String        `tfsdk:"subnet_id"`
 	WorkDir            types.String        `tfsdk:"work_dir"`
 }

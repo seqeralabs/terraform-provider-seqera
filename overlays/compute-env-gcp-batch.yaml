@@ -350,3 +350,29 @@ actions:
       pattern: "^gs://.+"
       x-speakeasy-param-force-new: true
       x-speakeasy-param-optional: false
+
+  # List-of-string fields need a custom type so they can hold "unknown" lists
+  # produced by Terraform data sources at plan time. Without this Speakeasy
+  # generates `[]types.String`, which the framework cannot decode when the
+  # whole list is unknown (e.g. `network_tags = data.google_compute_network.x.tags`).
+  - target: $.components.schemas.GoogleBatchConfig.properties.computeJobsMachineType
+    update:
+      description: |
+        List of Google Cloud machine types compute jobs may use.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.networkTags
+    update:
+      description: |
+        Network tags applied to compute instances for VPC firewall rule targeting.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
