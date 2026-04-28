@@ -40,7 +40,13 @@ type AWSComputeEnvComputeConfigInput struct {
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
 	ID *string `json:"id,omitempty"`
-	// Display name for the compute environment
+	// A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+	//
+	// Deprecated: The `seqera_aws_compute_env` resource is superseded by `seqera_aws_batch_ce`.
+	// The two resources share the same schema and API; `seqera_aws_batch_ce` is
+	// the canonical resource going forward. Migrate with a `moved {}` block —
+	// see the resource docs.
+	// .
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
@@ -162,7 +168,13 @@ type AWSComputeEnvComputeConfig struct {
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
 	ID *string `json:"id,omitempty"`
-	// Display name for the compute environment
+	// A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+	//
+	// Deprecated: The `seqera_aws_compute_env` resource is superseded by `seqera_aws_batch_ce`.
+	// The two resources share the same schema and API; `seqera_aws_batch_ce` is
+	// the canonical resource going forward. Migrate with a `moved {}` block —
+	// see the resource docs.
+	// .
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`

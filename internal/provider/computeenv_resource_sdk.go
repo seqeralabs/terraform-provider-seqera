@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -62,10 +63,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						} else {
 							r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
 						}
-						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
-						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
-							r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
-						}
+						allowBucketsValue, allowBucketsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets)
+						diags.Append(allowBucketsDiags...)
+						allowBucketsValuable, allowBucketsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, allowBucketsValue)
+						diags.Append(allowBucketsDiags...)
+						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, _ = allowBucketsValuable.(basetypes.ListValue)
 						r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
 						r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
 						r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
@@ -86,20 +88,23 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
 						r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
 						r.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
-						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
-						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
-							r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
-						}
+						instanceTypesValue, instanceTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes)
+						diags.Append(instanceTypesDiags...)
+						instanceTypesValuable, instanceTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, instanceTypesValue)
+						diags.Append(instanceTypesDiags...)
+						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, _ = instanceTypesValuable.(basetypes.ListValue)
 						r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
 						r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
-						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
-							r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
-						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
-							r.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
-						}
+						securityGroupsValue, securityGroupsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups)
+						diags.Append(securityGroupsDiags...)
+						securityGroupsValuable, securityGroupsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue)
+						diags.Append(securityGroupsDiags...)
+						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, _ = securityGroupsValuable.(basetypes.ListValue)
+						subnetsValue, subnetsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets)
+						diags.Append(subnetsDiags...)
+						subnetsValuable, subnetsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, subnetsValue)
+						diags.Append(subnetsDiags...)
+						r.ComputeEnv.Config.AwsBatch.Forge.Subnets, _ = subnetsValuable.(basetypes.ListValue)
 						r.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
 						r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					}
@@ -974,9 +979,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				allocStrategy = nil
 			}
-			allowBuckets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets))
-			for allowBucketsIndex := range r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets {
-				allowBuckets = append(allowBuckets, r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets[allowBucketsIndex].ValueString())
+			var allowBuckets []string
+			if !r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets.ElementsAs(ctx, &allowBuckets, true)...)
 			}
 			arm64Enabled := new(bool)
 			if !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
@@ -1098,9 +1103,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				imageID = nil
 			}
-			instanceTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes))
-			for instanceTypesIndex := range r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes {
-				instanceTypes = append(instanceTypes, r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes[instanceTypesIndex].ValueString())
+			var instanceTypes []string
+			if !r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes.ElementsAs(ctx, &instanceTypes, true)...)
 			}
 			var maxCpus int
 			maxCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
@@ -1108,13 +1113,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			var minCpus int
 			minCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MinCpus.ValueInt32())
 
-			securityGroups := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups))
-			for securityGroupsIndex := range r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups {
-				securityGroups = append(securityGroups, r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups[securityGroupsIndex].ValueString())
+			var securityGroups []string
+			if !r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups.ElementsAs(ctx, &securityGroups, true)...)
 			}
-			subnets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.Subnets))
-			for subnetsIndex := range r.ComputeEnv.Config.AwsBatch.Forge.Subnets {
-				subnets = append(subnets, r.ComputeEnv.Config.AwsBatch.Forge.Subnets[subnetsIndex].ValueString())
+			var subnets []string
+			if !r.ComputeEnv.Config.AwsBatch.Forge.Subnets.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Subnets.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsBatch.Forge.Subnets.ElementsAs(ctx, &subnets, true)...)
 			}
 			typeVar := shared.ForgeConfigType(r.ComputeEnv.Config.AwsBatch.Forge.Type.ValueString())
 			vpcID := new(string)
@@ -1288,8 +1293,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	var awsCloudConfiguration *shared.AWSCloudConfiguration
 	if r.ComputeEnv.Config.AwsCloud != nil {
 		allowBuckets1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.AllowBuckets))
-		for allowBucketsIndex1 := range r.ComputeEnv.Config.AwsCloud.AllowBuckets {
-			allowBuckets1 = append(allowBuckets1, r.ComputeEnv.Config.AwsCloud.AllowBuckets[allowBucketsIndex1].ValueString())
+		for allowBucketsIndex := range r.ComputeEnv.Config.AwsCloud.AllowBuckets {
+			allowBuckets1 = append(allowBuckets1, r.ComputeEnv.Config.AwsCloud.AllowBuckets[allowBucketsIndex].ValueString())
 		}
 		arm64Enabled1 := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsNull() {
@@ -1418,8 +1423,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			schedEnabled = nil
 		}
 		securityGroups1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SecurityGroups))
-		for securityGroupsIndex1 := range r.ComputeEnv.Config.AwsCloud.SecurityGroups {
-			securityGroups1 = append(securityGroups1, r.ComputeEnv.Config.AwsCloud.SecurityGroups[securityGroupsIndex1].ValueString())
+		for securityGroupsIndex := range r.ComputeEnv.Config.AwsCloud.SecurityGroups {
+			securityGroups1 = append(securityGroups1, r.ComputeEnv.Config.AwsCloud.SecurityGroups[securityGroupsIndex].ValueString())
 		}
 		subnetID := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.SubnetID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SubnetID.IsNull() {

@@ -286,8 +286,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 								},
 							},
 							"allow_buckets": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.List{
 									listplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
@@ -572,8 +573,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Requires replacement if changed.`,
 							},
 							"instance_types": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.List{
 									listplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
@@ -610,8 +612,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Requires replacement if changed.`,
 							},
 							"security_groups": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.List{
 									listplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
@@ -622,8 +625,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Requires replacement if changed.`,
 							},
 							"subnets": schema.ListAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.List{
 									listplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
@@ -912,9 +916,14 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Display name for the compute environment. Requires replacement if changed.`,
+				DeprecationMessage: `The ` + "`" + `seqera_aws_compute_env` + "`" + ` resource is superseded by ` + "`" + `seqera_aws_batch_ce` + "`" + `.` + "\n" +
+					`The two resources share the same schema and API; ` + "`" + `seqera_aws_batch_ce` + "`" + ` is` + "\n" +
+					`the canonical resource going forward. Migrate with a ` + "`" + `moved {}` + "`" + ` block —` + "\n" +
+					`see the resource docs.`,
+				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
 			"org_id": schema.Int64Attribute{

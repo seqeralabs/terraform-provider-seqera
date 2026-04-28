@@ -477,8 +477,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 											"allow_buckets": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
@@ -742,8 +743,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Requires replacement if changed.`,
 											},
 											"instance_types": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
@@ -777,8 +779,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Requires replacement if changed.`,
 											},
 											"security_groups": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
@@ -788,8 +791,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Requires replacement if changed.`,
 											},
 											"subnets": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
