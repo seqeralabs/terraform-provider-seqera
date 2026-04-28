@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -47,10 +48,11 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 			} else {
 				r.Config.Forge.AllocStrategy = types.StringNull()
 			}
-			r.Config.Forge.AllowBuckets = make([]types.String, 0, len(resp.Config.Forge.AllowBuckets))
-			for _, v := range resp.Config.Forge.AllowBuckets {
-				r.Config.Forge.AllowBuckets = append(r.Config.Forge.AllowBuckets, types.StringValue(v))
-			}
+			allowBucketsValue, allowBucketsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.AllowBuckets)
+			diags.Append(allowBucketsDiags...)
+			allowBucketsValuable, allowBucketsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, allowBucketsValue)
+			diags.Append(allowBucketsDiags...)
+			r.Config.Forge.AllowBuckets, _ = allowBucketsValuable.(basetypes.ListValue)
 			r.Config.Forge.Arm64Enabled = types.BoolPointerValue(resp.Config.Forge.Arm64Enabled)
 			r.Config.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.BidPercentage))
 			r.Config.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Config.Forge.DisposeOnDeletion)
@@ -71,20 +73,23 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 			r.Config.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.FsxSize))
 			r.Config.Forge.GpuEnabled = types.BoolPointerValue(resp.Config.Forge.GpuEnabled)
 			r.Config.Forge.ImageID = types.StringPointerValue(resp.Config.Forge.ImageID)
-			r.Config.Forge.InstanceTypes = make([]types.String, 0, len(resp.Config.Forge.InstanceTypes))
-			for _, v := range resp.Config.Forge.InstanceTypes {
-				r.Config.Forge.InstanceTypes = append(r.Config.Forge.InstanceTypes, types.StringValue(v))
-			}
+			instanceTypesValue, instanceTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.InstanceTypes)
+			diags.Append(instanceTypesDiags...)
+			instanceTypesValuable, instanceTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, instanceTypesValue)
+			diags.Append(instanceTypesDiags...)
+			r.Config.Forge.InstanceTypes, _ = instanceTypesValuable.(basetypes.ListValue)
 			r.Config.Forge.MaxCpus = types.Int32Value(int32(resp.Config.Forge.MaxCpus))
 			r.Config.Forge.MinCpus = types.Int32Value(int32(resp.Config.Forge.MinCpus))
-			r.Config.Forge.SecurityGroups = make([]types.String, 0, len(resp.Config.Forge.SecurityGroups))
-			for _, v := range resp.Config.Forge.SecurityGroups {
-				r.Config.Forge.SecurityGroups = append(r.Config.Forge.SecurityGroups, types.StringValue(v))
-			}
-			r.Config.Forge.Subnets = make([]types.String, 0, len(resp.Config.Forge.Subnets))
-			for _, v := range resp.Config.Forge.Subnets {
-				r.Config.Forge.Subnets = append(r.Config.Forge.Subnets, types.StringValue(v))
-			}
+			securityGroupsValue, securityGroupsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.SecurityGroups)
+			diags.Append(securityGroupsDiags...)
+			securityGroupsValuable, securityGroupsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue)
+			diags.Append(securityGroupsDiags...)
+			r.Config.Forge.SecurityGroups, _ = securityGroupsValuable.(basetypes.ListValue)
+			subnetsValue, subnetsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.Subnets)
+			diags.Append(subnetsDiags...)
+			subnetsValuable, subnetsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, subnetsValue)
+			diags.Append(subnetsDiags...)
+			r.Config.Forge.Subnets, _ = subnetsValuable.(basetypes.ListValue)
 			r.Config.Forge.Type = types.StringValue(string(resp.Config.Forge.Type))
 			r.Config.Forge.VpcID = types.StringPointerValue(resp.Config.Forge.VpcID)
 		}
@@ -341,9 +346,9 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			allocStrategy = nil
 		}
-		allowBuckets := make([]string, 0, len(r.Config.Forge.AllowBuckets))
-		for allowBucketsIndex := range r.Config.Forge.AllowBuckets {
-			allowBuckets = append(allowBuckets, r.Config.Forge.AllowBuckets[allowBucketsIndex].ValueString())
+		var allowBuckets []string
+		if !r.Config.Forge.AllowBuckets.IsUnknown() && !r.Config.Forge.AllowBuckets.IsNull() {
+			diags.Append(r.Config.Forge.AllowBuckets.ElementsAs(ctx, &allowBuckets, true)...)
 		}
 		arm64Enabled := new(bool)
 		if !r.Config.Forge.Arm64Enabled.IsUnknown() && !r.Config.Forge.Arm64Enabled.IsNull() {
@@ -465,9 +470,9 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			imageID = nil
 		}
-		instanceTypes := make([]string, 0, len(r.Config.Forge.InstanceTypes))
-		for instanceTypesIndex := range r.Config.Forge.InstanceTypes {
-			instanceTypes = append(instanceTypes, r.Config.Forge.InstanceTypes[instanceTypesIndex].ValueString())
+		var instanceTypes []string
+		if !r.Config.Forge.InstanceTypes.IsUnknown() && !r.Config.Forge.InstanceTypes.IsNull() {
+			diags.Append(r.Config.Forge.InstanceTypes.ElementsAs(ctx, &instanceTypes, true)...)
 		}
 		var maxCpus int
 		maxCpus = int(r.Config.Forge.MaxCpus.ValueInt32())
@@ -475,13 +480,13 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		var minCpus int
 		minCpus = int(r.Config.Forge.MinCpus.ValueInt32())
 
-		securityGroups := make([]string, 0, len(r.Config.Forge.SecurityGroups))
-		for securityGroupsIndex := range r.Config.Forge.SecurityGroups {
-			securityGroups = append(securityGroups, r.Config.Forge.SecurityGroups[securityGroupsIndex].ValueString())
+		var securityGroups []string
+		if !r.Config.Forge.SecurityGroups.IsUnknown() && !r.Config.Forge.SecurityGroups.IsNull() {
+			diags.Append(r.Config.Forge.SecurityGroups.ElementsAs(ctx, &securityGroups, true)...)
 		}
-		subnets := make([]string, 0, len(r.Config.Forge.Subnets))
-		for subnetsIndex := range r.Config.Forge.Subnets {
-			subnets = append(subnets, r.Config.Forge.Subnets[subnetsIndex].ValueString())
+		var subnets []string
+		if !r.Config.Forge.Subnets.IsUnknown() && !r.Config.Forge.Subnets.IsNull() {
+			diags.Append(r.Config.Forge.Subnets.ElementsAs(ctx, &subnets, true)...)
 		}
 		typeVar := shared.ForgeConfigType(r.Config.Forge.Type.ValueString())
 		vpcID := new(string)

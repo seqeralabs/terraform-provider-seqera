@@ -15775,6 +15775,11 @@ components:
             The work directory bucket is automatically included.
           example: ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         arm64Enabled:
           type: boolean
           description: |
@@ -15969,6 +15974,11 @@ components:
             Default: ["optimal"] - AWS Batch selects appropriate instances
           example: ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         maxCpus:
           type: integer
           format: int32
@@ -15995,6 +16005,11 @@ components:
             Security groups must allow necessary network access.
           example: ["sg-12345678", "sg-12345678"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         subnets:
           type: array
           items:
@@ -16005,6 +16020,11 @@ components:
             Must have sufficient IP addresses.
           example: ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         type:
           type: string
           enum:
@@ -21008,7 +21028,15 @@ components:
         name:
           maxLength: 100
           type: string
-          description: Display name for the compute environment
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+          deprecated: true
+          x-speakeasy-param-force-new: true
+          x-speakeasy-deprecation-message: |
+            The `seqera_aws_compute_env` resource is superseded by `seqera_aws_batch_ce`.
+            The two resources share the same schema and API; `seqera_aws_batch_ce` is
+            the canonical resource going forward. Migrate with a `moved {}` block —
+            see the resource docs.
         description:
           type: string
           description: Optional description of the compute environment
