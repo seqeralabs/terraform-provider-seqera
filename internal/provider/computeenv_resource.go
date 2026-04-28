@@ -1022,8 +1022,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Attributes: map[string]schema.Attribute{
 									"allow_buckets": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
@@ -1267,8 +1268,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Requires replacement if changed.`,
 									},
 									"security_groups": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
@@ -1465,13 +1467,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 											"container_reg_ids": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -2608,13 +2611,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires replacement if changed.`,
 									},
 									"compute_jobs_machine_type": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										Description: `List of Google Cloud machine types compute jobs may use. Requires replacement if changed.`,
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -2805,13 +2809,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Google Cloud VPC network name or self-link for compute instances. Requires replacement if changed.`,
 									},
 									"network_tags": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										Description: `Network tags applied to compute instances for VPC firewall rule targeting. Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,

@@ -53,6 +53,8 @@ DEPRECATIONS:
 
 BUGFIXES:
 
+- Extended the unknown-value list-type fix from #186 to the remaining list-of-string fields across the AWS Cloud, Google Cloud Batch, and Azure Batch compute configurations: `AwsCloudConfig.allow_buckets`, `AwsCloudConfig.security_groups`, `GoogleBatchConfig.compute_jobs_machine_type`, `GoogleBatchConfig.network_tags`, and `AzBatchForgeConfig.container_reg_ids`. These fields can now accept unknown collections from data sources (e.g. `network_tags = data.google_compute_network.x.tags`) without failing at plan time.
+
 - [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
 
 - [#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159) - Fixed EBS field descriptions in AWS compute environments. `ebs_block_size` was incorrectly described as "Size of EBS root volume" when it is actually the auto-expandable block size. `ebs_boot_size` (the actual root/boot volume size) had no description at all.

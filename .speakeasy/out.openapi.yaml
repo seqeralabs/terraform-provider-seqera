@@ -13644,6 +13644,11 @@ components:
             List of additional S3 bucket names that compute jobs are allowed to access.
             The work directory bucket is automatically included.
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         arm64Enabled:
           type: boolean
           description: |
@@ -13752,6 +13757,11 @@ components:
             Security groups must allow necessary network access.
           example: ["sg-12345678"]
           x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         subnetId:
           type: string
           description: |
@@ -13959,6 +13969,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            List of Azure Container Registry IDs whose images compute jobs may pull.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         disposeOnDeletion:
           type: boolean
         dualPoolConfig:
@@ -17030,6 +17048,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            List of Google Cloud machine types compute jobs may use.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         copyImage:
           type: string
           description: |
@@ -17120,6 +17146,14 @@ components:
           type: array
           items:
             type: string
+          description: |
+            Network tags applied to compute instances for VPC firewall rule targeting.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+            schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+            valueType: basetypes.ListValue
         nextflowConfig:
           type: string
         nfsMount:
