@@ -31,7 +31,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 			r.ComputeEnv.AwsAccountID = types.StringPointerValue(resp.ComputeEnv.AwsAccountID)
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
 			if resp.ComputeEnv.Config != nil {
-				r.ComputeEnv.Config = &tfTypes.ComputeConfigInput{}
+				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
 				if resp.ComputeEnv.Config.AWSBatchConfiguration != nil {
 					r.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
 					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
@@ -899,7 +899,7 @@ func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx contex
 func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var config shared.ComputeConfigInput
+	var config shared.ComputeConfig
 	var awsBatchConfiguration *shared.AWSBatchConfiguration
 	if r.ComputeEnv.Config.AwsBatch != nil {
 		cliPath := new(string)
@@ -1286,7 +1286,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsBatchConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AWSBatchConfiguration: awsBatchConfiguration,
 		}
 	}
@@ -1469,7 +1469,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AWSCloudConfiguration: awsCloudConfiguration,
 		}
 	}
@@ -1559,7 +1559,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if seqeraComputeConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			SeqeraComputeConfiguration: seqeraComputeConfiguration,
 		}
 	}
@@ -1814,7 +1814,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleBatchServiceConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleBatchServiceConfiguration: googleBatchServiceConfiguration,
 		}
 	}
@@ -1973,17 +1973,23 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleCloudConfiguration: googleCloudConfiguration,
 		}
 	}
-	var azureBatchConfigurationInput *shared.AzureBatchConfigurationInput
+	var azureBatchConfiguration *shared.AzureBatchConfiguration
 	if r.ComputeEnv.Config.AzureBatch != nil {
 		autoPoolMode := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsNull() {
 			*autoPoolMode = r.ComputeEnv.Config.AzureBatch.AutoPoolMode.ValueBool()
 		} else {
 			autoPoolMode = nil
+		}
+		deleteJobsOnCompletion := new(shared.ComputeConfigDeleteJobsOnCompletion)
+		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
+			*deleteJobsOnCompletion = shared.ComputeConfigDeleteJobsOnCompletion(r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
+		} else {
+			deleteJobsOnCompletion = nil
 		}
 		deleteJobsOnCompletionEnabled := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsNull() {
@@ -2243,8 +2249,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			workerPool1 = nil
 		}
-		azureBatchConfigurationInput = &shared.AzureBatchConfigurationInput{
+		azureBatchConfiguration = &shared.AzureBatchConfiguration{
 			AutoPoolMode:                  autoPoolMode,
+			DeleteJobsOnCompletion:        deleteJobsOnCompletion,
 			DeleteJobsOnCompletionEnabled: deleteJobsOnCompletionEnabled,
 			DeletePoolsOnCompletion:       deletePoolsOnCompletion,
 			DeleteTasksOnCompletion:       deleteTasksOnCompletion,
@@ -2271,9 +2278,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			WorkerPool:                    workerPool1,
 		}
 	}
-	if azureBatchConfigurationInput != nil {
-		config = shared.ComputeConfigInput{
-			AzureBatchConfigurationInput: azureBatchConfigurationInput,
+	if azureBatchConfiguration != nil {
+		config = shared.ComputeConfig{
+			AzureBatchConfiguration: azureBatchConfiguration,
 		}
 	}
 	var azureCloudConfiguration *shared.AzureCloudConfiguration
@@ -2455,7 +2462,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if azureCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AzureCloudConfiguration: azureCloudConfiguration,
 		}
 	}
@@ -2608,7 +2615,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if ibmLSFConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			IBMLSFConfiguration: ibmLSFConfiguration,
 		}
 	}
@@ -2740,7 +2747,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if slurmConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			SlurmConfiguration: slurmConfiguration,
 		}
 	}
@@ -2881,7 +2888,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if kubernetesComputeConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			KubernetesComputeConfiguration: kubernetesComputeConfiguration,
 		}
 	}
@@ -3059,7 +3066,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AmazonEKSClusterConfiguration: amazonEKSClusterConfiguration,
 		}
 	}
@@ -3237,7 +3244,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleGKEClusterConfiguration: googleGKEClusterConfiguration,
 		}
 	}
@@ -3369,7 +3376,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if univaGridEngineConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			UnivaGridEngineConfiguration: univaGridEngineConfiguration,
 		}
 	}
@@ -3501,7 +3508,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if altairPBSConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AltairPBSConfiguration: altairPBSConfiguration,
 		}
 	}
@@ -3633,7 +3640,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if moabConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			MoabConfiguration: moabConfiguration,
 		}
 	}
@@ -3736,7 +3743,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if localExecutionConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			LocalExecutionConfiguration: localExecutionConfiguration,
 		}
 	}
@@ -3919,7 +3926,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleLifeSciencesConfigurationRetired != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleLifeSciencesConfigurationRetired: googleLifeSciencesConfigurationRetired,
 		}
 	}

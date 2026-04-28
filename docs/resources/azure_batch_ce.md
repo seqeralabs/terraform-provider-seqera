@@ -24,6 +24,7 @@ instances.
 resource "seqera_azure_batch_ce" "my_azurebatchce" {
   config = {
     auto_pool_mode                    = false
+    delete_jobs_on_completion         = "always"
     delete_jobs_on_completion_enabled = true
     delete_pools_on_completion        = false
     delete_tasks_on_completion        = false
@@ -124,6 +125,7 @@ Required:
 Optional:
 
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
+- `delete_jobs_on_completion` (String, Deprecated) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_jobs_on_completion_enabled` (Boolean) Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `delete_tasks_on_completion` (Boolean) Requires replacement if changed.
@@ -154,10 +156,6 @@ Requires replacement if changed.
 - `terminate_jobs_on_completion` (Boolean) Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `worker_pool` (String) Requires replacement if changed.
-
-Read-Only:
-
-- `delete_jobs_on_completion` (String)
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`

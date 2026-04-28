@@ -7,6 +7,15 @@ import (
 	"fmt"
 )
 
+// DeleteJobsOnCompletion
+//
+// Deprecated: Replaced by `delete_jobs_on_completion_enabled` (and optionally
+// `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+// Platform v26.1+. Kept settable here for backwards compatibility with
+// Platform v25.1 and earlier — on those versions this string is the
+// only way to control job cleanup. On v26.1+ it is read-only on the
+// server and the boolean fields are authoritative.
+// .
 type DeleteJobsOnCompletion string
 
 const (
@@ -38,7 +47,14 @@ func (e *DeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
 
 type AzBatchConfig struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode                  *bool                   `json:"autoPoolMode,omitempty"`
+	AutoPoolMode *bool `json:"autoPoolMode,omitempty"`
+	// Deprecated: Replaced by `delete_jobs_on_completion_enabled` (and optionally
+	// `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+	// Platform v26.1+. Kept settable here for backwards compatibility with
+	// Platform v25.1 and earlier — on those versions this string is the
+	// only way to control job cleanup. On v26.1+ it is read-only on the
+	// server and the boolean fields are authoritative.
+	// .
 	DeleteJobsOnCompletion        *DeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
 	DeleteJobsOnCompletionEnabled *bool                   `json:"deleteJobsOnCompletionEnabled,omitempty"`
 	DeletePoolsOnCompletion       *bool                   `json:"deletePoolsOnCompletion,omitempty"`

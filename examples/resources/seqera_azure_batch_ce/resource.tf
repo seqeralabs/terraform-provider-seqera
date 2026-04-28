@@ -1,6 +1,7 @@
 resource "seqera_azure_batch_ce" "my_azurebatchce" {
   config = {
     auto_pool_mode                    = false
+    delete_jobs_on_completion         = "always"
     delete_jobs_on_completion_enabled = true
     delete_pools_on_completion        = false
     delete_tasks_on_completion        = false

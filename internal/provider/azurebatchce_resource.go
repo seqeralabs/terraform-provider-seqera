@@ -103,6 +103,25 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 					"delete_jobs_on_completion": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						DeprecationMessage: `Replaced by ` + "`" + `delete_jobs_on_completion_enabled` + "`" + ` (and optionally` + "\n" +
+							`` + "`" + `delete_pools_on_completion` + "`" + `, ` + "`" + `delete_tasks_on_completion` + "`" + `) in Seqera` + "\n" +
+							`Platform v26.1+. Kept settable here for backwards compatibility with` + "\n" +
+							`Platform v25.1 and earlier — on those versions this string is the` + "\n" +
+							`only way to control job cleanup. On v26.1+ it is read-only on the` + "\n" +
+							`server and the boolean fields are authoritative.`,
+						Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"on_success",
+								"always",
+								"never",
+							),
+						},
 					},
 					"delete_jobs_on_completion_enabled": schema.BoolAttribute{
 						Computed: true,

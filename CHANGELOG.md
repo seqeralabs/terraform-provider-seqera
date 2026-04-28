@@ -53,6 +53,8 @@ DEPRECATIONS:
 
 BUGFIXES:
 
+- **Azure Batch backwards compatibility for `delete_jobs_on_completion`** - The upstream OpenAPI spec marks this string field read-only as of Seqera Platform v26.1, where it has been replaced by `delete_jobs_on_completion_enabled` and friends. Pinning the provider to that spec would lock anyone running Platform v25.1 or earlier out of configuring job cleanup behaviour at all. The provider now keeps `delete_jobs_on_completion` settable for both `seqera_compute_env` and `seqera_azure_batch_ce`, marked deprecated with a message pointing at the new boolean fields. Users on Platform v25.1 and earlier can keep using the string; users on v26.1+ should migrate to the boolean fields and will see a deprecation warning if they leave the string in their config.
+
 - [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
 
 - [#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159) - Fixed EBS field descriptions in AWS compute environments. `ebs_block_size` was incorrectly described as "Size of EBS root volume" when it is actually the auto-expandable block size. `ebs_boot_size` (the actual root/boot volume size) had no description at all.

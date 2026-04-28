@@ -13849,7 +13849,15 @@ components:
           allOf:
             - $ref: '#/components/schemas/JobCleanupPolicy'
           nullable: true
-          readOnly: true
+          readOnly: false
+          deprecated: true
+          x-speakeasy-deprecation-message: |
+            Replaced by `delete_jobs_on_completion_enabled` (and optionally
+            `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+            Platform v26.1+. Kept settable here for backwards compatibility with
+            Platform v25.1 and earlier — on those versions this string is the
+            only way to control job cleanup. On v26.1+ it is read-only on the
+            server and the boolean fields are authoritative.
         deleteJobsOnCompletionEnabled:
           type: boolean
           nullable: true

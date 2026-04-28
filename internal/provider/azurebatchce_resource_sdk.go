@@ -252,6 +252,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 	} else {
 		autoPoolMode = nil
 	}
+	deleteJobsOnCompletion := new(shared.DeleteJobsOnCompletion)
+	if !r.Config.DeleteJobsOnCompletion.IsUnknown() && !r.Config.DeleteJobsOnCompletion.IsNull() {
+		*deleteJobsOnCompletion = shared.DeleteJobsOnCompletion(r.Config.DeleteJobsOnCompletion.ValueString())
+	} else {
+		deleteJobsOnCompletion = nil
+	}
 	deleteJobsOnCompletionEnabled := new(bool)
 	if !r.Config.DeleteJobsOnCompletionEnabled.IsUnknown() && !r.Config.DeleteJobsOnCompletionEnabled.IsNull() {
 		*deleteJobsOnCompletionEnabled = r.Config.DeleteJobsOnCompletionEnabled.ValueBool()
@@ -510,8 +516,9 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 	} else {
 		workerPool1 = nil
 	}
-	config := shared.AzBatchConfigInput{
+	config := shared.AzBatchConfig{
 		AutoPoolMode:                  autoPoolMode,
+		DeleteJobsOnCompletion:        deleteJobsOnCompletion,
 		DeleteJobsOnCompletionEnabled: deleteJobsOnCompletionEnabled,
 		DeletePoolsOnCompletion:       deletePoolsOnCompletion,
 		DeleteTasksOnCompletion:       deleteTasksOnCompletion,
