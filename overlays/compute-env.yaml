@@ -287,6 +287,9 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzCloudConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.EksComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
@@ -294,6 +297,9 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleCloudConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.discriminator
@@ -374,6 +380,14 @@ actions:
         Nextflow pipelines via the Wave containers service.
 
         Required when `enable_fusion` is true.
+  - target: $.components.schemas.AzCloudConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
+
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.EksComputeConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
@@ -391,6 +405,14 @@ actions:
 
         Required when `enable_fusion` is true.
   - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
+
+        Required when `enable_fusion` is true.
+  - target: $.components.schemas.GoogleCloudConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
@@ -414,6 +436,9 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.AzCloudConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
   - target: $.components.schemas.EksComputeConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
@@ -421,6 +446,9 @@ actions:
     update:
       x-speakeasy-name-override: enable_wave
   - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.GoogleCloudConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
   # NOTE: SeqeraComputeConfig.waveEnabled name override moved to compute-env-seqeracompute.yaml
@@ -454,6 +482,15 @@ actions:
         speeding up most operations.
 
         Requires `enable_wave = true`.
+  - target: $.components.schemas.AzCloudConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.EksComputeConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
@@ -473,6 +510,15 @@ actions:
 
         Requires `enable_wave = true`.
   - target: $.components.schemas.GoogleBatchConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
+  - target: $.components.schemas.GoogleCloudConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
       x-speakeasy-plan-validators: FusionEnabledValidator
@@ -853,6 +899,217 @@ actions:
       description: |
         Local mount path for the NFS file system on compute instances.
       example: "/mnt/nfs"
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # GOOGLE CLOUD CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.region
+    update:
+      description: |
+        Google Cloud region where the compute environment will be created.
+        Examples: us-central1, europe-west1, asia-east1
+      example: "us-central1"
+      x-speakeasy-param-optional: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.zone
+    update:
+      description: |
+        Google Cloud zone within the configured region (e.g., us-central1-a).
+        If not specified, the platform selects a zone automatically.
+      example: "us-central1-a"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.workDir
+    update:
+      title: "Google Cloud Storage Work Directory"
+      description: |
+        Google Cloud Storage bucket path for Nextflow work directory where intermediate
+        files will be stored.
+        Format: gs://bucket-name/path
+      example: "gs://my-nextflow-bucket/work"
+      pattern: "^gs://.+"
+      x-speakeasy-param-optional: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.projectId
+    update:
+      description: |
+        Google Cloud project ID where compute resources will be created.
+      example: "my-gcp-project"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.serviceAccountEmail
+    update:
+      description: |
+        Google Cloud service account email for compute instances.
+        If not specified, the default compute service account is used.
+      example: "my-sa@my-project.iam.gserviceaccount.com"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.instanceType
+    update:
+      description: |
+        Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
+      example: "n1-standard-4"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.imageId
+    update:
+      description: |
+        Custom VM image self-link or family for compute instances.
+        If not specified, the default Seqera-managed image is used.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.bootDiskSizeGb
+    update:
+      description: |
+        Size of the boot disk in GB for compute instances.
+      example: 50
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.gpuEnabled
+    update:
+      description: |
+        Enable GPU support for compute instances.
+        When enabled, GPU-capable machine types will be selected.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.arm64Enabled
+    update:
+      description: |
+        Enable ARM64 (Tau T2A) machine types for compute instances.
+        When enabled, ARM-based machines will be selected for cost savings.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.environment
+    update:
+      description: |
+        Array of environment variables for the compute environment.
+        Each variable can target the head node, compute nodes, or both.
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.forgedResources
+    update:
+      description: |
+        Read-only list of resources provisioned for this compute environment.
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.GoogleCloudConfig.properties.nextflowConfig
+    update:
+      description: |
+        Nextflow configuration settings that override repository defaults.
+        Applied globally to all pipelines launched in this compute environment.
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # AZURE CLOUD CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.AzCloudConfig.properties.region
+    update:
+      description: |
+        Azure region where the compute environment will be created.
+        Examples: eastus, westus2, northeurope
+      example: "eastus"
+      x-speakeasy-param-optional: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.workDir
+    update:
+      title: "Azure Blob Work Directory"
+      description: |
+        Azure Blob Storage container path for Nextflow work directory.
+        Format: az://container-name/path
+      example: "az://my-container/work"
+      pattern: "^az://.+"
+      x-speakeasy-param-optional: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.subscriptionId
+    update:
+      description: |
+        Azure subscription ID where compute resources will be created.
+      example: "00000000-0000-0000-0000-000000000000"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.resourceGroup
+    update:
+      description: |
+        Azure resource group where compute instances will be provisioned.
+      example: "my-resource-group"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.networkId
+    update:
+      description: |
+        Azure VNet resource ID for compute instance networking.
+        Required when using private network isolation.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.instanceType
+    update:
+      description: |
+        Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
+      example: "Standard_D4s_v3"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.managedIdentityId
+    update:
+      description: |
+        Azure managed identity resource ID for compute instances.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.managedIdentityClientId
+    update:
+      description: |
+        Azure managed identity client ID for compute instances.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.dataCollectionEndpoint
+    update:
+      description: |
+        Azure Monitor data collection endpoint URL for diagnostic telemetry.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.dataCollectionRuleId
+    update:
+      description: |
+        Azure Monitor data collection rule resource ID associated with the endpoint.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.logWorkspaceId
+    update:
+      description: |
+        Azure Log Analytics workspace ID for execution logs.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.logTableName
+    update:
+      description: |
+        Azure Log Analytics table name for execution logs.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.environment
+    update:
+      description: |
+        Array of environment variables for the compute environment.
+        Each variable can target the head node, compute nodes, or both.
+
+  - target: $.components.schemas.AzCloudConfig.properties.forgedResources
+    update:
+      description: |
+        Read-only list of resources provisioned for this compute environment.
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.nextflowConfig
+    update:
+      description: |
+        Nextflow configuration settings that override repository defaults.
+        Applied globally to all pipelines launched in this compute environment.
       x-speakeasy-param-force-new: true
 
   # ============================================================================

@@ -1756,7 +1756,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.`,
 									},
 									"data_collection_rule_id": schema.StringAttribute{
 										Computed: true,
@@ -1764,7 +1764,34 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
+											`` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1827,10 +1854,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"forged_resources": schema.ListNestedAttribute{
 										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -1857,15 +1880,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
+										Description: `Read-only list of resources provisioned for this compute environment.`,
 									},
 									"instance_type": schema.StringAttribute{
 										Computed: true,
@@ -1873,7 +1888,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.`,
 									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,
@@ -1881,7 +1896,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure Log Analytics table name for execution logs. Requires replacement if changed.`,
 									},
 									"log_workspace_id": schema.StringAttribute{
 										Computed: true,
@@ -1889,7 +1904,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.`,
 									},
 									"managed_identity_client_id": schema.StringAttribute{
 										Computed: true,
@@ -1897,7 +1912,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure managed identity client ID for compute instances. Requires replacement if changed.`,
 									},
 									"managed_identity_id": schema.StringAttribute{
 										Computed: true,
@@ -1905,7 +1920,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure managed identity resource ID for compute instances. Requires replacement if changed.`,
 									},
 									"network_id": schema.StringAttribute{
 										Computed: true,
@@ -1913,7 +1928,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Azure VNet resource ID for compute instance networking.` + "\n" +
+											`Required when using private network isolation.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1945,7 +1962,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Azure region where the compute environment will be created.` + "\n" +
+											`Examples: eastus, westus2, northeurope` + "\n" +
+											`Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"resource_group": schema.StringAttribute{
 										Computed: true,
@@ -1953,7 +1975,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure resource group where compute instances will be provisioned. Requires replacement if changed.`,
 									},
 									"subscription_id": schema.StringAttribute{
 										Computed: true,
@@ -1961,15 +1983,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
-									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
+										Description: `Azure subscription ID where compute resources will be created. Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -2953,7 +2967,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable ARM64 (Tau T2A) machine types for compute instances.` + "\n" +
+											`When enabled, ARM-based machines will be selected for cost savings.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"boot_disk_size_gb": schema.Int32Attribute{
 										Computed: true,
@@ -2961,7 +2977,34 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Size of the boot disk in GB for compute instances. Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
+											`` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -3024,24 +3067,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"forged_resources": schema.ListAttribute{
 										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
 										ElementType: types.MapType{
 											ElemType: types.ObjectType{
 												AttrTypes: map[string]attr.Type{},
 											},
 										},
-										Description: `Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
+										Description: `Read-only list of resources provisioned for this compute environment.`,
 									},
 									"gpu_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -3049,7 +3080,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
+											`When enabled, GPU-capable machine types will be selected.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"image_id": schema.StringAttribute{
 										Computed: true,
@@ -3057,7 +3090,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Custom VM image self-link or family for compute instances.` + "\n" +
+											`If not specified, the default Seqera-managed image is used.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"instance_type": schema.StringAttribute{
 										Computed: true,
@@ -3065,7 +3100,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -3097,7 +3132,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -3105,7 +3140,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud region where the compute environment will be created.` + "\n" +
+											`Examples: us-central1, europe-west1, asia-east1` + "\n" +
+											`Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_account_email": schema.StringAttribute{
 										Computed: true,
@@ -3113,15 +3153,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
-									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud service account email for compute instances.` + "\n" +
+											`If not specified, the default compute service account is used.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -3140,7 +3174,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud zone within the configured region (e.g., us-central1-a).` + "\n" +
+											`If not specified, the platform selects a zone automatically.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
