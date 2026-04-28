@@ -7,7 +7,9 @@ import (
 )
 
 type AzBatchForgeConfig struct {
-	AutoScale         *bool    `json:"autoScale,omitempty"`
+	AutoScale *bool `json:"autoScale,omitempty"`
+	// List of Azure Container Registry IDs whose images compute jobs may pull.
+	//
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
 	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
 	DualPoolConfig    *bool    `json:"dualPoolConfig,omitempty"`

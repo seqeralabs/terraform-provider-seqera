@@ -533,8 +533,7 @@ actions:
       deprecated: true
       example: 100
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../ebsAutoScale
+      # NOTE: dependency on ebs_auto_scale is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.ebsBootSize
     update:
@@ -625,8 +624,7 @@ actions:
       description: Automatically create an EFS file system
       example: false
       x-speakeasy-param-force-new: true
-      x-speakeasy-conflicts-with:
-        - ../efsId
+      # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.efsId
     update:
@@ -704,8 +702,7 @@ actions:
         Custom AMI ID for DRAGEN-enabled instances.
         Only applicable when dragen_enabled is true.
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../dragenEnabled
+      # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.dragenInstanceType
     update:
@@ -713,8 +710,7 @@ actions:
         EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
         Only applicable when dragen_enabled is true.
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../dragenEnabled
+      # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
 
   - target: $.components.schemas.ForgeConfig.properties.ecsConfig
     update:
@@ -770,8 +766,12 @@ actions:
         AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
       example: false
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../fusion2Enabled
+      # NOTE: enable_fusion dependency is enforced by `FusionSnapshotsValidator`
+      # (internal/validators/boolvalidators/fusion_snapshots_validator.go).
+      # Speakeasy emits an over-deep AtParent path for the schema-level
+      # `x-speakeasy-required-with: [../fusion2Enabled]` directive AND uses
+      # the pre-rename name (`fusion2_enabled`) instead of the renamed
+      # `enable_fusion`, so we rely on the custom validator instead.
 
   - target: $.components.schemas.AwsBatchConfig.properties.dragenQueue
     update:

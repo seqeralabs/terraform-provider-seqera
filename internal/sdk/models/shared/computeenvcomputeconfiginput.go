@@ -81,7 +81,7 @@ type ComputeEnvComputeConfigInput struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config        ComputeConfigInput              `json:"config"`
+	Config        ComputeConfig                   `json:"config"`
 	CredentialsID string                          `json:"credentialsId"`
 	Description   *string                         `json:"description,omitempty"`
 	Message       *string                         `json:"message,omitempty"`
@@ -89,9 +89,9 @@ type ComputeEnvComputeConfigInput struct {
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfigInput {
+func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
 	if c == nil {
-		return ComputeConfigInput{}
+		return ComputeConfig{}
 	}
 	return c.Config
 }
@@ -108,8 +108,8 @@ func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AWSCloudConfiguratio
 	return c.GetConfig().AWSCloudConfiguration
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfigurationInput {
-	return c.GetConfig().AzureBatchConfigurationInput
+func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfiguration {
+	return c.GetConfig().AzureBatchConfiguration
 }
 
 func (c *ComputeEnvComputeConfigInput) GetConfigAzureCloud() *AzureCloudConfiguration {

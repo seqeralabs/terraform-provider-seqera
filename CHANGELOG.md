@@ -45,6 +45,19 @@ ENHANCEMENTS:
   - Graviton (ARM64) requires Fargate, Wave, and Fusion v2
   - Additional field-level validations for EBS, EFS, and DRAGEN dependencies
 
+BREAKING CHANGES:
+
+- **Azure Batch `delete_jobs_on_completion` is now read-only.** In v0.30.x this was a settable string (e.g. `"on_success"`). It has been replaced by three boolean fields on Azure Batch compute configurations: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old field name still exists in the schema but is read-only — easy to miss because the rename is partial.
+
+  User migration:
+
+  ```diff
+  - delete_jobs_on_completion       = "on_success"
+  + delete_jobs_on_completion_enabled = true
+  ```
+
+  A state upgrader (v1 → v2) is included for `seqera_compute_env` so users coming from v0.30.x state will have `delete_jobs_on_completion_enabled = true` automatically set whenever the old field had a non-empty value. This avoids a spurious `null -> true` diff that would otherwise force a resource replacement after the user updates their config. The upgrader only touches `config.azure_batch`; other platforms are unaffected.
+
 DEPRECATIONS:
 
 - **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
@@ -52,6 +65,12 @@ DEPRECATIONS:
 - **EBS Auto Scale** - `ebs_auto_scale` and `ebs_block_size` fields in AWS Batch Forge configuration are now marked as deprecated, matching the Seqera Platform documentation. These features are not compatible with Fusion v2. Use `ebs_boot_size` to configure a larger root volume instead.
 
 BUGFIXES:
+
+- **Azure Batch backwards compatibility for `delete_jobs_on_completion`** - The upstream OpenAPI spec marks this string field read-only as of Seqera Platform v26.1, where it has been replaced by `delete_jobs_on_completion_enabled` and friends. Pinning the provider to that spec would lock anyone running Platform v25.1 or earlier out of configuring job cleanup behaviour at all. The provider now keeps `delete_jobs_on_completion` settable for both `seqera_compute_env` and `seqera_azure_batch_ce`, marked deprecated with a message pointing at the new boolean fields. Users on Platform v25.1 and earlier can keep using the string; users on v26.1+ should migrate to the boolean fields and will see a deprecation warning if they leave the string in their config.
+
+- **`seqera_aws_batch_ce` plan validation** - Fixed three `Invalid Path Expression for Schema` errors that blocked `terraform validate` and `terraform plan` whenever a real-world AWS Batch config touched DRAGEN, forge-managed EFS, or Fusion snapshots. The schema-level `x-speakeasy-required-with` / `x-speakeasy-conflicts-with` directives Speakeasy emits for `forge.dragen_ami_id`, `forge.dragen_instance_type`, `forge.ebs_block_size`, `forge.efs_create`, and `awsbatchconfig.fusion_snapshots` produced one too many `AtParent()` calls (and used the pre-rename `fusion2_enabled` name instead of `enable_fusion`). The directives have been removed; the same dependency rules are now enforced by the existing `awsForgeValidator` and `FusionSnapshotsValidator` custom validators.
+
+- Extended the unknown-value list-type fix from #186 to the remaining list-of-string fields across the AWS Cloud, Google Cloud Batch, and Azure Batch compute configurations: `AwsCloudConfig.allow_buckets`, `AwsCloudConfig.security_groups`, `GoogleBatchConfig.compute_jobs_machine_type`, `GoogleBatchConfig.network_tags`, and `AzBatchForgeConfig.container_reg_ids`. These fields can now accept unknown collections from data sources (e.g. `network_tags = data.google_compute_network.x.tags`) without failing at plan time.
 
 - [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
 

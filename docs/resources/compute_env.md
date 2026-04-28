@@ -471,6 +471,7 @@ Optional:
 Optional:
 
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
+- `delete_jobs_on_completion` (String, Deprecated) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_jobs_on_completion_enabled` (Boolean) Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `delete_tasks_on_completion` (Boolean) Requires replacement if changed.
@@ -504,10 +505,6 @@ Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `worker_pool` (String) Requires replacement if changed.
 
-Read-Only:
-
-- `delete_jobs_on_completion` (String)
-
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`
 
@@ -531,7 +528,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
-- `container_reg_ids` (List of String) Requires replacement if changed.
+- `container_reg_ids` (List of String) List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
 - `dual_pool_config` (Boolean) Requires replacement if changed.
 - `head_pool` (Attributes) Head pool configuration for dual pool mode. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge--head_pool))
@@ -750,7 +747,7 @@ Optional:
 - `compute_jobs_instance_template` (String) Google Cloud instance template name or self-link for compute job VMs.
 Overrides other VM configuration settings for compute jobs.
 Requires replacement if changed.
-- `compute_jobs_machine_type` (List of String) Requires replacement if changed.
+- `compute_jobs_machine_type` (List of String) List of Google Cloud machine types compute jobs may use. Requires replacement if changed.
 - `copy_image` (String) Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.
 - `cpu_platform` (String) Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").
 See Google Cloud documentation for available CPU platforms per region.
@@ -783,7 +780,7 @@ Requires replacement if changed.
 Supports patterns like "c2-*" to allow any machine in a family.
 Requires replacement if changed.
 - `network` (String) Google Cloud VPC network name or self-link for compute instances. Requires replacement if changed.
-- `network_tags` (List of String) Requires replacement if changed.
+- `network_tags` (List of String) Network tags applied to compute instances for VPC firewall rule targeting. Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nfs_mount` (String) Local mount path for the NFS file system on compute instances. Requires replacement if changed.
 - `nfs_target` (String) NFS server hostname or IP address for shared file system access.

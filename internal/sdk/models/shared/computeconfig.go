@@ -1888,12 +1888,58 @@ func (a *AzureCloudConfiguration) GetWorkDir() *string {
 	return a.WorkDir
 }
 
-type AzureBatchConfigurationInput struct {
+// ComputeConfigDeleteJobsOnCompletion
+//
+// Deprecated: Replaced by `delete_jobs_on_completion_enabled` (and optionally
+// `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+// Platform v26.1+. Kept settable here for backwards compatibility with
+// Platform v25.1 and earlier — on those versions this string is the
+// only way to control job cleanup. On v26.1+ it is read-only on the
+// server and the boolean fields are authoritative.
+// .
+type ComputeConfigDeleteJobsOnCompletion string
+
+const (
+	ComputeConfigDeleteJobsOnCompletionOnSuccess ComputeConfigDeleteJobsOnCompletion = "on_success"
+	ComputeConfigDeleteJobsOnCompletionAlways    ComputeConfigDeleteJobsOnCompletion = "always"
+	ComputeConfigDeleteJobsOnCompletionNever     ComputeConfigDeleteJobsOnCompletion = "never"
+)
+
+func (e ComputeConfigDeleteJobsOnCompletion) ToPointer() *ComputeConfigDeleteJobsOnCompletion {
+	return &e
+}
+func (e *ComputeConfigDeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "on_success":
+		fallthrough
+	case "always":
+		fallthrough
+	case "never":
+		*e = ComputeConfigDeleteJobsOnCompletion(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ComputeConfigDeleteJobsOnCompletion: %v", v)
+	}
+}
+
+type AzureBatchConfiguration struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode                  *bool `json:"autoPoolMode,omitempty"`
-	DeleteJobsOnCompletionEnabled *bool `json:"deleteJobsOnCompletionEnabled,omitempty"`
-	DeletePoolsOnCompletion       *bool `json:"deletePoolsOnCompletion,omitempty"`
-	DeleteTasksOnCompletion       *bool `json:"deleteTasksOnCompletion,omitempty"`
+	AutoPoolMode *bool `json:"autoPoolMode,omitempty"`
+	// Deprecated: Replaced by `delete_jobs_on_completion_enabled` (and optionally
+	// `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+	// Platform v26.1+. Kept settable here for backwards compatibility with
+	// Platform v25.1 and earlier — on those versions this string is the
+	// only way to control job cleanup. On v26.1+ it is read-only on the
+	// server and the boolean fields are authoritative.
+	// .
+	DeleteJobsOnCompletion        *ComputeConfigDeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
+	DeleteJobsOnCompletionEnabled *bool                                `json:"deleteJobsOnCompletionEnabled,omitempty"`
+	DeletePoolsOnCompletion       *bool                                `json:"deletePoolsOnCompletion,omitempty"`
+	DeleteTasksOnCompletion       *bool                                `json:"deleteTasksOnCompletion,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
@@ -1938,193 +1984,200 @@ type AzureBatchConfigurationInput struct {
 	WorkerPool *string `json:"workerPool,omitempty"`
 }
 
-func (a AzureBatchConfigurationInput) MarshalJSON() ([]byte, error) {
+func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(a, "", false)
 }
 
-func (a *AzureBatchConfigurationInput) UnmarshalJSON(data []byte) error {
+func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *AzureBatchConfigurationInput) GetAutoPoolMode() *bool {
+func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.AutoPoolMode
 }
 
-func (a *AzureBatchConfigurationInput) GetDeleteJobsOnCompletionEnabled() *bool {
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *ComputeConfigDeleteJobsOnCompletion {
+	if a == nil {
+		return nil
+	}
+	return a.DeleteJobsOnCompletion
+}
+
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletionEnabled() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.DeleteJobsOnCompletionEnabled
 }
 
-func (a *AzureBatchConfigurationInput) GetDeletePoolsOnCompletion() *bool {
+func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.DeletePoolsOnCompletion
 }
 
-func (a *AzureBatchConfigurationInput) GetDeleteTasksOnCompletion() *bool {
+func (a *AzureBatchConfiguration) GetDeleteTasksOnCompletion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.DeleteTasksOnCompletion
 }
 
-func (a *AzureBatchConfigurationInput) GetDiscriminator() *string {
+func (a *AzureBatchConfiguration) GetDiscriminator() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Discriminator
 }
 
-func (a *AzureBatchConfigurationInput) GetEnvironment() []ConfigEnvVariable {
+func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
 	if a == nil {
 		return nil
 	}
 	return a.Environment
 }
 
-func (a *AzureBatchConfigurationInput) GetForge() *AzBatchForgeConfig {
+func (a *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
 	if a == nil {
 		return nil
 	}
 	return a.Forge
 }
 
-func (a *AzureBatchConfigurationInput) GetEnableFusion() *bool {
+func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.EnableFusion
 }
 
-func (a *AzureBatchConfigurationInput) GetHeadJobCpus() *int {
+func (a *AzureBatchConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
 	}
 	return a.HeadJobCpus
 }
 
-func (a *AzureBatchConfigurationInput) GetHeadJobMemoryMb() *int {
+func (a *AzureBatchConfiguration) GetHeadJobMemoryMb() *int {
 	if a == nil {
 		return nil
 	}
 	return a.HeadJobMemoryMb
 }
 
-func (a *AzureBatchConfigurationInput) GetHeadPool() *string {
+func (a *AzureBatchConfiguration) GetHeadPool() *string {
 	if a == nil {
 		return nil
 	}
 	return a.HeadPool
 }
 
-func (a *AzureBatchConfigurationInput) GetJobMaxWallClockTime() *string {
+func (a *AzureBatchConfiguration) GetJobMaxWallClockTime() *string {
 	if a == nil {
 		return nil
 	}
 	return a.JobMaxWallClockTime
 }
 
-func (a *AzureBatchConfigurationInput) GetManagedIdentityClientID() *string {
+func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ManagedIdentityClientID
 }
 
-func (a *AzureBatchConfigurationInput) GetManagedIdentityHeadResourceID() *string {
+func (a *AzureBatchConfiguration) GetManagedIdentityHeadResourceID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ManagedIdentityHeadResourceID
 }
 
-func (a *AzureBatchConfigurationInput) GetManagedIdentityPoolClientID() *string {
+func (a *AzureBatchConfiguration) GetManagedIdentityPoolClientID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ManagedIdentityPoolClientID
 }
 
-func (a *AzureBatchConfigurationInput) GetManagedIdentityPoolResourceID() *string {
+func (a *AzureBatchConfiguration) GetManagedIdentityPoolResourceID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.ManagedIdentityPoolResourceID
 }
 
-func (a *AzureBatchConfigurationInput) GetNextflowConfig() *string {
+func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
 	if a == nil {
 		return nil
 	}
 	return a.NextflowConfig
 }
 
-func (a *AzureBatchConfigurationInput) GetPostRunScript() *string {
+func (a *AzureBatchConfiguration) GetPostRunScript() *string {
 	if a == nil {
 		return nil
 	}
 	return a.PostRunScript
 }
 
-func (a *AzureBatchConfigurationInput) GetPreRunScript() *string {
+func (a *AzureBatchConfiguration) GetPreRunScript() *string {
 	if a == nil {
 		return nil
 	}
 	return a.PreRunScript
 }
 
-func (a *AzureBatchConfigurationInput) GetRegion() string {
+func (a *AzureBatchConfiguration) GetRegion() string {
 	if a == nil {
 		return ""
 	}
 	return a.Region
 }
 
-func (a *AzureBatchConfigurationInput) GetSubnetID() *string {
+func (a *AzureBatchConfiguration) GetSubnetID() *string {
 	if a == nil {
 		return nil
 	}
 	return a.SubnetID
 }
 
-func (a *AzureBatchConfigurationInput) GetTerminateJobsOnCompletion() *bool {
+func (a *AzureBatchConfiguration) GetTerminateJobsOnCompletion() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.TerminateJobsOnCompletion
 }
 
-func (a *AzureBatchConfigurationInput) GetTokenDuration() *string {
+func (a *AzureBatchConfiguration) GetTokenDuration() *string {
 	if a == nil {
 		return nil
 	}
 	return a.TokenDuration
 }
 
-func (a *AzureBatchConfigurationInput) GetEnableWave() *bool {
+func (a *AzureBatchConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.EnableWave
 }
 
-func (a *AzureBatchConfigurationInput) GetWorkDir() *string {
+func (a *AzureBatchConfiguration) GetWorkDir() *string {
 	if a == nil {
 		return nil
 	}
 	return a.WorkDir
 }
 
-func (a *AzureBatchConfigurationInput) GetWorkerPool() *string {
+func (a *AzureBatchConfiguration) GetWorkerPool() *string {
 	if a == nil {
 		return nil
 	}
@@ -2353,8 +2406,10 @@ type GoogleBatchServiceConfiguration struct {
 	// Google Cloud instance template name or self-link for compute job VMs.
 	// Overrides other VM configuration settings for compute jobs.
 	//
-	ComputeJobsInstanceTemplate *string  `json:"computeJobsInstanceTemplate,omitempty"`
-	ComputeJobsMachineType      []string `json:"computeJobsMachineType,omitempty"`
+	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
+	// List of Google Cloud machine types compute jobs may use.
+	//
+	ComputeJobsMachineType []string `json:"computeJobsMachineType,omitempty"`
 	// Container image used for file staging (copying data to/from Cloud Storage).
 	//
 	CopyImage *string `json:"copyImage,omitempty"`
@@ -2400,7 +2455,9 @@ type GoogleBatchServiceConfiguration struct {
 	MachineType *string `json:"machineType,omitempty"`
 	// Google Cloud VPC network name or self-link for compute instances.
 	//
-	Network     *string  `json:"network,omitempty"`
+	Network *string `json:"network,omitempty"`
+	// Network tags applied to compute instances for VPC firewall rule targeting.
+	//
 	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
@@ -3350,778 +3407,6 @@ func (a *AWSBatchConfiguration) GetWorkDir() *string {
 		return nil
 	}
 	return a.WorkDir
-}
-
-type ComputeConfigInputType string
-
-const (
-	ComputeConfigInputTypeAltairPlatform        ComputeConfigInputType = "altair-platform"
-	ComputeConfigInputTypeAwsBatch              ComputeConfigInputType = "aws-batch"
-	ComputeConfigInputTypeAwsCloud              ComputeConfigInputType = "aws-cloud"
-	ComputeConfigInputTypeAzureBatch            ComputeConfigInputType = "azure-batch"
-	ComputeConfigInputTypeAzureCloud            ComputeConfigInputType = "azure-cloud"
-	ComputeConfigInputTypeEksPlatform           ComputeConfigInputType = "eks-platform"
-	ComputeConfigInputTypeGkePlatform           ComputeConfigInputType = "gke-platform"
-	ComputeConfigInputTypeGoogleBatch           ComputeConfigInputType = "google-batch"
-	ComputeConfigInputTypeGoogleCloud           ComputeConfigInputType = "google-cloud"
-	ComputeConfigInputTypeGoogleLifesciences    ComputeConfigInputType = "google-lifesciences"
-	ComputeConfigInputTypeK8sPlatform           ComputeConfigInputType = "k8s-platform"
-	ComputeConfigInputTypeLocalPlatform         ComputeConfigInputType = "local-platform"
-	ComputeConfigInputTypeLsfPlatform           ComputeConfigInputType = "lsf-platform"
-	ComputeConfigInputTypeMoabPlatform          ComputeConfigInputType = "moab-platform"
-	ComputeConfigInputTypeSeqeracomputePlatform ComputeConfigInputType = "seqeracompute-platform"
-	ComputeConfigInputTypeSlurmPlatform         ComputeConfigInputType = "slurm-platform"
-	ComputeConfigInputTypeUgePlatform           ComputeConfigInputType = "uge-platform"
-)
-
-// ComputeConfigInput - Configuration settings for compute environments including work directories,
-// pre/post run scripts, and environment-specific parameters.
-type ComputeConfigInput struct {
-	AWSBatchConfiguration                  *AWSBatchConfiguration                  `queryParam:"inline" union:"member"`
-	AWSCloudConfiguration                  *AWSCloudConfiguration                  `queryParam:"inline" union:"member"`
-	SeqeraComputeConfiguration             *SeqeraComputeConfiguration             `queryParam:"inline" union:"member"`
-	GoogleBatchServiceConfiguration        *GoogleBatchServiceConfiguration        `queryParam:"inline" union:"member"`
-	GoogleCloudConfiguration               *GoogleCloudConfiguration               `queryParam:"inline" union:"member"`
-	AzureBatchConfigurationInput           *AzureBatchConfigurationInput           `queryParam:"inline" union:"member"`
-	AzureCloudConfiguration                *AzureCloudConfiguration                `queryParam:"inline" union:"member"`
-	IBMLSFConfiguration                    *IBMLSFConfiguration                    `queryParam:"inline" union:"member"`
-	SlurmConfiguration                     *SlurmConfiguration                     `queryParam:"inline" union:"member"`
-	KubernetesComputeConfiguration         *KubernetesComputeConfiguration         `queryParam:"inline" union:"member"`
-	AmazonEKSClusterConfiguration          *AmazonEKSClusterConfiguration          `queryParam:"inline" union:"member"`
-	GoogleGKEClusterConfiguration          *GoogleGKEClusterConfiguration          `queryParam:"inline" union:"member"`
-	UnivaGridEngineConfiguration           *UnivaGridEngineConfiguration           `queryParam:"inline" union:"member"`
-	AltairPBSConfiguration                 *AltairPBSConfiguration                 `queryParam:"inline" union:"member"`
-	MoabConfiguration                      *MoabConfiguration                      `queryParam:"inline" union:"member"`
-	LocalExecutionConfiguration            *LocalExecutionConfiguration            `queryParam:"inline" union:"member"`
-	GoogleLifeSciencesConfigurationRetired *GoogleLifeSciencesConfigurationRetired `queryParam:"inline" union:"member"`
-
-	Type ComputeConfigInputType
-}
-
-func CreateComputeConfigInputAltairPlatform(altairPlatform AltairPBSConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeAltairPlatform
-
-	typStr := string(typ)
-	altairPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AltairPBSConfiguration: &altairPlatform,
-		Type:                   typ,
-	}
-}
-
-func CreateComputeConfigInputAwsBatch(awsBatch AWSBatchConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeAwsBatch
-
-	typStr := string(typ)
-	awsBatch.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AWSBatchConfiguration: &awsBatch,
-		Type:                  typ,
-	}
-}
-
-func CreateComputeConfigInputAwsCloud(awsCloud AWSCloudConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeAwsCloud
-
-	typStr := string(typ)
-	awsCloud.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AWSCloudConfiguration: &awsCloud,
-		Type:                  typ,
-	}
-}
-
-func CreateComputeConfigInputAzureBatch(azureBatch AzureBatchConfigurationInput) ComputeConfigInput {
-	typ := ComputeConfigInputTypeAzureBatch
-
-	typStr := string(typ)
-	azureBatch.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AzureBatchConfigurationInput: &azureBatch,
-		Type:                         typ,
-	}
-}
-
-func CreateComputeConfigInputAzureCloud(azureCloud AzureCloudConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeAzureCloud
-
-	typStr := string(typ)
-	azureCloud.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AzureCloudConfiguration: &azureCloud,
-		Type:                    typ,
-	}
-}
-
-func CreateComputeConfigInputEksPlatform(eksPlatform AmazonEKSClusterConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeEksPlatform
-
-	typStr := string(typ)
-	eksPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		AmazonEKSClusterConfiguration: &eksPlatform,
-		Type:                          typ,
-	}
-}
-
-func CreateComputeConfigInputGkePlatform(gkePlatform GoogleGKEClusterConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeGkePlatform
-
-	typStr := string(typ)
-	gkePlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		GoogleGKEClusterConfiguration: &gkePlatform,
-		Type:                          typ,
-	}
-}
-
-func CreateComputeConfigInputGoogleBatch(googleBatch GoogleBatchServiceConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeGoogleBatch
-
-	typStr := string(typ)
-	googleBatch.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		GoogleBatchServiceConfiguration: &googleBatch,
-		Type:                            typ,
-	}
-}
-
-func CreateComputeConfigInputGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeGoogleCloud
-
-	typStr := string(typ)
-	googleCloud.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		GoogleCloudConfiguration: &googleCloud,
-		Type:                     typ,
-	}
-}
-
-func CreateComputeConfigInputGoogleLifesciences(googleLifesciences GoogleLifeSciencesConfigurationRetired) ComputeConfigInput {
-	typ := ComputeConfigInputTypeGoogleLifesciences
-
-	typStr := string(typ)
-	googleLifesciences.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		GoogleLifeSciencesConfigurationRetired: &googleLifesciences,
-		Type:                                   typ,
-	}
-}
-
-func CreateComputeConfigInputK8sPlatform(k8sPlatform KubernetesComputeConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeK8sPlatform
-
-	typStr := string(typ)
-	k8sPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		KubernetesComputeConfiguration: &k8sPlatform,
-		Type:                           typ,
-	}
-}
-
-func CreateComputeConfigInputLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeLocalPlatform
-
-	typStr := string(typ)
-	localPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		LocalExecutionConfiguration: &localPlatform,
-		Type:                        typ,
-	}
-}
-
-func CreateComputeConfigInputLsfPlatform(lsfPlatform IBMLSFConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeLsfPlatform
-
-	typStr := string(typ)
-	lsfPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		IBMLSFConfiguration: &lsfPlatform,
-		Type:                typ,
-	}
-}
-
-func CreateComputeConfigInputMoabPlatform(moabPlatform MoabConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeMoabPlatform
-
-	typStr := string(typ)
-	moabPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		MoabConfiguration: &moabPlatform,
-		Type:              typ,
-	}
-}
-
-func CreateComputeConfigInputSeqeracomputePlatform(seqeracomputePlatform SeqeraComputeConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeSeqeracomputePlatform
-
-	typStr := string(typ)
-	seqeracomputePlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		SeqeraComputeConfiguration: &seqeracomputePlatform,
-		Type:                       typ,
-	}
-}
-
-func CreateComputeConfigInputSlurmPlatform(slurmPlatform SlurmConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeSlurmPlatform
-
-	typStr := string(typ)
-	slurmPlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		SlurmConfiguration: &slurmPlatform,
-		Type:               typ,
-	}
-}
-
-func CreateComputeConfigInputUgePlatform(ugePlatform UnivaGridEngineConfiguration) ComputeConfigInput {
-	typ := ComputeConfigInputTypeUgePlatform
-
-	typStr := string(typ)
-	ugePlatform.Discriminator = &typStr
-
-	return ComputeConfigInput{
-		UnivaGridEngineConfiguration: &ugePlatform,
-		Type:                         typ,
-	}
-}
-
-func (u *ComputeConfigInput) UnmarshalJSON(data []byte) error {
-
-	type discriminator struct {
-		Discriminator string `json:"discriminator"`
-	}
-
-	dis := new(discriminator)
-	if err := json.Unmarshal(data, &dis); err != nil {
-		return fmt.Errorf("could not unmarshal discriminator: %w", err)
-	}
-
-	switch dis.Discriminator {
-	case "altair-platform":
-		altairPBSConfiguration := new(AltairPBSConfiguration)
-		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AltairPBSConfiguration = altairPBSConfiguration
-		u.Type = ComputeConfigInputTypeAltairPlatform
-		return nil
-	case "aws-batch":
-		awsBatchConfiguration := new(AWSBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AWSBatchConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AWSBatchConfiguration = awsBatchConfiguration
-		u.Type = ComputeConfigInputTypeAwsBatch
-		return nil
-	case "aws-cloud":
-		awsCloudConfiguration := new(AWSCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AWSCloudConfiguration = awsCloudConfiguration
-		u.Type = ComputeConfigInputTypeAwsCloud
-		return nil
-	case "azure-batch":
-		azureBatchConfigurationInput := new(AzureBatchConfigurationInput)
-		if err := utils.UnmarshalJSON(data, &azureBatchConfigurationInput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfigurationInput within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AzureBatchConfigurationInput = azureBatchConfigurationInput
-		u.Type = ComputeConfigInputTypeAzureBatch
-		return nil
-	case "azure-cloud":
-		azureCloudConfiguration := new(AzureCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &azureCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AzureCloudConfiguration = azureCloudConfiguration
-		u.Type = ComputeConfigInputTypeAzureCloud
-		return nil
-	case "eks-platform":
-		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.AmazonEKSClusterConfiguration = amazonEKSClusterConfiguration
-		u.Type = ComputeConfigInputTypeEksPlatform
-		return nil
-	case "gke-platform":
-		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GoogleGKEClusterConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.GoogleGKEClusterConfiguration = googleGKEClusterConfiguration
-		u.Type = ComputeConfigInputTypeGkePlatform
-		return nil
-	case "google-batch":
-		googleBatchServiceConfiguration := new(GoogleBatchServiceConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-batch) type GoogleBatchServiceConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.GoogleBatchServiceConfiguration = googleBatchServiceConfiguration
-		u.Type = ComputeConfigInputTypeGoogleBatch
-		return nil
-	case "google-cloud":
-		googleCloudConfiguration := new(GoogleCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.GoogleCloudConfiguration = googleCloudConfiguration
-		u.Type = ComputeConfigInputTypeGoogleCloud
-		return nil
-	case "google-lifesciences":
-		googleLifeSciencesConfigurationRetired := new(GoogleLifeSciencesConfigurationRetired)
-		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfigurationRetired, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfigurationRetired within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.GoogleLifeSciencesConfigurationRetired = googleLifeSciencesConfigurationRetired
-		u.Type = ComputeConfigInputTypeGoogleLifesciences
-		return nil
-	case "k8s-platform":
-		kubernetesComputeConfiguration := new(KubernetesComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type KubernetesComputeConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.KubernetesComputeConfiguration = kubernetesComputeConfiguration
-		u.Type = ComputeConfigInputTypeK8sPlatform
-		return nil
-	case "local-platform":
-		localExecutionConfiguration := new(LocalExecutionConfiguration)
-		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.LocalExecutionConfiguration = localExecutionConfiguration
-		u.Type = ComputeConfigInputTypeLocalPlatform
-		return nil
-	case "lsf-platform":
-		ibmLSFConfiguration := new(IBMLSFConfiguration)
-		if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == lsf-platform) type IBMLSFConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.IBMLSFConfiguration = ibmLSFConfiguration
-		u.Type = ComputeConfigInputTypeLsfPlatform
-		return nil
-	case "moab-platform":
-		moabConfiguration := new(MoabConfiguration)
-		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.MoabConfiguration = moabConfiguration
-		u.Type = ComputeConfigInputTypeMoabPlatform
-		return nil
-	case "seqeracompute-platform":
-		seqeraComputeConfiguration := new(SeqeraComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute-platform) type SeqeraComputeConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.SeqeraComputeConfiguration = seqeraComputeConfiguration
-		u.Type = ComputeConfigInputTypeSeqeracomputePlatform
-		return nil
-	case "slurm-platform":
-		slurmConfiguration := new(SlurmConfiguration)
-		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.SlurmConfiguration = slurmConfiguration
-		u.Type = ComputeConfigInputTypeSlurmPlatform
-		return nil
-	case "uge-platform":
-		univaGridEngineConfiguration := new(UnivaGridEngineConfiguration)
-		if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == uge-platform) type UnivaGridEngineConfiguration within ComputeConfigInput: %w", string(data), err)
-		}
-
-		u.UnivaGridEngineConfiguration = univaGridEngineConfiguration
-		u.Type = ComputeConfigInputTypeUgePlatform
-		return nil
-	}
-
-	return fmt.Errorf("could not unmarshal `%s` into any supported union types for ComputeConfigInput", string(data))
-}
-
-func (u ComputeConfigInput) MarshalJSON() ([]byte, error) {
-	if u.AWSBatchConfiguration != nil {
-		return utils.MarshalJSON(u.AWSBatchConfiguration, "", true)
-	}
-
-	if u.AWSCloudConfiguration != nil {
-		return utils.MarshalJSON(u.AWSCloudConfiguration, "", true)
-	}
-
-	if u.SeqeraComputeConfiguration != nil {
-		return utils.MarshalJSON(u.SeqeraComputeConfiguration, "", true)
-	}
-
-	if u.GoogleBatchServiceConfiguration != nil {
-		return utils.MarshalJSON(u.GoogleBatchServiceConfiguration, "", true)
-	}
-
-	if u.GoogleCloudConfiguration != nil {
-		return utils.MarshalJSON(u.GoogleCloudConfiguration, "", true)
-	}
-
-	if u.AzureBatchConfigurationInput != nil {
-		return utils.MarshalJSON(u.AzureBatchConfigurationInput, "", true)
-	}
-
-	if u.AzureCloudConfiguration != nil {
-		return utils.MarshalJSON(u.AzureCloudConfiguration, "", true)
-	}
-
-	if u.IBMLSFConfiguration != nil {
-		return utils.MarshalJSON(u.IBMLSFConfiguration, "", true)
-	}
-
-	if u.SlurmConfiguration != nil {
-		return utils.MarshalJSON(u.SlurmConfiguration, "", true)
-	}
-
-	if u.KubernetesComputeConfiguration != nil {
-		return utils.MarshalJSON(u.KubernetesComputeConfiguration, "", true)
-	}
-
-	if u.AmazonEKSClusterConfiguration != nil {
-		return utils.MarshalJSON(u.AmazonEKSClusterConfiguration, "", true)
-	}
-
-	if u.GoogleGKEClusterConfiguration != nil {
-		return utils.MarshalJSON(u.GoogleGKEClusterConfiguration, "", true)
-	}
-
-	if u.UnivaGridEngineConfiguration != nil {
-		return utils.MarshalJSON(u.UnivaGridEngineConfiguration, "", true)
-	}
-
-	if u.AltairPBSConfiguration != nil {
-		return utils.MarshalJSON(u.AltairPBSConfiguration, "", true)
-	}
-
-	if u.MoabConfiguration != nil {
-		return utils.MarshalJSON(u.MoabConfiguration, "", true)
-	}
-
-	if u.LocalExecutionConfiguration != nil {
-		return utils.MarshalJSON(u.LocalExecutionConfiguration, "", true)
-	}
-
-	if u.GoogleLifeSciencesConfigurationRetired != nil {
-		return utils.MarshalJSON(u.GoogleLifeSciencesConfigurationRetired, "", true)
-	}
-
-	return nil, errors.New("could not marshal union type ComputeConfigInput: all fields are null")
-}
-
-type ComputeConfigDeleteJobsOnCompletion string
-
-const (
-	ComputeConfigDeleteJobsOnCompletionOnSuccess ComputeConfigDeleteJobsOnCompletion = "on_success"
-	ComputeConfigDeleteJobsOnCompletionAlways    ComputeConfigDeleteJobsOnCompletion = "always"
-	ComputeConfigDeleteJobsOnCompletionNever     ComputeConfigDeleteJobsOnCompletion = "never"
-)
-
-func (e ComputeConfigDeleteJobsOnCompletion) ToPointer() *ComputeConfigDeleteJobsOnCompletion {
-	return &e
-}
-func (e *ComputeConfigDeleteJobsOnCompletion) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "on_success":
-		fallthrough
-	case "always":
-		fallthrough
-	case "never":
-		*e = ComputeConfigDeleteJobsOnCompletion(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ComputeConfigDeleteJobsOnCompletion: %v", v)
-	}
-}
-
-type AzureBatchConfiguration struct {
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode                  *bool                                `json:"autoPoolMode,omitempty"`
-	DeleteJobsOnCompletion        *ComputeConfigDeleteJobsOnCompletion `json:"deleteJobsOnCompletion,omitempty"`
-	DeleteJobsOnCompletionEnabled *bool                                `json:"deleteJobsOnCompletionEnabled,omitempty"`
-	DeletePoolsOnCompletion       *bool                                `json:"deletePoolsOnCompletion,omitempty"`
-	DeleteTasksOnCompletion       *bool                                `json:"deleteTasksOnCompletion,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	Forge       *AzBatchForgeConfig `json:"forge,omitempty"`
-	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
-	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
-	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	HeadPool        *string `json:"headPool,omitempty"`
-	// Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days.
-	JobMaxWallClockTime           *string `json:"jobMaxWallClockTime,omitempty"`
-	ManagedIdentityClientID       *string `json:"managedIdentityClientId,omitempty"`
-	ManagedIdentityHeadResourceID *string `json:"managedIdentityHeadResourceId,omitempty"`
-	ManagedIdentityPoolClientID   *string `json:"managedIdentityPoolClientId,omitempty"`
-	ManagedIdentityPoolResourceID *string `json:"managedIdentityPoolResourceId,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	Region       string  `json:"region"`
-	// Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials.
-	SubnetID                  *string `json:"subnetId,omitempty"`
-	TerminateJobsOnCompletion *bool   `json:"terminateJobsOnCompletion,omitempty"`
-	TokenDuration             *string `json:"tokenDuration,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
-	// Working directory path for workflow execution
-	WorkDir    *string `json:"workDir,omitempty"`
-	WorkerPool *string `json:"workerPool,omitempty"`
-}
-
-func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.AutoPoolMode
-}
-
-func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *ComputeConfigDeleteJobsOnCompletion {
-	if a == nil {
-		return nil
-	}
-	return a.DeleteJobsOnCompletion
-}
-
-func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletionEnabled() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.DeleteJobsOnCompletionEnabled
-}
-
-func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.DeletePoolsOnCompletion
-}
-
-func (a *AzureBatchConfiguration) GetDeleteTasksOnCompletion() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.DeleteTasksOnCompletion
-}
-
-func (a *AzureBatchConfiguration) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
-func (a *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
-	if a == nil {
-		return nil
-	}
-	return a.Forge
-}
-
-func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.EnableFusion
-}
-
-func (a *AzureBatchConfiguration) GetHeadJobCpus() *int {
-	if a == nil {
-		return nil
-	}
-	return a.HeadJobCpus
-}
-
-func (a *AzureBatchConfiguration) GetHeadJobMemoryMb() *int {
-	if a == nil {
-		return nil
-	}
-	return a.HeadJobMemoryMb
-}
-
-func (a *AzureBatchConfiguration) GetHeadPool() *string {
-	if a == nil {
-		return nil
-	}
-	return a.HeadPool
-}
-
-func (a *AzureBatchConfiguration) GetJobMaxWallClockTime() *string {
-	if a == nil {
-		return nil
-	}
-	return a.JobMaxWallClockTime
-}
-
-func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ManagedIdentityClientID
-}
-
-func (a *AzureBatchConfiguration) GetManagedIdentityHeadResourceID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ManagedIdentityHeadResourceID
-}
-
-func (a *AzureBatchConfiguration) GetManagedIdentityPoolClientID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ManagedIdentityPoolClientID
-}
-
-func (a *AzureBatchConfiguration) GetManagedIdentityPoolResourceID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ManagedIdentityPoolResourceID
-}
-
-func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
-func (a *AzureBatchConfiguration) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
-func (a *AzureBatchConfiguration) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AzureBatchConfiguration) GetRegion() string {
-	if a == nil {
-		return ""
-	}
-	return a.Region
-}
-
-func (a *AzureBatchConfiguration) GetSubnetID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.SubnetID
-}
-
-func (a *AzureBatchConfiguration) GetTerminateJobsOnCompletion() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.TerminateJobsOnCompletion
-}
-
-func (a *AzureBatchConfiguration) GetTokenDuration() *string {
-	if a == nil {
-		return nil
-	}
-	return a.TokenDuration
-}
-
-func (a *AzureBatchConfiguration) GetEnableWave() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.EnableWave
-}
-
-func (a *AzureBatchConfiguration) GetWorkDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkDir
-}
-
-func (a *AzureBatchConfiguration) GetWorkerPool() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkerPool
 }
 
 type ComputeConfigType string

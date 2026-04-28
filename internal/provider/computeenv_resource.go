@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -74,7 +73,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -557,12 +556,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												MarkdownDescription: `Custom AMI ID for DRAGEN-enabled instances.` + "\n" +
 													`Only applicable when dragen_enabled is true.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-													}...),
-												},
 											},
 											"dragen_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -583,12 +576,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												MarkdownDescription: `EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).` + "\n" +
 													`Only applicable when dragen_enabled is true.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
-													}...),
-												},
 											},
 											"ebs_auto_scale": schema.BoolAttribute{
 												Computed: true,
@@ -615,12 +602,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`This is NOT the root/boot volume size — use ebs_boot_size for that.` + "\n" +
 													`This feature is deprecated and is not compatible with Fusion v2.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.Int32{
-													int32validator.AlsoRequires(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
-														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
-													}...),
-												},
 											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
@@ -659,12 +640,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
-												Validators: []validator.Bool{
-													boolvalidator.ConflictsWith(path.Expressions{
-														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
-														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
-													}...),
-												},
 											},
 											"efs_id": schema.StringAttribute{
 												Computed: true,
@@ -850,9 +825,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
-											boolvalidator.AlsoRequires(path.Expressions{
-												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
-											}...),
 											custom_boolvalidators.FusionSnapshotsValidator(),
 										},
 									},
@@ -1022,8 +994,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Attributes: map[string]schema.Attribute{
 									"allow_buckets": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
@@ -1267,8 +1240,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Requires replacement if changed.`,
 									},
 									"security_groups": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
@@ -1338,6 +1312,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"delete_jobs_on_completion": schema.StringAttribute{
 										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										DeprecationMessage: `Replaced by ` + "`" + `delete_jobs_on_completion_enabled` + "`" + ` (and optionally` + "\n" +
+											`` + "`" + `delete_pools_on_completion` + "`" + `, ` + "`" + `delete_tasks_on_completion` + "`" + `) in Seqera` + "\n" +
+											`Platform v26.1+. Kept settable here for backwards compatibility with` + "\n" +
+											`Platform v25.1 and earlier — on those versions this string is the` + "\n" +
+											`only way to control job cleanup. On v26.1+ it is read-only on the` + "\n" +
+											`server and the boolean fields are authoritative.`,
+										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"on_success",
+												"always",
+												"never",
+											),
+										},
 									},
 									"delete_jobs_on_completion_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1465,13 +1457,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 											"container_reg_ids": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -2608,13 +2601,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires replacement if changed.`,
 									},
 									"compute_jobs_machine_type": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										Description: `List of Google Cloud machine types compute jobs may use. Requires replacement if changed.`,
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -2805,13 +2799,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Google Cloud VPC network name or self-link for compute instances. Requires replacement if changed.`,
 									},
 									"network_tags": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										Description: `Network tags applied to compute instances for VPC firewall rule targeting. Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -5430,5 +5425,6 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV1},
 	}
 }

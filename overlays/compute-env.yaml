@@ -155,7 +155,7 @@ actions:
   - target: $.components.schemas.ComputeEnvResponseDto
     update:
       x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-version: 2
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -337,6 +337,31 @@ actions:
       pattern: "^az://.+"
       x-speakeasy-param-optional: false
       x-speakeasy-param-force-new: true
+
+  # Backwards compatibility: keep `delete_jobs_on_completion` settable.
+  #
+  # In Seqera Platform v26.1 this string field became read-only and was
+  # replaced by `delete_jobs_on_completion_enabled` (bool) +
+  # `delete_pools_on_completion` + `delete_tasks_on_completion`. The upstream
+  # spec we generate from is v26.1+, so it marks the string field
+  # `readOnly: true` — which would lock out anyone on Platform <= v25.1 from
+  # configuring cleanup behaviour at all. We override it back to settable and
+  # mark it deprecated so:
+  #   - Users on Platform <= v25.1 can keep using `delete_jobs_on_completion`
+  #     until they upgrade.
+  #   - Users on Platform >= v26.1 should prefer the new boolean fields; they
+  #     get a deprecation warning if their HCL still has the string.
+  - target: $.components.schemas.AzBatchConfig.properties.deleteJobsOnCompletion
+    update:
+      readOnly: false
+      deprecated: true
+      x-speakeasy-deprecation-message: |
+        Replaced by `delete_jobs_on_completion_enabled` (and optionally
+        `delete_pools_on_completion`, `delete_tasks_on_completion`) in Seqera
+        Platform v26.1+. Kept settable here for backwards compatibility with
+        Platform v25.1 and earlier — on those versions this string is the
+        only way to control job cleanup. On v26.1+ it is read-only on the
+        server and the boolean fields are authoritative.
 
   # Add bid percentage constraints and description for AWS Forge configuration
   - target: $.components.schemas.ForgeConfig.properties.bidPercentage
@@ -555,6 +580,11 @@ actions:
         List of additional S3 bucket names that compute jobs are allowed to access.
         The work directory bucket is automatically included.
       x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
 
   - target: $.components.schemas.AwsCloudConfig.properties.instanceType
     update:
@@ -626,6 +656,11 @@ actions:
         Security groups must allow necessary network access.
       example: ["sg-12345678"]
       x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
 
   # ============================================================================
   # GOOGLE BATCH CONFIG FIELD DESCRIPTIONS

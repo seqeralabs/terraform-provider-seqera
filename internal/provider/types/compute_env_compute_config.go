@@ -9,7 +9,7 @@ import (
 type ComputeEnvComputeConfig struct {
 	AwsAccountID      types.String                    `tfsdk:"aws_account_id"`
 	ComputeEnvID      types.String                    `tfsdk:"compute_env_id"`
-	Config            *ComputeConfigInput             `tfsdk:"config"`
+	Config            *ComputeConfig                  `tfsdk:"config"`
 	CredentialsID     types.String                    `tfsdk:"credentials_id"`
 	DateCreated       types.String                    `tfsdk:"date_created"`
 	Deleted           types.Bool                      `tfsdk:"deleted"`

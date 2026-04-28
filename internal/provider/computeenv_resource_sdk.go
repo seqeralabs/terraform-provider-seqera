@@ -31,7 +31,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 			r.ComputeEnv.AwsAccountID = types.StringPointerValue(resp.ComputeEnv.AwsAccountID)
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
 			if resp.ComputeEnv.Config != nil {
-				r.ComputeEnv.Config = &tfTypes.ComputeConfigInput{}
+				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
 				if resp.ComputeEnv.Config.AWSBatchConfiguration != nil {
 					r.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
 					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
@@ -129,10 +129,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 				}
 				if resp.ComputeEnv.Config.AWSCloudConfiguration != nil {
 					r.ComputeEnv.Config.AwsCloud = &tfTypes.AWSCloudConfiguration{}
-					r.ComputeEnv.Config.AwsCloud.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets))
-					for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets {
-						r.ComputeEnv.Config.AwsCloud.AllowBuckets = append(r.ComputeEnv.Config.AwsCloud.AllowBuckets, types.StringValue(v))
-					}
+					allowBucketsValue1, allowBucketsDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets)
+					diags.Append(allowBucketsDiags1...)
+					allowBucketsValuable1, allowBucketsDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, allowBucketsValue1)
+					diags.Append(allowBucketsDiags1...)
+					r.ComputeEnv.Config.AwsCloud.AllowBuckets, _ = allowBucketsValuable1.(basetypes.ListValue)
 					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
 					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
@@ -170,10 +171,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						}
 					}
 					r.ComputeEnv.Config.AwsCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SchedEnabled)
-					r.ComputeEnv.Config.AwsCloud.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups))
-					for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups {
-						r.ComputeEnv.Config.AwsCloud.SecurityGroups = append(r.ComputeEnv.Config.AwsCloud.SecurityGroups, types.StringValue(v))
-					}
+					securityGroupsValue1, securityGroupsDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups)
+					diags.Append(securityGroupsDiags1...)
+					securityGroupsValuable1, securityGroupsDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue1)
+					diags.Append(securityGroupsDiags1...)
+					r.ComputeEnv.Config.AwsCloud.SecurityGroups, _ = securityGroupsValuable1.(basetypes.ListValue)
 					r.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
 					r.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
 				}
@@ -274,10 +276,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
 						r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-						for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-							r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
-						}
+						containerRegIdsValue, containerRegIdsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds)
+						diags.Append(containerRegIdsDiags...)
+						containerRegIdsValuable, containerRegIdsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, containerRegIdsValue)
+						diags.Append(containerRegIdsDiags...)
+						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, _ = containerRegIdsValuable.(basetypes.ListValue)
 						r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
 						r.ComputeEnv.Config.AzureBatch.Forge.DualPoolConfig = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DualPoolConfig)
 						if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool == nil {
@@ -364,10 +367,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleBatch.BootDiskImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskImage)
 					r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
 					r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
-					r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType))
-					for _, v := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType {
-						r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType = append(r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType, types.StringValue(v))
-					}
+					computeJobsMachineTypeValue, computeJobsMachineTypeDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsMachineType)
+					diags.Append(computeJobsMachineTypeDiags...)
+					computeJobsMachineTypeValuable, computeJobsMachineTypeDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, computeJobsMachineTypeValue)
+					diags.Append(computeJobsMachineTypeDiags...)
+					r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType, _ = computeJobsMachineTypeValuable.(basetypes.ListValue)
 					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
 					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
@@ -398,10 +402,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleBatch.Location = types.StringValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
 					r.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.MachineType)
 					r.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Network)
-					r.ComputeEnv.Config.GoogleBatch.NetworkTags = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NetworkTags))
-					for _, v := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NetworkTags {
-						r.ComputeEnv.Config.GoogleBatch.NetworkTags = append(r.ComputeEnv.Config.GoogleBatch.NetworkTags, types.StringValue(v))
-					}
+					networkTagsValue, networkTagsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NetworkTags)
+					diags.Append(networkTagsDiags...)
+					networkTagsValuable, networkTagsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, networkTagsValue)
+					diags.Append(networkTagsDiags...)
+					r.ComputeEnv.Config.GoogleBatch.NetworkTags, _ = networkTagsValuable.(basetypes.ListValue)
 					r.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
 					r.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
@@ -899,7 +904,7 @@ func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx contex
 func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var config shared.ComputeConfigInput
+	var config shared.ComputeConfig
 	var awsBatchConfiguration *shared.AWSBatchConfiguration
 	if r.ComputeEnv.Config.AwsBatch != nil {
 		cliPath := new(string)
@@ -1286,15 +1291,15 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsBatchConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AWSBatchConfiguration: awsBatchConfiguration,
 		}
 	}
 	var awsCloudConfiguration *shared.AWSCloudConfiguration
 	if r.ComputeEnv.Config.AwsCloud != nil {
-		allowBuckets1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.AllowBuckets))
-		for allowBucketsIndex := range r.ComputeEnv.Config.AwsCloud.AllowBuckets {
-			allowBuckets1 = append(allowBuckets1, r.ComputeEnv.Config.AwsCloud.AllowBuckets[allowBucketsIndex].ValueString())
+		var allowBuckets1 []string
+		if !r.ComputeEnv.Config.AwsCloud.AllowBuckets.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.AllowBuckets.IsNull() {
+			diags.Append(r.ComputeEnv.Config.AwsCloud.AllowBuckets.ElementsAs(ctx, &allowBuckets1, true)...)
 		}
 		arm64Enabled1 := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsNull() {
@@ -1422,9 +1427,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			schedEnabled = nil
 		}
-		securityGroups1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SecurityGroups))
-		for securityGroupsIndex := range r.ComputeEnv.Config.AwsCloud.SecurityGroups {
-			securityGroups1 = append(securityGroups1, r.ComputeEnv.Config.AwsCloud.SecurityGroups[securityGroupsIndex].ValueString())
+		var securityGroups1 []string
+		if !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsNull() {
+			diags.Append(r.ComputeEnv.Config.AwsCloud.SecurityGroups.ElementsAs(ctx, &securityGroups1, true)...)
 		}
 		subnetID := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.SubnetID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SubnetID.IsNull() {
@@ -1469,7 +1474,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if awsCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AWSCloudConfiguration: awsCloudConfiguration,
 		}
 	}
@@ -1559,7 +1564,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if seqeraComputeConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			SeqeraComputeConfiguration: seqeraComputeConfiguration,
 		}
 	}
@@ -1583,9 +1588,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			computeJobsInstanceTemplate = nil
 		}
-		computeJobsMachineType := make([]string, 0, len(r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType))
-		for computeJobsMachineTypeIndex := range r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType {
-			computeJobsMachineType = append(computeJobsMachineType, r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType[computeJobsMachineTypeIndex].ValueString())
+		var computeJobsMachineType []string
+		if !r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.IsNull() {
+			diags.Append(r.ComputeEnv.Config.GoogleBatch.ComputeJobsMachineType.ElementsAs(ctx, &computeJobsMachineType, true)...)
 		}
 		copyImage := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsNull() {
@@ -1690,9 +1695,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			network = nil
 		}
-		networkTags := make([]string, 0, len(r.ComputeEnv.Config.GoogleBatch.NetworkTags))
-		for networkTagsIndex := range r.ComputeEnv.Config.GoogleBatch.NetworkTags {
-			networkTags = append(networkTags, r.ComputeEnv.Config.GoogleBatch.NetworkTags[networkTagsIndex].ValueString())
+		var networkTags []string
+		if !r.ComputeEnv.Config.GoogleBatch.NetworkTags.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NetworkTags.IsNull() {
+			diags.Append(r.ComputeEnv.Config.GoogleBatch.NetworkTags.ElementsAs(ctx, &networkTags, true)...)
 		}
 		nextflowConfig3 := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsNull() {
@@ -1814,7 +1819,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleBatchServiceConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleBatchServiceConfiguration: googleBatchServiceConfiguration,
 		}
 	}
@@ -1973,17 +1978,23 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleCloudConfiguration: googleCloudConfiguration,
 		}
 	}
-	var azureBatchConfigurationInput *shared.AzureBatchConfigurationInput
+	var azureBatchConfiguration *shared.AzureBatchConfiguration
 	if r.ComputeEnv.Config.AzureBatch != nil {
 		autoPoolMode := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsNull() {
 			*autoPoolMode = r.ComputeEnv.Config.AzureBatch.AutoPoolMode.ValueBool()
 		} else {
 			autoPoolMode = nil
+		}
+		deleteJobsOnCompletion := new(shared.ComputeConfigDeleteJobsOnCompletion)
+		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
+			*deleteJobsOnCompletion = shared.ComputeConfigDeleteJobsOnCompletion(r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
+		} else {
+			deleteJobsOnCompletion = nil
 		}
 		deleteJobsOnCompletionEnabled := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletionEnabled.IsNull() {
@@ -2044,9 +2055,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				autoScale = nil
 			}
-			containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
-			for containerRegIdsIndex := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
-				containerRegIds = append(containerRegIds, r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds[containerRegIdsIndex].ValueString())
+			var containerRegIds []string
+			if !r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.ElementsAs(ctx, &containerRegIds, true)...)
 			}
 			disposeOnDeletion1 := new(bool)
 			if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
@@ -2243,8 +2254,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			workerPool1 = nil
 		}
-		azureBatchConfigurationInput = &shared.AzureBatchConfigurationInput{
+		azureBatchConfiguration = &shared.AzureBatchConfiguration{
 			AutoPoolMode:                  autoPoolMode,
+			DeleteJobsOnCompletion:        deleteJobsOnCompletion,
 			DeleteJobsOnCompletionEnabled: deleteJobsOnCompletionEnabled,
 			DeletePoolsOnCompletion:       deletePoolsOnCompletion,
 			DeleteTasksOnCompletion:       deleteTasksOnCompletion,
@@ -2271,9 +2283,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			WorkerPool:                    workerPool1,
 		}
 	}
-	if azureBatchConfigurationInput != nil {
-		config = shared.ComputeConfigInput{
-			AzureBatchConfigurationInput: azureBatchConfigurationInput,
+	if azureBatchConfiguration != nil {
+		config = shared.ComputeConfig{
+			AzureBatchConfiguration: azureBatchConfiguration,
 		}
 	}
 	var azureCloudConfiguration *shared.AzureCloudConfiguration
@@ -2455,7 +2467,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if azureCloudConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AzureCloudConfiguration: azureCloudConfiguration,
 		}
 	}
@@ -2608,7 +2620,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if ibmLSFConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			IBMLSFConfiguration: ibmLSFConfiguration,
 		}
 	}
@@ -2740,7 +2752,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if slurmConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			SlurmConfiguration: slurmConfiguration,
 		}
 	}
@@ -2881,7 +2893,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if kubernetesComputeConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			KubernetesComputeConfiguration: kubernetesComputeConfiguration,
 		}
 	}
@@ -3059,7 +3071,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AmazonEKSClusterConfiguration: amazonEKSClusterConfiguration,
 		}
 	}
@@ -3237,7 +3249,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleGKEClusterConfiguration: googleGKEClusterConfiguration,
 		}
 	}
@@ -3369,7 +3381,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if univaGridEngineConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			UnivaGridEngineConfiguration: univaGridEngineConfiguration,
 		}
 	}
@@ -3501,7 +3513,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if altairPBSConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			AltairPBSConfiguration: altairPBSConfiguration,
 		}
 	}
@@ -3633,7 +3645,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if moabConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			MoabConfiguration: moabConfiguration,
 		}
 	}
@@ -3736,7 +3748,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if localExecutionConfiguration != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			LocalExecutionConfiguration: localExecutionConfiguration,
 		}
 	}
@@ -3919,7 +3931,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	if googleLifeSciencesConfigurationRetired != nil {
-		config = shared.ComputeConfigInput{
+		config = shared.ComputeConfig{
 			GoogleLifeSciencesConfigurationRetired: googleLifeSciencesConfigurationRetired,
 		}
 	}
