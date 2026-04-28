@@ -1,3 +1,13 @@
+# v0.40.1
+
+ENHANCEMENTS:
+
+- **Generation** - Speakeasy `persistentEdits` is now enabled (`gen.yaml: persistentEdits.enabled: true`). Manual edits to generated files are preserved across `speakeasy run` regenerations via 3-way merge, anchored by `pristine_git_object` refs in `gen.lock`. As part of this rollout, all 1037 tracked files now carry a `// @generated-id:` header and `gen.lock` was realigned so its pristine refs match the current committed blobs (423 stale or missing refs were updated).
+
+DEPRECATIONS:
+
+- **`seqera_aws_compute_env`** - The `seqera_aws_compute_env` resource is now marked deprecated. Use `seqera_aws_batch_ce` instead — the two resources share the same schema and API, and `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block; see the resource docs for an example.
+
 # v0.40.0
 
 ENHANCEMENTS:

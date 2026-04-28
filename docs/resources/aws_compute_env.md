@@ -9,10 +9,25 @@ description: |-
 
 # seqera_aws_compute_env (Resource)
 
+!> **Deprecated.** Use [`seqera_aws_batch_ce`](aws_batch_ce.md) instead. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward and supports state migration via [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) blocks. See [Migrating to `seqera_aws_batch_ce`](#migrating-to-seqera_aws_batch_ce) below.
+
 Manage AWS compute environments in Seqera platform using this resource.
 
 AWS compute environments define the execution platform where a pipeline will run
 on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
+
+## Migrating to `seqera_aws_batch_ce`
+
+State can be moved without re-creating the resource:
+
+```terraform
+moved {
+  from = seqera_aws_compute_env.example
+  to   = seqera_aws_batch_ce.example
+}
+```
+
+`seqera_aws_batch_ce` enforces a stricter `name` pattern (`^[a-zA-Z0-9_-]+$`). If your existing compute environment name contains spaces or other characters, rename it before moving.
 
 ## Example Usage
 
