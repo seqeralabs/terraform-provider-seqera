@@ -74,7 +74,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -5430,5 +5430,6 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV1},
 	}
 }
