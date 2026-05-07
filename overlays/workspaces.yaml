@@ -20,6 +20,12 @@ actions:
   - target: $["components"]["schemas"]["Workspace"]["properties"]["visibility"]
     update:
       x-speakeasy-param-readonly: false
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace

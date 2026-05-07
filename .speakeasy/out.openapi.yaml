@@ -21692,6 +21692,7 @@ components:
         dateCreated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         description:
           type: string
           maxLength: 1000
@@ -21712,6 +21713,7 @@ components:
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         name:
           type: string
           maxLength: 40
