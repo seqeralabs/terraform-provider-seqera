@@ -23524,7 +23524,7 @@ components:
               x-speakeasy-param-computed: false
             password:
               type: string
-              description: Gitea account password or personal access token (sensitive). Sent to Gitea as HTTP basic-auth password.
+              description: Gitea account password or personal access token (sensitive).
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
               example: mypassword

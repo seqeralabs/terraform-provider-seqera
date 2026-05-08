@@ -36,7 +36,7 @@ func (e *GiteaCredentialProviderType) UnmarshalJSON(data []byte) error {
 type GiteaCredentialKeys struct {
 	// Gitea account username.
 	Username string `json:"username"`
-	// Gitea account password or personal access token (sensitive). Sent to Gitea as HTTP basic-auth password.
+	// Gitea account password or personal access token (sensitive).
 	Password string `json:"password"`
 }
 

@@ -83,7 +83,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Gitea account password or personal access token (sensitive). Sent to Gitea as HTTP basic-auth password.`,
+				Description: `Gitea account password or personal access token (sensitive).`,
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,

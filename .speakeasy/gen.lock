@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 3f9b445fa37f16d3aec24b217ee643e3
+  docChecksum: f0115aa3d428640f1521547a715cc5f7
   docVersion: 1.147.0
   speakeasyVersion: 1.762.0
   generationVersion: 2.882.0
@@ -553,7 +553,7 @@ trackedFiles:
     last_write_checksum: sha1:412c24d954db792925ec76ad94c227be0a624308
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
-    last_write_checksum: sha1:d020d1a14e329671676b008504023424d5aa1c5c
+    last_write_checksum: sha1:3274fc24e8054c69230765729ad456d66f4fae50
     pristine_git_object: 511473aefa420f60b1e0fdd850d0d2360c7cd1aa
   internal/provider/giteacredential_resource_sdk.go:
     id: 63ee809ee195
@@ -3113,7 +3113,7 @@ trackedFiles:
     pristine_git_object: f2dfcf01b5586b5f4fabf4179fc9f48717d201d9
   internal/sdk/models/shared/giteacredential.go:
     id: dfce6a8fcdf0
-    last_write_checksum: sha1:e62e82ec596c84892d1d46402511c998ca0dde07
+    last_write_checksum: sha1:7282b2a6760534ad4f84413596a79c70a14accfd
     pristine_git_object: 7637ba2ec7d6a8ecf7312350d60e081f096f9a96
   internal/sdk/models/shared/githubactionconfig.go:
     id: f9c267b87cce
