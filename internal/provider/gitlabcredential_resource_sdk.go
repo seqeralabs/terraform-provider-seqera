@@ -122,12 +122,9 @@ func (r *GitlabCredentialResourceModel) ToOperationsDescribeGitlabCredentialsReq
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeGitlabCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,

@@ -88,12 +88,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_container_registry_credential.my_seqera_container_registry_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_container_registry_credential.my_seqera_container_registry_credential "..."
+terraform import seqera_container_registry_credential.my_seqera_container_registry_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

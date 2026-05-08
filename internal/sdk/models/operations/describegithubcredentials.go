@@ -11,7 +11,7 @@ type DescribeGithubCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DescribeGithubCredentialsRequest) GetCredentialsID() string {
@@ -21,9 +21,9 @@ func (d *DescribeGithubCredentialsRequest) GetCredentialsID() string {
 	return d.CredentialsID
 }
 
-func (d *DescribeGithubCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DescribeGithubCredentialsRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

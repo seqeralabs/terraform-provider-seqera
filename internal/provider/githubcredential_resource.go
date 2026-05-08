@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -378,7 +380,24 @@ func (r *GithubCredentialResource) Delete(ctx context.Context, req resource.Dele
 }
 
 func (r *GithubCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		CredentialsID string `json:"credentials_id"`
+		WorkspaceID   int64  `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"credentials_id": "...", "workspace_id": 0}': `+err.Error())
+		return
+	}
+
+	if len(data.CredentialsID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field credentials_id is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), data.CredentialsID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }
 
 func (r *GithubCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
