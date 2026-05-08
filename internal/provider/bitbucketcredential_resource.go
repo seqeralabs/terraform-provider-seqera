@@ -55,7 +55,7 @@ func (r *BitbucketCredentialResource) Metadata(ctx context.Context, req resource
 
 func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{

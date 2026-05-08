@@ -2,6 +2,7 @@
 page_title: "seqera_google_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage Google credentials in Seqera platform using this resource.
   Google credentials authenticate to Google Cloud either with a service account
   key (data) or via Workload Identity Federation (workload_identity_provider
@@ -10,6 +11,8 @@ description: |-
 ---
 
 # seqera_google_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage Google credentials in Seqera platform using this resource.
 

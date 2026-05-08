@@ -57,7 +57,7 @@ func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.Me
 
 func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials authenticate to Google Cloud either with a service account\nkey (`data`) or via Workload Identity Federation (`workload_identity_provider`\nand `service_account_email`). WIF is the recommended path — no long-lived key\nis stored in the platform.\n",
+		MarkdownDescription: "**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nManage Google credentials in Seqera platform using this resource.\n\nGoogle credentials authenticate to Google Cloud either with a service account\nkey (`data`) or via Workload Identity Federation (`workload_identity_provider`\nand `service_account_email`). WIF is the recommended path — no long-lived key\nis stored in the platform.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{

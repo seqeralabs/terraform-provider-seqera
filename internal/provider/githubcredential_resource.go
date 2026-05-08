@@ -55,7 +55,7 @@ func (r *GithubCredentialResource) Metadata(ctx context.Context, req resource.Me
 
 func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage GitHub credentials in Seqera platform using this resource.\n\nGitHub credentials store authentication information for accessing GitHub\nrepositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage GitHub credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nGitHub credentials store authentication information for accessing GitHub\nrepositories within the Seqera Platform workflows.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"access_token": schema.StringAttribute{

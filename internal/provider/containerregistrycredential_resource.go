@@ -55,7 +55,7 @@ func (r *ContainerRegistryCredentialResource) Metadata(ctx context.Context, req 
 
 func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage container registry credentials in Seqera platform using this resource.\n\nContainer registry credentials store authentication information for accessing\ncontainer registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nContainer registry credentials store authentication information for accessing\ncontainer registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{

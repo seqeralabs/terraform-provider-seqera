@@ -55,7 +55,7 @@ func (r *TowerAgentCredentialResource) Metadata(ctx context.Context, req resourc
 
 func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Tower Agent credentials in Seqera platform using this resource.\n\nTower Agent credentials store connection IDs for Tower Agent instances that\nenable secure communication between the Seqera Platform and compute environments.\n\n**IMPORTANT**: The Tower Agent must be running and online before creating the credential.\nStart the agent with your connection ID first, then create the credential resource.\nIf the agent is not online, you will receive an error: \"The agent is not online - You need to run the agent before proceeding\".\n",
+		MarkdownDescription: "Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nTower Agent credentials store connection IDs for Tower Agent instances that\nenable secure communication between the Seqera Platform and compute environments.\n\n**IMPORTANT**: The Tower Agent must be running and online before creating the credential.\nStart the agent with your connection ID first, then create the credential resource.\nIf the agent is not online, you will receive an error: \"The agent is not online - You need to run the agent before proceeding\".\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"connection_id": schema.StringAttribute{

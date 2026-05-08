@@ -2,14 +2,14 @@
 page_title: "seqera_gitea_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Gitea credentials in Seqera platform using this resource.
+  Manage Gitea credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Gitea credentials store authentication information for accessing Gitea
   repositories within the Seqera Platform workflows.
 ---
 
 # seqera_gitea_credential (Resource)
 
-Manage Gitea credentials in Seqera platform using this resource.
+Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Gitea credentials store authentication information for accessing Gitea
 repositories within the Seqera Platform workflows.

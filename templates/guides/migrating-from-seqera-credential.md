@@ -11,6 +11,8 @@ The provider exposes both a generic `seqera_credential` resource (one resource t
 
 This guide walks through migrating an existing `seqera_credential` to the matching typed resource without destroying the underlying credential on Seqera Platform.
 
+~> **Workspace-scoped only.** The typed credential resources are tested and validated for use within a Seqera organization workspace. User-context (personal) credentials are not supported on the typed resources — keep using `seqera_credential` for those.
+
 ## Why migrate
 
 - Provider-specific plan-time validation (e.g. mutually-exclusive auth fields, required-pair checks).

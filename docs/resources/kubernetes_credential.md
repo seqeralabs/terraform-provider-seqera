@@ -2,14 +2,14 @@
 page_title: "seqera_kubernetes_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Kubernetes credentials in Seqera platform using this resource.
+  Manage Kubernetes credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
   execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.
 ---
 
 # seqera_kubernetes_credential (Resource)
 
-Manage Kubernetes credentials in Seqera platform using this resource.
+Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
 execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.

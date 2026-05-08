@@ -2,7 +2,7 @@
 page_title: "seqera_tower_agent_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Tower Agent credentials in Seqera platform using this resource.
+  Manage Tower Agent credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Tower Agent credentials store connection IDs for Tower Agent instances that
   enable secure communication between the Seqera Platform and compute environments.
   IMPORTANT: The Tower Agent must be running and online before creating the credential.
@@ -12,7 +12,7 @@ description: |-
 
 # seqera_tower_agent_credential (Resource)
 
-Manage Tower Agent credentials in Seqera platform using this resource.
+Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Tower Agent credentials store connection IDs for Tower Agent instances that
 enable secure communication between the Seqera Platform and compute environments.

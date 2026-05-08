@@ -22774,6 +22774,8 @@ components:
           x-speakeasy-entity: AWSCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: |
+            **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
             Manage AWS credentials in Seqera platform using this resource.
 
             AWS credentials store authentication information for accessing AWS services
@@ -22899,6 +22901,8 @@ components:
           x-speakeasy-entity: AzureCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: |
+            **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
             Manage Azure credentials in Seqera platform using this resource.
 
             Azure credentials support three authentication modes: shared key
@@ -23062,7 +23066,7 @@ components:
           x-speakeasy-entity: BitbucketCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: bitbucket_credential
-          x-speakeasy-entity-description: 'Manage Bitbucket credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Bitbucket credentials store authentication information for accessing Bitbucket
@@ -23169,7 +23173,7 @@ components:
           x-speakeasy-entity: CodecommitCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: codecommit_credential
-          x-speakeasy-entity-description: 'Manage Codecommit credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage Codecommit credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Codecommit credentials store AWS authentication information for accessing
@@ -23271,7 +23275,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: ContainerRegistryCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage container registry credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Container registry credentials store authentication information for accessing
@@ -23378,6 +23382,8 @@ components:
           x-speakeasy-entity: GoogleCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: |
+            **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
             Manage Google credentials in Seqera platform using this resource.
 
             Google credentials authenticate to Google Cloud either with a service account
@@ -23508,7 +23514,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: GiteaCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Gitea credentials store authentication information for accessing Gitea
@@ -23615,7 +23621,7 @@ components:
           x-speakeasy-entity: GithubCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: github_credential
-          x-speakeasy-entity-description: 'Manage GitHub credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage GitHub credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             GitHub credentials store authentication information for accessing GitHub
@@ -23722,7 +23728,7 @@ components:
           x-speakeasy-entity: GitlabCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: gitlab_credential
-          x-speakeasy-entity-description: 'Manage GitLab credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage GitLab credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             GitLab credentials store authentication information for accessing GitLab
@@ -23821,7 +23827,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: KubernetesCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
@@ -23931,7 +23937,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: SSHCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
+          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
           type: object
           required:
             - privateKey
@@ -24031,7 +24037,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-entity: TowerAgentCredential
           x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Tower Agent credentials in Seqera platform using this resource.
+          x-speakeasy-entity-description: 'Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 
             Tower Agent credentials store connection IDs for Tower Agent instances that

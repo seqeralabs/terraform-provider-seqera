@@ -2,12 +2,12 @@
 page_title: "seqera_ssh_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
+  Manage SSH credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 ---
 
 # seqera_ssh_credential (Resource)
 
-Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
+Manage SSH credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 
 ## Example Usage
 

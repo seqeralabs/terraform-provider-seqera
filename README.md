@@ -8,6 +8,9 @@
 > [!CAUTION]
 > **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed for the stable release. Please migrate to their recommended replacements if available.
 
+> [!IMPORTANT]
+> **Scope of testing** — This provider is tested and validated for use within a Seqera **organization workspace**. Use against a personal (user-context) workspace is not part of our test matrix and may not work consistently across all resources — typed credential resources in particular are workspace-scoped only. If you need to manage user-context credentials, use the generic `seqera_credential` resource and please report any issues via [GitHub](https://github.com/seqeralabs/terraform-provider-seqera/issues).
+
 
 Terraform Provider for the Seqera Platform API.
 

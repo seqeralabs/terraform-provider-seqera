@@ -60,7 +60,7 @@ func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.Met
 
 func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials support three authentication modes: shared key\n(batch_key and storage_key, discriminator 'azure'), Entra service\nprincipal (tenant_id, client_id, client_secret, discriminator\n'azure-entra'), and Cloud service principal (same fields as Entra,\ndiscriminator 'azure-cloud').\n",
+		MarkdownDescription: "**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nManage Azure credentials in Seqera platform using this resource.\n\nAzure credentials support three authentication modes: shared key\n(batch_key and storage_key, discriminator 'azure'), Entra service\nprincipal (tenant_id, client_id, client_secret, discriminator\n'azure-entra'), and Cloud service principal (same fields as Entra,\ndiscriminator 'azure-cloud').\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"batch_key": schema.StringAttribute{

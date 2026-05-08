@@ -55,7 +55,7 @@ func (r *KubernetesCredentialResource) Metadata(ctx context.Context, req resourc
 
 func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Kubernetes credentials in Seqera platform using this resource.\n\nKubernetes credentials enable secure connections to Kubernetes clusters for workflow\nexecution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.",
+		MarkdownDescription: "Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nKubernetes credentials enable secure connections to Kubernetes clusters for workflow\nexecution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"client_certificate": schema.StringAttribute{

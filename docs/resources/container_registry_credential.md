@@ -2,14 +2,14 @@
 page_title: "seqera_container_registry_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage container registry credentials in Seqera platform using this resource.
+  Manage container registry credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Container registry credentials store authentication information for accessing
   container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
 ---
 
 # seqera_container_registry_credential (Resource)
 
-Manage container registry credentials in Seqera platform using this resource.
+Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Container registry credentials store authentication information for accessing
 container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.

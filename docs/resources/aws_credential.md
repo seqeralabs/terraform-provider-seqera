@@ -2,12 +2,15 @@
 page_title: "seqera_aws_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage AWS credentials in Seqera platform using this resource.
   AWS credentials store authentication information for accessing AWS services
   within the Seqera Platform workflows.
 ---
 
 # seqera_aws_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage AWS credentials in Seqera platform using this resource.
 

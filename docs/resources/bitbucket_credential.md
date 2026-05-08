@@ -2,14 +2,14 @@
 page_title: "seqera_bitbucket_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Bitbucket credentials in Seqera platform using this resource.
+  Manage Bitbucket credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Bitbucket credentials store authentication information for accessing Bitbucket
   repositories within the Seqera Platform workflows.
 ---
 
 # seqera_bitbucket_credential (Resource)
 
-Manage Bitbucket credentials in Seqera platform using this resource.
+Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Bitbucket credentials store authentication information for accessing Bitbucket
 repositories within the Seqera Platform workflows.

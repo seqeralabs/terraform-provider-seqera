@@ -2,6 +2,7 @@
 page_title: "seqera_azure_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage Azure credentials in Seqera platform using this resource.
   Azure credentials support three authentication modes: shared key
   (batch_key and storage_key, discriminator 'azure'), Entra service
@@ -11,6 +12,8 @@ description: |-
 ---
 
 # seqera_azure_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage Azure credentials in Seqera platform using this resource.
 

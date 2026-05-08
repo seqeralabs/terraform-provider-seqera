@@ -2,14 +2,14 @@
 page_title: "seqera_github_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage GitHub credentials in Seqera platform using this resource.
+  Manage GitHub credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   GitHub credentials store authentication information for accessing GitHub
   repositories within the Seqera Platform workflows.
 ---
 
 # seqera_github_credential (Resource)
 
-Manage GitHub credentials in Seqera platform using this resource.
+Manage GitHub credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 GitHub credentials store authentication information for accessing GitHub
 repositories within the Seqera Platform workflows.
