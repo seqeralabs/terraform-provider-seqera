@@ -65,13 +65,13 @@ resource "seqera_github_credential" "enterprise" {
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
-- `access_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) GitHub Personal Access Token (PAT) — classic or fine-grained — with `repo` scope. Sensitive.
+- `access_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `username` (String) GitHub account username associated with the access token.
 
 ### Optional
 
-- `base_url` (String) Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
+- `base_url` (String) Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

@@ -48,8 +48,8 @@ resource "seqera_bitbucket_credential" "example" {
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
-- `base_url` (String) Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://bitbucket.org/seqeralabs/repo1
-- `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket app password (sensitive). Generate from Bitbucket account settings. Mutually exclusive with `token`.
+- `base_url` (String) Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1
+- `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
 - `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket API token (sensitive). Mutually exclusive with `password`.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 

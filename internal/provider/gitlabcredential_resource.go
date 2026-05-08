@@ -58,7 +58,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is most similar to the target repository; if no ` + "`" + `base_url` + "`" + ` is set on any credential, the longest-lived credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs`,
+				Description: `Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
@@ -88,7 +88,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `GitLab access token (Personal, Group, or Project). Requires ` + "`" + `api` + "`" + `, ` + "`" + `read_api` + "`" + `, and ` + "`" + `read_repository` + "`" + ` scopes. Sensitive.`,
+				Description: `GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are ` + "`" + `api` + "`" + `, ` + "`" + `read_api` + "`" + `, and ` + "`" + `read_repository` + "`" + `, though the backend does not strictly enforce them. Sensitive.`,
 			},
 			"username": schema.StringAttribute{
 				Required:    true,

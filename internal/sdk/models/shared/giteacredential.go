@@ -36,7 +36,7 @@ func (e *GiteaCredentialProviderType) UnmarshalJSON(data []byte) error {
 type GiteaCredentialKeys struct {
 	// Gitea account username.
 	Username string `json:"username"`
-	// Gitea account password (sensitive).
+	// Gitea account password or personal access token (sensitive). Sent to Gitea as HTTP basic-auth password.
 	Password string `json:"password"`
 }
 
@@ -69,7 +69,7 @@ type GiteaCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for the self-hosted Gitea instance (required). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://gitea.mycompany.com
+	// Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
 	BaseURL *string             `json:"baseUrl,omitempty"`
 	Keys    GiteaCredentialKeys `json:"keys"`
 }
@@ -175,7 +175,7 @@ type GiteaCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for the self-hosted Gitea instance (required). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://gitea.mycompany.com
+	// Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
 	BaseURL *string                   `json:"baseUrl,omitempty"`
 	Keys    GiteaCredentialKeysOutput `json:"keys"`
 }

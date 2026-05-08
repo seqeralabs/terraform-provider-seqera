@@ -49,7 +49,7 @@ resource "seqera_codecommit_credential" "example" {
 
 ### Optional
 
-- `base_url` (String) Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
+- `base_url` (String) Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

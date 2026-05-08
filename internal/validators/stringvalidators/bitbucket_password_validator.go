@@ -27,8 +27,10 @@ func BitbucketPasswordValidator() validator.String {
 	return StringBitbucketPasswordValidatorValidator{}
 }
 
-// validateBitbucketKeysSibling errors when the current attribute and its sibling
-// are both set. `password` and `token` are mutually exclusive on the API.
+// validateBitbucketKeysSibling errors when both `password` and `token` are set.
+// The Seqera Platform backend technically accepts both (preferring `token`),
+// but having two credentials in one resource is ambiguous user intent — pick
+// one explicitly.
 func validateBitbucketKeysSibling(ctx context.Context, req validator.StringRequest, resp *validator.StringResponse, sibling string) {
 	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() || req.ConfigValue.ValueString() == "" {
 		return
@@ -47,6 +49,6 @@ func validateBitbucketKeysSibling(ctx context.Context, req validator.StringReque
 	resp.Diagnostics.AddAttributeError(
 		req.Path,
 		"Conflicting Bitbucket Credentials",
-		"Only one of `password` or `token` may be set.",
+		"Only one of `password` or `token` may be set. Choose `password` for HTTP/app-password auth, or `token` for API-token auth.",
 	)
 }

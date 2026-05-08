@@ -36,7 +36,7 @@ func (e *GithubCredentialProviderType) UnmarshalJSON(data []byte) error {
 type GithubCredentialKeys struct {
 	// GitHub account username associated with the access token.
 	Username string `json:"username"`
-	// GitHub Personal Access Token (PAT) — classic or fine-grained — with `repo` scope. Sensitive.
+	// GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
 	AccessToken string `json:"password"`
 }
 
@@ -69,7 +69,7 @@ type GithubCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
+	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
 	BaseURL *string              `json:"baseUrl,omitempty"`
 	Keys    GithubCredentialKeys `json:"keys"`
 }
@@ -175,7 +175,7 @@ type GithubCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
+	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
 	BaseURL *string                    `json:"baseUrl,omitempty"`
 	Keys    GithubCredentialKeysOutput `json:"keys"`
 }

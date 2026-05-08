@@ -58,7 +58,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL for the self-hosted Gitea instance (required). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is most similar to the target repository; if no ` + "`" + `base_url` + "`" + ` is set on any credential, the longest-lived credential is used. Example: https://gitea.mycompany.com`,
+				Description: `Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
@@ -83,7 +83,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Gitea account password (sensitive).`,
+				Description: `Gitea account password or personal access token (sensitive). Sent to Gitea as HTTP basic-auth password.`,
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,

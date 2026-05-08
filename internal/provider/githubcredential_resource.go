@@ -60,11 +60,11 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `GitHub Personal Access Token (PAT) — classic or fine-grained — with ` + "`" + `repo` + "`" + ` scope. Sensitive.`,
+				Description: `GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires ` + "`" + `repo` + "`" + ` scope; the backend does not enforce specific scopes. Sensitive.`,
 			},
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is most similar to the target repository; if no ` + "`" + `base_url` + "`" + ` is set on any credential, the longest-lived credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs`,
+				Description: `Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,

@@ -60,7 +60,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is most similar to the target repository; if no ` + "`" + `base_url` + "`" + ` is set on any credential, the longest-lived credential is used. Example: https://bitbucket.org/seqeralabs/repo1`,
+				Description: `Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
@@ -85,7 +85,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 				Optional:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Bitbucket app password (sensitive). Generate from Bitbucket account settings. Mutually exclusive with ` + "`" + `token` + "`" + `.`,
+				Description: `Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with ` + "`" + `token` + "`" + `.`,
 				Validators: []validator.String{
 					custom_stringvalidators.BitbucketPasswordValidator(),
 				},
