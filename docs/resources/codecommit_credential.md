@@ -17,11 +17,11 @@ AWS Codecommit repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-variable "codecommit_username" {
+variable "codecommit_access_key" {
   type = string
 }
 
-variable "codecommit_password" {
+variable "codecommit_secret_key" {
   type      = string
   sensitive = true
 }
@@ -30,8 +30,9 @@ resource "seqera_codecommit_credential" "example" {
   name         = "codecommit-main"
   workspace_id = seqera_workspace.main.id
 
-  username = var.codecommit_username
-  password = var.codecommit_password
+  access_key = var.codecommit_access_key
+  secret_key = var.codecommit_secret_key
+  base_url   = "https://git-codecommit.eu-west-1.amazonaws.com"
 }
 ```
 
@@ -42,13 +43,13 @@ resource "seqera_codecommit_credential" "example" {
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
-- `access_key` (String) AWS Access Key ID for CodeCommit (required)
+- `access_key` (String) AWS IAM access key ID for CodeCommit.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS Secret Access Key for CodeCommit (required, sensitive)
+- `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS IAM secret access key for CodeCommit (sensitive).
 
 ### Optional
 
-- `base_url` (String) Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
+- `base_url` (String) Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

@@ -34,10 +34,12 @@ func (e *BitbucketCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type BitbucketCredentialKeys struct {
-	// Bitbucket account username (for app passwords) or email (for API tokens). Required.
+	// Bitbucket account username (for app passwords) or email (for API tokens).
 	Username string `json:"username"`
-	// Bitbucket API token (required, sensitive). App passwords are deprecated.
-	Token string `json:"token"`
+	// Bitbucket app password (sensitive). Generate from Bitbucket account settings. Mutually exclusive with `token`.
+	Password *string `json:"password,omitempty"`
+	// Bitbucket API token (sensitive). Mutually exclusive with `password`.
+	Token *string `json:"token,omitempty"`
 }
 
 func (b *BitbucketCredentialKeys) GetUsername() string {
@@ -47,9 +49,16 @@ func (b *BitbucketCredentialKeys) GetUsername() string {
 	return b.Username
 }
 
-func (b *BitbucketCredentialKeys) GetToken() string {
+func (b *BitbucketCredentialKeys) GetPassword() *string {
 	if b == nil {
-		return ""
+		return nil
+	}
+	return b.Password
+}
+
+func (b *BitbucketCredentialKeys) GetToken() *string {
+	if b == nil {
+		return nil
 	}
 	return b.Token
 }
@@ -69,7 +78,7 @@ type BitbucketCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
+	// Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://bitbucket.org/seqeralabs/repo1
 	BaseURL *string                 `json:"baseUrl,omitempty"`
 	Keys    BitbucketCredentialKeys `json:"keys"`
 }
@@ -149,7 +158,7 @@ func (b *BitbucketCredential) GetKeys() BitbucketCredentialKeys {
 }
 
 type BitbucketCredentialKeysOutput struct {
-	// Bitbucket account username (for app passwords) or email (for API tokens). Required.
+	// Bitbucket account username (for app passwords) or email (for API tokens).
 	Username string `json:"username"`
 }
 
@@ -175,7 +184,7 @@ type BitbucketCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
+	// Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is most similar to the target repository; if no `base_url` is set on any credential, the longest-lived credential is used. Example: https://bitbucket.org/seqeralabs/repo1
 	BaseURL *string                       `json:"baseUrl,omitempty"`
 	Keys    BitbucketCredentialKeysOutput `json:"keys"`
 }
