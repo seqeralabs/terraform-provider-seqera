@@ -13,4 +13,5 @@ resource "seqera_bitbucket_credential" "example" {
 
   username = var.bitbucket_username
   password = var.bitbucket_password
+  base_url = "https://bitbucket.org/seqeralabs"
 }

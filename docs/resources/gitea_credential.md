@@ -44,12 +44,12 @@ resource "seqera_gitea_credential" "example" {
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Gitea account password (required, sensitive)
-- `username` (String) Gitea account username (required)
+- `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Gitea account password or personal access token (sensitive).
+- `username` (String) Gitea account username.
 
 ### Optional
 
-- `base_url` (String) Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com
+- `base_url` (String) Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

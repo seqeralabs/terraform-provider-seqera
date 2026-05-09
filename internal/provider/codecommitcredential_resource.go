@@ -58,12 +58,12 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Required:    true,
-				Description: `AWS Access Key ID for CodeCommit (required)`,
+				Description: `AWS IAM access key ID for CodeCommit.`,
 			},
 			"base_url": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com`,
+				Description: `Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
@@ -93,7 +93,7 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Required:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `AWS Secret Access Key for CodeCommit (required, sensitive)`,
+				Description: `AWS IAM secret access key for CodeCommit (sensitive).`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,

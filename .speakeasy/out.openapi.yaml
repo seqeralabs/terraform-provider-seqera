@@ -23041,8 +23041,8 @@ components:
           x-speakeasy-terraform-ignore: true
         baseUrl:
           type: string
-          description: 'Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs'
-          example: https://bitbucket.org/myorg
+          description: 'Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1'
+          example: https://bitbucket.org/seqeralabs/repo1
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
@@ -23061,18 +23061,26 @@ components:
           type: object
           required:
             - username
-            - token
           properties:
             username:
               type: string
-              description: Bitbucket account username (for app passwords) or email (for API tokens). Required.
+              description: Bitbucket account username (for app passwords) or email (for API tokens).
               example: myuser@example.com
               x-speakeasy-param-computed: false
-            token:
+            password:
               type: string
-              description: Bitbucket API token (required, sensitive). App passwords are deprecated.
+              description: Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
+              x-speakeasy-plan-validators: BitbucketPasswordValidator
+              example: BBDC-...
+              writeOnly: true
+            token:
+              type: string
+              description: Bitbucket API token (sensitive). Mutually exclusive with `password`.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
+              x-speakeasy-plan-validators: BitbucketTokenValidator
               example: ATBB...
               writeOnly: true
     CreateBitbucketCredentialsRequest:
@@ -23148,7 +23156,7 @@ components:
           x-speakeasy-terraform-ignore: true
         baseUrl:
           type: string
-          description: 'Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com'
+          description: 'Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com'
           example: https://git-codecommit.us-east-1.amazonaws.com
           x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
@@ -23172,13 +23180,13 @@ components:
           properties:
             username:
               type: string
-              description: AWS Access Key ID for CodeCommit (required)
+              description: AWS IAM access key ID for CodeCommit.
               example: AKIAIOSFODNN7EXAMPLE
               x-speakeasy-param-computed: false
               x-speakeasy-name-override: access_key
             password:
               type: string
-              description: AWS Secret Access Key for CodeCommit (required, sensitive)
+              description: AWS IAM secret access key for CodeCommit (sensitive).
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
@@ -23488,7 +23496,7 @@ components:
           x-speakeasy-terraform-ignore: true
         baseUrl:
           type: string
-          description: 'Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com'
+          description: 'Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com'
           example: https://gitea.mycompany.com
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
@@ -23511,12 +23519,12 @@ components:
           properties:
             username:
               type: string
-              description: Gitea account username (required)
+              description: Gitea account username.
               example: myuser
               x-speakeasy-param-computed: false
             password:
               type: string
-              description: Gitea account password (required, sensitive)
+              description: Gitea account password or personal access token (sensitive).
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
               example: mypassword
@@ -23594,8 +23602,8 @@ components:
           x-speakeasy-terraform-ignore: true
         baseUrl:
           type: string
-          description: 'Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com'
-          example: https://github.mycompany.com
+          description: 'Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs'
+          example: https://github.com/seqeralabs
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
@@ -23618,11 +23626,11 @@ components:
           properties:
             username:
               type: string
-              description: GitHub username associated with the Personal Access Token (required)
+              description: GitHub account username associated with the access token.
               example: octocat
             password:
               type: string
-              description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
+              description: GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
               example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
@@ -23701,8 +23709,8 @@ components:
           x-speakeasy-terraform-ignore: true
         baseUrl:
           type: string
-          description: 'Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com'
-          example: https://gitlab.mycompany.com
+          description: 'Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs'
+          example: https://gitlab.com/seqeralabs
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
@@ -23725,11 +23733,11 @@ components:
           properties:
             username:
               type: string
-              description: GitLab username associated with the Personal Access Token (required)
+              description: GitLab account username associated with the access token.
               example: gitlab-user
             token:
               type: string
-              description: GitLab Personal Access Token or Project Access Token (required, sensitive)
+              description: GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
               x-speakeasy-param-sensitive: true
               x-speakeasy-terraform-write-only: true
               example: glpat-xxxxxxxxxxxxxxxxxxxx

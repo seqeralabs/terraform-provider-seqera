@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 01318fe35f2b468ba80afe08088bd970
+  docChecksum: f0115aa3d428640f1521547a715cc5f7
   docVersion: 1.147.0
-  speakeasyVersion: 1.761.11
-  generationVersion: 2.881.17
+  speakeasyVersion: 1.762.0
+  generationVersion: 2.882.0
   releaseVersion: 0.40.0-RC2
   configChecksum: c77908dbe8aa95c668e0cdc1862e3c7f
 persistentEdits:
@@ -473,15 +473,15 @@ trackedFiles:
     pristine_git_object: 62f301e24df9501920ae8a9afe8ae7927b82a862
   internal/provider/bitbucketcredential_resource.go:
     id: 99461a76ba60
-    last_write_checksum: sha1:1d5dae518b5de9ed6a3b9ace4a4b1c3df7301962
+    last_write_checksum: sha1:e0429d833c03de274091ee5b19de3038d564b592
     pristine_git_object: ef48989850ba46b7641a28a14055504c1737a53c
   internal/provider/bitbucketcredential_resource_sdk.go:
     id: ea250abc2a72
-    last_write_checksum: sha1:4d21f18905224f7273dd1087df0656331ac860f0
+    last_write_checksum: sha1:155f0083160e07ce4ad7dad16aa9cc63e1570d5e
     pristine_git_object: 8a0bebdcdd3d64be9a83a6a75aa5bc0422f8f3ff
   internal/provider/codecommitcredential_resource.go:
     id: 22c2e9aa4b13
-    last_write_checksum: sha1:e919dfed021e52087fc3b4df37aff92ec2a175de
+    last_write_checksum: sha1:e91652ea75fd58954aab173c976e5f309d24b5ff
     pristine_git_object: 58dcb06c3f42ed4aa8f5bf250a2b70ed4ad235ed
   internal/provider/codecommitcredential_resource_sdk.go:
     id: dcc60e154878
@@ -553,7 +553,7 @@ trackedFiles:
     last_write_checksum: sha1:412c24d954db792925ec76ad94c227be0a624308
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
-    last_write_checksum: sha1:6ae8d03e115448f05d1455a0ee2f1f6811ab29f9
+    last_write_checksum: sha1:3274fc24e8054c69230765729ad456d66f4fae50
     pristine_git_object: 511473aefa420f60b1e0fdd850d0d2360c7cd1aa
   internal/provider/giteacredential_resource_sdk.go:
     id: 63ee809ee195
@@ -561,7 +561,7 @@ trackedFiles:
     pristine_git_object: 71e29ff10c22205eab4418ac0b8a92152cc5b23d
   internal/provider/githubcredential_resource.go:
     id: e1f090a0cb9e
-    last_write_checksum: sha1:188312fea5a86ad334c087ac2392ba63d38f2c2a
+    last_write_checksum: sha1:51e774b13b7ae0ea1c96ff69ce07f5964ea5171a
     pristine_git_object: c6a4da7de3d8a1ca06c268021bcb56ba09f3c9f1
   internal/provider/githubcredential_resource_sdk.go:
     id: bc2bee614a62
@@ -569,7 +569,7 @@ trackedFiles:
     pristine_git_object: 01c4b02c388b5caf56516bd71e9a2176973234b2
   internal/provider/gitlabcredential_resource.go:
     id: fcb86103d097
-    last_write_checksum: sha1:62ad11d73226d6163a03a9bb3262194871bb3453
+    last_write_checksum: sha1:ded1df7d5778dd4b89755c235b25fdd9e4b0d80f
     pristine_git_object: 5b27290c979fb073cf156f1babc37c36cde9ab8e
   internal/provider/gitlabcredential_resource_sdk.go:
     id: a6c217015659
@@ -2383,7 +2383,7 @@ trackedFiles:
     pristine_git_object: a19c8ae0ccb9dac4d7e8a63edfa348c0b6b3b3b2
   internal/sdk/models/shared/bitbucketcredential.go:
     id: 7dd213344297
-    last_write_checksum: sha1:82cca74f0f2ce6d853aa3d9cf905de1073578ec4
+    last_write_checksum: sha1:0e6dd2e4f2f0cf6d81d6cef5ec8d314ff76451dd
     pristine_git_object: 4640c93ca517620630d52210c4f3c131d9acdd31
   internal/sdk/models/shared/bucket.go:
     id: c799c619a5f3
@@ -2407,7 +2407,7 @@ trackedFiles:
     pristine_git_object: cc8547dd4b50e53073c00a2e2f3181a9fd23786a
   internal/sdk/models/shared/codecommitcredential.go:
     id: 5344cf634ea1
-    last_write_checksum: sha1:3441fcab6ab8f43df13f9d3cd4fdfc3f037c126f
+    last_write_checksum: sha1:9a8ff7eeea5d4e4fc537a4e7ba2ad7ad598490b9
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     last_write_checksum: sha1:4ff1675b2e7a0ecc77570aeb5dabf311f751b2cb
@@ -3113,7 +3113,7 @@ trackedFiles:
     pristine_git_object: f2dfcf01b5586b5f4fabf4179fc9f48717d201d9
   internal/sdk/models/shared/giteacredential.go:
     id: dfce6a8fcdf0
-    last_write_checksum: sha1:11aa2dfc12378b7538670c6872af00bf1ccef2f8
+    last_write_checksum: sha1:7282b2a6760534ad4f84413596a79c70a14accfd
     pristine_git_object: 7637ba2ec7d6a8ecf7312350d60e081f096f9a96
   internal/sdk/models/shared/githubactionconfig.go:
     id: f9c267b87cce
@@ -3125,11 +3125,11 @@ trackedFiles:
     pristine_git_object: 17c90fd61a9fdd0f3467eccfeab719d950ad8d75
   internal/sdk/models/shared/githubcredential.go:
     id: ff7ad720d02c
-    last_write_checksum: sha1:69684164e86bc1ec2d46f22de13455756be17867
+    last_write_checksum: sha1:40f553bdfc808f94b2c511e9521b1631d386dcae
     pristine_git_object: 79b31488d52fa8ac1243a3872b8897e67b34dd4b
   internal/sdk/models/shared/gitlabcredential.go:
     id: 22d18787c458
-    last_write_checksum: sha1:1e9b87549b018de105bc8fd9e6805f01faedc8e3
+    last_write_checksum: sha1:43f9370a5b6bb106e153100e436d7ed980003404
     pristine_git_object: 05f9c000d0738657deb5c5f3bee3445ac5780f92
   internal/sdk/models/shared/gkeplatformmetainfo.go:
     id: e8e0a0401118
@@ -3911,7 +3911,7 @@ trackedFiles:
     last_write_checksum: sha1:84fef173ddc771401f52a4c084d5a3e1b07f776e
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:d5642398b46a0fd953805293f4e72713a552e0e3
+    last_write_checksum: sha1:3a09040a82da5ad5446ffe297629b3dce887868e
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
@@ -4531,7 +4531,7 @@ examples:
   CreateBitbucketCredentials:
     speakeasy-default-create-bitbucket-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}}
       responses:
         "200":
           application/json: {}
@@ -4553,7 +4553,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}}
       responses:
         "400":
           application/json: {"message": "<value>"}

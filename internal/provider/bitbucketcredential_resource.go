@@ -19,6 +19,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -41,6 +42,7 @@ type BitbucketCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
 	Name          types.String `tfsdk:"name"`
+	Password      types.String `tfsdk:"password"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Token         types.String `tfsdk:"token"`
 	Username      types.String `tfsdk:"username"`
@@ -58,7 +60,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
+				Description: `Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
@@ -79,20 +81,32 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
+			"password": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				WriteOnly:   true,
+				Description: `Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with ` + "`" + `token` + "`" + `.`,
+				Validators: []validator.String{
+					custom_stringvalidators.BitbucketPasswordValidator(),
+				},
+			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`bitbucket`),
 				Description: `Cloud provider type (automatically set to "bitbucket"). Default: "bitbucket"`,
 			},
 			"token": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Sensitive:   true,
 				WriteOnly:   true,
-				Description: `Bitbucket API token (required, sensitive). App passwords are deprecated.`,
+				Description: `Bitbucket API token (sensitive). Mutually exclusive with ` + "`" + `password` + "`" + `.`,
+				Validators: []validator.String{
+					custom_stringvalidators.BitbucketTokenValidator(),
+				},
 			},
 			"username": schema.StringAttribute{
 				Required:    true,
-				Description: `Bitbucket account username (for app passwords) or email (for API tokens). Required.`,
+				Description: `Bitbucket account username (for app passwords) or email (for API tokens).`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,
