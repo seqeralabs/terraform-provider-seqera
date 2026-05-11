@@ -8,7 +8,9 @@ import (
 
 type GoogleInstanceType struct {
 	Arch *string `json:"arch,omitempty"`
-	ID   *string `json:"id,omitempty"`
+	// Capability features advertised for this instance type (e.g. GPU). Absent when the data source does not publish features; an empty list means none.
+	Features []Feature `json:"features,omitempty"`
+	ID       *string   `json:"id,omitempty"`
 }
 
 func (g GoogleInstanceType) MarshalJSON() ([]byte, error) {
@@ -27,6 +29,13 @@ func (g *GoogleInstanceType) GetArch() *string {
 		return nil
 	}
 	return g.Arch
+}
+
+func (g *GoogleInstanceType) GetFeatures() []Feature {
+	if g == nil {
+		return nil
+	}
+	return g.Features
 }
 
 func (g *GoogleInstanceType) GetID() *string {

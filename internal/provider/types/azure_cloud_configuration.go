@@ -7,23 +7,22 @@ import (
 )
 
 type AzureCloudConfiguration struct {
-	DataCollectionEndpoint  types.String           `tfsdk:"data_collection_endpoint"`
-	DataCollectionRuleID    types.String           `tfsdk:"data_collection_rule_id"`
-	EnableFusion            types.Bool             `tfsdk:"enable_fusion"`
-	EnableWave              types.Bool             `tfsdk:"enable_wave"`
-	Environment             []ConfigEnvVariable    `tfsdk:"environment"`
-	ForgedResources         []MapEntryStringString `tfsdk:"forged_resources"`
-	InstanceType            types.String           `tfsdk:"instance_type"`
-	LogTableName            types.String           `tfsdk:"log_table_name"`
-	LogWorkspaceID          types.String           `tfsdk:"log_workspace_id"`
-	ManagedIdentityClientID types.String           `tfsdk:"managed_identity_client_id"`
-	ManagedIdentityID       types.String           `tfsdk:"managed_identity_id"`
-	NetworkID               types.String           `tfsdk:"network_id"`
-	NextflowConfig          types.String           `tfsdk:"nextflow_config"`
-	PostRunScript           types.String           `tfsdk:"post_run_script"`
-	PreRunScript            types.String           `tfsdk:"pre_run_script"`
-	Region                  types.String           `tfsdk:"region"`
-	ResourceGroup           types.String           `tfsdk:"resource_group"`
-	SubscriptionID          types.String           `tfsdk:"subscription_id"`
-	WorkDir                 types.String           `tfsdk:"work_dir"`
+	DataCollectionEndpoint  types.String        `tfsdk:"data_collection_endpoint"`
+	DataCollectionRuleID    types.String        `tfsdk:"data_collection_rule_id"`
+	EnableFusion            types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave              types.Bool          `tfsdk:"enable_wave"`
+	Environment             []ConfigEnvVariable `tfsdk:"environment"`
+	InstanceType            types.String        `tfsdk:"instance_type"`
+	LogTableName            types.String        `tfsdk:"log_table_name"`
+	LogWorkspaceID          types.String        `tfsdk:"log_workspace_id"`
+	ManagedIdentityClientID types.String        `tfsdk:"managed_identity_client_id"`
+	ManagedIdentityID       types.String        `tfsdk:"managed_identity_id"`
+	NetworkID               types.String        `tfsdk:"network_id"`
+	NextflowConfig          types.String        `tfsdk:"nextflow_config"`
+	PostRunScript           types.String        `tfsdk:"post_run_script"`
+	PreRunScript            types.String        `tfsdk:"pre_run_script"`
+	Region                  types.String        `tfsdk:"region"`
+	ResourceGroup           types.String        `tfsdk:"resource_group"`
+	SubscriptionID          types.String        `tfsdk:"subscription_id"`
+	WorkDir                 types.String        `tfsdk:"work_dir"`
 }

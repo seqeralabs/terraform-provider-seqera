@@ -37,6 +37,7 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			}
 			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
 		}
+		r.SchedEnabled = types.BoolPointerValue(resp.SchedEnabled)
 		if resp.Workflow == nil {
 			r.Workflow = nil
 		} else {

@@ -14,7 +14,9 @@ type ProcessLoad struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	CPULoad int64 `json:"cpuLoad"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Cpus int64 `json:"cpus"`
+	Cpus           int64  `json:"cpus"`
+	CPUShareMillis *int64 `json:"cpuShareMillis,omitempty"`
+	CPUShares      *int64 `json:"cpuShares,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	CPUTime     int64      `json:"cpuTime"`
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
@@ -91,6 +93,20 @@ func (p *ProcessLoad) GetCpus() int64 {
 		return 0
 	}
 	return p.Cpus
+}
+
+func (p *ProcessLoad) GetCPUShareMillis() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CPUShareMillis
+}
+
+func (p *ProcessLoad) GetCPUShares() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CPUShares
 }
 
 func (p *ProcessLoad) GetCPUTime() int64 {

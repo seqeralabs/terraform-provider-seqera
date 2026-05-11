@@ -15,9 +15,6 @@ type AzCloudConfig struct {
 	// Each variable can target the head node, compute nodes, or both.
 	//
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Read-only list of resources provisioned for this compute environment.
-	//
-	ForgedResources []MapEntryStringString `json:"forgedResources,omitempty"`
 	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -99,13 +96,6 @@ func (a *AzCloudConfig) GetEnvironment() []ConfigEnvVariable {
 		return nil
 	}
 	return a.Environment
-}
-
-func (a *AzCloudConfig) GetForgedResources() []MapEntryStringString {
-	if a == nil {
-		return nil
-	}
-	return a.ForgedResources
 }
 
 func (a *AzCloudConfig) GetEnableFusion() *bool {

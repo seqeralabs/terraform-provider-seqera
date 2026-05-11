@@ -7,8 +7,10 @@ import (
 )
 
 type InstanceType struct {
-	Arch string  `json:"arch"`
-	ID   *string `json:"id,omitempty"`
+	Arch string `json:"arch"`
+	// Capability features advertised for this instance type (e.g. GPU, NVMe). Absent when the data source does not publish features; an empty list means none.
+	Features []Feature `json:"features,omitempty"`
+	ID       *string   `json:"id,omitempty"`
 }
 
 func (i InstanceType) MarshalJSON() ([]byte, error) {
@@ -27,6 +29,13 @@ func (i *InstanceType) GetArch() string {
 		return ""
 	}
 	return i.Arch
+}
+
+func (i *InstanceType) GetFeatures() []Feature {
+	if i == nil {
+		return nil
+	}
+	return i.Features
 }
 
 func (i *InstanceType) GetID() *string {

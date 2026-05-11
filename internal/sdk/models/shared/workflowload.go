@@ -14,6 +14,8 @@ type WorkflowLoad struct {
 	CPUEfficiency        *float32   `json:"cpuEfficiency,omitempty"`
 	CPULoad              int64      `json:"cpuLoad"`
 	Cpus                 int64      `json:"cpus"`
+	CPUShareMillis       *int64     `json:"cpuShareMillis,omitempty"`
+	CPUShares            *int64     `json:"cpuShares,omitempty"`
 	CPUTime              int64      `json:"cpuTime"`
 	DateCreated          *time.Time `json:"dateCreated,omitempty"`
 	Executors            []string   `json:"executors,omitempty"`
@@ -26,12 +28,16 @@ type WorkflowLoad struct {
 	MemoryEfficiency     *float32   `json:"memoryEfficiency,omitempty"`
 	MemoryReq            int64      `json:"memoryReq"`
 	MemoryRss            int64      `json:"memoryRss"`
+	NetCPUShareMillis    *int64     `json:"netCpuShareMillis,omitempty"`
+	NetCPUShares         *int64     `json:"netCpuShares,omitempty"`
 	NumSpotInterruptions *int       `json:"numSpotInterruptions,omitempty"`
 	PeakCpus             int64      `json:"peakCpus"`
 	PeakMemory           int64      `json:"peakMemory"`
 	PeakTasks            int64      `json:"peakTasks"`
 	Pending              int64      `json:"pending"`
 	ReadBytes            int64      `json:"readBytes"`
+	RequestedCPUTime     *int64     `json:"requestedCpuTime,omitempty"`
+	RequestedMemory      *int64     `json:"requestedMemory,omitempty"`
 	Running              int64      `json:"running"`
 	Submitted            int64      `json:"submitted"`
 	Succeeded            int64      `json:"succeeded"`
@@ -90,6 +96,20 @@ func (w *WorkflowLoad) GetCpus() int64 {
 		return 0
 	}
 	return w.Cpus
+}
+
+func (w *WorkflowLoad) GetCPUShareMillis() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.CPUShareMillis
+}
+
+func (w *WorkflowLoad) GetCPUShares() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.CPUShares
 }
 
 func (w *WorkflowLoad) GetCPUTime() int64 {
@@ -176,6 +196,20 @@ func (w *WorkflowLoad) GetMemoryRss() int64 {
 	return w.MemoryRss
 }
 
+func (w *WorkflowLoad) GetNetCPUShareMillis() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.NetCPUShareMillis
+}
+
+func (w *WorkflowLoad) GetNetCPUShares() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.NetCPUShares
+}
+
 func (w *WorkflowLoad) GetNumSpotInterruptions() *int {
 	if w == nil {
 		return nil
@@ -216,6 +250,20 @@ func (w *WorkflowLoad) GetReadBytes() int64 {
 		return 0
 	}
 	return w.ReadBytes
+}
+
+func (w *WorkflowLoad) GetRequestedCPUTime() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.RequestedCPUTime
+}
+
+func (w *WorkflowLoad) GetRequestedMemory() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.RequestedMemory
 }
 
 func (w *WorkflowLoad) GetRunning() int64 {

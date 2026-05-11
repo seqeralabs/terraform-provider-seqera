@@ -2,9 +2,6 @@
 
 package shared
 
-type GoogleCloudConfigForgedResource struct {
-}
-
 type GoogleCloudConfig struct {
 	// Enable ARM64 (Tau T2A) machine types for compute instances.
 	// When enabled, ARM-based machines will be selected for cost savings.
@@ -19,9 +16,6 @@ type GoogleCloudConfig struct {
 	// Each variable can target the head node, compute nodes, or both.
 	//
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Read-only list of resources provisioned for this compute environment.
-	//
-	ForgedResources []map[string]GoogleCloudConfigForgedResource `json:"forgedResources,omitempty"`
 	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -101,13 +95,6 @@ func (g *GoogleCloudConfig) GetEnvironment() []ConfigEnvVariable {
 		return nil
 	}
 	return g.Environment
-}
-
-func (g *GoogleCloudConfig) GetForgedResources() []map[string]GoogleCloudConfigForgedResource {
-	if g == nil {
-		return nil
-	}
-	return g.ForgedResources
 }
 
 func (g *GoogleCloudConfig) GetEnableFusion() *bool {

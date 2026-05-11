@@ -1683,9 +1683,6 @@ type AzureCloudConfiguration struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Read-only list of resources provisioned for this compute environment.
-	//
-	ForgedResources []MapEntryStringString `json:"forgedResources,omitempty"`
 	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -1774,13 +1771,6 @@ func (a *AzureCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 		return nil
 	}
 	return a.Environment
-}
-
-func (a *AzureCloudConfiguration) GetForgedResources() []MapEntryStringString {
-	if a == nil {
-		return nil
-	}
-	return a.ForgedResources
 }
 
 func (a *AzureCloudConfiguration) GetEnableFusion() *bool {
@@ -2184,20 +2174,6 @@ func (a *AzureBatchConfiguration) GetWorkerPool() *string {
 	return a.WorkerPool
 }
 
-type ComputeConfigGoogleCloudConfigForgedResource struct {
-}
-
-func (c ComputeConfigGoogleCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *ComputeConfigGoogleCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 type GoogleCloudConfiguration struct {
 	// Enable ARM64 (Tau T2A) machine types for compute instances.
 	// When enabled, ARM-based machines will be selected for cost savings.
@@ -2210,9 +2186,6 @@ type GoogleCloudConfiguration struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Read-only list of resources provisioned for this compute environment.
-	//
-	ForgedResources []map[string]ComputeConfigGoogleCloudConfigForgedResource `json:"forgedResources,omitempty"`
 	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -2298,13 +2271,6 @@ func (g *GoogleCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 		return nil
 	}
 	return g.Environment
-}
-
-func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]ComputeConfigGoogleCloudConfigForgedResource {
-	if g == nil {
-		return nil
-	}
-	return g.ForgedResources
 }
 
 func (g *GoogleCloudConfiguration) GetEnableFusion() *bool {
@@ -2843,20 +2809,6 @@ func (s *SeqeraComputeConfiguration) GetWorkDir() *string {
 	return s.WorkDir
 }
 
-type AwsCloudConfigForgedResource struct {
-}
-
-func (a AwsCloudConfigForgedResource) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AwsCloudConfigForgedResource) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 type AWSCloudConfiguration struct {
 	// List of additional S3 bucket names that compute jobs are allowed to access.
 	// The work directory bucket is automatically included.
@@ -2877,8 +2829,7 @@ type AWSCloudConfiguration struct {
 	//
 	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable                       `json:"environment,omitempty"`
-	ForgedResources []map[string]AwsCloudConfigForgedResource `json:"forgedResources,omitempty"`
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -2985,13 +2936,6 @@ func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 		return nil
 	}
 	return a.Environment
-}
-
-func (a *AWSCloudConfiguration) GetForgedResources() []map[string]AwsCloudConfigForgedResource {
-	if a == nil {
-		return nil
-	}
-	return a.ForgedResources
 }
 
 func (a *AWSCloudConfiguration) GetEnableFusion() *bool {
@@ -3106,20 +3050,6 @@ func (a *AWSCloudConfiguration) GetWorkDir() *string {
 	return a.WorkDir
 }
 
-type ComputeConfigAwsBatchConfigForgedResource struct {
-}
-
-func (c ComputeConfigAwsBatchConfigForgedResource) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *ComputeConfigAwsBatchConfigForgedResource) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
 type AWSBatchConfiguration struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
@@ -3147,9 +3077,8 @@ type AWSBatchConfiguration struct {
 	// Must have permissions for ECR and CloudWatch Logs.
 	// Format: arn:aws:iam::account-id:role/role-name
 	//
-	ExecutionRole   *string                                                `json:"executionRole,omitempty"`
-	Forge           *ForgeConfig                                           `json:"forge,omitempty"`
-	ForgedResources []map[string]ComputeConfigAwsBatchConfigForgedResource `json:"forgedResources,omitempty"`
+	ExecutionRole *string      `json:"executionRole,omitempty"`
+	Forge         *ForgeConfig `json:"forge,omitempty"`
 	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
 	// speeding up most operations.
 	//
@@ -3281,13 +3210,6 @@ func (a *AWSBatchConfiguration) GetForge() *ForgeConfig {
 		return nil
 	}
 	return a.Forge
-}
-
-func (a *AWSBatchConfiguration) GetForgedResources() []map[string]ComputeConfigAwsBatchConfigForgedResource {
-	if a == nil {
-		return nil
-	}
-	return a.ForgedResources
 }
 
 func (a *AWSBatchConfiguration) GetEnableFusion() *bool {

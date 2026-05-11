@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.147.0
+  version: 1.153.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -6593,6 +6593,16 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: sched
+          in: query
+          description: When true, narrow the catalog to Scheduler-compatible instance types (AWS only).
+          schema:
+            type: boolean
+        - name: nvme
+          in: query
+          description: When true, narrow the catalog to NVMe-equipped instance types (AWS only).
+          schema:
+            type: boolean
         - name: regionId
           in: query
           required: true
@@ -7444,7 +7454,7 @@ paths:
     put:
       operationId: UpdateDataStudio
       summary: Update a Studio
-      description: Updates the given Studio session ID. Can only update non-running Studios.
+      description: Updates the given Studio session ID. Can only update non-running Studios. The compute environment can be changed by setting `computeEnvId` to a CE compatible with the Studio's current one; see `GET /studios/{sessionId}/compatible-ce`.
       parameters:
         - name: sessionId
           in: path
@@ -7659,6 +7669,43 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Conflict, when the checkpoint name conflicts with an existing checkpoint for the same Studio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+  /studios/{sessionId}/compatible-ce:
+    get:
+      operationId: ListDataStudioCompatibleComputeEnvs
+      summary: List compute environments compatible with a Studio
+      description: Lists the compute environments in the same workspace as the given Studio that are compatible with its compute environment.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session numeric identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListComputeEnvsResponse'
+        '403':
+          description: Operation not allowed.
+        '404':
+          description: NotFound, when the Studio is not found, has no compute environment, or when the API is disabled for the workspace.
           content:
             application/json:
               schema:
@@ -9930,6 +9977,13 @@ components:
           type: string
         computeQueue:
           type: string
+        deletedResources:
+          type: array
+          items:
+            additionalProperties:
+              type: object
+            type: object
+          readOnly: true
         discriminator:
           description: property to select the compute config platform
           type: string
@@ -10059,6 +10113,13 @@ components:
             type: string
         arm64Enabled:
           type: boolean
+        deletedResources:
+          type: array
+          items:
+            additionalProperties:
+              type: object
+            type: object
+          readOnly: true
         discriminator:
           description: property to select the compute config platform
           type: string
@@ -11905,6 +11966,9 @@ components:
     DataStudioUpdateRequest:
       type: object
       properties:
+        computeEnvId:
+          type: string
+          nullable: true
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
@@ -12276,6 +12340,9 @@ components:
           $ref: '#/components/schemas/ComputePlatformDto'
         progress:
           $ref: '#/components/schemas/ProgressData'
+        schedEnabled:
+          type: boolean
+          nullable: true
         workflow:
           $ref: '#/components/schemas/WorkflowMaxDbDto'
         workspaceId:
@@ -12386,6 +12453,15 @@ components:
           type: boolean
         source:
           type: string
+    Feature:
+      type: string
+      enum:
+        - AMD
+        - ARM
+        - SCHED
+        - GPU
+        - FPGA
+        - NVME
     ForgeConfig:
       type: object
       properties:
@@ -12857,6 +12933,11 @@ components:
       properties:
         arch:
           type: string
+        features:
+          description: Capability features advertised for this instance type (e.g. GPU). Absent when the data source does not publish features; an empty list means none.
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
         id:
           type: string
     GoogleLifeSciencesConfig:
@@ -13050,6 +13131,11 @@ components:
       properties:
         arch:
           type: string
+        features:
+          description: Capability features advertised for this instance type (e.g. GPU, NVMe). Absent when the data source does not publish features; an empty list means none.
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
         id:
           type: string
       required:
@@ -14461,6 +14547,14 @@ components:
           type: integer
           format: int64
           deprecated: true
+        cpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        cpuShares:
+          type: integer
+          format: int64
+          nullable: true
         cpuTime:
           type: integer
           format: int64
@@ -14744,6 +14838,11 @@ components:
     SchedConfig:
       type: object
       properties:
+        machineTypes:
+          description: EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task.
+          type: array
+          items:
+            type: string
         provisioningModel:
           type: string
           enum:
@@ -16541,6 +16640,14 @@ components:
         cpus:
           type: integer
           format: int64
+        cpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        cpuShares:
+          type: integer
+          format: int64
+          nullable: true
         cpuTime:
           type: integer
           format: int64
@@ -16589,6 +16696,14 @@ components:
         netCpus:
           type: integer
           format: int64
+        netCpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        netCpuShares:
+          type: integer
+          format: int64
+          nullable: true
         netCpuTime:
           type: integer
           format: int64
@@ -16630,6 +16745,14 @@ components:
         readBytes:
           type: integer
           format: int64
+        requestedCpuTime:
+          type: integer
+          format: int64
+          nullable: true
+        requestedMemory:
+          type: integer
+          format: int64
+          nullable: true
         retries:
           type: integer
           format: int64
