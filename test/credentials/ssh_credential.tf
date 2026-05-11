@@ -12,8 +12,7 @@ resource "seqera_ssh_credential" "example_no_passphrase" {
     -----END OPENSSH PRIVATE KEY-----
   EOT
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Output the credential ID

@@ -22,3 +22,8 @@ variable "seqera_bearer_auth" {
   type        = string
   sensitive   = true
 }
+
+variable "seqera_workspace_id" {
+  description = "Seqera workspace numeric identifier. All typed credential resources require a workspace."
+  type        = number
+}

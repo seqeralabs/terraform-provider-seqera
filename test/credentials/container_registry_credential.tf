@@ -8,8 +8,7 @@ resource "seqera_container_registry_credential" "example_docker_hub" {
   password  = "example-docker-password-123456"
   registry  = "docker.io"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # AWS ECR credential
@@ -19,8 +18,7 @@ resource "seqera_container_registry_credential" "example_ecr" {
   password  = "example-ecr-token-base64-encoded-string-123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   registry  = "123456789012.dkr.ecr.us-east-1.amazonaws.com"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Google Container Registry (GCR) credential
@@ -36,8 +34,7 @@ resource "seqera_container_registry_credential" "example_gcr" {
   })
   registry = "gcr.io"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Google Artifact Registry (GAR) credential
@@ -53,8 +50,7 @@ resource "seqera_container_registry_credential" "example_gar" {
   })
   registry = "us-east1-docker.pkg.dev"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Azure Container Registry (ACR) credential
@@ -64,8 +60,7 @@ resource "seqera_container_registry_credential" "example_acr" {
   password  = "example-acr-password-123456"
   registry  = "exampleregistry.azurecr.io"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # GitHub Container Registry (GHCR) credential
@@ -75,8 +70,7 @@ resource "seqera_container_registry_credential" "example_ghcr" {
   password  = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
   registry  = "ghcr.io"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # GitLab Container Registry credential
@@ -86,8 +80,7 @@ resource "seqera_container_registry_credential" "example_gitlab_registry" {
   password  = "glpat-ExamplePersonalAccessToken1234567890AB"
   registry  = "registry.gitlab.com"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Quay.io credential
@@ -97,8 +90,7 @@ resource "seqera_container_registry_credential" "example_quay" {
   password  = "example-quay-password-123456"
   registry  = "quay.io"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Private/Custom Container Registry credential
@@ -108,8 +100,7 @@ resource "seqera_container_registry_credential" "example_private" {
   password  = "example-private-password-123456"
   registry  = "registry.example.com"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Output the credential ID

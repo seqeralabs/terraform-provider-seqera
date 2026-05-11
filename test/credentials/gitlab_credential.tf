@@ -7,8 +7,7 @@ resource "seqera_gitlab_credential" "example_gitlab_com" {
   username = "example-gitlab-user"
   token    = "glpat-ExamplePersonalAccessToken1234567890AB"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # GitLab credential for self-hosted GitLab instance
@@ -18,8 +17,7 @@ resource "seqera_gitlab_credential" "example_self_hosted" {
   token    = "glpat-ExamplePersonalAccessToken1234567890AB"
   base_url = "https://gitlab.example.com"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = var.seqera_workspace_id
 }
 
 # Output the credential ID
