@@ -9,14 +9,14 @@ import (
 
 type CreateContainerRegistryCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Container registry credentials create request
 	CreateContainerRegistryCredentialsRequest shared.CreateContainerRegistryCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateContainerRegistryCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateContainerRegistryCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

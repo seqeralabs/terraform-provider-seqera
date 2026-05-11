@@ -60,12 +60,9 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialOutput(ctx co
 func (r *SSHCredentialResourceModel) ToOperationsCreateSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*operations.CreateSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createSSHCredentialsRequest, createSSHCredentialsRequestDiags := r.ToSharedCreateSSHCredentialsRequest(ctx, opts)
 	diags.Append(createSSHCredentialsRequestDiags...)
 
@@ -87,12 +84,9 @@ func (r *SSHCredentialResourceModel) ToOperationsDeleteSSHCredentialsRequest(ctx
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteSSHCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -124,12 +118,9 @@ func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateSSHCredentialsRequest, updateSSHCredentialsRequestDiags := r.ToSharedUpdateSSHCredentialsRequest(ctx, opts)
 	diags.Append(updateSSHCredentialsRequestDiags...)
 

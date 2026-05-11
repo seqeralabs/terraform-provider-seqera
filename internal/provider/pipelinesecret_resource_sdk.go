@@ -77,12 +77,9 @@ func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ct
 	var secretID int64
 	secretID = r.SecretID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeletePipelineSecretRequest{
 		SecretID:    secretID,
 		WorkspaceID: workspaceID,
@@ -97,12 +94,9 @@ func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(
 	var secretID int64
 	secretID = r.SecretID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribePipelineSecretRequest{
 		SecretID:    secretID,
 		WorkspaceID: workspaceID,
@@ -117,12 +111,9 @@ func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ct
 	var secretID int64
 	secretID = r.SecretID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updatePipelineSecretRequest, updatePipelineSecretRequestDiags := r.ToSharedUpdatePipelineSecretRequest(ctx)
 	diags.Append(updatePipelineSecretRequestDiags...)
 

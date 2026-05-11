@@ -9,14 +9,14 @@ import (
 
 type CreateCodecommitCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Codecommit credentials create request
 	CreateCodecommitCredentialsRequest shared.CreateCodecommitCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateCodecommitCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateCodecommitCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

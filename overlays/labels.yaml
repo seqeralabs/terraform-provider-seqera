@@ -164,6 +164,17 @@ actions:
     update:
       description: "Workspace numeric identifier where the label is defined"
 
+  # Make workspaceId required across all label operations (workspace-scoped only)
+  - target: $.paths["/labels"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/labels/{labelId}"].put.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/labels/{labelId}"].delete.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
   # UpdateLabelRequest validators
   - target: $.components.schemas.UpdateLabelRequest.properties.name
     update:

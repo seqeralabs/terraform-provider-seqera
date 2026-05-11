@@ -88,7 +88,7 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

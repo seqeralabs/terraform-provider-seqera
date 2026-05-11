@@ -11,7 +11,7 @@ type UpdateTowerAgentCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Tower Agent credentials update request
 	UpdateTowerAgentCredentialsRequest shared.UpdateTowerAgentCredentialsRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateTowerAgentCredentialsRequest) GetCredentialsID() string {
 	return u.CredentialsID
 }
 
-func (u *UpdateTowerAgentCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateTowerAgentCredentialsRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

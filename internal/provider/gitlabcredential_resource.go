@@ -97,7 +97,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `GitLab account username associated with the access token.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

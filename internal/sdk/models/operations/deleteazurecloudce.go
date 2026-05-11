@@ -11,7 +11,7 @@ type DeleteAzureCloudCERequest struct {
 	// Compute environment string identifier
 	ComputeEnvID string `pathParam:"style=simple,explode=false,name=computeEnvId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeleteAzureCloudCERequest) GetComputeEnvID() string {
@@ -21,9 +21,9 @@ func (d *DeleteAzureCloudCERequest) GetComputeEnvID() string {
 	return d.ComputeEnvID
 }
 
-func (d *DeleteAzureCloudCERequest) GetWorkspaceID() *int64 {
+func (d *DeleteAzureCloudCERequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

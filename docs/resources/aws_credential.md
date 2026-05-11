@@ -128,6 +128,7 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 ### Required
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -138,7 +139,6 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 - `mode` (String) must be one of ["keys", "role"]
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `use_external_id` (Boolean) Generate External ID for AWS credentials (requires IAM Role ARN)
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

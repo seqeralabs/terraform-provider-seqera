@@ -97,7 +97,7 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 				Description: `Username for container registry authentication (required)`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

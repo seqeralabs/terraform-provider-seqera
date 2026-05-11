@@ -11,7 +11,7 @@ type UpdateAWSCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Generate External ID for AWS credentials (requires IAM Role ARN)
 	UseExternalID *bool `queryParam:"style=form,explode=true,name=useExternalId"`
 	// AWS credentials update request
@@ -25,9 +25,9 @@ func (u *UpdateAWSCredentialsRequest) GetCredentialsID() string {
 	return u.CredentialsID
 }
 
-func (u *UpdateAWSCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateAWSCredentialsRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

@@ -93,7 +93,7 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `When enabled, all workspace users can access the same Tower Agent instance. Default: false`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

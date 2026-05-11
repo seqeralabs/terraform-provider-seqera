@@ -76,12 +76,9 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 func (r *GoogleCredentialResourceModel) ToOperationsCreateGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*operations.CreateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createGoogleCredentialsRequest, createGoogleCredentialsRequestDiags := r.ToSharedCreateGoogleCredentialsRequest(ctx, opts)
 	diags.Append(createGoogleCredentialsRequestDiags...)
 
@@ -103,12 +100,9 @@ func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsReque
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteGoogleCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -140,12 +134,9 @@ func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsReque
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateGoogleCredentialsRequest, updateGoogleCredentialsRequestDiags := r.ToSharedUpdateGoogleCredentialsRequest(ctx, opts)
 	diags.Append(updateGoogleCredentialsRequestDiags...)
 

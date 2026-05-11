@@ -83,6 +83,7 @@ resource "seqera_pipeline" "shared" {
 
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `name` (String) Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
+- `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 
@@ -90,7 +91,6 @@ resource "seqera_pipeline" "shared" {
 - `icon` (String) Icon identifier or URL for visual representation
 - `label_ids` (List of Number)
 - `version` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--version))
-- `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 

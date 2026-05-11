@@ -110,12 +110,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_pipeline_secret.my_seqera_pipeline_secret
-  id = 0
+  id = jsonencode({
+    secret_id    = 0
+    workspace_id = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_pipeline_secret.my_seqera_pipeline_secret 0
+terraform import seqera_pipeline_secret.my_seqera_pipeline_secret '{"secret_id": 0, "workspace_id": 0}'
 ```

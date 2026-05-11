@@ -46,11 +46,11 @@ resource "seqera_codecommit_credential" "example" {
 - `access_key` (String) AWS IAM access key ID for CodeCommit.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS IAM secret access key for CodeCommit (sensitive).
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `base_url` (String) Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

@@ -39,12 +39,9 @@ func (r *LabelsResourceModel) RefreshFromSharedUpdateLabelResponse(ctx context.C
 func (r *LabelsResourceModel) ToOperationsCreateLabelRequest(ctx context.Context) (*operations.CreateLabelRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createLabelRequest, createLabelRequestDiags := r.ToSharedCreateLabelRequest(ctx)
 	diags.Append(createLabelRequestDiags...)
 
@@ -66,12 +63,9 @@ func (r *LabelsResourceModel) ToOperationsDeleteLabelRequest(ctx context.Context
 	var labelID int64
 	labelID = r.LabelID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteLabelRequest{
 		LabelID:     labelID,
 		WorkspaceID: workspaceID,
@@ -109,12 +103,9 @@ func (r *LabelsResourceModel) ToOperationsUpdateLabelRequest(ctx context.Context
 	var labelID int64
 	labelID = r.LabelID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateLabelRequest, updateLabelRequestDiags := r.ToSharedUpdateLabelRequest(ctx)
 	diags.Append(updateLabelRequestDiags...)
 

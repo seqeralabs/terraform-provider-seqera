@@ -98,7 +98,7 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `AWS IAM secret access key for CodeCommit (sensitive).`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

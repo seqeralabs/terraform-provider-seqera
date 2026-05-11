@@ -75,12 +75,9 @@ func (r *CodecommitCredentialResourceModel) RefreshFromSharedDescribeCodecommitC
 func (r *CodecommitCredentialResourceModel) ToOperationsCreateCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*operations.CreateCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createCodecommitCredentialsRequest, createCodecommitCredentialsRequestDiags := r.ToSharedCreateCodecommitCredentialsRequest(ctx, opts)
 	diags.Append(createCodecommitCredentialsRequestDiags...)
 
@@ -102,12 +99,9 @@ func (r *CodecommitCredentialResourceModel) ToOperationsDeleteCodecommitCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteCodecommitCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -139,12 +133,9 @@ func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateCodecommitCredentialsRequest, updateCodecommitCredentialsRequestDiags := r.ToSharedUpdateCodecommitCredentialsRequest(ctx, opts)
 	diags.Append(updateCodecommitCredentialsRequestDiags...)
 

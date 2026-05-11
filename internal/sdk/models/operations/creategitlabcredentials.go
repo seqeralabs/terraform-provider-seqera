@@ -9,14 +9,14 @@ import (
 
 type CreateGitlabCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// GitLab credentials create request
 	CreateGitlabCredentialsRequest shared.CreateGitlabCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateGitlabCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateGitlabCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

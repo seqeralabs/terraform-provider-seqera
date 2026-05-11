@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -17,7 +19,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
-	"strconv"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -404,11 +405,18 @@ func (r *PipelineSecretResource) Delete(ctx context.Context, req resource.Delete
 }
 
 func (r *PipelineSecretResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	secretID, err := strconv.Atoi(req.ID)
-	if err != nil {
-		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("ID must be an integer but was %s", req.ID))
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		SecretID    int64 `json:"secret_id"`
+		WorkspaceID int64 `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"secret_id": 0, "workspace_id": 0}': `+err.Error())
 		return
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("secret_id"), secretID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("secret_id"), data.SecretID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }

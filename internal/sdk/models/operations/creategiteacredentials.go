@@ -9,14 +9,14 @@ import (
 
 type CreateGiteaCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Gitea credentials create request
 	CreateGiteaCredentialsRequest shared.CreateGiteaCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateGiteaCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateGiteaCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

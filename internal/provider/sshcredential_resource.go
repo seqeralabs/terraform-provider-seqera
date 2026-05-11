@@ -94,7 +94,7 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Cloud provider type (automatically set to "ssh"). Default: "ssh"`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

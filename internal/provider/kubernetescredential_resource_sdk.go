@@ -60,12 +60,9 @@ func (r *KubernetesCredentialResourceModel) RefreshFromSharedKubernetesCredentia
 func (r *KubernetesCredentialResourceModel) ToOperationsCreateKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*operations.CreateKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createKubernetesCredentialsRequest, createKubernetesCredentialsRequestDiags := r.ToSharedCreateKubernetesCredentialsRequest(ctx, opts)
 	diags.Append(createKubernetesCredentialsRequestDiags...)
 
@@ -87,12 +84,9 @@ func (r *KubernetesCredentialResourceModel) ToOperationsDeleteKubernetesCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteKubernetesCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -124,12 +118,9 @@ func (r *KubernetesCredentialResourceModel) ToOperationsUpdateKubernetesCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateKubernetesCredentialsRequest, updateKubernetesCredentialsRequestDiags := r.ToSharedUpdateKubernetesCredentialsRequest(ctx, opts)
 	diags.Append(updateKubernetesCredentialsRequestDiags...)
 

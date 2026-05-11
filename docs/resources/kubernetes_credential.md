@@ -42,6 +42,7 @@ resource "seqera_kubernetes_credential" "example" {
 ### Required
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -50,7 +51,6 @@ resource "seqera_kubernetes_credential" "example" {
 - `client_certificate` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
 - `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
 - `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

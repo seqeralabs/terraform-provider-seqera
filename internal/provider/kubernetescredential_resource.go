@@ -101,7 +101,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

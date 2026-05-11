@@ -75,12 +75,9 @@ func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialOutput(ct
 func (r *GiteaCredentialResourceModel) ToOperationsCreateGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*operations.CreateGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createGiteaCredentialsRequest, createGiteaCredentialsRequestDiags := r.ToSharedCreateGiteaCredentialsRequest(ctx, opts)
 	diags.Append(createGiteaCredentialsRequestDiags...)
 
@@ -102,12 +99,9 @@ func (r *GiteaCredentialResourceModel) ToOperationsDeleteGiteaCredentialsRequest
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteGiteaCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -139,12 +133,9 @@ func (r *GiteaCredentialResourceModel) ToOperationsUpdateGiteaCredentialsRequest
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateGiteaCredentialsRequest, updateGiteaCredentialsRequestDiags := r.ToSharedUpdateGiteaCredentialsRequest(ctx, opts)
 	diags.Append(updateGiteaCredentialsRequestDiags...)
 

@@ -134,7 +134,7 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				Description: `Generate External ID for AWS credentials (requires IAM Role ARN)`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

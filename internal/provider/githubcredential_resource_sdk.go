@@ -75,12 +75,9 @@ func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialOutput(
 func (r *GithubCredentialResourceModel) ToOperationsCreateGithubCredentialsRequest(ctx context.Context, opts *GithubCredentialResourceModelOptions) (*operations.CreateGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createGithubCredentialsRequest, createGithubCredentialsRequestDiags := r.ToSharedCreateGithubCredentialsRequest(ctx, opts)
 	diags.Append(createGithubCredentialsRequestDiags...)
 
@@ -102,12 +99,9 @@ func (r *GithubCredentialResourceModel) ToOperationsDeleteGithubCredentialsReque
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteGithubCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -139,12 +133,9 @@ func (r *GithubCredentialResourceModel) ToOperationsUpdateGithubCredentialsReque
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateGithubCredentialsRequest, updateGithubCredentialsRequestDiags := r.ToSharedUpdateGithubCredentialsRequest(ctx, opts)
 	diags.Append(updateGithubCredentialsRequestDiags...)
 

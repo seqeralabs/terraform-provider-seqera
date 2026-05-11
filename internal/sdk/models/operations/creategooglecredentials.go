@@ -9,14 +9,14 @@ import (
 
 type CreateGoogleCredentialsRequest struct {
 	// Workspace numeric identifier where the credentials will be stored
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Google credentials create request
 	CreateGoogleCredentialsRequest shared.CreateGoogleCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateGoogleCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateGoogleCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

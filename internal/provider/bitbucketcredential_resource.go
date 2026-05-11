@@ -111,7 +111,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 				Description: `Bitbucket account username (for app passwords) or email (for API tokens).`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

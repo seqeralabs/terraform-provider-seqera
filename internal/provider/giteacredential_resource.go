@@ -97,7 +97,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Description: `Gitea account username.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},

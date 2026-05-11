@@ -68,11 +68,11 @@ resource "seqera_container_registry_credential" "private" {
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Password or access token for container registry authentication (required, sensitive)
 - `user_name` (String) Username for container registry authentication (required)
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `registry` (String) Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

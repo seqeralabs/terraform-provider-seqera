@@ -68,12 +68,9 @@ func (r *TowerAgentCredentialResourceModel) RefreshFromSharedTowerAgentCredentia
 func (r *TowerAgentCredentialResourceModel) ToOperationsCreateTowerAgentCredentialsRequest(ctx context.Context) (*operations.CreateTowerAgentCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createTowerAgentCredentialsRequest, createTowerAgentCredentialsRequestDiags := r.ToSharedCreateTowerAgentCredentialsRequest(ctx)
 	diags.Append(createTowerAgentCredentialsRequestDiags...)
 
@@ -95,12 +92,9 @@ func (r *TowerAgentCredentialResourceModel) ToOperationsDeleteTowerAgentCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteTowerAgentCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -132,12 +126,9 @@ func (r *TowerAgentCredentialResourceModel) ToOperationsUpdateTowerAgentCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateTowerAgentCredentialsRequest, updateTowerAgentCredentialsRequestDiags := r.ToSharedUpdateTowerAgentCredentialsRequest(ctx)
 	diags.Append(updateTowerAgentCredentialsRequestDiags...)
 

@@ -180,12 +180,9 @@ func (r *AWSComputeEnvResourceModel) ToOperationsDeleteAWSComputeEnvRequest(ctx 
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteAWSComputeEnvRequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,

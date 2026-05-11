@@ -11,7 +11,7 @@ type UpdatePipelineRequest struct {
 	// Pipeline numeric identifier
 	PipelineID int64 `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Pipeline update request
 	UpdatePipelineRequest shared.UpdatePipelineRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdatePipelineRequest) GetPipelineID() int64 {
 	return u.PipelineID
 }
 
-func (u *UpdatePipelineRequest) GetWorkspaceID() *int64 {
+func (u *UpdatePipelineRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

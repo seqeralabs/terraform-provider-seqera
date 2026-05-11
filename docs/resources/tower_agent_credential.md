@@ -65,11 +65,11 @@ resource "seqera_tower_agent_credential" "shared" {
 
 - `connection_id` (String) Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `shared` (Boolean) When enabled, all workspace users can access the same Tower Agent instance. Default: false
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
