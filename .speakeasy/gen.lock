@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 09c3d6b9768628c583dd8d20111848b3
+  docChecksum: e6ddd8bf9bc0cb61a3c03b4267740393
   docVersion: 1.147.0
   speakeasyVersion: 1.762.0
   generationVersion: 2.882.0
@@ -709,7 +709,7 @@ trackedFiles:
     pristine_git_object: a633929e19d2c86fc43fdc96a586954c0992048c
   internal/provider/studios_resource.go:
     id: d5d4f38592d9
-    last_write_checksum: sha1:10dbb5a896ba58505e254138a3fd23f3667838cb
+    last_write_checksum: sha1:b63ea12d2bb95d5ff9e63dbe147d807bd77d4016
     pristine_git_object: b69af57c1f895efdf781dd1ccf3aa900a68744e2
   internal/provider/studios_resource_sdk.go:
     id: 3f2ecca255e3

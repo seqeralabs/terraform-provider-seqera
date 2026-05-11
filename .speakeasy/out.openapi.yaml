@@ -15848,6 +15848,8 @@ components:
           type: integer
           format: int64
           description: Numeric identifier of the workspace containing the Studio
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
       x-speakeasy-entity: Studios
       description: |
         Represents a Studio session for interactive data analysis.

@@ -219,6 +219,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 - `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `data_studio_tool_url` (String) Requires replacement if changed.
 - `name` (String) Display name for the Studio session. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -228,7 +229,6 @@ resource "seqera_studios" "rstudio_regional_data" {
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.
 - `spot` (Boolean) Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

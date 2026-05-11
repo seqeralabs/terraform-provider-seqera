@@ -323,8 +323,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Description: `SSH connection details for a Studio session`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
