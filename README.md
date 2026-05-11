@@ -9,7 +9,9 @@
 > **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed for the stable release. Please migrate to their recommended replacements if available.
 
 > [!IMPORTANT]
-> **Workspace-scoped only** — This provider is intended for use within a Seqera **organization workspace** and all typed resources require a `workspace_id`. Personal (user-context) workspaces are not supported. If you specifically need to manage user-context credentials, the generic `seqera_credential` resource still accepts them; please report any user-context use cases that matter to you via [GitHub](https://github.com/seqeralabs/terraform-provider-seqera/issues).
+> **Workspace-scoped only** — This provider is intended for use within a Seqera **organization workspace**. Resources are scoped to either an organization (`seqera_workspace`, `seqera_teams`) or a workspace (everything else). Personal (user-context) workspaces are not supported.
+>
+> The only exception is `seqera_tokens`, which manages personal API tokens for the authenticated user and is inherently user-level on Seqera Platform.
 
 
 Terraform Provider for the Seqera Platform API.
