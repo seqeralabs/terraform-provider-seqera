@@ -4,7 +4,7 @@
 >
 > We'd love your feedback! Please test the provider with your use cases and [report any issues](https://github.com/seqeralabs/terraform-provider-seqera/issues) you encounter. Your input will help us build a better stable release.
 
-> [!IMPORTANT] > **Enterprise use cases only** — This provider is intended to support Seqera enterprise use cases. Resources within a personal workspace context are not supported.
+> [!IMPORTANT] > **Built for Seqera Organizations** — This provider targets admins managing shared resources within a Seqera organization. Personal-workspace use isn't part of our supported scope and some resources will not work in that context.
 
 > [!CAUTION] > **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed in the future release. Please migrate to their recommended replacements.
 
@@ -35,7 +35,6 @@ Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-cod
   - [Installation](#installation)
   - [Authentication](#authentication)
   - [Available Resources and Data Sources](#available-resources-and-data-sources)
-  - [Best Practices](#best-practices)
   - [Examples](#examples)
   - [Testing the provider locally](#testing-the-provider-locally)
 - [Development](#development)
@@ -131,61 +130,6 @@ Available configuration:
 - [seqera_credentials](docs/data-sources/credentials.md)
 - [seqera_data_links](docs/data-sources/data_links.md)
 <!-- End Available Resources and Data Sources [operations] -->
-
-## Best Practices
-
-### Prerequisites
-
-- **Terraform Knowledge**: Familiar with Terraform concepts, state management, and limitations
-- **Permissions**: Sufficient permissions in cloud provider and Seqera Platform
-- **Cost Management**: Infrastructure spend awareness and cost controls
-- **API Access**: Proper API access to Seqera Platform with authentication
-
-### Security
-
-#### ✅ DO
-
-- **Secure Credentials**: Use environment variables, Terraform Cloud variables, or secret management systems
-- **Least Privilege**: Grant minimum necessary permissions to Terraform service accounts
-- **Secure State**: Store Terraform state in remote backends (Terraform Cloud, S3, Azure Storage)
-- **Encryption**: Ensure sensitive data is encrypted at rest and in transit
-
-#### ❌ DON'T
-
-- **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
-- **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
-- **Public State**: Never commit Terraform state files to version control
-
-### Resource Management
-
-#### ✅ DO
-
-- **Persistent Resources**: Use for persistent infrastructure resources on Seqera Platform
-- **State Management**: Always use Terraform state to track infrastructure
-- **Naming & Tagging**: Use consistent naming conventions and comprehensive tagging
-- **Modular Design**: Organize code into reusable modules
-
-#### ❌ DON'T
-
-- **Pipeline Orchestration**: Don't use for launching pipelines except as smoke tests for compute environments (use Seqera Platform APIs for routine pipeline launches)
-- **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
-- **State Assumptions**: Do not assume the state reflects user-managed resources that may have been modified elsewhere.
-
-### Operations
-
-#### ✅ DO
-
-- **Version Control**: Store configurations in version control
-- **Code Review**: Implement review processes for infrastructure changes
-- **Environment Separation**: Use separate workspaces/configurations for environments
-- **Monitoring**: Set up monitoring and alerting
-- **Backup Strategy**: Maintain backups of state and configurations
-
-#### ❌ DON'T
-
-- **Manual Changes**: Avoid direct modifications to Terraform-managed resources
-- **Single Recovery**: Don't rely solely on Terraform for disaster recovery
-- **Resource Drift**: Don't allow resources to drift from Terraform state
 
 <!-- Start Examples [examples] -->
 
