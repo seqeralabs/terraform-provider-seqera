@@ -34,9 +34,9 @@ func (e *CodecommitCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type CodecommitCredentialKeys struct {
-	// AWS Access Key ID for CodeCommit (required)
+	// AWS IAM access key ID for CodeCommit.
 	AccessKey string `json:"username"`
-	// AWS Secret Access Key for CodeCommit (required, sensitive)
+	// AWS IAM secret access key for CodeCommit (sensitive).
 	SecretKey string `json:"password"`
 }
 
@@ -69,7 +69,7 @@ type CodecommitCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
+	// Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
 	BaseURL *string                  `json:"baseUrl,omitempty"`
 	Keys    CodecommitCredentialKeys `json:"keys"`
 }
@@ -149,7 +149,7 @@ func (c *CodecommitCredential) GetKeys() CodecommitCredentialKeys {
 }
 
 type CodecommitCredentialKeysOutput struct {
-	// AWS Access Key ID for CodeCommit (required)
+	// AWS IAM access key ID for CodeCommit.
 	AccessKey string `json:"username"`
 }
 
@@ -175,7 +175,7 @@ type CodecommitCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
+	// Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
 	BaseURL *string                        `json:"baseUrl,omitempty"`
 	Keys    CodecommitCredentialKeysOutput `json:"keys"`
 }

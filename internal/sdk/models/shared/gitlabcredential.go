@@ -34,9 +34,9 @@ func (e *GitlabCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type GitlabCredentialKeys struct {
-	// GitLab username associated with the Personal Access Token (required)
+	// GitLab account username associated with the access token.
 	Username string `json:"username"`
-	// GitLab Personal Access Token or Project Access Token (required, sensitive)
+	// GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
 	Token string `json:"token"`
 }
 
@@ -69,7 +69,7 @@ type GitlabCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
+	// Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs
 	BaseURL *string              `json:"baseUrl,omitempty"`
 	Keys    GitlabCredentialKeys `json:"keys"`
 }
@@ -149,7 +149,7 @@ func (g *GitlabCredential) GetKeys() GitlabCredentialKeys {
 }
 
 type GitlabCredentialKeysOutput struct {
-	// GitLab username associated with the Personal Access Token (required)
+	// GitLab account username associated with the access token.
 	Username string `json:"username"`
 }
 
@@ -175,7 +175,7 @@ type GitlabCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
-	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
+	// Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs
 	BaseURL *string                    `json:"baseUrl,omitempty"`
 	Keys    GitlabCredentialKeysOutput `json:"keys"`
 }

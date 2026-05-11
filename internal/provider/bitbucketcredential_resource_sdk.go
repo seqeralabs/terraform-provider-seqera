@@ -209,11 +209,21 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredentialKeys(ctx c
 	var username string
 	username = r.Username.ValueString()
 
-	var token string
-	token = opts.Config.Token.ValueString()
-
+	password := new(string)
+	if !opts.Config.Password.IsUnknown() && !opts.Config.Password.IsNull() {
+		*password = opts.Config.Password.ValueString()
+	} else {
+		password = nil
+	}
+	token := new(string)
+	if !opts.Config.Token.IsUnknown() && !opts.Config.Token.IsNull() {
+		*token = opts.Config.Token.ValueString()
+	} else {
+		token = nil
+	}
 	out := shared.BitbucketCredentialKeys{
 		Username: username,
+		Password: password,
 		Token:    token,
 	}
 

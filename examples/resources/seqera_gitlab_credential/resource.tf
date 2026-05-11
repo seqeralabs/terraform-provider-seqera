@@ -13,4 +13,5 @@ resource "seqera_gitlab_credential" "example" {
 
   username = var.gitlab_username
   token    = var.gitlab_token
+  base_url = "https://gitlab.com/seqeralabs"
 }

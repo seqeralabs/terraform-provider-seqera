@@ -13,4 +13,5 @@ resource "seqera_github_credential" "example" {
 
   username     = var.github_username
   access_token = var.github_access_token
+  base_url     = "https://github.com/seqeralabs"
 }

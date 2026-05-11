@@ -32,6 +32,7 @@ resource "seqera_gitlab_credential" "example" {
 
   username = var.gitlab_username
   token    = var.gitlab_token
+  base_url = "https://gitlab.com/seqeralabs"
 }
 ```
 
@@ -65,12 +66,12 @@ resource "seqera_gitlab_credential" "self_hosted" {
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) GitLab Personal Access Token or Project Access Token (required, sensitive)
-- `username` (String) GitLab username associated with the Personal Access Token (required)
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
+- `username` (String) GitLab account username associated with the access token.
 
 ### Optional
 
-- `base_url` (String) Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
+- `base_url` (String) Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
