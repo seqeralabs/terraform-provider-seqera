@@ -8,7 +8,7 @@ resource "seqera_gitea_credential" "example" {
   password = "example-password-or-token-123456"
   base_url = "https://gitea.example.com"
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

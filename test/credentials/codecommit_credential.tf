@@ -8,7 +8,7 @@ resource "seqera_codecommit_credential" "example" {
   secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   base_url   = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/example-repo"
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

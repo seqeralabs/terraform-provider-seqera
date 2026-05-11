@@ -9,7 +9,7 @@ resource "seqera_azure_credential" "example_shared_key" {
   batch_key    = "exampleBatchKeyBase64EncodedString123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ=="
   storage_key  = "exampleStorageKeyBase64EncodedString123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ=="
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Azure credential with service principal (Entra ID)
@@ -21,7 +21,7 @@ resource "seqera_azure_credential" "example_service_principal" {
   client_id     = "87654321-4321-4321-4321-210987654321"
   client_secret = "example.client.secret~123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

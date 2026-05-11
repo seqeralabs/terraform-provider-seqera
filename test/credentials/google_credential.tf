@@ -20,7 +20,7 @@ resource "seqera_google_credential" "example" {
     "universe_domain" : "googleapis.com"
   })
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

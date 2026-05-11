@@ -7,7 +7,7 @@ resource "seqera_bitbucket_credential" "example_cloud" {
   username = "example-user@example.com"
   token    = "ATBBExampleAppPassword123456789ABCDEFGH"
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Bitbucket credential for self-hosted Bitbucket Server
@@ -17,7 +17,7 @@ resource "seqera_bitbucket_credential" "example_server" {
   token    = "ATBBExampleAppPassword123456789ABCDEFGH"
   base_url = "https://bitbucket.example.com"
 
-  workspace_id = var.seqera_workspace_id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID
