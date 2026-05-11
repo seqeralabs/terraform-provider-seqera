@@ -461,6 +461,7 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `machine_types` (List of String) EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.
 - `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
 
@@ -594,10 +595,6 @@ Not Null; Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
-Read-Only:
-
-- `forged_resources` (Attributes List) Read-only list of resources provisioned for this compute environment. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--forged_resources))
-
 <a id="nestedatt--compute_env--config--azure_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.azure_cloud.environment`
 
@@ -612,15 +609,6 @@ At least one of 'head' or 'compute' must be set to true. Both can be true to tar
 Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
-- `value` (String) Requires replacement if changed.
-
-
-<a id="nestedatt--compute_env--config--azure_cloud--forged_resources"></a>
-### Nested Schema for `compute_env.config.azure_cloud.forged_resources`
-
-Optional:
-
-- `key` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
@@ -867,10 +855,6 @@ Requires replacement if changed.
 If not specified, the platform selects a zone automatically.
 Requires replacement if changed.
 
-Read-Only:
-
-- `forged_resources` (List of Map of Object) Read-only list of resources provisioned for this compute environment.
-
 <a id="nestedatt--compute_env--config--google_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.google_cloud.environment`
 
@@ -1024,6 +1008,7 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `machine_types` (List of String) EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.
 - `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
 

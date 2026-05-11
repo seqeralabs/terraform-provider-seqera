@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -206,18 +205,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						MarkdownDescription: `Array of environment variables for the compute environment.` + "\n" +
 							`Each variable can target the head node, compute nodes, or both.` + "\n" +
 							`Requires replacement if changed.`,
-					},
-					"forged_resources": schema.ListAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-						},
-						ElementType: types.MapType{
-							ElemType: types.ObjectType{
-								AttrTypes: map[string]attr.Type{},
-							},
-						},
-						Description: `Read-only list of resources provisioned for this compute environment.`,
 					},
 					"gpu_enabled": schema.BoolAttribute{
 						Computed: true,

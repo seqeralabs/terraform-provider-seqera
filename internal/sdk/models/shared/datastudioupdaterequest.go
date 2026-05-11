@@ -99,10 +99,18 @@ func (d *DataStudioUpdateRequestConfiguration) GetSSHEnabled() *bool {
 }
 
 type DataStudioUpdateRequest struct {
+	ComputeEnvID  *string                               `json:"computeEnvId,omitempty"`
 	Configuration *DataStudioUpdateRequestConfiguration `json:"configuration,omitempty"`
 	Description   *string                               `json:"description,omitempty"`
 	LabelIds      []int64                               `json:"labelIds,omitempty"`
 	Name          *string                               `json:"name,omitempty"`
+}
+
+func (d *DataStudioUpdateRequest) GetComputeEnvID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ComputeEnvID
 }
 
 func (d *DataStudioUpdateRequest) GetConfiguration() *DataStudioUpdateRequestConfiguration {

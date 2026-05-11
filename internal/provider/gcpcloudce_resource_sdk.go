@@ -59,19 +59,6 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 
 			r.Config.Environment = append(r.Config.Environment, environment)
 		}
-		r.Config.ForgedResources = nil
-		for _, forgedResourcesItem := range resp.Config.ForgedResources {
-			var forgedResources map[string]tfTypes.GoogleCloudConfigForgedResource
-			if len(forgedResourcesItem) > 0 {
-				forgedResources = make(map[string]tfTypes.GoogleCloudConfigForgedResource, len(forgedResourcesItem))
-				for googleCloudConfigForgedResourceKey, _ := range forgedResourcesItem {
-					var googleCloudConfigForgedResourceResult tfTypes.GoogleCloudConfigForgedResource
-
-					forgedResources[googleCloudConfigForgedResourceKey] = googleCloudConfigForgedResourceResult
-				}
-			}
-			r.Config.ForgedResources = append(r.Config.ForgedResources, forgedResources)
-		}
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
@@ -280,15 +267,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			Value:   value,
 		})
 	}
-	forgedResources := make([]map[string]shared.GoogleCloudConfigForgedResource, 0, len(r.Config.ForgedResources))
-	for forgedResourcesIndex := range r.Config.ForgedResources {
-		forgedResourcesTmp := make(map[string]shared.GoogleCloudConfigForgedResource)
-		for key := range r.Config.ForgedResources[forgedResourcesIndex] {
-			inst := shared.GoogleCloudConfigForgedResource{}
-			forgedResourcesTmp[key] = inst
-		}
-		forgedResources = append(forgedResources, forgedResourcesTmp)
-	}
 	enableFusion := new(bool)
 	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
 		*enableFusion = r.Config.EnableFusion.ValueBool()
@@ -371,7 +349,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		Arm64Enabled:        arm64Enabled,
 		BootDiskSizeGb:      bootDiskSizeGb,
 		Environment:         environment,
-		ForgedResources:     forgedResources,
 		EnableFusion:        enableFusion,
 		GpuEnabled:          gpuEnabled,
 		ImageID:             imageID,

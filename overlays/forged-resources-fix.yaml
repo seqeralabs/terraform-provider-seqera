@@ -1,0 +1,22 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Drop server-managed forge audit fields
+  version: 0.0.0
+# Server-managed forge audit metadata — stripped so it doesn't pollute state.
+actions:
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["deletedResources"]
+    remove: true
+
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["deletedResources"]
+    remove: true
+
+  - target: $["components"]["schemas"]["AzCloudConfig"]["properties"]["forgedResources"]
+    remove: true
+
+  - target: $["components"]["schemas"]["GoogleCloudConfig"]["properties"]["forgedResources"]
+    remove: true

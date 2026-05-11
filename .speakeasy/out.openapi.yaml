@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.147.0
+  version: 1.153.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -6757,6 +6757,16 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: sched
+          in: query
+          description: When true, narrow the catalog to Scheduler-compatible instance types (AWS only).
+          schema:
+            type: boolean
+        - name: nvme
+          in: query
+          description: When true, narrow the catalog to NVMe-equipped instance types (AWS only).
+          schema:
+            type: boolean
         - name: regionId
           in: query
           required: true
@@ -7637,7 +7647,7 @@ paths:
     put:
       operationId: UpdateDataStudio
       summary: Update a Studio
-      description: Updates the given Studio session ID. Can only update non-running Studios.
+      description: Updates the given Studio session ID. Can only update non-running Studios. The compute environment can be changed by setting `computeEnvId` to a CE compatible with the Studio's current one; see `GET /studios/{sessionId}/compatible-ce`.
       parameters:
         - name: sessionId
           in: path
@@ -7852,6 +7862,43 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Conflict, when the checkpoint name conflicts with an existing checkpoint for the same Studio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+  /studios/{sessionId}/compatible-ce:
+    get:
+      operationId: ListDataStudioCompatibleComputeEnvs
+      summary: List compute environments compatible with a Studio
+      description: Lists the compute environments in the same workspace as the given Studio that are compatible with its compute environment.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session numeric identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListComputeEnvsResponse'
+        '403':
+          description: Operation not allowed.
+        '404':
+          description: NotFound, when the Studio is not found, has no compute environment, or when the API is disabled for the workspace.
           content:
             application/json:
               schema:
@@ -13526,13 +13573,6 @@ components:
           x-speakeasy-param-force-new: true
         forge:
           $ref: '#/components/schemas/ForgeConfig'
-        forgedResources:
-          type: array
-          items:
-            additionalProperties:
-              type: object
-            type: object
-          x-speakeasy-terraform-ignore: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -13761,13 +13801,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
-        forgedResources:
-          type: array
-          items:
-            additionalProperties:
-              type: object
-            type: object
-          x-speakeasy-terraform-ignore: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -14145,13 +14178,6 @@ components:
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
-        forgedResources:
-          type: array
-          items:
-            $ref: '#/components/schemas/Map.Entry_String.String_'
-          description: |
-            Read-only list of resources provisioned for this compute environment.
-          x-speakeasy-param-readonly: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -16050,6 +16076,9 @@ components:
     DataStudioUpdateRequest:
       type: object
       properties:
+        computeEnvId:
+          type: string
+          nullable: true
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
@@ -16407,6 +16436,9 @@ components:
       properties:
         pipelineInfo:
           $ref: '#/components/schemas/PipelineMinInfoResponse'
+        schedEnabled:
+          type: boolean
+          nullable: true
         workflow:
           $ref: '#/components/schemas/WorkflowMaxDbDto'
         workspaceId:
@@ -16542,6 +16574,15 @@ components:
           type: boolean
         source:
           type: string
+    Feature:
+      type: string
+      enum:
+        - AMD
+        - ARM
+        - SCHED
+        - GPU
+        - FPGA
+        - NVME
     ForgeConfig:
       type: object
       properties:
@@ -17359,15 +17400,6 @@ components:
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
-        forgedResources:
-          type: array
-          items:
-            additionalProperties:
-              type: object
-            type: object
-          description: |
-            Read-only list of resources provisioned for this compute environment.
-          x-speakeasy-param-readonly: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -17502,6 +17534,11 @@ components:
       properties:
         arch:
           type: string
+        features:
+          description: Capability features advertised for this instance type (e.g. GPU). Absent when the data source does not publish features; an empty list means none.
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
         id:
           type: string
     GoogleLifeSciencesConfig:
@@ -17767,6 +17804,11 @@ components:
       properties:
         arch:
           type: string
+        features:
+          description: Capability features advertised for this instance type (e.g. GPU, NVMe). Absent when the data source does not publish features; an empty list means none.
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
         id:
           type: string
       required:
@@ -19311,6 +19353,14 @@ components:
           type: integer
           format: int64
           deprecated: true
+        cpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        cpuShares:
+          type: integer
+          format: int64
+          nullable: true
         cpuTime:
           type: integer
           format: int64
@@ -19590,6 +19640,11 @@ components:
     SchedConfig:
       type: object
       properties:
+        machineTypes:
+          description: EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task.
+          type: array
+          items:
+            type: string
         provisioningModel:
           type: string
           enum:
@@ -21586,6 +21641,14 @@ components:
         cpus:
           type: integer
           format: int64
+        cpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        cpuShares:
+          type: integer
+          format: int64
+          nullable: true
         cpuTime:
           type: integer
           format: int64
@@ -21623,6 +21686,14 @@ components:
         memoryRss:
           type: integer
           format: int64
+        netCpuShareMillis:
+          type: integer
+          format: int64
+          nullable: true
+        netCpuShares:
+          type: integer
+          format: int64
+          nullable: true
         numSpotInterruptions:
           type: integer
           format: int32
@@ -21641,6 +21712,14 @@ components:
         readBytes:
           type: integer
           format: int64
+        requestedCpuTime:
+          type: integer
+          format: int64
+          nullable: true
+        requestedMemory:
+          type: integer
+          format: int64
+          nullable: true
         running:
           type: integer
           format: int64

@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -1213,6 +1212,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"machine_types": schema.ListAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												Description: `EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.`,
+											},
 											"provisioning_model": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -1844,36 +1852,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"forged_resources": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-											},
-											PlanModifiers: []planmodifier.Object{
-												objectplanmodifier.RequiresReplaceIfConfigured(),
-											},
-											Attributes: map[string]schema.Attribute{
-												"key": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-												"value": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-											},
-										},
-										Description: `Read-only list of resources provisioned for this compute environment.`,
 									},
 									"instance_type": schema.StringAttribute{
 										Computed: true,
@@ -3060,15 +3038,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
-									"forged_resources": schema.ListAttribute{
-										Computed: true,
-										ElementType: types.MapType{
-											ElemType: types.ObjectType{
-												AttrTypes: map[string]attr.Type{},
-											},
-										},
-										Description: `Read-only list of resources provisioned for this compute environment.`,
-									},
 									"gpu_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
@@ -3806,6 +3775,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"machine_types": schema.ListAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												Description: `EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.`,
+											},
 											"provisioning_model": schema.StringAttribute{
 												Computed: true,
 												Optional: true,

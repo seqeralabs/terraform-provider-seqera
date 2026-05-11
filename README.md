@@ -18,32 +18,26 @@ Terraform Provider for the Seqera Platform API.
 </div>
 
 <!-- Start Summary [summary] -->
-
 ## Summary
 
 Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
-
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
-
 ## Table of Contents
-
 <!-- $toc-max-depth=2 -->
-
-- [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
-  - [Installation](#installation)
-  - [Authentication](#authentication)
-  - [Available Resources and Data Sources](#available-resources-and-data-sources)
-  - [Examples](#examples)
-  - [Testing the provider locally](#testing-the-provider-locally)
-- [Development](#development)
-  - [Contributions](#contributions)
+* [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
+  * [Installation](#installation)
+  * [Authentication](#authentication)
+  * [Available Resources and Data Sources](#available-resources-and-data-sources)
+  * [Examples](#examples)
+  * [Testing the provider locally](#testing-the-provider-locally)
+* [Development](#development)
+  * [Contributions](#contributions)
 
 <!-- End Table of Contents [toc] -->
 
 <!-- Start Installation [installation] -->
-
 ## Installation
 
 To install this provider, copy and paste this code into your Terraform configuration. Then, run `terraform init`.
@@ -62,11 +56,9 @@ provider "seqera" {
   server_url = "..." # Optional
 }
 ```
-
 <!-- End Installation [installation] -->
 
 <!-- Start Authentication [security] -->
-
 ## Authentication
 
 This provider supports authentication configuration via environment variables and provider configuration.
@@ -78,57 +70,55 @@ The configuration precedence is:
 
 Available configuration:
 
-| Provider Attribute | Description                                                              |
-| ------------------ | ------------------------------------------------------------------------ |
-| `bearer_auth`      | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
-
+| Provider Attribute | Description |
+|---|---|
+| `bearer_auth` | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
 <!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
-
 ## Available Resources and Data Sources
 
 ### Managed Resources
 
-- [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
-- [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
-- [seqera_aws_credential](docs/resources/aws_credential.md)
-- [seqera_action](docs/resources/action.md)
-- [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
-- [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
-- [seqera_azure_credential](docs/resources/azure_credential.md)
-- [seqera_bitbucket_credential](docs/resources/bitbucket_credential.md)
-- [seqera_codecommit_credential](docs/resources/codecommit_credential.md)
-- [seqera_compute_env](docs/resources/compute_env.md)
-- [seqera_container_registry_credential](docs/resources/container_registry_credential.md)
-- [seqera_credential](docs/resources/credential.md)
-- [seqera_data_link](docs/resources/data_link.md)
-- [seqera_datasets](docs/resources/datasets.md)
-- [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)
-- [seqera_gcp_cloud_ce](docs/resources/gcp_cloud_ce.md)
-- [seqera_gitea_credential](docs/resources/gitea_credential.md)
-- [seqera_github_credential](docs/resources/github_credential.md)
-- [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
-- [seqera_google_credential](docs/resources/google_credential.md)
-- [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
-- [seqera_labels](docs/resources/labels.md)
-- [seqera_managed_compute_ce](docs/resources/managed_compute_ce.md)
-- [seqera_orgs](docs/resources/orgs.md)
-- [seqera_pipeline](docs/resources/pipeline.md)
-- [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
-- [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
-- [seqera_ssh_credential](docs/resources/ssh_credential.md)
-- [seqera_studios](docs/resources/studios.md)
-- [seqera_teams](docs/resources/teams.md)
-- [seqera_tokens](docs/resources/tokens.md)
-- [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
-- [seqera_workflows](docs/resources/workflows.md)
-- [seqera_workspace](docs/resources/workspace.md)
+* [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
+* [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
+* [seqera_aws_credential](docs/resources/aws_credential.md)
+* [seqera_action](docs/resources/action.md)
+* [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
+* [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
+* [seqera_azure_credential](docs/resources/azure_credential.md)
+* [seqera_bitbucket_credential](docs/resources/bitbucket_credential.md)
+* [seqera_codecommit_credential](docs/resources/codecommit_credential.md)
+* [seqera_compute_env](docs/resources/compute_env.md)
+* [seqera_container_registry_credential](docs/resources/container_registry_credential.md)
+* [seqera_credential](docs/resources/credential.md)
+* [seqera_data_link](docs/resources/data_link.md)
+* [seqera_datasets](docs/resources/datasets.md)
+* [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)
+* [seqera_gcp_cloud_ce](docs/resources/gcp_cloud_ce.md)
+* [seqera_gitea_credential](docs/resources/gitea_credential.md)
+* [seqera_github_credential](docs/resources/github_credential.md)
+* [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
+* [seqera_google_credential](docs/resources/google_credential.md)
+* [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
+* [seqera_labels](docs/resources/labels.md)
+* [seqera_managed_compute_ce](docs/resources/managed_compute_ce.md)
+* [seqera_orgs](docs/resources/orgs.md)
+* [seqera_pipeline](docs/resources/pipeline.md)
+* [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
+* [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
+* [seqera_ssh_credential](docs/resources/ssh_credential.md)
+* [seqera_studios](docs/resources/studios.md)
+* [seqera_teams](docs/resources/teams.md)
+* [seqera_tokens](docs/resources/tokens.md)
+* [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
+* [seqera_workflows](docs/resources/workflows.md)
+* [seqera_workspace](docs/resources/workspace.md)
 
 ### Data Sources
 
-- [seqera_credentials](docs/data-sources/credentials.md)
-- [seqera_data_links](docs/data-sources/data_links.md)
+* [seqera_credentials](docs/data-sources/credentials.md)
+* [seqera_data_links](docs/data-sources/data_links.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Examples [examples] -->
@@ -158,7 +148,6 @@ Each example includes detailed variable descriptions and validation rules to hel
 <!-- End Examples [examples] -->
 
 <!-- Start Testing the provider locally [usage] -->
-
 ## Testing the provider locally
 
 #### Local Provider
@@ -198,7 +187,6 @@ provider_installation {
   direct {}
 }
 ```
-
 <!-- End Testing the provider locally [usage] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->

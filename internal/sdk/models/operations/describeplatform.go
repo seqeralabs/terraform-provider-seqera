@@ -11,7 +11,11 @@ type DescribePlatformRequest struct {
 	// Platform string identifier
 	PlatformID string `pathParam:"style=simple,explode=false,name=platformId"`
 	// Workspace numeric identifier
-	WorkspaceID   *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// When true, narrow the catalog to Scheduler-compatible instance types (AWS only).
+	Sched *bool `queryParam:"style=form,explode=true,name=sched"`
+	// When true, narrow the catalog to NVMe-equipped instance types (AWS only).
+	Nvme          *bool  `queryParam:"style=form,explode=true,name=nvme"`
 	RegionID      string `queryParam:"style=form,explode=false,name=regionId"`
 	CredentialsID string `queryParam:"style=form,explode=false,name=credentialsId"`
 }
@@ -28,6 +32,20 @@ func (d *DescribePlatformRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
+}
+
+func (d *DescribePlatformRequest) GetSched() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Sched
+}
+
+func (d *DescribePlatformRequest) GetNvme() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Nvme
 }
 
 func (d *DescribePlatformRequest) GetRegionID() string {

@@ -59,6 +59,7 @@ type WorkflowsResourceModel struct {
 	Resume            types.Bool                       `tfsdk:"resume"`
 	Revision          types.String                     `tfsdk:"revision"`
 	RunName           types.String                     `tfsdk:"run_name"`
+	SchedEnabled      types.Bool                       `tfsdk:"sched_enabled"`
 	SchemaName        types.String                     `tfsdk:"schema_name"`
 	SourceWorkspaceID types.Int64                      `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
 	StubRun           types.Bool                       `tfsdk:"stub_run"`
@@ -240,6 +241,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Custom run name. Requires replacement if changed.`,
+			},
+			"sched_enabled": schema.BoolAttribute{
+				Computed: true,
 			},
 			"schema_name": schema.StringAttribute{
 				Optional: true,

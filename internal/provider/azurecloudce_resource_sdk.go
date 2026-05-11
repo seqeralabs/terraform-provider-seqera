@@ -34,16 +34,6 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 
 			r.Config.Environment = append(r.Config.Environment, environment)
 		}
-		r.Config.ForgedResources = []tfTypes.MapEntryStringString{}
-
-		for _, forgedResourcesItem := range resp.Config.ForgedResources {
-			var forgedResources tfTypes.MapEntryStringString
-
-			forgedResources.Key = types.StringPointerValue(forgedResourcesItem.Key)
-			forgedResources.Value = types.StringPointerValue(forgedResourcesItem.Value)
-
-			r.Config.ForgedResources = append(r.Config.ForgedResources, forgedResources)
-		}
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
 		r.Config.LogTableName = types.StringPointerValue(resp.Config.LogTableName)
 		r.Config.LogWorkspaceID = types.StringPointerValue(resp.Config.LogWorkspaceID)
@@ -257,25 +247,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			Value:   value,
 		})
 	}
-	forgedResources := make([]shared.MapEntryStringString, 0, len(r.Config.ForgedResources))
-	for forgedResourcesIndex := range r.Config.ForgedResources {
-		key := new(string)
-		if !r.Config.ForgedResources[forgedResourcesIndex].Key.IsUnknown() && !r.Config.ForgedResources[forgedResourcesIndex].Key.IsNull() {
-			*key = r.Config.ForgedResources[forgedResourcesIndex].Key.ValueString()
-		} else {
-			key = nil
-		}
-		value1 := new(string)
-		if !r.Config.ForgedResources[forgedResourcesIndex].Value.IsUnknown() && !r.Config.ForgedResources[forgedResourcesIndex].Value.IsNull() {
-			*value1 = r.Config.ForgedResources[forgedResourcesIndex].Value.ValueString()
-		} else {
-			value1 = nil
-		}
-		forgedResources = append(forgedResources, shared.MapEntryStringString{
-			Key:   key,
-			Value: value1,
-		})
-	}
 	enableFusion := new(bool)
 	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
 		*enableFusion = r.Config.EnableFusion.ValueBool()
@@ -370,7 +341,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		DataCollectionEndpoint:  dataCollectionEndpoint,
 		DataCollectionRuleID:    dataCollectionRuleID,
 		Environment:             environment,
-		ForgedResources:         forgedResources,
 		EnableFusion:            enableFusion,
 		InstanceType:            instanceType,
 		LogTableName:            logTableName,

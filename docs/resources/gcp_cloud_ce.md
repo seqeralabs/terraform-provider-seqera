@@ -137,10 +137,6 @@ Requires replacement if changed.
 If not specified, the platform selects a zone automatically.
 Requires replacement if changed.
 
-Read-Only:
-
-- `forged_resources` (List of Map of Object) Read-only list of resources provisioned for this compute environment.
-
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`
 

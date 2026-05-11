@@ -38,6 +38,8 @@ func (e *ProvisioningModel) UnmarshalJSON(data []byte) error {
 }
 
 type SchedConfig struct {
+	// EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task.
+	MachineTypes      []string           `json:"machineTypes,omitempty"`
 	ProvisioningModel *ProvisioningModel `json:"provisioningModel,omitempty"`
 }
 
@@ -50,6 +52,13 @@ func (s *SchedConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (s *SchedConfig) GetMachineTypes() []string {
+	if s == nil {
+		return nil
+	}
+	return s.MachineTypes
 }
 
 func (s *SchedConfig) GetProvisioningModel() *ProvisioningModel {

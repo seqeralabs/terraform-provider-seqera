@@ -164,6 +164,10 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsCloud.SchedConfig = nil
 					} else {
 						r.ComputeEnv.Config.AwsCloud.SchedConfig = &tfTypes.SchedConfig{}
+						r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes))
+						for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes {
+							r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes = append(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes, types.StringValue(v))
+						}
 						if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel))
 						} else {
@@ -338,16 +342,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 
 						r.ComputeEnv.Config.AzureCloud.Environment = append(r.ComputeEnv.Config.AzureCloud.Environment, environment5)
 					}
-					r.ComputeEnv.Config.AzureCloud.ForgedResources = []tfTypes.MapEntryStringString{}
-
-					for _, forgedResourcesItem := range resp.ComputeEnv.Config.AzureCloudConfiguration.ForgedResources {
-						var forgedResources tfTypes.MapEntryStringString
-
-						forgedResources.Key = types.StringPointerValue(forgedResourcesItem.Key)
-						forgedResources.Value = types.StringPointerValue(forgedResourcesItem.Value)
-
-						r.ComputeEnv.Config.AzureCloud.ForgedResources = append(r.ComputeEnv.Config.AzureCloud.ForgedResources, forgedResources)
-					}
 					r.ComputeEnv.Config.AzureCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.InstanceType)
 					r.ComputeEnv.Config.AzureCloud.LogTableName = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogTableName)
 					r.ComputeEnv.Config.AzureCloud.LogWorkspaceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogWorkspaceID)
@@ -438,19 +432,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						environment7.Value = types.StringPointerValue(environmentItem7.Value)
 
 						r.ComputeEnv.Config.GoogleCloud.Environment = append(r.ComputeEnv.Config.GoogleCloud.Environment, environment7)
-					}
-					r.ComputeEnv.Config.GoogleCloud.ForgedResources = nil
-					for _, forgedResourcesItem1 := range resp.ComputeEnv.Config.GoogleCloudConfiguration.ForgedResources {
-						var forgedResources1 map[string]tfTypes.ComputeConfigGoogleCloudConfigForgedResource
-						if len(forgedResourcesItem1) > 0 {
-							forgedResources1 = make(map[string]tfTypes.ComputeConfigGoogleCloudConfigForgedResource, len(forgedResourcesItem1))
-							for computeConfigGoogleCloudConfigForgedResourceKey, _ := range forgedResourcesItem1 {
-								var computeConfigGoogleCloudConfigForgedResourceResult tfTypes.ComputeConfigGoogleCloudConfigForgedResource
-
-								forgedResources1[computeConfigGoogleCloudConfigForgedResourceKey] = computeConfigGoogleCloudConfigForgedResourceResult
-							}
-						}
-						r.ComputeEnv.Config.GoogleCloud.ForgedResources = append(r.ComputeEnv.Config.GoogleCloud.ForgedResources, forgedResources1)
 					}
 					r.ComputeEnv.Config.GoogleCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ImageID)
@@ -634,6 +615,10 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.SchedConfig = nil
 					} else {
 						r.ComputeEnv.Config.LocalPlatform.SchedConfig = &tfTypes.SchedConfig{}
+						r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes))
+						for _, v := range resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes {
+							r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes = append(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes, types.StringValue(v))
+						}
 						if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel))
 						} else {
@@ -1411,6 +1396,10 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 		var schedConfig *shared.SchedConfig
 		if r.ComputeEnv.Config.AwsCloud.SchedConfig != nil {
+			machineTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes))
+			for machineTypesIndex := range r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes {
+				machineTypes = append(machineTypes, r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes[machineTypesIndex].ValueString())
+			}
 			provisioningModel := new(shared.ProvisioningModel)
 			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsNull() {
 				*provisioningModel = shared.ProvisioningModel(r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.ValueString())
@@ -1418,6 +1407,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel = nil
 			}
 			schedConfig = &shared.SchedConfig{
+				MachineTypes:      machineTypes,
 				ProvisioningModel: provisioningModel,
 			}
 		}
@@ -1870,15 +1860,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value4,
 			})
 		}
-		forgedResources := make([]map[string]shared.ComputeConfigGoogleCloudConfigForgedResource, 0, len(r.ComputeEnv.Config.GoogleCloud.ForgedResources))
-		for forgedResourcesIndex := range r.ComputeEnv.Config.GoogleCloud.ForgedResources {
-			forgedResourcesTmp := make(map[string]shared.ComputeConfigGoogleCloudConfigForgedResource)
-			for key := range r.ComputeEnv.Config.GoogleCloud.ForgedResources[forgedResourcesIndex] {
-				inst := shared.ComputeConfigGoogleCloudConfigForgedResource{}
-				forgedResourcesTmp[key] = inst
-			}
-			forgedResources = append(forgedResources, forgedResourcesTmp)
-		}
 		enableFusion3 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.EnableFusion.IsNull() {
 			*enableFusion3 = r.ComputeEnv.Config.GoogleCloud.EnableFusion.ValueBool()
@@ -1961,7 +1942,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Arm64Enabled:        arm64Enabled2,
 			BootDiskSizeGb:      bootDiskSizeGb1,
 			Environment:         environment4,
-			ForgedResources:     forgedResources,
 			EnableFusion:        enableFusion3,
 			GpuEnabled:          gpuEnabled2,
 			ImageID:             imageId2,
@@ -2335,25 +2315,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value6,
 			})
 		}
-		forgedResources1 := make([]shared.MapEntryStringString, 0, len(r.ComputeEnv.Config.AzureCloud.ForgedResources))
-		for forgedResourcesIndex1 := range r.ComputeEnv.Config.AzureCloud.ForgedResources {
-			key1 := new(string)
-			if !r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Key.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Key.IsNull() {
-				*key1 = r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Key.ValueString()
-			} else {
-				key1 = nil
-			}
-			value7 := new(string)
-			if !r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Value.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Value.IsNull() {
-				*value7 = r.ComputeEnv.Config.AzureCloud.ForgedResources[forgedResourcesIndex1].Value.ValueString()
-			} else {
-				value7 = nil
-			}
-			forgedResources1 = append(forgedResources1, shared.MapEntryStringString{
-				Key:   key1,
-				Value: value7,
-			})
-		}
 		enableFusion5 := new(bool)
 		if !r.ComputeEnv.Config.AzureCloud.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.EnableFusion.IsNull() {
 			*enableFusion5 = r.ComputeEnv.Config.AzureCloud.EnableFusion.ValueBool()
@@ -2448,7 +2409,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DataCollectionEndpoint:  dataCollectionEndpoint,
 			DataCollectionRuleID:    dataCollectionRuleID,
 			Environment:             environment6,
-			ForgedResources:         forgedResources1,
 			EnableFusion:            enableFusion5,
 			InstanceType:            instanceType2,
 			LogTableName:            logTableName,
@@ -2499,17 +2459,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name7 = nil
 			}
-			value8 := new(string)
+			value7 := new(string)
 			if !r.ComputeEnv.Config.LsfPlatform.Environment[environmentIndex7].Value.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.Environment[environmentIndex7].Value.IsNull() {
-				*value8 = r.ComputeEnv.Config.LsfPlatform.Environment[environmentIndex7].Value.ValueString()
+				*value7 = r.ComputeEnv.Config.LsfPlatform.Environment[environmentIndex7].Value.ValueString()
 			} else {
-				value8 = nil
+				value7 = nil
 			}
 			environment7 = append(environment7, shared.ConfigEnvVariable{
 				Compute: compute7,
 				Head:    head7,
 				Name:    name7,
-				Value:   value8,
+				Value:   value7,
 			})
 		}
 		headJobOptions := new(string)
@@ -2652,17 +2612,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name8 = nil
 			}
-			value9 := new(string)
+			value8 := new(string)
 			if !r.ComputeEnv.Config.SlurmPlatform.Environment[environmentIndex8].Value.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.Environment[environmentIndex8].Value.IsNull() {
-				*value9 = r.ComputeEnv.Config.SlurmPlatform.Environment[environmentIndex8].Value.ValueString()
+				*value8 = r.ComputeEnv.Config.SlurmPlatform.Environment[environmentIndex8].Value.ValueString()
 			} else {
-				value9 = nil
+				value8 = nil
 			}
 			environment8 = append(environment8, shared.ConfigEnvVariable{
 				Compute: compute8,
 				Head:    head8,
 				Name:    name8,
-				Value:   value9,
+				Value:   value8,
 			})
 		}
 		headJobOptions1 := new(string)
@@ -2784,17 +2744,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name9 = nil
 			}
-			value10 := new(string)
+			value9 := new(string)
 			if !r.ComputeEnv.Config.K8sPlatform.Environment[environmentIndex9].Value.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.Environment[environmentIndex9].Value.IsNull() {
-				*value10 = r.ComputeEnv.Config.K8sPlatform.Environment[environmentIndex9].Value.ValueString()
+				*value9 = r.ComputeEnv.Config.K8sPlatform.Environment[environmentIndex9].Value.ValueString()
 			} else {
-				value10 = nil
+				value9 = nil
 			}
 			environment9 = append(environment9, shared.ConfigEnvVariable{
 				Compute: compute9,
 				Head:    head9,
 				Name:    name9,
-				Value:   value10,
+				Value:   value9,
 			})
 		}
 		headJobCpus3 := new(int)
@@ -2928,17 +2888,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name10 = nil
 			}
-			value11 := new(string)
+			value10 := new(string)
 			if !r.ComputeEnv.Config.EksPlatform.Environment[environmentIndex10].Value.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.Environment[environmentIndex10].Value.IsNull() {
-				*value11 = r.ComputeEnv.Config.EksPlatform.Environment[environmentIndex10].Value.ValueString()
+				*value10 = r.ComputeEnv.Config.EksPlatform.Environment[environmentIndex10].Value.ValueString()
 			} else {
-				value11 = nil
+				value10 = nil
 			}
 			environment10 = append(environment10, shared.ConfigEnvVariable{
 				Compute: compute10,
 				Head:    head10,
 				Name:    name10,
-				Value:   value11,
+				Value:   value10,
 			})
 		}
 		enableFusion6 := new(bool)
@@ -3106,17 +3066,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name11 = nil
 			}
-			value12 := new(string)
+			value11 := new(string)
 			if !r.ComputeEnv.Config.GkePlatform.Environment[environmentIndex11].Value.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.Environment[environmentIndex11].Value.IsNull() {
-				*value12 = r.ComputeEnv.Config.GkePlatform.Environment[environmentIndex11].Value.ValueString()
+				*value11 = r.ComputeEnv.Config.GkePlatform.Environment[environmentIndex11].Value.ValueString()
 			} else {
-				value12 = nil
+				value11 = nil
 			}
 			environment11 = append(environment11, shared.ConfigEnvVariable{
 				Compute: compute11,
 				Head:    head11,
 				Name:    name11,
-				Value:   value12,
+				Value:   value11,
 			})
 		}
 		enableFusion7 := new(bool)
@@ -3281,17 +3241,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name12 = nil
 			}
-			value13 := new(string)
+			value12 := new(string)
 			if !r.ComputeEnv.Config.UgePlatform.Environment[environmentIndex12].Value.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.Environment[environmentIndex12].Value.IsNull() {
-				*value13 = r.ComputeEnv.Config.UgePlatform.Environment[environmentIndex12].Value.ValueString()
+				*value12 = r.ComputeEnv.Config.UgePlatform.Environment[environmentIndex12].Value.ValueString()
 			} else {
-				value13 = nil
+				value12 = nil
 			}
 			environment12 = append(environment12, shared.ConfigEnvVariable{
 				Compute: compute12,
 				Head:    head12,
 				Name:    name12,
-				Value:   value13,
+				Value:   value12,
 			})
 		}
 		headJobOptions2 := new(string)
@@ -3413,17 +3373,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name13 = nil
 			}
-			value14 := new(string)
+			value13 := new(string)
 			if !r.ComputeEnv.Config.AltairPlatform.Environment[environmentIndex13].Value.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.Environment[environmentIndex13].Value.IsNull() {
-				*value14 = r.ComputeEnv.Config.AltairPlatform.Environment[environmentIndex13].Value.ValueString()
+				*value13 = r.ComputeEnv.Config.AltairPlatform.Environment[environmentIndex13].Value.ValueString()
 			} else {
-				value14 = nil
+				value13 = nil
 			}
 			environment13 = append(environment13, shared.ConfigEnvVariable{
 				Compute: compute13,
 				Head:    head13,
 				Name:    name13,
-				Value:   value14,
+				Value:   value13,
 			})
 		}
 		headJobOptions3 := new(string)
@@ -3545,17 +3505,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name14 = nil
 			}
-			value15 := new(string)
+			value14 := new(string)
 			if !r.ComputeEnv.Config.MoabPlatform.Environment[environmentIndex14].Value.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.Environment[environmentIndex14].Value.IsNull() {
-				*value15 = r.ComputeEnv.Config.MoabPlatform.Environment[environmentIndex14].Value.ValueString()
+				*value14 = r.ComputeEnv.Config.MoabPlatform.Environment[environmentIndex14].Value.ValueString()
 			} else {
-				value15 = nil
+				value14 = nil
 			}
 			environment14 = append(environment14, shared.ConfigEnvVariable{
 				Compute: compute14,
 				Head:    head14,
 				Name:    name14,
-				Value:   value15,
+				Value:   value14,
 			})
 		}
 		headJobOptions4 := new(string)
@@ -3671,17 +3631,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name15 = nil
 			}
-			value16 := new(string)
+			value15 := new(string)
 			if !r.ComputeEnv.Config.LocalPlatform.Environment[environmentIndex15].Value.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.Environment[environmentIndex15].Value.IsNull() {
-				*value16 = r.ComputeEnv.Config.LocalPlatform.Environment[environmentIndex15].Value.ValueString()
+				*value15 = r.ComputeEnv.Config.LocalPlatform.Environment[environmentIndex15].Value.ValueString()
 			} else {
-				value16 = nil
+				value15 = nil
 			}
 			environment15 = append(environment15, shared.ConfigEnvVariable{
 				Compute: compute15,
 				Head:    head15,
 				Name:    name15,
-				Value:   value16,
+				Value:   value15,
 			})
 		}
 		fusion2Enabled := new(bool)
@@ -3710,6 +3670,10 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 		var schedConfig1 *shared.SchedConfig
 		if r.ComputeEnv.Config.LocalPlatform.SchedConfig != nil {
+			machineTypes1 := make([]string, 0, len(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes))
+			for machineTypesIndex1 := range r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes {
+				machineTypes1 = append(machineTypes1, r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes[machineTypesIndex1].ValueString())
+			}
 			provisioningModel1 := new(shared.ProvisioningModel)
 			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsNull() {
 				*provisioningModel1 = shared.ProvisioningModel(r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.ValueString())
@@ -3717,6 +3681,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel1 = nil
 			}
 			schedConfig1 = &shared.SchedConfig{
+				MachineTypes:      machineTypes1,
 				ProvisioningModel: provisioningModel1,
 			}
 		}
@@ -3792,17 +3757,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				name16 = nil
 			}
-			value17 := new(string)
+			value16 := new(string)
 			if !r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentIndex16].Value.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentIndex16].Value.IsNull() {
-				*value17 = r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentIndex16].Value.ValueString()
+				*value16 = r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentIndex16].Value.ValueString()
 			} else {
-				value17 = nil
+				value16 = nil
 			}
 			environment16 = append(environment16, shared.ConfigEnvVariable{
 				Compute: compute16,
 				Head:    head16,
 				Name:    name16,
-				Value:   value17,
+				Value:   value16,
 			})
 		}
 		headJobCpus6 := new(int)

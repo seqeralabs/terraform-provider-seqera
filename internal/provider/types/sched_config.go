@@ -7,5 +7,6 @@ import (
 )
 
 type SchedConfig struct {
-	ProvisioningModel types.String `tfsdk:"provisioning_model"`
+	MachineTypes      []types.String `tfsdk:"machine_types"`
+	ProvisioningModel types.String   `tfsdk:"provisioning_model"`
 }

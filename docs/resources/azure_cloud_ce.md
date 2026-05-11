@@ -132,10 +132,6 @@ Requires replacement if changed.
 - `resource_group` (String) Azure resource group where compute instances will be provisioned. Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 
-Read-Only:
-
-- `forged_resources` (Attributes List) Read-only list of resources provisioned for this compute environment. (see [below for nested schema](#nestedatt--config--forged_resources))
-
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`
 
@@ -150,15 +146,6 @@ At least one of 'head' or 'compute' must be set to true. Both can be true to tar
 Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
-- `value` (String) Requires replacement if changed.
-
-
-<a id="nestedatt--config--forged_resources"></a>
-### Nested Schema for `config.forged_resources`
-
-Optional:
-
-- `key` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 ## Import

@@ -202,42 +202,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`Each variable can target the head node, compute nodes, or both.` + "\n" +
 							`Requires replacement if changed.`,
 					},
-					"forged_resources": schema.ListNestedAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.List{
-							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-						},
-						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
-							PlanModifiers: []planmodifier.Object{
-								objectplanmodifier.RequiresReplaceIfConfigured(),
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
-							Attributes: map[string]schema.Attribute{
-								"key": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Requires replacement if changed.`,
-								},
-								"value": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Requires replacement if changed.`,
-								},
-							},
-						},
-						Description: `Read-only list of resources provisioned for this compute environment.`,
-					},
 					"instance_type": schema.StringAttribute{
 						Computed: true,
 						Optional: true,

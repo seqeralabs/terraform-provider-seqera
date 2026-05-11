@@ -4,6 +4,7 @@ package shared
 
 type DescribeWorkflowResponse struct {
 	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
+	SchedEnabled *bool                    `json:"schedEnabled,omitempty"`
 	Workflow     *WorkflowMaxDbDto        `json:"workflow,omitempty"`
 	WorkspaceID  *int64                   `json:"workspaceId,omitempty"`
 }
@@ -13,6 +14,13 @@ func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
 		return nil
 	}
 	return d.PipelineInfo
+}
+
+func (d *DescribeWorkflowResponse) GetSchedEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.SchedEnabled
 }
 
 func (d *DescribeWorkflowResponse) GetWorkflow() *WorkflowMaxDbDto {
