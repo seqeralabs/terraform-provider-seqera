@@ -2,12 +2,12 @@
 page_title: "seqera_ssh_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
+  Manage SSH credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 ---
 
 # seqera_ssh_credential (Resource)
 
-Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
+Manage SSH credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 
 ## Example Usage
 
@@ -41,13 +41,13 @@ resource "seqera_ssh_credential" "example" {
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 > **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
 
 - `passphrase` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -63,12 +63,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_ssh_credential.my_seqera_ssh_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_ssh_credential.my_seqera_ssh_credential "..."
+terraform import seqera_ssh_credential.my_seqera_ssh_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

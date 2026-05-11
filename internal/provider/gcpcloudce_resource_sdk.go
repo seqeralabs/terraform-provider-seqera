@@ -127,12 +127,9 @@ func (r *GCPCloudCEResourceModel) ToOperationsDeleteGCPCloudCERequest(ctx contex
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteGCPCloudCERequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,

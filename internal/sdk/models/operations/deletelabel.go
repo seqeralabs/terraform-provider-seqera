@@ -11,7 +11,7 @@ type DeleteLabelRequest struct {
 	// Label numeric identifier
 	LabelID int64 `pathParam:"style=simple,explode=false,name=labelId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeleteLabelRequest) GetLabelID() int64 {
@@ -21,9 +21,9 @@ func (d *DeleteLabelRequest) GetLabelID() int64 {
 	return d.LabelID
 }
 
-func (d *DeleteLabelRequest) GetWorkspaceID() *int64 {
+func (d *DeleteLabelRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

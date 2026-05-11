@@ -9,14 +9,14 @@ import (
 
 type CreateBitbucketCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Bitbucket credentials create request
 	CreateBitbucketCredentialsRequest shared.CreateBitbucketCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateBitbucketCredentialsRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

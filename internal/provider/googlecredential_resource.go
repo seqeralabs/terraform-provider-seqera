@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -55,7 +57,7 @@ func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.Me
 
 func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials authenticate to Google Cloud either with a service account\nkey (`data`) or via Workload Identity Federation (`workload_identity_provider`\nand `service_account_email`). WIF is the recommended path — no long-lived key\nis stored in the platform.\n",
+		MarkdownDescription: "**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nManage Google credentials in Seqera platform using this resource.\n\nGoogle credentials authenticate to Google Cloud either with a service account\nkey (`data`) or via Workload Identity Federation (`workload_identity_provider`\nand `service_account_email`). WIF is the recommended path — no long-lived key\nis stored in the platform.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
@@ -115,7 +117,7 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -435,7 +437,24 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 }
 
 func (r *GoogleCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		CredentialsID string `json:"credentials_id"`
+		WorkspaceID   int64  `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"credentials_id": "...", "workspace_id": 0}': `+err.Error())
+		return
+	}
+
+	if len(data.CredentialsID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field credentials_id is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), data.CredentialsID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }
 
 func (r *GoogleCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {

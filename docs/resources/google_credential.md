@@ -2,6 +2,7 @@
 page_title: "seqera_google_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage Google credentials in Seqera platform using this resource.
   Google credentials authenticate to Google Cloud either with a service account
   key (data) or via Workload Identity Federation (workload_identity_provider
@@ -10,6 +11,8 @@ description: |-
 ---
 
 # seqera_google_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage Google credentials in Seqera platform using this resource.
 
@@ -52,6 +55,7 @@ resource "seqera_google_credential" "wif" {
 ### Required
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -61,7 +65,6 @@ resource "seqera_google_credential" "wif" {
 - `service_account_email` (String) Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
 - `token_audience` (String) OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
 - `workload_identity_provider` (String) Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -77,7 +80,10 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_google_credential.my_seqera_google_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 

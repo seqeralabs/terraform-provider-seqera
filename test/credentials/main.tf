@@ -22,3 +22,20 @@ variable "seqera_bearer_auth" {
   type        = string
   sensitive   = true
 }
+
+# Test org + workspace. Typed credential resources require a workspace_id;
+# the credential blocks below reference seqera_workspace.test.id, giving a
+# self-contained plan.
+resource "seqera_orgs" "test" {
+  name        = "tf-provider-credential-tests"
+  full_name   = "Terraform Provider Credential Tests"
+  description = "Test organization for the credential resource CI validation"
+}
+
+resource "seqera_workspace" "test" {
+  name        = "credential-tests"
+  full_name   = "Credential Tests"
+  description = "Test workspace for credential resource CI validation"
+  org_id      = seqera_orgs.test.org_id
+  visibility  = "PRIVATE"
+}

@@ -94,12 +94,9 @@ func (r *PipelineResourceModel) RefreshFromSharedUpdatePipelineResponse(ctx cont
 func (r *PipelineResourceModel) ToOperationsCreatePipelineRequest(ctx context.Context) (*operations.CreatePipelineRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createPipelineRequest, createPipelineRequestDiags := r.ToSharedCreatePipelineRequest(ctx)
 	diags.Append(createPipelineRequestDiags...)
 
@@ -121,12 +118,9 @@ func (r *PipelineResourceModel) ToOperationsDeletePipelineRequest(ctx context.Co
 	var pipelineID int64
 	pipelineID = r.PipelineID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeletePipelineRequest{
 		PipelineID:  pipelineID,
 		WorkspaceID: workspaceID,
@@ -158,12 +152,9 @@ func (r *PipelineResourceModel) ToOperationsUpdatePipelineRequest(ctx context.Co
 	var pipelineID int64
 	pipelineID = r.PipelineID.ValueInt64()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updatePipelineRequest, updatePipelineRequestDiags := r.ToSharedUpdatePipelineRequest(ctx)
 	diags.Append(updatePipelineRequestDiags...)
 

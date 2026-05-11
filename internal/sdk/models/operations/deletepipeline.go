@@ -11,7 +11,7 @@ type DeletePipelineRequest struct {
 	// Pipeline numeric identifier
 	PipelineID int64 `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeletePipelineRequest) GetPipelineID() int64 {
@@ -21,9 +21,9 @@ func (d *DeletePipelineRequest) GetPipelineID() int64 {
 	return d.PipelineID
 }
 
-func (d *DeletePipelineRequest) GetWorkspaceID() *int64 {
+func (d *DeletePipelineRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

@@ -2,14 +2,14 @@
 page_title: "seqera_codecommit_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Codecommit credentials in Seqera platform using this resource.
+  Manage Codecommit credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Codecommit credentials store AWS authentication information for accessing
   AWS Codecommit repositories within the Seqera Platform workflows.
 ---
 
 # seqera_codecommit_credential (Resource)
 
-Manage Codecommit credentials in Seqera platform using this resource.
+Manage Codecommit credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Codecommit credentials store AWS authentication information for accessing
 AWS Codecommit repositories within the Seqera Platform workflows.
@@ -46,11 +46,11 @@ resource "seqera_codecommit_credential" "example" {
 - `access_key` (String) AWS IAM access key ID for CodeCommit.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS IAM secret access key for CodeCommit (sensitive).
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `base_url` (String) Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -66,12 +66,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_codecommit_credential.my_seqera_codecommit_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_codecommit_credential.my_seqera_codecommit_credential "..."
+terraform import seqera_codecommit_credential.my_seqera_codecommit_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

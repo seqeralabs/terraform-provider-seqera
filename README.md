@@ -1,13 +1,12 @@
 # Seqera Platform Terraform Provider
 
-> [!NOTE]
-> **Early Preview** - This provider is currently in early preview as we work toward a stable release by the end of 2025. Track our progress on the [v1.0 stable release milestone](https://github.com/seqeralabs/terraform-provider-seqera/milestone/3).
+> [!NOTE] > **Public Preview** - This provider is currently in public preview.
 >
 > We'd love your feedback! Please test the provider with your use cases and [report any issues](https://github.com/seqeralabs/terraform-provider-seqera/issues) you encounter. Your input will help us build a better stable release.
 
-> [!CAUTION]
-> **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed for the stable release. Please migrate to their recommended replacements if available.
+> [!IMPORTANT] > **Built for Seqera Organizations** — This provider targets admins managing shared resources within a Seqera organization. Personal-workspace use isn't part of our supported scope and some resources will not work in that context.
 
+> [!CAUTION] > **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed in the future release. Please migrate to their recommended replacements.
 
 Terraform Provider for the Seqera Platform API.
 
@@ -19,27 +18,32 @@ Terraform Provider for the Seqera Platform API.
 </div>
 
 <!-- Start Summary [summary] -->
+
 ## Summary
 
 Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
+
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
+
 ## Table of Contents
+
 <!-- $toc-max-depth=2 -->
-* [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
-  * [Installation](#installation)
-  * [Authentication](#authentication)
-  * [Available Resources and Data Sources](#available-resources-and-data-sources)
-  * [Best Practices](#best-practices)
-  * [Examples](#examples)
-  * [Testing the provider locally](#testing-the-provider-locally)
-* [Development](#development)
-  * [Contributions](#contributions)
+
+- [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
+  - [Installation](#installation)
+  - [Authentication](#authentication)
+  - [Available Resources and Data Sources](#available-resources-and-data-sources)
+  - [Examples](#examples)
+  - [Testing the provider locally](#testing-the-provider-locally)
+- [Development](#development)
+  - [Contributions](#contributions)
 
 <!-- End Table of Contents [toc] -->
 
 <!-- Start Installation [installation] -->
+
 ## Installation
 
 To install this provider, copy and paste this code into your Terraform configuration. Then, run `terraform init`.
@@ -58,9 +62,11 @@ provider "seqera" {
   server_url = "..." # Optional
 }
 ```
+
 <!-- End Installation [installation] -->
 
 <!-- Start Authentication [security] -->
+
 ## Authentication
 
 This provider supports authentication configuration via environment variables and provider configuration.
@@ -72,122 +78,70 @@ The configuration precedence is:
 
 Available configuration:
 
-| Provider Attribute | Description |
-|---|---|
-| `bearer_auth` | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
+| Provider Attribute | Description                                                              |
+| ------------------ | ------------------------------------------------------------------------ |
+| `bearer_auth`      | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
+
 <!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
+
 ## Available Resources and Data Sources
 
 ### Managed Resources
 
-* [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
-* [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
-* [seqera_aws_credential](docs/resources/aws_credential.md)
-* [seqera_action](docs/resources/action.md)
-* [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
-* [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
-* [seqera_azure_credential](docs/resources/azure_credential.md)
-* [seqera_bitbucket_credential](docs/resources/bitbucket_credential.md)
-* [seqera_codecommit_credential](docs/resources/codecommit_credential.md)
-* [seqera_compute_env](docs/resources/compute_env.md)
-* [seqera_container_registry_credential](docs/resources/container_registry_credential.md)
-* [seqera_credential](docs/resources/credential.md)
-* [seqera_data_link](docs/resources/data_link.md)
-* [seqera_datasets](docs/resources/datasets.md)
-* [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)
-* [seqera_gcp_cloud_ce](docs/resources/gcp_cloud_ce.md)
-* [seqera_gitea_credential](docs/resources/gitea_credential.md)
-* [seqera_github_credential](docs/resources/github_credential.md)
-* [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
-* [seqera_google_credential](docs/resources/google_credential.md)
-* [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
-* [seqera_labels](docs/resources/labels.md)
-* [seqera_managed_compute_ce](docs/resources/managed_compute_ce.md)
-* [seqera_orgs](docs/resources/orgs.md)
-* [seqera_pipeline](docs/resources/pipeline.md)
-* [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
-* [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
-* [seqera_ssh_credential](docs/resources/ssh_credential.md)
-* [seqera_studios](docs/resources/studios.md)
-* [seqera_teams](docs/resources/teams.md)
-* [seqera_tokens](docs/resources/tokens.md)
-* [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
-* [seqera_workflows](docs/resources/workflows.md)
-* [seqera_workspace](docs/resources/workspace.md)
+- [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
+- [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
+- [seqera_aws_credential](docs/resources/aws_credential.md)
+- [seqera_action](docs/resources/action.md)
+- [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
+- [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
+- [seqera_azure_credential](docs/resources/azure_credential.md)
+- [seqera_bitbucket_credential](docs/resources/bitbucket_credential.md)
+- [seqera_codecommit_credential](docs/resources/codecommit_credential.md)
+- [seqera_compute_env](docs/resources/compute_env.md)
+- [seqera_container_registry_credential](docs/resources/container_registry_credential.md)
+- [seqera_credential](docs/resources/credential.md)
+- [seqera_data_link](docs/resources/data_link.md)
+- [seqera_datasets](docs/resources/datasets.md)
+- [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)
+- [seqera_gcp_cloud_ce](docs/resources/gcp_cloud_ce.md)
+- [seqera_gitea_credential](docs/resources/gitea_credential.md)
+- [seqera_github_credential](docs/resources/github_credential.md)
+- [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
+- [seqera_google_credential](docs/resources/google_credential.md)
+- [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
+- [seqera_labels](docs/resources/labels.md)
+- [seqera_managed_compute_ce](docs/resources/managed_compute_ce.md)
+- [seqera_orgs](docs/resources/orgs.md)
+- [seqera_pipeline](docs/resources/pipeline.md)
+- [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
+- [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
+- [seqera_ssh_credential](docs/resources/ssh_credential.md)
+- [seqera_studios](docs/resources/studios.md)
+- [seqera_teams](docs/resources/teams.md)
+- [seqera_tokens](docs/resources/tokens.md)
+- [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
+- [seqera_workflows](docs/resources/workflows.md)
+- [seqera_workspace](docs/resources/workspace.md)
 
 ### Data Sources
 
-* [seqera_credentials](docs/data-sources/credentials.md)
-* [seqera_data_links](docs/data-sources/data_links.md)
+- [seqera_credentials](docs/data-sources/credentials.md)
+- [seqera_data_links](docs/data-sources/data_links.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
-## Best Practices
-
-### Prerequisites
-
-* **Terraform Knowledge**: Familiar with Terraform concepts, state management, and limitations
-* **Permissions**: Sufficient permissions in cloud provider and Seqera Platform
-* **Cost Management**: Infrastructure spend awareness and cost controls
-* **API Access**: Proper API access to Seqera Platform with authentication
-
-### Security
-
-#### ✅ DO
-
-* **Secure Credentials**: Use environment variables, Terraform Cloud variables, or secret management systems
-* **Least Privilege**: Grant minimum necessary permissions to Terraform service accounts
-* **Secure State**: Store Terraform state in remote backends (Terraform Cloud, S3, Azure Storage)
-* **Encryption**: Ensure sensitive data is encrypted at rest and in transit
-
-#### ❌ DON'T
-
-* **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
-* **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
-* **Public State**: Never commit Terraform state files to version control
-
-### Resource Management
-
-#### ✅ DO
-
-* **Persistent Resources**: Use for persistent infrastructure resources on Seqera Platform
-* **State Management**: Always use Terraform state to track infrastructure
-* **Naming & Tagging**: Use consistent naming conventions and comprehensive tagging
-* **Modular Design**: Organize code into reusable modules
-
-#### ❌ DON'T
-
-* **Pipeline Orchestration**: Don't use for launching pipelines except as smoke tests for compute environments (use Seqera Platform APIs for routine pipeline launches)
-* **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
-* **State Assumptions**: Do not assume the state reflects user-managed resources that may have been modified elsewhere.
-
-### Operations
-
-#### ✅ DO
-
-* **Version Control**: Store configurations in version control
-* **Code Review**: Implement review processes for infrastructure changes
-* **Environment Separation**: Use separate workspaces/configurations for environments
-* **Monitoring**: Set up monitoring and alerting
-* **Backup Strategy**: Maintain backups of state and configurations
-
-#### ❌ DON'T
-
-* **Manual Changes**: Avoid direct modifications to Terraform-managed resources
-* **Single Recovery**: Don't rely solely on Terraform for disaster recovery
-* **Resource Drift**: Don't allow resources to drift from Terraform state
-
 <!-- Start Examples [examples] -->
+
 ## Examples
 
 The `examples/terraform-examples` directory contains comprehensive Terraform configurations demonstrating how to use the Seqera Platform provider across different cloud platforms. Each example includes a complete setup from organization to running nf-core/rnaseq.
 
 ### Cloud Platform Examples
 
-* **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
-* **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
-* **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
+- **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
+- **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
+- **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
 
 ### Getting Started with Examples
 
@@ -195,14 +149,16 @@ The `examples/terraform-examples` directory contains comprehensive Terraform con
 2. **Copy the example tfvars**: `cp terraform.tfvars.example terraform.tfvars`
 3. **Configure your credentials** and settings in `terraform.tfvars`
 4. **Amend any variable/resource names or values** ,ensure you update your organization name as that has to be unique.
-4. **Initialize Terraform**: `terraform init`
-5. **Review the plan**: `terraform plan`
-6. **Apply when ready**: `terraform apply`
+5. **Initialize Terraform**: `terraform init`
+6. **Review the plan**: `terraform plan`
+7. **Apply when ready**: `terraform apply`
 
 Each example includes detailed variable descriptions and validation rules to help you configure the resources correctly for your environment.
+
 <!-- End Examples [examples] -->
 
 <!-- Start Testing the provider locally [usage] -->
+
 ## Testing the provider locally
 
 #### Local Provider
@@ -242,6 +198,7 @@ provider_installation {
   direct {}
 }
 ```
+
 <!-- End Testing the provider locally [usage] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->

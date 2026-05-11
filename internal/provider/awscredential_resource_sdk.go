@@ -80,12 +80,9 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedDescribeAWSCredentialsResp
 func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*operations.CreateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	useExternalID := new(bool)
 	if !r.UseExternalID.IsUnknown() && !r.UseExternalID.IsNull() {
 		*useExternalID = r.UseExternalID.ValueBool()
@@ -114,12 +111,9 @@ func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteAWSCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -134,12 +128,9 @@ func (r *AWSCredentialResourceModel) ToOperationsDescribeAWSCredentialsRequest(c
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeAWSCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -154,12 +145,9 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	useExternalID := new(bool)
 	if !r.UseExternalID.IsUnknown() && !r.UseExternalID.IsNull() {
 		*useExternalID = r.UseExternalID.ValueBool()

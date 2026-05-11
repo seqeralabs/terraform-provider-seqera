@@ -2,14 +2,14 @@
 page_title: "seqera_kubernetes_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Kubernetes credentials in Seqera platform using this resource.
+  Manage Kubernetes credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
   execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.
 ---
 
 # seqera_kubernetes_credential (Resource)
 
-Manage Kubernetes credentials in Seqera platform using this resource.
+Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
 execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.
@@ -42,6 +42,7 @@ resource "seqera_kubernetes_credential" "example" {
 ### Required
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -50,7 +51,6 @@ resource "seqera_kubernetes_credential" "example" {
 - `client_certificate` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
 - `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
 - `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -66,12 +66,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_kubernetes_credential.my_seqera_kubernetes_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_kubernetes_credential.my_seqera_kubernetes_credential "..."
+terraform import seqera_kubernetes_credential.my_seqera_kubernetes_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

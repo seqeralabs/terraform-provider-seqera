@@ -2,14 +2,14 @@
 page_title: "seqera_bitbucket_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Bitbucket credentials in Seqera platform using this resource.
+  Manage Bitbucket credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Bitbucket credentials store authentication information for accessing Bitbucket
   repositories within the Seqera Platform workflows.
 ---
 
 # seqera_bitbucket_credential (Resource)
 
-Manage Bitbucket credentials in Seqera platform using this resource.
+Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Bitbucket credentials store authentication information for accessing Bitbucket
 repositories within the Seqera Platform workflows.
@@ -43,6 +43,7 @@ resource "seqera_bitbucket_credential" "example" {
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `username` (String) Bitbucket account username (for app passwords) or email (for API tokens).
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -51,7 +52,6 @@ resource "seqera_bitbucket_credential" "example" {
 - `base_url` (String) Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1
 - `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
 - `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket API token (sensitive). Mutually exclusive with `password`.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -67,12 +67,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_bitbucket_credential.my_seqera_bitbucket_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_bitbucket_credential.my_seqera_bitbucket_credential "..."
+terraform import seqera_bitbucket_credential.my_seqera_bitbucket_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

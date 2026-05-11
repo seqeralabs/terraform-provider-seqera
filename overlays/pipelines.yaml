@@ -148,7 +148,7 @@ actions:
   # FIELD CONFIGURATION
   # ============================================================================
 
-  # Make workspaceId required for pipelines GET endpoint to fix import
+  # Make workspaceId required across all pipeline operations (workspace-scoped only)
   - target: $.paths["/pipelines/{pipelineId}"].get.parameters[?(@.name == "workspaceId")]
     update:
       name: workspaceId
@@ -158,6 +158,15 @@ actions:
       schema:
         type: integer
         format: int64
+  - target: $.paths["/pipelines"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/pipelines/{pipelineId}"].put.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/pipelines/{pipelineId}"].delete.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
 
   # Remove required fields from WorkflowLaunchRequest to make them optional
   # This allows pipelines to be created without specifying compute env and work dir

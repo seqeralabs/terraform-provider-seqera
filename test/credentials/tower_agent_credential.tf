@@ -7,8 +7,7 @@ resource "seqera_tower_agent_credential" "example_basic" {
   connection_id = "12345678-1234-1234-1234-123456789012"
   shared        = false
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Tower Agent credential (shared with workspace)
@@ -17,8 +16,7 @@ resource "seqera_tower_agent_credential" "example_shared" {
   connection_id = "87654321-4321-4321-4321-210987654321"
   shared        = true
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

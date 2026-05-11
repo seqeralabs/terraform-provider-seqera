@@ -11,7 +11,7 @@ type DeleteBitbucketCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeleteBitbucketCredentialsRequest) GetCredentialsID() string {
@@ -21,9 +21,9 @@ func (d *DeleteBitbucketCredentialsRequest) GetCredentialsID() string {
 	return d.CredentialsID
 }
 
-func (d *DeleteBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DeleteBitbucketCredentialsRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

@@ -9,14 +9,14 @@ import (
 
 type CreateLabelRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` — if `resource: true`, include a `value`. Else, omit `value` from your request body.
 	CreateLabelRequest shared.CreateLabelRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateLabelRequest) GetWorkspaceID() *int64 {
+func (c *CreateLabelRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

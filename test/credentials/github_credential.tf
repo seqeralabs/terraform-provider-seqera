@@ -7,8 +7,7 @@ resource "seqera_github_credential" "example_github_com" {
   username     = "example-github-user"
   access_token = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # GitHub credential for GitHub Enterprise Server
@@ -18,8 +17,7 @@ resource "seqera_github_credential" "example_github_enterprise" {
   access_token = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
   base_url     = "https://github.example.com"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

@@ -2,12 +2,15 @@
 page_title: "seqera_aws_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage AWS credentials in Seqera platform using this resource.
   AWS credentials store authentication information for accessing AWS services
   within the Seqera Platform workflows.
 ---
 
 # seqera_aws_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage AWS credentials in Seqera platform using this resource.
 
@@ -125,6 +128,7 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 ### Required
 
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -135,7 +139,6 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 - `mode` (String) must be one of ["keys", "role"]
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `use_external_id` (Boolean) Generate External ID for AWS credentials (requires IAM Role ARN)
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -152,12 +155,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_aws_credential.my_seqera_aws_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_aws_credential.my_seqera_aws_credential "..."
+terraform import seqera_aws_credential.my_seqera_aws_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

@@ -11,7 +11,7 @@ type UpdateLabelRequest struct {
 	// Label numeric identifier
 	LabelID int64 `pathParam:"style=simple,explode=false,name=labelId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Label update request
 	UpdateLabelRequest shared.UpdateLabelRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateLabelRequest) GetLabelID() int64 {
 	return u.LabelID
 }
 
-func (u *UpdateLabelRequest) GetWorkspaceID() *int64 {
+func (u *UpdateLabelRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -53,7 +55,7 @@ func (r *KubernetesCredentialResource) Metadata(ctx context.Context, req resourc
 
 func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Kubernetes credentials in Seqera platform using this resource.\n\nKubernetes credentials enable secure connections to Kubernetes clusters for workflow\nexecution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.",
+		MarkdownDescription: "Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nKubernetes credentials enable secure connections to Kubernetes clusters for workflow\nexecution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"client_certificate": schema.StringAttribute{
@@ -99,7 +101,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -382,7 +384,24 @@ func (r *KubernetesCredentialResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *KubernetesCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		CredentialsID string `json:"credentials_id"`
+		WorkspaceID   int64  `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"credentials_id": "...", "workspace_id": 0}': `+err.Error())
+		return
+	}
+
+	if len(data.CredentialsID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field credentials_id is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), data.CredentialsID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }
 
 func (r *KubernetesCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {

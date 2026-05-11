@@ -7,8 +7,7 @@ resource "seqera_aws_credential" "example_basic" {
   access_key = "AKIAIOSFODNN7EXAMPLE"
   secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # AWS credential with assume role
@@ -18,8 +17,7 @@ resource "seqera_aws_credential" "example_with_role" {
   secret_key      = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"
 
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
+  workspace_id = seqera_workspace.test.id
 }
 
 # Output the credential ID

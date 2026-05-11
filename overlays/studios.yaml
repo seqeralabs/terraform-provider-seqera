@@ -190,6 +190,8 @@ actions:
   - target: $.components.schemas.DataStudioDto.properties.workspaceId
     update:
       description: Numeric identifier of the workspace containing the Studio
+      x-speakeasy-param-optional: false
+      x-speakeasy-param-force-new: true
   - target: $.components.schemas.DataStudioDto.properties.name
     update:
       description: Display name for the Studio session

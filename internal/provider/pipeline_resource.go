@@ -277,8 +277,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Computed:    true,
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

@@ -2,7 +2,7 @@
 page_title: "seqera_tower_agent_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Tower Agent credentials in Seqera platform using this resource.
+  Manage Tower Agent credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Tower Agent credentials store connection IDs for Tower Agent instances that
   enable secure communication between the Seqera Platform and compute environments.
   IMPORTANT: The Tower Agent must be running and online before creating the credential.
@@ -12,7 +12,7 @@ description: |-
 
 # seqera_tower_agent_credential (Resource)
 
-Manage Tower Agent credentials in Seqera platform using this resource.
+Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Tower Agent credentials store connection IDs for Tower Agent instances that
 enable secure communication between the Seqera Platform and compute environments.
@@ -65,11 +65,11 @@ resource "seqera_tower_agent_credential" "shared" {
 
 - `connection_id` (String) Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `shared` (Boolean) When enabled, all workspace users can access the same Tower Agent instance. Default: false
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -85,12 +85,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_tower_agent_credential.my_seqera_tower_agent_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_tower_agent_credential.my_seqera_tower_agent_credential "..."
+terraform import seqera_tower_agent_credential.my_seqera_tower_agent_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

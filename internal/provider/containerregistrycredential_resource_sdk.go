@@ -75,12 +75,9 @@ func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedDescribeCont
 func (r *ContainerRegistryCredentialResourceModel) ToOperationsCreateContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*operations.CreateContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createContainerRegistryCredentialsRequest, createContainerRegistryCredentialsRequestDiags := r.ToSharedCreateContainerRegistryCredentialsRequest(ctx, opts)
 	diags.Append(createContainerRegistryCredentialsRequestDiags...)
 
@@ -102,12 +99,9 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsDeleteContainerRe
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteContainerRegistryCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -122,12 +116,9 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsDescribeContainer
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeContainerRegistryCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -142,12 +133,9 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRe
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateContainerRegistryCredentialsRequest, updateContainerRegistryCredentialsRequestDiags := r.ToSharedUpdateContainerRegistryCredentialsRequest(ctx, opts)
 	diags.Append(updateContainerRegistryCredentialsRequestDiags...)
 

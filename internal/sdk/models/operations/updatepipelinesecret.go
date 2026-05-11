@@ -11,7 +11,7 @@ type UpdatePipelineSecretRequest struct {
 	// Secret numeric identifier
 	SecretID int64 `pathParam:"style=simple,explode=false,name=secretId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Secret update request
 	UpdatePipelineSecretRequest shared.UpdatePipelineSecretRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdatePipelineSecretRequest) GetSecretID() int64 {
 	return u.SecretID
 }
 
-func (u *UpdatePipelineSecretRequest) GetWorkspaceID() *int64 {
+func (u *UpdatePipelineSecretRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

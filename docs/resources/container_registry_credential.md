@@ -2,14 +2,14 @@
 page_title: "seqera_container_registry_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage container registry credentials in Seqera platform using this resource.
+  Manage container registry credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Container registry credentials store authentication information for accessing
   container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
 ---
 
 # seqera_container_registry_credential (Resource)
 
-Manage container registry credentials in Seqera platform using this resource.
+Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Container registry credentials store authentication information for accessing
 container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
@@ -68,11 +68,11 @@ resource "seqera_container_registry_credential" "private" {
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Password or access token for container registry authentication (required, sensitive)
 - `user_name` (String) Username for container registry authentication (required)
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `registry` (String) Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -88,12 +88,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_container_registry_credential.my_seqera_container_registry_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_container_registry_credential.my_seqera_container_registry_credential "..."
+terraform import seqera_container_registry_credential.my_seqera_container_registry_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

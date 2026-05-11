@@ -75,12 +75,9 @@ func (r *BitbucketCredentialResourceModel) RefreshFromSharedDescribeBitbucketCre
 func (r *BitbucketCredentialResourceModel) ToOperationsCreateBitbucketCredentialsRequest(ctx context.Context, opts *BitbucketCredentialResourceModelOptions) (*operations.CreateBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createBitbucketCredentialsRequest, createBitbucketCredentialsRequestDiags := r.ToSharedCreateBitbucketCredentialsRequest(ctx, opts)
 	diags.Append(createBitbucketCredentialsRequestDiags...)
 
@@ -102,12 +99,9 @@ func (r *BitbucketCredentialResourceModel) ToOperationsDeleteBitbucketCredential
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteBitbucketCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -122,12 +116,9 @@ func (r *BitbucketCredentialResourceModel) ToOperationsDescribeBitbucketCredenti
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeBitbucketCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
@@ -142,12 +133,9 @@ func (r *BitbucketCredentialResourceModel) ToOperationsUpdateBitbucketCredential
 	var credentialsID string
 	credentialsID = r.CredentialsID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateBitbucketCredentialsRequest, updateBitbucketCredentialsRequestDiags := r.ToSharedUpdateBitbucketCredentialsRequest(ctx, opts)
 	diags.Append(updateBitbucketCredentialsRequestDiags...)
 

@@ -2,14 +2,14 @@
 page_title: "seqera_gitea_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Manage Gitea credentials in Seqera platform using this resource.
+  Manage Gitea credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Gitea credentials store authentication information for accessing Gitea
   repositories within the Seqera Platform workflows.
 ---
 
 # seqera_gitea_credential (Resource)
 
-Manage Gitea credentials in Seqera platform using this resource.
+Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Gitea credentials store authentication information for accessing Gitea
 repositories within the Seqera Platform workflows.
@@ -46,11 +46,11 @@ resource "seqera_gitea_credential" "example" {
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `password` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Gitea account password or personal access token (sensitive).
 - `username` (String) Gitea account username.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `base_url` (String) Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -66,12 +66,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_gitea_credential.my_seqera_gitea_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_gitea_credential.my_seqera_gitea_credential "..."
+terraform import seqera_gitea_credential.my_seqera_gitea_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```

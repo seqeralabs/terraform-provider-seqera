@@ -97,6 +97,7 @@ actions:
             - name: workspaceId
               in: query
               description: Workspace numeric identifier
+              required: true
               schema:
                 type: integer
                 format: int64
@@ -153,6 +154,7 @@ actions:
             - name: workspaceId
               in: query
               description: Workspace numeric identifier
+              required: true
               schema:
                 type: integer
                 format: int64
@@ -207,6 +209,7 @@ actions:
             - name: workspaceId
               in: query
               description: Workspace numeric identifier
+              required: true
               schema:
                 type: integer
                 format: int64

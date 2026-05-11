@@ -11,7 +11,7 @@ type UpdateContainerRegistryCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Container registry credentials update request
 	UpdateContainerRegistryCredentialsRequest shared.UpdateContainerRegistryCredentialsRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateContainerRegistryCredentialsRequest) GetCredentialsID() string {
 	return u.CredentialsID
 }
 
-func (u *UpdateContainerRegistryCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateContainerRegistryCredentialsRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

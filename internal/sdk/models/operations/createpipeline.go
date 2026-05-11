@@ -9,14 +9,14 @@ import (
 
 type CreatePipelineRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Pipeline creation request
 	CreatePipelineRequest shared.CreatePipelineRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreatePipelineRequest) GetWorkspaceID() *int64 {
+func (c *CreatePipelineRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

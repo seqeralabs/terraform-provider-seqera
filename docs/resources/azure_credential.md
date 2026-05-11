@@ -2,6 +2,7 @@
 page_title: "seqera_azure_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
+  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
   Manage Azure credentials in Seqera platform using this resource.
   Azure credentials support three authentication modes: shared key
   (batch_key and storage_key, discriminator 'azure'), Entra service
@@ -11,6 +12,8 @@ description: |-
 ---
 
 # seqera_azure_credential (Resource)
+
+**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
 
 Manage Azure credentials in Seqera platform using this resource.
 
@@ -55,6 +58,7 @@ resource "seqera_azure_credential" "entra" {
 - `batch_name` (String) Azure Batch account name (required)
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `storage_name` (String) Azure Blob Storage account name (required)
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -65,7 +69,6 @@ resource "seqera_azure_credential" "entra" {
 - `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure service principal client secret (for Entra/Cloud authentication)
 - `storage_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure Storage account key (for shared key authentication)
 - `tenant_id` (String) Azure tenant ID (for Entra/Cloud authentication)
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
@@ -81,12 +84,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_azure_credential.my_seqera_azure_credential
-  id = "..."
+  id = jsonencode({
+    credentials_id = "..."
+    workspace_id   = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_azure_credential.my_seqera_azure_credential "..."
+terraform import seqera_azure_credential.my_seqera_azure_credential '{"credentials_id": "...", "workspace_id": 0}'
 ```
