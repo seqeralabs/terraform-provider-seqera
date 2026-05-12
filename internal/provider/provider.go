@@ -137,6 +137,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewAWSComputeEnvResource,
 		NewAWSCredentialResource,
 		NewActionResource,
+		NewAwsCloudCEResource,
 		NewAzureBatchCEResource,
 		NewAzureCloudCEResource,
 		NewAzureCredentialResource,

@@ -138,6 +138,10 @@ actions:
           x-speakeasy-entity-operation:
             terraform-datasource: null
             terraform-resource: ManagedComputeCE#read
+          # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          x-speakeasy-entity-missing-codes:
+            - 400
+            - 404
           x-speakeasy-name-override: DescribeManagedComputeCE
           summary: Describe Seqera Compute compute environment
           description: Retrieves the details of the Seqera Compute compute environment identified by the given `computeEnvId`.

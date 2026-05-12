@@ -380,7 +380,6 @@ actions:
         S3 bucket path for Nextflow work directory where intermediate files will be stored.
         Format: s3://bucket-name/path
       example: "s3://my-nextflow-bucket/work"
-      pattern: "^s3://.+"
       x-speakeasy-param-force-new: true
       x-speakeasy-param-optional: false
 

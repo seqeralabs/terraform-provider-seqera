@@ -109,6 +109,10 @@ actions:
           x-speakeasy-entity-operation:
             terraform-datasource: null
             terraform-resource: AzureCloudCE#read
+          # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          x-speakeasy-entity-missing-codes:
+            - 400
+            - 404
           x-speakeasy-name-override: DescribeAzureCloudCE
           summary: Describe Azure Cloud compute environment
           description: Retrieves the details of the Azure Cloud compute environment identified by the given `computeEnvId`.

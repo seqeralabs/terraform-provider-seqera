@@ -20,6 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -1158,6 +1159,72 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.`,
 									},
+									"intelligent_compute_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"machine_types": schema.ListAttribute{
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+													`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
+													`types per task. When populated, the scheduler is restricted to this` + "\n" +
+													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
+													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`spotFirst`),
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+													`Case-sensitive — must be one of:` + "\n" +
+													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
+													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
+													`- ` + "`" + `ondemand` + "`" + `: on-demand instances only — maximum reliability at a higher cost.` + "\n" +
+													`` + "\n" +
+													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
+													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple EC2 instances with` + "\n" +
+											`optimized scheduling and resource allocation, and` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is required. When ` + "`" + `false` + "`" + ` (default), all` + "\n" +
+											`tasks run on a single instance (Basic mode) and` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` must be omitted.` + "\n" +
+											`` + "\n" +
+											`Setting this to ` + "`" + `true` + "`" + ` requires the ` + "`" + `SEQERA_SCHEDULER` + "`" + ` feature toggle` + "\n" +
+											`to be enabled on the target workspace/org; otherwise the API returns` + "\n" +
+											`HTTP 403.` + "\n" +
+											`Requires replacement if changed.`,
+									},
 									"log_group": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1204,48 +1271,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
-									},
-									"sched_config": schema.SingleNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											objectplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Attributes: map[string]schema.Attribute{
-											"machine_types": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.List{
-													listplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												ElementType: types.StringType,
-												Description: `EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.`,
-											},
-											"provisioning_model": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												Description: `must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"spot",
-														"spotFirst",
-														"ondemand",
-													),
-												},
-											},
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"security_groups": schema.ListAttribute{
 										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
@@ -1301,6 +1326,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.SchedConfigConsistencyValidator(),
 								},
 							},
 							"azure_batch": schema.SingleNestedAttribute{
@@ -3744,6 +3770,62 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"intelligent_compute_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"machine_types": schema.ListAttribute{
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+													`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
+													`types per task. When populated, the scheduler is restricted to this` + "\n" +
+													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
+													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`spotFirst`),
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+													`Case-sensitive — must be one of:` + "\n" +
+													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
+													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
+													`- ` + "`" + `ondemand` + "`" + `: on-demand instances only — maximum reliability at a higher cost.` + "\n" +
+													`` + "\n" +
+													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
+													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -3767,48 +3849,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"sched_config": schema.SingleNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											objectplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Attributes: map[string]schema.Attribute{
-											"machine_types": schema.ListAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.List{
-													listplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												ElementType: types.StringType,
-												Description: `EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.`,
-											},
-											"provisioning_model": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												Description: `must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"spot",
-														"spotFirst",
-														"ondemand",
-													),
-												},
-											},
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"wave_enabled": schema.BoolAttribute{
 										Computed: true,

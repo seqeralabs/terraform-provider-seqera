@@ -17,99 +17,74 @@ on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
 ## Example Usage
 
 ```terraform
-resource "seqera_aws_batch_ce" "my_awsbatchce" {
+# Minimal AWS Batch compute environment with Batch Forge.
+# Seqera provisions and tears down the underlying Batch infra on apply/destroy.
+resource "seqera_aws_batch_ce" "minimal" {
+  name           = "aws-batch-minimal"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
   config = {
-    cli_path             = "/home/ec2-user/miniconda/bin/aws"
-    compute_job_role     = "arn:aws:iam::123456789012:role/BatchJobRole"
-    compute_queue        = "...my_compute_queue..."
-    dragen_instance_type = "...my_dragen_instance_type..."
-    dragen_queue         = "...my_dragen_queue..."
-    enable_fusion        = true
-    enable_wave          = true
-    environment = [
-      {
-        compute = false
-        head    = false
-        name    = "...my_name..."
-        value   = "...my_value..."
-      }
-    ]
-    execution_role = "arn:aws:iam::123456789012:role/BatchExecutionRole"
+    region   = "us-east-1"
+    work_dir = "s3://my-bucket/work"
     forge = {
+      type           = "SPOT"
+      max_cpus       = 256
       alloc_strategy = "SPOT_CAPACITY_OPTIMIZED"
-      allow_buckets = [
-        "s3://my-input-bucket",
-        "s3://my-output-bucket",
-        "s3://my-input-bucket",
-        "s3://my-output-bucket",
-      ]
-      arm64_enabled        = false
-      bid_percentage       = 20
-      dispose_on_deletion  = true
-      dragen_ami_id        = "...my_dragen_ami_id..."
-      dragen_enabled       = false
-      dragen_instance_type = "...my_dragen_instance_type..."
-      ebs_auto_scale       = false
-      ebs_block_size       = 100
-      ebs_boot_size        = 100
-      ec2_key_pair         = "my-keypair"
-      ecs_config           = "...my_ecs_config..."
-      efs_create           = false
-      efs_id               = "fs-1234567890abcdef0"
-      efs_mount            = "/mnt/efs"
-      fargate_head_enabled = false
-      fsx_mount            = "/fsx"
-      fsx_name             = "my-fsx-filesystem"
-      fsx_size             = 1200
-      gpu_enabled          = false
-      image_id             = "ami-0123456789abcdef0"
-      instance_types = [
-        "m5.xlarge",
-        "m5.2xlarge",
-        "m5.xlarge",
-        "m5.2xlarge",
-      ]
-      max_cpus = 256
-      min_cpus = 0
-      security_groups = [
-        "sg-12345678",
-        "sg-12345678",
-      ]
-      subnets = [
-        "subnet-12345",
-        "subnet-67890",
-        "subnet-12345",
-        "subnet-67890",
-      ]
-      type   = "SPOT"
-      vpc_id = "vpc-1234567890abcdef0"
     }
-    fusion_snapshots     = false
-    head_job_cpus        = 4
-    head_job_memory_mb   = 8192
-    head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
-    head_queue           = "...my_head_queue..."
-    log_group            = "/aws/batch/seqera"
-    lustre_id            = "...my_lustre_id..."
-    nextflow_config      = "...my_nextflow_config..."
-    nvme_storage_enabled = true
-    post_run_script      = "...my_post_run_script..."
-    pre_run_script       = "...my_pre_run_script..."
-    region               = "us-east-1"
-    storage_type         = "...my_storage_type..."
-    volumes = [
-      "..."
-    ]
-    work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
-  label_ids = [
-    3
-  ]
-  name         = "...my_name..."
-  platform     = "aws-batch"
-  workspace_id = 5
+}
+```
+
+### Forge Fusion
+
+```terraform
+# AWS Batch with Forge, Fusion v2, and Wave — the recommended modern setup.
+# Forge auto-provisions VPC subnets and security groups; Fusion v2 requires Wave.
+resource "seqera_aws_batch_ce" "forge_fusion" {
+  name           = "aws-batch-forge-fusion"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region        = "us-east-1"
+    work_dir      = "s3://my-bucket/work"
+    enable_wave   = true
+    enable_fusion = true
+    forge = {
+      type                = "SPOT"
+      max_cpus            = 512
+      alloc_strategy      = "SPOT_CAPACITY_OPTIMIZED"
+      dispose_on_deletion = true
+      ebs_boot_size       = 100
+      allow_buckets       = ["s3://my-bucket-input", "s3://my-bucket-ref"]
+    }
+  }
+}
+```
+
+### Manual
+
+```terraform
+# AWS Batch with pre-existing infra — bring your own compute queue and IAM.
+# No `forge` block: Seqera neither provisions nor tears down Batch resources.
+resource "seqera_aws_batch_ce" "manual" {
+  name           = "aws-batch-manual"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region           = "us-east-1"
+    work_dir         = "s3://my-bucket/work"
+    compute_queue    = "my-existing-batch-queue"
+    head_queue       = "my-existing-batch-head-queue"
+    head_job_role    = "arn:aws:iam::123456789012:role/SeqeraHeadJobRole"
+    compute_job_role = "arn:aws:iam::123456789012:role/SeqeraComputeJobRole"
+    execution_role   = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"
+  }
 }
 ```
 

@@ -7,13 +7,13 @@ import (
 )
 
 type LocalExecutionConfiguration struct {
-	Environment    []ConfigEnvVariable `tfsdk:"environment"`
-	Fusion2Enabled types.Bool          `tfsdk:"fusion2_enabled"`
-	NextflowConfig types.String        `tfsdk:"nextflow_config"`
-	PostRunScript  types.String        `tfsdk:"post_run_script"`
-	PreRunScript   types.String        `tfsdk:"pre_run_script"`
-	SchedConfig    *SchedConfig        `tfsdk:"sched_config"`
-	SchedEnabled   types.Bool          `tfsdk:"sched_enabled"`
-	WaveEnabled    types.Bool          `tfsdk:"wave_enabled"`
-	WorkDir        types.String        `tfsdk:"work_dir"`
+	Environment               []ConfigEnvVariable `tfsdk:"environment"`
+	Fusion2Enabled            types.Bool          `tfsdk:"fusion2_enabled"`
+	IntelligentComputeConfig  *SchedConfig        `tfsdk:"intelligent_compute_config"`
+	IntelligentComputeEnabled types.Bool          `tfsdk:"intelligent_compute_enabled"`
+	NextflowConfig            types.String        `tfsdk:"nextflow_config"`
+	PostRunScript             types.String        `tfsdk:"post_run_script"`
+	PreRunScript              types.String        `tfsdk:"pre_run_script"`
+	WaveEnabled               types.Bool          `tfsdk:"wave_enabled"`
+	WorkDir                   types.String        `tfsdk:"work_dir"`
 }

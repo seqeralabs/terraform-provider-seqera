@@ -8,6 +8,13 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
+// ProvisioningModel - EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+// Case-sensitive — must be one of:
+// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+// - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+// - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+//
+// Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 type ProvisioningModel string
 
 const (
@@ -38,9 +45,22 @@ func (e *ProvisioningModel) UnmarshalJSON(data []byte) error {
 }
 
 type SchedConfig struct {
-	// EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task.
-	MachineTypes      []string           `json:"machineTypes,omitempty"`
-	ProvisioningModel *ProvisioningModel `json:"provisioningModel,omitempty"`
+	// EC2 instance types eligible for Seqera Intelligent Compute nodes.
+	// Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+	// types per task. When populated, the scheduler is restricted to this
+	// whitelist; types outside the platform's filtered catalog for the
+	// scheduler are accepted by the API but may produce warnings.
+	//
+	MachineTypes []string `json:"machineTypes,omitempty"`
+	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+	// Case-sensitive — must be one of:
+	// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+	// - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+	// - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+	//
+	// Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+	//
+	ProvisioningModel *ProvisioningModel `default:"spotFirst" json:"provisioningModel"`
 }
 
 func (s SchedConfig) MarshalJSON() ([]byte, error) {

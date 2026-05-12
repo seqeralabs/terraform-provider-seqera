@@ -4,9 +4,10 @@ package types
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 type SchedConfig struct {
-	MachineTypes      []types.String `tfsdk:"machine_types"`
-	ProvisioningModel types.String   `tfsdk:"provisioning_model"`
+	MachineTypes      basetypes.ListValue `tfsdk:"machine_types"`
+	ProvisioningModel types.String        `tfsdk:"provisioning_model"`
 }

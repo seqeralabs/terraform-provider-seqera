@@ -1,0 +1,126 @@
+---
+page_title: "Seqera Provider"
+description: |-
+  Use the Seqera Platform Terraform provider to manage organizations, workspaces, compute environments, pipelines, credentials, and other resources on Seqera Cloud or self-hosted deployments.
+---
+
+# Seqera Provider
+
+The Seqera Platform Terraform provider manages [Seqera Platform](https://seqera.io/) resources as code. Seqera Platform is the control plane for Nextflow pipeline orchestration — used by life-sciences teams, multi-omics labs, and biotech enterprises to run reproducible bioinformatics workflows at scale across AWS, GCP, Azure, and Kubernetes.
+
+The provider currently exposes 39 resources and 8 data sources covering the full lifecycle of a Seqera workspace: organizations and teams, workspaces and membership, cloud credentials (AWS, Azure, GCP, GitHub, GitLab, Bitbucket, Kubernetes, SSH, Tower Agent, and others), platform-specific compute environments (AWS Batch / AWS Cloud / Azure Batch / Azure Cloud / GCP Batch / GCP Cloud / Seqera Managed Compute), pipelines and pipeline secrets, datasets and data-links, studios, actions, and access tokens.
+
+Configure the provider with a Seqera personal access token and start managing infrastructure by referring to the resources in the navigation. If you're upgrading from v0.30.x, see the [upgrade guide](guides/upgrading-from-0.30.5-to-0.40.md) for the required `workspace_id` edit and the new typed compute environment resources.
+
+## Example Usage
+
+```terraform
+terraform {
+  required_providers {
+    seqera = {
+      source  = "seqeralabs/seqera"
+      version = "~> 0.40"
+    }
+  }
+}
+
+provider "seqera" {
+  # bearer_auth is read from the TOWER_ACCESS_TOKEN environment variable
+  # by default — set it here only if you want to override that.
+  # server_url  = "https://api.cloud.seqera.io"   # Seqera Cloud (default)
+  # server_url  = "https://seqera.my-company.io/api"  # self-hosted
+}
+
+# Look up the workspace you want to manage resources in.
+data "seqera_workspace" "main" {
+  org_name       = "my-org"
+  workspace_name = "production"
+}
+
+# AWS credentials scoped to that workspace.
+resource "seqera_aws_credential" "main" {
+  name         = "aws-main"
+  workspace_id = data.seqera_workspace.main.id
+  mode         = "role"
+  keys = {
+    assume_role_arn = "arn:aws:iam::123456789012:role/seqera-runner"
+  }
+}
+
+# An AWS Batch compute environment that uses those credentials.
+resource "seqera_aws_batch_ce" "main" {
+  name           = "aws-batch-main"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region   = "us-east-1"
+    work_dir = "s3://my-bucket/work"
+    forge = {
+      type     = "SPOT"
+      max_cpus = 256
+    }
+  }
+}
+```
+
+## Authentication
+
+The provider authenticates to the Seqera Platform with a personal access token (PAT). You can generate one from the **Tokens** page in the Seqera UI under your user menu.
+
+The token can be supplied to the provider in one of two ways, in order of precedence:
+
+1. **Provider block** — `bearer_auth` attribute on the `seqera` provider block.
+2. **Environment variable** — `TOWER_ACCESS_TOKEN`.
+
+!> **Warning:** Don't hard-code your token in Terraform configuration files that may be committed to version control. Prefer the environment variable, a secret manager, or a `*.tfvars` file that's excluded from your VCS.
+
+### Provider block
+
+```terraform
+provider "seqera" {
+  bearer_auth = var.seqera_token
+}
+```
+
+### Environment variable
+
+```terraform
+provider "seqera" {}
+```
+
+```console
+% export TOWER_ACCESS_TOKEN="eyJ0eXAi..."
+% terraform plan
+```
+
+### Self-hosted Seqera Platform
+
+Point `server_url` at your deployment's API endpoint. The path must include `/api`.
+
+```terraform
+provider "seqera" {
+  server_url = "https://seqera.my-company.io/api"
+}
+```
+
+The default `server_url` is `https://api.cloud.seqera.io` (Seqera Cloud).
+
+{{ .SchemaMarkdown | trimspace }}
+
+## Resource & data-source documentation
+
+Use the navigation on the left to explore the available resources and data sources. Some highlights for new users:
+
+- **Compute environments**: start with [`seqera_aws_batch_ce`](resources/aws_batch_ce.md), [`seqera_gcp_batch_ce`](resources/gcp_batch_ce.md), [`seqera_azure_batch_ce`](resources/azure_batch_ce.md), or [`seqera_managed_compute_ce`](resources/managed_compute_ce.md) depending on where your pipelines run.
+- **Credentials**: pick the typed credential matching your provider, e.g. [`seqera_aws_credential`](resources/aws_credential.md), [`seqera_google_credential`](resources/google_credential.md), [`seqera_github_credential`](resources/github_credential.md).
+- **Pipelines**: [`seqera_pipeline`](resources/pipeline.md) defines reusable Nextflow pipeline configurations bound to a compute environment.
+- **Organizations & workspaces**: [`seqera_orgs`](resources/orgs.md), [`seqera_workspace`](resources/workspace.md), and [`seqera_workspace_participant`](resources/workspace_participant.md) cover identity and access management.
+
+## Related guides
+
+- [Upgrading from v0.30.5 to v0.40.0](guides/upgrading-from-0.30.5-to-0.40.md)
+- [Migrating from `seqera_credential` to typed credential resources](guides/migrating-from-seqera-credential.md)
+- [AWS Credentials with IAM Role and External ID](guides/aws-iam-role-with-external-id.md)
+- [GCP Credentials with Workload Identity Federation](guides/gcp-workload-identity-federation.md)

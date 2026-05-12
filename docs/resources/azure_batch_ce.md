@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_azure_batch_ce Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Compute Environments"
 description: |-
   Manage Azure Batch compute environments in Seqera platform.
   Azure Batch compute environments execute Nextflow pipelines on Azure Batch
@@ -21,69 +21,84 @@ instances.
 ## Example Usage
 
 ```terraform
-resource "seqera_azure_batch_ce" "my_azurebatchce" {
+# Minimal Azure Batch compute environment with Forge auto-provisioning.
+# Uses shared key authentication from the referenced Azure credential.
+resource "seqera_azure_batch_ce" "minimal" {
+  name           = "azure-batch-minimal"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-batch"
+  credentials_id = seqera_azure_credential.main.credentials_id
+
   config = {
-    auto_pool_mode                    = false
-    delete_jobs_on_completion         = "always"
-    delete_jobs_on_completion_enabled = true
-    delete_pools_on_completion        = false
-    delete_tasks_on_completion        = false
-    enable_fusion                     = false
-    enable_wave                       = false
-    environment = [
-      {
-        compute = false
-        head    = false
-        name    = "...my_name..."
-        value   = "...my_value..."
-      }
-    ]
+    region   = "eastus"
+    work_dir = "az://my-container/work"
     forge = {
-      auto_scale = true
-      container_reg_ids = [
-        "..."
-      ]
-      dispose_on_deletion = false
+      vm_type             = "Standard_D4s_v3"
+      vm_count            = 5
+      auto_scale          = true
+      dispose_on_deletion = true
+    }
+  }
+}
+```
+
+### Dual Pool
+
+```terraform
+# Azure Batch with separate head and worker pools.
+# Useful when head jobs have different VM-size requirements than workers
+# (e.g. memory-heavy head node, cheap auto-scaling workers).
+resource "seqera_azure_batch_ce" "dual_pool" {
+  name           = "azure-batch-dual-pool"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-batch"
+  credentials_id = seqera_azure_credential.main.credentials_id
+
+  config = {
+    region   = "eastus"
+    work_dir = "az://my-container/work"
+    forge = {
       dual_pool_config    = true
+      dispose_on_deletion = true
       head_pool = {
+        vm_type    = "Standard_E8s_v3"
+        vm_count   = 1
         auto_scale = false
-        vm_count   = 2
-        vm_type    = "...my_vm_type..."
       }
-      vm_count = 5
-      vm_type  = "...my_vm_type..."
       worker_pool = {
+        vm_type    = "Standard_D4s_v3"
+        vm_count   = 10
         auto_scale = true
-        vm_count   = 5
-        vm_type    = "...my_vm_type..."
       }
     }
-    head_job_cpus                     = 1
-    head_job_memory_mb                = 4096
-    head_pool                         = "...my_head_pool..."
-    job_max_wall_clock_time           = "7d"
-    managed_identity_client_id        = "...my_managed_identity_client_id..."
-    managed_identity_head_resource_id = "...my_managed_identity_head_resource_id..."
-    managed_identity_pool_client_id   = "...my_managed_identity_pool_client_id..."
-    managed_identity_pool_resource_id = "...my_managed_identity_pool_resource_id..."
-    nextflow_config                   = "...my_nextflow_config..."
-    post_run_script                   = "...my_post_run_script..."
-    pre_run_script                    = "...my_pre_run_script..."
-    region                            = "...my_region..."
-    subnet_id                         = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet"
-    terminate_jobs_on_completion      = false
-    token_duration                    = "...my_token_duration..."
-    work_dir                          = "az://my-container/work"
-    worker_pool                       = "...my_worker_pool..."
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
-  label_ids = [
-    1
-  ]
-  name         = "...my_name..."
-  platform     = "azure-batch"
-  workspace_id = 1
+}
+```
+
+### Managed Identity
+
+```terraform
+# Azure Batch using a user-assigned managed identity instead of shared keys.
+# Recommended for production — avoids long-lived Azure access keys in Platform.
+resource "seqera_azure_batch_ce" "managed_identity" {
+  name           = "azure-batch-mi"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-batch"
+  credentials_id = seqera_azure_credential.entra.credentials_id
+
+  config = {
+    region                            = "eastus"
+    work_dir                          = "az://my-container/work"
+    managed_identity_client_id        = "00000000-0000-0000-0000-000000000000"
+    managed_identity_head_resource_id = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-head"
+    managed_identity_pool_client_id   = "11111111-1111-1111-1111-111111111111"
+    managed_identity_pool_resource_id = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-pool"
+    forge = {
+      vm_type    = "Standard_D4s_v3"
+      vm_count   = 5
+      auto_scale = true
+    }
+  }
 }
 ```
 

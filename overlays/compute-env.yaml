@@ -284,6 +284,9 @@ actions:
   - target: $.components.schemas.AwsBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsCloudConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.AzBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
@@ -552,6 +555,14 @@ actions:
         speeding up most operations.
 
         Requires `enable_wave = true`.
+
+  # Rename schedEnabled/schedConfig -> intelligent_compute_* on LocalComputeConfig
+  - target: $.components.schemas.LocalComputeConfig.properties.schedEnabled
+    update:
+      x-speakeasy-name-override: intelligent_compute_enabled
+  - target: $.components.schemas.LocalComputeConfig.properties.schedConfig
+    update:
+      x-speakeasy-name-override: intelligent_compute_config
 
   # ============================================================================
   # AWS CLOUD CONFIG FIELD DESCRIPTIONS

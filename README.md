@@ -47,7 +47,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.40.0-RC2"
+      version = "0.40.0-RC3"
     }
   }
 }
@@ -84,6 +84,7 @@ Available configuration:
 * [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
 * [seqera_aws_credential](docs/resources/aws_credential.md)
 * [seqera_action](docs/resources/action.md)
+* [seqera_aws_cloud_ce](docs/resources/aws_cloud_ce.md)
 * [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
 * [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
 * [seqera_azure_credential](docs/resources/azure_credential.md)
