@@ -254,10 +254,10 @@ type LocalExecutionConfiguration struct {
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
-	PreRunScript *string      `json:"preRunScript,omitempty"`
-	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
-	WaveEnabled  *bool        `json:"waveEnabled,omitempty"`
+	PreRunScript              *string      `json:"preRunScript,omitempty"`
+	IntelligentComputeConfig  *SchedConfig `json:"schedConfig,omitempty"`
+	IntelligentComputeEnabled *bool        `json:"schedEnabled,omitempty"`
+	WaveEnabled               *bool        `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
 }
@@ -315,18 +315,18 @@ func (l *LocalExecutionConfiguration) GetPreRunScript() *string {
 	return l.PreRunScript
 }
 
-func (l *LocalExecutionConfiguration) GetSchedConfig() *SchedConfig {
+func (l *LocalExecutionConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	if l == nil {
 		return nil
 	}
-	return l.SchedConfig
+	return l.IntelligentComputeConfig
 }
 
-func (l *LocalExecutionConfiguration) GetSchedEnabled() *bool {
+func (l *LocalExecutionConfiguration) GetIntelligentComputeEnabled() *bool {
 	if l == nil {
 		return nil
 	}
-	return l.SchedEnabled
+	return l.IntelligentComputeEnabled
 }
 
 func (l *LocalExecutionConfiguration) GetWaveEnabled() *bool {
@@ -2864,19 +2864,20 @@ type AWSCloudConfiguration struct {
 	// AWS region where the compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
-	Region      string       `json:"region"`
-	SchedConfig *SchedConfig `json:"schedConfig,omitempty"`
+	Region                   string       `json:"region"`
+	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
 	// Enable Seqera Intelligent Compute (Preview).
 	// When `true`, tasks are distributed across multiple EC2 instances with
-	// optimized scheduling and resource allocation, and `sched_config` is
-	// required. When `false` (default), all tasks run on a single instance
-	// (Basic mode) and `sched_config` must be omitted.
+	// optimized scheduling and resource allocation, and
+	// `intelligent_compute_config` is required. When `false` (default), all
+	// tasks run on a single instance (Basic mode) and
+	// `intelligent_compute_config` must be omitted.
 	//
 	// Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
 	// to be enabled on the target workspace/org; otherwise the API returns
 	// HTTP 403.
 	//
-	SchedEnabled *bool `json:"schedEnabled,omitempty"`
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//
@@ -3018,18 +3019,18 @@ func (a *AWSCloudConfiguration) GetRegion() string {
 	return a.Region
 }
 
-func (a *AWSCloudConfiguration) GetSchedConfig() *SchedConfig {
+func (a *AWSCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	if a == nil {
 		return nil
 	}
-	return a.SchedConfig
+	return a.IntelligentComputeConfig
 }
 
-func (a *AWSCloudConfiguration) GetSchedEnabled() *bool {
+func (a *AWSCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AWSCloudConfiguration) GetSecurityGroups() []string {

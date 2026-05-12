@@ -155,27 +155,27 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
 					r.ComputeEnv.Config.AwsCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceType)
+					if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig == nil {
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = nil
+					} else {
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+						machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.MachineTypes)
+						diags.Append(machineTypesDiags...)
+						machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+						diags.Append(machineTypesDiags...)
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.ProvisioningModel))
+						} else {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
+						}
+					}
+					r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeEnabled)
 					r.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.LogGroup)
 					r.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Region)
-					if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig == nil {
-						r.ComputeEnv.Config.AwsCloud.SchedConfig = nil
-					} else {
-						r.ComputeEnv.Config.AwsCloud.SchedConfig = &tfTypes.SchedConfig{}
-						machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes)
-						diags.Append(machineTypesDiags...)
-						machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
-						diags.Append(machineTypesDiags...)
-						r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
-						if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel != nil {
-							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel))
-						} else {
-							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringNull()
-						}
-					}
-					r.ComputeEnv.Config.AwsCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SchedEnabled)
 					securityGroupsValue1, securityGroupsDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups)
 					diags.Append(securityGroupsDiags1...)
 					securityGroupsValuable1, securityGroupsDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue1)
@@ -609,25 +609,25 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.Environment = append(r.ComputeEnv.Config.LocalPlatform.Environment, environment12)
 					}
 					r.ComputeEnv.Config.LocalPlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.LocalPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.LocalPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PostRunScript)
-					r.ComputeEnv.Config.LocalPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PreRunScript)
-					if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig == nil {
-						r.ComputeEnv.Config.LocalPlatform.SchedConfig = nil
+					if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig == nil {
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = nil
 					} else {
-						r.ComputeEnv.Config.LocalPlatform.SchedConfig = &tfTypes.SchedConfig{}
-						machineTypesValue1, machineTypesDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes)
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+						machineTypesValue1, machineTypesDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.MachineTypes)
 						diags.Append(machineTypesDiags1...)
 						machineTypesValuable1, machineTypesDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue1)
 						diags.Append(machineTypesDiags1...)
-						r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
-						if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel != nil {
-							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel))
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.ProvisioningModel))
 						} else {
-							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringNull()
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 						}
 					}
-					r.ComputeEnv.Config.LocalPlatform.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedEnabled)
+					r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeEnabled)
+					r.ComputeEnv.Config.LocalPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.LocalPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PostRunScript)
+					r.ComputeEnv.Config.LocalPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PreRunScript)
 					r.ComputeEnv.Config.LocalPlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.WaveEnabled)
 					r.ComputeEnv.Config.LocalPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.WorkDir)
 				}
@@ -1396,28 +1396,28 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var region1 string
 		region1 = r.ComputeEnv.Config.AwsCloud.Region.ValueString()
 
-		var schedConfig *shared.SchedConfig
-		if r.ComputeEnv.Config.AwsCloud.SchedConfig != nil {
+		var intelligentComputeConfig *shared.SchedConfig
+		if r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig != nil {
 			var machineTypes []string
-			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.IsNull() {
-				diags.Append(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 			}
 			provisioningModel := new(shared.ProvisioningModel)
-			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsNull() {
-				*provisioningModel = shared.ProvisioningModel(r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.ValueString())
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+				*provisioningModel = shared.ProvisioningModel(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.ValueString())
 			} else {
 				provisioningModel = nil
 			}
-			schedConfig = &shared.SchedConfig{
+			intelligentComputeConfig = &shared.SchedConfig{
 				MachineTypes:      machineTypes,
 				ProvisioningModel: provisioningModel,
 			}
 		}
-		schedEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedEnabled.IsNull() {
-			*schedEnabled = r.ComputeEnv.Config.AwsCloud.SchedEnabled.ValueBool()
+		intelligentComputeEnabled := new(bool)
+		if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled.IsNull() {
+			*intelligentComputeEnabled = r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled.ValueBool()
 		} else {
-			schedEnabled = nil
+			intelligentComputeEnabled = nil
 		}
 		var securityGroups1 []string
 		if !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsNull() {
@@ -1442,27 +1442,27 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir1 = nil
 		}
 		awsCloudConfiguration = &shared.AWSCloudConfiguration{
-			AllowBuckets:       allowBuckets1,
-			Arm64Enabled:       arm64Enabled1,
-			EbsBootSize:        ebsBootSize1,
-			Ec2KeyPair:         ec2KeyPair1,
-			Environment:        environment1,
-			EnableFusion:       enableFusion1,
-			GpuEnabled:         gpuEnabled1,
-			ImageID:            imageId1,
-			InstanceProfileArn: instanceProfileArn,
-			InstanceType:       instanceType,
-			LogGroup:           logGroup1,
-			NextflowConfig:     nextflowConfig1,
-			PostRunScript:      postRunScript1,
-			PreRunScript:       preRunScript1,
-			Region:             region1,
-			SchedConfig:        schedConfig,
-			SchedEnabled:       schedEnabled,
-			SecurityGroups:     securityGroups1,
-			SubnetID:           subnetID,
-			EnableWave:         enableWave1,
-			WorkDir:            workDir1,
+			AllowBuckets:              allowBuckets1,
+			Arm64Enabled:              arm64Enabled1,
+			EbsBootSize:               ebsBootSize1,
+			Ec2KeyPair:                ec2KeyPair1,
+			Environment:               environment1,
+			EnableFusion:              enableFusion1,
+			GpuEnabled:                gpuEnabled1,
+			ImageID:                   imageId1,
+			InstanceProfileArn:        instanceProfileArn,
+			InstanceType:              instanceType,
+			LogGroup:                  logGroup1,
+			NextflowConfig:            nextflowConfig1,
+			PostRunScript:             postRunScript1,
+			PreRunScript:              preRunScript1,
+			Region:                    region1,
+			IntelligentComputeConfig:  intelligentComputeConfig,
+			IntelligentComputeEnabled: intelligentComputeEnabled,
+			SecurityGroups:            securityGroups1,
+			SubnetID:                  subnetID,
+			EnableWave:                enableWave1,
+			WorkDir:                   workDir1,
 		}
 	}
 	if awsCloudConfiguration != nil {
@@ -3670,28 +3670,28 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			preRunScript15 = nil
 		}
-		var schedConfig1 *shared.SchedConfig
-		if r.ComputeEnv.Config.LocalPlatform.SchedConfig != nil {
+		var intelligentComputeConfig1 *shared.SchedConfig
+		if r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig != nil {
 			var machineTypes1 []string
-			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.IsNull() {
-				diags.Append(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
 			}
 			provisioningModel1 := new(shared.ProvisioningModel)
-			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsNull() {
-				*provisioningModel1 = shared.ProvisioningModel(r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.ValueString())
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+				*provisioningModel1 = shared.ProvisioningModel(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.ValueString())
 			} else {
 				provisioningModel1 = nil
 			}
-			schedConfig1 = &shared.SchedConfig{
+			intelligentComputeConfig1 = &shared.SchedConfig{
 				MachineTypes:      machineTypes1,
 				ProvisioningModel: provisioningModel1,
 			}
 		}
-		schedEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.LocalPlatform.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedEnabled.IsNull() {
-			*schedEnabled1 = r.ComputeEnv.Config.LocalPlatform.SchedEnabled.ValueBool()
+		intelligentComputeEnabled1 := new(bool)
+		if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.IsNull() {
+			*intelligentComputeEnabled1 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.ValueBool()
 		} else {
-			schedEnabled1 = nil
+			intelligentComputeEnabled1 = nil
 		}
 		waveEnabled := new(bool)
 		if !r.ComputeEnv.Config.LocalPlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.WaveEnabled.IsNull() {
@@ -3703,15 +3703,15 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		workDir15 = r.ComputeEnv.Config.LocalPlatform.WorkDir.ValueString()
 
 		localExecutionConfiguration = &shared.LocalExecutionConfiguration{
-			Environment:    environment15,
-			Fusion2Enabled: fusion2Enabled,
-			NextflowConfig: nextflowConfig15,
-			PostRunScript:  postRunScript15,
-			PreRunScript:   preRunScript15,
-			SchedConfig:    schedConfig1,
-			SchedEnabled:   schedEnabled1,
-			WaveEnabled:    waveEnabled,
-			WorkDir:        workDir15,
+			Environment:               environment15,
+			Fusion2Enabled:            fusion2Enabled,
+			NextflowConfig:            nextflowConfig15,
+			PostRunScript:             postRunScript15,
+			PreRunScript:              preRunScript15,
+			IntelligentComputeConfig:  intelligentComputeConfig1,
+			IntelligentComputeEnabled: intelligentComputeEnabled1,
+			WaveEnabled:               waveEnabled,
+			WorkDir:                   workDir15,
 		}
 	}
 	if localExecutionConfiguration != nil {

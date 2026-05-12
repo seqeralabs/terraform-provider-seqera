@@ -55,19 +55,20 @@ type AwsCloudConfig struct {
 	// AWS region where the compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
-	Region      string       `json:"region"`
-	SchedConfig *SchedConfig `json:"schedConfig,omitempty"`
+	Region                   string       `json:"region"`
+	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
 	// Enable Seqera Intelligent Compute (Preview).
 	// When `true`, tasks are distributed across multiple EC2 instances with
-	// optimized scheduling and resource allocation, and `sched_config` is
-	// required. When `false` (default), all tasks run on a single instance
-	// (Basic mode) and `sched_config` must be omitted.
+	// optimized scheduling and resource allocation, and
+	// `intelligent_compute_config` is required. When `false` (default), all
+	// tasks run on a single instance (Basic mode) and
+	// `intelligent_compute_config` must be omitted.
 	//
 	// Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
 	// to be enabled on the target workspace/org; otherwise the API returns
 	// HTTP 403.
 	//
-	SchedEnabled *bool `json:"schedEnabled,omitempty"`
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//
@@ -201,18 +202,18 @@ func (a *AwsCloudConfig) GetRegion() string {
 	return a.Region
 }
 
-func (a *AwsCloudConfig) GetSchedConfig() *SchedConfig {
+func (a *AwsCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	if a == nil {
 		return nil
 	}
-	return a.SchedConfig
+	return a.IntelligentComputeConfig
 }
 
-func (a *AwsCloudConfig) GetSchedEnabled() *bool {
+func (a *AwsCloudConfig) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AwsCloudConfig) GetSecurityGroups() []string {

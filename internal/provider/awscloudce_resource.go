@@ -78,7 +78,7 @@ func (r *AwsCloudCEResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage AWS Cloud compute environments in Seqera Platform.\n\nAWS Cloud compute environments execute Nextflow pipelines directly on\nEC2 instances managed by Seqera (rather than via AWS Batch). All\nconfiguration fields (region, work_dir, allow_buckets, instance_type,\nscripts, env, etc.) are identical between the two compute modes — the\nscheduler only *adds* the `sched_config` block; nothing else is\nhidden or unlocked.\n\nTwo compute modes are supported, selected via `sched_enabled`.\n\nIn **Classic** mode (`sched_enabled = false`, the default), worker\nfleet and spot-vs-on-demand strategy are managed by Tower Forge.\nOmit the `sched_config` block in this mode.\n\nIn **Seqera Intelligent Compute** mode (Preview, `sched_enabled = true`),\ntasks are distributed across multiple EC2 instances with optimized\nscheduling and resource allocation. Set the `sched_config` block to\nchoose the EC2 provisioning strategy and (optionally) restrict the\ninstance-type catalog.\n\nNote: `instance_type` sets the **head node** EC2 type and applies in\nboth modes (defaults: `m5d.large`, or `m6gd.large` when\n`arm64_enabled = true`).\n\n**Backend feature flag.** Enabling Seqera Intelligent Compute\nrequires the `SEQERA_SCHEDULER` feature toggle on the target\nworkspace/org. Without it, a create with `sched_enabled = true`\nreturns HTTP 403. The toggle is controlled centrally — there is no\nAPI to flip it, so coordinate with the Platform team before applying.\n",
+		MarkdownDescription: "Manage AWS Cloud compute environments in Seqera Platform.\n\nAWS Cloud compute environments execute Nextflow pipelines directly on\nEC2 instances managed by Seqera (rather than via AWS Batch). All\nconfiguration fields (region, work_dir, allow_buckets, instance_type,\nscripts, env, etc.) are identical between the two compute modes — the\nscheduler only *adds* the `intelligent_compute_config` block; nothing\nelse is hidden or unlocked.\n\nTwo compute modes are supported, selected via `intelligent_compute_enabled`.\n\nIn **Classic** mode (`intelligent_compute_enabled = false`, the default),\nworker fleet and spot-vs-on-demand strategy are managed by Tower Forge.\nOmit the `intelligent_compute_config` block in this mode.\n\nIn **Seqera Intelligent Compute** mode (Preview,\n`intelligent_compute_enabled = true`), tasks are distributed across\nmultiple EC2 instances with optimized scheduling and resource\nallocation. Set the `intelligent_compute_config` block to choose the\nEC2 provisioning strategy and (optionally) restrict the instance-type\ncatalog.\n\nNote: `instance_type` sets the **head node** EC2 type and applies in\nboth modes (defaults: `m5d.large`, or `m6gd.large` when\n`arm64_enabled = true`).\n\n**Backend feature flag.** Enabling Seqera Intelligent Compute\nrequires the `SEQERA_SCHEDULER` feature toggle on the target\nworkspace/org. Without it, a create with\n`intelligent_compute_enabled = true` returns HTTP 403. The toggle is\ncontrolled centrally — there is no API to flip it, so coordinate\nwith the Platform team before applying.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
@@ -274,55 +274,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.`,
 					},
-					"log_group": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
-							`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
-							`Requires replacement if changed.`,
-					},
-					"nextflow_config": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
-					"post_run_script": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-					},
-					"pre_run_script": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-					},
-					"region": schema.StringAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `AWS region where the compute environment will be created.` + "\n" +
-							`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
-							`Requires replacement if changed.`,
-					},
-					"sched_config": schema.SingleNestedAttribute{
+					"intelligent_compute_config": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
@@ -373,7 +325,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Requires replacement if changed.`,
 					},
-					"sched_enabled": schema.BoolAttribute{
+					"intelligent_compute_enabled": schema.BoolAttribute{
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Bool{
@@ -382,13 +334,62 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
 							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple EC2 instances with` + "\n" +
-							`optimized scheduling and resource allocation, and ` + "`" + `sched_config` + "`" + ` is` + "\n" +
-							`required. When ` + "`" + `false` + "`" + ` (default), all tasks run on a single instance` + "\n" +
-							`(Basic mode) and ` + "`" + `sched_config` + "`" + ` must be omitted.` + "\n" +
+							`optimized scheduling and resource allocation, and` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is required. When ` + "`" + `false` + "`" + ` (default), all` + "\n" +
+							`tasks run on a single instance (Basic mode) and` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` must be omitted.` + "\n" +
 							`` + "\n" +
 							`Setting this to ` + "`" + `true` + "`" + ` requires the ` + "`" + `SEQERA_SCHEDULER` + "`" + ` feature toggle` + "\n" +
 							`to be enabled on the target workspace/org; otherwise the API returns` + "\n" +
 							`HTTP 403.` + "\n" +
+							`Requires replacement if changed.`,
+					},
+					"log_group": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
+							`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
+							`Requires replacement if changed.`,
+					},
+					"nextflow_config": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"post_run_script": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+					},
+					"pre_run_script": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+					},
+					"region": schema.StringAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `AWS region where the compute environment will be created.` + "\n" +
+							`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
 							`Requires replacement if changed.`,
 					},
 					"security_groups": schema.ListAttribute{

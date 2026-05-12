@@ -6,7 +6,8 @@ info:
 
 # Defines the `seqera_aws_cloud_ce` resource — AWS Cloud platform parallel of
 # `seqera_azure_cloud_ce` / `seqera_gcp_cloud_ce`. Two compute modes via
-# `sched_enabled`: Classic (default) or Seqera Intelligent Compute (Preview).
+# `intelligent_compute_enabled`: Classic (default) or Seqera Intelligent
+# Compute (Preview).
 # Examples live in `examples/resources/seqera_aws_cloud_ce/`. Shared field
 # descriptions for `AwsCloudConfig` are in `overlays/compute-env.yaml`.
 
@@ -188,20 +189,21 @@ actions:
           EC2 instances managed by Seqera (rather than via AWS Batch). All
           configuration fields (region, work_dir, allow_buckets, instance_type,
           scripts, env, etc.) are identical between the two compute modes — the
-          scheduler only *adds* the `sched_config` block; nothing else is
-          hidden or unlocked.
+          scheduler only *adds* the `intelligent_compute_config` block; nothing
+          else is hidden or unlocked.
 
-          Two compute modes are supported, selected via `sched_enabled`.
+          Two compute modes are supported, selected via `intelligent_compute_enabled`.
 
-          In **Classic** mode (`sched_enabled = false`, the default), worker
-          fleet and spot-vs-on-demand strategy are managed by Tower Forge.
-          Omit the `sched_config` block in this mode.
+          In **Classic** mode (`intelligent_compute_enabled = false`, the default),
+          worker fleet and spot-vs-on-demand strategy are managed by Tower Forge.
+          Omit the `intelligent_compute_config` block in this mode.
 
-          In **Seqera Intelligent Compute** mode (Preview, `sched_enabled = true`),
-          tasks are distributed across multiple EC2 instances with optimized
-          scheduling and resource allocation. Set the `sched_config` block to
-          choose the EC2 provisioning strategy and (optionally) restrict the
-          instance-type catalog.
+          In **Seqera Intelligent Compute** mode (Preview,
+          `intelligent_compute_enabled = true`), tasks are distributed across
+          multiple EC2 instances with optimized scheduling and resource
+          allocation. Set the `intelligent_compute_config` block to choose the
+          EC2 provisioning strategy and (optionally) restrict the instance-type
+          catalog.
 
           Note: `instance_type` sets the **head node** EC2 type and applies in
           both modes (defaults: `m5d.large`, or `m6gd.large` when
@@ -209,9 +211,10 @@ actions:
 
           **Backend feature flag.** Enabling Seqera Intelligent Compute
           requires the `SEQERA_SCHEDULER` feature toggle on the target
-          workspace/org. Without it, a create with `sched_enabled = true`
-          returns HTTP 403. The toggle is controlled centrally — there is no
-          API to flip it, so coordinate with the Platform team before applying.
+          workspace/org. Without it, a create with
+          `intelligent_compute_enabled = true` returns HTTP 403. The toggle is
+          controlled centrally — there is no API to flip it, so coordinate
+          with the Platform team before applying.
         required:
           - config
           - name
@@ -336,19 +339,22 @@ actions:
     update:
       x-speakeasy-param-force-new: true
 
-  # Enforce schedConfig required iff schedEnabled=true at plan time, before the API rejects apply.
+  # Enforce intelligent_compute_config required iff intelligent_compute_enabled=true
+  # at plan time, before the API rejects apply.
   - target: $.components.schemas.AwsCloudConfig
     update:
       x-speakeasy-plan-validators: schedConfigConsistencyValidator
 
   - target: $.components.schemas.AwsCloudConfig.properties.schedEnabled
     update:
+      x-speakeasy-name-override: intelligent_compute_enabled
       description: |
         Enable Seqera Intelligent Compute (Preview).
         When `true`, tasks are distributed across multiple EC2 instances with
-        optimized scheduling and resource allocation, and `sched_config` is
-        required. When `false` (default), all tasks run on a single instance
-        (Basic mode) and `sched_config` must be omitted.
+        optimized scheduling and resource allocation, and
+        `intelligent_compute_config` is required. When `false` (default), all
+        tasks run on a single instance (Basic mode) and
+        `intelligent_compute_config` must be omitted.
 
         Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
         to be enabled on the target workspace/org; otherwise the API returns
@@ -358,13 +364,14 @@ actions:
 
   - target: $.components.schemas.AwsCloudConfig.properties.schedConfig
     update:
+      x-speakeasy-name-override: intelligent_compute_config
       description: |
-        Scheduler configuration used when `sched_enabled = true` (Seqera
-        Intelligent Compute mode). Defines the EC2 provisioning strategy and,
-        optionally, the eligible instance-type catalog.
+        Scheduler configuration used when `intelligent_compute_enabled = true`
+        (Seqera Intelligent Compute mode). Defines the EC2 provisioning
+        strategy and, optionally, the eligible instance-type catalog.
 
-        Required when `sched_enabled = true`; must be omitted when
-        `sched_enabled = false`.
+        Required when `intelligent_compute_enabled = true`; must be omitted
+        when `intelligent_compute_enabled = false`.
       x-speakeasy-param-force-new: true
 
   - target: $.components.schemas.AwsCloudConfig.properties.workDir

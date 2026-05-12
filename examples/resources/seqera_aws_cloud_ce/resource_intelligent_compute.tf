@@ -11,8 +11,8 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     region        = "us-west-1"
     work_dir      = "s3://my-bucket/work"
     allow_buckets = ["s3://my-bucket-input", "s3://my-bucket-ref"]
-    sched_enabled = true
-    sched_config = {
+    intelligent_compute_enabled = true
+    intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
     }

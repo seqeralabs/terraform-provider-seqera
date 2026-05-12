@@ -99,8 +99,8 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Read-Only
 
+- `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
-- `sched_enabled` (Boolean)
 - `workflow` (Attributes) Represents a workflow execution record.
 Contains execution status, metadata, and results from pipeline
 runs including logs and performance metrics. (see [below for nested schema](#nestedatt--workflow))

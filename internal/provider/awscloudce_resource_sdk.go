@@ -45,27 +45,27 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceProfileArn = types.StringPointerValue(resp.Config.InstanceProfileArn)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
+		if resp.Config.IntelligentComputeConfig == nil {
+			r.Config.IntelligentComputeConfig = nil
+		} else {
+			r.Config.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
+			diags.Append(machineTypesDiags...)
+			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+			diags.Append(machineTypesDiags...)
+			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			if resp.Config.IntelligentComputeConfig.ProvisioningModel != nil {
+				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.Config.IntelligentComputeConfig.ProvisioningModel))
+			} else {
+				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
+			}
+		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.LogGroup = types.StringPointerValue(resp.Config.LogGroup)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
-		if resp.Config.SchedConfig == nil {
-			r.Config.SchedConfig = nil
-		} else {
-			r.Config.SchedConfig = &tfTypes.SchedConfig{}
-			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.SchedConfig.MachineTypes)
-			diags.Append(machineTypesDiags...)
-			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
-			diags.Append(machineTypesDiags...)
-			r.Config.SchedConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
-			if resp.Config.SchedConfig.ProvisioningModel != nil {
-				r.Config.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.Config.SchedConfig.ProvisioningModel))
-			} else {
-				r.Config.SchedConfig.ProvisioningModel = types.StringNull()
-			}
-		}
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		securityGroupsValue, securityGroupsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.SecurityGroups)
 		diags.Append(securityGroupsDiags...)
 		securityGroupsValuable, securityGroupsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue)
@@ -340,28 +340,28 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	var region string
 	region = r.Config.Region.ValueString()
 
-	var schedConfig *shared.SchedConfig
-	if r.Config.SchedConfig != nil {
+	var intelligentComputeConfig *shared.SchedConfig
+	if r.Config.IntelligentComputeConfig != nil {
 		var machineTypes []string
-		if !r.Config.SchedConfig.MachineTypes.IsUnknown() && !r.Config.SchedConfig.MachineTypes.IsNull() {
-			diags.Append(r.Config.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
+			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 		}
 		provisioningModel := new(shared.ProvisioningModel)
-		if !r.Config.SchedConfig.ProvisioningModel.IsUnknown() && !r.Config.SchedConfig.ProvisioningModel.IsNull() {
-			*provisioningModel = shared.ProvisioningModel(r.Config.SchedConfig.ProvisioningModel.ValueString())
+		if !r.Config.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.Config.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+			*provisioningModel = shared.ProvisioningModel(r.Config.IntelligentComputeConfig.ProvisioningModel.ValueString())
 		} else {
 			provisioningModel = nil
 		}
-		schedConfig = &shared.SchedConfig{
+		intelligentComputeConfig = &shared.SchedConfig{
 			MachineTypes:      machineTypes,
 			ProvisioningModel: provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	var securityGroups []string
 	if !r.Config.SecurityGroups.IsUnknown() && !r.Config.SecurityGroups.IsNull() {
@@ -386,27 +386,27 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		workDir = nil
 	}
 	config := shared.AwsCloudConfig{
-		AllowBuckets:       allowBuckets,
-		Arm64Enabled:       arm64Enabled,
-		EbsBootSize:        ebsBootSize,
-		Ec2KeyPair:         ec2KeyPair,
-		Environment:        environment,
-		EnableFusion:       enableFusion,
-		GpuEnabled:         gpuEnabled,
-		ImageID:            imageID,
-		InstanceProfileArn: instanceProfileArn,
-		InstanceType:       instanceType,
-		LogGroup:           logGroup,
-		NextflowConfig:     nextflowConfig,
-		PostRunScript:      postRunScript,
-		PreRunScript:       preRunScript,
-		Region:             region,
-		SchedConfig:        schedConfig,
-		SchedEnabled:       schedEnabled,
-		SecurityGroups:     securityGroups,
-		SubnetID:           subnetID,
-		EnableWave:         enableWave,
-		WorkDir:            workDir,
+		AllowBuckets:              allowBuckets,
+		Arm64Enabled:              arm64Enabled,
+		EbsBootSize:               ebsBootSize,
+		Ec2KeyPair:                ec2KeyPair,
+		Environment:               environment,
+		EnableFusion:              enableFusion,
+		GpuEnabled:                gpuEnabled,
+		ImageID:                   imageID,
+		InstanceProfileArn:        instanceProfileArn,
+		InstanceType:              instanceType,
+		LogGroup:                  logGroup,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		Region:                    region,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		SecurityGroups:            securityGroups,
+		SubnetID:                  subnetID,
+		EnableWave:                enableWave,
+		WorkDir:                   workDir,
 	}
 	out := shared.AwsCloudCEComputeConfigInput{
 		CredentialsID: credentialsID,

@@ -12,7 +12,7 @@ var _ validator.Object = ObjectSchedConfigConsistencyValidatorValidator{}
 type ObjectSchedConfigConsistencyValidatorValidator struct{}
 
 func (v ObjectSchedConfigConsistencyValidatorValidator) Description(_ context.Context) string {
-	return "Validates that sched_config is set when sched_enabled is true, and is omitted when sched_enabled is false."
+	return "Validates that intelligent_compute_config is set when intelligent_compute_enabled is true, and is omitted when intelligent_compute_enabled is false."
 }
 
 func (v ObjectSchedConfigConsistencyValidatorValidator) MarkdownDescription(ctx context.Context) string {
@@ -25,13 +25,13 @@ func (v ObjectSchedConfigConsistencyValidatorValidator) ValidateObject(ctx conte
 	}
 
 	var schedEnabled types.Bool
-	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, req.Path.AtName("sched_enabled"), &schedEnabled)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, req.Path.AtName("intelligent_compute_enabled"), &schedEnabled)...)
 	if resp.Diagnostics.HasError() || schedEnabled.IsUnknown() {
 		return
 	}
 
 	var schedConfig types.Object
-	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, req.Path.AtName("sched_config"), &schedConfig)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, req.Path.AtName("intelligent_compute_config"), &schedConfig)...)
 	if resp.Diagnostics.HasError() || schedConfig.IsUnknown() {
 		return
 	}
@@ -41,21 +41,21 @@ func (v ObjectSchedConfigConsistencyValidatorValidator) ValidateObject(ctx conte
 
 	if enabled && !configSet {
 		resp.Diagnostics.AddAttributeError(
-			req.Path.AtName("sched_config"),
-			"Missing sched_config",
-			"`sched_config` is required when `sched_enabled = true` (Seqera Intelligent Compute mode). "+
-				"Provide a `sched_config` block with `provisioning_model` (and optionally `machine_types`), "+
-				"or set `sched_enabled = false` for Classic mode.",
+			req.Path.AtName("intelligent_compute_config"),
+			"Missing intelligent_compute_config",
+			"`intelligent_compute_config` is required when `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode). "+
+				"Provide an `intelligent_compute_config` block with `provisioning_model` (and optionally `machine_types`), "+
+				"or set `intelligent_compute_enabled = false` for Classic mode.",
 		)
 		return
 	}
 
 	if !enabled && configSet {
 		resp.Diagnostics.AddAttributeError(
-			req.Path.AtName("sched_config"),
-			"Unexpected sched_config",
-			"`sched_config` must be omitted when `sched_enabled = false` (Classic mode). "+
-				"Remove the `sched_config` block, or set `sched_enabled = true` to enable Seqera Intelligent Compute.",
+			req.Path.AtName("intelligent_compute_config"),
+			"Unexpected intelligent_compute_config",
+			"`intelligent_compute_config` must be omitted when `intelligent_compute_enabled = false` (Classic mode). "+
+				"Remove the `intelligent_compute_config` block, or set `intelligent_compute_enabled = true` to enable Seqera Intelligent Compute.",
 		)
 	}
 }

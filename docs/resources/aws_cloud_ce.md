@@ -7,25 +7,27 @@ description: |-
   EC2 instances managed by Seqera (rather than via AWS Batch). All
   configuration fields (region, work_dir, allow_buckets, instance_type,
   scripts, env, etc.) are identical between the two compute modes — the
-  scheduler only adds the sched_config block; nothing else is
-  hidden or unlocked.
-  Two compute modes are supported, selected via sched_enabled.
-  In Classic mode (sched_enabled = false, the default), worker
-  fleet and spot-vs-on-demand strategy are managed by Tower Forge.
-  Omit the sched_config block in this mode.
-  In Seqera Intelligent Compute mode (Preview, sched_enabled = true),
-  tasks are distributed across multiple EC2 instances with optimized
-  scheduling and resource allocation. Set the sched_config block to
-  choose the EC2 provisioning strategy and (optionally) restrict the
-  instance-type catalog.
+  scheduler only adds the intelligent_compute_config block; nothing
+  else is hidden or unlocked.
+  Two compute modes are supported, selected via intelligent_compute_enabled.
+  In Classic mode (intelligent_compute_enabled = false, the default),
+  worker fleet and spot-vs-on-demand strategy are managed by Tower Forge.
+  Omit the intelligent_compute_config block in this mode.
+  In Seqera Intelligent Compute mode (Preview,
+  intelligent_compute_enabled = true), tasks are distributed across
+  multiple EC2 instances with optimized scheduling and resource
+  allocation. Set the intelligent_compute_config block to choose the
+  EC2 provisioning strategy and (optionally) restrict the instance-type
+  catalog.
   Note: instance_type sets the head node EC2 type and applies in
   both modes (defaults: m5d.large, or m6gd.large when
   arm64_enabled = true).
   Backend feature flag. Enabling Seqera Intelligent Compute
   requires the SEQERA_SCHEDULER feature toggle on the target
-  workspace/org. Without it, a create with sched_enabled = true
-  returns HTTP 403. The toggle is controlled centrally — there is no
-  API to flip it, so coordinate with the Platform team before applying.
+  workspace/org. Without it, a create with
+  intelligent_compute_enabled = true returns HTTP 403. The toggle is
+  controlled centrally — there is no API to flip it, so coordinate
+  with the Platform team before applying.
 ---
 
 # seqera_aws_cloud_ce (Resource)
@@ -36,20 +38,21 @@ AWS Cloud compute environments execute Nextflow pipelines directly on
 EC2 instances managed by Seqera (rather than via AWS Batch). All
 configuration fields (region, work_dir, allow_buckets, instance_type,
 scripts, env, etc.) are identical between the two compute modes — the
-scheduler only *adds* the `sched_config` block; nothing else is
-hidden or unlocked.
+scheduler only *adds* the `intelligent_compute_config` block; nothing
+else is hidden or unlocked.
 
-Two compute modes are supported, selected via `sched_enabled`.
+Two compute modes are supported, selected via `intelligent_compute_enabled`.
 
-In **Classic** mode (`sched_enabled = false`, the default), worker
-fleet and spot-vs-on-demand strategy are managed by Tower Forge.
-Omit the `sched_config` block in this mode.
+In **Classic** mode (`intelligent_compute_enabled = false`, the default),
+worker fleet and spot-vs-on-demand strategy are managed by Tower Forge.
+Omit the `intelligent_compute_config` block in this mode.
 
-In **Seqera Intelligent Compute** mode (Preview, `sched_enabled = true`),
-tasks are distributed across multiple EC2 instances with optimized
-scheduling and resource allocation. Set the `sched_config` block to
-choose the EC2 provisioning strategy and (optionally) restrict the
-instance-type catalog.
+In **Seqera Intelligent Compute** mode (Preview,
+`intelligent_compute_enabled = true`), tasks are distributed across
+multiple EC2 instances with optimized scheduling and resource
+allocation. Set the `intelligent_compute_config` block to choose the
+EC2 provisioning strategy and (optionally) restrict the instance-type
+catalog.
 
 Note: `instance_type` sets the **head node** EC2 type and applies in
 both modes (defaults: `m5d.large`, or `m6gd.large` when
@@ -57,15 +60,16 @@ both modes (defaults: `m5d.large`, or `m6gd.large` when
 
 **Backend feature flag.** Enabling Seqera Intelligent Compute
 requires the `SEQERA_SCHEDULER` feature toggle on the target
-workspace/org. Without it, a create with `sched_enabled = true`
-returns HTTP 403. The toggle is controlled centrally — there is no
-API to flip it, so coordinate with the Platform team before applying.
+workspace/org. Without it, a create with
+`intelligent_compute_enabled = true` returns HTTP 403. The toggle is
+controlled centrally — there is no API to flip it, so coordinate
+with the Platform team before applying.
 
 ## Example Usage
 
 ```terraform
 # Minimal AWS Cloud compute environment (Classic mode).
-# Seqera picks the worker fleet automatically. Omit `sched_config` in this mode.
+# Seqera picks the worker fleet automatically. Omit `intelligent_compute_config` in this mode.
 resource "seqera_aws_cloud_ce" "classic" {
   name           = "aws-cloud-classic"
   workspace_id   = data.seqera_workspace.main.id
@@ -118,8 +122,8 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     region        = "us-west-1"
     work_dir      = "s3://my-bucket/work"
     allow_buckets = ["s3://my-bucket-input", "s3://my-bucket-ref"]
-    sched_enabled = true
-    sched_config = {
+    intelligent_compute_enabled = true
+    intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
     }
@@ -202,23 +206,24 @@ Requires replacement if changed.
 Format: arn:aws:iam::account-id:instance-profile/profile-name
 Requires replacement if changed.
 - `instance_type` (String) EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple EC2 instances with
+optimized scheduling and resource allocation, and
+`intelligent_compute_config` is required. When `false` (default), all
+tasks run on a single instance (Basic mode) and
+`intelligent_compute_config` must be omitted.
+
+Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
+to be enabled on the target workspace/org; otherwise the API returns
+HTTP 403.
+Requires replacement if changed.
 - `log_group` (String) CloudWatch Log group name for pipeline execution logs.
 If specified, logs are sent to this existing log group instead of the default.
 Requires replacement if changed.
 - `nextflow_config` (String) Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--sched_config))
-- `sched_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
-When `true`, tasks are distributed across multiple EC2 instances with
-optimized scheduling and resource allocation, and `sched_config` is
-required. When `false` (default), all tasks run on a single instance
-(Basic mode) and `sched_config` must be omitted.
-
-Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
-to be enabled on the target workspace/org; otherwise the API returns
-HTTP 403.
-Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -243,8 +248,8 @@ Default: false; Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
-<a id="nestedatt--config--sched_config"></a>
-### Nested Schema for `config.sched_config`
+<a id="nestedatt--config--intelligent_compute_config"></a>
+### Nested Schema for `config.intelligent_compute_config`
 
 Optional:
 

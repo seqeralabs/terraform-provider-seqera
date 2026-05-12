@@ -40,36 +40,36 @@ type WorkflowsResource struct {
 
 // WorkflowsResourceModel describes the resource data model.
 type WorkflowsResourceModel struct {
-	ComputeEnvID      types.String                     `tfsdk:"compute_env_id"`
-	ConfigProfiles    []types.String                   `tfsdk:"config_profiles"`
-	ConfigText        types.String                     `tfsdk:"config_text"`
-	EntryName         types.String                     `tfsdk:"entry_name"`
-	Force             types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
-	HeadJobCpus       types.Int32                      `tfsdk:"head_job_cpus"`
-	HeadJobMemoryMb   types.Int32                      `tfsdk:"head_job_memory_mb"`
-	LabelIds          []types.Int64                    `tfsdk:"label_ids"`
-	MainScript        types.String                     `tfsdk:"main_script"`
-	ParamsText        types.String                     `tfsdk:"params_text"`
-	Pipeline          types.String                     `tfsdk:"pipeline"`
-	PipelineInfo      *tfTypes.PipelineMinInfoResponse `tfsdk:"pipeline_info"`
-	PipelineSchemaID  types.Int64                      `tfsdk:"pipeline_schema_id"`
-	PostRunScript     types.String                     `tfsdk:"post_run_script"`
-	PreRunScript      types.String                     `tfsdk:"pre_run_script"`
-	PullLatest        types.Bool                       `tfsdk:"pull_latest"`
-	Resume            types.Bool                       `tfsdk:"resume"`
-	Revision          types.String                     `tfsdk:"revision"`
-	RunName           types.String                     `tfsdk:"run_name"`
-	SchedEnabled      types.Bool                       `tfsdk:"sched_enabled"`
-	SchemaName        types.String                     `tfsdk:"schema_name"`
-	SourceWorkspaceID types.Int64                      `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
-	StubRun           types.Bool                       `tfsdk:"stub_run"`
-	TowerConfig       types.String                     `tfsdk:"tower_config"`
-	UserSecrets       []types.String                   `tfsdk:"user_secrets"`
-	WorkDir           types.String                     `tfsdk:"work_dir"`
-	Workflow          *tfTypes.WorkflowMaxDbDto        `tfsdk:"workflow"`
-	WorkflowID        types.String                     `tfsdk:"workflow_id"`
-	WorkspaceID       types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceSecrets  []types.String                   `tfsdk:"workspace_secrets"`
+	ComputeEnvID              types.String                     `tfsdk:"compute_env_id"`
+	ConfigProfiles            []types.String                   `tfsdk:"config_profiles"`
+	ConfigText                types.String                     `tfsdk:"config_text"`
+	EntryName                 types.String                     `tfsdk:"entry_name"`
+	Force                     types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	HeadJobCpus               types.Int32                      `tfsdk:"head_job_cpus"`
+	HeadJobMemoryMb           types.Int32                      `tfsdk:"head_job_memory_mb"`
+	IntelligentComputeEnabled types.Bool                       `tfsdk:"intelligent_compute_enabled"`
+	LabelIds                  []types.Int64                    `tfsdk:"label_ids"`
+	MainScript                types.String                     `tfsdk:"main_script"`
+	ParamsText                types.String                     `tfsdk:"params_text"`
+	Pipeline                  types.String                     `tfsdk:"pipeline"`
+	PipelineInfo              *tfTypes.PipelineMinInfoResponse `tfsdk:"pipeline_info"`
+	PipelineSchemaID          types.Int64                      `tfsdk:"pipeline_schema_id"`
+	PostRunScript             types.String                     `tfsdk:"post_run_script"`
+	PreRunScript              types.String                     `tfsdk:"pre_run_script"`
+	PullLatest                types.Bool                       `tfsdk:"pull_latest"`
+	Resume                    types.Bool                       `tfsdk:"resume"`
+	Revision                  types.String                     `tfsdk:"revision"`
+	RunName                   types.String                     `tfsdk:"run_name"`
+	SchemaName                types.String                     `tfsdk:"schema_name"`
+	SourceWorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
+	StubRun                   types.Bool                       `tfsdk:"stub_run"`
+	TowerConfig               types.String                     `tfsdk:"tower_config"`
+	UserSecrets               []types.String                   `tfsdk:"user_secrets"`
+	WorkDir                   types.String                     `tfsdk:"work_dir"`
+	Workflow                  *tfTypes.WorkflowMaxDbDto        `tfsdk:"workflow"`
+	WorkflowID                types.String                     `tfsdk:"workflow_id"`
+	WorkspaceID               types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceSecrets          []types.String                   `tfsdk:"workspace_secrets"`
 }
 
 func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -126,6 +126,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					int32planmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Head job memory allocation in MB. Requires replacement if changed.`,
+			},
+			"intelligent_compute_enabled": schema.BoolAttribute{
+				Computed: true,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,
@@ -241,9 +244,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Custom run name. Requires replacement if changed.`,
-			},
-			"sched_enabled": schema.BoolAttribute{
-				Computed: true,
 			},
 			"schema_name": schema.StringAttribute{
 				Optional: true,

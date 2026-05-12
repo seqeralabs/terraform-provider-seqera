@@ -279,6 +279,11 @@ actions:
   - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
     remove: true
 
+  # Rename schedEnabled -> intelligent_compute_enabled on workflow describe response
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.schedEnabled
+    update:
+      x-speakeasy-name-override: intelligent_compute_enabled
+
   # Remove runtime data fields from DescribeWorkflowResponse
   # These fields contain execution state that shouldn't be managed by Terraform
   - target: $.components.schemas.DescribeWorkflowResponse.properties.progress

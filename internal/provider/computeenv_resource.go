@@ -1159,54 +1159,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.`,
 									},
-									"log_group": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
-											`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
-											`Requires replacement if changed.`,
-									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"region": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										MarkdownDescription: `AWS region where the compute environment will be created.` + "\n" +
-											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
-											`Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"sched_config": schema.SingleNestedAttribute{
+									"intelligent_compute_config": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Object{
@@ -1254,7 +1207,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"sched_enabled": schema.BoolAttribute{
+									"intelligent_compute_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
@@ -1262,14 +1215,62 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
 											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple EC2 instances with` + "\n" +
-											`optimized scheduling and resource allocation, and ` + "`" + `sched_config` + "`" + ` is` + "\n" +
-											`required. When ` + "`" + `false` + "`" + ` (default), all tasks run on a single instance` + "\n" +
-											`(Basic mode) and ` + "`" + `sched_config` + "`" + ` must be omitted.` + "\n" +
+											`optimized scheduling and resource allocation, and` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is required. When ` + "`" + `false` + "`" + ` (default), all` + "\n" +
+											`tasks run on a single instance (Basic mode) and` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` must be omitted.` + "\n" +
 											`` + "\n" +
 											`Setting this to ` + "`" + `true` + "`" + ` requires the ` + "`" + `SEQERA_SCHEDULER` + "`" + ` feature toggle` + "\n" +
 											`to be enabled on the target workspace/org; otherwise the API returns` + "\n" +
 											`HTTP 403.` + "\n" +
 											`Requires replacement if changed.`,
+									},
+									"log_group": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
+											`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
+											`Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"region": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `AWS region where the compute environment will be created.` + "\n" +
+											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
+											`Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"security_groups": schema.ListAttribute{
 										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
@@ -3769,31 +3770,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"sched_config": schema.SingleNestedAttribute{
+									"intelligent_compute_config": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Object{
@@ -3841,13 +3818,37 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"sched_enabled": schema.BoolAttribute{
+									"intelligent_compute_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"wave_enabled": schema.BoolAttribute{
 										Computed: true,

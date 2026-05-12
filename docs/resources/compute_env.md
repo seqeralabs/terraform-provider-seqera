@@ -432,6 +432,18 @@ Requires replacement if changed.
 Format: arn:aws:iam::account-id:instance-profile/profile-name
 Requires replacement if changed.
 - `instance_type` (String) EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple EC2 instances with
+optimized scheduling and resource allocation, and
+`intelligent_compute_config` is required. When `false` (default), all
+tasks run on a single instance (Basic mode) and
+`intelligent_compute_config` must be omitted.
+
+Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
+to be enabled on the target workspace/org; otherwise the API returns
+HTTP 403.
+Requires replacement if changed.
 - `log_group` (String) CloudWatch Log group name for pipeline execution logs.
 If specified, logs are sent to this existing log group instead of the default.
 Requires replacement if changed.
@@ -441,17 +453,6 @@ Requires replacement if changed.
 - `region` (String) AWS region where the compute environment will be created.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
-- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--sched_config))
-- `sched_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
-When `true`, tasks are distributed across multiple EC2 instances with
-optimized scheduling and resource allocation, and `sched_config` is
-required. When `false` (default), all tasks run on a single instance
-(Basic mode) and `sched_config` must be omitted.
-
-Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
-to be enabled on the target workspace/org; otherwise the API returns
-HTTP 403.
-Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -477,8 +478,8 @@ Default: false; Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
-<a id="nestedatt--compute_env--config--aws_cloud--sched_config"></a>
-### Nested Schema for `compute_env.config.aws_cloud.sched_config`
+<a id="nestedatt--compute_env--config--aws_cloud--intelligent_compute_config"></a>
+### Nested Schema for `compute_env.config.aws_cloud.intelligent_compute_config`
 
 Optional:
 
@@ -1011,11 +1012,11 @@ Optional:
 
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--sched_config))
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
@@ -1036,8 +1037,8 @@ Default: false; Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
-<a id="nestedatt--compute_env--config--local_platform--sched_config"></a>
-### Nested Schema for `compute_env.config.local_platform.sched_config`
+<a id="nestedatt--compute_env--config--local_platform--intelligent_compute_config"></a>
+### Nested Schema for `compute_env.config.local_platform.intelligent_compute_config`
 
 Optional:
 
