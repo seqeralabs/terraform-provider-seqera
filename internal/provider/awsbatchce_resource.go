@@ -36,6 +36,7 @@ import (
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
@@ -815,7 +816,7 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Format: s3://bucket-name/path` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^s3://.+`), "must match pattern "+regexp.MustCompile(`^s3://.+`).String()),
+							custom_stringvalidators.WorkDirS3Validator(),
 						},
 					},
 				},
@@ -1089,7 +1090,7 @@ func (r *AWSBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 404 {
+	if res.StatusCode == 400 || res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -1168,7 +1169,7 @@ func (r *AWSBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 	switch res.StatusCode {
-	case 204, 404:
+	case 204, 400, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))

@@ -164,10 +164,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsCloud.SchedConfig = nil
 					} else {
 						r.ComputeEnv.Config.AwsCloud.SchedConfig = &tfTypes.SchedConfig{}
-						r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes))
-						for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes {
-							r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes = append(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes, types.StringValue(v))
-						}
+						machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.MachineTypes)
+						diags.Append(machineTypesDiags...)
+						machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+						diags.Append(machineTypesDiags...)
+						r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
 						if resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.SchedConfig.ProvisioningModel))
 						} else {
@@ -615,10 +616,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.SchedConfig = nil
 					} else {
 						r.ComputeEnv.Config.LocalPlatform.SchedConfig = &tfTypes.SchedConfig{}
-						r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes))
-						for _, v := range resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes {
-							r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes = append(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes, types.StringValue(v))
-						}
+						machineTypesValue1, machineTypesDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.MachineTypes)
+						diags.Append(machineTypesDiags1...)
+						machineTypesValuable1, machineTypesDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue1)
+						diags.Append(machineTypesDiags1...)
+						r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
 						if resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.SchedConfig.ProvisioningModel))
 						} else {
@@ -1396,9 +1398,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 		var schedConfig *shared.SchedConfig
 		if r.ComputeEnv.Config.AwsCloud.SchedConfig != nil {
-			machineTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes))
-			for machineTypesIndex := range r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes {
-				machineTypes = append(machineTypes, r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes[machineTypesIndex].ValueString())
+			var machineTypes []string
+			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AwsCloud.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 			}
 			provisioningModel := new(shared.ProvisioningModel)
 			if !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SchedConfig.ProvisioningModel.IsNull() {
@@ -3670,9 +3672,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 		var schedConfig1 *shared.SchedConfig
 		if r.ComputeEnv.Config.LocalPlatform.SchedConfig != nil {
-			machineTypes1 := make([]string, 0, len(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes))
-			for machineTypesIndex1 := range r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes {
-				machineTypes1 = append(machineTypes1, r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes[machineTypesIndex1].ValueString())
+			var machineTypes1 []string
+			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.LocalPlatform.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
 			}
 			provisioningModel1 := new(shared.ProvisioningModel)
 			if !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.SchedConfig.ProvisioningModel.IsNull() {

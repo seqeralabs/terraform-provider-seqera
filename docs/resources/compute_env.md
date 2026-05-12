@@ -12,6 +12,18 @@ description: |-
 
 # seqera_compute_env (Resource)
 
+~> **Prefer the typed resource.** New configurations should use a platform-specific resource — one of:
+
+- [`seqera_aws_batch_ce`](aws_batch_ce.md)
+- [`seqera_aws_cloud_ce`](aws_cloud_ce.md)
+- [`seqera_azure_batch_ce`](azure_batch_ce.md)
+- [`seqera_azure_cloud_ce`](azure_cloud_ce.md)
+- [`seqera_gcp_batch_ce`](gcp_batch_ce.md)
+- [`seqera_gcp_cloud_ce`](gcp_cloud_ce.md)
+- [`seqera_managed_compute_ce`](managed_compute_ce.md)
+
+State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, Slurm, LSF, and other on-premises schedulers.
+
 This resource allows the management of Seqera compute environments.
 
 Seqera Platform compute environments define the execution platform where a pipeline will run.
@@ -430,7 +442,16 @@ Requires replacement if changed.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
 - `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--sched_config))
-- `sched_enabled` (Boolean) Requires replacement if changed.
+- `sched_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple EC2 instances with
+optimized scheduling and resource allocation, and `sched_config` is
+required. When `false` (default), all tasks run on a single instance
+(Basic mode) and `sched_config` must be omitted.
+
+Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
+to be enabled on the target workspace/org; otherwise the API returns
+HTTP 403.
+Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -461,8 +482,20 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `machine_types` (List of String) EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.
-- `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
 
 
@@ -1008,8 +1041,20 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `machine_types` (List of String) EC2 instance types for compute nodes. Leave empty to automatically select the most cost-effective types for each task. Requires replacement if changed.
-- `provisioning_model` (String) must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
 
 

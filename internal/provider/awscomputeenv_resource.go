@@ -36,6 +36,7 @@ import (
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
@@ -815,7 +816,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Format: s3://bucket-name/path` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^s3://.+`), "must match pattern "+regexp.MustCompile(`^s3://.+`).String()),
+							custom_stringvalidators.WorkDirS3Validator(),
 						},
 					},
 				},

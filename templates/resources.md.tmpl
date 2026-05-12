@@ -2,7 +2,7 @@
 page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
 {{- if or (eq .Name "seqera_aws_credential") (eq .Name "seqera_azure_credential") (eq .Name "seqera_bitbucket_credential") (eq .Name "seqera_codecommit_credential") (eq .Name "seqera_container_registry_credential") (eq .Name "seqera_credential") (eq .Name "seqera_gitea_credential") (eq .Name "seqera_github_credential") (eq .Name "seqera_gitlab_credential") (eq .Name "seqera_google_credential") (eq .Name "seqera_kubernetes_credential") (eq .Name "seqera_ssh_credential") (eq .Name "seqera_tower_agent_credential") }}
 subcategory: "Credentials"
-{{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_compute_env") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_primary_compute_env") }}
+{{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_cloud_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_azure_batch_ce") (eq .Name "seqera_azure_cloud_ce") (eq .Name "seqera_compute_env") (eq .Name "seqera_gcp_batch_ce") (eq .Name "seqera_gcp_cloud_ce") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_primary_compute_env") }}
 subcategory: "Compute Environments"
 {{- else if or (eq .Name "seqera_action") (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") (eq .Name "seqera_workflows") }}
 subcategory: "Pipelines"
@@ -23,7 +23,56 @@ description: |-
 
 # {{.Name}} ({{.Type}})
 
+{{- if eq .Name "seqera_aws_compute_env" }}
+
+!> **Deprecated.** Use [`seqera_aws_batch_ce`](aws_batch_ce.md) instead. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward and supports state migration via [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) blocks. See [Migrating to `seqera_aws_batch_ce`](#migrating-to-seqera_aws_batch_ce) below.
+{{- else if eq .Name "seqera_compute_env" }}
+
+~> **Prefer the typed resource.** New configurations should use a platform-specific resource — one of:
+
+- [`seqera_aws_batch_ce`](aws_batch_ce.md)
+- [`seqera_aws_cloud_ce`](aws_cloud_ce.md)
+- [`seqera_azure_batch_ce`](azure_batch_ce.md)
+- [`seqera_azure_cloud_ce`](azure_cloud_ce.md)
+- [`seqera_gcp_batch_ce`](gcp_batch_ce.md)
+- [`seqera_gcp_cloud_ce`](gcp_cloud_ce.md)
+- [`seqera_managed_compute_ce`](managed_compute_ce.md)
+
+State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, Slurm, LSF, and other on-premises schedulers.
+{{- else if eq .Name "seqera_credential" }}
+
+~> **Prefer a typed credential resource.** New workspace-scoped configurations should use one of:
+
+- `seqera_aws_credential`
+- `seqera_azure_credential`
+- `seqera_bitbucket_credential`
+- `seqera_codecommit_credential`
+- `seqera_container_registry_credential`
+- `seqera_gitea_credential`
+- `seqera_github_credential`
+- `seqera_gitlab_credential`
+- `seqera_google_credential`
+- `seqera_kubernetes_credential`
+- `seqera_ssh_credential`
+- `seqera_tower_agent_credential`
+
+Typed resources give you a precise schema, provider-specific validators, and clearer registry docs. See the [migrating from `seqera_credential`](../guides/migrating-from-seqera-credential.md) guide for the `import {}` / `removed {}` flow. `seqera_credential` remains supported for user-context (personal workspace) credentials, which the typed resources no longer accept.
+{{- end }}
+
 {{ .Description | trimspace }}
+{{- if eq .Name "seqera_aws_compute_env" }}
+
+## Migrating to `seqera_aws_batch_ce`
+
+State can be moved without re-creating the resource:
+
+```terraform
+moved {
+  from = seqera_aws_compute_env.example
+  to   = seqera_aws_batch_ce.example
+}
+```
+{{- end }}
 
 {{ if .HasExamples -}}
 ## Example Usage

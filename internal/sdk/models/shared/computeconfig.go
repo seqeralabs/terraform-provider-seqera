@@ -2864,9 +2864,19 @@ type AWSCloudConfiguration struct {
 	// AWS region where the compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
-	Region       string       `json:"region"`
-	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
+	Region      string       `json:"region"`
+	SchedConfig *SchedConfig `json:"schedConfig,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple EC2 instances with
+	// optimized scheduling and resource allocation, and `sched_config` is
+	// required. When `false` (default), all tasks run on a single instance
+	// (Basic mode) and `sched_config` must be omitted.
+	//
+	// Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
+	// to be enabled on the target workspace/org; otherwise the API returns
+	// HTTP 403.
+	//
+	SchedEnabled *bool `json:"schedEnabled,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//

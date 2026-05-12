@@ -106,6 +106,10 @@ actions:
           x-speakeasy-entity-operation:
             terraform-datasource: null
             terraform-resource: GCPBatchCE#read
+          # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          x-speakeasy-entity-missing-codes:
+            - 400
+            - 404
           x-speakeasy-name-override: DescribeGCPBatchCE
           summary: Describe GCP Batch compute environment
           description: Retrieves the details of the Google Cloud Batch compute environment identified by the given `computeEnvId`.

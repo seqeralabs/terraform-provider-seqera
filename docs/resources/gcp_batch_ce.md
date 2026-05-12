@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_gcp_batch_ce Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Compute Environments"
 description: |-
   Manage Google Cloud Batch compute environments in Seqera platform.
   GCP Batch compute environments execute Nextflow pipelines on Google Cloud Batch
@@ -19,62 +19,68 @@ Google Cloud schedules and manages the underlying compute instances.
 ## Example Usage
 
 ```terraform
-resource "seqera_gcp_batch_ce" "my_gcpbatchce" {
+resource "seqera_gcp_batch_ce" "minimal" {
+  name           = "gcp-batch-minimal"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "google-batch"
+  credentials_id = seqera_google_credential.main.credentials_id
+
   config = {
-    boot_disk_image                = "...my_boot_disk_image..."
-    boot_disk_size_gb              = 50
-    compute_jobs_instance_template = "...my_compute_jobs_instance_template..."
-    compute_jobs_machine_type = [
-      "..."
-    ]
-    copy_image    = "...my_copy_image..."
-    cpu_platform  = "...my_cpu_platform..."
-    debug_mode    = 0
-    enable_fusion = true
-    enable_wave   = true
-    environment = [
-      {
-        compute = false
-        head    = false
-        name    = "...my_name..."
-        value   = "...my_value..."
-      }
-    ]
-    fusion_snapshots           = false
-    head_job_cpus              = 4
-    head_job_instance_template = "...my_head_job_instance_template..."
-    head_job_memory_mb         = 8192
-    labels = {
-      key = "value"
-    }
-    location     = "us-central1"
-    machine_type = "n1-standard-4"
-    network      = "default"
-    network_tags = [
-      "..."
-    ]
-    nextflow_config     = "...my_nextflow_config..."
-    nfs_mount           = "/mnt/nfs"
-    nfs_target          = "...my_nfs_target..."
-    post_run_script     = "...my_post_run_script..."
-    pre_run_script      = "...my_pre_run_script..."
-    project_id          = "my-gcp-project"
-    service_account     = "my-sa@my-project.iam.gserviceaccount.com"
-    spot                = false
-    ssh_daemon          = false
-    ssh_image           = "...my_ssh_image..."
-    subnetwork          = "...my_subnetwork..."
-    use_private_address = false
-    work_dir            = "gs://my-nextflow-bucket/work"
+    project_id      = "my-gcp-project"
+    location        = "us-central1"
+    work_dir        = "gs://my-bucket/work"
+    machine_type    = "n1-standard-4"
+    service_account = "seqera-runner@my-gcp-project.iam.gserviceaccount.com"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
-  label_ids = [
-    5
-  ]
-  name         = "...my_name..."
-  platform     = "google-batch"
-  workspace_id = 1
+}
+```
+
+### Fusion
+
+```terraform
+# GCP Batch with Fusion v2 and Wave — accelerates GCS-heavy workloads
+# by mounting buckets as a distributed file system. Fusion v2 requires Wave.
+resource "seqera_gcp_batch_ce" "fusion" {
+  name           = "gcp-batch-fusion"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "google-batch"
+  credentials_id = seqera_google_credential.main.credentials_id
+
+  config = {
+    project_id      = "my-gcp-project"
+    location        = "us-central1"
+    work_dir        = "gs://my-bucket/work"
+    machine_type    = "n2-standard-4"
+    service_account = "seqera-runner@my-gcp-project.iam.gserviceaccount.com"
+    enable_wave     = true
+    enable_fusion   = true
+    spot            = true
+  }
+}
+```
+
+### Private Network
+
+```terraform
+# GCP Batch on a private VPC with no external IP — for VPC-SC perimeters
+# or environments that require traffic to stay inside the corporate network.
+resource "seqera_gcp_batch_ce" "private_network" {
+  name           = "gcp-batch-private"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "google-batch"
+  credentials_id = seqera_google_credential.main.credentials_id
+
+  config = {
+    project_id          = "my-gcp-project"
+    location            = "us-central1"
+    work_dir            = "gs://my-bucket/work"
+    machine_type        = "n1-standard-4"
+    service_account     = "seqera-runner@my-gcp-project.iam.gserviceaccount.com"
+    network             = "projects/my-gcp-project/global/networks/seqera-vpc"
+    subnetwork          = "projects/my-gcp-project/regions/us-central1/subnetworks/seqera-private"
+    use_private_address = true
+    network_tags        = ["seqera", "no-external-ip"]
+  }
 }
 ```
 

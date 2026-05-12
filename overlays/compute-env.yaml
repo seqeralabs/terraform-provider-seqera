@@ -284,6 +284,9 @@ actions:
   - target: $.components.schemas.AwsBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsCloudConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.AzBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true

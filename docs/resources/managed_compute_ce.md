@@ -35,30 +35,58 @@ Available instance sizes:
 ## Example Usage
 
 ```terraform
-resource "seqera_managed_compute_ce" "my_managedcomputece" {
+# Seqera handles all infra provisioning; you pick the region and (optionally) size.
+resource "seqera_managed_compute_ce" "minimal" {
+  name         = "seqera-cloud-small"
+  workspace_id = data.seqera_workspace.main.id
+  region       = "us-east-1"
+}
+```
+
+### Large
+
+```terraform
+# LARGE Seqera Managed Compute environment with a custom work directory suffix.
+# 28-day automatic intermediary cleanup is on by default.
+resource "seqera_managed_compute_ce" "large" {
+  name                  = "seqera-cloud-large"
+  workspace_id          = data.seqera_workspace.main.id
+  region                = "eu-west-1"
+  instance_size         = "LARGE"
+  work_dir              = "rnaseq/work"
   data_retention_policy = true
+}
+```
+
+### With Env
+
+```terraform
+# Seqera Managed Compute with environment variables, pre/post scripts,
+# and a Nextflow config snippet. Useful for workspace-wide defaults.
+resource "seqera_managed_compute_ce" "with_env" {
+  name          = "seqera-cloud-with-env"
+  workspace_id  = data.seqera_workspace.main.id
+  region        = "us-east-1"
+  instance_size = "MEDIUM"
+
   environment = [
     {
+      name    = "NXF_OPTS"
+      value   = "-Xms256m -Xmx2g"
+      head    = true
       compute = false
-      head    = false
-      name    = "...my_name..."
-      value   = "...my_value..."
-    }
+    },
+    {
+      name    = "MY_API_TOKEN"
+      value   = "set-via-env-or-secret-store"
+      head    = true
+      compute = true
+    },
   ]
-  instance_size = "SMALL"
-  label_ids = [
-    6
-  ]
-  name            = "...my_name..."
-  nextflow_config = "...my_nextflow_config..."
-  post_run_script = "...my_post_run_script..."
-  pre_run_script  = "...my_pre_run_script..."
-  region          = "us-east-1"
-  resource_label_ids = [
-    1
-  ]
-  work_dir     = "work"
-  workspace_id = 10
+
+  pre_run_script  = "echo 'pipeline starting'"
+  post_run_script = "echo 'pipeline complete'"
+  nextflow_config = "process.cpus = 2"
 }
 ```
 

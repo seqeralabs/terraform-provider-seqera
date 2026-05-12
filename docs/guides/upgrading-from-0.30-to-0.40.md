@@ -11,15 +11,15 @@ v0.40.0 introduces platform-specific compute environment resources, a deprecatio
 
 ## At a glance
 
-| Change                                                                                           | Action required                                                                                                                      |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Automatic state upgrades (typo fix, Azure Batch cleanup field)                                   | None — runs on first `terraform plan`                                                                                                |
-| `workspace_id` now required on all typed resources (drops user-context support)                  | Required HCL edit — add `workspace_id` to every typed resource, or migrate user-context resources to the generic `seqera_credential` |
-| `seqera_aws_compute_env` → `seqera_aws_batch_ce`                                                 | Add a `moved {}` block (recommended); old resource still works with a deprecation warning                                            |
-| New first-class CE resources for AWS Batch / GCP Batch / GCP Cloud / Azure Batch / Azure Cloud   | Optional — adopt via `moved {}` from `seqera_compute_env` if you want clearer typed schemas                                          |
-| `delete_jobs_on_completion` (string) → `delete_jobs_on_completion_enabled` (bool) on Azure Batch | Recommended HCL update; the string is still settable but deprecated                                                                  |
-| `ebs_auto_scale` / `ebs_block_size` deprecated (Fusion v2 incompatible)                          | Switch to `ebs_boot_size` if you want a larger root volume                                                                           |
-| Field renames `fusion2Enabled` → `enable_fusion`, `waveEnabled` → `enable_wave`                  | Use the new names if you're touching the resource                                                                                    |
+| Change | Action required |
+| --- | --- |
+| Automatic state upgrades (typo fix, Azure Batch cleanup field) | None — runs on first `terraform plan` |
+| `workspace_id` now required on all typed resources (drops user-context support) | Required HCL edit — add `workspace_id` to every typed resource, or migrate user-context resources to the generic `seqera_credential` |
+| `seqera_aws_compute_env` → `seqera_aws_batch_ce` | Add a `moved {}` block (recommended); old resource still works with a deprecation warning |
+| New first-class CE resources for AWS Batch / GCP Batch / GCP Cloud / Azure Batch / Azure Cloud | Optional — adopt via `moved {}` from `seqera_compute_env` if you want clearer typed schemas |
+| `delete_jobs_on_completion` (string) → `delete_jobs_on_completion_enabled` (bool) on Azure Batch | Recommended HCL update; the string is still settable but deprecated |
+| `ebs_auto_scale` / `ebs_block_size` deprecated (Fusion v2 incompatible) | Switch to `ebs_boot_size` if you want a larger root volume |
+| Field renames `fusion2Enabled` → `enable_fusion`, `waveEnabled` → `enable_wave` | Use the new names if you're touching the resource |
 
 ## Before you start
 
@@ -138,13 +138,13 @@ You can keep the deprecated fields temporarily; they continue to work.
 
 v0.40.0 splits the per-cloud platforms out of the catch-all `seqera_compute_env` resource into first-class resources with typed schemas, dedicated registry doc pages, and platform-specific validators:
 
-| New resource            | Replaces using `seqera_compute_env` with… |
-| ----------------------- | ----------------------------------------- |
-| `seqera_aws_batch_ce`   | `platform = "aws-batch"`                  |
-| `seqera_gcp_batch_ce`   | `platform = "google-batch"`               |
-| `seqera_gcp_cloud_ce`   | `platform = "google-cloud"`               |
-| `seqera_azure_batch_ce` | `platform = "azure-batch"`                |
-| `seqera_azure_cloud_ce` | `platform = "azure-cloud"`                |
+| New resource | Replaces using `seqera_compute_env` with… |
+| --- | --- |
+| `seqera_aws_batch_ce` | `platform = "aws-batch"` |
+| `seqera_gcp_batch_ce` | `platform = "google-batch"` |
+| `seqera_gcp_cloud_ce` | `platform = "google-cloud"` |
+| `seqera_azure_batch_ce` | `platform = "azure-batch"` |
+| `seqera_azure_cloud_ce` | `platform = "azure-cloud"` |
 
 The catch-all `seqera_compute_env` still works for every platform, including ones that don't yet have a first-class resource (Kubernetes, EKS, GKE, Slurm, LSF, and others). Adopt the new resources at your own pace.
 
@@ -163,10 +163,10 @@ Each new resource accepts `moved {}` only from the catch-all `seqera_compute_env
 
 This is the matrix that matters for the `delete_jobs_on_completion` decision:
 
-| Platform version  | Old `delete_jobs_on_completion` (string)                                 | New `delete_jobs_on_completion_enabled` (bool) etc. |
-| ----------------- | ------------------------------------------------------------------------ | --------------------------------------------------- |
-| v25.1 and earlier | Source of truth — settable, no warning needed                            | Unknown to platform — don't use                     |
-| v26.1+            | Read-only on the server; provider keeps it settable but marks deprecated | Authoritative, no warning                           |
+| Platform version | Old `delete_jobs_on_completion` (string) | New `delete_jobs_on_completion_enabled` (bool) etc. |
+| --- | --- | --- |
+| v25.1 and earlier | Source of truth — settable, no warning needed | Unknown to platform — don't use |
+| v26.1+ | Read-only on the server; provider keeps it settable but marks deprecated | Authoritative, no warning |
 
 The provider doesn't try to enforce one or the other based on platform version — that decision is yours, since the provider has no reliable way to detect the platform version mid-config. Pick the field that matches your platform.
 

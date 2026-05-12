@@ -2,11 +2,13 @@
 
 FEATURES:
 
-- **New Resources:** Platform-specific Google Cloud and Azure compute environment resources, mirroring `seqera_aws_batch_ce`. Splits the relevant platforms out of the catch-all `seqera_compute_env` resource into first-class resources with their own typed schemas, validators, and registry doc pages:
-  - `seqera_gcp_batch_ce` — Google Cloud Batch (managed batch service)
-  - `seqera_gcp_cloud_ce` — Google Cloud (Compute Engine VMs managed directly by Seqera)
-  - `seqera_azure_batch_ce` — Azure Batch (managed pools)
-  - `seqera_azure_cloud_ce` — Azure Cloud (VMs managed directly by Seqera)
+- **New Resources:** Platform-specific Google Cloud, Azure, and AWS Cloud compute environment resources, mirroring `seqera_aws_batch_ce`. Splits the relevant platforms out of the catch-all `seqera_compute_env` resource into first-class resources with their own typed schemas, validators, and registry doc pages:
+
+  - `seqera_gcp_batch_ce` — Google Cloud Batch (managed batch service) ([#112](https://github.com/seqeralabs/terraform-provider-seqera/issues/112))
+  - `seqera_gcp_cloud_ce` — Google Cloud (Compute Engine VMs managed directly by Seqera) ([#113](https://github.com/seqeralabs/terraform-provider-seqera/issues/113))
+  - `seqera_azure_batch_ce` — Azure Batch (managed pools) ([#116](https://github.com/seqeralabs/terraform-provider-seqera/issues/116))
+  - `seqera_azure_cloud_ce` — Azure Cloud (VMs managed directly by Seqera) ([#115](https://github.com/seqeralabs/terraform-provider-seqera/issues/115))
+  - `seqera_aws_cloud_ce` — AWS Cloud (EC2 instances managed directly by Seqera). Two compute modes via `sched_enabled`: Classic (default — Seqera picks the worker fleet) and Seqera Intelligent Compute (Preview — set `sched_config` with `provisioning_model` and an optional `machine_types` whitelist to control spot/on-demand strategy and the eligible instance types). Intelligent Compute requires the `SEQERA_SCHEDULER` feature toggle on the target workspace; without it, `terraform apply` will return 403. ([#114](https://github.com/seqeralabs/terraform-provider-seqera/issues/114))
 
   Each resource ships with a sidecar `MoveState` implementation, so existing `seqera_compute_env` deployments can migrate without re-creating the resource:
 
@@ -21,7 +23,7 @@ FEATURES:
 
 ENHANCEMENTS:
 
-- **Compute Environment field documentation** - Added missing field-level descriptions, force-replacement annotations, and `enable_fusion`/`enable_wave` rename consistency for `GoogleCloudConfig` and `AzCloudConfig`. Brings them in line with `AwsCloudConfig` and `GoogleBatchConfig`, which already had this treatment.
+- **Compute environment fields are documented and behave consistently across clouds.** Field descriptions, "requires replacement" annotations, and the `enable_fusion` / `enable_wave` naming (formerly `fusion2_enabled` / `wave_enabled`) now match between Google Cloud, Azure Cloud, AWS Cloud, and Google Cloud Batch compute environments.
 
 - **Compute Environments** - New configuration blocks added: `azure_cloud`, `google_cloud`.
 
@@ -44,10 +46,12 @@ ENHANCEMENTS:
   - Fargate for head jobs requires Fusion v2 and Spot provisioning, and is not compatible with EFS or FSx
   - Graviton (ARM64) requires Fargate, Wave, and Fusion v2
   - Additional field-level validations for EBS, EFS, and DRAGEN dependencies
+  - `work_dir` on AWS compute environments must be a `s3://` URI with no trailing slash (catches typos like `"//s3"` at plan time, applies to `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, and the legacy `seqera_aws_compute_env`)
+  - On `seqera_aws_cloud_ce`, `sched_config` must be set when `sched_enabled = true` and must be omitted when `sched_enabled = false` — surfaced at plan time rather than as a 4xx during apply
 
-BREAKING CHANGES:
+DEPRECATIONS:
 
-- **Azure Batch `delete_jobs_on_completion` is now read-only.** In v0.30.x this was a settable string (e.g. `"on_success"`). It has been replaced by three boolean fields on Azure Batch compute configurations: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old field name still exists in the schema but is read-only — easy to miss because the rename is partial.
+- **Azure Batch `delete_jobs_on_completion` is deprecated.** Replaced by three boolean fields on Azure Batch compute configurations: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old string field remains settable for backward compatibility with Seqera Platform v25.1 and earlier, but emits a deprecation warning at plan time. Users on Platform v26.1+ should migrate to the boolean fields.
 
   User migration:
 
@@ -56,9 +60,7 @@ BREAKING CHANGES:
   + delete_jobs_on_completion_enabled = true
   ```
 
-  A state upgrader (v1 → v2) is included for `seqera_compute_env` so users coming from v0.30.x state will have `delete_jobs_on_completion_enabled = true` automatically set whenever the old field had a non-empty value. This avoids a spurious `null -> true` diff that would otherwise force a resource replacement after the user updates their config. The upgrader only touches `config.azure_batch`; other platforms are unaffected.
-
-DEPRECATIONS:
+  State upgrade is handled automatically: when upgrading `seqera_compute_env` from v0.30.x, any non-empty `delete_jobs_on_completion` value is migrated to `delete_jobs_on_completion_enabled = true` in state, so updating your config doesn't force a resource replacement. Only the `azure_batch` config block is affected.
 
 - **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
 
@@ -66,15 +68,13 @@ DEPRECATIONS:
 
 BUGFIXES:
 
-- **Azure Batch backwards compatibility for `delete_jobs_on_completion`** - The upstream OpenAPI spec marks this string field read-only as of Seqera Platform v26.1, where it has been replaced by `delete_jobs_on_completion_enabled` and friends. Pinning the provider to that spec would lock anyone running Platform v25.1 or earlier out of configuring job cleanup behaviour at all. The provider now keeps `delete_jobs_on_completion` settable for both `seqera_compute_env` and `seqera_azure_batch_ce`, marked deprecated with a message pointing at the new boolean fields. Users on Platform v25.1 and earlier can keep using the string; users on v26.1+ should migrate to the boolean fields and will see a deprecation warning if they leave the string in their config.
+- **Compute environments deleted in the UI no longer break `terraform plan`.** Fixed an error when refreshing a compute environment that had been deleted outside of Terraform (e.g. through the Seqera Platform UI) — `terraform plan` would fail with an unmarshal error instead of cleanly proposing to recreate it. Affects every typed CE resource (`seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce`, `seqera_managed_compute_ce`). `terraform destroy` on an already-removed CE is now also a silent no-op instead of an error.
 
-- **`seqera_aws_batch_ce` plan validation** - Fixed three `Invalid Path Expression for Schema` errors that blocked `terraform validate` and `terraform plan` whenever a real-world AWS Batch config touched DRAGEN, forge-managed EFS, or Fusion snapshots. The schema-level `x-speakeasy-required-with` / `x-speakeasy-conflicts-with` directives Speakeasy emits for `forge.dragen_ami_id`, `forge.dragen_instance_type`, `forge.ebs_block_size`, `forge.efs_create`, and `awsbatchconfig.fusion_snapshots` produced one too many `AtParent()` calls (and used the pre-rename `fusion2_enabled` name instead of `enable_fusion`). The directives have been removed; the same dependency rules are now enforced by the existing `awsForgeValidator` and `FusionSnapshotsValidator` custom validators.
+- **AWS Batch plan validation no longer crashes on DRAGEN, EFS, or Fusion Snapshots.** Fixed `terraform validate` and `terraform plan` errors when using `forge.dragen_enabled`, `forge.dragen_ami_id`, `forge.dragen_instance_type`, `forge.efs_create`, `forge.ebs_block_size`, or `fusion_snapshots` on `seqera_aws_batch_ce`. The dependency rules between these fields are still enforced — they now run through plan-time validators that produce a readable error message instead of a path-expression crash.
 
-- Extended the unknown-value list-type fix from #186 to the remaining list-of-string fields across the AWS Cloud, Google Cloud Batch, and Azure Batch compute configurations: `AwsCloudConfig.allow_buckets`, `AwsCloudConfig.security_groups`, `GoogleBatchConfig.compute_jobs_machine_type`, `GoogleBatchConfig.network_tags`, and `AzBatchForgeConfig.container_reg_ids`. These fields can now accept unknown collections from data sources (e.g. `network_tags = data.google_compute_network.x.tags`) without failing at plan time.
+- **List fields now accept values from data sources** ([#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186)). Fixed an error when driving list-of-string fields from a data source — for example, `subnets = data.aws_subnets.public.ids` or `network_tags = data.google_compute_network.x.tags`. Previously `terraform plan` failed with `Received unknown value, however the target type cannot handle unknown values`. Affects `forge.subnets`, `forge.security_groups`, `forge.allow_buckets`, `forge.instance_types` on AWS Batch resources, plus `allow_buckets` and `security_groups` on AWS Cloud, `compute_jobs_machine_type` and `network_tags` on GCP Batch, and `container_reg_ids` on Azure Batch.
 
-- [#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186) - Fixed `forge.subnets`, `security_groups`, `allow_buckets`, and `instance_types` so they accept unknown collections from data sources (e.g. `subnets = data.aws_subnets.public.ids`). Previously these failed at plan time with `Received unknown value, however the target type cannot handle unknown values`. Affects all three resources that share `ForgeConfig`: `seqera_aws_compute_env`, `seqera_aws_batch_ce`, and the legacy `seqera_compute_env`.
-
-- [#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159) - Fixed EBS field descriptions in AWS compute environments. `ebs_block_size` was incorrectly described as "Size of EBS root volume" when it is actually the auto-expandable block size. `ebs_boot_size` (the actual root/boot volume size) had no description at all.
+- **Corrected EBS field descriptions on AWS compute environments** ([#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159)). `ebs_block_size` previously claimed to be the root volume size; it's actually the auto-expandable scratch volume. `ebs_boot_size` (the real root volume size) now has a description.
 
 # v0.30.5
 

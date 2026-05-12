@@ -1,0 +1,423 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AWS Cloud Compute Environment Overlay
+  version: 0.0.1
+
+# Defines the `seqera_aws_cloud_ce` resource — AWS Cloud platform parallel of
+# `seqera_azure_cloud_ce` / `seqera_gcp_cloud_ce`. Two compute modes via
+# `sched_enabled`: Classic (default) or Seqera Intelligent Compute (Preview).
+# Examples live in `examples/resources/seqera_aws_cloud_ce/`. Shared field
+# descriptions for `AwsCloudConfig` are in `overlays/compute-env.yaml`.
+
+actions:
+  - target: $.paths
+    update:
+      "/compute-envs#aws-cloud":
+        post:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: AwsCloudCE#create
+          x-speakeasy-name-override: CreateAwsCloudCE
+          summary: Create AWS Cloud compute environment
+          description: Creates a new AWS Cloud compute environment. Append `?workspaceId` to create the environment in a workspace context.
+          x-speakeasy-retries:
+            strategy: backoff
+            backoff:
+              initialInterval: 5000
+              maxInterval: 5000
+              maxElapsedTime: 30000
+              exponent: 1.0
+            statusCodes:
+              - 429
+              - 500
+              - 502
+              - 503
+              - 504
+          tags:
+            - compute-envs
+          operationId: CreateAwsCloudCE
+          parameters:
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              required: true
+          requestBody:
+            description: AWS Cloud compute environment create request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CreateAwsCloudCERequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CreateAwsCloudCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Conflict - resource already exists
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+
+      "/compute-envs/{computeEnvId}#aws-cloud":
+        get:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: AwsCloudCE#read
+          # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          x-speakeasy-entity-missing-codes:
+            - 400
+            - 404
+          x-speakeasy-name-override: DescribeAwsCloudCE
+          summary: Describe AWS Cloud compute environment
+          description: Retrieves the details of the AWS Cloud compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DescribeAwsCloudCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              required: true
+            - name: attributes
+              in: query
+              description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DescribeAwsCloudCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "404":
+              description: Compute environment not found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+        delete:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: AwsCloudCE#delete
+          x-speakeasy-name-override: DeleteAwsCloudCE
+          summary: Delete AWS Cloud compute environment
+          description: Deletes the AWS Cloud compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DeleteAwsCloudCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+
+  - target: $.components.schemas
+    update:
+      # AWS Cloud compute environment schema
+      AwsCloudCE_ComputeConfig:
+        x-speakeasy-entity: AwsCloudCE
+        x-speakeasy-entity-version: 1
+        x-speakeasy-entity-description: |
+          Manage AWS Cloud compute environments in Seqera Platform.
+
+          AWS Cloud compute environments execute Nextflow pipelines directly on
+          EC2 instances managed by Seqera (rather than via AWS Batch). All
+          configuration fields (region, work_dir, allow_buckets, instance_type,
+          scripts, env, etc.) are identical between the two compute modes — the
+          scheduler only *adds* the `sched_config` block; nothing else is
+          hidden or unlocked.
+
+          Two compute modes are supported, selected via `sched_enabled`.
+
+          In **Classic** mode (`sched_enabled = false`, the default), worker
+          fleet and spot-vs-on-demand strategy are managed by Tower Forge.
+          Omit the `sched_config` block in this mode.
+
+          In **Seqera Intelligent Compute** mode (Preview, `sched_enabled = true`),
+          tasks are distributed across multiple EC2 instances with optimized
+          scheduling and resource allocation. Set the `sched_config` block to
+          choose the EC2 provisioning strategy and (optionally) restrict the
+          instance-type catalog.
+
+          Note: `instance_type` sets the **head node** EC2 type and applies in
+          both modes (defaults: `m5d.large`, or `m6gd.large` when
+          `arm64_enabled = true`).
+
+          **Backend feature flag.** Enabling Seqera Intelligent Compute
+          requires the `SEQERA_SCHEDULER` feature toggle on the target
+          workspace/org. Without it, a create with `sched_enabled = true`
+          returns HTTP 403. The toggle is controlled centrally — there is no
+          API to flip it, so coordinate with the Platform team before applying.
+        required:
+          - config
+          - name
+          - platform
+          - credentialsId
+        type: object
+        properties:
+          credentialsId:
+            type: string
+            description: AWS credentials identifier
+          orgId:
+            type: integer
+            format: int64
+            readOnly: true
+            x-speakeasy-param-readonly: true
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace numeric identifier
+          id:
+            type: string
+            description: Unique identifier for the compute environment
+            x-speakeasy-param-readonly: true
+          name:
+            maxLength: 100
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+            x-speakeasy-param-force-new: true
+          description:
+            type: string
+            description: Optional description of the compute environment
+            x-speakeasy-param-computed: false
+          platform:
+            type: string
+            enum:
+              - aws-cloud
+            description: AWS platform type
+            x-speakeasy-param-optional: false
+          status:
+            type: string
+            description: Compute environment status
+            x-speakeasy-param-readonly: true
+          dateCreated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was created
+            x-speakeasy-param-readonly: true
+          lastUpdated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last updated
+            x-speakeasy-param-readonly: true
+          lastUsed:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last used
+            x-speakeasy-param-readonly: true
+          deleted:
+            type: boolean
+            description: Flag indicating if the compute environment has been deleted
+            x-speakeasy-param-readonly: true
+          config:
+            description: AWS Cloud compute environment configuration
+            $ref: '#/components/schemas/AwsCloudConfig'
+
+      # AWS Cloud request/response schemas
+      CreateAwsCloudCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AwsCloudCE_ComputeConfig'
+          labelIds:
+            type: array
+            items:
+              type: integer
+              format: int64
+
+      CreateAwsCloudCEResponse:
+        type: object
+        properties:
+          computeEnvId:
+            type: string
+
+      UpdateAwsCloudCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AwsCloudCE_ComputeConfig'
+
+      DescribeAwsCloudCEResponse:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AwsCloudCE_ComputeConfig'
+
+      ListAwsCloudCEsResponse:
+        type: object
+        properties:
+          computeEnvs:
+            type: array
+            items:
+              $ref: '#/components/schemas/AwsCloudCE_ComputeConfig'
+          totalSize:
+            type: integer
+            format: int64
+
+  # name is intentionally update-in-place; all other top-level fields force replacement.
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.description
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.platform
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.credentialsId
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.workspaceId
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.config
+    update:
+      x-speakeasy-param-force-new: true
+
+  # Enforce schedConfig required iff schedEnabled=true at plan time, before the API rejects apply.
+  - target: $.components.schemas.AwsCloudConfig
+    update:
+      x-speakeasy-plan-validators: schedConfigConsistencyValidator
+
+  - target: $.components.schemas.AwsCloudConfig.properties.schedEnabled
+    update:
+      description: |
+        Enable Seqera Intelligent Compute (Preview).
+        When `true`, tasks are distributed across multiple EC2 instances with
+        optimized scheduling and resource allocation, and `sched_config` is
+        required. When `false` (default), all tasks run on a single instance
+        (Basic mode) and `sched_config` must be omitted.
+
+        Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
+        to be enabled on the target workspace/org; otherwise the API returns
+        HTTP 403.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.schedConfig
+    update:
+      description: |
+        Scheduler configuration used when `sched_enabled = true` (Seqera
+        Intelligent Compute mode). Defines the EC2 provisioning strategy and,
+        optionally, the eligible instance-type catalog.
+
+        Required when `sched_enabled = true`; must be omitted when
+        `sched_enabled = false`.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.workDir
+    update:
+      description: |
+        S3 working directory for workflow execution. Must be a `s3://` URI in
+        the same region as the compute environment (e.g. `s3://my-bucket/work`).
+        Max 100 characters.
+      example: "s3://my-bucket/work"
+      x-speakeasy-param-force-new: true
+      x-speakeasy-param-optional: false
+      x-speakeasy-plan-validators: WorkDirS3Validator
+
+  - target: $.components.schemas.AwsCloudConfig.properties.ebsBootSize
+    update:
+      description: |
+        Size of the EBS boot volume (root disk) in GB for EC2 instances.
+        Allowed range: 50–16384. When using Fusion v2 without fast instance
+        storage, a value of at least 100 is recommended.
+      example: 100
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.SchedConfig.properties.provisioningModel
+    update:
+      description: |
+        EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+        Case-sensitive — must be one of:
+        - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+        - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+        - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+        Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+      type: string
+      enum:
+        - spot
+        - spotFirst
+        - ondemand
+      default: spotFirst
+      example: "spotFirst"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.SchedConfig.properties.machineTypes
+    update:
+      description: |
+        EC2 instance types eligible for Seqera Intelligent Compute nodes.
+        Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+        types per task. When populated, the scheduler is restricted to this
+        whitelist; types outside the platform's filtered catalog for the
+        scheduler are accepted by the API but may produce warnings.
+      example: []
+      x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue

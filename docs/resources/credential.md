@@ -10,6 +10,23 @@ description: |-
 
 # seqera_credential (Resource)
 
+~> **Prefer a typed credential resource.** New workspace-scoped configurations should use one of:
+
+- `seqera_aws_credential`
+- `seqera_azure_credential`
+- `seqera_bitbucket_credential`
+- `seqera_codecommit_credential`
+- `seqera_container_registry_credential`
+- `seqera_gitea_credential`
+- `seqera_github_credential`
+- `seqera_gitlab_credential`
+- `seqera_google_credential`
+- `seqera_kubernetes_credential`
+- `seqera_ssh_credential`
+- `seqera_tower_agent_credential`
+
+Typed resources give you a precise schema, provider-specific validators, and clearer registry docs. See the [migrating from `seqera_credential`](../guides/migrating-from-seqera-credential.md) guide for the `import {}` / `removed {}` flow. `seqera_credential` remains supported for user-context (personal workspace) credentials, which the typed resources no longer accept.
+
 Manage workspace credentials in Seqera platform using this resource.
 
 Credentials store authentication information for accessing cloud providers,

@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_azure_cloud_ce Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Compute Environments"
 description: |-
   Manage Azure Cloud compute environments in Seqera platform.
   Azure Cloud compute environments execute Nextflow pipelines directly on
@@ -21,42 +21,70 @@ compute instances directly (rather than via Azure Batch).
 ## Example Usage
 
 ```terraform
-resource "seqera_azure_cloud_ce" "my_azurecloudce" {
+# Minimal Azure Cloud compute environment.
+# Nextflow runs directly on Azure VMs managed by Seqera (no Batch service).
+resource "seqera_azure_cloud_ce" "minimal" {
+  name           = "azure-cloud-minimal"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-cloud"
+  credentials_id = seqera_azure_credential.main.credentials_id
+
   config = {
-    data_collection_endpoint = "...my_data_collection_endpoint..."
-    data_collection_rule_id  = "...my_data_collection_rule_id..."
-    enable_fusion            = true
-    enable_wave              = false
-    environment = [
-      {
-        compute = false
-        head    = false
-        name    = "...my_name..."
-        value   = "...my_value..."
-      }
-    ]
-    instance_type              = "Standard_D4s_v3"
-    log_table_name             = "...my_log_table_name..."
-    log_workspace_id           = "...my_log_workspace_id..."
-    managed_identity_client_id = "...my_managed_identity_client_id..."
-    managed_identity_id        = "...my_managed_identity_id..."
-    network_id                 = "...my_network_id..."
-    nextflow_config            = "...my_nextflow_config..."
-    post_run_script            = "...my_post_run_script..."
-    pre_run_script             = "...my_pre_run_script..."
-    region                     = "eastus"
-    resource_group             = "my-resource-group"
-    subscription_id            = "00000000-0000-0000-0000-000000000000"
-    work_dir                   = "az://my-container/work"
+    region          = "eastus"
+    work_dir        = "az://my-container/work"
+    subscription_id = "00000000-0000-0000-0000-000000000000"
+    resource_group  = "my-resource-group"
+    instance_type   = "Standard_D4s_v3"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
-  label_ids = [
-    6
-  ]
-  name         = "...my_name..."
-  platform     = "azure-cloud"
-  workspace_id = 5
+}
+```
+
+### Log Analytics
+
+```terraform
+# Azure Cloud with telemetry forwarded to a Log Analytics workspace.
+# Use this when you want pipeline logs queryable in Azure Monitor.
+resource "seqera_azure_cloud_ce" "log_analytics" {
+  name           = "azure-cloud-logs"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-cloud"
+  credentials_id = seqera_azure_credential.main.credentials_id
+
+  config = {
+    region                   = "eastus"
+    work_dir                 = "az://my-container/work"
+    subscription_id          = "00000000-0000-0000-0000-000000000000"
+    resource_group           = "my-resource-group"
+    instance_type            = "Standard_D4s_v3"
+    log_workspace_id         = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.OperationalInsights/workspaces/my-law"
+    log_table_name           = "SeqeraNextflowLogs"
+    data_collection_endpoint = "https://my-dce-xxxx.eastus-1.ingest.monitor.azure.com"
+    data_collection_rule_id  = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.Insights/dataCollectionRules/seqera-dcr"
+  }
+}
+```
+
+### Managed Identity
+
+```terraform
+# Azure Cloud with a user-assigned managed identity for VM authentication.
+# The credential resource can still use shared keys or Entra service principal;
+# the managed identity here is the *runtime* identity attached to each VM.
+resource "seqera_azure_cloud_ce" "managed_identity" {
+  name           = "azure-cloud-mi"
+  workspace_id   = data.seqera_workspace.main.id
+  platform       = "azure-cloud"
+  credentials_id = seqera_azure_credential.main.credentials_id
+
+  config = {
+    region                     = "eastus"
+    work_dir                   = "az://my-container/work"
+    subscription_id            = "00000000-0000-0000-0000-000000000000"
+    resource_group             = "my-resource-group"
+    instance_type              = "Standard_D4s_v3"
+    managed_identity_client_id = "00000000-0000-0000-0000-000000000000"
+    managed_identity_id        = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-vm"
+  }
 }
 ```
 
