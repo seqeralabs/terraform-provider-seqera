@@ -23,5 +23,6 @@ Look up a workspace by name.
 
 - `description` (String) Description of the workspace.
 - `full_name` (String) Full name of the workspace.
+- `id` (Number) Workspace numeric identifier. Alias of `workspace_id` — matches the `workspace_id` argument expected by other Seqera resources.
 - `visibility` (String) Visibility of the workspace (PRIVATE or PUBLIC).
 - `workspace_id` (Number) Workspace numeric identifier.

@@ -68,6 +68,16 @@ with the Platform team before applying.
 ## Example Usage
 
 ```terraform
+# Look up the target organization and workspace by name.
+data "seqera_organization" "main" {
+  name = "my-organization"
+}
+
+data "seqera_workspace" "main" {
+  org_id = data.seqera_organization.main.org_id
+  name   = "my-workspace"
+}
+
 # Minimal AWS Cloud compute environment (Classic mode).
 # Seqera picks the worker fleet automatically. Omit `intelligent_compute_config` in this mode.
 resource "seqera_aws_cloud_ce" "classic" {

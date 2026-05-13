@@ -26,6 +26,7 @@ type DataSource struct {
 type DataSourceModel struct {
 	OrgID       types.Int64  `tfsdk:"org_id"`
 	Name        types.String `tfsdk:"name"`
+	ID          types.Int64  `tfsdk:"id"`
 	WorkspaceID types.Int64  `tfsdk:"workspace_id"`
 	FullName    types.String `tfsdk:"full_name"`
 	Description types.String `tfsdk:"description"`
@@ -47,6 +48,10 @@ func (d *DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, r
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `Name of the workspace to look up.`,
+			},
+			"id": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Workspace numeric identifier. Alias of ` + "`workspace_id`" + ` — matches the ` + "`workspace_id`" + ` argument expected by other Seqera resources.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed:    true,
@@ -114,6 +119,7 @@ func (d *DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp 
 	for _, w := range listRes.ListWorkspacesResponse.Workspaces {
 		if w.Name != nil && *w.Name == name {
 			data.WorkspaceID = types.Int64PointerValue(w.ID)
+			data.ID = types.Int64PointerValue(w.ID)
 			data.FullName = types.StringPointerValue(w.FullName)
 			data.Description = types.StringPointerValue(w.Description)
 			if w.Visibility != nil {
