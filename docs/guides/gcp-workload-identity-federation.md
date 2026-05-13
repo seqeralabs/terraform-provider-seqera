@@ -13,13 +13,23 @@ This guide creates a `seqera_google_credential` that authenticates to Google Clo
 
 ## How the trust works
 
-Seqera's public API endpoint is the OIDC issuer. For Seqera Cloud this is `https://api.cloud.seqera.io`; for Enterprise installs it is the `/api` base URL of your install (whatever your browser hits when you open the platform UI, with `/api` appended).
+The Seqera Platform's OIDC issuer is the `issuer` value advertised at
+`<host>/.well-known/openid-configuration`. For Seqera Cloud production this
+is `https://cloud.seqera.io/api`; for Enterprise installs it is your
+install's `/api` URL (whatever your browser hits to load the platform UI,
+with `/api` appended). Note that for Seqera Cloud the issuer is NOT
+`https://api.cloud.seqera.io` even though the API itself is served from
+that host — the OIDC `iss` claim uses the non-`api.` hostname with `/api` as
+the path. GCP STS does a byte-exact match between this value and the `iss`
+claim in the JWT, so getting it wrong silently breaks the federation. Always
+verify by fetching `/.well-known/openid-configuration` against your target
+deployment before setting `issuer-uri`.
 
 For each workflow run, the platform signs a JWT with these claims:
 
 | Claim        | Value                                                                                                                         |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `iss`        | The Seqera public API endpoint, e.g. `https://api.cloud.seqera.io`                                                            |
+| `iss`        | The Seqera public API endpoint, e.g. `https://cloud.seqera.io/api`                                                            |
 | `aud`        | `//iam.googleapis.com/<workload_identity_provider>` by default, or `token_audience` if you set it                             |
 | `sub`        | `org:<ORG_ID>:wsp:<WORKSPACE_ID>:workflow` for workspaces inside an org, or `usr:<USER_ID>:workflow` for a personal workspace |
 | `iat`, `exp` | Issued-at and a one-hour expiry                                                                                               |
@@ -46,7 +56,7 @@ gcloud iam workload-identity-pools create seqera-pool \
 gcloud iam workload-identity-pools providers create-oidc seqera-provider \
     --location=global \
     --workload-identity-pool=seqera-pool \
-    --issuer-uri="https://api.cloud.seqera.io" \
+    --issuer-uri="https://cloud.seqera.io/api" \
     --allowed-audiences="//iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider" \
     --attribute-mapping="google.subject=assertion.sub"
 
@@ -179,7 +189,7 @@ variable "gcp_project_id" {
 
 variable "seqera_issuer" {
   type        = string
-  default     = "https://api.cloud.seqera.io"
+  default     = "https://cloud.seqera.io/api"
   description = "Seqera Platform OIDC issuer. Use the /api base URL for Enterprise installs."
 }
 
@@ -276,7 +286,7 @@ resource "seqera_google_credential" "wif" {
 }
 ```
 
-The existing provider's `issuer-uri` must already be set to the Seqera issuer (`https://api.cloud.seqera.io` for Cloud, your `/api` endpoint for Enterprise). If the central team owns a single shared provider for multiple external issuers, they will need to confirm Seqera is one of them.
+The existing provider's `issuer-uri` must already be set to the Seqera issuer (`https://cloud.seqera.io/api` for Cloud, your `/api` endpoint for Enterprise). If the central team owns a single shared provider for multiple external issuers, they will need to confirm Seqera is one of them.
 
 ## Notes
 
