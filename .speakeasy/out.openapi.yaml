@@ -13838,12 +13838,14 @@ components:
             Use for cleanup, archiving results, sending notifications, etc.
           type: string
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: |
             Bash script to run before workflow execution begins.
             Use for environment setup, loading modules, downloading reference data, etc.
           type: string
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
           description: |
@@ -14034,9 +14036,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
           description: |
@@ -14267,9 +14271,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
         subnetId:
@@ -14448,9 +14454,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
           description: |
@@ -14740,9 +14748,11 @@ components:
         postRunScript:
           description: Shell script to execute after workflow completes
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Shell script to execute before workflow starts
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         workDir:
           description: Working directory path for workflow execution
           type: string
@@ -17529,9 +17539,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
           description: |
@@ -17669,9 +17681,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
           description: |
@@ -21751,6 +21765,7 @@ components:
             #!/bin/bash
             echo "Workflow completed"
             aws s3 sync ./results s3://my-bucket/results
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           type: string
           nullable: true
@@ -21759,6 +21774,7 @@ components:
             #!/bin/bash
             echo "Starting workflow execution"
             aws s3 sync s3://my-bucket/data ./data
+          x-speakeasy-plan-validators: RunScriptSizeValidator
         pullLatest:
           type: boolean
           example: true

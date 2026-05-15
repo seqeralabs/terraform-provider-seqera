@@ -35,6 +35,7 @@ import (
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -257,6 +258,9 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"pre_run_script": schema.StringAttribute{
 						Computed: true,
@@ -266,6 +270,9 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"project_id": schema.StringAttribute{
 						Computed: true,

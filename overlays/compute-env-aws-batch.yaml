@@ -430,6 +430,7 @@ actions:
         Bash script to run before workflow execution begins.
         Use for environment setup, loading modules, downloading reference data, etc.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: RunScriptSizeValidator
 
   - target: $.components.schemas.AwsBatchConfig.properties.postRunScript
     update:
@@ -437,6 +438,7 @@ actions:
         Bash script to run after workflow execution completes.
         Use for cleanup, archiving results, sending notifications, etc.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: RunScriptSizeValidator
 
   - target: $.components.schemas.AwsBatchConfig.properties.headJobCpus
     update:

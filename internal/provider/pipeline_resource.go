@@ -124,10 +124,16 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					"post_run_script": schema.StringAttribute{
 						Optional:    true,
 						Description: `Script to run after pipeline execution`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"pre_run_script": schema.StringAttribute{
 						Optional:    true,
 						Description: `Script to run before pipeline execution`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"pull_latest": schema.BoolAttribute{
 						Optional: true,

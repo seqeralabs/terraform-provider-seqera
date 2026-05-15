@@ -1266,9 +1266,11 @@ actions:
   - target: $.components.schemas.ComputeConfig.properties.preRunScript
     update:
       description: Shell script to execute before workflow starts
+      x-speakeasy-plan-validators: RunScriptSizeValidator
   - target: $.components.schemas.ComputeConfig.properties.postRunScript
     update:
       description: Shell script to execute after workflow completes
+      x-speakeasy-plan-validators: RunScriptSizeValidator
   - target: $.components.schemas.ComputeConfig.properties.environment
     update:
       description: Array of environment variables for the compute environment

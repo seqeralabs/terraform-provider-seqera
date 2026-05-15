@@ -209,6 +209,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Script to run after pipeline execution. Requires replacement if changed.`,
+				Validators: []validator.String{
+					custom_stringvalidators.RunScriptSizeValidator(),
+				},
 			},
 			"pre_run_script": schema.StringAttribute{
 				Optional: true,
@@ -216,6 +219,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Script to run before pipeline execution. Requires replacement if changed.`,
+				Validators: []validator.String{
+					custom_stringvalidators.RunScriptSizeValidator(),
+				},
 			},
 			"pull_latest": schema.BoolAttribute{
 				Optional: true,
