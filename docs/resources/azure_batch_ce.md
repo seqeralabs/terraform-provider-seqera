@@ -31,7 +31,6 @@ instances.
 resource "seqera_azure_batch_ce" "minimal" {
   name           = "azure-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-batch"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {
@@ -56,7 +55,6 @@ resource "seqera_azure_batch_ce" "minimal" {
 resource "seqera_azure_batch_ce" "dual_pool" {
   name           = "azure-batch-dual-pool"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-batch"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {
@@ -88,7 +86,6 @@ resource "seqera_azure_batch_ce" "dual_pool" {
 resource "seqera_azure_batch_ce" "managed_identity" {
   name           = "azure-batch-mi"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-batch"
   credentials_id = seqera_azure_credential.entra.credentials_id
 
   config = {

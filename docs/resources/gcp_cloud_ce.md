@@ -26,7 +26,6 @@ the underlying compute instances directly (rather than via Google Batch).
 resource "seqera_gcp_cloud_ce" "minimal" {
   name           = "gcp-cloud-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -48,7 +47,6 @@ resource "seqera_gcp_cloud_ce" "minimal" {
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -73,7 +71,6 @@ resource "seqera_gcp_cloud_ce" "fusion" {
 resource "seqera_gcp_cloud_ce" "gpu" {
   name           = "gcp-cloud-gpu"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {

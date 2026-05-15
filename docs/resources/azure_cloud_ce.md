@@ -26,7 +26,6 @@ compute instances directly (rather than via Azure Batch).
 resource "seqera_azure_cloud_ce" "minimal" {
   name           = "azure-cloud-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-cloud"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {
@@ -34,9 +33,6 @@ resource "seqera_azure_cloud_ce" "minimal" {
     work_dir        = "az://my-container/work"
     subscription_id = "00000000-0000-0000-0000-000000000000"
     instance_type   = "Standard_D4s_v3"
-    # resource_group is read-only — Forge creates a `TowerForge-<ce>-<id>`
-    # resource group per compute environment and exposes its name on the
-    # state attribute after apply.
   }
 }
 ```
@@ -49,7 +45,6 @@ resource "seqera_azure_cloud_ce" "minimal" {
 resource "seqera_azure_cloud_ce" "log_analytics" {
   name           = "azure-cloud-logs"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-cloud"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {
@@ -74,7 +69,6 @@ resource "seqera_azure_cloud_ce" "log_analytics" {
 resource "seqera_azure_cloud_ce" "managed_identity" {
   name           = "azure-cloud-mi"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-cloud"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {

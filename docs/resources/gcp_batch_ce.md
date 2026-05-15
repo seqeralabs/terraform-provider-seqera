@@ -22,7 +22,6 @@ Google Cloud schedules and manages the underlying compute instances.
 resource "seqera_gcp_batch_ce" "minimal" {
   name           = "gcp-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -43,7 +42,6 @@ resource "seqera_gcp_batch_ce" "minimal" {
 resource "seqera_gcp_batch_ce" "fusion" {
   name           = "gcp-batch-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -67,7 +65,6 @@ resource "seqera_gcp_batch_ce" "fusion" {
 resource "seqera_gcp_batch_ce" "private_network" {
   name           = "gcp-batch-private"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {

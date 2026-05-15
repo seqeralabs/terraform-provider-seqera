@@ -22,7 +22,6 @@ on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
 resource "seqera_aws_batch_ce" "minimal" {
   name           = "aws-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
@@ -55,7 +54,6 @@ resource "seqera_aws_batch_ce" "minimal" {
 resource "seqera_aws_batch_ce" "forge_fusion" {
   name           = "aws-batch-forge-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
@@ -89,7 +87,6 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
 resource "seqera_aws_batch_ce" "manual" {
   name           = "aws-batch-manual"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
