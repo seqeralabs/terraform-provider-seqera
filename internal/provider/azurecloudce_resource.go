@@ -17,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -299,12 +300,14 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 					"resource_group": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
 						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Azure resource group where compute instances will be provisioned. Requires replacement if changed.`,
+						MarkdownDescription: `Read-only. The Forge-created resource group that holds the compute` + "\n" +
+							`environment's resources (named ` + "`" + `TowerForge-<ce-name>-<id>` + "`" + `).` + "\n" +
+							`Forge always provisions its own RG at the subscription scope and` + "\n" +
+							`ignores any user-supplied value, so this field is computed by the` + "\n" +
+							`backend rather than configured.`,
 					},
 					"subscription_id": schema.StringAttribute{
 						Computed: true,
@@ -405,17 +408,12 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed: true,
 			},
 			"platform": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Default:  stringdefault.StaticString(`azure-cloud`),
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Azure platform type. must be "azure-cloud"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"azure-cloud",
-					),
-				},
+				Description: `Azure platform type. Always "azure-cloud" for this resource — set by the provider, not user-configurable. Default: "azure-cloud"`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

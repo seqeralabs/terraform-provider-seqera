@@ -92,7 +92,6 @@ resource "seqera_gcp_batch_ce" "private_network" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) Google Cloud credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) GCP platform type. must be "google-batch"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -109,6 +108,7 @@ resource "seqera_gcp_batch_ce" "private_network" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable. Default: "google-batch"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>

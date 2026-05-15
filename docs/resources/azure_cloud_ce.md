@@ -33,8 +33,10 @@ resource "seqera_azure_cloud_ce" "minimal" {
     region          = "eastus"
     work_dir        = "az://my-container/work"
     subscription_id = "00000000-0000-0000-0000-000000000000"
-    resource_group  = "my-resource-group"
     instance_type   = "Standard_D4s_v3"
+    # resource_group is read-only — Forge creates a `TowerForge-<ce>-<id>`
+    # resource group per compute environment and exposes its name on the
+    # state attribute after apply.
   }
 }
 ```
@@ -54,7 +56,6 @@ resource "seqera_azure_cloud_ce" "log_analytics" {
     region                   = "eastus"
     work_dir                 = "az://my-container/work"
     subscription_id          = "00000000-0000-0000-0000-000000000000"
-    resource_group           = "my-resource-group"
     instance_type            = "Standard_D4s_v3"
     log_workspace_id         = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.OperationalInsights/workspaces/my-law"
     log_table_name           = "SeqeraNextflowLogs"
@@ -96,7 +97,6 @@ resource "seqera_azure_cloud_ce" "managed_identity" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) Azure credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) Azure platform type. must be "azure-cloud"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -113,6 +113,7 @@ resource "seqera_azure_cloud_ce" "managed_identity" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) Azure platform type. Always "azure-cloud" for this resource — set by the provider, not user-configurable. Default: "azure-cloud"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>
@@ -157,8 +158,15 @@ Applied globally to all pipelines launched in this compute environment.
 Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `resource_group` (String) Azure resource group where compute instances will be provisioned. Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
+
+Read-Only:
+
+- `resource_group` (String) Read-only. The Forge-created resource group that holds the compute
+environment's resources (named `TowerForge-<ce-name>-<id>`).
+Forge always provisions its own RG at the subscription scope and
+ignores any user-supplied value, so this field is computed by the
+backend rather than configured.
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AzureBatchCEComputeConfigPlatform - Azure platform type
+// AzureBatchCEComputeConfigPlatform - Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
 type AzureBatchCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type AzureBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// Azure platform type
-	Platform AzureBatchCEComputeConfigPlatform `json:"platform"`
+	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
+	Platform *AzureBatchCEComputeConfigPlatform `default:"azure-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (a *AzureBatchCEComputeConfigInput) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AzureBatchCEComputeConfigInput) GetPlatform() AzureBatchCEComputeConfigPlatform {
+func (a *AzureBatchCEComputeConfigInput) GetPlatform() *AzureBatchCEComputeConfigPlatform {
 	if a == nil {
-		return AzureBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }
@@ -166,8 +166,8 @@ type AzureBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// Azure platform type
-	Platform AzureBatchCEComputeConfigPlatform `json:"platform"`
+	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
+	Platform *AzureBatchCEComputeConfigPlatform `default:"azure-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (a *AzureBatchCEComputeConfig) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AzureBatchCEComputeConfig) GetPlatform() AzureBatchCEComputeConfigPlatform {
+func (a *AzureBatchCEComputeConfig) GetPlatform() *AzureBatchCEComputeConfigPlatform {
 	if a == nil {
-		return AzureBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }

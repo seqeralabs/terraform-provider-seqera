@@ -3,7 +3,6 @@
 resource "seqera_aws_batch_ce" "minimal" {
   name           = "aws-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {

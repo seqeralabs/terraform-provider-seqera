@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AWSBatchCEComputeConfigPlatform - AWS platform type
+// AWSBatchCEComputeConfigPlatform - AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
 type AWSBatchCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type AWSBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// AWS platform type
-	Platform AWSBatchCEComputeConfigPlatform `json:"platform"`
+	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
+	Platform *AWSBatchCEComputeConfigPlatform `default:"aws-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (a *AWSBatchCEComputeConfigInput) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AWSBatchCEComputeConfigInput) GetPlatform() AWSBatchCEComputeConfigPlatform {
+func (a *AWSBatchCEComputeConfigInput) GetPlatform() *AWSBatchCEComputeConfigPlatform {
 	if a == nil {
-		return AWSBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }
@@ -166,8 +166,8 @@ type AWSBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// AWS platform type
-	Platform AWSBatchCEComputeConfigPlatform `json:"platform"`
+	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
+	Platform *AWSBatchCEComputeConfigPlatform `default:"aws-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (a *AWSBatchCEComputeConfig) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AWSBatchCEComputeConfig) GetPlatform() AWSBatchCEComputeConfigPlatform {
+func (a *AWSBatchCEComputeConfig) GetPlatform() *AWSBatchCEComputeConfigPlatform {
 	if a == nil {
-		return AWSBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }

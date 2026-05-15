@@ -4,7 +4,6 @@
 resource "seqera_azure_cloud_ce" "managed_identity" {
   name           = "azure-cloud-mi"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-cloud"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {

@@ -215,7 +215,6 @@ actions:
         required:
           - config
           - name
-          - platform
           - credentialsId
         type: object
         properties:
@@ -249,8 +248,9 @@ actions:
             type: string
             enum:
               - azure-batch
-            description: Azure platform type
-            x-speakeasy-param-optional: false
+            default: azure-batch
+            description: Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
+            x-speakeasy-param-readonly: true
           status:
             type: string
             description: Compute environment status

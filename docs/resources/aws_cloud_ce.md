@@ -16,9 +16,9 @@ description: |-
   In Seqera Intelligent Compute mode (Preview,
   intelligent_compute_enabled = true), tasks are distributed across
   multiple EC2 instances with optimized scheduling and resource
-  allocation. Set the intelligent_compute_config block to choose the
-  EC2 provisioning strategy and (optionally) restrict the instance-type
-  catalog.
+  allocation. The intelligent_compute_config block is optional —
+  leave it null to accept the platform defaults, or set it to override
+  the EC2 provisioning strategy or restrict the instance-type catalog.
   Note: instance_type sets the head node EC2 type and applies in
   both modes (defaults: m5d.large, or m6gd.large when
   arm64_enabled = true).
@@ -50,9 +50,9 @@ Omit the `intelligent_compute_config` block in this mode.
 In **Seqera Intelligent Compute** mode (Preview,
 `intelligent_compute_enabled = true`), tasks are distributed across
 multiple EC2 instances with optimized scheduling and resource
-allocation. Set the `intelligent_compute_config` block to choose the
-EC2 provisioning strategy and (optionally) restrict the instance-type
-catalog.
+allocation. The `intelligent_compute_config` block is optional —
+leave it null to accept the platform defaults, or set it to override
+the EC2 provisioning strategy or restrict the instance-type catalog.
 
 Note: `instance_type` sets the **head node** EC2 type and applies in
 both modes (defaults: `m5d.large`, or `m6gd.large` when
@@ -80,6 +80,16 @@ data "seqera_workspace" "main" {
 
 # Minimal AWS Cloud compute environment (Classic mode).
 # Seqera picks the worker fleet automatically. Omit `intelligent_compute_config` in this mode.
+#
+# work_dir notes:
+#   - Required and force-new. Changing it replaces the CE.
+#   - Seqera Forge implicitly adds the work_dir URI to allow_buckets at
+#     CE-create time. If you set allow_buckets explicitly, include the
+#     work_dir URI as the trailing entry to match server-side ordering
+#     and avoid a forced-replacement diff on subsequent plans.
+#   - Pipelines / workflows may override work_dir at launch without
+#     mutating the CE — but the override path must be reachable via the
+#     CE's allow_buckets / instance-role IAM permissions.
 resource "seqera_aws_cloud_ce" "classic" {
   name           = "aws-cloud-classic"
   workspace_id   = data.seqera_workspace.main.id
@@ -149,7 +159,6 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) AWS platform type. must be "aws-cloud"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -166,6 +175,7 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable. Default: "aws-cloud"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>
@@ -219,10 +229,13 @@ Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
 When `true`, tasks are distributed across multiple EC2 instances with
-optimized scheduling and resource allocation, and
-`intelligent_compute_config` is required. When `false` (default), all
-tasks run on a single instance (Basic mode) and
-`intelligent_compute_config` must be omitted.
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to pin the provisioning strategy
+or instance-type catalog.
 
 Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
 to be enabled on the target workspace/org; otherwise the API returns

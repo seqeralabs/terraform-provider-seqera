@@ -9,13 +9,18 @@ import (
 	"time"
 )
 
-// CredentialsProviderType - Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
+// CredentialsProviderType - Cloud or service provider type. The value must match the corresponding `keys.*` block:
+//
+// - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
+// - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
+// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
 type CredentialsProviderType string
 
 const (
 	CredentialsProviderTypeAws           CredentialsProviderType = "aws"
 	CredentialsProviderTypeAzure         CredentialsProviderType = "azure"
 	CredentialsProviderTypeAzureEntra    CredentialsProviderType = "azure_entra"
+	CredentialsProviderTypeAzureCloud    CredentialsProviderType = "azure-cloud"
 	CredentialsProviderTypeGoogle        CredentialsProviderType = "google"
 	CredentialsProviderTypeGithub        CredentialsProviderType = "github"
 	CredentialsProviderTypeGitlab        CredentialsProviderType = "gitlab"
@@ -44,6 +49,8 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	case "azure":
 		fallthrough
 	case "azure_entra":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "google":
 		fallthrough
@@ -90,7 +97,12 @@ type CredentialsInput struct {
 	Keys SecurityKeys `json:"keys"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
-	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
+	// Cloud or service provider type. The value must match the corresponding `keys.*` block:
+	//
+	// - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
+	// - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
+	// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+	//
 	ProviderType CredentialsProviderType `json:"provider"`
 }
 
@@ -241,7 +253,12 @@ type CredentialsOutput struct {
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
-	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
+	// Cloud or service provider type. The value must match the corresponding `keys.*` block:
+	//
+	// - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
+	// - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
+	// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+	//
 	ProviderType CredentialsProviderType `json:"provider"`
 }
 

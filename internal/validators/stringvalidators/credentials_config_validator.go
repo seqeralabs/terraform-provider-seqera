@@ -55,13 +55,15 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 		return
 	}
 
-	// Get the expected keys field name by converting schema name to field name
 	// Provider to schema mapping from the discriminator in the OpenAPI spec.
-	// Some provider types accept multiple keys blocks (e.g., "azure" accepts
-	// both "azure" shared-key and "azure_cloud" service-principal keys).
+	// One provider_type ↔ one keys block. The three Azure variants are
+	// distinct provider values: "azure" (shared key, Batch CE), "azure_entra"
+	// (SP, Batch CE manual), "azure-cloud" (SP, Cloud SingleVM CE).
 	providerKeysMap := map[string][]string{
 		"aws":           {"AwsSecurityKeys"},
-		"azure":         {"AzureSecurityKeys", "AzureCloudSecurityKeys"},
+		"azure":         {"AzureSecurityKeys"},
+		"azure_entra":   {"AzureEntraKeys"},
+		"azure-cloud":   {"AzureCloudSecurityKeys"},
 		"google":        {"GoogleSecurityKeys"},
 		"github":        {"GitHubSecurityKeys"},
 		"gitlab":        {"GitLabSecurityKeys"},
@@ -74,7 +76,6 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 		"gitea":         {"GiteaSecurityKeys"},
 		"azurerepos":    {"AzureReposSecurityKeys"},
 		"seqeracompute": {"SeqeraComputeSecurityKeys"},
-		"azure_entra":   {"AzureEntraKeys"},
 	}
 
 	// Get the expected keys schema names for this provider

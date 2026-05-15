@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -621,17 +622,12 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed: true,
 			},
 			"platform": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Default:  stringdefault.StaticString(`azure-batch`),
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Azure platform type. must be "azure-batch"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"azure-batch",
-					),
-				},
+				Description: `Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable. Default: "azure-batch"`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

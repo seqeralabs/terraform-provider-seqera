@@ -1215,10 +1215,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
 											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple EC2 instances with` + "\n" +
-											`optimized scheduling and resource allocation, and` + "\n" +
-											`` + "`" + `intelligent_compute_config` + "`" + ` is required. When ` + "`" + `false` + "`" + ` (default), all` + "\n" +
-											`tasks run on a single instance (Basic mode) and` + "\n" +
-											`` + "`" + `intelligent_compute_config` + "`" + ` must be omitted.` + "\n" +
+											`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+											`all tasks run on a single instance (Classic mode).` + "\n" +
+											`` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+											`to accept the platform defaults, or provide it (only when` + "\n" +
+											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to pin the provisioning strategy` + "\n" +
+											`or instance-type catalog.` + "\n" +
 											`` + "\n" +
 											`Setting this to ` + "`" + `true` + "`" + ` requires the ` + "`" + `SEQERA_SCHEDULER` + "`" + ` feature toggle` + "\n" +
 											`to be enabled on the target workspace/org; otherwise the API returns` + "\n" +
@@ -1968,11 +1971,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"resource_group": schema.StringAttribute{
 										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Azure resource group where compute instances will be provisioned. Requires replacement if changed.`,
+										MarkdownDescription: `Read-only. The Forge-created resource group that holds the compute` + "\n" +
+											`environment's resources (named ` + "`" + `TowerForge-<ce-name>-<id>` + "`" + `).` + "\n" +
+											`Forge always provisions its own RG at the subscription scope and` + "\n" +
+											`ignores any user-supplied value, so this field is computed by the` + "\n" +
+											`backend rather than configured.`,
 									},
 									"subscription_id": schema.StringAttribute{
 										Computed: true,

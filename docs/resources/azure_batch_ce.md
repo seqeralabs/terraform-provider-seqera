@@ -23,6 +23,11 @@ instances.
 ```terraform
 # Minimal Azure Batch compute environment with Forge auto-provisioning.
 # Uses shared key authentication from the referenced Azure credential.
+#
+# work_dir is required and force-new — changing it replaces the CE.
+# Pipelines / workflows may override work_dir at launch without
+# touching the CE; the override container must be reachable by the
+# Azure credential's permissions.
 resource "seqera_azure_batch_ce" "minimal" {
   name           = "azure-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
@@ -110,7 +115,6 @@ resource "seqera_azure_batch_ce" "managed_identity" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) Azure credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) Azure platform type. must be "azure-batch"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -127,6 +131,7 @@ resource "seqera_azure_batch_ce" "managed_identity" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable. Default: "azure-batch"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>

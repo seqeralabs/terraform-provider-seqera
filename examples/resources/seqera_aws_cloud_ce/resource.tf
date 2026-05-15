@@ -23,7 +23,6 @@ data "seqera_workspace" "main" {
 resource "seqera_aws_cloud_ce" "classic" {
   name           = "aws-cloud-classic"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-cloud"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {

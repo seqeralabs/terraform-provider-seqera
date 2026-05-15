@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -398,17 +399,12 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 			},
 			"platform": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Default:  stringdefault.StaticString(`google-cloud`),
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `GCP platform type. must be "google-cloud"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"google-cloud",
-					),
-				},
+				Description: `GCP platform type. Always "google-cloud" for this resource — set by the provider, not user-configurable. Default: "google-cloud"`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

@@ -1,7 +1,6 @@
 resource "seqera_gcp_batch_ce" "minimal" {
   name           = "gcp-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {

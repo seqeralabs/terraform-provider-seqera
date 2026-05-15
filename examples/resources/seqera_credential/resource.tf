@@ -1,6 +1,7 @@
-# Azure Batch credentials (shared key authentication)
-resource "seqera_credential" "azure_batch" {
-  name          = "azure-batch-creds"
+# Azure Batch credentials — shared key authentication
+# provider_type "azure" pairs with keys.azure (Azure Batch CE, Batch Forge).
+resource "seqera_credential" "azure_shared_keys" {
+  name          = "azure-shared-keys"
   workspace_id  = seqera_workspace.main.id
   provider_type = "azure"
   description   = "Azure Batch credentials using shared keys"
@@ -14,35 +15,38 @@ resource "seqera_credential" "azure_batch" {
   }
 }
 
-# Azure Cloud credentials (service principal / Entra ID)
-resource "seqera_credential" "azure_cloud" {
-  name          = "azure-cloud-creds"
+# Azure Batch credentials — Entra service principal
+# provider_type "azure_entra" pairs with keys.azure_entra (Azure Batch CE, manual).
+resource "seqera_credential" "azure_entra" {
+  name          = "azure-entra-sp"
   workspace_id  = seqera_workspace.main.id
-  provider_type = "azure"
-  description   = "Azure Cloud credentials using service principal"
+  provider_type = "azure_entra"
+  description   = "Azure Batch credentials using Entra service principal"
   keys = {
-    azure_cloud = {
-      tenant_id       = var.azure_tenant_id
-      client_id       = var.azure_client_id
-      client_secret   = var.azure_client_secret
-      subscription_id = var.azure_subscription_id
+    azure_entra = {
+      batch_name    = var.azure_batch_name
+      storage_name  = var.azure_storage_name
+      tenant_id     = var.azure_tenant_id
+      client_id     = var.azure_client_id
+      client_secret = var.azure_client_secret
     }
   }
 }
 
-# Azure Entra ID credentials
-resource "seqera_credential" "azure_entra" {
-  name          = "azure-entra-creds"
+# Azure Cloud credentials — Entra service principal
+# provider_type "azure-cloud" pairs with keys.azure_cloud (Azure Cloud / SingleVM CE).
+resource "seqera_credential" "azure_cloud" {
+  name          = "azure-cloud-sp"
   workspace_id  = seqera_workspace.main.id
-  provider_type = "azure_entra"
-  description   = "Azure Entra ID credentials"
+  provider_type = "azure-cloud"
+  description   = "Azure Cloud credentials using Entra service principal"
   keys = {
-    azure_entra = {
-      tenant_id     = var.azure_tenant_id
-      client_id     = var.azure_client_id
-      client_secret = var.azure_client_secret
-      batch_name    = var.azure_batch_name
-      storage_name  = var.azure_storage_name
+    azure_cloud = {
+      subscription_id = var.azure_subscription_id
+      storage_name    = var.azure_storage_name
+      tenant_id       = var.azure_tenant_id
+      client_id       = var.azure_client_id
+      client_secret   = var.azure_client_secret
     }
   }
 }

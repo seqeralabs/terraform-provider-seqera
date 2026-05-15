@@ -8,7 +8,6 @@
 resource "seqera_azure_batch_ce" "minimal" {
   name           = "azure-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-batch"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {

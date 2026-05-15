@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -899,17 +900,12 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 			},
 			"platform": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Default:  stringdefault.StaticString(`aws-batch`),
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `AWS platform type. must be "aws-batch"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"aws-batch",
-					),
-				},
+				Description: `AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable. Default: "aws-batch"`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

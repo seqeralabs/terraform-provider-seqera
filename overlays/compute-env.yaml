@@ -1085,9 +1085,14 @@ actions:
   - target: $.components.schemas.AzCloudConfig.properties.resourceGroup
     update:
       description: |
-        Azure resource group where compute instances will be provisioned.
-      example: "my-resource-group"
-      x-speakeasy-param-force-new: true
+        Read-only. The Forge-created resource group that holds the compute
+        environment's resources (named `TowerForge-<ce-name>-<id>`).
+        Forge always provisions its own RG at the subscription scope and
+        ignores any user-supplied value, so this field is computed by the
+        backend rather than configured.
+      example: "TowerForge-my-ce-abc123XYZ"
+      x-speakeasy-param-readonly: true
+      x-speakeasy-param-computed: true
 
   - target: $.components.schemas.AzCloudConfig.properties.networkId
     update:

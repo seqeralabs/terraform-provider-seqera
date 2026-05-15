@@ -52,7 +52,11 @@ type AzCloudConfig struct {
 	// Examples: eastus, westus2, northeurope
 	//
 	Region *string `json:"region,omitempty"`
-	// Azure resource group where compute instances will be provisioned.
+	// Read-only. The Forge-created resource group that holds the compute
+	// environment's resources (named `TowerForge-<ce-name>-<id>`).
+	// Forge always provisions its own RG at the subscription scope and
+	// ignores any user-supplied value, so this field is computed by the
+	// backend rather than configured.
 	//
 	ResourceGroup *string `json:"resourceGroup,omitempty"`
 	// Azure subscription ID where compute resources will be created.

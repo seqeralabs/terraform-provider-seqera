@@ -235,7 +235,6 @@ actions:
         required:
           - config
           - name
-          - platform
           - credentialsId
         type: object
         properties:
@@ -269,8 +268,9 @@ actions:
             type: string
             enum:
               - aws-batch
-            description: AWS platform type
-            x-speakeasy-param-optional: false
+            default: aws-batch
+            description: AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
+            x-speakeasy-param-readonly: true
           status:
             type: string
             description: Compute environment status

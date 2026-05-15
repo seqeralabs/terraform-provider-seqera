@@ -79,7 +79,11 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Platform = types.StringValue(string(resp.Platform))
+		if resp.Platform != nil {
+			r.Platform = types.StringValue(string(*resp.Platform))
+		} else {
+			r.Platform = types.StringNull()
+		}
 		r.Status = types.StringPointerValue(resp.Status)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -191,7 +195,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		description = nil
 	}
-	platform := shared.GCPCloudCEComputeConfigPlatform(r.Platform.ValueString())
+	platform := new(shared.GCPCloudCEComputeConfigPlatform)
+	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
+		*platform = shared.GCPCloudCEComputeConfigPlatform(r.Platform.ValueString())
+	} else {
+		platform = nil
+	}
 	status := new(string)
 	if !r.Status.IsUnknown() && !r.Status.IsNull() {
 		*status = r.Status.ValueString()
