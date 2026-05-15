@@ -9,9 +9,8 @@ import (
 type GoogleCloudConfiguration struct {
 	Arm64Enabled        types.Bool          `tfsdk:"arm64_enabled"`
 	BootDiskSizeGb      types.Int32         `tfsdk:"boot_disk_size_gb"`
-	EnableFusion        types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave          types.Bool          `tfsdk:"enable_wave"`
 	Environment         []ConfigEnvVariable `tfsdk:"environment"`
+	EnableFusion        types.Bool          `tfsdk:"enable_fusion"`
 	GpuEnabled          types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID             types.String        `tfsdk:"image_id"`
 	InstanceType        types.String        `tfsdk:"instance_type"`
@@ -21,6 +20,7 @@ type GoogleCloudConfiguration struct {
 	ProjectID           types.String        `tfsdk:"project_id"`
 	Region              types.String        `tfsdk:"region"`
 	ServiceAccountEmail types.String        `tfsdk:"service_account_email"`
+	EnableWave          types.Bool          `tfsdk:"enable_wave"`
 	WorkDir             types.String        `tfsdk:"work_dir"`
 	Zone                types.String        `tfsdk:"zone"`
 }

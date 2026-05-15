@@ -59,11 +59,11 @@ type ComputeEnvResource struct {
 
 // ComputeEnvResourceModel describes the resource data model.
 type ComputeEnvResourceModel struct {
-	ComputeEnv   *tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
-	ComputeEnvID types.String                     `tfsdk:"compute_env_id"`
-	Force        types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
-	LabelIds     []types.Int64                    `tfsdk:"label_ids"`
-	WorkspaceID  types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnv   *tfTypes.ComputeEnvComputeConfig1 `tfsdk:"compute_env"`
+	ComputeEnvID types.String                      `tfsdk:"compute_env_id"`
+	Force        types.Bool                        `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	LabelIds     []types.Int64                     `tfsdk:"label_ids"`
+	WorkspaceID  types.Int64                       `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {

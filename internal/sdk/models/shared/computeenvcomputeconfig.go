@@ -77,128 +77,6 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ComputeEnvComputeConfigInput struct {
-	// Configuration settings for compute environments including work directories,
-	// pre/post run scripts, and environment-specific parameters.
-	//
-	Config        ComputeConfig                   `json:"config"`
-	CredentialsID string                          `json:"credentialsId"`
-	Description   *string                         `json:"description,omitempty"`
-	Message       *string                         `json:"message,omitempty"`
-	Name          string                          `json:"name"`
-	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
-	if c == nil {
-		return ComputeConfig{}
-	}
-	return c.Config
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureCloud() *AzureCloudConfiguration {
-	return c.GetConfig().AzureCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleCloud() *GoogleCloudConfiguration {
-	return c.GetConfig().GoogleCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
-	return c.GetConfig().GoogleLifeSciencesConfigurationRetired
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigLocalPlatform() *LocalExecutionConfiguration {
-	return c.GetConfig().LocalExecutionConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
-	if c == nil {
-		return ""
-	}
-	return c.CredentialsID
-}
-
-func (c *ComputeEnvComputeConfigInput) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Message
-}
-
-func (c *ComputeEnvComputeConfigInput) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *ComputeEnvComputeConfigInput) GetPlatform() ComputeEnvComputeConfigPlatform {
-	if c == nil {
-		return ComputeEnvComputeConfigPlatform("")
-	}
-	return c.Platform
-}
-
 type ComputeEnvComputeConfigStatus string
 
 const (
@@ -443,4 +321,126 @@ func (c *ComputeEnvComputeConfig) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return c.WorkspaceID
+}
+
+type ComputeEnvComputeConfigInput struct {
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config        ComputeConfig                   `json:"config"`
+	CredentialsID string                          `json:"credentialsId"`
+	Description   *string                         `json:"description,omitempty"`
+	Message       *string                         `json:"message,omitempty"`
+	Name          string                          `json:"name"`
+	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
+	if c == nil {
+		return ComputeConfig{}
+	}
+	return c.Config
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	return c.GetConfig().AltairPBSConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AWSBatchConfiguration {
+	return c.GetConfig().AWSBatchConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AWSCloudConfiguration {
+	return c.GetConfig().AWSCloudConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfiguration {
+	return c.GetConfig().AzureBatchConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAzureCloud() *AzureCloudConfiguration {
+	return c.GetConfig().AzureCloudConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	return c.GetConfig().AmazonEKSClusterConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	return c.GetConfig().GoogleGKEClusterConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	return c.GetConfig().GoogleBatchServiceConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	return c.GetConfig().GoogleCloudConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	return c.GetConfig().GoogleLifeSciencesConfigurationRetired
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	return c.GetConfig().KubernetesComputeConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	return c.GetConfig().LocalExecutionConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	return c.GetConfig().IBMLSFConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguration {
+	return c.GetConfig().MoabConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	return c.GetConfig().SeqeraComputeConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmConfiguration {
+	return c.GetConfig().SlurmConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	return c.GetConfig().UnivaGridEngineConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
+	if c == nil {
+		return ""
+	}
+	return c.CredentialsID
+}
+
+func (c *ComputeEnvComputeConfigInput) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Message
+}
+
+func (c *ComputeEnvComputeConfigInput) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *ComputeEnvComputeConfigInput) GetPlatform() ComputeEnvComputeConfigPlatform {
+	if c == nil {
+		return ComputeEnvComputeConfigPlatform("")
+	}
+	return c.Platform
 }

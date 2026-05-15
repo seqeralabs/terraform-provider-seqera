@@ -79,14 +79,26 @@ actions:
 
         terraform-resource: Pipeline#create
 
-  # READ - GET /pipelines/{pipelineId}
+  # READ - GET /pipelines/{pipelineId} (step 1: top-level metadata)
   - target: $.paths["/pipelines/{pipelineId}"].get
     update:
       x-speakeasy-entity-operation:
 
         terraform-datasource: null
 
-        terraform-resource: Pipeline#read
+        terraform-resource: Pipeline#read#1
+
+  # READ - GET /pipelines/{pipelineId}/launch (step 2: launch config —
+  # the launch fields live on a separate endpoint server-side and must
+  # be merged in on Read for `pipeline_schema_id`, `params_text`, and
+  # the pre/post-run scripts to round-trip correctly.)
+  - target: $.paths["/pipelines/{pipelineId}/launch"].get
+    update:
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Pipeline#read#2
 
   # UPDATE - PUT /pipelines/{pipelineId}
   - target: $.paths["/pipelines/{pipelineId}"].put
