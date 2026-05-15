@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AWSCredentialProviderType - Cloud provider type (automatically set to "aws")
+// AWSCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type AWSCredentialProviderType string
 
 const (
@@ -85,7 +85,7 @@ type AWSCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "aws")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *AWSCredentialProviderType `default:"aws" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -199,7 +199,7 @@ type AWSCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "aws")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *AWSCredentialProviderType `default:"aws" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

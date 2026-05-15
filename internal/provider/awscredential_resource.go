@@ -117,7 +117,7 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`aws`),
-				Description: `Cloud provider type (automatically set to "aws"). Default: "aws"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "aws"`,
 			},
 			"secret_key": schema.StringAttribute{
 				Optional:    true,

@@ -55,7 +55,7 @@ resource "seqera_codecommit_credential" "example" {
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
-- `provider_type` (String) Cloud provider type (automatically set to "codecommit"). Default: "codecommit"
+- `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "codecommit"
 
 ## Import
 

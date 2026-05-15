@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// BitbucketCredentialProviderType - Cloud provider type (automatically set to "bitbucket")
+// BitbucketCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type BitbucketCredentialProviderType string
 
 const (
@@ -68,7 +68,7 @@ type BitbucketCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "bitbucket")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *BitbucketCredentialProviderType `default:"bitbucket" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -174,7 +174,7 @@ type BitbucketCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "bitbucket")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *BitbucketCredentialProviderType `default:"bitbucket" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

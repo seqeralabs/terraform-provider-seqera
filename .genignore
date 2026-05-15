@@ -56,6 +56,8 @@ examples/resources/seqera_google_credential/resource*.tf
 examples/resources/seqera_google_credential/import.sh
 examples/resources/seqera_aws_credential/resource*.tf
 examples/resources/seqera_azure_credential/resource.tf
+examples/resources/seqera_azure_entra_credential/resource.tf
+examples/resources/seqera_azure_cloud_credential/resource.tf
 examples/resources/seqera_credential/resource.tf
 examples/resources/seqera_bitbucket_credential/resource.tf
 examples/resources/seqera_codecommit_credential/resource.tf

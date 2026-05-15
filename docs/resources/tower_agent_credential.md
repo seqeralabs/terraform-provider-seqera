@@ -74,7 +74,7 @@ resource "seqera_tower_agent_credential" "shared" {
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
-- `provider_type` (String) Cloud provider type (automatically set to "tw-agent"). Default: "tw-agent"
+- `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "tw-agent"
 
 ## Import
 

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// KubernetesCredentialProviderType - Cloud provider type (automatically set to "k8s")
+// KubernetesCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type KubernetesCredentialProviderType string
 
 const (
@@ -88,7 +88,7 @@ type KubernetesCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "k8s")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *KubernetesCredentialProviderType `default:"k8s" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -196,7 +196,7 @@ type KubernetesCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "k8s")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *KubernetesCredentialProviderType `default:"k8s" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

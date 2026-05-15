@@ -77,7 +77,7 @@ resource "seqera_github_credential" "enterprise" {
 ### Read-Only
 
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `provider_type` (String) Cloud provider type (automatically set to "github"). Default: "github"
+- `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "github"
 
 ## Import
 

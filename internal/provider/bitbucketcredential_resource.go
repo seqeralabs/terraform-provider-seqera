@@ -95,7 +95,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`bitbucket`),
-				Description: `Cloud provider type (automatically set to "bitbucket"). Default: "bitbucket"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "bitbucket"`,
 			},
 			"token": schema.StringAttribute{
 				Optional:    true,

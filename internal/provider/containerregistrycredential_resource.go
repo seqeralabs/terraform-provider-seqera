@@ -86,7 +86,7 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`container-reg`),
-				Description: `Cloud provider type (automatically set to "container-reg"). Default: "container-reg"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "container-reg"`,
 			},
 			"registry": schema.StringAttribute{
 				Optional:    true,

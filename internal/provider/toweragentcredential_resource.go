@@ -84,7 +84,7 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`tw-agent`),
-				Description: `Cloud provider type (automatically set to "tw-agent"). Default: "tw-agent"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "tw-agent"`,
 			},
 			"shared": schema.BoolAttribute{
 				Computed:    true,
