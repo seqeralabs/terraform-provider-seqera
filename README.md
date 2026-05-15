@@ -95,6 +95,7 @@ Available configuration:
 * [seqera_compute_env](docs/resources/compute_env.md)
 * [seqera_container_registry_credential](docs/resources/container_registry_credential.md)
 * [seqera_credential](docs/resources/credential.md)
+* [seqera_custom_role](docs/resources/custom_role.md)
 * [seqera_data_link](docs/resources/data_link.md)
 * [seqera_datasets](docs/resources/datasets.md)
 * [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)

@@ -35,12 +35,21 @@ terraform:
   version: 0.40.0-RC4
   additionalActions: []
   additionalDataSources:
+    - datasource: custom_role_data.NewDataSource
+      importAlias: custom_role_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/custom_role_data
     - datasource: organization_data.NewDataSource
       importAlias: organization_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data
     - datasource: organization_member_data.NewDataSource
       importAlias: organization_member_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data
+    - datasource: permissions_data.NewDataSource
+      importAlias: permissions_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/permissions_data
+    - datasource: team_data.NewDataSource
+      importAlias: team_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_data
     - datasource: workspace_data.NewDataSource
       importAlias: workspace_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data

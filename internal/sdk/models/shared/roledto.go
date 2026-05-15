@@ -3,15 +3,28 @@
 package shared
 
 type RoleDto struct {
-	Description  *string  `json:"description,omitempty"`
-	IsPredefined *bool    `json:"isPredefined,omitempty"`
-	Name         *string  `json:"name,omitempty"`
-	Permissions  []string `json:"permissions,omitempty"`
+	// Human-readable description of what the role grants.
+	Description string `json:"description"`
+	// Always `false` for roles managed by this resource.
+	IsPredefined *bool `json:"isPredefined,omitempty"`
+	// Role name. Unique within the organization. Up to 40 characters.
+	// Changing the name replaces the role — Terraform will destroy the
+	// existing custom role and create a new one. Workspace participants
+	// assigned to the old role need to be reassigned via
+	// `seqera_workspace_participant`.
+	//
+	Name string `json:"name"`
+	// Set of permission strings the role grants. Permission names follow
+	// the `resource:verb` convention (e.g. `pipeline:read`,
+	// `workflow:execute`, `compute_environment:write`). The full
+	// catalogue can be retrieved from `GET /roles/permissions`.
+	//
+	Permissions []string `json:"permissions"`
 }
 
-func (r *RoleDto) GetDescription() *string {
+func (r *RoleDto) GetDescription() string {
 	if r == nil {
-		return nil
+		return ""
 	}
 	return r.Description
 }
@@ -23,16 +36,16 @@ func (r *RoleDto) GetIsPredefined() *bool {
 	return r.IsPredefined
 }
 
-func (r *RoleDto) GetName() *string {
+func (r *RoleDto) GetName() string {
 	if r == nil {
-		return nil
+		return ""
 	}
 	return r.Name
 }
 
 func (r *RoleDto) GetPermissions() []string {
 	if r == nil {
-		return nil
+		return []string{}
 	}
 	return r.Permissions
 }

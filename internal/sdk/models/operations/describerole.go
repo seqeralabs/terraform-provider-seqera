@@ -11,7 +11,7 @@ type DescribeRoleRequest struct {
 	// The role name
 	RoleName string `pathParam:"style=simple,explode=false,name=roleName"`
 	// Numeric identifier of the organization
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 }
 
 func (d *DescribeRoleRequest) GetRoleName() string {
@@ -21,9 +21,9 @@ func (d *DescribeRoleRequest) GetRoleName() string {
 	return d.RoleName
 }
 
-func (d *DescribeRoleRequest) GetOrgID() *int64 {
+func (d *DescribeRoleRequest) GetOrgID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.OrgID
 }

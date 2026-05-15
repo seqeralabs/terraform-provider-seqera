@@ -1,0 +1,161 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Custom Roles Overlay
+  version: 0.0.0
+
+# Binds the upstream `/roles` endpoints to a `CustomRole` Terraform resource.
+# Custom roles let admins define fine-grained workspace permission sets
+# alongside the predefined owner/admin/maintain/launch/view roles.
+# Assignments live on `seqera_workspace_participant`.
+
+actions:
+  # -------------------------------------------------------------------------
+  # Operation-level entity bindings
+  # -------------------------------------------------------------------------
+
+  - target: $.paths["/roles"].post
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#create
+
+  - target: $.paths["/roles/{roleName}"].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#read
+
+  - target: $.paths["/roles/{roleName}"].put
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#update
+
+  - target: $.paths["/roles/{roleName}"].delete
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#delete
+
+  # -------------------------------------------------------------------------
+  # Per-operation parameter annotations (no replacements — annotate in place)
+  # -------------------------------------------------------------------------
+
+  # orgId must be required on every role operation so Terraform treats it as
+  # a real attribute. Marked force-new so a config change moves to a new
+  # org (effectively a recreate).
+
+  - target: $.paths["/roles"].post.parameters[?(@.name=="orgId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/roles/{roleName}"].get.parameters[?(@.name=="orgId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/roles/{roleName}"].put.parameters[?(@.name=="orgId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+
+  - target: $.paths["/roles/{roleName}"].delete.parameters[?(@.name=="orgId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+
+  # roleName in the URL maps to `name` on the role body. Speakeasy needs an
+  # explicit match so it can thread the Create response's name into the
+  # Read/Update/Delete URLs.
+
+  - target: $.paths["/roles/{roleName}"].get.parameters[?(@.name=="roleName")]
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/roles/{roleName}"].put.parameters[?(@.name=="roleName")]
+    update:
+      x-speakeasy-match: name
+
+  - target: $.paths["/roles/{roleName}"].delete.parameters[?(@.name=="roleName")]
+    update:
+      x-speakeasy-match: name
+
+  # -------------------------------------------------------------------------
+  # Entity binding on RoleDto (the Read response shape)
+  # -------------------------------------------------------------------------
+
+  - target: $.components.schemas.RoleDto
+    update:
+      x-speakeasy-entity: CustomRole
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: custom_role
+      required:
+        - name
+        - description
+        - permissions
+      x-speakeasy-entity-description: |
+        Manage a custom role in a Seqera organization. Custom roles are
+        named permission sets that admins can assign to workspace
+        participants alongside the predefined `owner` / `admin` /
+        `maintain` / `launch` / `view` / `connect` roles.
+
+        Renaming a role is supported in place — assignments on existing
+        participants are automatically updated to track the new name.
+
+        Custom roles require the `CUSTOM_ROLES` feature toggle on the
+        organization's tier. Without it the API returns HTTP 403. There is
+        also a per-org quota (`tower.limits.max-custom-roles`, default
+        20); reaching it surfaces as HTTP 400 on create.
+
+  # -------------------------------------------------------------------------
+  # Schema field annotations on RoleDto
+  # -------------------------------------------------------------------------
+
+  - target: $.components.schemas.RoleDto.properties.name
+    update:
+      maxLength: 40
+      description: |
+        Role name. Unique within the organization. Up to 40 characters.
+        Changing the name replaces the role — Terraform will destroy the
+        existing custom role and create a new one. Workspace participants
+        assigned to the old role need to be reassigned via
+        `seqera_workspace_participant`.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.RoleDto.properties.description
+    update:
+      minLength: 1
+      maxLength: 120
+      description: Human-readable description of what the role grants.
+
+  - target: $.components.schemas.RoleDto.properties.permissions
+    update:
+      uniqueItems: true
+      description: |
+        Set of permission strings the role grants. Permission names follow
+        the `resource:verb` convention (e.g. `pipeline:read`,
+        `workflow:execute`, `compute_environment:write`). The full
+        catalogue can be retrieved from `GET /roles/permissions`.
+
+  - target: $.components.schemas.RoleDto.properties.isPredefined
+    update:
+      description: Always `false` for roles managed by this resource.
+      x-speakeasy-name-override: is_predefined
+      x-speakeasy-param-readonly: true
+
+  # -------------------------------------------------------------------------
+  # Mark CreateRole/UpdateRole request fields as required so the generated
+  # TF schema treats them as required attributes rather than optional.
+  # -------------------------------------------------------------------------
+
+  - target: $.components.schemas.CreateRoleRequest.properties.description
+    update:
+      minLength: 1
+      maxLength: 120
+
+  - target: $.components.schemas.UpdateRoleRequest.properties.description
+    update:
+      minLength: 1
+      maxLength: 120

@@ -9,14 +9,14 @@ import (
 
 type CreateRoleRequest struct {
 	// Numeric identifier of the organization
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// Create role request
 	CreateRoleRequest shared.CreateRoleRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateRoleRequest) GetOrgID() *int64 {
+func (c *CreateRoleRequest) GetOrgID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.OrgID
 }

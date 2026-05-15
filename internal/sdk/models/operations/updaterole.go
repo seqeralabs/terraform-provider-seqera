@@ -11,7 +11,7 @@ type UpdateRoleRequest struct {
 	// The role name
 	RoleName string `pathParam:"style=simple,explode=false,name=roleName"`
 	// Numeric identifier of the organization
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// Update role request
 	UpdateRoleRequest shared.UpdateRoleRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateRoleRequest) GetRoleName() string {
 	return u.RoleName
 }
 
-func (u *UpdateRoleRequest) GetOrgID() *int64 {
+func (u *UpdateRoleRequest) GetOrgID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.OrgID
 }

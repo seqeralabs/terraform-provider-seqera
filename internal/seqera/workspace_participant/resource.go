@@ -151,13 +151,12 @@ Import formats:
 				},
 			},
 			"role": schema.StringAttribute{
-				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("view"),
-				MarkdownDescription: `Role of the participant. Valid values: owner, admin, maintain, launch, view. Defaults to "view".`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("owner", "admin", "maintain", "launch", "view"),
-				},
+				Optional: true,
+				Computed: true,
+				Default:  stringdefault.StaticString("view"),
+				MarkdownDescription: "Role of the participant. Accepts any predefined role (`owner`, `admin`, " +
+					"`maintain`, `launch`, `connect`, `view`) or the name of a custom role defined via " +
+					"`seqera_custom_role` in the same organization. Defaults to `view`.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

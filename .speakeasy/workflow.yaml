@@ -33,6 +33,7 @@ sources:
             - location: overlays/credentials-ssh.yaml
             - location: overlays/credentials-tower-agent.yaml
             - location: overlays/credentials.yaml
+            - location: overlays/custom-roles.yaml
             - location: overlays/datalinks.yaml
             - location: overlays/datasets.yaml
             - location: overlays/datasource-credentials.yaml

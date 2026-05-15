@@ -6900,6 +6900,8 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Create role request
         required: true
@@ -6928,6 +6930,9 @@ paths:
         - BearerAuth: []
       tags:
         - roles
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#create
   /roles/permissions:
     get:
       operationId: ListRolePermissions
@@ -7012,12 +7017,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: name
         - name: orgId
           in: query
           description: Numeric identifier of the organization
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '204':
           description: No Content - Role deleted successfully
@@ -7035,6 +7043,9 @@ paths:
         - BearerAuth: []
       tags:
         - roles
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#delete
     get:
       operationId: DescribeRole
       summary: Describe role and its permissions fetching by role name
@@ -7045,12 +7056,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: name
         - name: orgId
           in: query
           description: Numeric identifier of the organization
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '200':
           description: OK
@@ -7072,6 +7086,9 @@ paths:
         - BearerAuth: []
       tags:
         - roles
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#read
     put:
       operationId: UpdateRole
       summary: Update a role with the given name
@@ -7082,12 +7099,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: name
         - name: orgId
           in: query
           description: Numeric identifier of the organization
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Update role request
         required: true
@@ -7114,6 +7134,9 @@ paths:
         - BearerAuth: []
       tags:
         - roles
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CustomRole#update
   /service-info:
     get:
       operationId: Info
@@ -20159,14 +20182,54 @@ components:
       properties:
         description:
           type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable description of what the role grants.
         isPredefined:
           type: boolean
+          description: Always `false` for roles managed by this resource.
+          x-speakeasy-name-override: is_predefined
+          x-speakeasy-param-readonly: true
         name:
           type: string
+          maxLength: 40
+          description: |
+            Role name. Unique within the organization. Up to 40 characters.
+            Changing the name replaces the role — Terraform will destroy the
+            existing custom role and create a new one. Workspace participants
+            assigned to the old role need to be reassigned via
+            `seqera_workspace_participant`.
+          x-speakeasy-param-force-new: true
         permissions:
           type: array
           items:
             type: string
+          uniqueItems: true
+          description: |
+            Set of permission strings the role grants. Permission names follow
+            the `resource:verb` convention (e.g. `pipeline:read`,
+            `workflow:execute`, `compute_environment:write`). The full
+            catalogue can be retrieved from `GET /roles/permissions`.
+      x-speakeasy-entity: CustomRole
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: custom_role
+      required:
+        - name
+        - description
+        - permissions
+      x-speakeasy-entity-description: |
+        Manage a custom role in a Seqera organization. Custom roles are
+        named permission sets that admins can assign to workspace
+        participants alongside the predefined `owner` / `admin` /
+        `maintain` / `launch` / `view` / `connect` roles.
+
+        Renaming a role is supported in place — assignments on existing
+        participants are automatically updated to track the new name.
+
+        Custom roles require the `CUSTOM_ROLES` feature toggle on the
+        organization's tier. Without it the API returns HTTP 403. There is
+        also a per-org quota (`tower.limits.max-custom-roles`, default
+        20); reaching it surfaces as HTTP 400 on create.
     RolePermissionResponseDto:
       type: object
       properties:
