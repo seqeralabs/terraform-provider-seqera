@@ -24730,5 +24730,18 @@ components:
       bearerFormat: jwt
       scheme: bearer
       type: http
+x-speakeasy-retries:
+  strategy: backoff
+  backoff:
+    initialInterval: 500
+    maxInterval: 30000
+    maxElapsedTime: 300000
+    exponent: 1.5
+  statusCodes:
+    - "429"
+    - "502"
+    - "503"
+    - "504"
+  retryConnectionErrors: true
 servers:
   - url: https://api.cloud.seqera.io
