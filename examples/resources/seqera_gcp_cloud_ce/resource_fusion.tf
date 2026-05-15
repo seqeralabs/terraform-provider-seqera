@@ -3,7 +3,6 @@
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {

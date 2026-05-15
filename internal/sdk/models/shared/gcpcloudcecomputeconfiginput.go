@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// GCPCloudCEComputeConfigPlatform - GCP platform type
+// GCPCloudCEComputeConfigPlatform - GCP platform type. Always "google-cloud" for this resource — set by the provider, not user-configurable.
 type GCPCloudCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type GCPCloudCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// GCP platform type
-	Platform GCPCloudCEComputeConfigPlatform `json:"platform"`
+	// GCP platform type. Always "google-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *GCPCloudCEComputeConfigPlatform `default:"google-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (g *GCPCloudCEComputeConfigInput) GetDescription() *string {
 	return g.Description
 }
 
-func (g *GCPCloudCEComputeConfigInput) GetPlatform() GCPCloudCEComputeConfigPlatform {
+func (g *GCPCloudCEComputeConfigInput) GetPlatform() *GCPCloudCEComputeConfigPlatform {
 	if g == nil {
-		return GCPCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return g.Platform
 }
@@ -166,8 +166,8 @@ type GCPCloudCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// GCP platform type
-	Platform GCPCloudCEComputeConfigPlatform `json:"platform"`
+	// GCP platform type. Always "google-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *GCPCloudCEComputeConfigPlatform `default:"google-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (g *GCPCloudCEComputeConfig) GetDescription() *string {
 	return g.Description
 }
 
-func (g *GCPCloudCEComputeConfig) GetPlatform() GCPCloudCEComputeConfigPlatform {
+func (g *GCPCloudCEComputeConfig) GetPlatform() *GCPCloudCEComputeConfigPlatform {
 	if g == nil {
-		return GCPCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return g.Platform
 }

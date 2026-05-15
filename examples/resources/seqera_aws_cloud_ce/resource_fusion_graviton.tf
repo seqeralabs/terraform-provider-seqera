@@ -3,7 +3,6 @@
 resource "seqera_aws_cloud_ce" "fusion_graviton" {
   name           = "aws-cloud-fusion-graviton"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-cloud"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {

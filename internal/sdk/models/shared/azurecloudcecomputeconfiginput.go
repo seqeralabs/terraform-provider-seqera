@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AzureCloudCEComputeConfigPlatform - Azure platform type
+// AzureCloudCEComputeConfigPlatform - Azure platform type. Always "azure-cloud" for this resource — set by the provider, not user-configurable.
 type AzureCloudCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type AzureCloudCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// Azure platform type
-	Platform AzureCloudCEComputeConfigPlatform `json:"platform"`
+	// Azure platform type. Always "azure-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *AzureCloudCEComputeConfigPlatform `default:"azure-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (a *AzureCloudCEComputeConfigInput) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AzureCloudCEComputeConfigInput) GetPlatform() AzureCloudCEComputeConfigPlatform {
+func (a *AzureCloudCEComputeConfigInput) GetPlatform() *AzureCloudCEComputeConfigPlatform {
 	if a == nil {
-		return AzureCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }
@@ -166,8 +166,8 @@ type AzureCloudCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// Azure platform type
-	Platform AzureCloudCEComputeConfigPlatform `json:"platform"`
+	// Azure platform type. Always "azure-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *AzureCloudCEComputeConfigPlatform `default:"azure-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (a *AzureCloudCEComputeConfig) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AzureCloudCEComputeConfig) GetPlatform() AzureCloudCEComputeConfigPlatform {
+func (a *AzureCloudCEComputeConfig) GetPlatform() *AzureCloudCEComputeConfigPlatform {
 	if a == nil {
-		return AzureCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }

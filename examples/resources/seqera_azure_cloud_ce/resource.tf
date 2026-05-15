@@ -3,14 +3,12 @@
 resource "seqera_azure_cloud_ce" "minimal" {
   name           = "azure-cloud-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "azure-cloud"
   credentials_id = seqera_azure_credential.main.credentials_id
 
   config = {
     region          = "eastus"
     work_dir        = "az://my-container/work"
     subscription_id = "00000000-0000-0000-0000-000000000000"
-    resource_group  = "my-resource-group"
     instance_type   = "Standard_D4s_v3"
   }
 }

@@ -12,7 +12,7 @@ var _ validator.Object = ObjectSchedConfigConsistencyValidatorValidator{}
 type ObjectSchedConfigConsistencyValidatorValidator struct{}
 
 func (v ObjectSchedConfigConsistencyValidatorValidator) Description(_ context.Context) string {
-	return "Validates that intelligent_compute_config is set when intelligent_compute_enabled is true, and is omitted when intelligent_compute_enabled is false."
+	return "Validates that intelligent_compute_config is omitted when intelligent_compute_enabled is false. The config is optional when enabled is true — the API uses defaults if it's null."
 }
 
 func (v ObjectSchedConfigConsistencyValidatorValidator) MarkdownDescription(ctx context.Context) string {
@@ -38,17 +38,6 @@ func (v ObjectSchedConfigConsistencyValidatorValidator) ValidateObject(ctx conte
 
 	enabled := !schedEnabled.IsNull() && schedEnabled.ValueBool()
 	configSet := !schedConfig.IsNull()
-
-	if enabled && !configSet {
-		resp.Diagnostics.AddAttributeError(
-			req.Path.AtName("intelligent_compute_config"),
-			"Missing intelligent_compute_config",
-			"`intelligent_compute_config` is required when `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode). "+
-				"Provide an `intelligent_compute_config` block with `provisioning_model` (and optionally `machine_types`), "+
-				"or set `intelligent_compute_enabled = false` for Classic mode.",
-		)
-		return
-	}
 
 	if !enabled && configSet {
 		resp.Diagnostics.AddAttributeError(

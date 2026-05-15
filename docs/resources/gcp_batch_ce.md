@@ -22,7 +22,6 @@ Google Cloud schedules and manages the underlying compute instances.
 resource "seqera_gcp_batch_ce" "minimal" {
   name           = "gcp-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -43,7 +42,6 @@ resource "seqera_gcp_batch_ce" "minimal" {
 resource "seqera_gcp_batch_ce" "fusion" {
   name           = "gcp-batch-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -67,7 +65,6 @@ resource "seqera_gcp_batch_ce" "fusion" {
 resource "seqera_gcp_batch_ce" "private_network" {
   name           = "gcp-batch-private"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-batch"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -92,7 +89,6 @@ resource "seqera_gcp_batch_ce" "private_network" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) Google Cloud credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) GCP platform type. must be "google-batch"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -109,6 +105,7 @@ resource "seqera_gcp_batch_ce" "private_network" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable. Default: "google-batch"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>

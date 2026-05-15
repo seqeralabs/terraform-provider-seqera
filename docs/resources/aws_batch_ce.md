@@ -22,7 +22,6 @@ on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
 resource "seqera_aws_batch_ce" "minimal" {
   name           = "aws-batch-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
@@ -42,10 +41,19 @@ resource "seqera_aws_batch_ce" "minimal" {
 ```terraform
 # AWS Batch with Forge, Fusion v2, and Wave — the recommended modern setup.
 # Forge auto-provisions VPC subnets and security groups; Fusion v2 requires Wave.
+#
+# work_dir + allow_buckets interaction (worth knowing):
+#   - work_dir is the CE's default scratch path; Seqera auto-appends its
+#     full URI to the END of allow_buckets on the server side.
+#   - Mirror that ordering in config (work_dir URI last) — otherwise plan
+#     sees a list-position diff and forces CE replacement on every apply.
+#   - work_dir is force-new: changing it replaces the whole CE.
+#   - Pipelines / workflows may override work_dir per launch without
+#     mutating the CE's allow_buckets — but the overriding bucket must
+#     already be in allow_buckets, or the run will fail at runtime.
 resource "seqera_aws_batch_ce" "forge_fusion" {
   name           = "aws-batch-forge-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
@@ -59,7 +67,13 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
       alloc_strategy      = "SPOT_CAPACITY_OPTIMIZED"
       dispose_on_deletion = true
       ebs_boot_size       = 100
-      allow_buckets       = ["s3://my-bucket-input", "s3://my-bucket-ref"]
+      # Trailing entry MUST match work_dir above — Seqera appends it
+      # there itself; mirror it to keep terraform plan a no-op.
+      allow_buckets = [
+        "s3://my-bucket-input",
+        "s3://my-bucket-ref",
+        "s3://my-bucket/work",
+      ]
     }
   }
 }
@@ -73,7 +87,6 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
 resource "seqera_aws_batch_ce" "manual" {
   name           = "aws-batch-manual"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "aws-batch"
   credentials_id = seqera_aws_credential.main.credentials_id
 
   config = {
@@ -96,7 +109,6 @@ resource "seqera_aws_batch_ce" "manual" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) AWS platform type. must be "aws-batch"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -113,6 +125,7 @@ resource "seqera_aws_batch_ce" "manual" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable. Default: "aws-batch"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>

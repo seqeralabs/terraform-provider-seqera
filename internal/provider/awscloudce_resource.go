@@ -78,7 +78,7 @@ func (r *AwsCloudCEResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage AWS Cloud compute environments in Seqera Platform.\n\nAWS Cloud compute environments execute Nextflow pipelines directly on\nEC2 instances managed by Seqera (rather than via AWS Batch). All\nconfiguration fields (region, work_dir, allow_buckets, instance_type,\nscripts, env, etc.) are identical between the two compute modes — the\nscheduler only *adds* the `intelligent_compute_config` block; nothing\nelse is hidden or unlocked.\n\nTwo compute modes are supported, selected via `intelligent_compute_enabled`.\n\nIn **Classic** mode (`intelligent_compute_enabled = false`, the default),\nworker fleet and spot-vs-on-demand strategy are managed by Tower Forge.\nOmit the `intelligent_compute_config` block in this mode.\n\nIn **Seqera Intelligent Compute** mode (Preview,\n`intelligent_compute_enabled = true`), tasks are distributed across\nmultiple EC2 instances with optimized scheduling and resource\nallocation. Set the `intelligent_compute_config` block to choose the\nEC2 provisioning strategy and (optionally) restrict the instance-type\ncatalog.\n\nNote: `instance_type` sets the **head node** EC2 type and applies in\nboth modes (defaults: `m5d.large`, or `m6gd.large` when\n`arm64_enabled = true`).\n\n**Backend feature flag.** Enabling Seqera Intelligent Compute\nrequires the `SEQERA_SCHEDULER` feature toggle on the target\nworkspace/org. Without it, a create with\n`intelligent_compute_enabled = true` returns HTTP 403. The toggle is\ncontrolled centrally — there is no API to flip it, so coordinate\nwith the Platform team before applying.\n",
+		MarkdownDescription: "Manage AWS Cloud compute environments in Seqera Platform.\n\nAWS Cloud compute environments execute Nextflow pipelines directly on\nEC2 instances managed by Seqera (rather than via AWS Batch). All\nconfiguration fields (region, work_dir, allow_buckets, instance_type,\nscripts, env, etc.) are identical between the two compute modes — the\nscheduler only *adds* the `intelligent_compute_config` block; nothing\nelse is hidden or unlocked.\n\nTwo compute modes are supported, selected via `intelligent_compute_enabled`.\n\nIn **Classic** mode (`intelligent_compute_enabled = false`, the default),\nworker fleet and spot-vs-on-demand strategy are managed by Tower Forge.\nOmit the `intelligent_compute_config` block in this mode.\n\nIn **Seqera Intelligent Compute** mode (Preview,\n`intelligent_compute_enabled = true`), tasks are distributed across\nmultiple EC2 instances with optimized scheduling and resource\nallocation. The `intelligent_compute_config` block is optional —\nleave it null to accept the platform defaults, or set it to override\nthe EC2 provisioning strategy or restrict the instance-type catalog.\n\nNote: `instance_type` sets the **head node** EC2 type and applies in\nboth modes (defaults: `m5d.large`, or `m6gd.large` when\n`arm64_enabled = true`).\n\n**Backend feature flag.** Enabling Seqera Intelligent Compute\nrequires the `SEQERA_SCHEDULER` feature toggle on the target\nworkspace/org. Without it, a create with\n`intelligent_compute_enabled = true` returns HTTP 403. The toggle is\ncontrolled centrally — there is no API to flip it, so coordinate\nwith the Platform team before applying.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
@@ -334,10 +334,13 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
 							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple EC2 instances with` + "\n" +
-							`optimized scheduling and resource allocation, and` + "\n" +
-							`` + "`" + `intelligent_compute_config` + "`" + ` is required. When ` + "`" + `false` + "`" + ` (default), all` + "\n" +
-							`tasks run on a single instance (Basic mode) and` + "\n" +
-							`` + "`" + `intelligent_compute_config` + "`" + ` must be omitted.` + "\n" +
+							`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+							`all tasks run on a single instance (Classic mode).` + "\n" +
+							`` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+							`to accept the platform defaults, or provide it (only when` + "\n" +
+							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to pin the provisioning strategy` + "\n" +
+							`or instance-type catalog.` + "\n" +
 							`` + "\n" +
 							`Setting this to ` + "`" + `true` + "`" + ` requires the ` + "`" + `SEQERA_SCHEDULER` + "`" + ` feature toggle` + "\n" +
 							`to be enabled on the target workspace/org; otherwise the API returns` + "\n" +
@@ -510,17 +513,12 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 			},
 			"platform": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Default:  stringdefault.StaticString(`aws-cloud`),
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `AWS platform type. must be "aws-cloud"; Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"aws-cloud",
-					),
-				},
+				Description: `AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable. Default: "aws-cloud"`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

@@ -214,7 +214,6 @@ actions:
         required:
           - config
           - name
-          - platform
           - credentialsId
         type: object
         properties:
@@ -248,8 +247,9 @@ actions:
             type: string
             enum:
               - google-batch
-            description: GCP platform type
-            x-speakeasy-param-optional: false
+            default: google-batch
+            description: GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
+            x-speakeasy-param-readonly: true
           status:
             type: string
             description: Compute environment status

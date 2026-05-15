@@ -2,31 +2,51 @@
 page_title: "seqera_azure_credential Resource - terraform-provider-seqera"
 subcategory: "Credentials"
 description: |-
-  Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
-  Manage Azure credentials in Seqera platform using this resource.
-  Azure credentials support three authentication modes: shared key
-  (batch_key and storage_key, discriminator 'azure'), Entra service
-  principal (tenant_id, client_id, client_secret, discriminator
-  'azure-entra'), and Cloud service principal (same fields as Entra,
-  discriminator 'azure-cloud').
+  Note: This is a workspace-scoped resource for Azure Batch
+  credentials using shared-key authentication
+  (provider = "azure"). For other Azure credential types use the
+  generic seqera_credential resource:
+  Entra service principal (Azure Batch CE, manual mode):
+  provider_type = "azure_entra" with keys.azure_entra.Cloud service principal (Azure Cloud / SingleVM CE):
+  provider_type = "azure-cloud" with keys.azure_cloud.
+  Dedicated seqera_azure_entra_credential and
+  seqera_azure_cloud_credential resources are planned but not yet
+  available.
+  Although this schema exposes tenant_id, client_id, and
+  client_secret, the credential is always stored on Seqera with
+  provider = "azure" — meaning service-principal credentials
+  created here will not appear in the compute-environment
+  picker for Azure Batch (Entra) or Azure Cloud CEs. Use the
+  generic resource for those modes.
 ---
 
 # seqera_azure_credential (Resource)
 
-**Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+**Note:** This is a workspace-scoped resource for Azure Batch
+credentials using **shared-key** authentication
+(`provider = "azure"`). For other Azure credential types use the
+generic `seqera_credential` resource:
 
-Manage Azure credentials in Seqera platform using this resource.
+- **Entra service principal** (Azure Batch CE, manual mode):
+  `provider_type = "azure_entra"` with `keys.azure_entra`.
+- **Cloud service principal** (Azure Cloud / SingleVM CE):
+  `provider_type = "azure-cloud"` with `keys.azure_cloud`.
 
-Azure credentials support three authentication modes: shared key
-(batch_key and storage_key, discriminator 'azure'), Entra service
-principal (tenant_id, client_id, client_secret, discriminator
-'azure-entra'), and Cloud service principal (same fields as Entra,
-discriminator 'azure-cloud').
+Dedicated `seqera_azure_entra_credential` and
+`seqera_azure_cloud_credential` resources are planned but not yet
+available.
+
+Although this schema exposes `tenant_id`, `client_id`, and
+`client_secret`, the credential is always stored on Seqera with
+`provider = "azure"` — meaning service-principal credentials
+created here will **not** appear in the compute-environment
+picker for Azure Batch (Entra) or Azure Cloud CEs. Use the
+generic resource for those modes.
 
 ## Example Usage
 
 ```terraform
-# Azure credential with shared key authentication
+# Azure Batch credential — shared key authentication.
 resource "seqera_azure_credential" "shared_key" {
   name         = "azure-shared-key"
   workspace_id = seqera_workspace.main.id
@@ -35,18 +55,6 @@ resource "seqera_azure_credential" "shared_key" {
   batch_key    = var.azure_batch_key
   storage_name = var.azure_storage_name
   storage_key  = var.azure_storage_key
-}
-
-# Azure credential with Entra ID / Cloud authentication (service principal)
-resource "seqera_azure_credential" "entra" {
-  name         = "azure-entra"
-  workspace_id = seqera_workspace.main.id
-
-  batch_name    = var.azure_batch_name
-  storage_name  = var.azure_storage_name
-  tenant_id     = var.azure_tenant_id
-  client_id     = var.azure_client_id
-  client_secret = var.azure_client_secret
 }
 ```
 

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// GCPBatchCEComputeConfigPlatform - GCP platform type
+// GCPBatchCEComputeConfigPlatform - GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
 type GCPBatchCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type GCPBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// GCP platform type
-	Platform GCPBatchCEComputeConfigPlatform `json:"platform"`
+	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
+	Platform *GCPBatchCEComputeConfigPlatform `default:"google-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (g *GCPBatchCEComputeConfigInput) GetDescription() *string {
 	return g.Description
 }
 
-func (g *GCPBatchCEComputeConfigInput) GetPlatform() GCPBatchCEComputeConfigPlatform {
+func (g *GCPBatchCEComputeConfigInput) GetPlatform() *GCPBatchCEComputeConfigPlatform {
 	if g == nil {
-		return GCPBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return g.Platform
 }
@@ -166,8 +166,8 @@ type GCPBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// GCP platform type
-	Platform GCPBatchCEComputeConfigPlatform `json:"platform"`
+	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
+	Platform *GCPBatchCEComputeConfigPlatform `default:"google-batch" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (g *GCPBatchCEComputeConfig) GetDescription() *string {
 	return g.Description
 }
 
-func (g *GCPBatchCEComputeConfig) GetPlatform() GCPBatchCEComputeConfigPlatform {
+func (g *GCPBatchCEComputeConfig) GetPlatform() *GCPBatchCEComputeConfigPlatform {
 	if g == nil {
-		return GCPBatchCEComputeConfigPlatform("")
+		return nil
 	}
 	return g.Platform
 }

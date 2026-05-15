@@ -26,7 +26,6 @@ the underlying compute instances directly (rather than via Google Batch).
 resource "seqera_gcp_cloud_ce" "minimal" {
   name           = "gcp-cloud-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -48,7 +47,6 @@ resource "seqera_gcp_cloud_ce" "minimal" {
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -73,7 +71,6 @@ resource "seqera_gcp_cloud_ce" "fusion" {
 resource "seqera_gcp_cloud_ce" "gpu" {
   name           = "gcp-cloud-gpu"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
@@ -97,7 +94,6 @@ resource "seqera_gcp_cloud_ce" "gpu" {
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) Google Cloud credentials identifier. Requires replacement if changed.
 - `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
-- `platform` (String) GCP platform type. must be "google-cloud"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -114,6 +110,7 @@ resource "seqera_gcp_cloud_ce" "gpu" {
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `org_id` (Number)
+- `platform` (String) GCP platform type. Always "google-cloud" for this resource — set by the provider, not user-configurable. Default: "google-cloud"
 - `status` (String) Compute environment status
 
 <a id="nestedatt--config"></a>

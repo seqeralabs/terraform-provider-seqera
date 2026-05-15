@@ -82,7 +82,11 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Platform = types.StringValue(string(resp.Platform))
+		if resp.Platform != nil {
+			r.Platform = types.StringValue(string(*resp.Platform))
+		} else {
+			r.Platform = types.StringNull()
+		}
 		r.Status = types.StringPointerValue(resp.Status)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -197,7 +201,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		description = nil
 	}
-	platform := shared.AwsCloudCEComputeConfigPlatform(r.Platform.ValueString())
+	platform := new(shared.AwsCloudCEComputeConfigPlatform)
+	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
+		*platform = shared.AwsCloudCEComputeConfigPlatform(r.Platform.ValueString())
+	} else {
+		platform = nil
+	}
 	status := new(string)
 	if !r.Status.IsUnknown() && !r.Status.IsNull() {
 		*status = r.Status.ValueString()

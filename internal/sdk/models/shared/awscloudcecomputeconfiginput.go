@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AwsCloudCEComputeConfigPlatform - AWS platform type
+// AwsCloudCEComputeConfigPlatform - AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable.
 type AwsCloudCEComputeConfigPlatform string
 
 const (
@@ -44,8 +44,8 @@ type AwsCloudCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// AWS platform type
-	Platform AwsCloudCEComputeConfigPlatform `json:"platform"`
+	// AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *AwsCloudCEComputeConfigPlatform `default:"aws-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -105,9 +105,9 @@ func (a *AwsCloudCEComputeConfigInput) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AwsCloudCEComputeConfigInput) GetPlatform() AwsCloudCEComputeConfigPlatform {
+func (a *AwsCloudCEComputeConfigInput) GetPlatform() *AwsCloudCEComputeConfigPlatform {
 	if a == nil {
-		return AwsCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }
@@ -166,8 +166,8 @@ type AwsCloudCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
-	// AWS platform type
-	Platform AwsCloudCEComputeConfigPlatform `json:"platform"`
+	// AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable.
+	Platform *AwsCloudCEComputeConfigPlatform `default:"aws-cloud" json:"platform"`
 	// Compute environment status
 	Status *string `json:"status,omitempty"`
 	// Timestamp when the compute environment was created
@@ -234,9 +234,9 @@ func (a *AwsCloudCEComputeConfig) GetDescription() *string {
 	return a.Description
 }
 
-func (a *AwsCloudCEComputeConfig) GetPlatform() AwsCloudCEComputeConfigPlatform {
+func (a *AwsCloudCEComputeConfig) GetPlatform() *AwsCloudCEComputeConfigPlatform {
 	if a == nil {
-		return AwsCloudCEComputeConfigPlatform("")
+		return nil
 	}
 	return a.Platform
 }

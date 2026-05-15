@@ -435,10 +435,13 @@ Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
 When `true`, tasks are distributed across multiple EC2 instances with
-optimized scheduling and resource allocation, and
-`intelligent_compute_config` is required. When `false` (default), all
-tasks run on a single instance (Basic mode) and
-`intelligent_compute_config` must be omitted.
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to pin the provisioning strategy
+or instance-type catalog.
 
 Setting this to `true` requires the `SEQERA_SCHEDULER` feature toggle
 to be enabled on the target workspace/org; otherwise the API returns
@@ -625,9 +628,16 @@ Requires replacement if changed.
 - `region` (String) Azure region where the compute environment will be created.
 Examples: eastus, westus2, northeurope
 Not Null; Requires replacement if changed.
-- `resource_group` (String) Azure resource group where compute instances will be provisioned. Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+Read-Only:
+
+- `resource_group` (String) Read-only. The Forge-created resource group that holds the compute
+environment's resources (named `TowerForge-<ce-name>-<id>`).
+Forge always provisions its own RG at the subscription scope and
+ignores any user-supplied value, so this field is computed by the
+backend rather than configured.
 
 <a id="nestedatt--compute_env--config--azure_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.azure_cloud.environment`

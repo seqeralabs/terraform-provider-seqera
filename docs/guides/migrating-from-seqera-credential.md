@@ -42,7 +42,9 @@ The `keys.<provider>` sub-block in `seqera_credential` maps to a typed resource 
 | `seqera_credential.keys` block | Typed resource | Notable field renames |
 | --- | --- | --- |
 | `aws` | `seqera_aws_credential` | `access_key`, `secret_key`, `assume_role_arn` |
-| `azure` / `azure_cloud` / `azure_entra` | `seqera_azure_credential` | `batch_name`, `storage_name`, `batch_key`, `storage_key`, `tenant_id`, `client_id`, `client_secret` |
+| `azure` (Batch shared key) | `seqera_azure_credential` | `batch_name`, `storage_name`, `batch_key`, `storage_key` |
+| `azure_entra` (Batch Entra service principal) | _no typed resource yet — stay on `seqera_credential` with `provider_type = "azure_entra"`_ | `batch_name`, `storage_name`, `tenant_id`, `client_id`, `client_secret` |
+| `azure_cloud` (Azure Cloud SingleVM Entra service principal) | _no typed resource yet — stay on `seqera_credential` with `provider_type = "azure-cloud"`_ | `subscription_id`, `storage_name`, `tenant_id`, `client_id`, `client_secret` |
 | `bitbucket` | `seqera_bitbucket_credential` | `username`, `password`, `token` |
 | `codecommit` | `seqera_codecommit_credential` | `username` → `access_key`, `password` → `secret_key` |
 | `container_reg` | `seqera_container_registry_credential` | `username`, `password`, `registry` |

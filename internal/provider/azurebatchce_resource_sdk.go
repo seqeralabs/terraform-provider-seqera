@@ -99,7 +99,11 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Platform = types.StringValue(string(resp.Platform))
+		if resp.Platform != nil {
+			r.Platform = types.StringValue(string(*resp.Platform))
+		} else {
+			r.Platform = types.StringNull()
+		}
 		r.Status = types.StringPointerValue(resp.Status)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -214,7 +218,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 	} else {
 		description = nil
 	}
-	platform := shared.AzureBatchCEComputeConfigPlatform(r.Platform.ValueString())
+	platform := new(shared.AzureBatchCEComputeConfigPlatform)
+	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
+		*platform = shared.AzureBatchCEComputeConfigPlatform(r.Platform.ValueString())
+	} else {
+		platform = nil
+	}
 	status := new(string)
 	if !r.Status.IsUnknown() && !r.Status.IsNull() {
 		*status = r.Status.ValueString()

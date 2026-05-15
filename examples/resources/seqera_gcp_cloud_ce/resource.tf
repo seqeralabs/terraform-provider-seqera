@@ -3,7 +3,6 @@
 resource "seqera_gcp_cloud_ce" "minimal" {
   name           = "gcp-cloud-minimal"
   workspace_id   = data.seqera_workspace.main.id
-  platform       = "google-cloud"
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
