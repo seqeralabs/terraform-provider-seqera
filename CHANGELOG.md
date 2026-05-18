@@ -107,6 +107,14 @@ BUGFIXES:
 
 - **Corrected EBS field descriptions on AWS compute environments** ([#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159)). `ebs_block_size` previously claimed to be the root volume size; it's actually the auto-expandable scratch volume. `ebs_boot_size` (the real root volume size) now has a description.
 
+- **`pipeline` is now required on launch requests** ([#209](https://github.com/seqeralabs/terraform-provider-seqera/pull/209)). The nested `WorkflowLaunchRequest.pipeline` field was previously optional and shared across `seqera_pipeline`, `seqera_workflows`, and `seqera_action`. Omitting it produced inconsistent 400 errors from the backend (and an unhelpful message on actions); it's now enforced at plan time with a clear validation error.
+
+- **`workspace_id` is now read-only** ([#210](https://github.com/seqeralabs/terraform-provider-seqera/pull/210)). The workspace identifier is assigned by the backend and should never be supplied by users — it's now marked computed to prevent accidental overrides.
+
+- **Compute environment in-place updates** ([#211](https://github.com/seqeralabs/terraform-provider-seqera/pull/211)). Updates to `name`, `credentials_id`, or `description` on a compute environment no longer trigger a replace; the change is applied in place against the existing CE.
+
+- **Cloud CEs ignore `enable_fusion` / `enable_wave`** ([#212](https://github.com/seqeralabs/terraform-provider-seqera/pull/212)). Fusion and Wave are hard requirements for Cloud compute environments and not user-configurable. The provider now omits these fields from the request rather than surfacing them as configurable, and relies on the backend to default them to enabled.
+
 # v0.30.5
 
 FIX:
