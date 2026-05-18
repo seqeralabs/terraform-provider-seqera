@@ -14,13 +14,8 @@ type AzCloudConfig struct {
 	// Array of environment variables for the compute environment.
 	// Each variable can target the head node, compute nodes, or both.
 	//
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
@@ -62,12 +57,7 @@ type AzCloudConfig struct {
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
 	// Azure Blob Storage container path for Nextflow work directory.
 	// Format: az://container-name/path
 	//
@@ -102,11 +92,11 @@ func (a *AzCloudConfig) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AzCloudConfig) GetEnableFusion() *bool {
+func (a *AzCloudConfig) GetFusion2Enabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableFusion
+	return a.Fusion2Enabled
 }
 
 func (a *AzCloudConfig) GetInstanceType() *string {
@@ -193,11 +183,11 @@ func (a *AzCloudConfig) GetSubscriptionID() *string {
 	return a.SubscriptionID
 }
 
-func (a *AzCloudConfig) GetEnableWave() *bool {
+func (a *AzCloudConfig) GetWaveEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableWave
+	return a.WaveEnabled
 }
 
 func (a *AzCloudConfig) GetWorkDir() *string {

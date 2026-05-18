@@ -411,16 +411,6 @@ Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
-Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
@@ -603,16 +593,6 @@ Optional:
 
 - `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
-Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
@@ -866,16 +846,6 @@ Optional:
 When enabled, ARM-based machines will be selected for cost savings.
 Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances. Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
-Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable machine types will be selected.

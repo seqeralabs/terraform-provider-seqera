@@ -409,14 +409,6 @@ When enabled, Graviton-based EC2 instances will be selected for cost savings.
 When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
-- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_cloud--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
@@ -588,14 +580,6 @@ Read-Only:
 
 - `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry.
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_cloud--environment))
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 - `log_table_name` (String) Azure Log Analytics table name for execution logs.
@@ -822,14 +806,6 @@ Read-Only:
 - `arm64_enabled` (Boolean) Enable ARM64 (Tau T2A) machine types for compute instances.
 When enabled, ARM-based machines will be selected for cost savings.
 - `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_cloud--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable machine types will be selected.

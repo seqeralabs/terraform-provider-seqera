@@ -137,8 +137,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
 					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
-					r.ComputeEnv.Config.AwsCloud.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.EnableFusion)
-					r.ComputeEnv.Config.AwsCloud.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.EnableWave)
 					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem1 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
@@ -329,8 +327,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud = &tfTypes.AzureCloudConfiguration{}
 					r.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionEndpoint)
 					r.ComputeEnv.Config.AzureCloud.DataCollectionRuleID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionRuleID)
-					r.ComputeEnv.Config.AzureCloud.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.EnableFusion)
-					r.ComputeEnv.Config.AzureCloud.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.EnableWave)
 					r.ComputeEnv.Config.AzureCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem5 := range resp.ComputeEnv.Config.AzureCloudConfiguration.Environment {
@@ -420,8 +416,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleCloud = &tfTypes.GoogleCloudConfiguration{}
 					r.ComputeEnv.Config.GoogleCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Arm64Enabled)
 					r.ComputeEnv.Config.GoogleCloud.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleCloudConfiguration.BootDiskSizeGb))
-					r.ComputeEnv.Config.GoogleCloud.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.EnableFusion)
-					r.ComputeEnv.Config.GoogleCloud.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.EnableWave)
 					r.ComputeEnv.Config.GoogleCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem7 := range resp.ComputeEnv.Config.GoogleCloudConfiguration.Environment {
@@ -1339,12 +1333,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value1,
 			})
 		}
-		enableFusion1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EnableFusion.IsNull() {
-			*enableFusion1 = r.ComputeEnv.Config.AwsCloud.EnableFusion.ValueBool()
-		} else {
-			enableFusion1 = nil
-		}
 		gpuEnabled1 := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsNull() {
 			*gpuEnabled1 = r.ComputeEnv.Config.AwsCloud.GpuEnabled.ValueBool()
@@ -1429,12 +1417,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			subnetID = nil
 		}
-		enableWave1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.EnableWave.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EnableWave.IsNull() {
-			*enableWave1 = r.ComputeEnv.Config.AwsCloud.EnableWave.ValueBool()
-		} else {
-			enableWave1 = nil
-		}
 		workDir1 := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WorkDir.IsNull() {
 			*workDir1 = r.ComputeEnv.Config.AwsCloud.WorkDir.ValueString()
@@ -1447,7 +1429,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			EbsBootSize:               ebsBootSize1,
 			Ec2KeyPair:                ec2KeyPair1,
 			Environment:               environment1,
-			EnableFusion:              enableFusion1,
 			GpuEnabled:                gpuEnabled1,
 			ImageID:                   imageId1,
 			InstanceProfileArn:        instanceProfileArn,
@@ -1461,7 +1442,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			IntelligentComputeEnabled: intelligentComputeEnabled,
 			SecurityGroups:            securityGroups1,
 			SubnetID:                  subnetID,
-			EnableWave:                enableWave1,
 			WorkDir:                   workDir1,
 		}
 	}
@@ -1635,11 +1615,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value3,
 			})
 		}
-		enableFusion2 := new(bool)
+		enableFusion1 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.EnableFusion.IsNull() {
-			*enableFusion2 = r.ComputeEnv.Config.GoogleBatch.EnableFusion.ValueBool()
+			*enableFusion1 = r.ComputeEnv.Config.GoogleBatch.EnableFusion.ValueBool()
 		} else {
-			enableFusion2 = nil
+			enableFusion1 = nil
 		}
 		fusionSnapshots1 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsNull() {
@@ -1763,11 +1743,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			usePrivateAddress = nil
 		}
-		enableWave2 := new(bool)
+		enableWave1 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsNull() {
-			*enableWave2 = r.ComputeEnv.Config.GoogleBatch.EnableWave.ValueBool()
+			*enableWave1 = r.ComputeEnv.Config.GoogleBatch.EnableWave.ValueBool()
 		} else {
-			enableWave2 = nil
+			enableWave1 = nil
 		}
 		workDir3 := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsNull() {
@@ -1784,7 +1764,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			CPUPlatform:                 cpuPlatform,
 			DebugMode:                   debugMode,
 			Environment:                 environment3,
-			EnableFusion:                enableFusion2,
+			EnableFusion:                enableFusion1,
 			FusionSnapshots:             fusionSnapshots1,
 			HeadJobCpus:                 headJobCpus1,
 			HeadJobInstanceTemplate:     headJobInstanceTemplate,
@@ -1806,7 +1786,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			SSHImage:                    sshImage,
 			Subnetwork:                  subnetwork,
 			UsePrivateAddress:           usePrivateAddress,
-			EnableWave:                  enableWave2,
+			EnableWave:                  enableWave1,
 			WorkDir:                     workDir3,
 		}
 	}
@@ -1862,12 +1842,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value4,
 			})
 		}
-		enableFusion3 := new(bool)
-		if !r.ComputeEnv.Config.GoogleCloud.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.EnableFusion.IsNull() {
-			*enableFusion3 = r.ComputeEnv.Config.GoogleCloud.EnableFusion.ValueBool()
-		} else {
-			enableFusion3 = nil
-		}
 		gpuEnabled2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsNull() {
 			*gpuEnabled2 = r.ComputeEnv.Config.GoogleCloud.GpuEnabled.ValueBool()
@@ -1922,12 +1896,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			serviceAccountEmail = nil
 		}
-		enableWave3 := new(bool)
-		if !r.ComputeEnv.Config.GoogleCloud.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.EnableWave.IsNull() {
-			*enableWave3 = r.ComputeEnv.Config.GoogleCloud.EnableWave.ValueBool()
-		} else {
-			enableWave3 = nil
-		}
 		workDir4 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.WorkDir.IsNull() {
 			*workDir4 = r.ComputeEnv.Config.GoogleCloud.WorkDir.ValueString()
@@ -1944,7 +1912,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Arm64Enabled:        arm64Enabled2,
 			BootDiskSizeGb:      bootDiskSizeGb1,
 			Environment:         environment4,
-			EnableFusion:        enableFusion3,
 			GpuEnabled:          gpuEnabled2,
 			ImageID:             imageId2,
 			InstanceType:        instanceType1,
@@ -1954,7 +1921,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ProjectID:           projectId1,
 			Region:              region3,
 			ServiceAccountEmail: serviceAccountEmail,
-			EnableWave:          enableWave3,
 			WorkDir:             workDir4,
 			Zone:                zone,
 		}
@@ -2125,11 +2091,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				WorkerPool:        workerPool,
 			}
 		}
-		enableFusion4 := new(bool)
+		enableFusion2 := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.EnableFusion.IsNull() {
-			*enableFusion4 = r.ComputeEnv.Config.AzureBatch.EnableFusion.ValueBool()
+			*enableFusion2 = r.ComputeEnv.Config.AzureBatch.EnableFusion.ValueBool()
 		} else {
-			enableFusion4 = nil
+			enableFusion2 = nil
 		}
 		headJobCpus2 := new(int)
 		if !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsNull() {
@@ -2218,11 +2184,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			tokenDuration = nil
 		}
-		enableWave4 := new(bool)
+		enableWave2 := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.EnableWave.IsNull() {
-			*enableWave4 = r.ComputeEnv.Config.AzureBatch.EnableWave.ValueBool()
+			*enableWave2 = r.ComputeEnv.Config.AzureBatch.EnableWave.ValueBool()
 		} else {
-			enableWave4 = nil
+			enableWave2 = nil
 		}
 		workDir5 := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WorkDir.IsNull() {
@@ -2244,7 +2210,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DeleteTasksOnCompletion:       deleteTasksOnCompletion,
 			Environment:                   environment5,
 			Forge:                         forge1,
-			EnableFusion:                  enableFusion4,
+			EnableFusion:                  enableFusion2,
 			HeadJobCpus:                   headJobCpus2,
 			HeadJobMemoryMb:               headJobMemoryMb2,
 			HeadPool:                      headPool1,
@@ -2260,7 +2226,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			SubnetID:                      subnetId1,
 			TerminateJobsOnCompletion:     terminateJobsOnCompletion,
 			TokenDuration:                 tokenDuration,
-			EnableWave:                    enableWave4,
+			EnableWave:                    enableWave2,
 			WorkDir:                       workDir5,
 			WorkerPool:                    workerPool1,
 		}
@@ -2316,12 +2282,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Name:    name6,
 				Value:   value6,
 			})
-		}
-		enableFusion5 := new(bool)
-		if !r.ComputeEnv.Config.AzureCloud.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.EnableFusion.IsNull() {
-			*enableFusion5 = r.ComputeEnv.Config.AzureCloud.EnableFusion.ValueBool()
-		} else {
-			enableFusion5 = nil
 		}
 		instanceType2 := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.InstanceType.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.InstanceType.IsNull() {
@@ -2395,12 +2355,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			subscriptionID = nil
 		}
-		enableWave5 := new(bool)
-		if !r.ComputeEnv.Config.AzureCloud.EnableWave.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.EnableWave.IsNull() {
-			*enableWave5 = r.ComputeEnv.Config.AzureCloud.EnableWave.ValueBool()
-		} else {
-			enableWave5 = nil
-		}
 		workDir6 := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.WorkDir.IsNull() {
 			*workDir6 = r.ComputeEnv.Config.AzureCloud.WorkDir.ValueString()
@@ -2411,7 +2365,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DataCollectionEndpoint:  dataCollectionEndpoint,
 			DataCollectionRuleID:    dataCollectionRuleID,
 			Environment:             environment6,
-			EnableFusion:            enableFusion5,
 			InstanceType:            instanceType2,
 			LogTableName:            logTableName,
 			LogWorkspaceID:          logWorkspaceID,
@@ -2424,7 +2377,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:                  region5,
 			ResourceGroup:           resourceGroup,
 			SubscriptionID:          subscriptionID,
-			EnableWave:              enableWave5,
 			WorkDir:                 workDir6,
 		}
 	}
@@ -2903,11 +2855,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value10,
 			})
 		}
-		enableFusion6 := new(bool)
+		enableFusion3 := new(bool)
 		if !r.ComputeEnv.Config.EksPlatform.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.EnableFusion.IsNull() {
-			*enableFusion6 = r.ComputeEnv.Config.EksPlatform.EnableFusion.ValueBool()
+			*enableFusion3 = r.ComputeEnv.Config.EksPlatform.EnableFusion.ValueBool()
 		} else {
-			enableFusion6 = nil
+			enableFusion3 = nil
 		}
 		headJobCpus4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
@@ -2996,11 +2948,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			storageMountPath1 = nil
 		}
-		enableWave6 := new(bool)
+		enableWave3 := new(bool)
 		if !r.ComputeEnv.Config.EksPlatform.EnableWave.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.EnableWave.IsNull() {
-			*enableWave6 = r.ComputeEnv.Config.EksPlatform.EnableWave.ValueBool()
+			*enableWave3 = r.ComputeEnv.Config.EksPlatform.EnableWave.ValueBool()
 		} else {
-			enableWave6 = nil
+			enableWave3 = nil
 		}
 		workDir10 := new(string)
 		if !r.ComputeEnv.Config.EksPlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.WorkDir.IsNull() {
@@ -3012,7 +2964,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ClusterName:           clusterName,
 			ComputeServiceAccount: computeServiceAccount1,
 			Environment:           environment10,
-			EnableFusion:          enableFusion6,
+			EnableFusion:          enableFusion3,
 			HeadJobCpus:           headJobCpus4,
 			HeadJobMemoryMb:       headJobMemoryMb4,
 			HeadPodSpec:           headPodSpec1,
@@ -3028,7 +2980,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			SslCert:               sslCert1,
 			StorageClaimName:      storageClaimName1,
 			StorageMountPath:      storageMountPath1,
-			EnableWave:            enableWave6,
+			EnableWave:            enableWave3,
 			WorkDir:               workDir10,
 		}
 	}
@@ -3081,11 +3033,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Value:   value11,
 			})
 		}
-		enableFusion7 := new(bool)
+		enableFusion4 := new(bool)
 		if !r.ComputeEnv.Config.GkePlatform.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.EnableFusion.IsNull() {
-			*enableFusion7 = r.ComputeEnv.Config.GkePlatform.EnableFusion.ValueBool()
+			*enableFusion4 = r.ComputeEnv.Config.GkePlatform.EnableFusion.ValueBool()
 		} else {
-			enableFusion7 = nil
+			enableFusion4 = nil
 		}
 		headJobCpus5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
@@ -3174,11 +3126,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			storageMountPath2 = nil
 		}
-		enableWave7 := new(bool)
+		enableWave4 := new(bool)
 		if !r.ComputeEnv.Config.GkePlatform.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.EnableWave.IsNull() {
-			*enableWave7 = r.ComputeEnv.Config.GkePlatform.EnableWave.ValueBool()
+			*enableWave4 = r.ComputeEnv.Config.GkePlatform.EnableWave.ValueBool()
 		} else {
-			enableWave7 = nil
+			enableWave4 = nil
 		}
 		workDir11 := new(string)
 		if !r.ComputeEnv.Config.GkePlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.WorkDir.IsNull() {
@@ -3190,7 +3142,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ClusterName:           clusterName1,
 			ComputeServiceAccount: computeServiceAccount2,
 			Environment:           environment11,
-			EnableFusion:          enableFusion7,
+			EnableFusion:          enableFusion4,
 			HeadJobCpus:           headJobCpus5,
 			HeadJobMemoryMb:       headJobMemoryMb5,
 			HeadPodSpec:           headPodSpec2,
@@ -3206,7 +3158,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			SslCert:               sslCert2,
 			StorageClaimName:      storageClaimName2,
 			StorageMountPath:      storageMountPath2,
-			EnableWave:            enableWave7,
+			EnableWave:            enableWave4,
 			WorkDir:               workDir11,
 		}
 	}

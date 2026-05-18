@@ -9,8 +9,6 @@ import (
 type AzCloudConfig struct {
 	DataCollectionEndpoint  types.String        `tfsdk:"data_collection_endpoint"`
 	DataCollectionRuleID    types.String        `tfsdk:"data_collection_rule_id"`
-	EnableFusion            types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave              types.Bool          `tfsdk:"enable_wave"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
 	InstanceType            types.String        `tfsdk:"instance_type"`
 	LogTableName            types.String        `tfsdk:"log_table_name"`

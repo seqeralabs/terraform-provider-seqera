@@ -1682,13 +1682,8 @@ type AzureCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
@@ -1728,12 +1723,7 @@ type AzureCloudConfiguration struct {
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 }
@@ -1777,11 +1767,11 @@ func (a *AzureCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AzureCloudConfiguration) GetEnableFusion() *bool {
+func (a *AzureCloudConfiguration) GetFusion2Enabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableFusion
+	return a.Fusion2Enabled
 }
 
 func (a *AzureCloudConfiguration) GetInstanceType() *string {
@@ -1868,11 +1858,11 @@ func (a *AzureCloudConfiguration) GetSubscriptionID() *string {
 	return a.SubscriptionID
 }
 
-func (a *AzureCloudConfiguration) GetEnableWave() *bool {
+func (a *AzureCloudConfiguration) GetWaveEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableWave
+	return a.WaveEnabled
 }
 
 func (a *AzureCloudConfiguration) GetWorkDir() *string {
@@ -2189,13 +2179,8 @@ type GoogleCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable machine types will be selected.
 	//
@@ -2224,12 +2209,7 @@ type GoogleCloudConfiguration struct {
 	// If not specified, the default compute service account is used.
 	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	WaveEnabled         *bool   `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Google Cloud zone within the configured region (e.g., us-central1-a).
@@ -2277,11 +2257,11 @@ func (g *GoogleCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return g.Environment
 }
 
-func (g *GoogleCloudConfiguration) GetEnableFusion() *bool {
+func (g *GoogleCloudConfiguration) GetFusion2Enabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.EnableFusion
+	return g.Fusion2Enabled
 }
 
 func (g *GoogleCloudConfiguration) GetGpuEnabled() *bool {
@@ -2347,11 +2327,11 @@ func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
 	return g.ServiceAccountEmail
 }
 
-func (g *GoogleCloudConfiguration) GetEnableWave() *bool {
+func (g *GoogleCloudConfiguration) GetWaveEnabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.EnableWave
+	return g.WaveEnabled
 }
 
 func (g *GoogleCloudConfiguration) GetWorkDir() *string {
@@ -2833,13 +2813,8 @@ type AWSCloudConfiguration struct {
 	//
 	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -2892,13 +2867,8 @@ type AWSCloudConfiguration struct {
 	// Subnet ID where compute instances will be launched.
 	// Must be in the same VPC and region as the compute environment.
 	//
-	SubnetID *string `json:"subnetId,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	SubnetID    *string `json:"subnetId,omitempty"`
+	WaveEnabled *bool   `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 }
@@ -2956,11 +2926,11 @@ func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AWSCloudConfiguration) GetEnableFusion() *bool {
+func (a *AWSCloudConfiguration) GetFusion2Enabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableFusion
+	return a.Fusion2Enabled
 }
 
 func (a *AWSCloudConfiguration) GetGpuEnabled() *bool {
@@ -3054,11 +3024,11 @@ func (a *AWSCloudConfiguration) GetSubnetID() *string {
 	return a.SubnetID
 }
 
-func (a *AWSCloudConfiguration) GetEnableWave() *bool {
+func (a *AWSCloudConfiguration) GetWaveEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableWave
+	return a.WaveEnabled
 }
 
 func (a *AWSCloudConfiguration) GetWorkDir() *string {

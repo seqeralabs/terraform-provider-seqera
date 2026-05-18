@@ -20,14 +20,9 @@ type AwsCloudConfig struct {
 	// EC2 key pair name for SSH access to compute instances.
 	// Key pair must exist in the specified region.
 	//
-	Ec2KeyPair  *string             `json:"ec2KeyPair,omitempty"`
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
-	// speeding up most operations.
-	//
-	// Requires `enable_wave = true`.
-	//
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	Ec2KeyPair     *string             `json:"ec2KeyPair,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -79,13 +74,8 @@ type AwsCloudConfig struct {
 	// Subnet ID where compute instances will be launched.
 	// Must be in the same VPC and region as the compute environment.
 	//
-	SubnetID *string `json:"subnetId,omitempty"`
-	// Allow access to private container repositories and the provisioning of containers in your
-	// Nextflow pipelines via the Wave containers service.
-	//
-	// Required when `enable_fusion` is true.
-	//
-	EnableWave *bool `json:"waveEnabled,omitempty"`
+	SubnetID    *string `json:"subnetId,omitempty"`
+	WaveEnabled *bool   `json:"waveEnabled,omitempty"`
 	// S3 working directory for workflow execution. Must be a `s3://` URI in
 	// the same region as the compute environment (e.g. `s3://my-bucket/work`).
 	// Max 100 characters.
@@ -135,11 +125,11 @@ func (a *AwsCloudConfig) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AwsCloudConfig) GetEnableFusion() *bool {
+func (a *AwsCloudConfig) GetFusion2Enabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableFusion
+	return a.Fusion2Enabled
 }
 
 func (a *AwsCloudConfig) GetGpuEnabled() *bool {
@@ -233,11 +223,11 @@ func (a *AwsCloudConfig) GetSubnetID() *string {
 	return a.SubnetID
 }
 
-func (a *AwsCloudConfig) GetEnableWave() *bool {
+func (a *AwsCloudConfig) GetWaveEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.EnableWave
+	return a.WaveEnabled
 }
 
 func (a *AwsCloudConfig) GetWorkDir() *string {
