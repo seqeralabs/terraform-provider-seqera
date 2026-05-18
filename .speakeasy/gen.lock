@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: f782de63dde628920353d931fef0bfb0
+  docChecksum: 2fc06ef7527e9d4daa4b5fb9d5639dc4
   docVersion: 1.153.0
   speakeasyVersion: 1.763.1
   generationVersion: 2.884.4
@@ -425,7 +425,7 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:cebe299123271acd137216814e07e1fd6c6ebb4e
+    last_write_checksum: sha1:682e0637b4dffd15d881ddcf00b33c8841a64588
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
@@ -632,7 +632,7 @@ trackedFiles:
     last_write_checksum: sha1:2d307f6ad9029a4dd900dac1e440f4c3c4891e4b
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
-    last_write_checksum: sha1:f34071ee6dd3fbcb5d819f3f845e52986820c028
+    last_write_checksum: sha1:cb8148a4f8242c2ad88cd4ac7653117a51c732c7
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
     last_write_checksum: sha1:30a2128391bc026cf81b407d2533f0155988c927
