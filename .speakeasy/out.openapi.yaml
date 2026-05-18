@@ -22260,7 +22260,7 @@ components:
           items:
             type: string
           example: ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]
-      required: [workDir]
+      required: [pipeline, workDir]
       x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object

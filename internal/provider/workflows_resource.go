@@ -153,7 +153,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Pipeline parameters text. Requires replacement if changed.`,
 			},
 			"pipeline": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
