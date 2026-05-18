@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: c8f6b00ef8336ad8036df90c3e755473
+  docChecksum: 95950901c27916c27ccbefea584885f7
   docVersion: 1.153.0
   speakeasyVersion: 1.763.1
   generationVersion: 2.884.4
   releaseVersion: 0.40.0-RC4
-  configChecksum: aabe96223f808091d2df01640077729b
+  configChecksum: 0106ecda0b43e2e04b1ad1d5cfd70576
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -149,6 +149,10 @@ trackedFiles:
     id: 1a35d741ac7b
     last_write_checksum: sha1:f18cf7adaafe5f5bba6d786bb901960d5e83470a
     pristine_git_object: 12c546b32885a4203ab501c5db562909e8b00534
+  examples/resources/seqera_custom_role/import-by-string-id.tf:
+    last_write_checksum: sha1:d6669baf6959aa52ee1242df27865c26837d3a09
+  examples/resources/seqera_custom_role/import.sh:
+    last_write_checksum: sha1:f3c87442991d55f7d86acb28dc73b871c79e315f
   examples/resources/seqera_data_link/import-by-string-id.tf:
     id: ec38480385b8
     last_write_checksum: sha1:2571aa5c57aa0e479edba8d1290d85824ee0f039
@@ -527,6 +531,10 @@ trackedFiles:
     id: b0f72a52b626
     last_write_checksum: sha1:e0a459c5a5607b21f3635ffd97bd73a24ecbc82a
     pristine_git_object: 807cf3f81a5f07294dd545ab9e7dbdb66c6dbe6b
+  internal/provider/customrole_resource.go:
+    last_write_checksum: sha1:b6a4a813e3a502aa2046f1255d3d8af44221ed34
+  internal/provider/customrole_resource_sdk.go:
+    last_write_checksum: sha1:8db6d4e14a6c8757f38a26f0cac77b485e6e9627
   internal/provider/datalink_resource.go:
     id: 6f886fe60227
     last_write_checksum: sha1:4de3b09909f43757acffd9df2c2c200866233aaf
@@ -647,7 +655,7 @@ trackedFiles:
     pristine_git_object: 8271b7fae7ec72fa236df95b6cb1c021ff466b99
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:b36073a8377b574368ce4ab82a591c71dd9dbb14
+    last_write_checksum: sha1:4e2f90b0228aeaa9210f7fb77417afe45d8aeb8f
     pristine_git_object: 6c768261d1bb7b8f84d2db80197389871642d002
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -1306,7 +1314,7 @@ trackedFiles:
     last_write_checksum: sha1:7dbedcc004c3240ab9817b88bb7e9f266b43c349
     pristine_git_object: 81824dc902542ca5df67fd3e8471d0cdcfbec4f0
   internal/sdk/models/operations/createrole.go:
-    last_write_checksum: sha1:3d2dfe7e9b2a4d8f542cca2792155200c8d28646
+    last_write_checksum: sha1:0d9fc6823a2fcd850b4a6448cab7800cf3bba236
   internal/sdk/models/operations/createsshcredentials.go:
     id: bb07e307e98d
     last_write_checksum: sha1:d38799758f6349e1e156df277979027b70005b14
@@ -1484,7 +1492,7 @@ trackedFiles:
     last_write_checksum: sha1:f2033356665231f4e13a70b4a8749a1dfcd5315d
     pristine_git_object: 8171786108b1cd0aae18b59bf45ba2f54b097f6c
   internal/sdk/models/operations/deleterole.go:
-    last_write_checksum: sha1:1646cad9f90b74c7711d86c5242b14758358a0cb
+    last_write_checksum: sha1:86915383fff5d9c9b5b2324a8a8b038611849c61
   internal/sdk/models/operations/deletesshcredentials.go:
     id: 0e155693ad42
     last_write_checksum: sha1:cbcd6d6bf19ef32dd3882a6c7304c32a9c29fc0f
@@ -1664,7 +1672,7 @@ trackedFiles:
     last_write_checksum: sha1:db36e5f0495e37f16027516616b1d20baf7f9c67
     pristine_git_object: aa8639c7f649618febf4911e27d6e88b47376523
   internal/sdk/models/operations/describerole.go:
-    last_write_checksum: sha1:449a66d454b7b3d22f48d59d3beaaf2a5e2ae534
+    last_write_checksum: sha1:f41c57bb992e27b815560ebefa71389278542d0e
   internal/sdk/models/operations/describesshcredentials.go:
     id: a85ddc2ebbb2
     last_write_checksum: sha1:4b48c159209cda718c28b0ad1525775b0c6257de
@@ -2168,7 +2176,7 @@ trackedFiles:
   internal/sdk/models/operations/updatepipelineversion.go:
     last_write_checksum: sha1:827b2ed98820558f8f4191216e0a16dba3a1d178
   internal/sdk/models/operations/updaterole.go:
-    last_write_checksum: sha1:7da1c127187b06619396febf06aecdca9bb9cfde
+    last_write_checksum: sha1:7feac14c3d3b7c101987f5de7e615dda2a8123de
   internal/sdk/models/operations/updatesshcredentials.go:
     id: c3e32df7fc4c
     last_write_checksum: sha1:3cfd5deffed1103892ab3c710f43cbce798ed00e
@@ -3542,7 +3550,7 @@ trackedFiles:
     last_write_checksum: sha1:dd49583273ffd4269c639808a82b4fd7830a4378
     pristine_git_object: 0f1a811a5e550def410f370cd8546ecead0b9ae3
   internal/sdk/models/shared/roledto.go:
-    last_write_checksum: sha1:e6c0e7dcaf645ebbe0ad1b715f26d2dfae99565b
+    last_write_checksum: sha1:1b77f7de243b242e050e85390f6d6b2d59badaeb
   internal/sdk/models/shared/rolepermissionresponsedto.go:
     last_write_checksum: sha1:6965d46468fb40f86ada57b7441a4b08e68fff76
   internal/sdk/models/shared/runid.go:
@@ -6786,6 +6794,9 @@ examples:
           application/json: {"message": "<value>"}
   CreateRole:
     speakeasy-default-create-role:
+      parameters:
+        query:
+          orgId: 888688
       requestBody:
         application/json: {"description": "till sweetly scratch dredger up gruesome amid devise address worth"}
       responses:
@@ -6813,6 +6824,8 @@ examples:
       parameters:
         path:
           roleName: "<value>"
+        query:
+          orgId: 981328
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6821,6 +6834,8 @@ examples:
       parameters:
         path:
           roleName: "<value>"
+        query:
+          orgId: 673578
       responses:
         "200":
           application/json: {}
@@ -6831,6 +6846,8 @@ examples:
       parameters:
         path:
           roleName: "<value>"
+        query:
+          orgId: 271118
       requestBody:
         application/json: {"description": "spiteful yowza foot solidly jury"}
       responses:

@@ -8,7 +8,7 @@ subcategory: "Compute Environments"
 subcategory: "Pipelines"
 {{- else if or (eq .Name "seqera_data_link") (eq .Name "seqera_datasets") (eq .Name "seqera_dataset_version") }}
 subcategory: "Data"
-{{- else if or (eq .Name "seqera_orgs") (eq .Name "seqera_organization_member") (eq .Name "seqera_teams") (eq .Name "seqera_team_member") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
+{{- else if or (eq .Name "seqera_custom_role") (eq .Name "seqera_orgs") (eq .Name "seqera_organization_member") (eq .Name "seqera_teams") (eq .Name "seqera_team_member") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
 subcategory: "Organization"
 {{- else if eq .Name "seqera_studios" }}
 subcategory: "Studios"

@@ -41,6 +41,7 @@ examples/resources/seqera_pipeline/resource*.tf
 examples/resources/seqera_action/resource*.tf
 examples/resources/seqera_labels/resource*.tf
 examples/resources/seqera_orgs/resource*.tf
+examples/resources/seqera_custom_role/resource.tf
 examples/resources/seqera_primary_compute_env/resource*.tf
 examples/resources/seqera_aws_cloud_ce/resource*.tf
 examples/resources/seqera_aws_batch_ce/resource*.tf

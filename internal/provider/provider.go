@@ -15,13 +15,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	custom_role_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/custom_role_data"
 	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
 	organization_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data"
 	organization_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member"
 	organization_member_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data"
+	permissions_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/permissions_data"
 	pipeline_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_data"
 	pipeline_schema "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema"
 	pipeline_secret_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data"
+	team_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_data"
 	team_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member"
 	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
 	workspace_participant "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant"
@@ -149,6 +152,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewComputeEnvResource,
 		NewContainerRegistryCredentialResource,
 		NewCredentialResource,
+		NewCustomRoleResource,
 		NewDataLinkResource,
 		NewDatasetsResource,
 		NewGCPBatchCEResource,
@@ -183,8 +187,11 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 	return []func() datasource.DataSource{
 		NewCredentialsDataSource,
 		NewDataLinksDataSource,
+		custom_role_data.NewDataSource,
 		organization_data.NewDataSource,
 		organization_member_data.NewDataSource,
+		permissions_data.NewDataSource,
+		team_data.NewDataSource,
 		workspace_data.NewDataSource,
 		workspace_participant_data.NewDataSource,
 		pipeline_data.NewDataSource,

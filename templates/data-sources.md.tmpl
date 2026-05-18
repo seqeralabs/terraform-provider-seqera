@@ -2,7 +2,7 @@
 page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
 {{- if eq .Name "seqera_credentials" }}
 subcategory: "Credentials"
-{{- else if or (eq .Name "seqera_organization") (eq .Name "seqera_organization_member") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
+{{- else if or (eq .Name "seqera_custom_role") (eq .Name "seqera_organization") (eq .Name "seqera_organization_member") (eq .Name "seqera_permissions") (eq .Name "seqera_team") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
 subcategory: "Organization"
 {{- else if or (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") }}
 subcategory: "Pipelines"

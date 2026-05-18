@@ -84,7 +84,7 @@ resource "seqera_workspace_participant" "team_access" {
 
 - `email` (String) Email address of the user to add as a workspace participant. Specify either member_id, team_id, or email but not multiple. Email lookup happens once during creation.
 - `member_id` (Number) Organization member ID to add as a workspace participant. Specify either member_id, team_id, or email but not multiple.
-- `role` (String) Role of the participant. Valid values: owner, admin, maintain, launch, view. Defaults to "view".
+- `role` (String) Role of the participant. Accepts any predefined role (`owner`, `admin`, `maintain`, `launch`, `connect`, `view`) or the name of a custom role defined via `seqera_custom_role` in the same organization. Defaults to `view`.
 - `team_id` (Number) Team ID to add as workspace participants. All team members will be granted access. Specify either member_id, team_id, or email but not multiple.
 
 ### Read-Only
