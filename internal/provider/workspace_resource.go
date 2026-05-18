@@ -76,7 +76,6 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"id": schema.Int64Attribute{
 				Computed:    true,
-				Optional:    true,
 				Description: `Workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{

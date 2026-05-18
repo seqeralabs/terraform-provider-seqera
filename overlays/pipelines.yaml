@@ -184,7 +184,7 @@ actions:
   # This allows pipelines to be created without specifying compute env and work dir
   - target: $.components.schemas.WorkflowLaunchRequest
     update:
-      required: []
+      required: [pipeline]
 
   # Make workDir optional in WorkflowLaunchRequest
   - target: $.components.schemas.WorkflowLaunchRequest.properties.workDir

@@ -1082,12 +1082,9 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		paramsText = nil
 	}
-	pipeline := new(string)
-	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-		*pipeline = r.Launch.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
 	pipelineSchemaID := new(int64)
 	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
 		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
@@ -1325,12 +1322,9 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		paramsText = nil
 	}
-	pipeline := new(string)
-	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-		*pipeline = r.Launch.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
 	pipelineSchemaID := new(int64)
 	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
 		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()

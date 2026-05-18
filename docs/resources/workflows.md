@@ -67,6 +67,7 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Required
 
+- `pipeline` (String) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -81,7 +82,6 @@ resource "seqera_workflows" "my_workflows" {
 - `label_ids` (List of Number) Requires replacement if changed.
 - `main_script` (String) Main script path. Requires replacement if changed.
 - `params_text` (String) Pipeline parameters text. Requires replacement if changed.
-- `pipeline` (String) Requires replacement if changed.
 - `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
 - `pre_run_script` (String) Script to run before pipeline execution. Requires replacement if changed.

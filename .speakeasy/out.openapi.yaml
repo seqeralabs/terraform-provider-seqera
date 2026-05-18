@@ -22658,7 +22658,7 @@ components:
           items:
             type: string
           example: ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]
-      required: [workDir]
+      required: [pipeline, workDir]
       x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
@@ -22981,7 +22981,7 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time

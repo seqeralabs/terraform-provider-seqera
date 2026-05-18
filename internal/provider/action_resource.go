@@ -2408,8 +2408,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline parameters text`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 					},
 					"pipeline_schema_id": schema.Int64Attribute{
 						Computed: true,
