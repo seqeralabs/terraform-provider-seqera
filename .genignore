@@ -78,10 +78,14 @@ internal/seqera/
 # Guide pages
 docs/guides/aws-iam-role-with-external-id.md
 docs/guides/gcp-workload-identity-federation.md
+docs/guides/pipeline-schema-custom-upload.md
 
 # Custom workspace_participant examples
 examples/resources/seqera_workspace_participant/resource*.tf
 examples/resources/seqera_workspace_participant/import.sh
+
+# Custom pipeline_schema examples
+examples/resources/seqera_pipeline_schema/resource*.tf
 
 # Custom doc templates for subcategory grouping
 templates/

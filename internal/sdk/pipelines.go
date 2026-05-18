@@ -2071,6 +2071,8 @@ func (s *Pipelines) DescribePipelineLaunch(ctx context.Context, request operatio
 		}
 	case httpRes.StatusCode == 403:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

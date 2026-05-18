@@ -73,6 +73,9 @@ terraform:
     - importAlias: dataset_version
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version
       resource: dataset_version.NewResource
+    - importAlias: pipeline_schema
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema
+      resource: pipeline_schema.NewResource
   allowUnknownFieldsInWeakUnions: false
   author: seqeralabs
   baseErrorName: SeqeraError

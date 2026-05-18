@@ -6311,7 +6311,7 @@ paths:
         - pipelines
       x-speakeasy-entity-operation:
         terraform-datasource: null
-        terraform-resource: Pipeline#read
+        terraform-resource: Pipeline#read#1
     put:
       operationId: UpdatePipeline
       summary: Update pipeline (default version)
@@ -6422,6 +6422,9 @@ paths:
         - BearerAuth: []
       tags:
         - pipelines
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Pipeline#read#2
   /pipelines/{pipelineId}/schema:
     get:
       operationId: DescribePipelineSchema
@@ -18240,6 +18243,9 @@ components:
     LaunchDbDto:
       type: object
       properties:
+        computeEnv:
+          $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
+          x-speakeasy-param-readonly: true
         configProfiles:
           type: array
           items:

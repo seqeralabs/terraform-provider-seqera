@@ -3,7 +3,8 @@
 package shared
 
 type LaunchDbDto struct {
-	ConfigProfiles []string `json:"configProfiles,omitempty"`
+	ComputeEnv     *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
+	ConfigProfiles []string                 `json:"configProfiles,omitempty"`
 	// Nextflow configuration text
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
@@ -48,6 +49,13 @@ type LaunchDbDto struct {
 	WorkDir          *string  `json:"workDir,omitempty"`
 	WorkspaceID      *int64   `json:"workspaceId,omitempty"`
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
+}
+
+func (l *LaunchDbDto) GetComputeEnv() *ComputeEnvComputeConfig {
+	if l == nil {
+		return nil
+	}
+	return l.ComputeEnv
 }
 
 func (l *LaunchDbDto) GetConfigProfiles() []string {

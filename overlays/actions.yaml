@@ -286,9 +286,14 @@ actions:
   - target: $.components.schemas.LaunchDbDto.properties.lastUpdated
     remove: true
 
-  # Remove computeEnv (full compute environment object - response only)
+  # Mark computeEnv as read-only — the nested compute environment object is
+  # populated only on responses (GET /pipelines/{id}/launch). Keeping it
+  # readable lets the seqera_pipeline resource refresh compute_env_id on
+  # Read; marking it read-only keeps Speakeasy from treating it as a
+  # request input.
   - target: $.components.schemas.LaunchDbDto.properties.computeEnv
-    remove: true
+    update:
+      x-speakeasy-param-readonly: true
 
   # Mark computed/response-only fields as read-only in LaunchDbDto schema
   - target: $.components.schemas.LaunchDbDto.properties.resumeLaunchId

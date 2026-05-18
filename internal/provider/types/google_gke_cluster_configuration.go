@@ -9,9 +9,8 @@ import (
 type GoogleGKEClusterConfiguration struct {
 	ClusterName           types.String        `tfsdk:"cluster_name"`
 	ComputeServiceAccount types.String        `tfsdk:"compute_service_account"`
-	EnableFusion          types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave            types.Bool          `tfsdk:"enable_wave"`
 	Environment           []ConfigEnvVariable `tfsdk:"environment"`
+	EnableFusion          types.Bool          `tfsdk:"enable_fusion"`
 	HeadJobCpus           types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb       types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadPodSpec           types.String        `tfsdk:"head_pod_spec"`
@@ -27,5 +26,6 @@ type GoogleGKEClusterConfiguration struct {
 	SslCert               types.String        `tfsdk:"ssl_cert"`
 	StorageClaimName      types.String        `tfsdk:"storage_claim_name"`
 	StorageMountPath      types.String        `tfsdk:"storage_mount_path"`
+	EnableWave            types.Bool          `tfsdk:"enable_wave"`
 	WorkDir               types.String        `tfsdk:"work_dir"`
 }
