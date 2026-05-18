@@ -148,8 +148,6 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 					r.Launch.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
 					r.Launch.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.Launch.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
-					r.Launch.ComputeEnv.Config.AwsCloud.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EnableFusion)
-					r.Launch.ComputeEnv.Config.AwsCloud.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem1 := range resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Environment {
@@ -284,8 +282,6 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 					r.Launch.ComputeEnv.Config.GoogleCloud = &tfTypes.GoogleCloudConfiguration{}
 					r.Launch.ComputeEnv.Config.GoogleCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Arm64Enabled)
 					r.Launch.ComputeEnv.Config.GoogleCloud.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleCloudConfiguration.BootDiskSizeGb))
-					r.Launch.ComputeEnv.Config.GoogleCloud.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleCloudConfiguration.EnableFusion)
-					r.Launch.ComputeEnv.Config.GoogleCloud.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleCloudConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.GoogleCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem4 := range resp.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Environment {
@@ -388,8 +384,6 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 					r.Launch.ComputeEnv.Config.AzureCloud = &tfTypes.AzureCloudConfiguration{}
 					r.Launch.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionEndpoint)
 					r.Launch.ComputeEnv.Config.AzureCloud.DataCollectionRuleID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionRuleID)
-					r.Launch.ComputeEnv.Config.AzureCloud.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureCloudConfiguration.EnableFusion)
-					r.Launch.ComputeEnv.Config.AzureCloud.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureCloudConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.AzureCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem6 := range resp.Launch.ComputeEnv.Config.AzureCloudConfiguration.Environment {
@@ -1050,12 +1044,9 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		paramsText = nil
 	}
-	pipeline := new(string)
-	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-		*pipeline = r.Launch.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
 	pipelineSchemaID := new(int64)
 	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
 		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
@@ -1252,12 +1243,9 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		paramsText = nil
 	}
-	pipeline := new(string)
-	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-		*pipeline = r.Launch.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
 	pipelineSchemaID := new(int64)
 	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
 		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()

@@ -11,6 +11,7 @@ import (
 
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/seqera/common"
 )
 
 var _ datasource.DataSource = &DataSource{}
@@ -67,18 +68,11 @@ func (d *DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, r
 }
 
 func (d *DataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
+	client, diags := common.ConfigureClient(req.ProviderData)
+	resp.Diagnostics.Append(diags...)
+	if client != nil {
+		d.client = client
 	}
-	client, ok := req.ProviderData.(*sdk.Seqera)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *sdk.Seqera, got: %T.", req.ProviderData),
-		)
-		return
-	}
-	d.client = client
 }
 
 func (d *DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -102,7 +96,7 @@ func (d *DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp 
 		return
 	}
 	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError("Unexpected API response", fmt.Sprintf("Status code: %d", res.StatusCode))
+		common.AddUnexpectedStatus(&resp.Diagnostics, "describing role", res.RawResponse)
 		return
 	}
 	if res.DescribeRoleResponse == nil || res.DescribeRoleResponse.Role == nil {

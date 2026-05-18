@@ -45,8 +45,6 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config = &tfTypes.GoogleCloudConfig{}
 		r.Config.Arm64Enabled = types.BoolPointerValue(resp.Config.Arm64Enabled)
 		r.Config.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGb))
-		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
-		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
 		for _, environmentItem := range resp.Config.Environment {
@@ -141,6 +139,31 @@ func (r *GCPCloudCEResourceModel) ToOperationsDescribeGCPCloudCERequest(ctx cont
 	out := operations.DescribeGCPCloudCERequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *GCPCloudCEResourceModel) ToOperationsUpdateGCPCloudCERequest(ctx context.Context) (*operations.UpdateGCPCloudCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateGCPCloudCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
 	}
 
 	return &out, diags
@@ -276,12 +299,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			Value:   value,
 		})
 	}
-	enableFusion := new(bool)
-	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
-		*enableFusion = r.Config.EnableFusion.ValueBool()
-	} else {
-		enableFusion = nil
-	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -336,12 +353,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		serviceAccountEmail = nil
 	}
-	enableWave := new(bool)
-	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
-		*enableWave = r.Config.EnableWave.ValueBool()
-	} else {
-		enableWave = nil
-	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
 		*workDir = r.Config.WorkDir.ValueString()
@@ -358,7 +369,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		Arm64Enabled:        arm64Enabled,
 		BootDiskSizeGb:      bootDiskSizeGb,
 		Environment:         environment,
-		EnableFusion:        enableFusion,
 		GpuEnabled:          gpuEnabled,
 		ImageID:             imageID,
 		InstanceType:        instanceType,
@@ -368,7 +378,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		ProjectID:           projectID,
 		Region:              region,
 		ServiceAccountEmail: serviceAccountEmail,
-		EnableWave:          enableWave,
 		WorkDir:             workDir,
 		Zone:                zone,
 	}
@@ -385,6 +394,36 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		LastUsed:      lastUsed,
 		Deleted:       deleted,
 		Config:        config,
+	}
+
+	return &out, diags
+}
+
+func (r *GCPCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

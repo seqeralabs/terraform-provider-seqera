@@ -20,8 +20,6 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.Config = &tfTypes.AzCloudConfig{}
 		r.Config.DataCollectionEndpoint = types.StringPointerValue(resp.Config.DataCollectionEndpoint)
 		r.Config.DataCollectionRuleID = types.StringPointerValue(resp.Config.DataCollectionRuleID)
-		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
-		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
 		for _, environmentItem := range resp.Config.Environment {
@@ -148,6 +146,31 @@ func (r *AzureCloudCEResourceModel) ToOperationsDescribeAzureCloudCERequest(ctx 
 	return &out, diags
 }
 
+func (r *AzureCloudCEResourceModel) ToOperationsUpdateAzureCloudCERequest(ctx context.Context) (*operations.UpdateAzureCloudCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateAzureCloudCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx context.Context) (*shared.AzureCloudCEComputeConfigInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -256,12 +279,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			Value:   value,
 		})
 	}
-	enableFusion := new(bool)
-	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
-		*enableFusion = r.Config.EnableFusion.ValueBool()
-	} else {
-		enableFusion = nil
-	}
 	instanceType := new(string)
 	if !r.Config.InstanceType.IsUnknown() && !r.Config.InstanceType.IsNull() {
 		*instanceType = r.Config.InstanceType.ValueString()
@@ -334,12 +351,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		subscriptionID = nil
 	}
-	enableWave := new(bool)
-	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
-		*enableWave = r.Config.EnableWave.ValueBool()
-	} else {
-		enableWave = nil
-	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
 		*workDir = r.Config.WorkDir.ValueString()
@@ -350,7 +361,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		DataCollectionEndpoint:  dataCollectionEndpoint,
 		DataCollectionRuleID:    dataCollectionRuleID,
 		Environment:             environment,
-		EnableFusion:            enableFusion,
 		InstanceType:            instanceType,
 		LogTableName:            logTableName,
 		LogWorkspaceID:          logWorkspaceID,
@@ -363,7 +373,6 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		Region:                  region,
 		ResourceGroup:           resourceGroup,
 		SubscriptionID:          subscriptionID,
-		EnableWave:              enableWave,
 		WorkDir:                 workDir,
 	}
 	out := shared.AzureCloudCEComputeConfigInput{
@@ -401,6 +410,36 @@ func (r *AzureCloudCEResourceModel) ToSharedCreateAzureCloudCERequest(ctx contex
 	out := shared.CreateAzureCloudCERequest{
 		ComputeEnv: computeEnv,
 		LabelIds:   labelIds,
+	}
+
+	return &out, diags
+}
+
+func (r *AzureCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

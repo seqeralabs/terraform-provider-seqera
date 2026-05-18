@@ -148,13 +148,13 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 ### Required
 
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
-- `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
-- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
+- `credentials_id` (String) AWS credentials identifier
+- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
-- `description` (String) Optional description of the compute environment. Requires replacement if changed.
+- `description` (String) Optional description of the compute environment
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -195,16 +195,6 @@ When using Fusion v2 without fast instance storage, this defaults to 100 GB with
 Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
-Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.

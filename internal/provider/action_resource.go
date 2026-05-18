@@ -649,20 +649,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
 													`Key pair must exist in the specified region.`,
 											},
-											"enable_fusion": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
-													`speeding up most operations.` + "\n" +
-													`` + "\n" +
-													`Requires ` + "`" + `enable_wave = true` + "`" + `.`,
-											},
-											"enable_wave": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
-													`Nextflow pipelines via the Wave containers service.` + "\n" +
-													`` + "\n" +
-													`Required when ` + "`" + `enable_fusion` + "`" + ` is true.`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -991,20 +977,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"data_collection_rule_id": schema.StringAttribute{
 												Computed:    true,
 												Description: `Azure Monitor data collection rule resource ID associated with the endpoint.`,
-											},
-											"enable_fusion": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
-													`speeding up most operations.` + "\n" +
-													`` + "\n" +
-													`Requires ` + "`" + `enable_wave = true` + "`" + `.`,
-											},
-											"enable_wave": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
-													`Nextflow pipelines via the Wave containers service.` + "\n" +
-													`` + "\n" +
-													`Required when ` + "`" + `enable_fusion` + "`" + ` is true.`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
@@ -1519,20 +1491,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"boot_disk_size_gb": schema.Int32Attribute{
 												Computed:    true,
 												Description: `Size of the boot disk in GB for compute instances.`,
-											},
-											"enable_fusion": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
-													`speeding up most operations.` + "\n" +
-													`` + "\n" +
-													`Requires ` + "`" + `enable_wave = true` + "`" + `.`,
-											},
-											"enable_wave": schema.BoolAttribute{
-												Computed: true,
-												MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
-													`Nextflow pipelines via the Wave containers service.` + "\n" +
-													`` + "\n" +
-													`Required when ` + "`" + `enable_fusion` + "`" + ` is true.`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
@@ -2300,9 +2258,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"credentials_id": schema.StringAttribute{
 								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 							},
 							"date_created": schema.StringAttribute{
 								Computed: true,
@@ -2312,9 +2267,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,
@@ -2414,8 +2366,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline parameters text`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 					},
 					"pipeline_schema_id": schema.Int64Attribute{
 						Computed: true,

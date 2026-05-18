@@ -95,7 +95,7 @@ resource "seqera_managed_compute_ce" "with_env" {
 
 ### Required
 
-- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
+- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 - `region` (String) AWS region for Seqera Managed Compute resources.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Requires replacement if changed.

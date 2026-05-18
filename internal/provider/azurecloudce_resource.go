@@ -30,7 +30,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -107,35 +106,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.`,
-					},
-					"enable_fusion": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
-							`speeding up most operations.` + "\n" +
-							`` + "\n" +
-							`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
-							`Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.FusionEnabledValidator(),
-						},
-					},
-					"enable_wave": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
-							`Nextflow pipelines via the Wave containers service.` + "\n" +
-							`` + "\n" +
-							`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
-							`Requires replacement if changed.`,
 					},
 					"environment": schema.ListNestedAttribute{
 						Computed: true,
@@ -342,12 +312,8 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Requires replacement if changed.`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Azure credentials identifier. Requires replacement if changed.`,
+				Required:    true,
+				Description: `Azure credentials identifier`,
 			},
 			"date_created": schema.StringAttribute{
 				Computed: true,
@@ -364,11 +330,12 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Flag indicating if the compute environment has been deleted`,
 			},
 			"description": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+				Computed:    true,
+				Optional:    true,
+				Description: `Optional description of the compute environment`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(2000),
 				},
-				Description: `Optional description of the compute environment. Requires replacement if changed.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -400,12 +367,8 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Timestamp when the compute environment was last used`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.`,
+				Required:    true,
+				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
@@ -637,7 +600,71 @@ func (r *AzureCloudCEResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	// Not Implemented; all attributes marked as RequiresReplace
+	request, requestDiags := data.ToOperationsUpdateAzureCloudCERequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.ComputeEnvs.UpdateAzureCloudCE(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 204 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribeAzureCloudCERequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.ComputeEnvs.DescribeAzureCloudCE(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DescribeAzureCloudCEResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAzureCloudCEResponse(ctx, res1.DescribeAzureCloudCEResponse)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

@@ -10,7 +10,6 @@ type AzureCloudConfiguration struct {
 	DataCollectionEndpoint  types.String        `tfsdk:"data_collection_endpoint"`
 	DataCollectionRuleID    types.String        `tfsdk:"data_collection_rule_id"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
-	EnableFusion            types.Bool          `tfsdk:"enable_fusion"`
 	InstanceType            types.String        `tfsdk:"instance_type"`
 	LogTableName            types.String        `tfsdk:"log_table_name"`
 	LogWorkspaceID          types.String        `tfsdk:"log_workspace_id"`
@@ -23,6 +22,5 @@ type AzureCloudConfiguration struct {
 	Region                  types.String        `tfsdk:"region"`
 	ResourceGroup           types.String        `tfsdk:"resource_group"`
 	SubscriptionID          types.String        `tfsdk:"subscription_id"`
-	EnableWave              types.Bool          `tfsdk:"enable_wave"`
 	WorkDir                 types.String        `tfsdk:"work_dir"`
 }

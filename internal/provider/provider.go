@@ -4,6 +4,9 @@ package provider
 
 import (
 	"context"
+	"net/http"
+	"os"
+
 	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
@@ -15,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	compute_env_enabled "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/compute_env_enabled"
 	custom_role_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/custom_role_data"
 	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
 	organization_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data"
@@ -31,8 +35,6 @@ import (
 	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
 	workspace_participant "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant"
 	workspace_participant_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant_data"
-	"net/http"
-	"os"
 )
 
 var _ provider.Provider = (*SeqeraProvider)(nil)
@@ -183,6 +185,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		dataset_version.NewResource,
 		pipeline_schema.NewResource,
 		pipeline_version.NewResource,
+		compute_env_enabled.NewResource,
 	}
 }
 

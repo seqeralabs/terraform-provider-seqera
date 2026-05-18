@@ -88,9 +88,9 @@ terraform:
     - importAlias: pipeline_schema
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema
       resource: pipeline_schema.NewResource
-    - importAlias: pipeline_version
-      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_version
-      resource: pipeline_version.NewResource
+    - importAlias: compute_env_enabled
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/compute_env_enabled
+      resource: compute_env_enabled.NewResource
   allowUnknownFieldsInWeakUnions: false
   author: seqeralabs
   baseErrorName: SeqeraError

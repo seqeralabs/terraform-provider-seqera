@@ -261,12 +261,9 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		paramsText = nil
 	}
-	pipeline := new(string)
-	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
-		*pipeline = r.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Pipeline.ValueString()
+
 	pipelineSchemaID := new(int64)
 	if !r.PipelineSchemaID.IsUnknown() && !r.PipelineSchemaID.IsNull() {
 		*pipelineSchemaID = r.PipelineSchemaID.ValueInt64()

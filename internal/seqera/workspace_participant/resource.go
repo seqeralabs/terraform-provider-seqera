@@ -194,18 +194,11 @@ Import formats:
 }
 
 func (r *Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
+	client, diags := common.ConfigureClient(req.ProviderData)
+	resp.Diagnostics.Append(diags...)
+	if client != nil {
+		r.client = client
 	}
-	client, ok := req.ProviderData.(*sdk.Seqera)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Seqera, got: %T.", req.ProviderData),
-		)
-		return
-	}
-	r.client = client
 }
 
 func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -280,7 +273,7 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		return
 	}
 	if createRes.StatusCode != 200 || createRes.AddParticipantResponse == nil || createRes.AddParticipantResponse.Participant == nil {
-		resp.Diagnostics.AddError("Unexpected API response", common.DebugResponse(createRes.RawResponse))
+		common.AddUnexpectedStatus(&resp.Diagnostics, "adding workspace participant", createRes.RawResponse)
 		return
 	}
 
@@ -564,7 +557,7 @@ func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64
 				return nil, 0, err
 			}
 			if listRes.StatusCode != 200 {
-				return nil, 0, fmt.Errorf("unexpected status code %d listing workspace participants", listRes.StatusCode)
+				return nil, 0, common.UnexpectedStatusErr("listing workspace participants", listRes.RawResponse)
 			}
 			if listRes.ListParticipantsResponse == nil {
 				return nil, 0, fmt.Errorf("empty response listing workspace participants")

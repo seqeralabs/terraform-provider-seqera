@@ -16,7 +16,6 @@ package pipeline_schema
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -113,18 +112,11 @@ orphaned server-side.
 }
 
 func (r *Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
+	client, diags := common.ConfigureClient(req.ProviderData)
+	resp.Diagnostics.Append(diags...)
+	if client != nil {
+		r.client = client
 	}
-	client, ok := req.ProviderData.(*sdk.Seqera)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Seqera, got: %T.", req.ProviderData),
-		)
-		return
-	}
-	r.client = client
 }
 
 func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -151,7 +143,7 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		res.CreatePipelineSchemaResponse == nil ||
 		res.CreatePipelineSchemaResponse.PipelineSchema == nil ||
 		res.CreatePipelineSchemaResponse.PipelineSchema.ID == nil {
-		resp.Diagnostics.AddError("Unexpected API response", common.DebugResponse(res.RawResponse))
+		common.AddUnexpectedStatus(&resp.Diagnostics, "creating pipeline schema", res.RawResponse)
 		return
 	}
 

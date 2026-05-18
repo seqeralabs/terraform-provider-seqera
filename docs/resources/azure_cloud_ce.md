@@ -89,13 +89,13 @@ resource "seqera_azure_cloud_ce" "managed_identity" {
 ### Required
 
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
-- `credentials_id` (String) Azure credentials identifier. Requires replacement if changed.
-- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
+- `credentials_id` (String) Azure credentials identifier
+- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
-- `description` (String) Optional description of the compute environment. Requires replacement if changed.
+- `description` (String) Optional description of the compute environment
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -126,16 +126,6 @@ Optional:
 
 - `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
-Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment.
 Each variable can target the head node, compute nodes, or both.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
