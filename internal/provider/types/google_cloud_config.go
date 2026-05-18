@@ -9,8 +9,6 @@ import (
 type GoogleCloudConfig struct {
 	Arm64Enabled        types.Bool          `tfsdk:"arm64_enabled"`
 	BootDiskSizeGb      types.Int32         `tfsdk:"boot_disk_size_gb"`
-	EnableFusion        types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave          types.Bool          `tfsdk:"enable_wave"`
 	Environment         []ConfigEnvVariable `tfsdk:"environment"`
 	GpuEnabled          types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID             types.String        `tfsdk:"image_id"`

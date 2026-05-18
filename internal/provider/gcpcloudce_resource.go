@@ -32,7 +32,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -111,35 +110,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `Size of the boot disk in GB for compute instances. Requires replacement if changed.`,
-					},
-					"enable_fusion": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
-							`speeding up most operations.` + "\n" +
-							`` + "\n" +
-							`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
-							`Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.FusionEnabledValidator(),
-						},
-					},
-					"enable_wave": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
-							`Nextflow pipelines via the Wave containers service.` + "\n" +
-							`` + "\n" +
-							`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
-							`Requires replacement if changed.`,
 					},
 					"environment": schema.ListNestedAttribute{
 						Computed: true,
