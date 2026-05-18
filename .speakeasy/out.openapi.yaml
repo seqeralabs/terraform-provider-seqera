@@ -9988,6 +9988,56 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#update
+      x-speakeasy-name-override: UpdateAWSComputeEnv
+      summary: Update AWS compute environment
+      description: Updates name, description, or credentials of the AWS compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
     delete:
       x-speakeasy-entity-operation:
         terraform-datasource: null
@@ -10142,6 +10192,56 @@ paths:
           description: Operation not allowed
         "404":
           description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#update
+      x-speakeasy-name-override: UpdateAWSBatchCE
+      summary: Update AWS Batch compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateAWSBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
           content:
             application/json:
               schema:
@@ -10308,6 +10408,56 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AwsCloudCE#update
+      x-speakeasy-name-override: UpdateAwsCloudCE
+      summary: Update AWS Cloud compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateAwsCloudCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
     delete:
       x-speakeasy-entity-operation:
         terraform-datasource: null
@@ -10462,6 +10612,56 @@ paths:
           description: Operation not allowed
         "404":
           description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureBatchCE#update
+      x-speakeasy-name-override: UpdateAzureBatchCE
+      summary: Update Azure Batch compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateAzureBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
           content:
             application/json:
               schema:
@@ -10628,6 +10828,56 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCloudCE#update
+      x-speakeasy-name-override: UpdateAzureCloudCE
+      summary: Update Azure Cloud compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateAzureCloudCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
     delete:
       x-speakeasy-entity-operation:
         terraform-datasource: null
@@ -10782,6 +11032,56 @@ paths:
           description: Operation not allowed
         "404":
           description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GCPBatchCE#update
+      x-speakeasy-name-override: UpdateGCPBatchCE
+      summary: Update GCP Batch compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateGCPBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
           content:
             application/json:
               schema:
@@ -10948,6 +11248,56 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GCPCloudCE#update
+      x-speakeasy-name-override: UpdateGCPCloudCE
+      summary: Update GCP Cloud compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateGCPCloudCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
     delete:
       x-speakeasy-entity-operation:
         terraform-datasource: null
@@ -11106,6 +11456,56 @@ paths:
           description: Operation not allowed
         "404":
           description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ManagedComputeCE#update
+      x-speakeasy-name-override: UpdateManagedComputeCE
+      summary: Update Seqera Compute compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateManagedComputeCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
           content:
             application/json:
               schema:
@@ -15336,7 +15736,6 @@ components:
           x-speakeasy-param-force-new: true
         credentialsId:
           type: string
-          x-speakeasy-param-force-new: true
         dateCreated:
           type: string
           format: date-time
@@ -15349,7 +15748,6 @@ components:
         description:
           type: string
           maxLength: 2000
-          x-speakeasy-param-force-new: true
         id:
           type: string
           maxLength: 22
@@ -22655,7 +23053,6 @@ components:
         credentialsId:
           type: string
           description: AWS credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -22676,7 +23073,6 @@ components:
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
           deprecated: true
-          x-speakeasy-param-force-new: true
           x-speakeasy-deprecation-message: |
             The `seqera_aws_compute_env` resource is superseded by `seqera_aws_batch_ce`.
             The two resources share the same schema and API; `seqera_aws_batch_ce` is
@@ -22685,8 +23081,6 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -22775,7 +23169,6 @@ components:
         credentialsId:
           type: string
           description: AWS credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -22795,12 +23188,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -22918,7 +23308,6 @@ components:
         credentialsId:
           type: string
           description: AWS credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -22938,12 +23327,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -23035,7 +23421,6 @@ components:
         credentialsId:
           type: string
           description: Azure credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -23055,12 +23440,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -23152,7 +23534,6 @@ components:
         credentialsId:
           type: string
           description: Azure credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -23172,12 +23553,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -23268,7 +23646,6 @@ components:
         credentialsId:
           type: string
           description: Google Cloud credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -23288,12 +23665,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -23385,7 +23759,6 @@ components:
         credentialsId:
           type: string
           description: Google Cloud credentials identifier
-          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -23405,12 +23778,9 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
@@ -23509,7 +23879,6 @@ components:
           type: string
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment

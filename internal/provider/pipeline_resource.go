@@ -2148,9 +2148,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							},
 							"credentials_id": schema.StringAttribute{
 								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 							},
 							"date_created": schema.StringAttribute{
 								Computed: true,
@@ -2160,9 +2157,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,

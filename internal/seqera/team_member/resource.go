@@ -162,18 +162,11 @@ Import format: org_id/team_id/email (e.g., "12345/67890/user@example.com")
 }
 
 func (r *Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
+	client, diags := common.ConfigureClient(req.ProviderData)
+	resp.Diagnostics.Append(diags...)
+	if client != nil {
+		r.client = client
 	}
-	client, ok := req.ProviderData.(*sdk.Seqera)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Seqera, got: %T.", req.ProviderData),
-		)
-		return
-	}
-	r.client = client
 }
 
 func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -225,7 +218,7 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		return
 	}
 	if createRes.StatusCode != 200 || createRes.AddTeamMemberResponse == nil || createRes.AddTeamMemberResponse.Member == nil {
-		resp.Diagnostics.AddError("Unexpected API response", common.DebugResponse(createRes.RawResponse))
+		common.AddUnexpectedStatus(&resp.Diagnostics, "adding team member", createRes.RawResponse)
 		return
 	}
 
@@ -337,7 +330,7 @@ func (r *Resource) findOrgMember(ctx context.Context, orgID, memberID int64) (*s
 				return nil, 0, err
 			}
 			if listRes.StatusCode != 200 {
-				return nil, 0, fmt.Errorf("unexpected status code %d listing organization members", listRes.StatusCode)
+				return nil, 0, common.UnexpectedStatusErr("listing organization members", listRes.RawResponse)
 			}
 			if listRes.ListMembersResponse == nil {
 				return nil, 0, fmt.Errorf("empty response listing organization members")
@@ -387,7 +380,7 @@ func (r *Resource) findMember(ctx context.Context, orgID, teamID int64, email st
 				return nil, 0, err
 			}
 			if listRes.StatusCode != 200 {
-				return nil, 0, fmt.Errorf("unexpected status code %d listing team members", listRes.StatusCode)
+				return nil, 0, common.UnexpectedStatusErr("listing team members", listRes.RawResponse)
 			}
 			if listRes.ListMembersResponse == nil {
 				return nil, 0, fmt.Errorf("empty response listing team members")

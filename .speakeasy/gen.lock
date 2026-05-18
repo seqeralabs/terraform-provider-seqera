@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 46b2348612c72913a48dbf93308a895e
+  docChecksum: 08b792e3b13582c0d748be872943a1f9
   docVersion: 1.153.0
   speakeasyVersion: 1.763.1
   generationVersion: 2.884.4
   releaseVersion: 0.40.0-RC4
-  configChecksum: 0106ecda0b43e2e04b1ad1d5cfd70576
+  configChecksum: 866337ba25c2eb7d49150c99c29e2182
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -425,7 +425,7 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:29001b95985ab203b3165617016dd07daef05034
+    last_write_checksum: sha1:0fb313bcc3d9f02c237df9c4d6aea4c736af858a
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
@@ -433,23 +433,23 @@ trackedFiles:
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
-    last_write_checksum: sha1:8ca4fe796db00c5f0cf92b081accb018e19bc36b
+    last_write_checksum: sha1:5ad5abfcac0271e0183291c3b3248770c890c002
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
   internal/provider/awsbatchce_resource_sdk.go:
     id: acddb134f02d
-    last_write_checksum: sha1:24662f3ae4add03a0261eefe1348aca7e2b63421
+    last_write_checksum: sha1:dd22a3ae2798e141de8f3e1276835425b926c9b7
     pristine_git_object: 91db6c7b9d563b0b0fa5e57c712ed1952c1d54d2
   internal/provider/awscloudce_resource.go:
-    last_write_checksum: sha1:03adf4d22091ffa199a337244ad36a8e8e9905f7
+    last_write_checksum: sha1:3acd5333cca7a6ffa393ee2be87d0e6dd514196c
   internal/provider/awscloudce_resource_sdk.go:
-    last_write_checksum: sha1:670c5788a7235ce26d0212dff732ced782d42a66
+    last_write_checksum: sha1:4f5e42dd40c14f3e02755107b26c101d2217230c
   internal/provider/awscomputeenv_resource.go:
     id: 788844f2d22e
-    last_write_checksum: sha1:9d12cfcecfb390bf5135eeb27f0838cf4af63d92
+    last_write_checksum: sha1:dc043ab61d705afdd471ee6230dbae3f9c86d40e
     pristine_git_object: 251b9b34df068086a2b6c118fd0cdc7384d6fb53
   internal/provider/awscomputeenv_resource_sdk.go:
     id: 9a23d2e0f03e
-    last_write_checksum: sha1:d4ceb2e9863c00ac2fea08751a2867e10b3909b0
+    last_write_checksum: sha1:360e7334e473fbb1265ad4deb745acdc23a07c71
     pristine_git_object: 4d4451329e274230a287210d496b8e03aea29724
   internal/provider/awscredential_resource.go:
     id: fd1fb9518f67
@@ -460,13 +460,13 @@ trackedFiles:
     last_write_checksum: sha1:d7ae62614a2b6bc033413f7972ebdd36ffc33189
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
   internal/provider/azurebatchce_resource.go:
-    last_write_checksum: sha1:04c7c5922ceaf6fa30c66ec6216e0f30d3e5bba4
+    last_write_checksum: sha1:dfa7e30d707a35e30f7ee63fe29150f4208527d2
   internal/provider/azurebatchce_resource_sdk.go:
-    last_write_checksum: sha1:149ff0c5af2eb00c69f5885db1f3803181c34ec8
+    last_write_checksum: sha1:23105b512e07f34339c8e74e54a3f0d3f73fd7af
   internal/provider/azurecloudce_resource.go:
-    last_write_checksum: sha1:08e51735c41d7f732c4ee6a69a276602f521b36c
+    last_write_checksum: sha1:b255065b9b3d256edb26151d6900f87b61170d1a
   internal/provider/azurecloudce_resource_sdk.go:
-    last_write_checksum: sha1:bd04316eae695ad1caa2059f05c10c3dc8bf6c39
+    last_write_checksum: sha1:86d28c885f46283e51159c3b77a99da6cc79dfd6
   internal/provider/azurecloudcredential_resource.go:
     last_write_checksum: sha1:18ad4cb4c6c5566376cd9c01e2fb8f2b45e9e2bd
   internal/provider/azurecloudcredential_resource_sdk.go:
@@ -560,13 +560,13 @@ trackedFiles:
     last_write_checksum: sha1:2518480b1bf5983bf0d0fec9a47e654d138db587
     pristine_git_object: d3d10cadef9504a6a38441129ada6ccaf494496e
   internal/provider/gcpbatchce_resource.go:
-    last_write_checksum: sha1:4e8dc98d34b85821b5048ffb2145b2148c2768ad
+    last_write_checksum: sha1:fd172b6536175ed1545153bdbc54f0f23711f6ac
   internal/provider/gcpbatchce_resource_sdk.go:
-    last_write_checksum: sha1:0a2d6bb7b81f8053dfc9aab6a27b27848c64075e
+    last_write_checksum: sha1:51e775539dce2e1ce359466ed81b14de76f2892f
   internal/provider/gcpcloudce_resource.go:
-    last_write_checksum: sha1:29b34eb39339f6d500e35ec9c20f89cdb6580665
+    last_write_checksum: sha1:0fbdab27c664c8bf2755ad9b83f0f20693720fed
   internal/provider/gcpcloudce_resource_sdk.go:
-    last_write_checksum: sha1:0c4f03cd5a79cceb0ffb487e743e63488ba61ad1
+    last_write_checksum: sha1:5b1d35a7ef5389f58dbe11030bbd09508c444e6d
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
     last_write_checksum: sha1:2e739ea241a59f21cbebac2c7b74235e68dcd92f
@@ -617,11 +617,11 @@ trackedFiles:
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
   internal/provider/managedcomputece_resource.go:
     id: 7e0eecddbc1e
-    last_write_checksum: sha1:40be299301994577a8fb0976ce6fbad376760bf5
+    last_write_checksum: sha1:4102214810a4bec60c21dc304d36da106219aaaa
     pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
   internal/provider/managedcomputece_resource_sdk.go:
     id: 834a6a05996d
-    last_write_checksum: sha1:5df09d5c0e9ec1c32a475a319bbf8ee3986ec6f2
+    last_write_checksum: sha1:ac5377850cff3e60ff2b0d73c2eabea12bdafbe1
     pristine_git_object: 2200507ea00d48e6fa7ee4f3f2e51571f17226c3
   internal/provider/orgs_resource.go:
     id: 28df60f6d9c9
@@ -632,7 +632,7 @@ trackedFiles:
     last_write_checksum: sha1:2d307f6ad9029a4dd900dac1e440f4c3c4891e4b
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
-    last_write_checksum: sha1:072135eb80839997b86a2ff3720f06507e34abd2
+    last_write_checksum: sha1:4c8120e981fa1baf05f4cbde6135c64e35b4e9d6
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
     last_write_checksum: sha1:72d66982bbd71fb5e43a21431a190a275e5e40fa
@@ -655,7 +655,7 @@ trackedFiles:
     pristine_git_object: 8271b7fae7ec72fa236df95b6cb1c021ff466b99
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:4e2f90b0228aeaa9210f7fb77417afe45d8aeb8f
+    last_write_checksum: sha1:9aa93ed72943f4e047ba466823ed939ba3353b18
     pristine_git_object: 6c768261d1bb7b8f84d2db80197389871642d002
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -1043,7 +1043,7 @@ trackedFiles:
     pristine_git_object: eeb2138186ead7a043a4156ca999876ae1ef98ad
   internal/sdk/computeenvs.go:
     id: 966f951685a1
-    last_write_checksum: sha1:4c3b513c0e185013ca297a0daa7c497eb6cfa19a
+    last_write_checksum: sha1:9a979c1b6a98e6b01bca895fb662ad95248bb935
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
@@ -2063,10 +2063,20 @@ trackedFiles:
     id: fa6cffd64c4c
     last_write_checksum: sha1:bba70cfd8942122760264619f67fb72772b0e1d5
     pristine_git_object: ccdb6e36db8c9db4a5ab14e083ea970b5ae7a07a
+  internal/sdk/models/operations/updateawsbatchce.go:
+    last_write_checksum: sha1:8f36f26ef71c678264bf30509e012903e9410b79
+  internal/sdk/models/operations/updateawscloudce.go:
+    last_write_checksum: sha1:5b93fb2e3dcbde09b7b7caf357cebaa1ec0b7405
+  internal/sdk/models/operations/updateawscomputeenv.go:
+    last_write_checksum: sha1:95bc4574aa754432544eaec4232cf495cd6af1cc
   internal/sdk/models/operations/updateawscredentials.go:
     id: e8911e4f76af
     last_write_checksum: sha1:150772a2b3263175fad51346ced94d913018a458
     pristine_git_object: 3e2391c515076b6d3c87c79685bf5d033d1b7833
+  internal/sdk/models/operations/updateazurebatchce.go:
+    last_write_checksum: sha1:70c91d6f6f278da09c20cae37c558c6fbebd59c6
+  internal/sdk/models/operations/updateazurecloudce.go:
+    last_write_checksum: sha1:4ae77314a211e47aefe08defaabcbfd05d9a13c0
   internal/sdk/models/operations/updateazurecloudcredentials.go:
     last_write_checksum: sha1:c3f8e7da5d9155e72fa2087125a18c3470ebcbf0
   internal/sdk/models/operations/updateazurecredentials.go:
@@ -2121,6 +2131,10 @@ trackedFiles:
     id: 4b4d6754cd64
     last_write_checksum: sha1:291da8255dd5fc25ba2f4ebb56fc8890e87afbd4
     pristine_git_object: 8e81d37d107dc0cb14ed0ba599bbc9b3ddbcfb9e
+  internal/sdk/models/operations/updategcpbatchce.go:
+    last_write_checksum: sha1:1d5a30e02136104d139111e5d29f0cbedc69885d
+  internal/sdk/models/operations/updategcpcloudce.go:
+    last_write_checksum: sha1:79eae38fd45fbf2bdc92eff2d054a36b76d16bfb
   internal/sdk/models/operations/updategiteacredentials.go:
     id: e445df842b48
     last_write_checksum: sha1:44613491091e9a58d37c897b9bd7e8c96ef30ea7
@@ -2145,6 +2159,8 @@ trackedFiles:
     id: 05d3f0b86579
     last_write_checksum: sha1:0fe8e503332fa016bd2f76e8b3423a5ac3a5e778
     pristine_git_object: 772478ab423b2082b92ec3801415300156851a49
+  internal/sdk/models/operations/updatemanagedcomputece.go:
+    last_write_checksum: sha1:cc28017783009559796b09742e82e0cca96e522b
   internal/sdk/models/operations/updatemanagedcredentials.go:
     id: b23eb77587f3
     last_write_checksum: sha1:1fa7366b35dcf5c0bf1a2c8d0b40c0ecb9f5333b
@@ -7148,4 +7164,100 @@ examples:
           application/json: {"message": "<value>"}
         "409":
           application/json: {}
+  UpdateAWSComputeEnv:
+    speakeasy-default-update-AWS-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 851760
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAWSBatchCE:
+    speakeasy-default-update-AWS-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 256457
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAwsCloudCE:
+    speakeasy-default-update-aws-cloud-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 159779
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAzureBatchCE:
+    speakeasy-default-update-azure-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 449522
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAzureCloudCE:
+    speakeasy-default-update-azure-cloud-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 72588
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGCPBatchCE:
+    speakeasy-default-update-GCP-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 744253
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGCPCloudCE:
+    speakeasy-default-update-GCP-cloud-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 107919
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedComputeCE:
+    speakeasy-default-update-managed-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 99706
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

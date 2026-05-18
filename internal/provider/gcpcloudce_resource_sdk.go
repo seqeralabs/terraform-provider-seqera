@@ -144,6 +144,31 @@ func (r *GCPCloudCEResourceModel) ToOperationsDescribeGCPCloudCERequest(ctx cont
 	return &out, diags
 }
 
+func (r *GCPCloudCEResourceModel) ToOperationsUpdateGCPCloudCERequest(ctx context.Context) (*operations.UpdateGCPCloudCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateGCPCloudCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *GCPCloudCEResourceModel) ToSharedCreateGCPCloudCERequest(ctx context.Context) (*shared.CreateGCPCloudCERequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -369,6 +394,36 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		LastUsed:      lastUsed,
 		Deleted:       deleted,
 		Config:        config,
+	}
+
+	return &out, diags
+}
+
+func (r *GCPCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

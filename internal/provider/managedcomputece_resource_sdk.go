@@ -156,6 +156,31 @@ func (r *ManagedComputeCEResourceModel) ToOperationsDescribeManagedComputeCERequ
 	return &out, diags
 }
 
+func (r *ManagedComputeCEResourceModel) ToOperationsUpdateManagedComputeCERequest(ctx context.Context) (*operations.UpdateManagedComputeCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateManagedComputeCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *ManagedComputeCEResourceModel) ToSharedConfig(ctx context.Context) (*shared.Config, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -347,6 +372,22 @@ func (r *ManagedComputeCEResourceModel) ToSharedManagedComputeCEComputeConfigInp
 		LastUsed:    lastUsed,
 		Deleted:     deleted,
 		Config:      *config,
+	}
+
+	return &out, diags
+}
+
+func (r *ManagedComputeCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		Name: name,
 	}
 
 	return &out, diags

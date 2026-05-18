@@ -148,13 +148,13 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 ### Required
 
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
-- `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
-- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
+- `credentials_id` (String) AWS credentials identifier
+- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
-- `description` (String) Optional description of the compute environment. Requires replacement if changed.
+- `description` (String) Optional description of the compute environment
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

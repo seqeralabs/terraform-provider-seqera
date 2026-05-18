@@ -193,6 +193,56 @@ actions:
                     $ref: "#/components/schemas/ErrorResponse"
           security:
             - BearerAuth: []
+        put:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: ManagedComputeCE#update
+          x-speakeasy-name-override: UpdateManagedComputeCE
+          summary: Update Seqera Compute compute environment
+          description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+          tags:
+            - compute-envs
+          operationId: UpdateManagedComputeCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: Compute environment update request
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UpdateComputeEnvRequest"
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Duplicate element
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
         delete:
           x-speakeasy-entity-operation:
             terraform-datasource: null
@@ -259,7 +309,6 @@ actions:
             type: string
             pattern: '^[a-zA-Z0-9_-]+$'
             description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-            x-speakeasy-param-force-new: true
           description:
             type: string
             description: Optional description of the compute environment
