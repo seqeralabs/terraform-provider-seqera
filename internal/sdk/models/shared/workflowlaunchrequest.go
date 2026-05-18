@@ -18,7 +18,7 @@ type WorkflowLaunchRequest struct {
 	MainScript *string `json:"mainScript,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
-	Pipeline         *string `json:"pipeline,omitempty"`
+	Pipeline         string  `json:"pipeline"`
 	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
 	// Script to run after pipeline execution
 	PostRunScript *string `json:"postRunScript,omitempty"`
@@ -104,9 +104,9 @@ func (w *WorkflowLaunchRequest) GetParamsText() *string {
 	return w.ParamsText
 }
 
-func (w *WorkflowLaunchRequest) GetPipeline() *string {
+func (w *WorkflowLaunchRequest) GetPipeline() string {
 	if w == nil {
-		return nil
+		return ""
 	}
 	return w.Pipeline
 }
