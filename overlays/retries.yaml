@@ -1,0 +1,42 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Retry Policy Overlay
+  version: 0.0.0
+
+# Sets a global retry policy for all SDK calls. Without retries, transient
+# failures (connection timeouts, 502/503/504, rate limits) cause
+# `terraform apply` to abort mid-create — partial creates succeed
+# server-side but the resource isn't captured in state, leaving orphan
+# rows that fail re-apply with HTTP 409 "already exists".
+#
+# Retried automatically:
+#   - Network errors (connection refused, DNS failure, EOF, timeouts)
+#   - HTTP 502 Bad Gateway
+#   - HTTP 503 Service Unavailable
+#   - HTTP 504 Gateway Timeout
+#   - HTTP 429 Too Many Requests (rate-limited)
+#
+# NOT retried:
+#   - 4xx other than 429 (bad request, auth, not found, conflict — deterministic)
+#   - HTTP 500 Internal Server Error (could be deterministic; retrying risks
+#     making partial-create orphans worse)
+#
+# Backoff: exponential, 500ms → 30s per attempt, total cap 5 minutes.
+
+actions:
+  - target: $
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500
+          maxInterval: 30000
+          maxElapsedTime: 300000
+          exponent: 1.5
+        statusCodes:
+          - "429"
+          - "502"
+          - "503"
+          - "504"
+        retryConnectionErrors: true

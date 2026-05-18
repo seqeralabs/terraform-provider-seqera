@@ -41,6 +41,7 @@ sources:
             - location: overlays/pipelines.yaml
             - location: overlays/primary-compute-env.yaml
             - location: overlays/required.yaml
+            - location: overlays/retries.yaml
             - location: overlays/schema-fixes.yaml
             - location: overlays/speakeasy.yaml
             - location: overlays/studios.yaml
