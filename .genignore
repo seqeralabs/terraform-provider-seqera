@@ -17,6 +17,7 @@ internal/validators/stringvalidators/bitbucket_password_validator.go
 internal/validators/stringvalidators/bitbucket_token_validator.go
 internal/validators/stringvalidators/credentials_config_validator.go
 internal/validators/stringvalidators/aws_credential_keys_validator.go
+internal/validators/stringvalidators/run_script_size_validator.go
 internal/validators/stringvalidators/google_credential_keys_validator.go
 internal/validators/stringvalidators/instance_type_size_validator.go
 internal/validators/stringvalidators/seqera_compute_region_validator.go

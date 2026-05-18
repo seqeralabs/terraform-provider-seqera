@@ -237,6 +237,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -245,6 +248,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -910,6 +916,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -918,6 +927,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1253,6 +1265,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1261,6 +1276,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1688,6 +1706,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1696,6 +1717,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1947,6 +1971,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1955,6 +1982,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -2200,6 +2230,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2208,6 +2241,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -2479,6 +2515,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2487,6 +2526,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -2848,6 +2890,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2856,6 +2901,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
@@ -3110,6 +3158,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3118,6 +3169,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
@@ -3351,6 +3405,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3359,6 +3416,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"preemptible": schema.BoolAttribute{
 										Computed: true,
@@ -3608,6 +3668,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3616,6 +3679,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -3844,6 +3910,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3852,6 +3921,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"wave_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -4047,6 +4119,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4055,6 +4130,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -4250,6 +4328,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4258,6 +4339,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -4412,6 +4496,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4420,6 +4507,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -4602,6 +4692,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4610,6 +4703,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -4797,6 +4893,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4805,6 +4904,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.RunScriptSizeValidator(),
+										},
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,

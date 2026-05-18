@@ -762,6 +762,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						MarkdownDescription: `Bash script to run after workflow execution completes.` + "\n" +
 							`Use for cleanup, archiving results, sending notifications, etc.` + "\n" +
 							`Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"pre_run_script": schema.StringAttribute{
 						Computed: true,
@@ -773,6 +776,9 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						MarkdownDescription: `Bash script to run before workflow execution begins.` + "\n" +
 							`Use for environment setup, loading modules, downloading reference data, etc.` + "\n" +
 							`Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"region": schema.StringAttribute{
 						Required: true,

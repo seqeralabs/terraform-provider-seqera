@@ -215,12 +215,14 @@ actions:
         #!/bin/bash
         echo "Starting workflow execution"
         aws s3 sync s3://my-bucket/data ./data
+      x-speakeasy-plan-validators: RunScriptSizeValidator
   - target: $.components.schemas.WorkflowLaunchRequest.properties.postRunScript
     update:
       example: |
         #!/bin/bash
         echo "Workflow completed"
         aws s3 sync ./results s3://my-bucket/results
+      x-speakeasy-plan-validators: RunScriptSizeValidator
   - target: $.components.schemas.WorkflowLaunchRequest.properties.mainScript
     update:
       example: "main.nf"

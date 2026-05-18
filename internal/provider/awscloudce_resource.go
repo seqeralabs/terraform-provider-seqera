@@ -375,6 +375,9 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"pre_run_script": schema.StringAttribute{
 						Computed: true,
@@ -384,6 +387,9 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
 					},
 					"region": schema.StringAttribute{
 						Required: true,

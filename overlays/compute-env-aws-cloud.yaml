@@ -432,3 +432,13 @@ actions:
           - github.com/hashicorp/terraform-plugin-framework/types/basetypes
         schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
         valueType: basetypes.ListValue
+
+  # Plan-time soft-warn when pre/post-run scripts exceed Platform Cloud's
+  # 1024-byte limit. Enterprise installs can raise the limit via platform
+  # configuration, so this stays a Warning rather than an Error.
+  - target: $.components.schemas.AwsCloudConfig.properties.preRunScript
+    update:
+      x-speakeasy-plan-validators: RunScriptSizeValidator
+  - target: $.components.schemas.AwsCloudConfig.properties.postRunScript
+    update:
+      x-speakeasy-plan-validators: RunScriptSizeValidator
