@@ -168,17 +168,9 @@ actions:
   # ============================================================================
   # FORCE REPLACEMENT ON CHANGES
   # ============================================================================
-  # Most compute environment fields should trigger replacement when changed
-  # Exception: name can be updated in-place
-
-  # NOTE: name field does NOT have force-new - it can be updated in-place
-  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.description
-    update:
-      x-speakeasy-param-force-new: true
+  # name, description, credentialsId update in place via PUT /compute-envs/{id}.
+  # All other top-level fields force replacement.
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.platform
-    update:
-      x-speakeasy-param-force-new: true
-  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.credentialsId
     update:
       x-speakeasy-param-force-new: true
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.config

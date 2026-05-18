@@ -132,18 +132,11 @@ Import format: workspace_id/dataset_id/version (e.g., "12345/my-dataset/1")
 }
 
 func (r *Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
-	if req.ProviderData == nil {
-		return
+	client, diags := common.ConfigureClient(req.ProviderData)
+	resp.Diagnostics.Append(diags...)
+	if client != nil {
+		r.client = client
 	}
-	client, ok := req.ProviderData.(*sdk.Seqera)
-	if !ok {
-		resp.Diagnostics.AddError(
-			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *sdk.Seqera, got: %T.", req.ProviderData),
-		)
-		return
-	}
-	r.client = client
 }
 
 func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -185,7 +178,7 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		return
 	}
 	if uploadRes.StatusCode != 200 || uploadRes.UploadDatasetVersionResponse == nil || uploadRes.UploadDatasetVersionResponse.Version == nil {
-		resp.Diagnostics.AddError("Unexpected API response", common.DebugResponse(uploadRes.RawResponse))
+		common.AddUnexpectedStatus(&resp.Diagnostics, "uploading dataset version", uploadRes.RawResponse)
 		return
 	}
 
@@ -289,7 +282,7 @@ func (r *Resource) findVersion(ctx context.Context, workspaceID int64, datasetID
 		return nil, err
 	}
 	if listRes.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code %d listing dataset versions", listRes.StatusCode)
+		return nil, common.UnexpectedStatusErr("listing dataset versions", listRes.RawResponse)
 	}
 	if listRes.ListDatasetVersionsResponse == nil {
 		return nil, fmt.Errorf("empty response listing dataset versions")

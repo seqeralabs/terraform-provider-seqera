@@ -208,6 +208,31 @@ func (r *AWSComputeEnvResourceModel) ToOperationsDescribeAWSComputeEnvRequest(ct
 	return &out, diags
 }
 
+func (r *AWSComputeEnvResourceModel) ToOperationsUpdateAWSComputeEnvRequest(ctx context.Context) (*operations.UpdateAWSComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateAWSComputeEnvRequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx context.Context) (*shared.AWSComputeEnvComputeConfigInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -683,6 +708,36 @@ func (r *AWSComputeEnvResourceModel) ToSharedCreateAWSComputeEnvRequest(ctx cont
 	out := shared.CreateAWSComputeEnvRequest{
 		ComputeEnv: computeEnv,
 		LabelIds:   labelIds,
+	}
+
+	return &out, diags
+}
+
+func (r *AWSComputeEnvResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

@@ -174,6 +174,31 @@ func (r *AwsCloudCEResourceModel) ToOperationsDescribeAwsCloudCERequest(ctx cont
 	return &out, diags
 }
 
+func (r *AwsCloudCEResourceModel) ToOperationsUpdateAwsCloudCERequest(ctx context.Context) (*operations.UpdateAwsCloudCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateAwsCloudCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx context.Context) (*shared.AwsCloudCEComputeConfigInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -452,6 +477,36 @@ func (r *AwsCloudCEResourceModel) ToSharedCreateAwsCloudCERequest(ctx context.Co
 	out := shared.CreateAwsCloudCERequest{
 		ComputeEnv: computeEnv,
 		LabelIds:   labelIds,
+	}
+
+	return &out, diags
+}
+
+func (r *AwsCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags

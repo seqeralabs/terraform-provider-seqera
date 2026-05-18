@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	compute_env_enabled "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/compute_env_enabled"
 	custom_role_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/custom_role_data"
 	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
 	organization_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data"
@@ -180,6 +181,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		team_member.NewResource,
 		dataset_version.NewResource,
 		pipeline_schema.NewResource,
+		compute_env_enabled.NewResource,
 	}
 }
 

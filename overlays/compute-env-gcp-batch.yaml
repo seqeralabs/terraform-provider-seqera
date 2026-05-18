@@ -161,6 +161,56 @@ actions:
                     $ref: "#/components/schemas/ErrorResponse"
           security:
             - BearerAuth: []
+        put:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: GCPBatchCE#update
+          x-speakeasy-name-override: UpdateGCPBatchCE
+          summary: Update GCP Batch compute environment
+          description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+          tags:
+            - compute-envs
+          operationId: UpdateGCPBatchCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: Compute environment update request
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UpdateComputeEnvRequest"
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Duplicate element
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
         delete:
           x-speakeasy-entity-operation:
             terraform-datasource: null
@@ -238,11 +288,9 @@ actions:
             type: string
             pattern: '^[a-zA-Z0-9_-]+$'
             description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
-            x-speakeasy-param-force-new: true
           description:
             type: string
             description: Optional description of the compute environment
-            x-speakeasy-param-computed: false
           platform:
             type: string
             enum:
@@ -321,16 +369,15 @@ actions:
   # ============================================================================
   # FORCE-REPLACEMENT ON TOP-LEVEL FIELDS
   # ============================================================================
-  # NOTE: name field does NOT have force-new — it can be updated in-place.
+  # NOTE: name, description, credentialsId update in-place via
+  # PUT /compute-envs/{computeEnvId}. Updating credentials support varies by
+  # Platform release and may not be possible without deleting the existing
+  # credential first; Terraform's destroy-before-create dependency graph
+  # handles this naturally when the old `seqera_credential` resource is also
+  # being removed.
   # All other top-level fields force replacement on change.
 
-  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.description
-    update:
-      x-speakeasy-param-force-new: true
   - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.platform
-    update:
-      x-speakeasy-param-force-new: true
-  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.credentialsId
     update:
       x-speakeasy-param-force-new: true
   - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.workspaceId

@@ -191,6 +191,31 @@ func (r *AzureBatchCEResourceModel) ToOperationsDescribeAzureBatchCERequest(ctx 
 	return &out, diags
 }
 
+func (r *AzureBatchCEResourceModel) ToOperationsUpdateAzureBatchCERequest(ctx context.Context) (*operations.UpdateAzureBatchCERequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
+	diags.Append(updateComputeEnvRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateAzureBatchCERequest{
+		ComputeEnvID:            computeEnvID,
+		WorkspaceID:             workspaceID,
+		UpdateComputeEnvRequest: *updateComputeEnvRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx context.Context) (*shared.AzureBatchCEComputeConfigInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -587,6 +612,36 @@ func (r *AzureBatchCEResourceModel) ToSharedCreateAzureBatchCERequest(ctx contex
 	out := shared.CreateAzureBatchCERequest{
 		ComputeEnv: computeEnv,
 		LabelIds:   labelIds,
+	}
+
+	return &out, diags
+}
+
+func (r *AzureBatchCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		CredentialsID: credentialsID,
+		Description:   description,
+		Name:          name,
 	}
 
 	return &out, diags
