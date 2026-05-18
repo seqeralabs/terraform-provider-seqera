@@ -45,8 +45,6 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config = &tfTypes.GoogleCloudConfig{}
 		r.Config.Arm64Enabled = types.BoolPointerValue(resp.Config.Arm64Enabled)
 		r.Config.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGb))
-		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
-		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
 		for _, environmentItem := range resp.Config.Environment {
@@ -276,12 +274,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			Value:   value,
 		})
 	}
-	enableFusion := new(bool)
-	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
-		*enableFusion = r.Config.EnableFusion.ValueBool()
-	} else {
-		enableFusion = nil
-	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -336,12 +328,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		serviceAccountEmail = nil
 	}
-	enableWave := new(bool)
-	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
-		*enableWave = r.Config.EnableWave.ValueBool()
-	} else {
-		enableWave = nil
-	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
 		*workDir = r.Config.WorkDir.ValueString()
@@ -358,7 +344,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		Arm64Enabled:        arm64Enabled,
 		BootDiskSizeGb:      bootDiskSizeGb,
 		Environment:         environment,
-		EnableFusion:        enableFusion,
 		GpuEnabled:          gpuEnabled,
 		ImageID:             imageID,
 		InstanceType:        instanceType,
@@ -368,7 +353,6 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		ProjectID:           projectID,
 		Region:              region,
 		ServiceAccountEmail: serviceAccountEmail,
-		EnableWave:          enableWave,
 		WorkDir:             workDir,
 		Zone:                zone,
 	}

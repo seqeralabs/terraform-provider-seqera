@@ -132,16 +132,6 @@ Optional:
 When enabled, ARM-based machines will be selected for cost savings.
 Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances. Requires replacement if changed.
-- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
-speeding up most operations.
-
-Requires `enable_wave = true`.
-Requires replacement if changed.
-- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
-Nextflow pipelines via the Wave containers service.
-
-Required when `enable_fusion` is true.
-Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment.
 Each variable can target the head node, compute nodes, or both.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))

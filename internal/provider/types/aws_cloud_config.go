@@ -12,8 +12,6 @@ type AwsCloudConfig struct {
 	Arm64Enabled              types.Bool          `tfsdk:"arm64_enabled"`
 	EbsBootSize               types.Int32         `tfsdk:"ebs_boot_size"`
 	Ec2KeyPair                types.String        `tfsdk:"ec2_key_pair"`
-	EnableFusion              types.Bool          `tfsdk:"enable_fusion"`
-	EnableWave                types.Bool          `tfsdk:"enable_wave"`
 	Environment               []ConfigEnvVariable `tfsdk:"environment"`
 	GpuEnabled                types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID                   types.String        `tfsdk:"image_id"`
