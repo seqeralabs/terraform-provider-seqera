@@ -60,7 +60,7 @@ func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.Met
 
 func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "**Note:** This is a workspace-scoped resource for Azure Batch\ncredentials using **shared-key** authentication\n(`provider = \"azure\"`). For other Azure credential types use the\ngeneric `seqera_credential` resource:\n\n- **Entra service principal** (Azure Batch CE, manual mode):\n  `provider_type = \"azure_entra\"` with `keys.azure_entra`.\n- **Cloud service principal** (Azure Cloud / SingleVM CE):\n  `provider_type = \"azure-cloud\"` with `keys.azure_cloud`.\n\nDedicated `seqera_azure_entra_credential` and\n`seqera_azure_cloud_credential` resources are planned but not yet\navailable.\n\nAlthough this schema exposes `tenant_id`, `client_id`, and\n`client_secret`, the credential is always stored on Seqera with\n`provider = \"azure\"` — meaning service-principal credentials\ncreated here will **not** appear in the compute-environment\npicker for Azure Batch (Entra) or Azure Cloud CEs. Use the\ngeneric resource for those modes.\n",
+		MarkdownDescription: "Manage Azure Batch credentials using shared-key authentication.\nThis is the credential type required for Azure Batch compute\nenvironments in Forge mode.\n\nFor other Azure credential types, use a dedicated typed resource:\n\n- **Azure Batch with Entra service principal**: `seqera_azure_entra_credential`\n- **Azure Cloud (SingleVM) with Entra service principal**: `seqera_azure_cloud_credential`\n\nThe `tenant_id`, `client_id`, and `client_secret` fields are kept\nfor backwards compatibility with earlier provider releases but\nhave no effect on this credential type. Use the typed resources\nabove for service-principal credentials so they surface in the\ncorrect compute-environment picker.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"batch_key": schema.StringAttribute{
@@ -114,7 +114,7 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`azure`),
-				Description: `Cloud provider type (automatically set to "azure"). Default: "azure"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "azure"`,
 			},
 			"storage_key": schema.StringAttribute{
 				Optional:    true,

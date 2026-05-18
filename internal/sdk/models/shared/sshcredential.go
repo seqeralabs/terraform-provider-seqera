@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// SSHCredentialProviderType - Cloud provider type (automatically set to "ssh")
+// SSHCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type SSHCredentialProviderType string
 
 const (
@@ -79,7 +79,7 @@ type SSHCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "ssh")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *SSHCredentialProviderType `default:"ssh" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -187,7 +187,7 @@ type SSHCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "ssh")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *SSHCredentialProviderType `default:"ssh" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

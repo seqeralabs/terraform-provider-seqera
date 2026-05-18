@@ -14,6 +14,8 @@ description: |-
 
 - `seqera_aws_credential`
 - `seqera_azure_credential`
+- `seqera_azure_cloud_credential`
+- `seqera_azure_entra_credential`
 - `seqera_bitbucket_credential`
 - `seqera_codecommit_credential`
 - `seqera_container_registry_credential`

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// GoogleCredentialProviderType - Cloud provider type (automatically set to "google")
+// GoogleCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type GoogleCredentialProviderType string
 
 const (
@@ -97,7 +97,7 @@ type GoogleCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "google")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -232,7 +232,7 @@ type GoogleCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "google")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

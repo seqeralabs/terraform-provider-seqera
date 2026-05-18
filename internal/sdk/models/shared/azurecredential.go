@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AzureCredentialProviderType - Cloud provider type (automatically set to "azure")
+// AzureCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type AzureCredentialProviderType string
 
 const (
@@ -33,19 +33,19 @@ func (e *AzureCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// Discriminator - Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-type Discriminator string
+// AzureCredentialDiscriminator - Authentication mode discriminator (azure, azure-entra, or azure-cloud)
+type AzureCredentialDiscriminator string
 
 const (
-	DiscriminatorAzure      Discriminator = "azure"
-	DiscriminatorAzureEntra Discriminator = "azure-entra"
-	DiscriminatorAzureCloud Discriminator = "azure-cloud"
+	AzureCredentialDiscriminatorAzure      AzureCredentialDiscriminator = "azure"
+	AzureCredentialDiscriminatorAzureEntra AzureCredentialDiscriminator = "azure-entra"
+	AzureCredentialDiscriminatorAzureCloud AzureCredentialDiscriminator = "azure-cloud"
 )
 
-func (e Discriminator) ToPointer() *Discriminator {
+func (e AzureCredentialDiscriminator) ToPointer() *AzureCredentialDiscriminator {
 	return &e
 }
-func (e *Discriminator) UnmarshalJSON(data []byte) error {
+func (e *AzureCredentialDiscriminator) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -56,16 +56,16 @@ func (e *Discriminator) UnmarshalJSON(data []byte) error {
 	case "azure-entra":
 		fallthrough
 	case "azure-cloud":
-		*e = Discriminator(v)
+		*e = AzureCredentialDiscriminator(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for Discriminator: %v", v)
+		return fmt.Errorf("invalid value for AzureCredentialDiscriminator: %v", v)
 	}
 }
 
 type AzureCredentialKeys struct {
 	// Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-	Discriminator *Discriminator `default:"azure" json:"discriminator"`
+	Discriminator *AzureCredentialDiscriminator `default:"azure" json:"discriminator"`
 	// Azure Batch account name (required)
 	BatchName string `json:"batchName"`
 	// Azure Blob Storage account name (required)
@@ -93,7 +93,7 @@ func (a *AzureCredentialKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredentialKeys) GetDiscriminator() *Discriminator {
+func (a *AzureCredentialKeys) GetDiscriminator() *AzureCredentialDiscriminator {
 	if a == nil {
 		return nil
 	}
@@ -154,7 +154,7 @@ type AzureCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "azure")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *AzureCredentialProviderType `default:"azure" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -236,7 +236,7 @@ func (a *AzureCredential) GetKeys() AzureCredentialKeys {
 
 type AzureCredentialKeysOutput struct {
 	// Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-	Discriminator *Discriminator `default:"azure" json:"discriminator"`
+	Discriminator *AzureCredentialDiscriminator `default:"azure" json:"discriminator"`
 	// Azure Batch account name (required)
 	BatchName string `json:"batchName"`
 	// Azure Blob Storage account name (required)
@@ -254,7 +254,7 @@ func (a *AzureCredentialKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredentialKeysOutput) GetDiscriminator() *Discriminator {
+func (a *AzureCredentialKeysOutput) GetDiscriminator() *AzureCredentialDiscriminator {
 	if a == nil {
 		return nil
 	}
@@ -280,7 +280,7 @@ type AzureCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "azure")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *AzureCredentialProviderType `default:"azure" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

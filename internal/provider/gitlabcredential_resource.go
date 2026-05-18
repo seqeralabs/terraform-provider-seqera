@@ -84,7 +84,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`gitlab`),
-				Description: `Cloud provider type (automatically set to "gitlab"). Default: "gitlab"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "gitlab"`,
 			},
 			"token": schema.StringAttribute{
 				Required:    true,

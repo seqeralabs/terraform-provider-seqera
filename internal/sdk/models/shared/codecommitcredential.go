@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// CodecommitCredentialProviderType - Cloud provider type (automatically set to "codecommit")
+// CodecommitCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type CodecommitCredentialProviderType string
 
 const (
@@ -59,7 +59,7 @@ type CodecommitCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "codecommit")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *CodecommitCredentialProviderType `default:"codecommit" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -165,7 +165,7 @@ type CodecommitCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "codecommit")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *CodecommitCredentialProviderType `default:"codecommit" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

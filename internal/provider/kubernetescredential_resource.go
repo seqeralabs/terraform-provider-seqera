@@ -92,7 +92,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`k8s`),
-				Description: `Cloud provider type (automatically set to "k8s"). Default: "k8s"`,
+				Description: `Cloud provider type. Always set by the provider for this resource. Default: "k8s"`,
 			},
 			"token": schema.StringAttribute{
 				Optional:    true,

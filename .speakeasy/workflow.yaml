@@ -20,6 +20,8 @@ sources:
             - location: overlays/forged-resources-fix.yaml
             - location: overlays/credentials-aws.yaml
             - location: overlays/credentials-azure.yaml
+            - location: overlays/credentials-azure-entra.yaml
+            - location: overlays/credentials-azure-cloud.yaml
             - location: overlays/credentials-bitbucket.yaml
             - location: overlays/credentials-codecommit.yaml
             - location: overlays/credentials-container-registry.yaml

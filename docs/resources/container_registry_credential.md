@@ -77,7 +77,7 @@ resource "seqera_container_registry_credential" "private" {
 ### Read-Only
 
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `provider_type` (String) Cloud provider type (automatically set to "container-reg"). Default: "container-reg"
+- `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "container-reg"
 
 ## Import
 

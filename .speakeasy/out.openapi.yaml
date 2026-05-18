@@ -11508,6 +11508,376 @@ paths:
                 $ref: '#/components/schemas/DeleteCredentialsConflictResponse'
       security:
         - BearerAuth: []
+  /credentials#azure-entra:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureEntraCredential#create
+      x-speakeasy-name-override: CreateAzureEntraCredentials
+      summary: Create Azure Entra credentials
+      description: Creates new Azure Batch credentials authenticating via an Entra service principal in a workspace.
+      tags:
+        - credentials
+      operationId: CreateAzureEntraCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Azure Entra credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAzureEntraCredentialsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAzureEntraCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+  /credentials/{credentialsId}#azure-entra:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureEntraCredential#read
+      x-speakeasy-name-override: DescribeAzureEntraCredentials
+      summary: Describe Azure Entra credentials
+      description: Retrieves the details of the Azure Entra credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeAzureEntraCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeAzureEntraCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureEntraCredential#update
+      x-speakeasy-name-override: UpdateAzureEntraCredentials
+      summary: Update Azure Entra credentials
+      description: Updates the details of the Azure Entra credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateAzureEntraCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Azure Entra credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAzureEntraCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureEntraCredential#delete
+      x-speakeasy-name-override: DeleteAzureEntraCredentials
+      summary: Delete Azure Entra credentials
+      description: Deletes the Azure Entra credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteAzureEntraCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Running jobs block the deletion of this credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCredentialsConflictResponse'
+      security:
+        - BearerAuth: []
+  /credentials#azure-cloud:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCloudCredential#create
+      x-speakeasy-name-override: CreateAzureCloudCredentials
+      summary: Create Azure Cloud credentials
+      description: Creates new Azure Cloud (SingleVM) credentials authenticating via an Entra service principal in a workspace.
+      tags:
+        - credentials
+      operationId: CreateAzureCloudCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Azure Cloud credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAzureCloudCredentialsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAzureCloudCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+  /credentials/{credentialsId}#azure-cloud:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCloudCredential#read
+      x-speakeasy-name-override: DescribeAzureCloudCredentials
+      summary: Describe Azure Cloud credentials
+      description: Retrieves the details of the Azure Cloud credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeAzureCloudCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeAzureCloudCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCloudCredential#update
+      x-speakeasy-name-override: UpdateAzureCloudCredentials
+      summary: Update Azure Cloud credentials
+      description: Updates the details of the Azure Cloud credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateAzureCloudCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Azure Cloud credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAzureCloudCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCloudCredential#delete
+      x-speakeasy-name-override: DeleteAzureCloudCredentials
+      summary: Delete Azure Cloud credentials
+      description: Deletes the Azure Cloud credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteAzureCloudCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Running jobs block the deletion of this credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCredentialsConflictResponse'
+      security:
+        - BearerAuth: []
   /credentials#bitbucket:
     post:
       x-speakeasy-entity-operation:
@@ -23314,7 +23684,7 @@ components:
           enum:
             - aws
           default: aws
-          description: Cloud provider type (automatically set to "aws")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -23441,7 +23811,7 @@ components:
           enum:
             - azure
           default: azure
-          description: Cloud provider type (automatically set to "azure")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -23473,26 +23843,20 @@ components:
           x-speakeasy-entity: AzureCredential
           x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: |
-            **Note:** This is a workspace-scoped resource for Azure Batch
-            credentials using **shared-key** authentication
-            (`provider = "azure"`). For other Azure credential types use the
-            generic `seqera_credential` resource:
+            Manage Azure Batch credentials using shared-key authentication.
+            This is the credential type required for Azure Batch compute
+            environments in Forge mode.
 
-            - **Entra service principal** (Azure Batch CE, manual mode):
-              `provider_type = "azure_entra"` with `keys.azure_entra`.
-            - **Cloud service principal** (Azure Cloud / SingleVM CE):
-              `provider_type = "azure-cloud"` with `keys.azure_cloud`.
+            For other Azure credential types, use a dedicated typed resource:
 
-            Dedicated `seqera_azure_entra_credential` and
-            `seqera_azure_cloud_credential` resources are planned but not yet
-            available.
+            - **Azure Batch with Entra service principal**: `seqera_azure_entra_credential`
+            - **Azure Cloud (SingleVM) with Entra service principal**: `seqera_azure_cloud_credential`
 
-            Although this schema exposes `tenant_id`, `client_id`, and
-            `client_secret`, the credential is always stored on Seqera with
-            `provider = "azure"` — meaning service-principal credentials
-            created here will **not** appear in the compute-environment
-            picker for Azure Batch (Entra) or Azure Cloud CEs. Use the
-            generic resource for those modes.
+            The `tenant_id`, `client_id`, and `client_secret` fields are kept
+            for backwards compatibility with earlier provider releases but
+            have no effect on this credential type. Use the typed resources
+            above for service-principal credentials so they surface in the
+            correct compute-environment picker.
           type: object
           required:
             - batchName
@@ -23587,6 +23951,279 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/AzureCredential'
+    AzureEntraCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          x-speakeasy-name-override: credentials_id
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          minLength: 2
+          maxLength: 99
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum:
+            - azure_entra
+          default: azure_entra
+          description: Cloud provider type. Always set by the provider for this resource.
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: AzureEntraCredential
+          x-speakeasy-entity-version: 1
+          x-speakeasy-terraform-resource-name: azure_entra_credential
+          x-speakeasy-entity-description: |
+            Manage Azure Batch credentials authenticated via a Microsoft Entra
+            service principal. Use this credential type for Azure Batch compute
+            environments configured in manual mode — Forge mode requires
+            shared-key credentials via `seqera_azure_credential`.
+
+            For Azure Cloud (SingleVM) CEs, use `seqera_azure_cloud_credential`
+            instead.
+          type: object
+          required:
+            - batchName
+            - storageName
+            - tenantId
+            - clientId
+            - clientSecret
+          properties:
+            discriminator:
+              type: string
+              description: Authentication mode discriminator.
+              enum:
+                - azure_entra
+              default: azure_entra
+              x-speakeasy-terraform-ignore: true
+              x-speakeasy-param-readonly: true
+            batchName:
+              type: string
+              description: Azure Batch account name.
+              example: myazurebatch
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: batch_name
+            storageName:
+              type: string
+              description: Azure Blob Storage account name.
+              example: myazurestorage
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: storage_name
+            tenantId:
+              type: string
+              description: Microsoft Entra tenant ID.
+              example: 00000000-0000-0000-0000-000000000000
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: tenant_id
+            clientId:
+              type: string
+              description: Microsoft Entra service principal client (application) ID.
+              example: 00000000-0000-0000-0000-000000000000
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: client_id
+            clientSecret:
+              type: string
+              description: Microsoft Entra service principal client secret.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
+              example: YourEntraClientSecretHere
+              x-speakeasy-name-override: client_secret
+              writeOnly: true
+    CreateAzureEntraCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureEntraCredential'
+    CreateAzureEntraCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateAzureEntraCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureEntraCredential'
+    DescribeAzureEntraCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureEntraCredential'
+    AzureCloudCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          x-speakeasy-name-override: credentials_id
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          minLength: 2
+          maxLength: 99
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum:
+            - azure-cloud
+          default: azure-cloud
+          description: Cloud provider type. Always set by the provider for this resource.
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: AzureCloudCredential
+          x-speakeasy-entity-version: 1
+          x-speakeasy-terraform-resource-name: azure_cloud_credential
+          x-speakeasy-entity-description: |
+            Manage Azure Cloud (SingleVM) credentials authenticated via a
+            Microsoft Entra service principal. Use this credential type for
+            Azure Cloud compute environments, which run Nextflow directly on
+            Azure VMs managed by Seqera Forge (no Azure Batch involvement).
+            Storage access is brokered through the same service principal,
+            so no separate storage key is required.
+
+            For Azure Batch with Entra service-principal auth, use
+            `seqera_azure_entra_credential`; for Azure Batch with shared-key
+            auth, use `seqera_azure_credential`.
+          type: object
+          required:
+            - subscriptionId
+            - storageName
+            - tenantId
+            - clientId
+            - clientSecret
+          properties:
+            discriminator:
+              type: string
+              description: Authentication mode discriminator.
+              enum:
+                - azure-cloud
+              default: azure-cloud
+              x-speakeasy-terraform-ignore: true
+              x-speakeasy-param-readonly: true
+            subscriptionId:
+              type: string
+              description: Azure subscription ID where Forge provisions VMs.
+              example: 00000000-0000-0000-0000-000000000000
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: subscription_id
+            storageName:
+              type: string
+              description: Azure Blob Storage account name used for work_dir.
+              example: myazurestorage
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: storage_name
+            tenantId:
+              type: string
+              description: Microsoft Entra tenant ID.
+              example: 00000000-0000-0000-0000-000000000000
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: tenant_id
+            clientId:
+              type: string
+              description: Microsoft Entra service principal client (application) ID.
+              example: 00000000-0000-0000-0000-000000000000
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: client_id
+            clientSecret:
+              type: string
+              description: Microsoft Entra service principal client secret.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
+              example: YourEntraClientSecretHere
+              x-speakeasy-name-override: client_secret
+              writeOnly: true
+    CreateAzureCloudCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureCloudCredential'
+    CreateAzureCloudCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateAzureCloudCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureCloudCredential'
+    DescribeAzureCloudCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/AzureCloudCredential'
     BitbucketCredential:
       required:
         - name
@@ -23611,7 +24248,7 @@ components:
           enum:
             - bitbucket
           default: bitbucket
-          description: Cloud provider type (automatically set to "bitbucket")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -23726,7 +24363,7 @@ components:
           enum:
             - codecommit
           default: codecommit
-          description: Cloud provider type (automatically set to "codecommit")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -23835,7 +24472,7 @@ components:
           enum:
             - container-reg
           default: container-reg
-          description: Cloud provider type (automatically set to "container-reg")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -23941,7 +24578,7 @@ components:
           enum:
             - google
           default: google
-          description: Cloud provider type (automatically set to "google")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24068,7 +24705,7 @@ components:
           enum:
             - gitea
           default: gitea
-          description: Cloud provider type (automatically set to "gitea")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24174,7 +24811,7 @@ components:
           enum:
             - github
           default: github
-          description: Cloud provider type (automatically set to "github")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24281,7 +24918,7 @@ components:
           enum:
             - gitlab
           default: gitlab
-          description: Cloud provider type (automatically set to "gitlab")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24387,7 +25024,7 @@ components:
           enum:
             - k8s
           default: k8s
-          description: Cloud provider type (automatically set to "k8s")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24497,7 +25134,7 @@ components:
           enum:
             - ssh
           default: ssh
-          description: Cloud provider type (automatically set to "ssh")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -24597,7 +25234,7 @@ components:
           enum:
             - tw-agent
           default: tw-agent
-          description: Cloud provider type (automatically set to "tw-agent")
+          description: Cloud provider type. Always set by the provider for this resource.
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:

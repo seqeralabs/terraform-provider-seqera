@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// ContainerRegistryCredentialProviderType - Cloud provider type (automatically set to "container-reg")
+// ContainerRegistryCredentialProviderType - Cloud provider type. Always set by the provider for this resource.
 type ContainerRegistryCredentialProviderType string
 
 const (
@@ -68,7 +68,7 @@ type ContainerRegistryCredential struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "container-reg")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *ContainerRegistryCredentialProviderType `default:"container-reg" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
@@ -174,7 +174,7 @@ type ContainerRegistryCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "container-reg")
+	// Cloud provider type. Always set by the provider for this resource.
 	ProviderType *ContainerRegistryCredentialProviderType `default:"container-reg" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`

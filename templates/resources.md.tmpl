@@ -1,6 +1,6 @@
 ---
 page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
-{{- if or (eq .Name "seqera_aws_credential") (eq .Name "seqera_azure_credential") (eq .Name "seqera_bitbucket_credential") (eq .Name "seqera_codecommit_credential") (eq .Name "seqera_container_registry_credential") (eq .Name "seqera_credential") (eq .Name "seqera_gitea_credential") (eq .Name "seqera_github_credential") (eq .Name "seqera_gitlab_credential") (eq .Name "seqera_google_credential") (eq .Name "seqera_kubernetes_credential") (eq .Name "seqera_ssh_credential") (eq .Name "seqera_tower_agent_credential") }}
+{{- if or (eq .Name "seqera_aws_credential") (eq .Name "seqera_azure_credential") (eq .Name "seqera_azure_cloud_credential") (eq .Name "seqera_azure_entra_credential") (eq .Name "seqera_bitbucket_credential") (eq .Name "seqera_codecommit_credential") (eq .Name "seqera_container_registry_credential") (eq .Name "seqera_credential") (eq .Name "seqera_gitea_credential") (eq .Name "seqera_github_credential") (eq .Name "seqera_gitlab_credential") (eq .Name "seqera_google_credential") (eq .Name "seqera_kubernetes_credential") (eq .Name "seqera_ssh_credential") (eq .Name "seqera_tower_agent_credential") }}
 subcategory: "Credentials"
 {{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_cloud_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_azure_batch_ce") (eq .Name "seqera_azure_cloud_ce") (eq .Name "seqera_compute_env") (eq .Name "seqera_gcp_batch_ce") (eq .Name "seqera_gcp_cloud_ce") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_primary_compute_env") }}
 subcategory: "Compute Environments"
@@ -45,6 +45,8 @@ State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/lang
 
 - `seqera_aws_credential`
 - `seqera_azure_credential`
+- `seqera_azure_cloud_credential`
+- `seqera_azure_entra_credential`
 - `seqera_bitbucket_credential`
 - `seqera_codecommit_credential`
 - `seqera_container_registry_credential`

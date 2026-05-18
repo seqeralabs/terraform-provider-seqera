@@ -2,8 +2,8 @@ speakeasyVersion: 1.763.1
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:bf561c3c18fd6f1fe232e074492bb1acefb7bcf4eccbef2ffb64a4421a81869f
-        sourceBlobDigest: sha256:ec8a3f6b0c4df327fb952faa5a463734f49f36c0dff6b38ab5068c7aaa81297e
+        sourceRevisionDigest: sha256:a17204e13df594465790200562229c13f796e76321d3b5de8dfc58e10dbde1ac
+        sourceBlobDigest: sha256:aa720f48e4a494a77cedf7cf97a68a2af9ebbe7dcb0c9b79d7e49cfebd838345
         tags:
             - latest
             - 1.153.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:bf561c3c18fd6f1fe232e074492bb1acefb7bcf4eccbef2ffb64a4421a81869f
-        sourceBlobDigest: sha256:ec8a3f6b0c4df327fb952faa5a463734f49f36c0dff6b38ab5068c7aaa81297e
+        sourceRevisionDigest: sha256:a17204e13df594465790200562229c13f796e76321d3b5de8dfc58e10dbde1ac
+        sourceBlobDigest: sha256:aa720f48e4a494a77cedf7cf97a68a2af9ebbe7dcb0c9b79d7e49cfebd838345
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -36,6 +36,8 @@ workflow:
                 - location: overlays/forged-resources-fix.yaml
                 - location: overlays/credentials-aws.yaml
                 - location: overlays/credentials-azure.yaml
+                - location: overlays/credentials-azure-entra.yaml
+                - location: overlays/credentials-azure-cloud.yaml
                 - location: overlays/credentials-bitbucket.yaml
                 - location: overlays/credentials-codecommit.yaml
                 - location: overlays/credentials-container-registry.yaml
