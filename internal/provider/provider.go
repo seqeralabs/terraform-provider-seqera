@@ -24,6 +24,8 @@ import (
 	pipeline_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_data"
 	pipeline_schema "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema"
 	pipeline_secret_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data"
+	pipeline_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_version"
+	pipeline_versions_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data"
 	team_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_data"
 	team_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member"
 	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
@@ -180,6 +182,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		team_member.NewResource,
 		dataset_version.NewResource,
 		pipeline_schema.NewResource,
+		pipeline_version.NewResource,
 	}
 }
 
@@ -196,6 +199,7 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		workspace_participant_data.NewDataSource,
 		pipeline_data.NewDataSource,
 		pipeline_secret_data.NewDataSource,
+		pipeline_versions_data.NewDataSource,
 	}
 }
 

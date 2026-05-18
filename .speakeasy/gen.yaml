@@ -32,7 +32,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.40.0-RC4
+  version: 0.40.0-RC5
   additionalActions: []
   additionalDataSources:
     - datasource: custom_role_data.NewDataSource
@@ -62,6 +62,9 @@ terraform:
     - datasource: pipeline_secret_data.NewDataSource
       importAlias: pipeline_secret_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data
+    - datasource: pipeline_versions_data.NewDataSource
+      importAlias: pipeline_versions_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data
   additionalDependencies: {}
   additionalEphemeralResources: []
   additionalFunctions: []
@@ -85,6 +88,9 @@ terraform:
     - importAlias: pipeline_schema
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema
       resource: pipeline_schema.NewResource
+    - importAlias: pipeline_version
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_version
+      resource: pipeline_version.NewResource
   allowUnknownFieldsInWeakUnions: false
   author: seqeralabs
   baseErrorName: SeqeraError

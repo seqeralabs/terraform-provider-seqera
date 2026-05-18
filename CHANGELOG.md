@@ -21,7 +21,38 @@ FEATURES:
 
   Migrations are only supported from the generic `seqera_compute_env` (no cross-cloud or cross-platform moves).
 
+- **Fine-grained access control (Cloud Pro / Enterprise v25.3+):** New surfaces for managing custom roles and assigning them via existing team / workspace-participant resources ([#205](https://github.com/seqeralabs/terraform-provider-seqera/pull/205)):
+
+  - `seqera_custom_role` (resource) — CRUD on org-scoped custom roles. `description` and `permissions` update in place; `name` change is force-new.
+  - `seqera_custom_role` (data source) — resolves both custom and predefined roles; `is_predefined` distinguishes them.
+  - `seqera_team` (data source) — by-name lookup, returns `team_id` and `members_count` for wiring teams into other resources without a hardcoded id.
+  - `seqera_permissions` (data source) — live grant catalogue with optional category filter plus convenience `names` / `categories` lists; pairs with `lifecycle.precondition` to fail plan-time on invalid permission strings before any API call.
+  - `seqera_workspace_participant` — drops the role enum so custom role names are accepted alongside predefined ones.
+
+  See the new guide at [docs/guides/fine-grained-access-control.md](docs/guides/fine-grained-access-control.md) for end-to-end usage and three archetype role templates.
+
+- **Pipeline version promotion and pinning.** New surfaces for declaring which version of a pipeline is the platform default and keeping it pinned against out-of-band UI changes:
+
+  - `seqera_pipeline_versions` (data source) — lists versions on a pipeline; optional `is_published` filter forwards to the platform's `?isPublished` query parameter to scope to drafts or published versions.
+  - `seqera_pipeline_version` (resource) — owns the `(name, is_default)` tuple of an existing version via `PUT /pipelines/{id}/versions/{versionId}/manage`. Renames are in place (same `version_id` and `hash`). `is_default = true` is always re-asserted on apply so out-of-band promotions in the UI are reverted at the next plan.
+
+  The resource intentionally does **not** create or delete versions — the platform's audit trail is immutable and the API has no create-version or delete-version endpoint. Drafts appear automatically when a versionable field on `seqera_pipeline` changes; this resource publishes them (by assigning a name) and pins which one is default. See the new guide at [docs/guides/pipeline-versioning.md](docs/guides/pipeline-versioning.md).
+
+- **New `seqera_pipeline_schema` resource for custom pipeline parameter schemas.** Wraps `POST /pipeline-schemas` and exposes the server-assigned `id` so it can be passed to `seqera_pipeline.launch.pipeline_schema_id`, populating the custom parameters form in the Launchpad. Read is trusted from state (rows are immutable server-side; the endpoint has no GET-by-id), updates to `schema_content` force replace, and `terraform destroy` is a no-op (no DELETE endpoint — the previous row is orphaned server-side). A new guide at [docs/guides/pipeline-schema-custom-upload.md](docs/guides/pipeline-schema-custom-upload.md) covers `file()` loading, URL fetch via `data.http`, and the nf-core checkout pattern. ([#184](https://github.com/seqeralabs/terraform-provider-seqera/pull/184))
+
+- **New typed Azure credential resources** ([#204](https://github.com/seqeralabs/terraform-provider-seqera/pull/204)). Splits the three Azure authentication modes previously conflated under `seqera_credential` with `provider_type = "azure"` into first-class resources with mode-specific schemas:
+
+  - `seqera_azure_credential` — Azure Batch shared key (`batch_name`, `storage_name`, `batch_key`, `storage_key`).
+  - `seqera_azure_entra_credential` — Microsoft Entra service principal for Azure Batch (`batch_name`, `storage_name`, `tenant_id`, `client_id`, `client_secret`).
+  - `seqera_azure_cloud_credential` — Microsoft Entra service principal for Azure Cloud SingleVM (`subscription_id`, `storage_name`, `tenant_id`, `client_id`, `client_secret`).
+
+  The generic `seqera_credential` resource also accepts `provider_type = "azure-cloud"` and no longer crashes with "unknown after apply" when `keys.azure_cloud` is used (the `keys` block is no longer marked readonly). See [docs/guides/migrating-from-seqera-credential.md](docs/guides/migrating-from-seqera-credential.md) for migration from the generic resource.
+
 ENHANCEMENTS:
+
+- **SDK-level retry policy for transient API failures.** Every generated SDK call site now retries automatically on connection errors, timeouts, HTTP 429, and HTTP 502/503/504, with exponential backoff (500ms → 30s, 5-minute total cap). 4xx (other than 429) and HTTP 500 are *not* retried — they're either deterministic or could deepen partial-create orphans. Addresses prior reports of `failure to invoke API` / `read: connection timed out` failures on `seqera_data_link`, `seqera_pipeline`, and `seqera_credential` resources. ([#207](https://github.com/seqeralabs/terraform-provider-seqera/pull/207))
+
+- **Plan-time warning when pre/post-run scripts exceed 1024 bytes.** Seqera Platform Cloud rejects pre/post-run scripts larger than 1024 bytes; Enterprise installs can raise the limit via platform configuration, so the provider can't know in advance which environment a config targets. A plan-time **Warning** (not an Error) now fires on every compute-environment `pre_run_script` / `post_run_script` above the limit, as well as on `seqera_pipeline.launch` and `seqera_workflows`. Apply still proceeds. ([#206](https://github.com/seqeralabs/terraform-provider-seqera/pull/206))
 
 - **Compute environment fields are documented and behave consistently across clouds.** Field descriptions, "requires replacement" annotations, and the `enable_fusion` / `enable_wave` naming (formerly `fusion2_enabled` / `wave_enabled`) now match between Google Cloud, Azure Cloud, AWS Cloud, and Google Cloud Batch compute environments.
 
