@@ -22583,7 +22583,7 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time

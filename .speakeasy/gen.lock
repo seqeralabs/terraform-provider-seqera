@@ -301,7 +301,7 @@ trackedFiles:
     pristine_git_object: fd5a27e12a4fe32fb7817dd93d51447a7d67f58d
   examples/resources/seqera_workspace/resource.tf:
     id: 0861dd715211
-    last_write_checksum: sha1:6aea6fceaab2cb3beda2a79ce58aeadf8d67116d
+    last_write_checksum: sha1:3f3a3ec874fa3912c2f1f9077e710deb6db914ad
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
   go.mod:
     id: c47645c391ad
@@ -1023,7 +1023,7 @@ trackedFiles:
     pristine_git_object: 32dd5a54a21939c3cfa3c2ada55b841cb54032f9
   internal/provider/workspace_resource.go:
     id: 4255ab3c913f
-    last_write_checksum: sha1:4bf6ad93820be0b88c973503918a062924020608
+    last_write_checksum: sha1:1eab3b4395cbc6ae2907a9bbb47fe6d9152cfddc
     pristine_git_object: 3a254498bdb26fe0a1be5e3afd3452978bba12da
   internal/provider/workspace_resource_sdk.go:
     id: 6b7b5772bf74
