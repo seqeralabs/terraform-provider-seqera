@@ -284,10 +284,37 @@ actions:
   - target: $.components.schemas
     update:
       # Seqera Managed Compute environment schema
-      # Uses hoisting pattern: x-speakeasy-entity on 'config' property hoists fields to root level
+      # Uses transform-based hoisting (see docs-internal/OVERLAY_GUIDE.md
+      # → Hoisting Nested API Structures). The platform wire format is
+      # `{ name, ..., config: { region, instanceTypeSize, ... } }`. The
+      # jq transforms flatten that on read and re-nest on write so the
+      # Terraform schema sees `region`, `instance_size`, `work_dir`, etc.
+      # at the resource root with no `config` block.
       ManagedComputeCE_ComputeConfig:
+        x-speakeasy-entity: ManagedComputeCE
+        x-speakeasy-entity-version: 1
+        x-speakeasy-entity-description: |
+          Manage Seqera Managed Compute environments in Seqera Platform.
+
+          Seqera Managed Compute is a fully managed compute service that handles infrastructure
+          provisioning and management automatically. Unlike AWS Batch or other compute
+          environments where you need to configure VPCs, subnets, and IAM roles,
+          Seqera Managed Compute only requires you to specify the region and instance size.
+
+          Key benefits:
+          - No infrastructure setup required
+          - Automatic scaling and resource management
+          - Simplified configuration with just region and instance size
+
+          Available instance sizes:
+          - SMALL: Suitable for lightweight workflows (default)
+          - MEDIUM: Balanced compute resources
+          - LARGE: High-performance compute for demanding workflows
+        x-speakeasy-transform-from-api:
+          jq: '. + { region: .config.region, instance_size: .config.instanceTypeSize, work_dir: .config.workDir, data_retention_policy: .config.defaultDataRetentionPolicy, resource_label_ids: .config.resourceLabelIds, pre_run_script: .config.preRunScript, post_run_script: .config.postRunScript, nextflow_config: .config.nextflowConfig, environment: .config.environment } | del(.config)'
+        x-speakeasy-transform-to-api:
+          jq: '. + { config: { discriminator: "seqeracompute-platform", region: .region, instanceTypeSize: .instance_size, workDir: .work_dir, defaultDataRetentionPolicy: .data_retention_policy, resourceLabelIds: .resource_label_ids, preRunScript: .pre_run_script, postRunScript: .post_run_script, nextflowConfig: .nextflow_config, environment: .environment } } | del(.region, .instance_size, .work_dir, .data_retention_policy, .resource_label_ids, .pre_run_script, .post_run_script, .nextflow_config, .environment)'
         required:
-          - config
           - name
         type: object
         properties:
@@ -343,113 +370,77 @@ actions:
             type: boolean
             description: Flag indicating if the compute environment has been deleted
             x-speakeasy-param-readonly: true
-          # Config property with hoisting - fields defined here appear at Terraform root level
-          config:
-            x-speakeasy-entity: ManagedComputeCE
-            x-speakeasy-entity-version: 1
-            x-speakeasy-entity-description: |
-              Manage Seqera Managed Compute environments in Seqera Platform.
-
-              Seqera Managed Compute is a fully managed compute service that handles infrastructure
-              provisioning and management automatically. Unlike AWS Batch or other compute
-              environments where you need to configure VPCs, subnets, and IAM roles,
-              Seqera Managed Compute only requires you to specify the region and instance size.
-
-              Key benefits:
-              - No infrastructure setup required
-              - Automatic scaling and resource management
-              - Simplified configuration with just region and instance size
-
-              Available instance sizes:
-              - SMALL: Suitable for lightweight workflows (default)
+          region:
+            type: string
+            description: |
+              AWS region for Seqera Managed Compute resources.
+              Examples: us-east-1, eu-west-1, ap-southeast-2
+            example: "us-east-1"
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: false
+            x-speakeasy-plan-validators: SeqeraComputeRegionValidator
+          instance_size:
+            type: string
+            enum:
+              - SMALL
+              - MEDIUM
+              - LARGE
+            description: |
+              Size of the compute instance.
+              - SMALL: Lightweight workflows (default)
               - MEDIUM: Balanced compute resources
               - LARGE: High-performance compute for demanding workflows
-            type: object
-            properties:
-              # Primary hoisted fields - appear at root level in Terraform
-              region:
-                type: string
-                description: |
-                  AWS region for Seqera Managed Compute resources.
-                  Examples: us-east-1, eu-west-1, ap-southeast-2
-                example: "us-east-1"
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: false
-                x-speakeasy-plan-validators: SeqeraComputeRegionValidator
-              instanceTypeSize:
-                type: string
-                enum:
-                  - SMALL
-                  - MEDIUM
-                  - LARGE
-                description: |
-                  Size of the compute instance.
-                  - SMALL: Lightweight workflows (default)
-                  - MEDIUM: Balanced compute resources
-                  - LARGE: High-performance compute for demanding workflows
-                example: "SMALL"
-                default: "SMALL"
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: true
-                x-speakeasy-name-override: instance_size
-                x-speakeasy-plan-validators: InstanceTypeSizeValidator
-              # Additional optional fields
-              workDir:
-                type: string
-                description: |
-                  Work directory suffix relative to the S3 bucket provisioned by Seqera.
-                  Optional - a default work directory is used if not specified.
-                example: "work"
-                x-speakeasy-param-optional: true
-                x-speakeasy-param-force-new: true
-                x-speakeasy-name-override: work_dir
-              defaultDataRetentionPolicy:
-                type: boolean
-                description: |
-                  Enable automatic data retention policy.
-                  When enabled, intermediary files are automatically deleted after 28 days.
-                default: true
-                x-speakeasy-param-optional: true
-                x-speakeasy-param-force-new: true
-                x-speakeasy-name-override: data_retention_policy
-              resourceLabelIds:
-                type: array
-                items:
-                  type: integer
-                  format: int64
-                description: List of resource label IDs to associate with this compute environment.
-                x-speakeasy-param-optional: true
-                x-speakeasy-param-force-new: true
-                x-speakeasy-name-override: resource_label_ids
-              preRunScript:
-                type: string
-                description: Bash script to run before workflow execution begins.
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: true
-                x-speakeasy-name-override: pre_run_script
-              postRunScript:
-                type: string
-                description: Bash script to run after workflow execution completes.
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: true
-                x-speakeasy-name-override: post_run_script
-              nextflowConfig:
-                type: string
-                description: Global Nextflow configuration settings for workflows.
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: true
-                x-speakeasy-name-override: nextflow_config
-              environment:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ConfigEnvVariable"
-                description: Environment variables for the compute environment.
-                x-speakeasy-param-force-new: true
-                x-speakeasy-param-optional: true
-              discriminator:
-                type: string
-                description: Internal platform discriminator
-                x-speakeasy-terraform-ignore: true
+            example: "SMALL"
+            default: "SMALL"
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: true
+            x-speakeasy-plan-validators: InstanceTypeSizeValidator
+          work_dir:
+            type: string
+            description: |
+              Work directory suffix relative to the S3 bucket provisioned by Seqera.
+              Optional - a default work directory is used if not specified.
+            example: "work"
+            x-speakeasy-param-optional: true
+            x-speakeasy-param-force-new: true
+          data_retention_policy:
+            type: boolean
+            description: |
+              Enable automatic data retention policy.
+              When enabled, intermediary files are automatically deleted after 28 days.
+            default: true
+            x-speakeasy-param-optional: true
+            x-speakeasy-param-force-new: true
+          resource_label_ids:
+            type: array
+            items:
+              type: integer
+              format: int64
+            description: List of resource label IDs to associate with this compute environment.
+            x-speakeasy-param-optional: true
+            x-speakeasy-param-force-new: true
+          pre_run_script:
+            type: string
+            description: Bash script to run before workflow execution begins.
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: true
+          post_run_script:
+            type: string
+            description: Bash script to run after workflow execution completes.
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: true
+          nextflow_config:
+            type: string
+            description: Global Nextflow configuration settings for workflows.
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: true
+          environment:
+            type: array
+            items:
+              $ref: "#/components/schemas/ConfigEnvVariable"
+            description: Environment variables for the compute environment.
+            x-speakeasy-param-force-new: true
+            x-speakeasy-param-optional: true
 
       # Seqera Compute request/response schemas
       CreateManagedComputeCERequest:

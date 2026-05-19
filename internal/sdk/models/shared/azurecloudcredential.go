@@ -33,101 +33,11 @@ func (e *AzureCloudCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// AzureCloudCredentialDiscriminator - Authentication mode discriminator.
-type AzureCloudCredentialDiscriminator string
-
-const (
-	AzureCloudCredentialDiscriminatorAzureCloud AzureCloudCredentialDiscriminator = "azure-cloud"
-)
-
-func (e AzureCloudCredentialDiscriminator) ToPointer() *AzureCloudCredentialDiscriminator {
-	return &e
-}
-func (e *AzureCloudCredentialDiscriminator) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "azure-cloud":
-		*e = AzureCloudCredentialDiscriminator(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AzureCloudCredentialDiscriminator: %v", v)
-	}
-}
-
-type AzureCloudCredentialKeys struct {
-	// Authentication mode discriminator.
-	Discriminator *AzureCloudCredentialDiscriminator `default:"azure-cloud" json:"discriminator"`
-	// Azure subscription ID where Forge provisions VMs.
-	SubscriptionID string `json:"subscriptionId"`
-	// Azure Blob Storage account name used for work_dir.
-	StorageName string `json:"storageName"`
-	// Microsoft Entra tenant ID.
-	TenantID string `json:"tenantId"`
-	// Microsoft Entra service principal client (application) ID.
-	ClientID string `json:"clientId"`
-	// Microsoft Entra service principal client secret.
-	ClientSecret string `json:"clientSecret"`
-}
-
-func (a AzureCloudCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureCloudCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureCloudCredentialKeys) GetDiscriminator() *AzureCloudCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureCloudCredentialKeys) GetSubscriptionID() string {
-	if a == nil {
-		return ""
-	}
-	return a.SubscriptionID
-}
-
-func (a *AzureCloudCredentialKeys) GetStorageName() string {
-	if a == nil {
-		return ""
-	}
-	return a.StorageName
-}
-
-func (a *AzureCloudCredentialKeys) GetTenantID() string {
-	if a == nil {
-		return ""
-	}
-	return a.TenantID
-}
-
-func (a *AzureCloudCredentialKeys) GetClientID() string {
-	if a == nil {
-		return ""
-	}
-	return a.ClientID
-}
-
-func (a *AzureCloudCredentialKeys) GetClientSecret() string {
-	if a == nil {
-		return ""
-	}
-	return a.ClientSecret
-}
-
 type AzureCloudCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -139,19 +49,48 @@ type AzureCloudCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        AzureCloudCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure subscription ID where Forge provisions VMs.
+	SubscriptionID string `json:"subscription_id"`
+	// Azure Blob Storage account name used for work_dir.
+	StorageName string `json:"storage_name"`
+	// Microsoft Entra tenant ID.
+	TenantID string `json:"tenant_id"`
+	// Microsoft Entra service principal client (application) ID.
+	ClientID string `json:"client_id"`
+	// Microsoft Entra service principal client secret.
+	ClientSecret string `json:"client_secret"`
 }
 
 func (a AzureCloudCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure-cloud\", subscriptionId: .subscription_id, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.subscription_id, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureCloudCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { subscription_id: .keys.subscriptionId, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCloudCredential) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureCloudCredential) GetCredentialsID() *string {
@@ -203,75 +142,46 @@ func (a *AzureCloudCredential) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureCloudCredential) GetKeys() AzureCloudCredentialKeys {
-	if a == nil {
-		return AzureCloudCredentialKeys{}
-	}
-	return a.Keys
-}
-
-type AzureCloudCredentialKeysOutput struct {
-	// Authentication mode discriminator.
-	Discriminator *AzureCloudCredentialDiscriminator `default:"azure-cloud" json:"discriminator"`
-	// Azure subscription ID where Forge provisions VMs.
-	SubscriptionID string `json:"subscriptionId"`
-	// Azure Blob Storage account name used for work_dir.
-	StorageName string `json:"storageName"`
-	// Microsoft Entra tenant ID.
-	TenantID string `json:"tenantId"`
-	// Microsoft Entra service principal client (application) ID.
-	ClientID string `json:"clientId"`
-}
-
-func (a AzureCloudCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureCloudCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureCloudCredentialKeysOutput) GetDiscriminator() *AzureCloudCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureCloudCredentialKeysOutput) GetSubscriptionID() string {
+func (a *AzureCloudCredential) GetSubscriptionID() string {
 	if a == nil {
 		return ""
 	}
 	return a.SubscriptionID
 }
 
-func (a *AzureCloudCredentialKeysOutput) GetStorageName() string {
+func (a *AzureCloudCredential) GetStorageName() string {
 	if a == nil {
 		return ""
 	}
 	return a.StorageName
 }
 
-func (a *AzureCloudCredentialKeysOutput) GetTenantID() string {
+func (a *AzureCloudCredential) GetTenantID() string {
 	if a == nil {
 		return ""
 	}
 	return a.TenantID
 }
 
-func (a *AzureCloudCredentialKeysOutput) GetClientID() string {
+func (a *AzureCloudCredential) GetClientID() string {
 	if a == nil {
 		return ""
 	}
 	return a.ClientID
 }
 
+func (a *AzureCloudCredential) GetClientSecret() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientSecret
+}
+
 type AzureCloudCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -283,19 +193,46 @@ type AzureCloudCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        AzureCloudCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure subscription ID where Forge provisions VMs.
+	SubscriptionID string `json:"subscription_id"`
+	// Azure Blob Storage account name used for work_dir.
+	StorageName string `json:"storage_name"`
+	// Microsoft Entra tenant ID.
+	TenantID string `json:"tenant_id"`
+	// Microsoft Entra service principal client (application) ID.
+	ClientID string `json:"client_id"`
 }
 
 func (a AzureCloudCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure-cloud\", subscriptionId: .subscription_id, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.subscription_id, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureCloudCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { subscription_id: .keys.subscriptionId, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCloudCredentialOutput) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureCloudCredentialOutput) GetCredentialsID() *string {
@@ -347,9 +284,30 @@ func (a *AzureCloudCredentialOutput) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureCloudCredentialOutput) GetKeys() AzureCloudCredentialKeysOutput {
+func (a *AzureCloudCredentialOutput) GetSubscriptionID() string {
 	if a == nil {
-		return AzureCloudCredentialKeysOutput{}
+		return ""
 	}
-	return a.Keys
+	return a.SubscriptionID
+}
+
+func (a *AzureCloudCredentialOutput) GetStorageName() string {
+	if a == nil {
+		return ""
+	}
+	return a.StorageName
+}
+
+func (a *AzureCloudCredentialOutput) GetTenantID() string {
+	if a == nil {
+		return ""
+	}
+	return a.TenantID
+}
+
+func (a *AzureCloudCredentialOutput) GetClientID() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientID
 }

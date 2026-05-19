@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 // PipelineDbDto - Represents a pipeline configuration in the Seqera Platform.
 // Contains pipeline metadata, configuration settings, and execution parameters
 // for Nextflow workflows.
@@ -22,6 +26,24 @@ type PipelineDbDto struct {
 	UserName      *string                     `json:"userName,omitempty"`
 	Version       *PipelineVersionFullInfoDto `json:"version,omitempty"`
 	WorkspaceID   *int64                      `json:"workspaceId,omitempty"`
+	// Alias of `pipeline_id` for Terraform convention.
+	ID *int64 `json:"id,omitempty"`
+}
+
+func (p PipelineDbDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PipelineDbDto) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .pipelineId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *PipelineDbDto) GetDescription() *string {
@@ -92,4 +114,11 @@ func (p *PipelineDbDto) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return p.WorkspaceID
+}
+
+func (p *PipelineDbDto) GetID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }

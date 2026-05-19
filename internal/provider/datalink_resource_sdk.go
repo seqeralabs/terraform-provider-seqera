@@ -29,6 +29,7 @@ func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context
 		r.DataLinkID = types.StringPointerValue(resp.DataLinkID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Hidden = types.BoolPointerValue(resp.Hidden)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Message = types.StringPointerValue(resp.Message)
 		r.Name = types.StringPointerValue(resp.Name)
 		if resp.ProviderType != nil {

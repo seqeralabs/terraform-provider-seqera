@@ -257,9 +257,24 @@ actions:
   # CLEANUP - Remove unmanageable, internal, and deprecated fields
   # ============================================================================
 
-  # Remove internal/computed fields from WorkflowLaunchRequest that aren't user-configurable
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
-    remove: true
+  # Remove internal/computed fields from WorkflowLaunchRequest that aren't user-configurable.
+  #
+  # NOTE: `id` is intentionally NOT removed — the seqera_action Update endpoint
+  # reuses this request shape and the backend validates that the incoming
+  # `launch.id` matches the action's existing launch (rejecting with HTTP 400
+  # "Launch ID value can't change" when absent). Removing it broke every
+  # action update, which surfaced to users as "actions can't be updated when
+  # secrets are involved". Mark it Read-Only instead so it stays Computed
+  # for create paths (workflow launch, pipeline create) but is echoed back
+  # by the provider on action updates.
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.id
+    update:
+      description: |
+        Launch identifier. Server-generated on workflow launch and pipeline
+        create — leave unset. Echoed back by the provider on
+        `seqera_action` updates so the backend can confirm the launch
+        identity hasn't changed.
+      x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["sessionId"]
     remove: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["resumeDir"]

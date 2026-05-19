@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 08b792e3b13582c0d748be872943a1f9
+  docChecksum: 944539d5eb90fb3604e747617c347cb0
   docVersion: 1.153.0
   speakeasyVersion: 1.763.1
   generationVersion: 2.884.4
-  releaseVersion: 0.40.0-RC5
-  configChecksum: ada59616bcc708e432e625b5014b7888
+  releaseVersion: 0.40.0-RC6
+  configChecksum: 9465a3da4cfd5feaff51e732a2942943
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -27,6 +27,7 @@ features:
     nameOverrides: 2.81.7
     nullables: 0.0.0
     retries: 2.81.4
+    transformJq: 0.0.1
     unions: 2.82.15
 trackedFiles:
   .gitattributes:
@@ -39,7 +40,7 @@ trackedFiles:
     pristine_git_object: 8e707bb129af1da185ba30b4c289b0160819c437
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:9e3dabc681c11378e0ac8a3b40639e5c2fb8748e
+    last_write_checksum: sha1:d47cefdbf3739214bd40b10abdfdaa48bb815de5
     pristine_git_object: 7b241353e887cd10c08b0653d13c2227ce91f456
   examples/resources/seqera_action/import-by-string-id.tf:
     id: 7b9e1b28088a
@@ -305,7 +306,7 @@ trackedFiles:
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:e51480b0ad97ca7bf3d8e87932f122aecbbe239e
+    last_write_checksum: sha1:5671809fb98083f6be47ace78b1d84d8e7c85dc9
     pristine_git_object: 0197aba33874c19d2d4a76f51d3c37929a4d811e
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
@@ -425,11 +426,11 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:0fb313bcc3d9f02c237df9c4d6aea4c736af858a
+    last_write_checksum: sha1:2a0aa203381a7a1d0ac1fb3d0625e30f545b49ff
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
-    last_write_checksum: sha1:bceab68cc8fc3d4b8ae04ca88b2167881dbccb5d
+    last_write_checksum: sha1:87a99c8577e72bffc8250681e9c8ed746c187df3
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
@@ -453,11 +454,11 @@ trackedFiles:
     pristine_git_object: 4d4451329e274230a287210d496b8e03aea29724
   internal/provider/awscredential_resource.go:
     id: fd1fb9518f67
-    last_write_checksum: sha1:3824361782a66523304045ce751f4afa8fd288ef
+    last_write_checksum: sha1:6aa98ca72229312eea9bb900f9ebdf352a9d7af6
     pristine_git_object: 718916f70c62d6cdeb910a896ec32723c62f9346
   internal/provider/awscredential_resource_sdk.go:
     id: 6dd3171fbbcc
-    last_write_checksum: sha1:d7ae62614a2b6bc033413f7972ebdd36ffc33189
+    last_write_checksum: sha1:7af2249a39b89d7643f4442b37c0cea80922eade
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
   internal/provider/azurebatchce_resource.go:
     last_write_checksum: sha1:dfa7e30d707a35e30f7ee63fe29150f4208527d2
@@ -468,52 +469,52 @@ trackedFiles:
   internal/provider/azurecloudce_resource_sdk.go:
     last_write_checksum: sha1:86d28c885f46283e51159c3b77a99da6cc79dfd6
   internal/provider/azurecloudcredential_resource.go:
-    last_write_checksum: sha1:18ad4cb4c6c5566376cd9c01e2fb8f2b45e9e2bd
+    last_write_checksum: sha1:978b428562ae34f3f2002e91d703e648edb32dac
   internal/provider/azurecloudcredential_resource_sdk.go:
-    last_write_checksum: sha1:2b36406b70667186c4468057b0822458d01abc0a
+    last_write_checksum: sha1:7ce1a39c5651fc23651dee3383f0e2251026fedb
   internal/provider/azurecredential_resource.go:
     id: 4e14a60d78ce
-    last_write_checksum: sha1:28877e55d6733f40430254dd82e2e2f425a32c8d
+    last_write_checksum: sha1:d9a32f5b55b3a7d1f5f9bf88467b2bacfa2c27de
     pristine_git_object: 0eb0896ee9fe4eed104d1d66e3c5b72221a8e8c1
   internal/provider/azurecredential_resource_sdk.go:
     id: 1cff49867392
-    last_write_checksum: sha1:e0efdbdd9e57a0c89357e93a25b03b5421f07caa
+    last_write_checksum: sha1:07a57319f845b88529508d9b0908cb7ce01fd002
     pristine_git_object: 62f301e24df9501920ae8a9afe8ae7927b82a862
   internal/provider/azureentracredential_resource.go:
-    last_write_checksum: sha1:6db44426fcc87ae6f9dfad2841d1505aa45944a1
+    last_write_checksum: sha1:7467274d28fb6c69044172ccf517da543b96f791
   internal/provider/azureentracredential_resource_sdk.go:
-    last_write_checksum: sha1:27b591ed7e722950c69ff7ba9e244a708c2a37c2
+    last_write_checksum: sha1:2cf03b163b75edcaafe42925a3fcfe685843c953
   internal/provider/bitbucketcredential_resource.go:
     id: 99461a76ba60
-    last_write_checksum: sha1:0df1526fbd7ceb37d455d05ca5fa8c1fdd0061ca
+    last_write_checksum: sha1:5bce9723362d15b5b7e0c2e3f3f10b2eafdae385
     pristine_git_object: ef48989850ba46b7641a28a14055504c1737a53c
   internal/provider/bitbucketcredential_resource_sdk.go:
     id: ea250abc2a72
-    last_write_checksum: sha1:f9cb30345d1a5b42d9c1c92925fb10cf587d1685
+    last_write_checksum: sha1:b00c9b77de96aec0da0c8c8bba6c147aca098fed
     pristine_git_object: 8a0bebdcdd3d64be9a83a6a75aa5bc0422f8f3ff
   internal/provider/codecommitcredential_resource.go:
     id: 22c2e9aa4b13
-    last_write_checksum: sha1:b980ff21c67b485e44472aaf42103ace4336c9e6
+    last_write_checksum: sha1:27a2a4e7ec3e2d1f4935eacb2a57cd00f73959c7
     pristine_git_object: 58dcb06c3f42ed4aa8f5bf250a2b70ed4ad235ed
   internal/provider/codecommitcredential_resource_sdk.go:
     id: dcc60e154878
-    last_write_checksum: sha1:799fd38e5f568921d5f837bc5488681731766514
+    last_write_checksum: sha1:d9f72dc52d3fda3b00dbfe15fea59c15ccde71fd
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:57f067587590c5c1b898c100bbca2adbbf2b5b9f
+    last_write_checksum: sha1:ee20c7266d94a929b1b76e9f2c9e9f1a9f7d020c
     pristine_git_object: d5550a0a3bc980d281c55531d71458e7e4968b48
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
-    last_write_checksum: sha1:5d79a0cbe35631af52ffd3ad4da63dbe0a98d9e1
+    last_write_checksum: sha1:3c97e7c9b9ecffda4282141b91e7a9f35ab04b68
     pristine_git_object: 2e933070714e8aa8d9ab83f2e1b81abd6f262ade
   internal/provider/containerregistrycredential_resource.go:
     id: f0a18857f2ea
-    last_write_checksum: sha1:81320b1e389a4f77b405c643f15461f4217cbeb0
+    last_write_checksum: sha1:058e2d28d8686f3f3c8229d9ae6f45a937145dde
     pristine_git_object: e6a9866eacb679ff8d1567624763412dcb61f0d1
   internal/provider/containerregistrycredential_resource_sdk.go:
     id: 84a1496699d8
-    last_write_checksum: sha1:a53e030badf9601c2e698a2dec0efc387c9015c3
+    last_write_checksum: sha1:88fbb1bd9d7c68c3bdaecae6e63fe41e6a05f782
     pristine_git_object: 9cb9ad7d844c9ac4c05ed05c9fbc4351231a9c4e
   internal/provider/credential_resource.go:
     id: b17d06f08976
@@ -537,11 +538,11 @@ trackedFiles:
     last_write_checksum: sha1:8db6d4e14a6c8757f38a26f0cac77b485e6e9627
   internal/provider/datalink_resource.go:
     id: 6f886fe60227
-    last_write_checksum: sha1:4de3b09909f43757acffd9df2c2c200866233aaf
+    last_write_checksum: sha1:872c91faee7c348aaf2747e5ac460295aa1ce4d4
     pristine_git_object: 902c444f8d5b5d7081962322c5f7b97db2feca79
   internal/provider/datalink_resource_sdk.go:
     id: 32916a33fa82
-    last_write_checksum: sha1:8b9eb69d19bc4b0d5866653cafb9d875d9362a41
+    last_write_checksum: sha1:420d7b8ff0b51885a49d26e38b6835777c30ad6e
     pristine_git_object: 2ad07b97c9a0b94cd787c77ca0b89e7f5e92b8f1
   internal/provider/datalinks_data_source.go:
     id: b9cf30e3a6ef
@@ -569,51 +570,51 @@ trackedFiles:
     last_write_checksum: sha1:5b1d35a7ef5389f58dbe11030bbd09508c444e6d
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
-    last_write_checksum: sha1:2e739ea241a59f21cbebac2c7b74235e68dcd92f
+    last_write_checksum: sha1:c9cd253e8540eff268f3ba8fcc0c599317120efa
     pristine_git_object: 511473aefa420f60b1e0fdd850d0d2360c7cd1aa
   internal/provider/giteacredential_resource_sdk.go:
     id: 63ee809ee195
-    last_write_checksum: sha1:d7d6fe32cf9c85dd46a8ac754e3458867bade66a
+    last_write_checksum: sha1:8bff3a37eedb61d439b76c88d97c31243e7a03ef
     pristine_git_object: 71e29ff10c22205eab4418ac0b8a92152cc5b23d
   internal/provider/githubcredential_resource.go:
     id: e1f090a0cb9e
-    last_write_checksum: sha1:d2eb30293085f47a10d31191924f416ce9456be1
+    last_write_checksum: sha1:5c99fc9cce9b283fa08d88a9ccabc8b294d7534e
     pristine_git_object: c6a4da7de3d8a1ca06c268021bcb56ba09f3c9f1
   internal/provider/githubcredential_resource_sdk.go:
     id: bc2bee614a62
-    last_write_checksum: sha1:af737463efc0ea922cae0b4345d106e6aa249055
+    last_write_checksum: sha1:ae0c5546c3c1fa03896cb6ed0072e27c8378ee5c
     pristine_git_object: 01c4b02c388b5caf56516bd71e9a2176973234b2
   internal/provider/gitlabcredential_resource.go:
     id: fcb86103d097
-    last_write_checksum: sha1:a1b05a66ead00f47ebaa23e36d1843beb6fe9222
+    last_write_checksum: sha1:ec7c6deaaf2c05284ccf028ccd026e3f9e098a5d
     pristine_git_object: 5b27290c979fb073cf156f1babc37c36cde9ab8e
   internal/provider/gitlabcredential_resource_sdk.go:
     id: a6c217015659
-    last_write_checksum: sha1:20bf0ba9c0d1f0ca299260c53c8d1fc9fb36b22a
+    last_write_checksum: sha1:9a260ce308613dea6addc908e8036d080aa7cd47
     pristine_git_object: 0f3d5604b62f838d2b0b79919f08bc65e5c9cf5b
   internal/provider/googlecredential_resource.go:
     id: 8822521a4af3
-    last_write_checksum: sha1:7e8539bdd2daeac03a77eeaeb6ba27f51d22b968
+    last_write_checksum: sha1:0005c125efc524e4dab5ea095cae2a373a1fded6
     pristine_git_object: 026226dc9ef3d464025bca768181bcaa0a4e6f7f
   internal/provider/googlecredential_resource_sdk.go:
     id: b4c881561996
-    last_write_checksum: sha1:5505989685c1f3ef31ab257a056486a81d13fb1d
+    last_write_checksum: sha1:ee72ea448a31adccf7af5bc0ce76c24d57ea43a7
     pristine_git_object: a25a2b110b86b9bffc9496f89bf92a4e5e452bce
   internal/provider/kubernetescredential_resource.go:
     id: 9cca06635b9e
-    last_write_checksum: sha1:828b0c344fd531ded00282daeb1a6456a1847fab
+    last_write_checksum: sha1:abe382719b9de2c5b1519544531f67386acef141
     pristine_git_object: 1be6769e629c348b8cf88a2f4898baf75b3da740
   internal/provider/kubernetescredential_resource_sdk.go:
     id: ea2832ecd302
-    last_write_checksum: sha1:0e1fc21261e2cc8f5696b36f5d616e767a10bf2e
+    last_write_checksum: sha1:50fd884953a08ca3797c4d68bef4006545c8bb1b
     pristine_git_object: 2814ac2db68121be9482eefc7c946a8df0202a38
   internal/provider/labels_resource.go:
     id: 738bccd5f1b7
-    last_write_checksum: sha1:511b2e4ea5302568341ed184500c5562a685fb13
+    last_write_checksum: sha1:18be5ec5ac637f3bd6a0374b30dc5f37e228caaf
     pristine_git_object: 2a111f6eaffb7ca5734357f3dd75289fa5996fd2
   internal/provider/labels_resource_sdk.go:
     id: 720ad0a834ae
-    last_write_checksum: sha1:3681f2336e5b7b8977662c1c56adb6cbd41af069
+    last_write_checksum: sha1:db84bb2a9652362d2362324505fa5304b154d711
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
   internal/provider/managedcomputece_resource.go:
     id: 7e0eecddbc1e
@@ -621,21 +622,21 @@ trackedFiles:
     pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
   internal/provider/managedcomputece_resource_sdk.go:
     id: 834a6a05996d
-    last_write_checksum: sha1:ac5377850cff3e60ff2b0d73c2eabea12bdafbe1
+    last_write_checksum: sha1:c411d45a54c40c1acd7c9985d01fc400ecb85060
     pristine_git_object: 2200507ea00d48e6fa7ee4f3f2e51571f17226c3
   internal/provider/orgs_resource.go:
     id: 28df60f6d9c9
-    last_write_checksum: sha1:514c0487300be0d8452911c526f54991917dddc3
+    last_write_checksum: sha1:e5ccd09ab1738b98d205a9addbb2bfddbbb3489a
     pristine_git_object: e73b7ac164d81f97838d8b785505471601e1ccb1
   internal/provider/orgs_resource_sdk.go:
     id: 473d7fede1ee
-    last_write_checksum: sha1:2d307f6ad9029a4dd900dac1e440f4c3c4891e4b
+    last_write_checksum: sha1:62e7d80e48a82f86cdf811dca8a8c84aa1d41f82
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
-    last_write_checksum: sha1:4c8120e981fa1baf05f4cbde6135c64e35b4e9d6
+    last_write_checksum: sha1:4f91c765b347af607ba60ceef847ce16357ecda0
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
-    last_write_checksum: sha1:72d66982bbd71fb5e43a21431a190a275e5e40fa
+    last_write_checksum: sha1:b3e2cb4961d852f08af3d4bb2290e4addfa7a8b8
     pristine_git_object: eb186d4cf2287bf1eec7eb07d9b9c7e0386b7b26
   internal/provider/pipelinesecret_resource.go:
     id: 5319f8284106
@@ -715,27 +716,27 @@ trackedFiles:
     pristine_git_object: c588f768bd7b39be33962188f97d81e1c4c25f4b
   internal/provider/sshcredential_resource.go:
     id: 7eb281c9649c
-    last_write_checksum: sha1:c88da68bf32d80157cdba5c301e888faf16cd519
+    last_write_checksum: sha1:6b00e516b93af140bb7322ac1c031e8a604c4e7c
     pristine_git_object: 47f7c6e152f7cecdcbd982d27de12746f870a355
   internal/provider/sshcredential_resource_sdk.go:
     id: 3c25312d23ab
-    last_write_checksum: sha1:bf81ac6928daa9835967a6e5dc50f7618f4d9daa
+    last_write_checksum: sha1:68eaa21dd1d86223bfcf4d06799ae0e7928386a7
     pristine_git_object: a633929e19d2c86fc43fdc96a586954c0992048c
   internal/provider/studios_resource.go:
     id: d5d4f38592d9
-    last_write_checksum: sha1:b63ea12d2bb95d5ff9e63dbe147d807bd77d4016
+    last_write_checksum: sha1:5989705fd2c1e5f57ec1079625287f14bb29cc20
     pristine_git_object: b69af57c1f895efdf781dd1ccf3aa900a68744e2
   internal/provider/studios_resource_sdk.go:
     id: 3f2ecca255e3
-    last_write_checksum: sha1:008cf079dff80267ae79e68e4c546123f71dca15
+    last_write_checksum: sha1:2d282b32efe0659162b902683c7badb5de3decaa
     pristine_git_object: 5bfc8970d75b9bf9e6a0729b69f9a3cd9ad0eaeb
   internal/provider/teams_resource.go:
     id: 6e0e94a85c68
-    last_write_checksum: sha1:41666cafa16927ba125bb14c145da4b9e86b586e
+    last_write_checksum: sha1:0c3bab34929b39c5243c9e4efa52ab927ac75ea8
     pristine_git_object: 5d8d2ee60c142b7c8d7b5fd44dc886e4bfee5df7
   internal/provider/teams_resource_sdk.go:
     id: 7638a674c722
-    last_write_checksum: sha1:f0c870e81dc2d527e24de1e19538abc603f450d7
+    last_write_checksum: sha1:f4056c889f0bfbe0811324b152b39ed6290b2a15
     pristine_git_object: 26f268ef8a33992e5cedbb0dbbe25ccb26ffb14a
   internal/provider/tokens_resource.go:
     last_write_checksum: sha1:175a120b77e6e478b8f803a28c3a557524745cfc
@@ -743,11 +744,11 @@ trackedFiles:
     last_write_checksum: sha1:09b4887dfd5f9916f8a729c10ba042065dec71b0
   internal/provider/toweragentcredential_resource.go:
     id: 9596670e4f16
-    last_write_checksum: sha1:bc44066e4be2a5fc414ffcfabfdd8b3ddebe4368
+    last_write_checksum: sha1:fb2873b0705403262568fbdc2b66eced46687e40
     pristine_git_object: d91d65ea5bffdb82659601bb5f8c37780e55e998
   internal/provider/toweragentcredential_resource_sdk.go:
     id: 139ea0cf9bf1
-    last_write_checksum: sha1:a564cafd8f311792622ca406e6bcab75f3569035
+    last_write_checksum: sha1:38825d6f4aa8490ab583c52a979f57c572a33b74
     pristine_git_object: 8717142892f205e2ca6d831bbe400d59dd11f556
   internal/provider/typeconvert/date.go:
     id: dfe2bc95ad1b
@@ -1015,11 +1016,11 @@ trackedFiles:
     pristine_git_object: 9cc78dd1f7684941df14144df744dad2b23885f9
   internal/provider/workflows_resource.go:
     id: efcad015245a
-    last_write_checksum: sha1:8d94cf5afb25e5389f9541af83ca618cabc4a260
+    last_write_checksum: sha1:8ef4ed6ba904af8f18acba7ef5e817404d74e1b4
     pristine_git_object: 2ec8cdfba570a37c74c14055a3d9ffa12fe8881c
   internal/provider/workflows_resource_sdk.go:
     id: ee2d992725aa
-    last_write_checksum: sha1:0ae2d06bab1aedbad8e9fd41e6078eb7efc9599e
+    last_write_checksum: sha1:48562f6b108cc43f42138db79cbefa8b2190b9c3
     pristine_git_object: 32dd5a54a21939c3cfa3c2ada55b841cb54032f9
   internal/provider/workspace_resource.go:
     id: 4255ab3c913f
@@ -1093,6 +1094,8 @@ trackedFiles:
     id: f035883ac0ff
     last_write_checksum: sha1:8b6f3dd49ed711c8cb30463e99346557d0316f1c
     pristine_git_object: c4537b353994c4844d7c32d5a4c6ae017088ea96
+  internal/sdk/internal/utils/jq.go:
+    last_write_checksum: sha1:2e75ed7a7db1f91e97dac1ac4ca7801b2beb69b5
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
     last_write_checksum: sha1:ad0cf4af7529ed1a80cda10dc48eab8aa9688424
@@ -2405,7 +2408,7 @@ trackedFiles:
     pristine_git_object: 41abb39480dcb63f5417d6dca691130fee15eb9b
   internal/sdk/models/shared/awscredential.go:
     id: 6a9e44208230
-    last_write_checksum: sha1:b811a9c4ce8cb24559f0992213007288b6d26ee8
+    last_write_checksum: sha1:5f06969f05ac0eca49e255e7eb26cb56eea1d2ec
     pristine_git_object: 6937799095194b4fcab39215565cc6a37887fb8b
   internal/sdk/models/shared/awscredentialsmode.go:
     last_write_checksum: sha1:a43a49efc166ca0c6bb6e58f4a25442c89c04175
@@ -2428,16 +2431,16 @@ trackedFiles:
   internal/sdk/models/shared/azurecloudcecomputeconfiginput.go:
     last_write_checksum: sha1:a487e6199d84b5cba0e8ba16cd4fa0fba7f9bab5
   internal/sdk/models/shared/azurecloudcredential.go:
-    last_write_checksum: sha1:85c5a3a223cc5c2d9089c63006a3a05375b9cbc3
+    last_write_checksum: sha1:1bbcc7bba31eb69ca902cf064e8657e2d7607863
   internal/sdk/models/shared/azurecredential.go:
     id: d67155a3f009
-    last_write_checksum: sha1:ec7cb0d8147543b65f79f2c10f728bef32f21cd9
+    last_write_checksum: sha1:178e7883a67f98bb4fbba21af675baf5a92ebcc4
     pristine_git_object: a19c8ae0ccb9dac4d7e8a63edfa348c0b6b3b3b2
   internal/sdk/models/shared/azureentracredential.go:
-    last_write_checksum: sha1:cd956178ba9e1f975717d9db709d59eaff893790
+    last_write_checksum: sha1:b147727f022677149edaadbcfd01118be4a82aeb
   internal/sdk/models/shared/bitbucketcredential.go:
     id: 7dd213344297
-    last_write_checksum: sha1:2a42671df3e443c129c4288cc0e7633509aabd0d
+    last_write_checksum: sha1:747ff8e4bd6f6e0b69183fcedcbe300c06553dc7
     pristine_git_object: 4640c93ca517620630d52210c4f3c131d9acdd31
   internal/sdk/models/shared/bucket.go:
     id: c799c619a5f3
@@ -2461,7 +2464,7 @@ trackedFiles:
     pristine_git_object: cc8547dd4b50e53073c00a2e2f3181a9fd23786a
   internal/sdk/models/shared/codecommitcredential.go:
     id: 5344cf634ea1
-    last_write_checksum: sha1:5e43c5c9fa8b8619eb944637514b97fb358f44ff
+    last_write_checksum: sha1:5ec332bfd451b6583b5f188e5ee81fb377e60614
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     last_write_checksum: sha1:434e04f3e4d2d602afb1208522e415143f67f1ae
@@ -2497,7 +2500,7 @@ trackedFiles:
     pristine_git_object: 4902f5c3d3419beeffcbfb00894fd70a90196353
   internal/sdk/models/shared/containerregistrycredential.go:
     id: ec1b043f32ef
-    last_write_checksum: sha1:645ec5e8bd74bb7a9ad5d739a46390bcac3f2b00
+    last_write_checksum: sha1:d35abbdc00431be6080ec7ad174de3a0416a8c2b
     pristine_git_object: 2e21d84ace615328cc045c70a9c52e1260853306
   internal/sdk/models/shared/createaccesstokenrequest.go:
     id: 3f32ab63906f
@@ -2593,7 +2596,7 @@ trackedFiles:
     pristine_git_object: 1ff1a56b54ae8aa46472c29cfcb55084180999e7
   internal/sdk/models/shared/createcomputeenvresponse.go:
     id: 4e018414aa3a
-    last_write_checksum: sha1:00ee185b7c40397200684ecab4b35bb8ac05304b
+    last_write_checksum: sha1:356a05922bfc6b65aa3a753404155b639091c5f6
     pristine_git_object: 9e6f53467d4b1e86551eb21a2e48a07518671092
   internal/sdk/models/shared/createcontainerregistrycredentialsrequest.go:
     id: eec3753514d1
@@ -2673,7 +2676,7 @@ trackedFiles:
     pristine_git_object: 31cb7e608ce4af22de6d901b709d45faa06ca8fe
   internal/sdk/models/shared/createlabelresponse.go:
     id: 20e6917be565
-    last_write_checksum: sha1:b2e024559653864dd50c6dfe7b27f3cbf96364bf
+    last_write_checksum: sha1:9f321a197042a1d4aa3b77c317a475328dd87332
     pristine_git_object: 2f3d3956bbda89b74c6567e36b85e13806a818a0
   internal/sdk/models/shared/createmanagedcomputecerequest.go:
     id: 794725842e1b
@@ -2821,7 +2824,7 @@ trackedFiles:
     pristine_git_object: 0e6d8fe3999c1dddc3946c461a69fdbf202fad8f
   internal/sdk/models/shared/datalinkdto.go:
     id: 5b92f13f1e83
-    last_write_checksum: sha1:0f8ea1e205a5511e88afb5152a2f6c3af424f172
+    last_write_checksum: sha1:2228523d27e442f46582684aff62364cd44be18b
     pristine_git_object: c7d163766c28007ac37cbcf2093a5a16732a158b
   internal/sdk/models/shared/datalinkfinishmultipartuploadrequest.go:
     id: d71bb92372e2
@@ -2899,7 +2902,7 @@ trackedFiles:
     pristine_git_object: 89ec20df5b4c222b73ea2376c4d354ac5dfa2479
   internal/sdk/models/shared/datastudiodto.go:
     id: e7da86830815
-    last_write_checksum: sha1:628bdc97a673a51c10799cda86a60d28d58f1495
+    last_write_checksum: sha1:1789b53b8e86222f62878bbb92c3236f16700abe
     pristine_git_object: 31d366345ef0f16a13e69c4a39d3516b82279009
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
@@ -3187,7 +3190,7 @@ trackedFiles:
     pristine_git_object: f2dfcf01b5586b5f4fabf4179fc9f48717d201d9
   internal/sdk/models/shared/giteacredential.go:
     id: dfce6a8fcdf0
-    last_write_checksum: sha1:20ac89b894d14a5b02596339c512f28077b965ad
+    last_write_checksum: sha1:f67071816c8bb4d84f1849ec32e02ec4125bf1ad
     pristine_git_object: 7637ba2ec7d6a8ecf7312350d60e081f096f9a96
   internal/sdk/models/shared/githubactionconfig.go:
     id: f9c267b87cce
@@ -3199,11 +3202,11 @@ trackedFiles:
     pristine_git_object: 17c90fd61a9fdd0f3467eccfeab719d950ad8d75
   internal/sdk/models/shared/githubcredential.go:
     id: ff7ad720d02c
-    last_write_checksum: sha1:6ec81a506848da8de2f71501aa15291d572c6493
+    last_write_checksum: sha1:ff15a41d5840fee94ba6f00c7f14f1df8bfa4269
     pristine_git_object: 79b31488d52fa8ac1243a3872b8897e67b34dd4b
   internal/sdk/models/shared/gitlabcredential.go:
     id: 22d18787c458
-    last_write_checksum: sha1:435d9864562ca64e410b042add4e3286eae48f62
+    last_write_checksum: sha1:063844a6c5ecf1d637aabe106046b43b102d47c8
     pristine_git_object: 05f9c000d0738657deb5c5f3bee3445ac5780f92
   internal/sdk/models/shared/gkeplatformmetainfo.go:
     id: e8e0a0401118
@@ -3215,7 +3218,7 @@ trackedFiles:
     last_write_checksum: sha1:616efeaa58a7df5b13ad17f726d4c40cf4242bf6
   internal/sdk/models/shared/googlecredential.go:
     id: a084779f2e36
-    last_write_checksum: sha1:5803a6d9da3f63e8f0f8fac0eb985c0fac7adfa0
+    last_write_checksum: sha1:87d1dacba480523574d2cfa71ed8a03a6f447702
     pristine_git_object: 8fa752a4783e5b119cbcdb50b6dc72cd4c5a29f5
   internal/sdk/models/shared/googleimage.go:
     last_write_checksum: sha1:33a6a88c16b3df789e3e1a63b171b2245ffa312c
@@ -3255,7 +3258,7 @@ trackedFiles:
     pristine_git_object: 0c21b12e52de3aa371634e192d353eb5c563286d
   internal/sdk/models/shared/kubernetescredential.go:
     id: 6cf20ba318a9
-    last_write_checksum: sha1:2745f129286f5452a08dc7652f8c168238551fe8
+    last_write_checksum: sha1:a19c07050dfadeaf9b1b17eba278555f27a6ed81
     pristine_git_object: 844e20a2429f42fc26fcb77430963158f4d4059a
   internal/sdk/models/shared/labeldbdto.go:
     id: 45e15e6c711e
@@ -3425,7 +3428,7 @@ trackedFiles:
     pristine_git_object: 26b3bbf325408f55485076ebeb3735ff106e85b9
   internal/sdk/models/shared/managedcomputececomputeconfiginput.go:
     id: b61b6426185b
-    last_write_checksum: sha1:84990c7b087925fcbda36cc9a823f7fe260c8a6e
+    last_write_checksum: sha1:464de170c882dea69c0112add0b8fe7df6f55e5a
     pristine_git_object: c42c622e89e5569eeae7f55d32b4b51e9d21655c
   internal/sdk/models/shared/managedcredentialsdbdto.go:
     id: 1c90d0daeff5
@@ -3471,7 +3474,7 @@ trackedFiles:
     pristine_git_object: 091ec3592a1e043eadd2c56b5f515056df1fc71c
   internal/sdk/models/shared/organizationdbdto.go:
     id: 743698f7345f
-    last_write_checksum: sha1:37701b8483b457c01b8a60e7520787c55fdf6e7b
+    last_write_checksum: sha1:c81dbc1ac62072a30d42e3a4a71f4259b39b44c5
     pristine_git_object: ed662ad9da6e6efcb588e485cc1d4c41d50ee43e
   internal/sdk/models/shared/organizationquotas.go:
     id: 653380a41b95
@@ -3495,7 +3498,7 @@ trackedFiles:
     pristine_git_object: 37ce998cf58b840e48da44d7bb0cb29e5143108f
   internal/sdk/models/shared/pipelinedbdto.go:
     id: ab8ad3b3fa8a
-    last_write_checksum: sha1:cc459ada362038fda521dd7e83b50d0c5bacb89d
+    last_write_checksum: sha1:9cef5e5326369cc5dfa5035f0b6435e8539d06ad
     pristine_git_object: 4e92c835cc6c6b1bf6fff9027a42ca0ea78dabf7
   internal/sdk/models/shared/pipelineinfo.go:
     id: 4179c13facd2
@@ -3619,7 +3622,7 @@ trackedFiles:
     last_write_checksum: sha1:ea64a9a80ba3aa84a9456d30ebda502a9e93d50c
   internal/sdk/models/shared/sshcredential.go:
     id: 1a87a201cd9a
-    last_write_checksum: sha1:ae289f2e06e36a44cccdb88da11baf581522d8bd
+    last_write_checksum: sha1:45bf59c4261b4700c6341e5288009a0ea6cffe9c
     pristine_git_object: 06ae72e7724d5f0464c0c5511d9131ed83732dee
   internal/sdk/models/shared/state.go:
     id: 9ab3d61a9713
@@ -3655,13 +3658,13 @@ trackedFiles:
     pristine_git_object: 7792f7a7084c873bb4eb1d650777802ad5763a71
   internal/sdk/models/shared/teamdbdto.go:
     id: ee24b7228b4c
-    last_write_checksum: sha1:a8f37a9ddf2f68a1f015710d74eac5c40d5a6728
+    last_write_checksum: sha1:5ee65fcd74fb7d074c78477211df7cf29acaaae1
     pristine_git_object: c7ecedae2f88deb2e9c68175ace0168cfbbc006b
   internal/sdk/models/shared/teamtype.go:
     last_write_checksum: sha1:dd76c8622f69f1fe12881e71323ccd25f842e2a4
   internal/sdk/models/shared/toweragentcredential.go:
     id: 9035b6976eb3
-    last_write_checksum: sha1:8d95b63e6e9c544b3c449c623bd11973ea3e2e74
+    last_write_checksum: sha1:4bf7e1b86afe887ace0618514a52b5f79efeae01
     pristine_git_object: df7b2a4139a0d7d29eba4b5e4bfc4cf25af30f96
   internal/sdk/models/shared/tracebeginrequest.go:
     id: 14c21c68d13b
@@ -3905,7 +3908,7 @@ trackedFiles:
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
   internal/sdk/models/shared/workflowlaunchrequest.go:
     id: 2b0df021cbad
-    last_write_checksum: sha1:3e66ab461a2ef386cc97fd76a893f9ac515fd18f
+    last_write_checksum: sha1:1b0e23437884986811d89c2415ccafea6fc1ea1e
     pristine_git_object: 610d44495458858e298def213b53372951961f8e
   internal/sdk/models/shared/workflowlaunchresponse.go:
     id: 58befbe96295
@@ -3985,7 +3988,7 @@ trackedFiles:
     last_write_checksum: sha1:4254ac7cabfdf1410c8e69888cc51a81318bbfb4
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:336c49ee134d1e9c8537b63bc361dca245906707
+    last_write_checksum: sha1:07491cfa5040075892703718e1742ff1fe401b76
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
@@ -4455,7 +4458,7 @@ examples:
         query:
           workspaceId: 5152
       requestBody:
-        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "region": "us-east-1", "instance_size": "SMALL", "work_dir": "work", "data_retention_policy": true}}
       responses:
         "200":
           application/json: {}
@@ -4470,7 +4473,7 @@ examples:
           workspaceId: 990670
       responses:
         "200":
-          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "region": "us-east-1", "instance_size": "SMALL", "work_dir": "work", "data_retention_policy": true}}
         "400":
           application/json: {"message": "<value>"}
   DeleteManagedComputeCE:
@@ -4543,7 +4546,7 @@ examples:
         query:
           workspaceId: 77862
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole"}}
       responses:
         "200":
           application/json: {}
@@ -4558,7 +4561,7 @@ examples:
           workspaceId: 359184
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSCredentials:
@@ -4569,7 +4572,7 @@ examples:
         query:
           workspaceId: 636030
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4591,7 +4594,7 @@ examples:
         query:
           workspaceId: 922087
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "batch_name": "myazurebatch", "storage_name": "myazurestorage", "batch_key": "YourAzureBatchAccountKeyHere==", "storage_key": "YourAzureStorageAccountKeyHere==", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourAzureClientSecretHere"}}
       responses:
         "200":
           application/json: {}
@@ -4606,7 +4609,7 @@ examples:
           workspaceId: 248753
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "azure", "batch_name": "myazurebatch", "storage_name": "myazurestorage"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAzureCredentials:
@@ -4617,7 +4620,7 @@ examples:
         query:
           workspaceId: 358934
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "batch_name": "myazurebatch", "storage_name": "myazurestorage", "batch_key": "YourAzureBatchAccountKeyHere==", "storage_key": "YourAzureStorageAccountKeyHere==", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourAzureClientSecretHere"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4639,7 +4642,7 @@ examples:
         query:
           workspaceId: 519001
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}
       responses:
         "200":
           application/json: {}
@@ -4654,7 +4657,7 @@ examples:
           workspaceId: 197308
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "username": "myuser@example.com"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateBitbucketCredentials:
@@ -4665,7 +4668,7 @@ examples:
         query:
           workspaceId: 718537
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "username": "myuser@example.com", "password": "BBDC-...", "token": "ATBB..."}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4685,7 +4688,7 @@ examples:
         query:
           workspaceId: 513159
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}
       responses:
         "200":
           application/json: {}
@@ -4700,7 +4703,7 @@ examples:
           workspaceId: 340322
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "access_key": "AKIAIOSFODNN7EXAMPLE"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateCodecommitCredentials:
@@ -4711,7 +4714,7 @@ examples:
         query:
           workspaceId: 600014
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4731,7 +4734,7 @@ examples:
         query:
           workspaceId: 919513
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "user_name": "myuser", "password": "mypassword", "registry": "docker.io"}}
       responses:
         "200":
           application/json: {}
@@ -4746,7 +4749,7 @@ examples:
           workspaceId: 626039
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "registry": "docker.io"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "user_name": "myuser", "registry": "docker.io"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateContainerRegistryCredentials:
@@ -4757,7 +4760,7 @@ examples:
         query:
           workspaceId: 788856
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "user_name": "myuser", "password": "mypassword", "registry": "docker.io"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4777,7 +4780,7 @@ examples:
         query:
           workspaceId: 684793
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workload_identity_provider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "service_account_email": "seqera-runner@my-project.iam.gserviceaccount.com"}}
       responses:
         "200":
           application/json: {}
@@ -4792,7 +4795,7 @@ examples:
           workspaceId: 829482
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "google", "workload_identity_provider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "service_account_email": "seqera-runner@my-project.iam.gserviceaccount.com"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGoogleCredentials:
@@ -4803,7 +4806,7 @@ examples:
         query:
           workspaceId: 571481
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workloadIdentityProvider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "serviceAccountEmail": "seqera-runner@my-project.iam.gserviceaccount.com", "keyType": "google"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "workload_identity_provider": "projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider", "service_account_email": "seqera-runner@my-project.iam.gserviceaccount.com"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4825,7 +4828,7 @@ examples:
         query:
           workspaceId: 210701
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "username": "myuser", "password": "mypassword"}}
       responses:
         "200":
           application/json: {}
@@ -4840,7 +4843,7 @@ examples:
           workspaceId: 854272
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "username": "myuser"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGiteaCredentials:
@@ -4851,7 +4854,7 @@ examples:
         query:
           workspaceId: 693377
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "username": "myuser", "password": "mypassword"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4871,7 +4874,7 @@ examples:
         query:
           workspaceId: 871342
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "username": "octocat", "access_token": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}
       responses:
         "200":
           application/json: {}
@@ -4886,7 +4889,7 @@ examples:
           workspaceId: 154616
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "username": "octocat"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGithubCredentials:
@@ -4897,7 +4900,7 @@ examples:
         query:
           workspaceId: 764192
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "username": "octocat", "access_token": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4917,7 +4920,7 @@ examples:
         query:
           workspaceId: 607858
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}
       responses:
         "200":
           application/json: {}
@@ -4932,7 +4935,7 @@ examples:
           workspaceId: 841024
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "username": "gitlab-user"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGitlabCredentials:
@@ -4943,7 +4946,7 @@ examples:
         query:
           workspaceId: 564595
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5055,7 +5058,7 @@ examples:
         query:
           workspaceId: 805575
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "connection_id": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}
       responses:
         "200":
           application/json: {}
@@ -5081,7 +5084,7 @@ examples:
         query:
           workspaceId: 112517
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "connection_id": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -7074,7 +7077,7 @@ examples:
         query:
           workspaceId: 819708
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "keys": {"discriminator": "azure_entra", "batchName": "myazurebatch", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourEntraClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "batch_name": "myazurebatch", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourEntraClientSecretHere"}}
       responses:
         "200":
           application/json: {}
@@ -7089,7 +7092,7 @@ examples:
           workspaceId: 272560
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "keys": {"discriminator": "azure_entra", "batchName": "myazurebatch", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "batch_name": "myazurebatch", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAzureEntraCredentials:
@@ -7100,7 +7103,7 @@ examples:
         query:
           workspaceId: 920837
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "keys": {"discriminator": "azure_entra", "batchName": "myazurebatch", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourEntraClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure_entra", "batch_name": "myazurebatch", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourEntraClientSecretHere"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -7122,7 +7125,7 @@ examples:
         query:
           workspaceId: 466577
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "keys": {"discriminator": "azure-cloud", "subscriptionId": "00000000-0000-0000-0000-000000000000", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourEntraClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "subscription_id": "00000000-0000-0000-0000-000000000000", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourEntraClientSecretHere"}}
       responses:
         "200":
           application/json: {}
@@ -7137,7 +7140,7 @@ examples:
           workspaceId: 557829
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "keys": {"discriminator": "azure-cloud", "subscriptionId": "00000000-0000-0000-0000-000000000000", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "subscription_id": "00000000-0000-0000-0000-000000000000", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAzureCloudCredentials:
@@ -7148,7 +7151,7 @@ examples:
         query:
           workspaceId: 528253
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "keys": {"discriminator": "azure-cloud", "subscriptionId": "00000000-0000-0000-0000-000000000000", "storageName": "myazurestorage", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourEntraClientSecretHere"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure-cloud", "subscription_id": "00000000-0000-0000-0000-000000000000", "storage_name": "myazurestorage", "tenant_id": "00000000-0000-0000-0000-000000000000", "client_id": "00000000-0000-0000-0000-000000000000", "client_secret": "YourEntraClientSecretHere"}}
       responses:
         "400":
           application/json: {"message": "<value>"}

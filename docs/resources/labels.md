@@ -77,4 +77,5 @@ resource "seqera_labels" "critical" {
 
 ### Read-Only
 
+- `id` (Number) The ID of this resource.
 - `label_id` (Number) Label numeric identifier

@@ -66,120 +66,6 @@ func (e *InstanceSize) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type Config struct {
-	// AWS region for Seqera Managed Compute resources.
-	// Examples: us-east-1, eu-west-1, ap-southeast-2
-	//
-	Region *string `json:"region,omitempty"`
-	// Size of the compute instance.
-	// - SMALL: Lightweight workflows (default)
-	// - MEDIUM: Balanced compute resources
-	// - LARGE: High-performance compute for demanding workflows
-	//
-	InstanceSize *InstanceSize `default:"SMALL" json:"instanceTypeSize"`
-	// Work directory suffix relative to the S3 bucket provisioned by Seqera.
-	// Optional - a default work directory is used if not specified.
-	//
-	WorkDir *string `json:"workDir,omitempty"`
-	// Enable automatic data retention policy.
-	// When enabled, intermediary files are automatically deleted after 28 days.
-	//
-	DataRetentionPolicy *bool `default:"true" json:"defaultDataRetentionPolicy"`
-	// List of resource label IDs to associate with this compute environment.
-	ResourceLabelIds []int64 `json:"resourceLabelIds,omitempty"`
-	// Bash script to run before workflow execution begins.
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Bash script to run after workflow execution completes.
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Global Nextflow configuration settings for workflows.
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// Environment variables for the compute environment.
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Internal platform discriminator
-	Discriminator *string `json:"discriminator,omitempty"`
-}
-
-func (c Config) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *Config) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *Config) GetRegion() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Region
-}
-
-func (c *Config) GetInstanceSize() *InstanceSize {
-	if c == nil {
-		return nil
-	}
-	return c.InstanceSize
-}
-
-func (c *Config) GetWorkDir() *string {
-	if c == nil {
-		return nil
-	}
-	return c.WorkDir
-}
-
-func (c *Config) GetDataRetentionPolicy() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.DataRetentionPolicy
-}
-
-func (c *Config) GetResourceLabelIds() []int64 {
-	if c == nil {
-		return nil
-	}
-	return c.ResourceLabelIds
-}
-
-func (c *Config) GetPreRunScript() *string {
-	if c == nil {
-		return nil
-	}
-	return c.PreRunScript
-}
-
-func (c *Config) GetPostRunScript() *string {
-	if c == nil {
-		return nil
-	}
-	return c.PostRunScript
-}
-
-func (c *Config) GetNextflowConfig() *string {
-	if c == nil {
-		return nil
-	}
-	return c.NextflowConfig
-}
-
-func (c *Config) GetEnvironment() []ConfigEnvVariable {
-	if c == nil {
-		return nil
-	}
-	return c.Environment
-}
-
-func (c *Config) GetDiscriminator() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Discriminator
-}
-
 type ManagedComputeCEComputeConfigInput struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
@@ -200,15 +86,55 @@ type ManagedComputeCEComputeConfigInput struct {
 	// Timestamp when the compute environment was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Flag indicating if the compute environment has been deleted
-	Deleted *bool  `json:"deleted,omitempty"`
-	Config  Config `json:"config"`
+	Deleted *bool `json:"deleted,omitempty"`
+	// AWS region for Seqera Managed Compute resources.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region *string `json:"region,omitempty"`
+	// Size of the compute instance.
+	// - SMALL: Lightweight workflows (default)
+	// - MEDIUM: Balanced compute resources
+	// - LARGE: High-performance compute for demanding workflows
+	//
+	InstanceSize *InstanceSize `default:"SMALL" json:"instance_size"`
+	// Work directory suffix relative to the S3 bucket provisioned by Seqera.
+	// Optional - a default work directory is used if not specified.
+	//
+	WorkDir *string `json:"work_dir,omitempty"`
+	// Enable automatic data retention policy.
+	// When enabled, intermediary files are automatically deleted after 28 days.
+	//
+	DataRetentionPolicy *bool `default:"true" json:"data_retention_policy"`
+	// List of resource label IDs to associate with this compute environment.
+	ResourceLabelIds []int64 `json:"resource_label_ids,omitempty"`
+	// Bash script to run before workflow execution begins.
+	PreRunScript *string `json:"pre_run_script,omitempty"`
+	// Bash script to run after workflow execution completes.
+	PostRunScript *string `json:"post_run_script,omitempty"`
+	// Global Nextflow configuration settings for workflows.
+	NextflowConfig *string `json:"nextflow_config,omitempty"`
+	// Environment variables for the compute environment.
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (m ManagedComputeCEComputeConfigInput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(m, "", false)
+	jsonBytes, err := utils.MarshalJSON(m, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { config: { discriminator: \"seqeracompute-platform\", region: .region, instanceTypeSize: .instance_size, workDir: .work_dir, defaultDataRetentionPolicy: .data_retention_policy, resourceLabelIds: .resource_label_ids, preRunScript: .pre_run_script, postRunScript: .post_run_script, nextflowConfig: .nextflow_config, environment: .environment } } | del(.region, .instance_size, .work_dir, .data_retention_policy, .resource_label_ids, .pre_run_script, .post_run_script, .nextflow_config, .environment)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (m *ManagedComputeCEComputeConfigInput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { region: .config.region, instance_size: .config.instanceTypeSize, work_dir: .config.workDir, data_retention_policy: .config.defaultDataRetentionPolicy, resource_label_ids: .config.resourceLabelIds, pre_run_script: .config.preRunScript, post_run_script: .config.postRunScript, nextflow_config: .config.nextflowConfig, environment: .config.environment } | del(.config)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
@@ -285,11 +211,67 @@ func (m *ManagedComputeCEComputeConfigInput) GetDeleted() *bool {
 	return m.Deleted
 }
 
-func (m *ManagedComputeCEComputeConfigInput) GetConfig() Config {
+func (m *ManagedComputeCEComputeConfigInput) GetRegion() *string {
 	if m == nil {
-		return Config{}
+		return nil
 	}
-	return m.Config
+	return m.Region
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetInstanceSize() *InstanceSize {
+	if m == nil {
+		return nil
+	}
+	return m.InstanceSize
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetWorkDir() *string {
+	if m == nil {
+		return nil
+	}
+	return m.WorkDir
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetDataRetentionPolicy() *bool {
+	if m == nil {
+		return nil
+	}
+	return m.DataRetentionPolicy
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetResourceLabelIds() []int64 {
+	if m == nil {
+		return nil
+	}
+	return m.ResourceLabelIds
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetPreRunScript() *string {
+	if m == nil {
+		return nil
+	}
+	return m.PreRunScript
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetPostRunScript() *string {
+	if m == nil {
+		return nil
+	}
+	return m.PostRunScript
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetNextflowConfig() *string {
+	if m == nil {
+		return nil
+	}
+	return m.NextflowConfig
+}
+
+func (m *ManagedComputeCEComputeConfigInput) GetEnvironment() []ConfigEnvVariable {
+	if m == nil {
+		return nil
+	}
+	return m.Environment
 }
 
 type ManagedComputeCEComputeConfig struct {
@@ -313,15 +295,55 @@ type ManagedComputeCEComputeConfig struct {
 	// Timestamp when the compute environment was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Flag indicating if the compute environment has been deleted
-	Deleted *bool  `json:"deleted,omitempty"`
-	Config  Config `json:"config"`
+	Deleted *bool `json:"deleted,omitempty"`
+	// AWS region for Seqera Managed Compute resources.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region *string `json:"region,omitempty"`
+	// Size of the compute instance.
+	// - SMALL: Lightweight workflows (default)
+	// - MEDIUM: Balanced compute resources
+	// - LARGE: High-performance compute for demanding workflows
+	//
+	InstanceSize *InstanceSize `default:"SMALL" json:"instance_size"`
+	// Work directory suffix relative to the S3 bucket provisioned by Seqera.
+	// Optional - a default work directory is used if not specified.
+	//
+	WorkDir *string `json:"work_dir,omitempty"`
+	// Enable automatic data retention policy.
+	// When enabled, intermediary files are automatically deleted after 28 days.
+	//
+	DataRetentionPolicy *bool `default:"true" json:"data_retention_policy"`
+	// List of resource label IDs to associate with this compute environment.
+	ResourceLabelIds []int64 `json:"resource_label_ids,omitempty"`
+	// Bash script to run before workflow execution begins.
+	PreRunScript *string `json:"pre_run_script,omitempty"`
+	// Bash script to run after workflow execution completes.
+	PostRunScript *string `json:"post_run_script,omitempty"`
+	// Global Nextflow configuration settings for workflows.
+	NextflowConfig *string `json:"nextflow_config,omitempty"`
+	// Environment variables for the compute environment.
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (m ManagedComputeCEComputeConfig) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(m, "", false)
+	jsonBytes, err := utils.MarshalJSON(m, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { config: { discriminator: \"seqeracompute-platform\", region: .region, instanceTypeSize: .instance_size, workDir: .work_dir, defaultDataRetentionPolicy: .data_retention_policy, resourceLabelIds: .resource_label_ids, preRunScript: .pre_run_script, postRunScript: .post_run_script, nextflowConfig: .nextflow_config, environment: .environment } } | del(.region, .instance_size, .work_dir, .data_retention_policy, .resource_label_ids, .pre_run_script, .post_run_script, .nextflow_config, .environment)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (m *ManagedComputeCEComputeConfig) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { region: .config.region, instance_size: .config.instanceTypeSize, work_dir: .config.workDir, data_retention_policy: .config.defaultDataRetentionPolicy, resource_label_ids: .config.resourceLabelIds, pre_run_script: .config.preRunScript, post_run_script: .config.postRunScript, nextflow_config: .config.nextflowConfig, environment: .config.environment } | del(.config)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
@@ -405,9 +427,65 @@ func (m *ManagedComputeCEComputeConfig) GetDeleted() *bool {
 	return m.Deleted
 }
 
-func (m *ManagedComputeCEComputeConfig) GetConfig() Config {
+func (m *ManagedComputeCEComputeConfig) GetRegion() *string {
 	if m == nil {
-		return Config{}
+		return nil
 	}
-	return m.Config
+	return m.Region
+}
+
+func (m *ManagedComputeCEComputeConfig) GetInstanceSize() *InstanceSize {
+	if m == nil {
+		return nil
+	}
+	return m.InstanceSize
+}
+
+func (m *ManagedComputeCEComputeConfig) GetWorkDir() *string {
+	if m == nil {
+		return nil
+	}
+	return m.WorkDir
+}
+
+func (m *ManagedComputeCEComputeConfig) GetDataRetentionPolicy() *bool {
+	if m == nil {
+		return nil
+	}
+	return m.DataRetentionPolicy
+}
+
+func (m *ManagedComputeCEComputeConfig) GetResourceLabelIds() []int64 {
+	if m == nil {
+		return nil
+	}
+	return m.ResourceLabelIds
+}
+
+func (m *ManagedComputeCEComputeConfig) GetPreRunScript() *string {
+	if m == nil {
+		return nil
+	}
+	return m.PreRunScript
+}
+
+func (m *ManagedComputeCEComputeConfig) GetPostRunScript() *string {
+	if m == nil {
+		return nil
+	}
+	return m.PostRunScript
+}
+
+func (m *ManagedComputeCEComputeConfig) GetNextflowConfig() *string {
+	if m == nil {
+		return nil
+	}
+	return m.NextflowConfig
+}
+
+func (m *ManagedComputeCEComputeConfig) GetEnvironment() []ConfigEnvVariable {
+	if m == nil {
+		return nil
+	}
+	return m.Environment
 }

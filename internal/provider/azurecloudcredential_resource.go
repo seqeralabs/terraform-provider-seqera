@@ -43,6 +43,7 @@ type AzureCloudCredentialResourceModel struct {
 	ClientID       types.String `tfsdk:"client_id"`
 	ClientSecret   types.String `tfsdk:"client_secret"`
 	CredentialsID  types.String `tfsdk:"credentials_id"`
+	ID             types.String `tfsdk:"id"`
 	Name           types.String `tfsdk:"name"`
 	ProviderType   types.String `tfsdk:"provider_type"`
 	StorageName    types.String `tfsdk:"storage_name"`
@@ -71,6 +72,13 @@ func (r *AzureCloudCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Microsoft Entra service principal client secret.`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

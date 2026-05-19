@@ -232,6 +232,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Read-Only
 
+- `id` (String) Alias of `session_id` for Terraform convention.
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
 

@@ -178,7 +178,10 @@ Optional:
 Read-Only:
 
 - `compute_env` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env))
-- `id` (String)
+- `id` (String) Launch identifier. Server-generated on workflow launch and pipeline
+create — leave unset. Echoed back by the provider on
+`seqera_action` updates so the backend can confirm the launch
+identity hasn't changed.
 - `launch_container` (String)
 - `optimization_id` (String) Optimization profile ID
 - `optimization_targets` (String) Optimization targets

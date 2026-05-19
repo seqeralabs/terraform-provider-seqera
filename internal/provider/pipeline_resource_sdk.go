@@ -832,6 +832,7 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 	if resp != nil {
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Icon = types.StringPointerValue(resp.Icon)
+		r.ID = types.Int64PointerValue(resp.ID)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
 		r.Repository = types.StringPointerValue(resp.Repository)
@@ -1028,6 +1029,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		headJobMemoryMb = nil
 	}
+	id := new(string)
+	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+		*id = r.Launch.ID.ValueString()
+	} else {
+		id = nil
+	}
 	labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex1 := range r.Launch.LabelIds {
 		labelIds1 = append(labelIds1, r.Launch.LabelIds[labelIdsIndex1].ValueInt64())
@@ -1128,6 +1135,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		ID:               id,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,
@@ -1226,6 +1234,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
 	} else {
 		headJobMemoryMb = nil
+	}
+	id := new(string)
+	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+		*id = r.Launch.ID.ValueString()
+	} else {
+		id = nil
 	}
 	labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex1 := range r.Launch.LabelIds {
@@ -1327,6 +1341,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		ID:               id,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,

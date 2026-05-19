@@ -16,31 +16,19 @@ type AWSCredentialResourceModelOptions struct {
 	State  *AWSCredentialResourceModel
 }
 
-func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialKeysOutput(ctx context.Context, resp *shared.AWSCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.AccessKey = types.StringPointerValue(resp.AccessKey)
-	r.ExternalID = types.StringPointerValue(resp.ExternalID)
-	if resp.Mode != nil {
-		r.Mode = types.StringValue(string(*resp.Mode))
-	} else {
-		r.Mode = types.StringNull()
-	}
-
-	return diags
-}
-
 func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialOutput(ctx context.Context, resp *shared.AWSCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AccessKey = types.StringPointerValue(resp.AccessKey)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedAWSCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
+		r.ExternalID = types.StringPointerValue(resp.ExternalID)
+		r.ID = types.StringPointerValue(resp.ID)
+		if resp.Mode != nil {
+			r.Mode = types.StringValue(string(*resp.Mode))
+		} else {
+			r.Mode = types.StringNull()
 		}
-
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -174,6 +162,12 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.AWSCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -189,26 +183,6 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, 
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAWSCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.AWSCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.AWSCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	accessKey := new(string)
 	if !r.AccessKey.IsUnknown() && !r.AccessKey.IsNull() {
 		*accessKey = r.AccessKey.ValueString()
@@ -239,7 +213,11 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Conte
 	} else {
 		externalID = nil
 	}
-	out := shared.AWSCredentialKeys{
+	out := shared.AWSCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
 		AccessKey:     accessKey,
 		SecretKey:     secretKey,
 		AssumeRoleArn: assumeRoleArn,

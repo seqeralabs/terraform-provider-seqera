@@ -69,6 +69,15 @@ actions:
   - target: $["components"]["schemas"]["OrganizationDbDto"]
     update:
       x-speakeasy-entity: Orgs
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .orgId }'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Alias of `org_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
 
   # ============================================================================
   # ENTITY OPERATIONS (CRUD)

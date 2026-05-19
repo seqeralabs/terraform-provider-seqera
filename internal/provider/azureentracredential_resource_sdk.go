@@ -16,34 +16,22 @@ type AzureEntraCredentialResourceModelOptions struct {
 	State  *AzureEntraCredentialResourceModel
 }
 
-func (r *AzureEntraCredentialResourceModel) RefreshFromSharedAzureEntraCredentialKeysOutput(ctx context.Context, resp *shared.AzureEntraCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.BatchName = types.StringValue(resp.BatchName)
-	r.ClientID = types.StringValue(resp.ClientID)
-	r.StorageName = types.StringValue(resp.StorageName)
-	r.TenantID = types.StringValue(resp.TenantID)
-
-	return diags
-}
-
 func (r *AzureEntraCredentialResourceModel) RefreshFromSharedAzureEntraCredentialOutput(ctx context.Context, resp *shared.AzureEntraCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BatchName = types.StringValue(resp.BatchName)
+		r.ClientID = types.StringValue(resp.ClientID)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedAzureEntraCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.StorageName = types.StringValue(resp.StorageName)
+		r.TenantID = types.StringValue(resp.TenantID)
 	}
 
 	return diags
@@ -157,6 +145,12 @@ func (r *AzureEntraCredentialResourceModel) ToOperationsUpdateAzureEntraCredenti
 func (r *AzureEntraCredentialResourceModel) ToSharedAzureEntraCredential(ctx context.Context, opts *AzureEntraCredentialResourceModelOptions) (*shared.AzureEntraCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -172,26 +166,6 @@ func (r *AzureEntraCredentialResourceModel) ToSharedAzureEntraCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAzureEntraCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.AzureEntraCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *AzureEntraCredentialResourceModel) ToSharedAzureEntraCredentialKeys(ctx context.Context, opts *AzureEntraCredentialResourceModelOptions) (*shared.AzureEntraCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var batchName string
 	batchName = r.BatchName.ValueString()
 
@@ -207,12 +181,16 @@ func (r *AzureEntraCredentialResourceModel) ToSharedAzureEntraCredentialKeys(ctx
 	var clientSecret string
 	clientSecret = opts.Config.ClientSecret.ValueString()
 
-	out := shared.AzureEntraCredentialKeys{
-		BatchName:    batchName,
-		StorageName:  storageName,
-		TenantID:     tenantID,
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
+	out := shared.AzureEntraCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BatchName:     batchName,
+		StorageName:   storageName,
+		TenantID:      tenantID,
+		ClientID:      clientID,
+		ClientSecret:  clientSecret,
 	}
 
 	return &out, diags

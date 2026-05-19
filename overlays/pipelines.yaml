@@ -243,6 +243,24 @@ actions:
     update:
       x-speakeasy-param-readonly: true
 
+  # Add a parallel `id` attribute that aliases `pipelineId` so users can
+  # reference the pipeline with the conventional `seqera_pipeline.foo.id`
+  # alongside the existing `pipeline_id`. The jq transform-from-api
+  # copies pipelineId into a synthetic `id` on deserialization — the
+  # wire format stays `pipelineId` (no backend change) and existing
+  # state keeps its `pipeline_id` attribute (no state upgrader needed).
+  - target: $.components.schemas.PipelineDbDto
+    update:
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .pipelineId }'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Alias of `pipeline_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+
   # ============================================================================
   # REQUEST EXAMPLES
   # ============================================================================

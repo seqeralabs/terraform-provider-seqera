@@ -46,6 +46,7 @@ type PipelineResource struct {
 type PipelineResourceModel struct {
 	Description   types.String                          `tfsdk:"description"`
 	Icon          types.String                          `tfsdk:"icon"`
+	ID            types.Int64                           `tfsdk:"id"`
 	LabelIds      []types.Int64                         `tfsdk:"label_ids"`
 	Launch        *tfTypes.WorkflowLaunchRequest        `tfsdk:"launch"`
 	Name          types.String                          `tfsdk:"name"`
@@ -75,6 +76,13 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				Optional:    true,
 				Description: `Icon identifier or URL for visual representation`,
+			},
+			"id": schema.Int64Attribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `pipeline_id` + "`" + ` for Terraform convention.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional:    true,
@@ -2226,6 +2234,10 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `Launch identifier. Server-generated on workflow launch and pipeline` + "\n" +
+							`create — leave unset. Echoed back by the provider on` + "\n" +
+							`` + "`" + `seqera_action` + "`" + ` updates so the backend can confirm the launch` + "\n" +
+							`identity hasn't changed.`,
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,

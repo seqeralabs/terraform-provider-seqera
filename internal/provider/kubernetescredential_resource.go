@@ -42,6 +42,7 @@ type KubernetesCredentialResource struct {
 type KubernetesCredentialResourceModel struct {
 	ClientCertificate types.String `tfsdk:"client_certificate"`
 	CredentialsID     types.String `tfsdk:"credentials_id"`
+	ID                types.String `tfsdk:"id"`
 	Name              types.String `tfsdk:"name"`
 	PrivateKey        types.String `tfsdk:"private_key"`
 	ProviderType      types.String `tfsdk:"provider_type"`
@@ -65,6 +66,13 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

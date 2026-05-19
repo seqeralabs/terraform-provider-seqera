@@ -41,6 +41,7 @@ type SSHCredentialResource struct {
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Passphrase    types.String `tfsdk:"passphrase"`
 	PrivateKey    types.String `tfsdk:"private_key"`
@@ -58,6 +59,13 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

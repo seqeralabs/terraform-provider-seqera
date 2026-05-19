@@ -33,30 +33,11 @@ func (e *GiteaCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type GiteaCredentialKeys struct {
-	// Gitea account username.
-	Username string `json:"username"`
-	// Gitea account password or personal access token (sensitive).
-	Password string `json:"password"`
-}
-
-func (g *GiteaCredentialKeys) GetUsername() string {
-	if g == nil {
-		return ""
-	}
-	return g.Username
-}
-
-func (g *GiteaCredentialKeys) GetPassword() string {
-	if g == nil {
-		return ""
-	}
-	return g.Password
-}
-
 type GiteaCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -70,19 +51,42 @@ type GiteaCredential struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
-	BaseURL *string             `json:"baseUrl,omitempty"`
-	Keys    GiteaCredentialKeys `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Gitea account username.
+	Username string `json:"username"`
+	// Gitea account password or personal access token (sensitive).
+	Password string `json:"password"`
 }
 
 func (g GiteaCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .password } } | del(.username, .password, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GiteaCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, password: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GiteaCredential) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GiteaCredential) GetCredentialsID() *string {
@@ -141,28 +145,25 @@ func (g *GiteaCredential) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GiteaCredential) GetKeys() GiteaCredentialKeys {
-	if g == nil {
-		return GiteaCredentialKeys{}
-	}
-	return g.Keys
-}
-
-type GiteaCredentialKeysOutput struct {
-	// Gitea account username.
-	Username string `json:"username"`
-}
-
-func (g *GiteaCredentialKeysOutput) GetUsername() string {
+func (g *GiteaCredential) GetUsername() string {
 	if g == nil {
 		return ""
 	}
 	return g.Username
 }
 
+func (g *GiteaCredential) GetPassword() string {
+	if g == nil {
+		return ""
+	}
+	return g.Password
+}
+
 type GiteaCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -176,19 +177,40 @@ type GiteaCredentialOutput struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL for the self-hosted Gitea instance (required by the credential validator). When multiple Gitea credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. Example: https://gitea.mycompany.com
-	BaseURL *string                   `json:"baseUrl,omitempty"`
-	Keys    GiteaCredentialKeysOutput `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Gitea account username.
+	Username string `json:"username"`
 }
 
 func (g GiteaCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .password } } | del(.username, .password, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GiteaCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, password: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GiteaCredentialOutput) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GiteaCredentialOutput) GetCredentialsID() *string {
@@ -247,9 +269,9 @@ func (g *GiteaCredentialOutput) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GiteaCredentialOutput) GetKeys() GiteaCredentialKeysOutput {
+func (g *GiteaCredentialOutput) GetUsername() string {
 	if g == nil {
-		return GiteaCredentialKeysOutput{}
+		return ""
 	}
-	return g.Keys
+	return g.Username
 }

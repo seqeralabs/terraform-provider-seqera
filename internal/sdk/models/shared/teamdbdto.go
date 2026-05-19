@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 // TeamDbDto - Represents a team within an organization.
 // Contains team membership, permissions, and access controls
 // for collaborative workspace management.
@@ -16,6 +20,24 @@ type TeamDbDto struct {
 	Name *string `json:"name,omitempty"`
 	// Unique numeric identifier for the team
 	TeamID *int64 `json:"teamId,omitempty"`
+	// Alias of `team_id` for Terraform convention.
+	ID *int64 `json:"id,omitempty"`
+}
+
+func (t TeamDbDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TeamDbDto) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .teamId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *TeamDbDto) GetAvatarURL() *string {
@@ -51,4 +73,11 @@ func (t *TeamDbDto) GetTeamID() *int64 {
 		return nil
 	}
 	return t.TeamID
+}
+
+func (t *TeamDbDto) GetID() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.ID
 }

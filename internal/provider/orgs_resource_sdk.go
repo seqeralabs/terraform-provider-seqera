@@ -46,6 +46,7 @@ func (r *OrgsResourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Conte
 	if resp != nil {
 		r.Description = types.StringPointerValue(resp.Description)
 		r.FullName = types.StringPointerValue(resp.FullName)
+		r.ID = types.Int64PointerValue(resp.ID)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.MemberID = types.Int64PointerValue(resp.MemberID)
 		if resp.MemberRole != nil {

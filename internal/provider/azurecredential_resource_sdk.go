@@ -16,32 +16,20 @@ type AzureCredentialResourceModelOptions struct {
 	State  *AzureCredentialResourceModel
 }
 
-func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialKeysOutput(ctx context.Context, resp *shared.AzureCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.BatchName = types.StringValue(resp.BatchName)
-	r.StorageName = types.StringValue(resp.StorageName)
-
-	return diags
-}
-
 func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialOutput(ctx context.Context, resp *shared.AzureCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BatchName = types.StringValue(resp.BatchName)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedAzureCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.StorageName = types.StringValue(resp.StorageName)
 	}
 
 	return diags
@@ -155,6 +143,12 @@ func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest
 func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.AzureCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -170,26 +164,6 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Conte
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAzureCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.AzureCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.AzureCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var batchName string
 	batchName = r.BatchName.ValueString()
 
@@ -226,14 +200,18 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.C
 	} else {
 		clientSecret = nil
 	}
-	out := shared.AzureCredentialKeys{
-		BatchName:    batchName,
-		StorageName:  storageName,
-		BatchKey:     batchKey,
-		StorageKey:   storageKey,
-		TenantID:     tenantID,
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
+	out := shared.AzureCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BatchName:     batchName,
+		StorageName:   storageName,
+		BatchKey:      batchKey,
+		StorageKey:    storageKey,
+		TenantID:      tenantID,
+		ClientID:      clientID,
+		ClientSecret:  clientSecret,
 	}
 
 	return &out, diags

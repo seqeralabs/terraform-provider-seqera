@@ -33,30 +33,11 @@ func (e *GitlabCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type GitlabCredentialKeys struct {
-	// GitLab account username associated with the access token.
-	Username string `json:"username"`
-	// GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
-	Token string `json:"token"`
-}
-
-func (g *GitlabCredentialKeys) GetUsername() string {
-	if g == nil {
-		return ""
-	}
-	return g.Username
-}
-
-func (g *GitlabCredentialKeys) GetToken() string {
-	if g == nil {
-		return ""
-	}
-	return g.Token
-}
-
 type GitlabCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -70,19 +51,42 @@ type GitlabCredential struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs
-	BaseURL *string              `json:"baseUrl,omitempty"`
-	Keys    GitlabCredentialKeys `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// GitLab account username associated with the access token.
+	Username string `json:"username"`
+	// GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
+	Token string `json:"token"`
 }
 
 func (g GitlabCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, token: .token } } | del(.username, .token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GitlabCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, token: .keys.token, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GitlabCredential) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GitlabCredential) GetCredentialsID() *string {
@@ -141,28 +145,25 @@ func (g *GitlabCredential) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GitlabCredential) GetKeys() GitlabCredentialKeys {
-	if g == nil {
-		return GitlabCredentialKeys{}
-	}
-	return g.Keys
-}
-
-type GitlabCredentialKeysOutput struct {
-	// GitLab account username associated with the access token.
-	Username string `json:"username"`
-}
-
-func (g *GitlabCredentialKeysOutput) GetUsername() string {
+func (g *GitlabCredential) GetUsername() string {
 	if g == nil {
 		return ""
 	}
 	return g.Username
 }
 
+func (g *GitlabCredential) GetToken() string {
+	if g == nil {
+		return ""
+	}
+	return g.Token
+}
+
 type GitlabCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -176,19 +177,40 @@ type GitlabCredentialOutput struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple GitLab credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitLab credential is used. For self-hosted GitLab, set this to the server URL. Example: https://gitlab.com/seqeralabs
-	BaseURL *string                    `json:"baseUrl,omitempty"`
-	Keys    GitlabCredentialKeysOutput `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// GitLab account username associated with the access token.
+	Username string `json:"username"`
 }
 
 func (g GitlabCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, token: .token } } | del(.username, .token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GitlabCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, token: .keys.token, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GitlabCredentialOutput) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GitlabCredentialOutput) GetCredentialsID() *string {
@@ -247,9 +269,9 @@ func (g *GitlabCredentialOutput) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GitlabCredentialOutput) GetKeys() GitlabCredentialKeysOutput {
+func (g *GitlabCredentialOutput) GetUsername() string {
 	if g == nil {
-		return GitlabCredentialKeysOutput{}
+		return ""
 	}
-	return g.Keys
+	return g.Username
 }

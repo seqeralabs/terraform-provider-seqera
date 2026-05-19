@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 // SSHDetails - SSH connection details for a Studio session
 type SSHDetails struct {
 	// The full SSH command to execute
@@ -57,6 +61,24 @@ type DataStudioDto struct {
 	SSHDetails *SSHDetails `json:"sshDetails,omitempty"`
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
+	// Alias of `session_id` for Terraform convention.
+	ID *string `json:"id,omitempty"`
+}
+
+func (d DataStudioDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .sessionId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
@@ -106,4 +128,11 @@ func (d *DataStudioDto) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
+}
+
+func (d *DataStudioDto) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
 }

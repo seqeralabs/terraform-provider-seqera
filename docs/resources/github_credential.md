@@ -76,7 +76,8 @@ resource "seqera_github_credential" "enterprise" {
 
 ### Read-Only
 
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+- `id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "github"
 
 ## Import

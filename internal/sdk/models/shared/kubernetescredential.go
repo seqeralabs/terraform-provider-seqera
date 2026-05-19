@@ -33,59 +33,11 @@ func (e *KubernetesCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type KubernetesCredentialKeys struct {
-	// Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
-	Token *string `json:"token,omitempty"`
-	// X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
-	ClientCertificate *string `json:"certificate,omitempty"`
-	// Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
-	PrivateKey *string `json:"privateKey,omitempty"`
-	// Type of key (always "kubernetes") - not exposed in Terraform
-	KeyType *string `default:"kubernetes" json:"keyType"`
-}
-
-func (k KubernetesCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
-}
-
-func (k *KubernetesCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (k *KubernetesCredentialKeys) GetToken() *string {
-	if k == nil {
-		return nil
-	}
-	return k.Token
-}
-
-func (k *KubernetesCredentialKeys) GetClientCertificate() *string {
-	if k == nil {
-		return nil
-	}
-	return k.ClientCertificate
-}
-
-func (k *KubernetesCredentialKeys) GetPrivateKey() *string {
-	if k == nil {
-		return nil
-	}
-	return k.PrivateKey
-}
-
-func (k *KubernetesCredentialKeys) GetKeyType() *string {
-	if k == nil {
-		return nil
-	}
-	return k.KeyType
-}
-
 type KubernetesCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -97,19 +49,44 @@ type KubernetesCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        KubernetesCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
+	Token *string `json:"token,omitempty"`
+	// X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
+	ClientCertificate *string `json:"client_certificate,omitempty"`
+	// Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
+	PrivateKey *string `json:"private_key,omitempty"`
 }
 
 func (k KubernetesCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
+	jsonBytes, err := utils.MarshalJSON(k, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { keyType: \"kubernetes\", token: .token, certificate: .client_certificate, privateKey: .private_key } } | del(.token, .client_certificate, .private_key, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (k *KubernetesCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { token: .keys.token, client_certificate: .keys.certificate, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (k *KubernetesCredential) GetID() *string {
+	if k == nil {
+		return nil
+	}
+	return k.ID
 }
 
 func (k *KubernetesCredential) GetCredentialsID() *string {
@@ -161,39 +138,32 @@ func (k *KubernetesCredential) GetLastUpdated() *time.Time {
 	return k.LastUpdated
 }
 
-func (k *KubernetesCredential) GetKeys() KubernetesCredentialKeys {
-	if k == nil {
-		return KubernetesCredentialKeys{}
-	}
-	return k.Keys
-}
-
-type KubernetesCredentialKeysOutput struct {
-	// Type of key (always "kubernetes") - not exposed in Terraform
-	KeyType *string `default:"kubernetes" json:"keyType"`
-}
-
-func (k KubernetesCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
-}
-
-func (k *KubernetesCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (k *KubernetesCredentialKeysOutput) GetKeyType() *string {
+func (k *KubernetesCredential) GetToken() *string {
 	if k == nil {
 		return nil
 	}
-	return k.KeyType
+	return k.Token
+}
+
+func (k *KubernetesCredential) GetClientCertificate() *string {
+	if k == nil {
+		return nil
+	}
+	return k.ClientCertificate
+}
+
+func (k *KubernetesCredential) GetPrivateKey() *string {
+	if k == nil {
+		return nil
+	}
+	return k.PrivateKey
 }
 
 type KubernetesCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -205,19 +175,38 @@ type KubernetesCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        KubernetesCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }
 
 func (k KubernetesCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(k, "", false)
+	jsonBytes, err := utils.MarshalJSON(k, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { keyType: \"kubernetes\", token: .token, certificate: .client_certificate, privateKey: .private_key } } | del(.token, .client_certificate, .private_key, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (k *KubernetesCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { token: .keys.token, client_certificate: .keys.certificate, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (k *KubernetesCredentialOutput) GetID() *string {
+	if k == nil {
+		return nil
+	}
+	return k.ID
 }
 
 func (k *KubernetesCredentialOutput) GetCredentialsID() *string {
@@ -267,11 +256,4 @@ func (k *KubernetesCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return k.LastUpdated
-}
-
-func (k *KubernetesCredentialOutput) GetKeys() KubernetesCredentialKeysOutput {
-	if k == nil {
-		return KubernetesCredentialKeysOutput{}
-	}
-	return k.Keys
 }

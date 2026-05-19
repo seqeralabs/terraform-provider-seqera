@@ -13,40 +13,6 @@ import (
 	"time"
 )
 
-func (r *ManagedComputeCEResourceModel) RefreshFromSharedConfig(ctx context.Context, resp *shared.Config) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.DataRetentionPolicy = types.BoolPointerValue(resp.DataRetentionPolicy)
-	r.Environment = []tfTypes.ConfigEnvVariable{}
-
-	for _, environmentItem := range resp.Environment {
-		var environment tfTypes.ConfigEnvVariable
-
-		environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-		environment.Head = types.BoolPointerValue(environmentItem.Head)
-		environment.Name = types.StringPointerValue(environmentItem.Name)
-		environment.Value = types.StringPointerValue(environmentItem.Value)
-
-		r.Environment = append(r.Environment, environment)
-	}
-	if resp.InstanceSize != nil {
-		r.InstanceSize = types.StringValue(string(*resp.InstanceSize))
-	} else {
-		r.InstanceSize = types.StringNull()
-	}
-	r.NextflowConfig = types.StringPointerValue(resp.NextflowConfig)
-	r.PostRunScript = types.StringPointerValue(resp.PostRunScript)
-	r.PreRunScript = types.StringPointerValue(resp.PreRunScript)
-	r.Region = types.StringPointerValue(resp.Region)
-	r.ResourceLabelIds = make([]types.Int64, 0, len(resp.ResourceLabelIds))
-	for _, v := range resp.ResourceLabelIds {
-		r.ResourceLabelIds = append(r.ResourceLabelIds, types.Int64Value(v))
-	}
-	r.WorkDir = types.StringPointerValue(resp.WorkDir)
-
-	return diags
-}
-
 func (r *ManagedComputeCEResourceModel) RefreshFromSharedCreateManagedComputeCEResponse(ctx context.Context, resp *shared.CreateManagedComputeCEResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -76,25 +42,46 @@ func (r *ManagedComputeCEResourceModel) RefreshFromSharedManagedComputeCECompute
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedConfig(ctx, &resp.Config)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.DataRetentionPolicy = types.BoolPointerValue(resp.DataRetentionPolicy)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
+		r.Environment = []tfTypes.ConfigEnvVariable{}
+
+		for _, environmentItem := range resp.Environment {
+			var environment tfTypes.ConfigEnvVariable
+
+			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+			environment.Head = types.BoolPointerValue(environmentItem.Head)
+			environment.Name = types.StringPointerValue(environmentItem.Name)
+			environment.Value = types.StringPointerValue(environmentItem.Value)
+
+			r.Environment = append(r.Environment, environment)
+		}
 		r.ID = types.StringPointerValue(resp.ID)
+		if resp.InstanceSize != nil {
+			r.InstanceSize = types.StringValue(string(*resp.InstanceSize))
+		} else {
+			r.InstanceSize = types.StringNull()
+		}
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
+		r.NextflowConfig = types.StringPointerValue(resp.NextflowConfig)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
 		if resp.Platform != nil {
 			r.Platform = types.StringValue(string(*resp.Platform))
 		} else {
 			r.Platform = types.StringNull()
 		}
+		r.PostRunScript = types.StringPointerValue(resp.PostRunScript)
+		r.PreRunScript = types.StringPointerValue(resp.PreRunScript)
+		r.Region = types.StringPointerValue(resp.Region)
+		r.ResourceLabelIds = make([]types.Int64, 0, len(resp.ResourceLabelIds))
+		for _, v := range resp.ResourceLabelIds {
+			r.ResourceLabelIds = append(r.ResourceLabelIds, types.Int64Value(v))
+		}
 		r.Status = types.StringPointerValue(resp.Status)
+		r.WorkDir = types.StringPointerValue(resp.WorkDir)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -181,103 +168,6 @@ func (r *ManagedComputeCEResourceModel) ToOperationsUpdateManagedComputeCEReques
 	return &out, diags
 }
 
-func (r *ManagedComputeCEResourceModel) ToSharedConfig(ctx context.Context) (*shared.Config, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	region := new(string)
-	if !r.Region.IsUnknown() && !r.Region.IsNull() {
-		*region = r.Region.ValueString()
-	} else {
-		region = nil
-	}
-	instanceSize := new(shared.InstanceSize)
-	if !r.InstanceSize.IsUnknown() && !r.InstanceSize.IsNull() {
-		*instanceSize = shared.InstanceSize(r.InstanceSize.ValueString())
-	} else {
-		instanceSize = nil
-	}
-	workDir := new(string)
-	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
-		*workDir = r.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
-	dataRetentionPolicy := new(bool)
-	if !r.DataRetentionPolicy.IsUnknown() && !r.DataRetentionPolicy.IsNull() {
-		*dataRetentionPolicy = r.DataRetentionPolicy.ValueBool()
-	} else {
-		dataRetentionPolicy = nil
-	}
-	resourceLabelIds := make([]int64, 0, len(r.ResourceLabelIds))
-	for resourceLabelIdsIndex := range r.ResourceLabelIds {
-		resourceLabelIds = append(resourceLabelIds, r.ResourceLabelIds[resourceLabelIdsIndex].ValueInt64())
-	}
-	preRunScript := new(string)
-	if !r.PreRunScript.IsUnknown() && !r.PreRunScript.IsNull() {
-		*preRunScript = r.PreRunScript.ValueString()
-	} else {
-		preRunScript = nil
-	}
-	postRunScript := new(string)
-	if !r.PostRunScript.IsUnknown() && !r.PostRunScript.IsNull() {
-		*postRunScript = r.PostRunScript.ValueString()
-	} else {
-		postRunScript = nil
-	}
-	nextflowConfig := new(string)
-	if !r.NextflowConfig.IsUnknown() && !r.NextflowConfig.IsNull() {
-		*nextflowConfig = r.NextflowConfig.ValueString()
-	} else {
-		nextflowConfig = nil
-	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Environment))
-	for environmentIndex := range r.Environment {
-		compute := new(bool)
-		if !r.Environment[environmentIndex].Compute.IsUnknown() && !r.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
-		}
-		head := new(bool)
-		if !r.Environment[environmentIndex].Head.IsUnknown() && !r.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name := new(string)
-		if !r.Environment[environmentIndex].Name.IsUnknown() && !r.Environment[environmentIndex].Name.IsNull() {
-			*name = r.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name = nil
-		}
-		value := new(string)
-		if !r.Environment[environmentIndex].Value.IsUnknown() && !r.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name,
-			Value:   value,
-		})
-	}
-	out := shared.Config{
-		Region:              region,
-		InstanceSize:        instanceSize,
-		WorkDir:             workDir,
-		DataRetentionPolicy: dataRetentionPolicy,
-		ResourceLabelIds:    resourceLabelIds,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		NextflowConfig:      nextflowConfig,
-		Environment:         environment,
-	}
-
-	return &out, diags
-}
-
 func (r *ManagedComputeCEResourceModel) ToSharedCreateManagedComputeCERequest(ctx context.Context) (*shared.CreateManagedComputeCERequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -354,24 +244,104 @@ func (r *ManagedComputeCEResourceModel) ToSharedManagedComputeCEComputeConfigInp
 	} else {
 		deleted = nil
 	}
-	config, configDiags := r.ToSharedConfig(ctx)
-	diags.Append(configDiags...)
-
-	if diags.HasError() {
-		return nil, diags
+	region := new(string)
+	if !r.Region.IsUnknown() && !r.Region.IsNull() {
+		*region = r.Region.ValueString()
+	} else {
+		region = nil
 	}
-
+	instanceSize := new(shared.InstanceSize)
+	if !r.InstanceSize.IsUnknown() && !r.InstanceSize.IsNull() {
+		*instanceSize = shared.InstanceSize(r.InstanceSize.ValueString())
+	} else {
+		instanceSize = nil
+	}
+	workDir := new(string)
+	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
+		*workDir = r.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
+	dataRetentionPolicy := new(bool)
+	if !r.DataRetentionPolicy.IsUnknown() && !r.DataRetentionPolicy.IsNull() {
+		*dataRetentionPolicy = r.DataRetentionPolicy.ValueBool()
+	} else {
+		dataRetentionPolicy = nil
+	}
+	resourceLabelIds := make([]int64, 0, len(r.ResourceLabelIds))
+	for resourceLabelIdsIndex := range r.ResourceLabelIds {
+		resourceLabelIds = append(resourceLabelIds, r.ResourceLabelIds[resourceLabelIdsIndex].ValueInt64())
+	}
+	preRunScript := new(string)
+	if !r.PreRunScript.IsUnknown() && !r.PreRunScript.IsNull() {
+		*preRunScript = r.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.PostRunScript.IsUnknown() && !r.PostRunScript.IsNull() {
+		*postRunScript = r.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	nextflowConfig := new(string)
+	if !r.NextflowConfig.IsUnknown() && !r.NextflowConfig.IsNull() {
+		*nextflowConfig = r.NextflowConfig.ValueString()
+	} else {
+		nextflowConfig = nil
+	}
+	environment := make([]shared.ConfigEnvVariable, 0, len(r.Environment))
+	for environmentIndex := range r.Environment {
+		compute := new(bool)
+		if !r.Environment[environmentIndex].Compute.IsUnknown() && !r.Environment[environmentIndex].Compute.IsNull() {
+			*compute = r.Environment[environmentIndex].Compute.ValueBool()
+		} else {
+			compute = nil
+		}
+		head := new(bool)
+		if !r.Environment[environmentIndex].Head.IsUnknown() && !r.Environment[environmentIndex].Head.IsNull() {
+			*head = r.Environment[environmentIndex].Head.ValueBool()
+		} else {
+			head = nil
+		}
+		name1 := new(string)
+		if !r.Environment[environmentIndex].Name.IsUnknown() && !r.Environment[environmentIndex].Name.IsNull() {
+			*name1 = r.Environment[environmentIndex].Name.ValueString()
+		} else {
+			name1 = nil
+		}
+		value := new(string)
+		if !r.Environment[environmentIndex].Value.IsUnknown() && !r.Environment[environmentIndex].Value.IsNull() {
+			*value = r.Environment[environmentIndex].Value.ValueString()
+		} else {
+			value = nil
+		}
+		environment = append(environment, shared.ConfigEnvVariable{
+			Compute: compute,
+			Head:    head,
+			Name:    name1,
+			Value:   value,
+		})
+	}
 	out := shared.ManagedComputeCEComputeConfigInput{
-		WorkspaceID: workspaceID,
-		ID:          id,
-		Name:        name,
-		Platform:    platform,
-		Status:      status,
-		DateCreated: dateCreated,
-		LastUpdated: lastUpdated,
-		LastUsed:    lastUsed,
-		Deleted:     deleted,
-		Config:      *config,
+		WorkspaceID:         workspaceID,
+		ID:                  id,
+		Name:                name,
+		Platform:            platform,
+		Status:              status,
+		DateCreated:         dateCreated,
+		LastUpdated:         lastUpdated,
+		LastUsed:            lastUsed,
+		Deleted:             deleted,
+		Region:              region,
+		InstanceSize:        instanceSize,
+		WorkDir:             workDir,
+		DataRetentionPolicy: dataRetentionPolicy,
+		ResourceLabelIds:    resourceLabelIds,
+		PreRunScript:        preRunScript,
+		PostRunScript:       postRunScript,
+		NextflowConfig:      nextflowConfig,
+		Environment:         environment,
 	}
 
 	return &out, diags

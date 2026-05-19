@@ -33,30 +33,11 @@ func (e *CodecommitCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type CodecommitCredentialKeys struct {
-	// AWS IAM access key ID for CodeCommit.
-	AccessKey string `json:"username"`
-	// AWS IAM secret access key for CodeCommit (sensitive).
-	SecretKey string `json:"password"`
-}
-
-func (c *CodecommitCredentialKeys) GetAccessKey() string {
-	if c == nil {
-		return ""
-	}
-	return c.AccessKey
-}
-
-func (c *CodecommitCredentialKeys) GetSecretKey() string {
-	if c == nil {
-		return ""
-	}
-	return c.SecretKey
-}
-
 type CodecommitCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -70,19 +51,42 @@ type CodecommitCredential struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
-	BaseURL *string                  `json:"baseUrl,omitempty"`
-	Keys    CodecommitCredentialKeys `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// AWS IAM access key ID for CodeCommit.
+	AccessKey string `json:"access_key"`
+	// AWS IAM secret access key for CodeCommit (sensitive).
+	SecretKey string `json:"secret_key"`
 }
 
 func (c CodecommitCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+	jsonBytes, err := utils.MarshalJSON(c, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .access_key, password: .secret_key } } | del(.access_key, .secret_key, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *CodecommitCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { access_key: .keys.username, secret_key: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (c *CodecommitCredential) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *CodecommitCredential) GetCredentialsID() *string {
@@ -141,28 +145,25 @@ func (c *CodecommitCredential) GetBaseURL() *string {
 	return c.BaseURL
 }
 
-func (c *CodecommitCredential) GetKeys() CodecommitCredentialKeys {
-	if c == nil {
-		return CodecommitCredentialKeys{}
-	}
-	return c.Keys
-}
-
-type CodecommitCredentialKeysOutput struct {
-	// AWS IAM access key ID for CodeCommit.
-	AccessKey string `json:"username"`
-}
-
-func (c *CodecommitCredentialKeysOutput) GetAccessKey() string {
+func (c *CodecommitCredential) GetAccessKey() string {
 	if c == nil {
 		return ""
 	}
 	return c.AccessKey
 }
 
+func (c *CodecommitCredential) GetSecretKey() string {
+	if c == nil {
+		return ""
+	}
+	return c.SecretKey
+}
+
 type CodecommitCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -176,19 +177,40 @@ type CodecommitCredentialOutput struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Regional AWS CodeCommit endpoint (optional, recommended). When multiple CodeCommit credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated CodeCommit credential is used. Example: https://git-codecommit.eu-west-1.amazonaws.com
-	BaseURL *string                        `json:"baseUrl,omitempty"`
-	Keys    CodecommitCredentialKeysOutput `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// AWS IAM access key ID for CodeCommit.
+	AccessKey string `json:"access_key"`
 }
 
 func (c CodecommitCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+	jsonBytes, err := utils.MarshalJSON(c, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .access_key, password: .secret_key } } | del(.access_key, .secret_key, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *CodecommitCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { access_key: .keys.username, secret_key: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (c *CodecommitCredentialOutput) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *CodecommitCredentialOutput) GetCredentialsID() *string {
@@ -247,9 +269,9 @@ func (c *CodecommitCredentialOutput) GetBaseURL() *string {
 	return c.BaseURL
 }
 
-func (c *CodecommitCredentialOutput) GetKeys() CodecommitCredentialKeysOutput {
+func (c *CodecommitCredentialOutput) GetAccessKey() string {
 	if c == nil {
-		return CodecommitCredentialKeysOutput{}
+		return ""
 	}
-	return c.Keys
+	return c.AccessKey
 }

@@ -16,26 +16,14 @@ type CodecommitCredentialResourceModelOptions struct {
 	State  *CodecommitCredentialResourceModel
 }
 
-func (r *CodecommitCredentialResourceModel) RefreshFromSharedCodecommitCredentialKeysOutput(ctx context.Context, resp *shared.CodecommitCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.AccessKey = types.StringValue(resp.AccessKey)
-
-	return diags
-}
-
 func (r *CodecommitCredentialResourceModel) RefreshFromSharedCodecommitCredentialOutput(ctx context.Context, resp *shared.CodecommitCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AccessKey = types.StringValue(resp.AccessKey)
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedCodecommitCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -155,6 +143,12 @@ func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredenti
 func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.CodecommitCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -176,36 +170,20 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx con
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedCodecommitCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.CodecommitCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredentialKeys(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.CodecommitCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var accessKey string
 	accessKey = r.AccessKey.ValueString()
 
 	var secretKey string
 	secretKey = opts.Config.SecretKey.ValueString()
 
-	out := shared.CodecommitCredentialKeys{
-		AccessKey: accessKey,
-		SecretKey: secretKey,
+	out := shared.CodecommitCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		AccessKey:     accessKey,
+		SecretKey:     secretKey,
 	}
 
 	return &out, diags

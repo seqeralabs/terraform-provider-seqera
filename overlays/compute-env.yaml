@@ -17,6 +17,21 @@ actions:
     update:
       x-speakeasy-entity: ComputeEnv
 
+  # Add `id` as an alias of `compute_env_id` on the create response so users
+  # can reference the resource with either `seqera_compute_env.foo.id` (TF
+  # convention) or `seqera_compute_env.foo.compute_env_id` (existing
+  # customer HCL). Both Computed, same value.
+  - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
+    update:
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
+      properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+
   # ComputeConfig platform validator
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:

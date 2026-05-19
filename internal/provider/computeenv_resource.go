@@ -62,6 +62,7 @@ type ComputeEnvResourceModel struct {
 	ComputeEnv   *tfTypes.ComputeEnvComputeConfig1 `tfsdk:"compute_env"`
 	ComputeEnvID types.String                      `tfsdk:"compute_env_id"`
 	Force        types.Bool                        `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	ID           types.String                      `tfsdk:"id"`
 	LabelIds     []types.Int64                     `tfsdk:"label_ids"`
 	WorkspaceID  types.Int64                       `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
@@ -5121,6 +5122,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"force": schema.BoolAttribute{
 				Optional:    true,
 				Description: `Force-delete a stuck compute environment, bypassing active-job checks. Only valid for environments in ERRORED, INVALID, or DELETING status.`,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `compute_env_id` + "`" + ` for Terraform convention.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,

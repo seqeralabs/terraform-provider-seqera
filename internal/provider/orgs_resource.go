@@ -9,9 +9,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 	"strconv"
@@ -35,6 +37,7 @@ type OrgsResource struct {
 type OrgsResourceModel struct {
 	Description types.String `tfsdk:"description"`
 	FullName    types.String `tfsdk:"full_name"`
+	ID          types.Int64  `tfsdk:"id"`
 	Location    types.String `tfsdk:"location"`
 	MemberID    types.Int64  `tfsdk:"member_id"`
 	MemberRole  types.String `tfsdk:"member_role"`
@@ -65,6 +68,13 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
+			},
+			"id": schema.Int64Attribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `org_id` + "`" + ` for Terraform convention.`,
 			},
 			"location": schema.StringAttribute{
 				Computed:    true,

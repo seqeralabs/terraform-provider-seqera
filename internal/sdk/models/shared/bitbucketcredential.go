@@ -33,39 +33,11 @@ func (e *BitbucketCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type BitbucketCredentialKeys struct {
-	// Bitbucket account username (for app passwords) or email (for API tokens).
-	Username string `json:"username"`
-	// Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
-	Password *string `json:"password,omitempty"`
-	// Bitbucket API token (sensitive). Mutually exclusive with `password`.
-	Token *string `json:"token,omitempty"`
-}
-
-func (b *BitbucketCredentialKeys) GetUsername() string {
-	if b == nil {
-		return ""
-	}
-	return b.Username
-}
-
-func (b *BitbucketCredentialKeys) GetPassword() *string {
-	if b == nil {
-		return nil
-	}
-	return b.Password
-}
-
-func (b *BitbucketCredentialKeys) GetToken() *string {
-	if b == nil {
-		return nil
-	}
-	return b.Token
-}
-
 type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -79,19 +51,44 @@ type BitbucketCredential struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1
-	BaseURL *string                 `json:"baseUrl,omitempty"`
-	Keys    BitbucketCredentialKeys `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Bitbucket account username (for app passwords) or email (for API tokens).
+	Username string `json:"username"`
+	// Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
+	Password *string `json:"password,omitempty"`
+	// Bitbucket API token (sensitive). Mutually exclusive with `password`.
+	Token *string `json:"token,omitempty"`
 }
 
 func (b BitbucketCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(b, "", false)
+	jsonBytes, err := utils.MarshalJSON(b, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .password, token: .token } } | del(.username, .password, .token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (b *BitbucketCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, password: .keys.password, token: .keys.token, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (b *BitbucketCredential) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
 }
 
 func (b *BitbucketCredential) GetCredentialsID() *string {
@@ -150,28 +147,32 @@ func (b *BitbucketCredential) GetBaseURL() *string {
 	return b.BaseURL
 }
 
-func (b *BitbucketCredential) GetKeys() BitbucketCredentialKeys {
-	if b == nil {
-		return BitbucketCredentialKeys{}
-	}
-	return b.Keys
-}
-
-type BitbucketCredentialKeysOutput struct {
-	// Bitbucket account username (for app passwords) or email (for API tokens).
-	Username string `json:"username"`
-}
-
-func (b *BitbucketCredentialKeysOutput) GetUsername() string {
+func (b *BitbucketCredential) GetUsername() string {
 	if b == nil {
 		return ""
 	}
 	return b.Username
 }
 
+func (b *BitbucketCredential) GetPassword() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Password
+}
+
+func (b *BitbucketCredential) GetToken() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Token
+}
+
 type BitbucketCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -185,19 +186,40 @@ type BitbucketCredentialOutput struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1
-	BaseURL *string                       `json:"baseUrl,omitempty"`
-	Keys    BitbucketCredentialKeysOutput `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Bitbucket account username (for app passwords) or email (for API tokens).
+	Username string `json:"username"`
 }
 
 func (b BitbucketCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(b, "", false)
+	jsonBytes, err := utils.MarshalJSON(b, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .password, token: .token } } | del(.username, .password, .token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (b *BitbucketCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, password: .keys.password, token: .keys.token, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (b *BitbucketCredentialOutput) GetID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ID
 }
 
 func (b *BitbucketCredentialOutput) GetCredentialsID() *string {
@@ -256,9 +278,9 @@ func (b *BitbucketCredentialOutput) GetBaseURL() *string {
 	return b.BaseURL
 }
 
-func (b *BitbucketCredentialOutput) GetKeys() BitbucketCredentialKeysOutput {
+func (b *BitbucketCredentialOutput) GetUsername() string {
 	if b == nil {
-		return BitbucketCredentialKeysOutput{}
+		return ""
 	}
-	return b.Keys
+	return b.Username
 }

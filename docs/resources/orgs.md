@@ -92,6 +92,7 @@ resource "seqera_orgs" "research" {
 
 ### Read-Only
 
+- `id` (Number) Alias of `org_id` for Terraform convention.
 - `member_id` (Number) Member ID (can be null for collaborators)
 - `member_role` (String) Member role (can be null for collaborators)
 - `org_id` (Number) Organization numeric identifier

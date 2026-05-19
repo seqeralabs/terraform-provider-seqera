@@ -139,6 +139,7 @@ func TestCredentialsConfigValidator_ValidSingleKeyProviders(t *testing.T) {
 		"azurerepos":    "azurerepos",
 		"seqeracompute": "seqeracompute",
 		"azure_entra":   "azure_entra",
+		"azure-cloud":   "azure_cloud",
 	}
 
 	for provider, keyField := range cases {
@@ -149,13 +150,6 @@ func TestCredentialsConfigValidator_ValidSingleKeyProviders(t *testing.T) {
 			assert.False(t, diags.HasError(), "expected no errors for provider_type=%q with keys.%s, got: %s", provider, keyField, diags.Errors())
 		})
 	}
-}
-
-func TestCredentialsConfigValidator_AzureWithAzureCloudKeys(t *testing.T) {
-	t.Parallel()
-	req := makeRequest("azure", buildKeysValue("azure_cloud"))
-	diags := runValidator(req)
-	assert.False(t, diags.HasError(), "provider_type=azure should accept keys.azure_cloud, got: %s", diags.Errors())
 }
 
 func TestCredentialsConfigValidator_AzureWithAzureKeys(t *testing.T) {
@@ -184,7 +178,10 @@ func TestCredentialsConfigValidator_MismatchedKeys(t *testing.T) {
 		{"aws with google keys", "aws", "google"},
 		{"google with aws keys", "google", "aws"},
 		{"azure with github keys", "azure", "github"},
+		{"azure with azure_cloud keys", "azure", "azure_cloud"},
+		{"azure with azure_entra keys", "azure", "azure_entra"},
 		{"azure_entra with azure keys", "azure_entra", "azure"},
+		{"azure-cloud with azure keys", "azure-cloud", "azure"},
 		{"ssh with k8s keys", "ssh", "k8s"},
 	}
 

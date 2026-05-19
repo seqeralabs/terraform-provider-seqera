@@ -33,101 +33,11 @@ func (e *AzureEntraCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// AzureEntraCredentialDiscriminator - Authentication mode discriminator.
-type AzureEntraCredentialDiscriminator string
-
-const (
-	AzureEntraCredentialDiscriminatorAzureEntra AzureEntraCredentialDiscriminator = "azure_entra"
-)
-
-func (e AzureEntraCredentialDiscriminator) ToPointer() *AzureEntraCredentialDiscriminator {
-	return &e
-}
-func (e *AzureEntraCredentialDiscriminator) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "azure_entra":
-		*e = AzureEntraCredentialDiscriminator(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AzureEntraCredentialDiscriminator: %v", v)
-	}
-}
-
-type AzureEntraCredentialKeys struct {
-	// Authentication mode discriminator.
-	Discriminator *AzureEntraCredentialDiscriminator `default:"azure_entra" json:"discriminator"`
-	// Azure Batch account name.
-	BatchName string `json:"batchName"`
-	// Azure Blob Storage account name.
-	StorageName string `json:"storageName"`
-	// Microsoft Entra tenant ID.
-	TenantID string `json:"tenantId"`
-	// Microsoft Entra service principal client (application) ID.
-	ClientID string `json:"clientId"`
-	// Microsoft Entra service principal client secret.
-	ClientSecret string `json:"clientSecret"`
-}
-
-func (a AzureEntraCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureEntraCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureEntraCredentialKeys) GetDiscriminator() *AzureEntraCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureEntraCredentialKeys) GetBatchName() string {
-	if a == nil {
-		return ""
-	}
-	return a.BatchName
-}
-
-func (a *AzureEntraCredentialKeys) GetStorageName() string {
-	if a == nil {
-		return ""
-	}
-	return a.StorageName
-}
-
-func (a *AzureEntraCredentialKeys) GetTenantID() string {
-	if a == nil {
-		return ""
-	}
-	return a.TenantID
-}
-
-func (a *AzureEntraCredentialKeys) GetClientID() string {
-	if a == nil {
-		return ""
-	}
-	return a.ClientID
-}
-
-func (a *AzureEntraCredentialKeys) GetClientSecret() string {
-	if a == nil {
-		return ""
-	}
-	return a.ClientSecret
-}
-
 type AzureEntraCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -139,19 +49,48 @@ type AzureEntraCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        AzureEntraCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure Batch account name.
+	BatchName string `json:"batch_name"`
+	// Azure Blob Storage account name.
+	StorageName string `json:"storage_name"`
+	// Microsoft Entra tenant ID.
+	TenantID string `json:"tenant_id"`
+	// Microsoft Entra service principal client (application) ID.
+	ClientID string `json:"client_id"`
+	// Microsoft Entra service principal client secret.
+	ClientSecret string `json:"client_secret"`
 }
 
 func (a AzureEntraCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure_entra\", batchName: .batch_name, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureEntraCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { batch_name: .keys.batchName, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureEntraCredential) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureEntraCredential) GetCredentialsID() *string {
@@ -203,75 +142,46 @@ func (a *AzureEntraCredential) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureEntraCredential) GetKeys() AzureEntraCredentialKeys {
-	if a == nil {
-		return AzureEntraCredentialKeys{}
-	}
-	return a.Keys
-}
-
-type AzureEntraCredentialKeysOutput struct {
-	// Authentication mode discriminator.
-	Discriminator *AzureEntraCredentialDiscriminator `default:"azure_entra" json:"discriminator"`
-	// Azure Batch account name.
-	BatchName string `json:"batchName"`
-	// Azure Blob Storage account name.
-	StorageName string `json:"storageName"`
-	// Microsoft Entra tenant ID.
-	TenantID string `json:"tenantId"`
-	// Microsoft Entra service principal client (application) ID.
-	ClientID string `json:"clientId"`
-}
-
-func (a AzureEntraCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureEntraCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureEntraCredentialKeysOutput) GetDiscriminator() *AzureEntraCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureEntraCredentialKeysOutput) GetBatchName() string {
+func (a *AzureEntraCredential) GetBatchName() string {
 	if a == nil {
 		return ""
 	}
 	return a.BatchName
 }
 
-func (a *AzureEntraCredentialKeysOutput) GetStorageName() string {
+func (a *AzureEntraCredential) GetStorageName() string {
 	if a == nil {
 		return ""
 	}
 	return a.StorageName
 }
 
-func (a *AzureEntraCredentialKeysOutput) GetTenantID() string {
+func (a *AzureEntraCredential) GetTenantID() string {
 	if a == nil {
 		return ""
 	}
 	return a.TenantID
 }
 
-func (a *AzureEntraCredentialKeysOutput) GetClientID() string {
+func (a *AzureEntraCredential) GetClientID() string {
 	if a == nil {
 		return ""
 	}
 	return a.ClientID
 }
 
+func (a *AzureEntraCredential) GetClientSecret() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientSecret
+}
+
 type AzureEntraCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -283,19 +193,46 @@ type AzureEntraCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        AzureEntraCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure Batch account name.
+	BatchName string `json:"batch_name"`
+	// Azure Blob Storage account name.
+	StorageName string `json:"storage_name"`
+	// Microsoft Entra tenant ID.
+	TenantID string `json:"tenant_id"`
+	// Microsoft Entra service principal client (application) ID.
+	ClientID string `json:"client_id"`
 }
 
 func (a AzureEntraCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure_entra\", batchName: .batch_name, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureEntraCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { batch_name: .keys.batchName, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureEntraCredentialOutput) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureEntraCredentialOutput) GetCredentialsID() *string {
@@ -347,9 +284,30 @@ func (a *AzureEntraCredentialOutput) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureEntraCredentialOutput) GetKeys() AzureEntraCredentialKeysOutput {
+func (a *AzureEntraCredentialOutput) GetBatchName() string {
 	if a == nil {
-		return AzureEntraCredentialKeysOutput{}
+		return ""
 	}
-	return a.Keys
+	return a.BatchName
+}
+
+func (a *AzureEntraCredentialOutput) GetStorageName() string {
+	if a == nil {
+		return ""
+	}
+	return a.StorageName
+}
+
+func (a *AzureEntraCredentialOutput) GetTenantID() string {
+	if a == nil {
+		return ""
+	}
+	return a.TenantID
+}
+
+func (a *AzureEntraCredentialOutput) GetClientID() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientID
 }

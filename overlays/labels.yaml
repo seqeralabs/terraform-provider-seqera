@@ -87,10 +87,21 @@ actions:
         and other platform resources, enabling resource organization, filtering,
         and management across the platform.
 
-  # Entity response schema
+  # Entity response schema. Add transform-from-api so the response surfaces
+  # `label_id` (existing customer attribute) alongside `id` (TF convention).
+  # Both attributes are Computed and hold the same value.
   - target: $["components"]["schemas"]["CreateLabelResponse"]
     update:
       x-speakeasy-entity: Labels
+      x-speakeasy-transform-from-api:
+        jq: '. + { label_id: .id }'
+      properties:
+        label_id:
+          type: integer
+          format: int64
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
 
   # ============================================================================
   # ENTITY OPERATIONS (CRUD)
@@ -214,10 +225,8 @@ actions:
   - target: $["components"]["schemas"]["ListLabelsResponse"]["properties"]["totalSize"]
     remove: true
 
-  # ID field name override
-  - target: $["components"]["schemas"]["CreateLabelResponse"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: labelId
+  # ID field name override removed — `id` now flows through as `id` in
+  # the Terraform schema. `label_id` is added as a synthetic alias above.
 
   # Readonly parameters
   - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["id"]

@@ -68,6 +68,7 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.Configuration.SSHEnabled = types.BoolPointerValue(resp.Configuration.SSHEnabled)
 		}
 		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.SessionID = types.StringPointerValue(resp.SessionID)

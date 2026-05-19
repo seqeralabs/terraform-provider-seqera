@@ -42,6 +42,7 @@ type DataLinkResourceModel struct {
 	DataLinkID       types.String                  `tfsdk:"data_link_id"`
 	Description      types.String                  `tfsdk:"description"`
 	Hidden           types.Bool                    `tfsdk:"hidden"`
+	ID               types.String                  `tfsdk:"id"`
 	Message          types.String                  `tfsdk:"message"`
 	Name             types.String                  `tfsdk:"name"`
 	ProviderType     types.String                  `tfsdk:"provider_type"`
@@ -82,7 +83,10 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Optional: true,
 			},
 			"data_link_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Data-link string identifier`,
 			},
 			"description": schema.StringAttribute{
@@ -91,6 +95,10 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"hidden": schema.BoolAttribute{
 				Computed: true,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the data link`,
 			},
 			"message": schema.StringAttribute{
 				Computed: true,
