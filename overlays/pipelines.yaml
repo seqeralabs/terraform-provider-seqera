@@ -52,11 +52,15 @@ actions:
     update:
       x-speakeasy-entity: Pipeline
       x-speakeasy-entity-description: |
-        Manage Nextflow pipeline definitions and configurations.
+        Manage saved pipeline definitions on the Seqera Platform Launchpad.
 
-        Pipelines define reusable workflow templates with parameters,
-        compute environment settings, and execution configurations
-        for scalable bioinformatics and data processing workflows.
+        A `seqera_pipeline` is a reusable launch template — repository,
+        revision, default parameters, and a default compute environment —
+        that users can launch on demand from the UI or API.
+
+        Reach for `seqera_workflows` instead when Terraform itself should
+        trigger an individual workflow run (for example, a validation
+        launch after a compute environment change).
       description: |
         Represents a pipeline configuration in the Seqera Platform.
         Contains pipeline metadata, configuration settings, and execution parameters

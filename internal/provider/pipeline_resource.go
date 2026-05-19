@@ -65,7 +65,7 @@ func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Nextflow pipeline definitions and configurations.\n\nPipelines define reusable workflow templates with parameters,\ncompute environment settings, and execution configurations\nfor scalable bioinformatics and data processing workflows.\n",
+		MarkdownDescription: "Manage saved pipeline definitions on the Seqera Platform Launchpad.\n\nA `seqera_pipeline` is a reusable launch template — repository,\nrevision, default parameters, and a default compute environment —\nthat users can launch on demand from the UI or API.\n\nReach for `seqera_workflows` instead when Terraform itself should\ntrigger an individual workflow run (for example, a validation\nlaunch after a compute environment change).\n",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -2160,9 +2160,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							"date_created": schema.StringAttribute{
 								Computed: true,
 							},
-							"deleted": schema.BoolAttribute{
-								Computed: true,
-							},
 							"description": schema.StringAttribute{
 								Computed: true,
 							},
@@ -2231,13 +2228,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Computed:    true,
 						Optional:    true,
 						Description: `Head job memory allocation in MB`,
-					},
-					"id": schema.StringAttribute{
-						Computed: true,
-						MarkdownDescription: `Launch identifier. Server-generated on workflow launch and pipeline` + "\n" +
-							`create — leave unset. Echoed back by the provider on` + "\n" +
-							`` + "`" + `seqera_action` + "`" + ` updates so the backend can confirm the launch` + "\n" +
-							`identity hasn't changed.`,
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,

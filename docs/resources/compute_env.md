@@ -117,7 +117,6 @@ Read-Only:
 - `aws_account_id` (String)
 - `compute_env_id` (String)
 - `date_created` (String)
-- `deleted` (Boolean) Whether compute environment is deleted (null means not deleted)
 - `labels` (Attributes List) (see [below for nested schema](#nestedatt--compute_env--labels))
 - `last_updated` (String)
 - `last_used` (String) Last time this compute environment was used (null if never used)

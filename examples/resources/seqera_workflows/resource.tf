@@ -1,41 +1,18 @@
-resource "seqera_workflows" "my_workflows" {
-  compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
-  config_profiles = [
-    "docker",
-    "aws",
-  ]
-  config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
-  entry_name         = "main.nf"
-  force              = false
-  head_job_cpus      = 2
-  head_job_memory_mb = 4096
-  label_ids = [
-    1001,
-    1002,
-    1003,
-  ]
-  main_script         = "main.nf"
-  params_text         = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-  pipeline            = "https://github.com/nextflow-io/hello"
-  pipeline_schema_id  = 10
-  post_run_script     = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-  pre_run_script      = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-  pull_latest         = true
-  resume              = true
-  revision            = "main"
-  run_name            = "nextflow-hello"
-  schema_name         = "nextflow_schema.json"
-  source_workspace_id = 2
-  stub_run            = false
-  tower_config        = "...my_tower_config..."
-  user_secrets = [
-    "MY_API_KEY",
-    "DATABASE_PASSWORD",
-  ]
-  work_dir     = "s3://my-bucket/work"
-  workspace_id = 10
-  workspace_secrets = [
-    "WORKSPACE_TOKEN",
-    "SHARED_CREDENTIALS",
-  ]
+# seqera_workflows — launch an individual workflow run on the Seqera
+# Platform. Each resource maps to one Run on the Runs page.
+#
+# Use this when Terraform itself should trigger a run (e.g. a validation
+# launch after a compute environment change, or a CI fan-out across CEs).
+# For a saved, re-launchable pipeline definition on the Launchpad, use
+# `seqera_pipeline` instead.
+
+# Minimal launch against an existing compute environment.
+resource "seqera_workflows" "hello" {
+  workspace_id   = seqera_workspace.main.id
+  compute_env_id = seqera_aws_batch_ce.production.compute_env_id
+  work_dir       = seqera_aws_batch_ce.production.config.work_dir
+
+  pipeline = "https://github.com/nextflow-io/hello"
+  revision = "master"
+  run_name = "hello-tf-launch"
 }

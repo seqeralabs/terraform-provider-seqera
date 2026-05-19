@@ -123,7 +123,6 @@ resource "seqera_azure_batch_ce" "managed_identity" {
 
 - `compute_env_id` (String) Compute environment string identifier
 - `date_created` (String) Timestamp when the compute environment was created
-- `deleted` (Boolean) Flag indicating if the compute environment has been deleted
 - `id` (String) Unique identifier for the compute environment
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used

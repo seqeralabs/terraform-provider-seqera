@@ -10,7 +10,7 @@ type ComputeEnvComputeConfig struct {
 	Config        *ComputeConfig `tfsdk:"config"`
 	CredentialsID types.String   `tfsdk:"credentials_id"`
 	DateCreated   types.String   `tfsdk:"date_created"`
-	Deleted       types.Bool     `tfsdk:"deleted"`
+	Deleted       types.Bool     `tfsdk:"-"`
 	Description   types.String   `tfsdk:"description"`
 	ComputeEnvID  types.String   `tfsdk:"compute_env_id"`
 	LastUpdated   types.String   `tfsdk:"last_updated"`

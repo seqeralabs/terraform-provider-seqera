@@ -153,9 +153,40 @@ actions:
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.lastUsed
     update:
       x-speakeasy-param-readonly: true
+  # Soft-delete handling — Tower returns 200 OK with `deleted: true` for a
+  # destroyed CE rather than a 404. Mark the field so Speakeasy treats a
+  # truthy value as resource-gone and the next plan re-creates the CE.
+  # Complements `x-speakeasy-entity-missing-codes: [400, 404]` (used per
+  # Read operation) which handles the fully-purged case.
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.deleted
     update:
       x-speakeasy-param-readonly: true
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.deleted
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.AWSBatchCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.AwsCloudCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.AzureBatchCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.AzureCloudCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.GCPBatchCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.GCPCloudCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
+  - target: $.components.schemas.ManagedComputeCE_ComputeConfig.properties.deleted
+    update:
+      x-speakeasy-soft-delete-property: true
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.status
     update:
       x-speakeasy-param-readonly: true

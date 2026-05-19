@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type WorkflowLaunchRequest struct {
+type ActionLaunchRequest struct {
 	ComputeEnv          *ComputeEnvComputeConfig `tfsdk:"compute_env"`
 	ComputeEnvID        types.String             `tfsdk:"compute_env_id"`
 	ConfigProfiles      []types.String           `tfsdk:"config_profiles"`
@@ -14,6 +14,7 @@ type WorkflowLaunchRequest struct {
 	EntryName           types.String             `tfsdk:"entry_name"`
 	HeadJobCpus         types.Int32              `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32              `tfsdk:"head_job_memory_mb"`
+	ID                  types.String             `tfsdk:"id"`
 	LabelIds            []types.Int64            `tfsdk:"label_ids"`
 	LaunchContainer     types.String             `tfsdk:"launch_container"`
 	MainScript          types.String             `tfsdk:"main_script"`
