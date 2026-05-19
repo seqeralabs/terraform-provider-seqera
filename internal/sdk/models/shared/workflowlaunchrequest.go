@@ -12,8 +12,14 @@ type WorkflowLaunchRequest struct {
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	LabelIds        []int64 `json:"labelIds,omitempty"`
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+	// Launch identifier. Server-generated on workflow launch and pipeline
+	// create — leave unset. Echoed back by the provider on
+	// `seqera_action` updates so the backend can confirm the launch
+	// identity hasn't changed.
+	//
+	ID       *string `json:"id,omitempty"`
+	LabelIds []int64 `json:"labelIds,omitempty"`
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
 	// Pipeline parameters text
@@ -81,6 +87,13 @@ func (w *WorkflowLaunchRequest) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return w.HeadJobMemoryMb
+}
+
+func (w *WorkflowLaunchRequest) GetID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ID
 }
 
 func (w *WorkflowLaunchRequest) GetLabelIds() []int64 {

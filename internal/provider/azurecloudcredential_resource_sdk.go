@@ -16,34 +16,22 @@ type AzureCloudCredentialResourceModelOptions struct {
 	State  *AzureCloudCredentialResourceModel
 }
 
-func (r *AzureCloudCredentialResourceModel) RefreshFromSharedAzureCloudCredentialKeysOutput(ctx context.Context, resp *shared.AzureCloudCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.ClientID = types.StringValue(resp.ClientID)
-	r.StorageName = types.StringValue(resp.StorageName)
-	r.SubscriptionID = types.StringValue(resp.SubscriptionID)
-	r.TenantID = types.StringValue(resp.TenantID)
-
-	return diags
-}
-
 func (r *AzureCloudCredentialResourceModel) RefreshFromSharedAzureCloudCredentialOutput(ctx context.Context, resp *shared.AzureCloudCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ClientID = types.StringValue(resp.ClientID)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedAzureCloudCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.StorageName = types.StringValue(resp.StorageName)
+		r.SubscriptionID = types.StringValue(resp.SubscriptionID)
+		r.TenantID = types.StringValue(resp.TenantID)
 	}
 
 	return diags
@@ -157,6 +145,12 @@ func (r *AzureCloudCredentialResourceModel) ToOperationsUpdateAzureCloudCredenti
 func (r *AzureCloudCredentialResourceModel) ToSharedAzureCloudCredential(ctx context.Context, opts *AzureCloudCredentialResourceModelOptions) (*shared.AzureCloudCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -172,26 +166,6 @@ func (r *AzureCloudCredentialResourceModel) ToSharedAzureCloudCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAzureCloudCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.AzureCloudCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *AzureCloudCredentialResourceModel) ToSharedAzureCloudCredentialKeys(ctx context.Context, opts *AzureCloudCredentialResourceModelOptions) (*shared.AzureCloudCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var subscriptionID string
 	subscriptionID = r.SubscriptionID.ValueString()
 
@@ -207,7 +181,11 @@ func (r *AzureCloudCredentialResourceModel) ToSharedAzureCloudCredentialKeys(ctx
 	var clientSecret string
 	clientSecret = opts.Config.ClientSecret.ValueString()
 
-	out := shared.AzureCloudCredentialKeys{
+	out := shared.AzureCloudCredential{
+		ID:             id,
+		CredentialsID:  credentialsID,
+		Name:           name,
+		ProviderType:   providerType,
 		SubscriptionID: subscriptionID,
 		StorageName:    storageName,
 		TenantID:       tenantID,

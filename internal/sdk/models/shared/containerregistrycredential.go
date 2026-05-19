@@ -33,39 +33,11 @@ func (e *ContainerRegistryCredentialProviderType) UnmarshalJSON(data []byte) err
 	}
 }
 
-type ContainerRegistryCredentialKeys struct {
-	// Username for container registry authentication (required)
-	UserName string `json:"userName"`
-	// Password or access token for container registry authentication (required, sensitive)
-	Password string `json:"password"`
-	// Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
-	Registry *string `json:"registry,omitempty"`
-}
-
-func (c *ContainerRegistryCredentialKeys) GetUserName() string {
-	if c == nil {
-		return ""
-	}
-	return c.UserName
-}
-
-func (c *ContainerRegistryCredentialKeys) GetPassword() string {
-	if c == nil {
-		return ""
-	}
-	return c.Password
-}
-
-func (c *ContainerRegistryCredentialKeys) GetRegistry() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Registry
-}
-
 type ContainerRegistryCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -77,19 +49,44 @@ type ContainerRegistryCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                      `json:"lastUpdated,omitempty"`
-	Keys        ContainerRegistryCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Username for container registry authentication (required)
+	UserName string `json:"user_name"`
+	// Password or access token for container registry authentication (required, sensitive)
+	Password string `json:"password"`
+	// Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
+	Registry *string `json:"registry,omitempty"`
 }
 
 func (c ContainerRegistryCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+	jsonBytes, err := utils.MarshalJSON(c, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { userName: .user_name, password: .password, registry: .registry } } | del(.user_name, .password, .registry, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *ContainerRegistryCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { user_name: .keys.userName, password: .keys.password, registry: .keys.registry, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (c *ContainerRegistryCredential) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *ContainerRegistryCredential) GetCredentialsID() *string {
@@ -141,28 +138,21 @@ func (c *ContainerRegistryCredential) GetLastUpdated() *time.Time {
 	return c.LastUpdated
 }
 
-func (c *ContainerRegistryCredential) GetKeys() ContainerRegistryCredentialKeys {
-	if c == nil {
-		return ContainerRegistryCredentialKeys{}
-	}
-	return c.Keys
-}
-
-type ContainerRegistryCredentialKeysOutput struct {
-	// Username for container registry authentication (required)
-	UserName string `json:"userName"`
-	// Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
-	Registry *string `json:"registry,omitempty"`
-}
-
-func (c *ContainerRegistryCredentialKeysOutput) GetUserName() string {
+func (c *ContainerRegistryCredential) GetUserName() string {
 	if c == nil {
 		return ""
 	}
 	return c.UserName
 }
 
-func (c *ContainerRegistryCredentialKeysOutput) GetRegistry() *string {
+func (c *ContainerRegistryCredential) GetPassword() string {
+	if c == nil {
+		return ""
+	}
+	return c.Password
+}
+
+func (c *ContainerRegistryCredential) GetRegistry() *string {
 	if c == nil {
 		return nil
 	}
@@ -171,7 +161,9 @@ func (c *ContainerRegistryCredentialKeysOutput) GetRegistry() *string {
 
 type ContainerRegistryCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -183,19 +175,42 @@ type ContainerRegistryCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                            `json:"lastUpdated,omitempty"`
-	Keys        ContainerRegistryCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Username for container registry authentication (required)
+	UserName string `json:"user_name"`
+	// Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
+	Registry *string `json:"registry,omitempty"`
 }
 
 func (c ContainerRegistryCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
+	jsonBytes, err := utils.MarshalJSON(c, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { userName: .user_name, password: .password, registry: .registry } } | del(.user_name, .password, .registry, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *ContainerRegistryCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { user_name: .keys.userName, password: .keys.password, registry: .keys.registry, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (c *ContainerRegistryCredentialOutput) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *ContainerRegistryCredentialOutput) GetCredentialsID() *string {
@@ -247,9 +262,16 @@ func (c *ContainerRegistryCredentialOutput) GetLastUpdated() *time.Time {
 	return c.LastUpdated
 }
 
-func (c *ContainerRegistryCredentialOutput) GetKeys() ContainerRegistryCredentialKeysOutput {
+func (c *ContainerRegistryCredentialOutput) GetUserName() string {
 	if c == nil {
-		return ContainerRegistryCredentialKeysOutput{}
+		return ""
 	}
-	return c.Keys
+	return c.UserName
+}
+
+func (c *ContainerRegistryCredentialOutput) GetRegistry() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Registry
 }

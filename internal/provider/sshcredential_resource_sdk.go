@@ -46,6 +46,7 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialOutput(ctx co
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -157,6 +158,12 @@ func (r *SSHCredentialResourceModel) ToSharedCreateSSHCredentialsRequest(ctx con
 func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.SSHCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -172,26 +179,6 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context, 
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedSSHCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.SSHCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.SSHCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var privateKey string
 	privateKey = opts.Config.PrivateKey.ValueString()
 
@@ -201,9 +188,13 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Conte
 	} else {
 		passphrase = nil
 	}
-	out := shared.SSHCredentialKeys{
-		PrivateKey: privateKey,
-		Passphrase: passphrase,
+	out := shared.SSHCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		PrivateKey:    privateKey,
+		Passphrase:    passphrase,
 	}
 
 	return &out, diags

@@ -15994,6 +15994,13 @@ components:
       properties:
         computeEnvId:
           type: string
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       x-speakeasy-entity: ComputeEnv
     CreateCredentialsRequest:
       type: object
@@ -16061,7 +16068,6 @@ components:
         id:
           type: integer
           format: int64
-          x-speakeasy-name-override: labelId
         isDefault:
           type: boolean
         name:
@@ -16070,7 +16076,15 @@ components:
           type: boolean
         value:
           type: string
+        label_id:
+          type: integer
+          format: int64
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Labels
+      x-speakeasy-transform-from-api:
+        jq: '. + { label_id: .id }'
     CreateManagedCredentialsRequest:
       type: object
       properties:
@@ -16531,7 +16545,6 @@ components:
           type: boolean
         id:
           type: string
-          x-speakeasy-name-override: dataLinkId
           description: Unique identifier for the data link
         message:
           type: string
@@ -16560,12 +16573,19 @@ components:
         type:
           $ref: '#/components/schemas/DataLinkType'
           description: Type of data link (e.g., S3, Azure Blob, etc.)
+        data_link_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: DataLink
       x-speakeasy-entity-description: |
         Manage connections to external storage systems and data repositories.
 
         Data links provide access to cloud storage for pipeline input/output operations,
         enabling seamless data integration.
+      x-speakeasy-transform-from-api:
+        jq: '. + { data_link_id: .id }'
       description: |
         Represents a data link connection to external storage systems.
         Provides access to cloud storage, file systems, and data repositories
@@ -16887,7 +16907,14 @@ components:
           description: Numeric identifier of the workspace containing the Studio
           x-speakeasy-param-optional: false
           x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Alias of `session_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Studios
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .sessionId }'
       description: |
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based
@@ -19989,7 +20016,15 @@ components:
           type: string
           nullable: true
           description: Official website URL for the organization
+        id:
+          type: integer
+          format: int64
+          description: Alias of `org_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Orgs
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .orgId }'
       description: |
         Represents an organization in the Seqera Platform.
         Contains organizational metadata, settings, and member management
@@ -20118,6 +20153,12 @@ components:
         workspaceId:
           type: integer
           format: int64
+        id:
+          type: integer
+          format: int64
+          description: Alias of `pipeline_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Pipeline
       x-speakeasy-entity-description: |
         Manage Nextflow pipeline definitions and configurations.
@@ -20129,6 +20170,8 @@ components:
         Represents a pipeline configuration in the Seqera Platform.
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .pipelineId }'
     PipelineInfo:
       type: object
       properties:
@@ -21353,7 +21396,15 @@ components:
           x-speakeasy-param-optional: true
           x-speakeasy-name-override: teamId
           description: Unique numeric identifier for the team
+        id:
+          type: integer
+          format: int64
+          description: Alias of `team_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Teams
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .teamId }'
       description: |
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
@@ -22532,6 +22583,14 @@ components:
           nullable: true
           description: Head job memory allocation in MB
           example: 4096
+        id:
+          type: string
+          description: |
+            Launch identifier. Server-generated on workflow launch and pipeline
+            create — leave unset. Echoed back by the provider on
+            `seqera_action` updates so the backend can confirm the launch
+            identity hasn't changed.
+          x-speakeasy-param-readonly: true
         labelIds:
           type: array
           items:
@@ -23853,10 +23912,37 @@ components:
           type: integer
           format: int64
     # Seqera Managed Compute environment schema
-    # Uses hoisting pattern: x-speakeasy-entity on 'config' property hoists fields to root level
+    # Uses transform-based hoisting (see docs-internal/OVERLAY_GUIDE.md
+    # → Hoisting Nested API Structures). The platform wire format is
+    # `{ name, ..., config: { region, instanceTypeSize, ... } }`. The
+    # jq transforms flatten that on read and re-nest on write so the
+    # Terraform schema sees `region`, `instance_size`, `work_dir`, etc.
+    # at the resource root with no `config` block.
     ManagedComputeCE_ComputeConfig:
+      x-speakeasy-entity: ManagedComputeCE
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        Manage Seqera Managed Compute environments in Seqera Platform.
+
+        Seqera Managed Compute is a fully managed compute service that handles infrastructure
+        provisioning and management automatically. Unlike AWS Batch or other compute
+        environments where you need to configure VPCs, subnets, and IAM roles,
+        Seqera Managed Compute only requires you to specify the region and instance size.
+
+        Key benefits:
+        - No infrastructure setup required
+        - Automatic scaling and resource management
+        - Simplified configuration with just region and instance size
+
+        Available instance sizes:
+        - SMALL: Suitable for lightweight workflows (default)
+        - MEDIUM: Balanced compute resources
+        - LARGE: High-performance compute for demanding workflows
+      x-speakeasy-transform-from-api:
+        jq: '. + { region: .config.region, instance_size: .config.instanceTypeSize, work_dir: .config.workDir, data_retention_policy: .config.defaultDataRetentionPolicy, resource_label_ids: .config.resourceLabelIds, pre_run_script: .config.preRunScript, post_run_script: .config.postRunScript, nextflow_config: .config.nextflowConfig, environment: .config.environment } | del(.config)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { config: { discriminator: "seqeracompute-platform", region: .region, instanceTypeSize: .instance_size, workDir: .work_dir, defaultDataRetentionPolicy: .data_retention_policy, resourceLabelIds: .resource_label_ids, preRunScript: .pre_run_script, postRunScript: .post_run_script, nextflowConfig: .nextflow_config, environment: .environment } } | del(.region, .instance_size, .work_dir, .data_retention_policy, .resource_label_ids, .pre_run_script, .post_run_script, .nextflow_config, .environment)'
       required:
-        - config
         - name
       type: object
       properties:
@@ -23913,113 +23999,77 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
-        # Config property with hoisting - fields defined here appear at Terraform root level
-        config:
-          x-speakeasy-entity: ManagedComputeCE
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: |
-            Manage Seqera Managed Compute environments in Seqera Platform.
-
-            Seqera Managed Compute is a fully managed compute service that handles infrastructure
-            provisioning and management automatically. Unlike AWS Batch or other compute
-            environments where you need to configure VPCs, subnets, and IAM roles,
-            Seqera Managed Compute only requires you to specify the region and instance size.
-
-            Key benefits:
-            - No infrastructure setup required
-            - Automatic scaling and resource management
-            - Simplified configuration with just region and instance size
-
-            Available instance sizes:
-            - SMALL: Suitable for lightweight workflows (default)
+        region:
+          type: string
+          description: |
+            AWS region for Seqera Managed Compute resources.
+            Examples: us-east-1, eu-west-1, ap-southeast-2
+          example: "us-east-1"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: false
+          x-speakeasy-plan-validators: SeqeraComputeRegionValidator
+        instance_size:
+          type: string
+          enum:
+            - SMALL
+            - MEDIUM
+            - LARGE
+          description: |
+            Size of the compute instance.
+            - SMALL: Lightweight workflows (default)
             - MEDIUM: Balanced compute resources
             - LARGE: High-performance compute for demanding workflows
-          type: object
-          properties:
-            # Primary hoisted fields - appear at root level in Terraform
-            region:
-              type: string
-              description: |
-                AWS region for Seqera Managed Compute resources.
-                Examples: us-east-1, eu-west-1, ap-southeast-2
-              example: "us-east-1"
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: false
-              x-speakeasy-plan-validators: SeqeraComputeRegionValidator
-            instanceTypeSize:
-              type: string
-              enum:
-                - SMALL
-                - MEDIUM
-                - LARGE
-              description: |
-                Size of the compute instance.
-                - SMALL: Lightweight workflows (default)
-                - MEDIUM: Balanced compute resources
-                - LARGE: High-performance compute for demanding workflows
-              example: "SMALL"
-              default: "SMALL"
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: instance_size
-              x-speakeasy-plan-validators: InstanceTypeSizeValidator
-            # Additional optional fields
-            workDir:
-              type: string
-              description: |
-                Work directory suffix relative to the S3 bucket provisioned by Seqera.
-                Optional - a default work directory is used if not specified.
-              example: "work"
-              x-speakeasy-param-optional: true
-              x-speakeasy-param-force-new: true
-              x-speakeasy-name-override: work_dir
-            defaultDataRetentionPolicy:
-              type: boolean
-              description: |
-                Enable automatic data retention policy.
-                When enabled, intermediary files are automatically deleted after 28 days.
-              default: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-param-force-new: true
-              x-speakeasy-name-override: data_retention_policy
-            resourceLabelIds:
-              type: array
-              items:
-                type: integer
-                format: int64
-              description: List of resource label IDs to associate with this compute environment.
-              x-speakeasy-param-optional: true
-              x-speakeasy-param-force-new: true
-              x-speakeasy-name-override: resource_label_ids
-            preRunScript:
-              type: string
-              description: Bash script to run before workflow execution begins.
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: pre_run_script
-            postRunScript:
-              type: string
-              description: Bash script to run after workflow execution completes.
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: post_run_script
-            nextflowConfig:
-              type: string
-              description: Global Nextflow configuration settings for workflows.
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: nextflow_config
-            environment:
-              type: array
-              items:
-                $ref: "#/components/schemas/ConfigEnvVariable"
-              description: Environment variables for the compute environment.
-              x-speakeasy-param-force-new: true
-              x-speakeasy-param-optional: true
-            discriminator:
-              type: string
-              description: Internal platform discriminator
-              x-speakeasy-terraform-ignore: true
+          example: "SMALL"
+          default: "SMALL"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: InstanceTypeSizeValidator
+        work_dir:
+          type: string
+          description: |
+            Work directory suffix relative to the S3 bucket provisioned by Seqera.
+            Optional - a default work directory is used if not specified.
+          example: "work"
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        data_retention_policy:
+          type: boolean
+          description: |
+            Enable automatic data retention policy.
+            When enabled, intermediary files are automatically deleted after 28 days.
+          default: true
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        resource_label_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: List of resource label IDs to associate with this compute environment.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        pre_run_script:
+          type: string
+          description: Bash script to run before workflow execution begins.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+        post_run_script:
+          type: string
+          description: Bash script to run after workflow execution completes.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+        nextflow_config:
+          type: string
+          description: Global Nextflow configuration settings for workflows.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
+          description: Environment variables for the compute environment.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
     # Seqera Compute request/response schemas
     CreateManagedComputeCERequest:
       type: object
@@ -24057,15 +24107,31 @@ components:
           type: integer
           format: int64
     AWSCredential:
+      x-speakeasy-entity: AWSCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+        Manage AWS credentials in Seqera platform using this resource.
+
+        AWS credentials store authentication information for accessing AWS services
+        within the Seqera Platform workflows.
+      x-speakeasy-transform-from-api:
+        jq: '. + { access_key: .keys.accessKey, secret_key: .keys.secretKey, assume_role_arn: .keys.assumeRoleArn, mode: .keys.mode, external_id: .keys.externalId, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { accessKey: .access_key, secretKey: .secret_key, assumeRoleArn: .assume_role_arn, mode: .mode, externalId: .external_id } } | del(.access_key, .secret_key, .assume_role_arn, .mode, .external_id, .credentials_id)'
       required:
         - name
-        - keys
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24107,62 +24173,44 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
+        access_key:
+          type: string
+          minLength: 16
+          maxLength: 128
+          pattern: ^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$
+          description: AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
+          example: AKIAIOSFODNN7EXAMPLE
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: AWSCredentialKeysValidator
+        secret_key:
+          type: string
+          minLength: 40
+          description: AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          x-speakeasy-param-optional: true
+          example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+          x-speakeasy-plan-validators: AWSCredentialKeysValidator
+          writeOnly: true
+        assume_role_arn:
+          type: string
+          pattern: ^arn:aws:iam::[0-9]{12}:role/.+$
+          description: 'IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.'
+          example: arn:aws:iam::123456789012:role/SeqeraRole
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: AWSCredentialKeysValidator
+          writeOnly: true
+        mode:
+          $ref: '#/components/schemas/AwsCredentialsMode'
+          description: 'Authentication mode: "keys" for access key/secret key, "role" for IAM role assumption.'
+          x-speakeasy-param-optional: true
+        external_id:
+          type: string
+          description: External ID for cross-account IAM role assumption. Generated by the platform when useExternalId is enabled.
           x-speakeasy-param-readonly: true
-          x-speakeasy-entity: AWSCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: |
-            **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-            Manage AWS credentials in Seqera platform using this resource.
-
-            AWS credentials store authentication information for accessing AWS services
-            within the Seqera Platform workflows.
-          type: object
-          properties:
-            accessKey:
-              type: string
-              minLength: 16
-              maxLength: 128
-              pattern: ^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$
-              description: AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
-              example: AKIAIOSFODNN7EXAMPLE
-              x-speakeasy-param-computed: false
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: access_key
-              x-speakeasy-plan-validators: AWSCredentialKeysValidator
-            secretKey:
-              type: string
-              minLength: 40
-              description: AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-param-optional: true
-              example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-              x-speakeasy-name-override: secret_key
-              x-speakeasy-plan-validators: AWSCredentialKeysValidator
-              writeOnly: true
-            assumeRoleArn:
-              type: string
-              pattern: ^arn:aws:iam::[0-9]{12}:role/.+$
-              description: 'IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.'
-              example: arn:aws:iam::123456789012:role/SeqeraRole
-              x-speakeasy-param-computed: false
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: assume_role_arn
-              x-speakeasy-plan-validators: AWSCredentialKeysValidator
-              writeOnly: true
-            mode:
-              $ref: '#/components/schemas/AwsCredentialsMode'
-              description: 'Authentication mode: "keys" for access key/secret key, "role" for IAM role assumption.'
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: mode
-            externalId:
-              type: string
-              description: External ID for cross-account IAM role assumption. Generated by the platform when useExternalId is enabled.
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-name-override: external_id
+          x-speakeasy-param-sensitive: true
     CreateAWSCredentialsRequest:
       type: object
       properties:
@@ -24184,15 +24232,41 @@ components:
         credentials:
           $ref: '#/components/schemas/AWSCredential'
     AzureCredential:
+      x-speakeasy-entity: AzureCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        Manage Azure Batch credentials using shared-key authentication.
+        This is the credential type required for Azure Batch compute
+        environments in Forge mode.
+
+        For other Azure credential types, use a dedicated typed resource:
+
+        - **Azure Batch with Entra service principal**: `seqera_azure_entra_credential`
+        - **Azure Cloud (SingleVM) with Entra service principal**: `seqera_azure_cloud_credential`
+
+        The `tenant_id`, `client_id`, and `client_secret` fields are kept
+        for backwards compatibility with earlier provider releases but
+        have no effect on this credential type. Use the typed resources
+        above for service-principal credentials so they surface in the
+        correct compute-environment picker.
+      x-speakeasy-transform-from-api:
+        jq: '. + { batch_name: .keys.batchName, storage_name: .keys.storageName, batch_key: .keys.batchKey, storage_key: .keys.storageKey, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { discriminator: "azure", batchName: .batch_name, storageName: .storage_name, batchKey: .batch_key, storageKey: .storage_key, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .batch_key, .storage_key, .tenant_id, .client_id, .client_secret, .credentials_id)'
       required:
         - name
-        - keys
+        - batch_name
+        - storage_name
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24234,95 +24308,54 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: AzureCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: |
-            Manage Azure Batch credentials using shared-key authentication.
-            This is the credential type required for Azure Batch compute
-            environments in Forge mode.
-
-            For other Azure credential types, use a dedicated typed resource:
-
-            - **Azure Batch with Entra service principal**: `seqera_azure_entra_credential`
-            - **Azure Cloud (SingleVM) with Entra service principal**: `seqera_azure_cloud_credential`
-
-            The `tenant_id`, `client_id`, and `client_secret` fields are kept
-            for backwards compatibility with earlier provider releases but
-            have no effect on this credential type. Use the typed resources
-            above for service-principal credentials so they surface in the
-            correct compute-environment picker.
-          type: object
-          required:
-            - batchName
-            - storageName
-          properties:
-            discriminator:
-              type: string
-              description: Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-              enum:
-                - azure
-                - azure-entra
-                - azure-cloud
-              default: azure
-              x-speakeasy-terraform-ignore: true
-              x-speakeasy-param-readonly: true
-            batchName:
-              type: string
-              description: Azure Batch account name (required)
-              example: myazurebatch
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: batch_name
-            storageName:
-              type: string
-              description: Azure Blob Storage account name (required)
-              example: myazurestorage
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: storage_name
-            batchKey:
-              type: string
-              description: Azure Batch account key (for shared key authentication)
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: YourAzureBatchAccountKeyHere==
-              x-speakeasy-name-override: batch_key
-              x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
-              writeOnly: true
-            storageKey:
-              type: string
-              description: Azure Storage account key (for shared key authentication)
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: YourAzureStorageAccountKeyHere==
-              x-speakeasy-name-override: storage_key
-              x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
-              writeOnly: true
-            tenantId:
-              type: string
-              description: Azure tenant ID (for Entra/Cloud authentication)
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: tenant_id
-              x-speakeasy-plan-validators: AzureCredentialEntraValidator
-              writeOnly: true
-            clientId:
-              type: string
-              description: Azure service principal client ID (for Entra/Cloud authentication)
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: client_id
-              x-speakeasy-plan-validators: AzureCredentialEntraValidator
-              writeOnly: true
-            clientSecret:
-              type: string
-              description: Azure service principal client secret (for Entra/Cloud authentication)
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: YourAzureClientSecretHere
-              x-speakeasy-name-override: client_secret
-              x-speakeasy-plan-validators: AzureCredentialEntraValidator
-              writeOnly: true
+        batch_name:
+          type: string
+          description: Azure Batch account name (required)
+          example: myazurebatch
+          x-speakeasy-param-computed: false
+        storage_name:
+          type: string
+          description: Azure Blob Storage account name (required)
+          example: myazurestorage
+          x-speakeasy-param-computed: false
+        batch_key:
+          type: string
+          description: Azure Batch account key (for shared key authentication)
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: YourAzureBatchAccountKeyHere==
+          x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
+          writeOnly: true
+        storage_key:
+          type: string
+          description: Azure Storage account key (for shared key authentication)
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: YourAzureStorageAccountKeyHere==
+          x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
+          writeOnly: true
+        tenant_id:
+          type: string
+          description: Azure tenant ID (for Entra/Cloud authentication)
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-validators: AzureCredentialEntraValidator
+          writeOnly: true
+        client_id:
+          type: string
+          description: Azure service principal client ID (for Entra/Cloud authentication)
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-validators: AzureCredentialEntraValidator
+          writeOnly: true
+        client_secret:
+          type: string
+          description: Azure service principal client secret (for Entra/Cloud authentication)
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: YourAzureClientSecretHere
+          x-speakeasy-plan-validators: AzureCredentialEntraValidator
+          writeOnly: true
     CreateAzureCredentialsRequest:
       type: object
       required:
@@ -24348,15 +24381,38 @@ components:
         credentials:
           $ref: '#/components/schemas/AzureCredential'
     AzureEntraCredential:
+      x-speakeasy-entity: AzureEntraCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: azure_entra_credential
+      x-speakeasy-entity-description: |
+        Manage Azure Batch credentials authenticated via a Microsoft Entra
+        service principal. Use this credential type for Azure Batch compute
+        environments configured in manual mode — Forge mode requires
+        shared-key credentials via `seqera_azure_credential`.
+
+        For Azure Cloud (SingleVM) CEs, use `seqera_azure_cloud_credential`
+        instead.
+      x-speakeasy-transform-from-api:
+        jq: '. + { batch_name: .keys.batchName, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { discriminator: "azure_entra", batchName: .batch_name, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)'
       required:
         - name
-        - keys
+        - batch_name
+        - storage_name
+        - tenant_id
+        - client_id
+        - client_secret
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24398,66 +24454,33 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-entity: AzureEntraCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: azure_entra_credential
-          x-speakeasy-entity-description: |
-            Manage Azure Batch credentials authenticated via a Microsoft Entra
-            service principal. Use this credential type for Azure Batch compute
-            environments configured in manual mode — Forge mode requires
-            shared-key credentials via `seqera_azure_credential`.
-
-            For Azure Cloud (SingleVM) CEs, use `seqera_azure_cloud_credential`
-            instead.
-          type: object
-          required:
-            - batchName
-            - storageName
-            - tenantId
-            - clientId
-            - clientSecret
-          properties:
-            discriminator:
-              type: string
-              description: Authentication mode discriminator.
-              enum:
-                - azure_entra
-              default: azure_entra
-              x-speakeasy-terraform-ignore: true
-              x-speakeasy-param-readonly: true
-            batchName:
-              type: string
-              description: Azure Batch account name.
-              example: myazurebatch
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: batch_name
-            storageName:
-              type: string
-              description: Azure Blob Storage account name.
-              example: myazurestorage
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: storage_name
-            tenantId:
-              type: string
-              description: Microsoft Entra tenant ID.
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: tenant_id
-            clientId:
-              type: string
-              description: Microsoft Entra service principal client (application) ID.
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: client_id
-            clientSecret:
-              type: string
-              description: Microsoft Entra service principal client secret.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: YourEntraClientSecretHere
-              x-speakeasy-name-override: client_secret
-              writeOnly: true
+        batch_name:
+          type: string
+          description: Azure Batch account name.
+          example: myazurebatch
+          x-speakeasy-param-computed: false
+        storage_name:
+          type: string
+          description: Azure Blob Storage account name.
+          example: myazurestorage
+          x-speakeasy-param-computed: false
+        tenant_id:
+          type: string
+          description: Microsoft Entra tenant ID.
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+        client_id:
+          type: string
+          description: Microsoft Entra service principal client (application) ID.
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+        client_secret:
+          type: string
+          description: Microsoft Entra service principal client secret.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: YourEntraClientSecretHere
+          writeOnly: true
     CreateAzureEntraCredentialsRequest:
       type: object
       required:
@@ -24483,15 +24506,41 @@ components:
         credentials:
           $ref: '#/components/schemas/AzureEntraCredential'
     AzureCloudCredential:
+      x-speakeasy-entity: AzureCloudCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: azure_cloud_credential
+      x-speakeasy-entity-description: |
+        Manage Azure Cloud (SingleVM) credentials authenticated via a
+        Microsoft Entra service principal. Use this credential type for
+        Azure Cloud compute environments, which run Nextflow directly on
+        Azure VMs managed by Seqera Forge (no Azure Batch involvement).
+        Storage access is brokered through the same service principal,
+        so no separate storage key is required.
+
+        For Azure Batch with Entra service-principal auth, use
+        `seqera_azure_entra_credential`; for Azure Batch with shared-key
+        auth, use `seqera_azure_credential`.
+      x-speakeasy-transform-from-api:
+        jq: '. + { subscription_id: .keys.subscriptionId, storage_name: .keys.storageName, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { discriminator: "azure-cloud", subscriptionId: .subscription_id, storageName: .storage_name, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.subscription_id, .storage_name, .tenant_id, .client_id, .client_secret, .credentials_id)'
       required:
         - name
-        - keys
+        - subscription_id
+        - storage_name
+        - tenant_id
+        - client_id
+        - client_secret
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24533,69 +24582,33 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-entity: AzureCloudCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: azure_cloud_credential
-          x-speakeasy-entity-description: |
-            Manage Azure Cloud (SingleVM) credentials authenticated via a
-            Microsoft Entra service principal. Use this credential type for
-            Azure Cloud compute environments, which run Nextflow directly on
-            Azure VMs managed by Seqera Forge (no Azure Batch involvement).
-            Storage access is brokered through the same service principal,
-            so no separate storage key is required.
-
-            For Azure Batch with Entra service-principal auth, use
-            `seqera_azure_entra_credential`; for Azure Batch with shared-key
-            auth, use `seqera_azure_credential`.
-          type: object
-          required:
-            - subscriptionId
-            - storageName
-            - tenantId
-            - clientId
-            - clientSecret
-          properties:
-            discriminator:
-              type: string
-              description: Authentication mode discriminator.
-              enum:
-                - azure-cloud
-              default: azure-cloud
-              x-speakeasy-terraform-ignore: true
-              x-speakeasy-param-readonly: true
-            subscriptionId:
-              type: string
-              description: Azure subscription ID where Forge provisions VMs.
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: subscription_id
-            storageName:
-              type: string
-              description: Azure Blob Storage account name used for work_dir.
-              example: myazurestorage
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: storage_name
-            tenantId:
-              type: string
-              description: Microsoft Entra tenant ID.
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: tenant_id
-            clientId:
-              type: string
-              description: Microsoft Entra service principal client (application) ID.
-              example: 00000000-0000-0000-0000-000000000000
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: client_id
-            clientSecret:
-              type: string
-              description: Microsoft Entra service principal client secret.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: YourEntraClientSecretHere
-              x-speakeasy-name-override: client_secret
-              writeOnly: true
+        subscription_id:
+          type: string
+          description: Azure subscription ID where Forge provisions VMs.
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+        storage_name:
+          type: string
+          description: Azure Blob Storage account name used for work_dir.
+          example: myazurestorage
+          x-speakeasy-param-computed: false
+        tenant_id:
+          type: string
+          description: Microsoft Entra tenant ID.
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+        client_id:
+          type: string
+          description: Microsoft Entra service principal client (application) ID.
+          example: 00000000-0000-0000-0000-000000000000
+          x-speakeasy-param-computed: false
+        client_secret:
+          type: string
+          description: Microsoft Entra service principal client secret.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: YourEntraClientSecretHere
+          writeOnly: true
     CreateAzureCloudCredentialsRequest:
       type: object
       required:
@@ -24621,15 +24634,34 @@ components:
         credentials:
           $ref: '#/components/schemas/AzureCloudCredential'
     BitbucketCredential:
+      x-speakeasy-entity: BitbucketCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: bitbucket_credential
+      x-speakeasy-entity-description: 'Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Bitbucket credentials store authentication information for accessing Bitbucket
+
+        repositories within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { username: .keys.username, password: .keys.password, token: .keys.token, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { username: .username, password: .password, token: .token } } | del(.username, .password, .token, .credentials_id)'
       required:
         - name
-        - keys
+        - username
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24677,44 +24709,27 @@ components:
           example: https://bitbucket.org/seqeralabs/repo1
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: BitbucketCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: bitbucket_credential
-          x-speakeasy-entity-description: 'Manage Bitbucket credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Bitbucket credentials store authentication information for accessing Bitbucket
-
-            repositories within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - username
-          properties:
-            username:
-              type: string
-              description: Bitbucket account username (for app passwords) or email (for API tokens).
-              example: myuser@example.com
-              x-speakeasy-param-computed: false
-            password:
-              type: string
-              description: Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-plan-validators: BitbucketPasswordValidator
-              example: BBDC-...
-              writeOnly: true
-            token:
-              type: string
-              description: Bitbucket API token (sensitive). Mutually exclusive with `password`.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-plan-validators: BitbucketTokenValidator
-              example: ATBB...
-              writeOnly: true
+        username:
+          type: string
+          description: Bitbucket account username (for app passwords) or email (for API tokens).
+          example: myuser@example.com
+          x-speakeasy-param-computed: false
+        password:
+          type: string
+          description: Bitbucket app password or HTTP password (sensitive). Generate app passwords from Bitbucket account settings. Mutually exclusive with `token`.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          x-speakeasy-plan-validators: BitbucketPasswordValidator
+          example: BBDC-...
+          writeOnly: true
+        token:
+          type: string
+          description: Bitbucket API token (sensitive). Mutually exclusive with `password`.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          x-speakeasy-plan-validators: BitbucketTokenValidator
+          example: ATBB...
+          writeOnly: true
     CreateBitbucketCredentialsRequest:
       type: object
       properties:
@@ -24736,15 +24751,35 @@ components:
         credentials:
           $ref: '#/components/schemas/BitbucketCredential'
     CodecommitCredential:
+      x-speakeasy-entity: CodecommitCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: codecommit_credential
+      x-speakeasy-entity-description: 'Manage Codecommit credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Codecommit credentials store AWS authentication information for accessing
+
+        AWS Codecommit repositories within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { access_key: .keys.username, secret_key: .keys.password, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { username: .access_key, password: .secret_key } } | del(.access_key, .secret_key, .credentials_id)'
       required:
         - name
-        - keys
+        - access_key
+        - secret_key
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24792,38 +24827,18 @@ components:
           example: https://git-codecommit.us-east-1.amazonaws.com
           x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: CodecommitCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: codecommit_credential
-          x-speakeasy-entity-description: 'Manage Codecommit credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Codecommit credentials store AWS authentication information for accessing
-
-            AWS Codecommit repositories within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - username
-            - password
-          properties:
-            username:
-              type: string
-              description: AWS IAM access key ID for CodeCommit.
-              example: AKIAIOSFODNN7EXAMPLE
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: access_key
-            password:
-              type: string
-              description: AWS IAM secret access key for CodeCommit (sensitive).
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-              x-speakeasy-name-override: secret_key
-              writeOnly: true
+        access_key:
+          type: string
+          description: AWS IAM access key ID for CodeCommit.
+          example: AKIAIOSFODNN7EXAMPLE
+          x-speakeasy-param-computed: false
+        secret_key:
+          type: string
+          description: AWS IAM secret access key for CodeCommit (sensitive).
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+          writeOnly: true
     CreateCodecommitCredentialsRequest:
       type: object
       properties:
@@ -24845,15 +24860,34 @@ components:
         credentials:
           $ref: '#/components/schemas/CodecommitCredential'
     ContainerRegistryCredential:
+      x-speakeasy-entity: ContainerRegistryCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: 'Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Container registry credentials store authentication information for accessing
+
+        container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { user_name: .keys.userName, password: .keys.password, registry: .keys.registry, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { userName: .user_name, password: .password, registry: .registry } } | del(.user_name, .password, .registry, .credentials_id)'
       required:
         - name
-        - keys
+        - user_name
+        - password
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -24895,41 +24929,23 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: ContainerRegistryCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage container registry credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Container registry credentials store authentication information for accessing
-
-            container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - userName
-            - password
-          properties:
-            userName:
-              type: string
-              description: Username for container registry authentication (required)
-              example: myuser
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: user_name
-            password:
-              type: string
-              description: Password or access token for container registry authentication (required, sensitive)
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: mypassword
-              writeOnly: true
-            registry:
-              type: string
-              description: 'Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com'
-              example: docker.io
-              x-speakeasy-param-computed: false
+        user_name:
+          type: string
+          description: Username for container registry authentication (required)
+          example: myuser
+          x-speakeasy-param-computed: false
+        password:
+          type: string
+          description: Password or access token for container registry authentication (required, sensitive)
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: mypassword
+          writeOnly: true
+        registry:
+          type: string
+          description: 'Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com'
+          example: docker.io
+          x-speakeasy-param-computed: false
     CreateContainerRegistryCredentialsRequest:
       type: object
       properties:
@@ -24951,15 +24967,33 @@ components:
         credentials:
           $ref: '#/components/schemas/ContainerRegistryCredential'
     GoogleCredential:
+      x-speakeasy-entity: GoogleCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+        Manage Google credentials in Seqera platform using this resource.
+
+        Google credentials authenticate to Google Cloud either with a service account
+        key (`data`) or via Workload Identity Federation (`workload_identity_provider`
+        and `service_account_email`). WIF is the recommended path — no long-lived key
+        is stored in the platform.
+      x-speakeasy-transform-from-api:
+        jq: '. + { data: .keys.data, workload_identity_provider: .keys.workloadIdentityProvider, service_account_email: .keys.serviceAccountEmail, token_audience: .keys.tokenAudience, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { keyType: "google", data: .data, workloadIdentityProvider: .workload_identity_provider, serviceAccountEmail: .service_account_email, tokenAudience: .token_audience } } | del(.data, .workload_identity_provider, .service_account_email, .token_audience, .credentials_id)'
       required:
         - name
-        - keys
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25001,58 +25035,33 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: GoogleCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: |
-            **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-            Manage Google credentials in Seqera platform using this resource.
-
-            Google credentials authenticate to Google Cloud either with a service account
-            key (`data`) or via Workload Identity Federation (`workload_identity_provider`
-            and `service_account_email`). WIF is the recommended path — no long-lived key
-            is stored in the platform.
-          type: object
-          properties:
-            data:
-              type: string
-              description: Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-param-optional: true
-              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
-              example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
-              writeOnly: true
-            workloadIdentityProvider:
-              type: string
-              pattern: '^projects/[0-9]+/locations/global/workloadIdentityPools/[^/]+/providers/[^/]+$'
-              description: 'Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.'
-              example: projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: workload_identity_provider
-              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
-            serviceAccountEmail:
-              type: string
-              pattern: '^[^@]+@[^.]+\.iam\.gserviceaccount\.com$'
-              description: Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
-              example: seqera-runner@my-project.iam.gserviceaccount.com
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: service_account_email
-              x-speakeasy-plan-validators: GoogleCredentialKeysValidator
-            tokenAudience:
-              type: string
-              description: OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
-              x-speakeasy-param-optional: true
-              x-speakeasy-name-override: token_audience
-            keyType:
-              type: string
-              description: Type of key (always "google") - not exposed in Terraform
-              default: google
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-terraform-ignore: true
+        data:
+          type: string
+          description: Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: GoogleCredentialKeysValidator
+          example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
+          writeOnly: true
+        workload_identity_provider:
+          type: string
+          pattern: '^projects/[0-9]+/locations/global/workloadIdentityPools/[^/]+/providers/[^/]+$'
+          description: 'Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.'
+          example: projects/123456789012/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: GoogleCredentialKeysValidator
+        service_account_email:
+          type: string
+          pattern: '^[^@]+@[^.]+\.iam\.gserviceaccount\.com$'
+          description: Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
+          example: seqera-runner@my-project.iam.gserviceaccount.com
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: GoogleCredentialKeysValidator
+        token_audience:
+          type: string
+          description: OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+          x-speakeasy-param-optional: true
     CreateGoogleCredentialsRequest:
       type: object
       required:
@@ -25078,15 +25087,40 @@ components:
         credentials:
           $ref: '#/components/schemas/GoogleCredential'
     GiteaCredential:
+      # PILOT: transform-based hoisting (see OVERLAY_GUIDE.md →
+      # "Hoisting Nested API Structures"). The API wire format is
+      # { name, provider, keys: { username, password }, ... }. The
+      # transform flattens that on read and re-nests it on write so
+      # the Terraform schema sees `username` and `password` at the
+      # resource root — no `keys` block, no per-field name-overrides.
+      x-speakeasy-entity: GiteaCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Gitea credentials store authentication information for accessing Gitea
+
+        repositories within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { username: .keys.username, password: .keys.password, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { username: .username, password: .password } } | del(.username, .password, .credentials_id)'
       required:
         - name
-        - keys
+        - username
+        - password
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25134,35 +25168,18 @@ components:
           example: https://gitea.mycompany.com
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: GiteaCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Gitea credentials store authentication information for accessing Gitea
-
-            repositories within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - username
-            - password
-          properties:
-            username:
-              type: string
-              description: Gitea account username.
-              example: myuser
-              x-speakeasy-param-computed: false
-            password:
-              type: string
-              description: Gitea account password or personal access token (sensitive).
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: mypassword
-              writeOnly: true
+        username:
+          type: string
+          description: Gitea account username.
+          example: myuser
+          x-speakeasy-param-computed: false
+        password:
+          type: string
+          description: Gitea account password or personal access token (sensitive).
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: mypassword
+          writeOnly: true
     CreateGiteaCredentialsRequest:
       type: object
       properties:
@@ -25184,15 +25201,35 @@ components:
         credentials:
           $ref: '#/components/schemas/GiteaCredential'
     GithubCredential:
+      x-speakeasy-entity: GithubCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: github_credential
+      x-speakeasy-entity-description: 'Manage GitHub credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        GitHub credentials store authentication information for accessing GitHub
+
+        repositories within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { username: .keys.username, access_token: .keys.password, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { username: .username, password: .access_token } } | del(.username, .access_token, .credentials_id)'
       required:
         - name
-        - keys
+        - username
+        - access_token
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25240,36 +25277,17 @@ components:
           example: https://github.com/seqeralabs
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: GithubCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: github_credential
-          x-speakeasy-entity-description: 'Manage GitHub credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            GitHub credentials store authentication information for accessing GitHub
-
-            repositories within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - username
-            - password
-          properties:
-            username:
-              type: string
-              description: GitHub account username associated with the access token.
-              example: octocat
-            password:
-              type: string
-              description: GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
-              x-speakeasy-name-override: access_token
-              writeOnly: true
+        username:
+          type: string
+          description: GitHub account username associated with the access token.
+          example: octocat
+        access_token:
+          type: string
+          description: GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
+          writeOnly: true
     CreateGithubCredentialsRequest:
       type: object
       properties:
@@ -25291,15 +25309,35 @@ components:
         credentials:
           $ref: '#/components/schemas/GithubCredential'
     GitlabCredential:
+      x-speakeasy-entity: GitlabCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: gitlab_credential
+      x-speakeasy-entity-description: 'Manage GitLab credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        GitLab credentials store authentication information for accessing GitLab
+
+        repositories within the Seqera Platform workflows.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { username: .keys.username, token: .keys.token, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { username: .username, token: .token } } | del(.username, .token, .credentials_id)'
       required:
         - name
-        - keys
+        - username
+        - token
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25347,35 +25385,17 @@ components:
           example: https://gitlab.com/seqeralabs
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: GitlabCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-terraform-resource-name: gitlab_credential
-          x-speakeasy-entity-description: 'Manage GitLab credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            GitLab credentials store authentication information for accessing GitLab
-
-            repositories within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - username
-            - token
-          properties:
-            username:
-              type: string
-              description: GitLab account username associated with the access token.
-              example: gitlab-user
-            token:
-              type: string
-              description: GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              example: glpat-xxxxxxxxxxxxxxxxxxxx
-              writeOnly: true
+        username:
+          type: string
+          description: GitLab account username associated with the access token.
+          example: gitlab-user
+        token:
+          type: string
+          description: GitLab access token (Personal, Group, or Project). Used by Seqera to authenticate against the GitLab API. Recommended scopes are `api`, `read_api`, and `read_repository`, though the backend does not strictly enforce them. Sensitive.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: glpat-xxxxxxxxxxxxxxxxxxxx
+          writeOnly: true
     CreateGitlabCredentialsRequest:
       type: object
       properties:
@@ -25397,15 +25417,30 @@ components:
         credentials:
           $ref: '#/components/schemas/GitlabCredential'
     KubernetesCredential:
+      x-speakeasy-entity: KubernetesCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
+
+        execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.'
+      x-speakeasy-transform-from-api:
+        jq: '. + { token: .keys.token, client_certificate: .keys.certificate, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { keyType: "kubernetes", token: .token, certificate: .client_certificate, privateKey: .private_key } } | del(.token, .client_certificate, .private_key, .credentials_id)'
       required:
         - name
-        - keys
       type: object
       properties:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentials_id
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25447,45 +25482,24 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: KubernetesCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
-
-            execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.'
-          type: object
-          properties:
-            token:
-              type: string
-              description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              writeOnly: true
-            certificate:
-              type: string
-              description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-name-override: client_certificate
-              writeOnly: true
-            privateKey:
-              type: string
-              description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-name-override: private_key
-              writeOnly: true
-            keyType:
-              type: string
-              description: Type of key (always "kubernetes") - not exposed in Terraform
-              default: kubernetes
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-terraform-ignore: true
+        token:
+          type: string
+          description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          writeOnly: true
+        client_certificate:
+          type: string
+          description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          writeOnly: true
+        private_key:
+          type: string
+          description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          writeOnly: true
     CreateKubernetesCredentialsRequest:
       type: object
       properties:
@@ -25507,15 +25521,26 @@ components:
         credentials:
           $ref: '#/components/schemas/KubernetesCredential'
     SSHCredential:
+      x-speakeasy-entity: SSHCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
+      x-speakeasy-transform-from-api:
+        jq: '. + { private_key: .keys.privateKey, passphrase: .keys.passphrase, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { keyType: "ssh", privateKey: .private_key, passphrase: .passphrase } } | del(.private_key, .passphrase, .credentials_id)'
       required:
         - name
-        - keys
+        - private_key
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25557,35 +25582,18 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: SSHCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
-          type: object
-          required:
-            - privateKey
-          properties:
-            privateKey:
-              type: string
-              description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              x-speakeasy-name-override: private_key
-              writeOnly: true
-            passphrase:
-              type: string
-              description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-terraform-write-only: true
-              writeOnly: true
-            keyType:
-              type: string
-              description: Type of key (always "ssh") - not exposed in Terraform
-              default: ssh
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-terraform-ignore: true
+        private_key:
+          type: string
+          description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          writeOnly: true
+        passphrase:
+          type: string
+          description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          writeOnly: true
     CreateSSHCredentialsRequest:
       type: object
       properties:
@@ -25607,15 +25615,40 @@ components:
         credentials:
           $ref: '#/components/schemas/SSHCredential'
     TowerAgentCredential:
+      x-speakeasy-entity: TowerAgentCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: 'Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        Tower Agent credentials store connection IDs for Tower Agent instances that
+
+        enable secure communication between the Seqera Platform and compute environments.
+
+
+        **IMPORTANT**: The Tower Agent must be running and online before creating the credential.
+
+        Start the agent with your connection ID first, then create the credential resource.
+
+        If the agent is not online, you will receive an error: "The agent is not online - You need to run the agent before proceeding".
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { connection_id: .keys.connectionId, shared: .keys.shared, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { connectionId: .connection_id, shared: .shared } } | del(.connection_id, .shared, .credentials_id)'
       required:
         - name
-        - keys
+        - connection_id
       type: object
       properties:
         id:
-          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -25657,41 +25690,17 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-param-readonly: true
-          x-speakeasy-entity: TowerAgentCredential
-          x-speakeasy-entity-version: 1
-          x-speakeasy-entity-description: 'Manage Tower Agent credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
-
-
-            Tower Agent credentials store connection IDs for Tower Agent instances that
-
-            enable secure communication between the Seqera Platform and compute environments.
-
-
-            **IMPORTANT**: The Tower Agent must be running and online before creating the credential.
-
-            Start the agent with your connection ID first, then create the credential resource.
-
-            If the agent is not online, you will receive an error: "The agent is not online - You need to run the agent before proceeding".
-
-'
-          type: object
-          required:
-            - connectionId
-          properties:
-            connectionId:
-              type: string
-              description: Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
-              example: 31e42060-7985-4727-aca1-4071c819ad8e
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: connection_id
-              writeOnly: true
-            shared:
-              type: boolean
-              description: When enabled, all workspace users can access the same Tower Agent instance
-              default: false
-              x-speakeasy-param-computed: false
+        connection_id:
+          type: string
+          description: Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
+          example: 31e42060-7985-4727-aca1-4071c819ad8e
+          x-speakeasy-param-computed: false
+          writeOnly: true
+        shared:
+          type: boolean
+          description: When enabled, all workspace users can access the same Tower Agent instance
+          default: false
+          x-speakeasy-param-computed: false
     CreateTowerAgentCredentialsRequest:
       type: object
       properties:

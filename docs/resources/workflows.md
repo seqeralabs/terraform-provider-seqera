@@ -99,6 +99,10 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Read-Only
 
+- `id` (String) Launch identifier. Server-generated on workflow launch and pipeline
+create — leave unset. Echoed back by the provider on
+`seqera_action` updates so the backend can confirm the launch
+identity hasn't changed.
 - `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
 - `workflow` (Attributes) Represents a workflow execution record.

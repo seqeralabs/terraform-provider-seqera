@@ -16,32 +16,20 @@ type BitbucketCredentialResourceModelOptions struct {
 	State  *BitbucketCredentialResourceModel
 }
 
-func (r *BitbucketCredentialResourceModel) RefreshFromSharedBitbucketCredentialKeysOutput(ctx context.Context, resp *shared.BitbucketCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Username = types.StringValue(resp.Username)
-
-	return diags
-}
-
 func (r *BitbucketCredentialResourceModel) RefreshFromSharedBitbucketCredentialOutput(ctx context.Context, resp *shared.BitbucketCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedBitbucketCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.Username = types.StringValue(resp.Username)
 	}
 
 	return diags
@@ -155,6 +143,12 @@ func (r *BitbucketCredentialResourceModel) ToOperationsUpdateBitbucketCredential
 func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredential(ctx context.Context, opts *BitbucketCredentialResourceModelOptions) (*shared.BitbucketCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -176,27 +170,6 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredential(ctx conte
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedBitbucketCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.BitbucketCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredentialKeys(ctx context.Context, opts *BitbucketCredentialResourceModelOptions) (*shared.BitbucketCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var username string
 	username = r.Username.ValueString()
 
@@ -212,10 +185,15 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredentialKeys(ctx c
 	} else {
 		token = nil
 	}
-	out := shared.BitbucketCredentialKeys{
-		Username: username,
-		Password: password,
-		Token:    token,
+	out := shared.BitbucketCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Username:      username,
+		Password:      password,
+		Token:         token,
 	}
 
 	return &out, diags

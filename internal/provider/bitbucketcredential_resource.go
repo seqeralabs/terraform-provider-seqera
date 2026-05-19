@@ -43,6 +43,7 @@ type BitbucketCredentialResource struct {
 type BitbucketCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Password      types.String `tfsdk:"password"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -65,6 +66,13 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 				Description: `Repository base URL (optional, recommended). When multiple Bitbucket credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated Bitbucket credential is used. Example: https://bitbucket.org/seqeralabs/repo1`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

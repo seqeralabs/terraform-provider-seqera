@@ -41,6 +41,7 @@ type ContainerRegistryCredentialResource struct {
 // ContainerRegistryCredentialResourceModel describes the resource data model.
 type ContainerRegistryCredentialResourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Password      types.String `tfsdk:"password"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -59,6 +60,13 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

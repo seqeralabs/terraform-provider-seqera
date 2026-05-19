@@ -41,32 +41,20 @@ func (r *GiteaCredentialResourceModel) RefreshFromSharedDescribeGiteaCredentials
 	return diags
 }
 
-func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialKeysOutput(ctx context.Context, resp *shared.GiteaCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Username = types.StringValue(resp.Username)
-
-	return diags
-}
-
 func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialOutput(ctx context.Context, resp *shared.GiteaCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedGiteaCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.Username = types.StringValue(resp.Username)
 	}
 
 	return diags
@@ -172,6 +160,12 @@ func (r *GiteaCredentialResourceModel) ToSharedCreateGiteaCredentialsRequest(ctx
 func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.GiteaCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -193,36 +187,20 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Conte
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedGiteaCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.GiteaCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *GiteaCredentialResourceModel) ToSharedGiteaCredentialKeys(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.GiteaCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var username string
 	username = r.Username.ValueString()
 
 	var password string
 	password = opts.Config.Password.ValueString()
 
-	out := shared.GiteaCredentialKeys{
-		Username: username,
-		Password: password,
+	out := shared.GiteaCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Username:      username,
+		Password:      password,
 	}
 
 	return &out, diags

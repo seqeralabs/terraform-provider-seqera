@@ -2,8 +2,30 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateComputeEnvResponse struct {
 	ComputeEnvID *string `json:"computeEnvId,omitempty"`
+	// Alias of `compute_env_id` for Terraform convention.
+	ID *string `json:"id,omitempty"`
+}
+
+func (c CreateComputeEnvResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateComputeEnvResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .computeEnvId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateComputeEnvResponse) GetComputeEnvID() *string {
@@ -11,4 +33,11 @@ func (c *CreateComputeEnvResponse) GetComputeEnvID() *string {
 		return nil
 	}
 	return c.ComputeEnvID
+}
+
+func (c *CreateComputeEnvResponse) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }

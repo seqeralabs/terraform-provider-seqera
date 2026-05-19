@@ -14,6 +14,7 @@ func (r *LabelsResourceModel) RefreshFromSharedCreateLabelResponse(ctx context.C
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ID = types.Int64PointerValue(resp.ID)
 		r.IsDefault = types.BoolPointerValue(resp.IsDefault)
 		r.LabelID = types.Int64PointerValue(resp.LabelID)
 		r.Name = types.StringPointerValue(resp.Name)
@@ -28,6 +29,7 @@ func (r *LabelsResourceModel) RefreshFromSharedUpdateLabelResponse(ctx context.C
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ID = types.Int64PointerValue(resp.ID)
 		r.IsDefault = types.BoolPointerValue(resp.IsDefault)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.Value = types.StringPointerValue(resp.Value)

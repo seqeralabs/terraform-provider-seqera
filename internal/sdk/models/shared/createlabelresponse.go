@@ -2,19 +2,41 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateLabelResponse struct {
-	LabelID   *int64  `json:"id,omitempty"`
+	ID        *int64  `json:"id,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
 	Name      *string `json:"name,omitempty"`
 	Resource  *bool   `json:"resource,omitempty"`
 	Value     *string `json:"value,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	LabelID *int64 `json:"label_id,omitempty"`
 }
 
-func (c *CreateLabelResponse) GetLabelID() *int64 {
+func (c CreateLabelResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateLabelResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { label_id: .id }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CreateLabelResponse) GetID() *int64 {
 	if c == nil {
 		return nil
 	}
-	return c.LabelID
+	return c.ID
 }
 
 func (c *CreateLabelResponse) GetIsDefault() *bool {
@@ -43,4 +65,11 @@ func (c *CreateLabelResponse) GetValue() *string {
 		return nil
 	}
 	return c.Value
+}
+
+func (c *CreateLabelResponse) GetLabelID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.LabelID
 }

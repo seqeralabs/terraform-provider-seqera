@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
 type DataLinkDtoStatus string
@@ -43,8 +44,8 @@ type DataLinkDto struct {
 	Description *string `json:"description,omitempty"`
 	Hidden      *bool   `json:"hidden,omitempty"`
 	// Unique identifier for the data link
-	DataLinkID *string `json:"id,omitempty"`
-	Message    *string `json:"message,omitempty"`
+	ID      *string `json:"id,omitempty"`
+	Message *string `json:"message,omitempty"`
 	// Display name for the data link connection
 	Name             *string       `json:"name,omitempty"`
 	ProviderType     *ProviderType `json:"provider,omitempty"`
@@ -55,6 +56,24 @@ type DataLinkDto struct {
 	ResourceRef *string            `json:"resourceRef,omitempty"`
 	Status      *DataLinkDtoStatus `json:"status,omitempty"`
 	Type        *DataLinkType      `json:"type,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	DataLinkID *string `json:"data_link_id,omitempty"`
+}
+
+func (d DataLinkDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DataLinkDto) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { data_link_id: .id }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DataLinkDto) GetCredentials() []DataLinkCredentials {
@@ -78,11 +97,11 @@ func (d *DataLinkDto) GetHidden() *bool {
 	return d.Hidden
 }
 
-func (d *DataLinkDto) GetDataLinkID() *string {
+func (d *DataLinkDto) GetID() *string {
 	if d == nil {
 		return nil
 	}
-	return d.DataLinkID
+	return d.ID
 }
 
 func (d *DataLinkDto) GetMessage() *string {
@@ -139,4 +158,11 @@ func (d *DataLinkDto) GetType() *DataLinkType {
 		return nil
 	}
 	return d.Type
+}
+
+func (d *DataLinkDto) GetDataLinkID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DataLinkID
 }

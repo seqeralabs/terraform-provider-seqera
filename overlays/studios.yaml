@@ -67,6 +67,14 @@ actions:
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .sessionId }'
+      properties:
+        id:
+          type: string
+          description: Alias of `session_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
 
   # ============================================================================
   # ENTITY OPERATIONS (CRUD)

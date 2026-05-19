@@ -56,6 +56,7 @@ type StudiosResourceModel struct {
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
 	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
 	Description         types.String                     `tfsdk:"description"`
+	ID                  types.String                     `tfsdk:"id"`
 	InitialCheckpointID types.Int64                      `tfsdk:"initial_checkpoint_id"`
 	IsPrivate           types.Bool                       `tfsdk:"is_private"`
 	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
@@ -253,6 +254,13 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `session_id` + "`" + ` for Terraform convention.`,
 			},
 			"initial_checkpoint_id": schema.Int64Attribute{
 				Optional: true,

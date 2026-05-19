@@ -2,15 +2,7 @@
 
 FEATURES:
 
-- **New Resources:** Platform-specific Google Cloud, Azure, and AWS Cloud compute environment resources, mirroring `seqera_aws_batch_ce`. Splits the relevant platforms out of the catch-all `seqera_compute_env` resource into first-class resources with their own typed schemas, validators, and registry doc pages:
-
-  - `seqera_gcp_batch_ce` — Google Cloud Batch (managed batch service) ([#112](https://github.com/seqeralabs/terraform-provider-seqera/issues/112))
-  - `seqera_gcp_cloud_ce` — Google Cloud (Compute Engine VMs managed directly by Seqera) ([#113](https://github.com/seqeralabs/terraform-provider-seqera/issues/113))
-  - `seqera_azure_batch_ce` — Azure Batch (managed pools) ([#116](https://github.com/seqeralabs/terraform-provider-seqera/issues/116))
-  - `seqera_azure_cloud_ce` — Azure Cloud (VMs managed directly by Seqera) ([#115](https://github.com/seqeralabs/terraform-provider-seqera/issues/115))
-  - `seqera_aws_cloud_ce` — AWS Cloud (EC2 instances managed directly by Seqera). Two compute modes via `sched_enabled`: Classic (default — Seqera picks the worker fleet) and Seqera Intelligent Compute (Preview — set `sched_config` with `provisioning_model` and an optional `machine_types` whitelist to control spot/on-demand strategy and the eligible instance types). Intelligent Compute requires the `SEQERA_SCHEDULER` feature toggle on the target workspace; without it, `terraform apply` will return 403. ([#114](https://github.com/seqeralabs/terraform-provider-seqera/issues/114))
-
-  Each resource ships with a sidecar `MoveState` implementation, so existing `seqera_compute_env` deployments can migrate without re-creating the resource:
+- **New typed compute environment resources.** Splits the platform-specific compute environments out of the catch-all `seqera_compute_env` into first-class resources with mode-specific schemas and validators: `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_aws_cloud_ce`. Existing `seqera_compute_env` deployments can migrate without re-creating the resource via a `moved {}` block:
 
   ```terraform
   moved {
@@ -21,99 +13,68 @@ FEATURES:
 
   Migrations are only supported from the generic `seqera_compute_env` (no cross-cloud or cross-platform moves).
 
-- **Fine-grained access control (Cloud Pro / Enterprise v25.3+):** New surfaces for managing custom roles and assigning them via existing team / workspace-participant resources ([#205](https://github.com/seqeralabs/terraform-provider-seqera/pull/205)):
+- **Fine-grained access control (Cloud Pro / Enterprise v25.3+).** New `seqera_custom_role` resource + data source for org-scoped custom roles, plus `seqera_team` and `seqera_permissions` data sources. `seqera_workspace_participant` drops its role enum so custom roles are accepted alongside the predefined ones. See [docs/guides/fine-grained-access-control.md](docs/guides/fine-grained-access-control.md).
 
-  - `seqera_custom_role` (resource) — CRUD on org-scoped custom roles. `description` and `permissions` update in place; `name` change is force-new.
-  - `seqera_custom_role` (data source) — resolves both custom and predefined roles; `is_predefined` distinguishes them.
-  - `seqera_team` (data source) — by-name lookup, returns `team_id` and `members_count` for wiring teams into other resources without a hardcoded id.
-  - `seqera_permissions` (data source) — live grant catalogue with optional category filter plus convenience `names` / `categories` lists; pairs with `lifecycle.precondition` to fail plan-time on invalid permission strings before any API call.
-  - `seqera_workspace_participant` — drops the role enum so custom role names are accepted alongside predefined ones.
+- **Pipeline version promotion and pinning.** New `seqera_pipeline_version` resource (rename in place, pin the platform default against out-of-band UI changes) and `seqera_pipeline_versions` data source. The resource does not create or delete versions — drafts appear automatically when a versionable field on `seqera_pipeline` changes. See [docs/guides/pipeline-versioning.md](docs/guides/pipeline-versioning.md).
 
-  See the new guide at [docs/guides/fine-grained-access-control.md](docs/guides/fine-grained-access-control.md) for end-to-end usage and three archetype role templates.
+- **New `seqera_pipeline_schema` resource for custom pipeline parameter schemas** — populates the Launchpad's custom parameters form. Server-side rows are immutable: content updates force replace, and `terraform destroy` is a no-op (no DELETE endpoint). See [docs/guides/pipeline-schema-custom-upload.md](docs/guides/pipeline-schema-custom-upload.md).
 
-- **Pipeline version promotion and pinning.** New surfaces for declaring which version of a pipeline is the platform default and keeping it pinned against out-of-band UI changes:
+- **New typed Azure credential resources.** Splits the three Azure authentication modes previously conflated under `seqera_credential` into first-class resources: `seqera_azure_credential` (Batch shared key), `seqera_azure_entra_credential` (Batch with Entra service principal), and `seqera_azure_cloud_credential` (Cloud SingleVM with Entra service principal). The generic `seqera_credential` also accepts `provider_type = "azure-cloud"` and no longer crashes with "unknown after apply" when `keys.azure_cloud` is used. See [docs/guides/migrating-from-seqera-credential.md](docs/guides/migrating-from-seqera-credential.md).
 
-  - `seqera_pipeline_versions` (data source) — lists versions on a pipeline; optional `is_published` filter forwards to the platform's `?isPublished` query parameter to scope to drafts or published versions.
-  - `seqera_pipeline_version` (resource) — owns the `(name, is_default)` tuple of an existing version via `PUT /pipelines/{id}/versions/{versionId}/manage`. Renames are in place (same `version_id` and `hash`). `is_default = true` is always re-asserted on apply so out-of-band promotions in the UI are reverted at the next plan.
+- **AWS IAM role-based authentication on `seqera_aws_credential`**, with cross-account external ID support, alongside the existing access-key flow.
 
-  The resource intentionally does **not** create or delete versions — the platform's audit trail is immutable and the API has no create-version or delete-version endpoint. Drafts appear automatically when a versionable field on `seqera_pipeline` changes; this resource publishes them (by assigning a name) and pins which one is default. See the new guide at [docs/guides/pipeline-versioning.md](docs/guides/pipeline-versioning.md).
+- **Google Workload Identity Federation on `seqera_google_credential`** — authenticate to GCP without storing a long-lived service account key. Recommended path for new deployments. See [GCP Credentials with Workload Identity Federation](docs/guides/gcp-workload-identity-federation.md).
 
-- **New `seqera_pipeline_schema` resource for custom pipeline parameter schemas.** Wraps `POST /pipeline-schemas` and exposes the server-assigned `id` so it can be passed to `seqera_pipeline.launch.pipeline_schema_id`, populating the custom parameters form in the Launchpad. Read is trusted from state (rows are immutable server-side; the endpoint has no GET-by-id), updates to `schema_content` force replace, and `terraform destroy` is a no-op (no DELETE endpoint — the previous row is orphaned server-side). A new guide at [docs/guides/pipeline-schema-custom-upload.md](docs/guides/pipeline-schema-custom-upload.md) covers `file()` loading, URL fetch via `data.http`, and the nf-core checkout pattern. ([#184](https://github.com/seqeralabs/terraform-provider-seqera/pull/184))
-
-- **New typed Azure credential resources** ([#204](https://github.com/seqeralabs/terraform-provider-seqera/pull/204)). Splits the three Azure authentication modes previously conflated under `seqera_credential` with `provider_type = "azure"` into first-class resources with mode-specific schemas:
-
-  - `seqera_azure_credential` — Azure Batch shared key (`batch_name`, `storage_name`, `batch_key`, `storage_key`).
-  - `seqera_azure_entra_credential` — Microsoft Entra service principal for Azure Batch (`batch_name`, `storage_name`, `tenant_id`, `client_id`, `client_secret`).
-  - `seqera_azure_cloud_credential` — Microsoft Entra service principal for Azure Cloud SingleVM (`subscription_id`, `storage_name`, `tenant_id`, `client_id`, `client_secret`).
-
-  The generic `seqera_credential` resource also accepts `provider_type = "azure-cloud"` and no longer crashes with "unknown after apply" when `keys.azure_cloud` is used (the `keys` block is no longer marked readonly). See [docs/guides/migrating-from-seqera-credential.md](docs/guides/migrating-from-seqera-credential.md) for migration from the generic resource.
+- **Microsoft Entra ID (service principal) authentication on `seqera_azure_credential`**, alongside the existing shared-key flow.
 
 ENHANCEMENTS:
 
-- **SDK-level retry policy for transient API failures.** Every generated SDK call site now retries automatically on connection errors, timeouts, HTTP 429, and HTTP 502/503/504, with exponential backoff (500ms → 30s, 5-minute total cap). 4xx (other than 429) and HTTP 500 are *not* retried — they're either deterministic or could deepen partial-create orphans. Addresses prior reports of `failure to invoke API` / `read: connection timed out` failures on `seqera_data_link`, `seqera_pipeline`, and `seqera_credential` resources. ([#207](https://github.com/seqeralabs/terraform-provider-seqera/pull/207))
+- **Automatic retry on transient API failures.** All provider API calls now retry on connection errors, timeouts, HTTP 429, and HTTP 502/503/504, with exponential backoff (500ms → 30s, 5-minute cap). 4xx (other than 429) and HTTP 500 are not retried. Addresses prior `failure to invoke API` / `read: connection timed out` failures on `seqera_data_link`, `seqera_pipeline`, and `seqera_credential`.
 
-- **Plan-time warning when pre/post-run scripts exceed 1024 bytes.** Seqera Platform Cloud rejects pre/post-run scripts larger than 1024 bytes; Enterprise installs can raise the limit via platform configuration, so the provider can't know in advance which environment a config targets. A plan-time **Warning** (not an Error) now fires on every compute-environment `pre_run_script` / `post_run_script` above the limit, as well as on `seqera_pipeline.launch` and `seqera_workflows`. Apply still proceeds. ([#206](https://github.com/seqeralabs/terraform-provider-seqera/pull/206))
+- **Plan-time warning when pre/post-run scripts exceed 1024 bytes.** Seqera Cloud rejects scripts above this limit; Enterprise installs can raise it via platform config, so a warning (not an error) now fires at plan time on `pre_run_script` / `post_run_script` for compute environments, `seqera_pipeline.launch`, and `seqera_workflows`. Apply still proceeds.
 
-- **Compute environment fields are documented and behave consistently across clouds.** Field descriptions, "requires replacement" annotations, and the `enable_fusion` / `enable_wave` naming (formerly `fusion2_enabled` / `wave_enabled`) now match between Google Cloud, Azure Cloud, AWS Cloud, and Google Cloud Batch compute environments.
+- **Compute environment fields documented and named consistently across clouds.** Field descriptions, "requires replacement" annotations, and the `enable_fusion` / `enable_wave` naming (formerly `fusion2_enabled` / `wave_enabled`) now match across Google Cloud, Azure Cloud, AWS Cloud, and Google Cloud Batch.
 
-- **Compute Environments** - New configuration blocks added: `azure_cloud`, `google_cloud`.
+- **SSH access on Studios** is now exposed in state, and `mount_data` has been restructured for stronger typing (the old string-list form is deprecated).
 
-- **Pipelines** - Added `version` block for pipeline versioning support and `pipeline_schema_id` field in the launch configuration.
-
-- **Workflows** - Added `pipeline_schema_id` field for pipeline schema association.
-
-- **Studios** - Added `ssh_details` read-only block with SSH connection information (`host`, `port`, `user`, `command`). Added `mount_data_v2` structured block (deprecating the `mount_data` string list) and `ssh_enabled` option in configuration.
-
-- **Credentials** - AWS credential resource (`seqera_aws_credential`) now supports `mode` (`keys` or `role`), `external_id`, and `use_external_id` fields for IAM role-based authentication with cross-account external ID support.
-
-- **Credentials** - Google credential resource (`seqera_google_credential`) now supports Workload Identity Federation via `workload_identity_provider`, `service_account_email`, and `token_audience` fields. WIF is the recommended path — no long-lived service account key is stored in the platform. See the new guide at [GCP Credentials with Workload Identity Federation](docs/guides/gcp-workload-identity-federation.md).
-
-- **Credentials** - Azure credential resource (`seqera_azure_credential`) now supports Microsoft Entra ID (service principal) authentication via `tenant_id`, `client_id`, and `client_secret`, alongside the existing shared key flow. Removes the need for long-lived Azure access keys when using Batch Forge environments.
-
-- **Validation** - Compute environment configuration now validates feature dependencies at plan time, matching the Seqera Platform UI. You'll get clear errors during `terraform plan` instead of unexpected failures at apply time.
+- **Plan-time validation of compute environment feature dependencies**, matching the Seqera Platform UI:
 
   - Fusion v2 requires Wave containers
   - Fast instance storage and Fusion Snapshots require Fusion v2
   - Fargate for head jobs requires Fusion v2 and Spot provisioning, and is not compatible with EFS or FSx
   - Graviton (ARM64) requires Fargate, Wave, and Fusion v2
   - Additional field-level validations for EBS, EFS, and DRAGEN dependencies
-  - `work_dir` on AWS compute environments must be a `s3://` URI with no trailing slash (catches typos like `"//s3"` at plan time, applies to `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, and the legacy `seqera_aws_compute_env`)
-  - On `seqera_aws_cloud_ce`, `sched_config` must be set when `sched_enabled = true` and must be omitted when `sched_enabled = false` — surfaced at plan time rather than as a 4xx during apply
+  - On AWS compute environments, `work_dir` must be a `s3://` URI with no trailing slash, and `sched_config` must be paired correctly with `sched_enabled` — both surfaced at plan time rather than as 4xx errors during apply
+
+- **`.id` alias added to 20+ resources** for consistency with the Terraform convention `seqera_<resource>.<name>.id`. Both the new `.id` and the existing `{entity}_id` attribute hold the same value; existing HCL is unaffected. `seqera_custom_role` and `seqera_primary_compute_env` are intentionally excluded — their identities are composite or action-like.
 
 DEPRECATIONS:
 
-- **Azure Batch `delete_jobs_on_completion` is deprecated.** Replaced by three boolean fields on Azure Batch compute configurations: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old string field remains settable for backward compatibility with Seqera Platform v25.1 and earlier, but emits a deprecation warning at plan time. Users on Platform v26.1+ should migrate to the boolean fields.
+- **Azure Batch `delete_jobs_on_completion` is deprecated.** Replaced by three boolean fields: `delete_jobs_on_completion_enabled`, `delete_pools_on_completion`, `delete_tasks_on_completion`. The old string field still works (with a plan-time warning) for compatibility with Platform v25.1 and earlier; v26.1+ users should migrate (e.g. `delete_jobs_on_completion = "on_success"` → `delete_jobs_on_completion_enabled = true`). State is upgraded automatically when upgrading `seqera_compute_env` from v0.30.x; updating your config will not force a resource replacement.
 
-  User migration:
+- **`seqera_aws_compute_env`** is deprecated in favour of `seqera_aws_batch_ce`. Same schema and API; migrate via a `moved {}` block (see the resource docs). `terraform plan` surfaces a deprecation warning.
 
-  ```diff
-  - delete_jobs_on_completion       = "on_success"
-  + delete_jobs_on_completion_enabled = true
-  ```
-
-  State upgrade is handled automatically: when upgrading `seqera_compute_env` from v0.30.x, any non-empty `delete_jobs_on_completion` value is migrated to `delete_jobs_on_completion_enabled = true` in state, so updating your config doesn't force a resource replacement. Only the `azure_batch` config block is affected.
-
-- **`seqera_aws_compute_env`** ([#187](https://github.com/seqeralabs/terraform-provider-seqera/issues/187)) - The `seqera_aws_compute_env` resource is now marked deprecated in favour of `seqera_aws_batch_ce`. The two resources share the same schema and API; `seqera_aws_batch_ce` is the canonical AWS Batch compute environment resource going forward. State can be migrated without re-creating the resource via a `moved {}` block — see the resource docs for an example. `terraform plan` will surface a deprecation warning, and the registry doc page now leads with a deprecation banner.
-
-- **EBS Auto Scale** - `ebs_auto_scale` and `ebs_block_size` fields in AWS Batch Forge configuration are now marked as deprecated, matching the Seqera Platform documentation. These features are not compatible with Fusion v2. Use `ebs_boot_size` to configure a larger root volume instead.
+- **`ebs_auto_scale` and `ebs_block_size`** in AWS Batch Forge are deprecated — not compatible with Fusion v2. Use `ebs_boot_size` for the root volume.
 
 BUGFIXES:
 
-- **Compute environments deleted in the UI no longer break `terraform plan`.** Fixed an error when refreshing a compute environment that had been deleted outside of Terraform (e.g. through the Seqera Platform UI) — `terraform plan` would fail with an unmarshal error instead of cleanly proposing to recreate it. Affects every typed CE resource (`seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce`, `seqera_managed_compute_ce`). `terraform destroy` on an already-removed CE is now also a silent no-op instead of an error.
+- **`seqera_action` updates no longer fail with HTTP 400 "Launch ID value can't change".** Originally reported on 0.30.4 as "actions don't update when secrets are involved" — in reality every `launch` mutation (compute env, params, secrets, revision) failed because the SDK stopped echoing back `launch.id` on PUT. The fix restores the round-trip; previously the only workaround was `terraform taint`.
 
-- **AWS Batch plan validation no longer crashes on DRAGEN, EFS, or Fusion Snapshots.** Fixed `terraform validate` and `terraform plan` errors when using `forge.dragen_enabled`, `forge.dragen_ami_id`, `forge.dragen_instance_type`, `forge.efs_create`, `forge.ebs_block_size`, or `fusion_snapshots` on `seqera_aws_batch_ce`. The dependency rules between these fields are still enforced — they now run through plan-time validators that produce a readable error message instead of a path-expression crash.
+- **Compute environments deleted in the UI no longer break `terraform plan`.** Previously, refreshing a CE that had been deleted outside Terraform failed with an unmarshal error; now `terraform plan` cleanly proposes to recreate it, and `terraform destroy` on an already-removed CE is a silent no-op. Affects every typed CE resource.
 
-- **List fields now accept values from data sources** ([#186](https://github.com/seqeralabs/terraform-provider-seqera/issues/186)). Fixed an error when driving list-of-string fields from a data source — for example, `subnets = data.aws_subnets.public.ids` or `network_tags = data.google_compute_network.x.tags`. Previously `terraform plan` failed with `Received unknown value, however the target type cannot handle unknown values`. Affects `forge.subnets`, `forge.security_groups`, `forge.allow_buckets`, `forge.instance_types` on AWS Batch resources, plus `allow_buckets` and `security_groups` on AWS Cloud, `compute_jobs_machine_type` and `network_tags` on GCP Batch, and `container_reg_ids` on Azure Batch.
+- **List fields now accept values from data sources.** `terraform plan` no longer fails with `Received unknown value, however the target type cannot handle unknown values` when feeding list-of-string fields from a data source (e.g. `subnets = data.aws_subnets.public.ids`). Affects `forge.subnets`, `forge.security_groups`, `forge.allow_buckets`, `forge.instance_types`, `allow_buckets`, `security_groups`, `compute_jobs_machine_type`, `network_tags`, and `container_reg_ids` across AWS/Azure/GCP compute environments.
 
-- **Corrected EBS field descriptions on AWS compute environments** ([#159](https://github.com/seqeralabs/terraform-provider-seqera/issues/159)). `ebs_block_size` previously claimed to be the root volume size; it's actually the auto-expandable scratch volume. `ebs_boot_size` (the real root volume size) now has a description.
+- **Compute environment in-place updates.** Updates to `name`, `credentials_id`, or `description` no longer trigger a replace.
 
-- **`pipeline` is now required on launch requests** ([#209](https://github.com/seqeralabs/terraform-provider-seqera/pull/209)). The nested `WorkflowLaunchRequest.pipeline` field was previously optional and shared across `seqera_pipeline`, `seqera_workflows`, and `seqera_action`. Omitting it produced inconsistent 400 errors from the backend (and an unhelpful message on actions); it's now enforced at plan time with a clear validation error.
+- **AWS Batch plan validation no longer crashes on DRAGEN, EFS, or Fusion Snapshots.** Field-dependency errors on `forge.dragen_*`, `forge.efs_create`, `forge.ebs_block_size`, and `fusion_snapshots` now surface as readable plan-time messages instead of path-expression crashes.
 
-- **`workspace_id` is now read-only** ([#210](https://github.com/seqeralabs/terraform-provider-seqera/pull/210)). The workspace identifier is assigned by the backend and should never be supplied by users — it's now marked computed to prevent accidental overrides.
+- **`pipeline` is now required on launch requests.** Previously optional on `seqera_pipeline`, `seqera_workflows`, and `seqera_action`; omitting it produced inconsistent 400 errors. Now enforced at plan time.
 
-- **Compute environment in-place updates** ([#211](https://github.com/seqeralabs/terraform-provider-seqera/pull/211)). Updates to `name`, `credentials_id`, or `description` on a compute environment no longer trigger a replace; the change is applied in place against the existing CE.
+- **`workspace_id` is now read-only.** Assigned by the backend; marking it computed prevents accidental overrides.
 
-- **Cloud CEs ignore `enable_fusion` / `enable_wave`** ([#212](https://github.com/seqeralabs/terraform-provider-seqera/pull/212)). Fusion and Wave are hard requirements for Cloud compute environments and not user-configurable. The provider now omits these fields from the request rather than surfacing them as configurable, and relies on the backend to default them to enabled.
+- **No false drift on `enable_fusion` / `enable_wave` for Cloud CEs.** Fusion and Wave are hard requirements for Cloud compute environments and not user-configurable; the provider now omits them from the request and relies on the backend default, so they no longer appear as configurable fields.
+
+- **Corrected EBS field descriptions on AWS compute environments.** `ebs_block_size` previously claimed to be the root volume — it's actually the auto-expandable scratch volume. `ebs_boot_size` (the real root volume) now has a description.
 
 # v0.30.5
 

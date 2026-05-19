@@ -11,9 +11,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -37,6 +39,7 @@ type TeamsResourceModel struct {
 	AvatarID     types.String `tfsdk:"avatar_id"`
 	AvatarURL    types.String `tfsdk:"avatar_url"`
 	Description  types.String `tfsdk:"description"`
+	ID           types.Int64  `tfsdk:"id"`
 	MembersCount types.Int64  `tfsdk:"members_count"`
 	Name         types.String `tfsdk:"name"`
 	OrgID        types.Int64  `tfsdk:"org_id"`
@@ -65,6 +68,13 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(250),
 				},
+			},
+			"id": schema.Int64Attribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `team_id` + "`" + ` for Terraform convention.`,
 			},
 			"members_count": schema.Int64Attribute{
 				Computed:    true,

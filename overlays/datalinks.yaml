@@ -30,14 +30,19 @@ actions:
   - target: $["paths"]["/data-links"]["post"]["parameters"][0]
     update:
       required: true
-  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: dataLinkId
   - target: $["components"]["schemas"]["DataLinkProvider"]
     update:
       x-speakeasy-name-override: providerType
 
-  # DataLink entity annotation
+  # DataLink entity annotation + add a `data_link_id` alias of `id`. The
+  # transform-from-api copies the wire `id` into a synthetic `data_link_id`
+  # property so users can reference the resource with either
+  # `seqera_data_link.foo.id` (TF convention) or
+  # `seqera_data_link.foo.data_link_id` (existing customer HCL).
+  # No transform-to-api is needed because DataLinkDto is response-only
+  # (Create/Update/Read all use it on the response side; requests use
+  # separate DataLinkCreateRequest / DataLinkUpdateRequest schemas), so
+  # the synthetic field never leaks back onto the wire.
   - target: $["components"]["schemas"]["DataLinkDto"]
     update:
       x-speakeasy-entity: DataLink
@@ -46,6 +51,14 @@ actions:
 
         Data links provide access to cloud storage for pipeline input/output operations,
         enabling seamless data integration.
+      x-speakeasy-transform-from-api:
+        jq: '. + { data_link_id: .id }'
+      properties:
+        data_link_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
 
   # DataLink description update
   - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]

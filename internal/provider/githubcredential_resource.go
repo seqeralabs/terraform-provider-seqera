@@ -43,6 +43,7 @@ type GithubCredentialResourceModel struct {
 	AccessToken   types.String `tfsdk:"access_token"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Username      types.String `tfsdk:"username"`
@@ -69,6 +70,13 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose ` + "`" + `base_url` + "`" + ` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a ` + "`" + `base_url` + "`" + `, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

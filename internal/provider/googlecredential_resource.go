@@ -43,6 +43,7 @@ type GoogleCredentialResource struct {
 type GoogleCredentialResourceModel struct {
 	CredentialsID            types.String `tfsdk:"credentials_id"`
 	Data                     types.String `tfsdk:"data"`
+	ID                       types.String `tfsdk:"id"`
 	Name                     types.String `tfsdk:"name"`
 	ProviderType             types.String `tfsdk:"provider_type"`
 	ServiceAccountEmail      types.String `tfsdk:"service_account_email"`
@@ -75,6 +76,13 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Validators: []validator.String{
 					custom_stringvalidators.GoogleCredentialKeysValidator(),
 				},
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

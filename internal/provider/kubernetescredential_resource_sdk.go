@@ -46,6 +46,7 @@ func (r *KubernetesCredentialResourceModel) RefreshFromSharedKubernetesCredentia
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -157,6 +158,12 @@ func (r *KubernetesCredentialResourceModel) ToSharedCreateKubernetesCredentialsR
 func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.KubernetesCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -172,26 +179,6 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedKubernetesCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.KubernetesCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredentialKeys(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.KubernetesCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	token := new(string)
 	if !opts.Config.Token.IsUnknown() && !opts.Config.Token.IsNull() {
 		*token = opts.Config.Token.ValueString()
@@ -210,7 +197,11 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredentialKeys(ctx
 	} else {
 		privateKey = nil
 	}
-	out := shared.KubernetesCredentialKeys{
+	out := shared.KubernetesCredential{
+		ID:                id,
+		CredentialsID:     credentialsID,
+		Name:              name,
+		ProviderType:      providerType,
 		Token:             token,
 		ClientCertificate: clientCertificate,
 		PrivateKey:        privateKey,

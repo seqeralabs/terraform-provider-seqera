@@ -33,125 +33,11 @@ func (e *AzureCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// AzureCredentialDiscriminator - Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-type AzureCredentialDiscriminator string
-
-const (
-	AzureCredentialDiscriminatorAzure      AzureCredentialDiscriminator = "azure"
-	AzureCredentialDiscriminatorAzureEntra AzureCredentialDiscriminator = "azure-entra"
-	AzureCredentialDiscriminatorAzureCloud AzureCredentialDiscriminator = "azure-cloud"
-)
-
-func (e AzureCredentialDiscriminator) ToPointer() *AzureCredentialDiscriminator {
-	return &e
-}
-func (e *AzureCredentialDiscriminator) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "azure":
-		fallthrough
-	case "azure-entra":
-		fallthrough
-	case "azure-cloud":
-		*e = AzureCredentialDiscriminator(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for AzureCredentialDiscriminator: %v", v)
-	}
-}
-
-type AzureCredentialKeys struct {
-	// Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-	Discriminator *AzureCredentialDiscriminator `default:"azure" json:"discriminator"`
-	// Azure Batch account name (required)
-	BatchName string `json:"batchName"`
-	// Azure Blob Storage account name (required)
-	StorageName string `json:"storageName"`
-	// Azure Batch account key (for shared key authentication)
-	BatchKey *string `json:"batchKey,omitempty"`
-	// Azure Storage account key (for shared key authentication)
-	StorageKey *string `json:"storageKey,omitempty"`
-	// Azure tenant ID (for Entra/Cloud authentication)
-	TenantID *string `json:"tenantId,omitempty"`
-	// Azure service principal client ID (for Entra/Cloud authentication)
-	ClientID *string `json:"clientId,omitempty"`
-	// Azure service principal client secret (for Entra/Cloud authentication)
-	ClientSecret *string `json:"clientSecret,omitempty"`
-}
-
-func (a AzureCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureCredentialKeys) GetDiscriminator() *AzureCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureCredentialKeys) GetBatchName() string {
-	if a == nil {
-		return ""
-	}
-	return a.BatchName
-}
-
-func (a *AzureCredentialKeys) GetStorageName() string {
-	if a == nil {
-		return ""
-	}
-	return a.StorageName
-}
-
-func (a *AzureCredentialKeys) GetBatchKey() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BatchKey
-}
-
-func (a *AzureCredentialKeys) GetStorageKey() *string {
-	if a == nil {
-		return nil
-	}
-	return a.StorageKey
-}
-
-func (a *AzureCredentialKeys) GetTenantID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.TenantID
-}
-
-func (a *AzureCredentialKeys) GetClientID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ClientID
-}
-
-func (a *AzureCredentialKeys) GetClientSecret() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ClientSecret
-}
-
 type AzureCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -163,19 +49,52 @@ type AzureCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time          `json:"lastUpdated,omitempty"`
-	Keys        AzureCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure Batch account name (required)
+	BatchName string `json:"batch_name"`
+	// Azure Blob Storage account name (required)
+	StorageName string `json:"storage_name"`
+	// Azure Batch account key (for shared key authentication)
+	BatchKey *string `json:"batch_key,omitempty"`
+	// Azure Storage account key (for shared key authentication)
+	StorageKey *string `json:"storage_key,omitempty"`
+	// Azure tenant ID (for Entra/Cloud authentication)
+	TenantID *string `json:"tenant_id,omitempty"`
+	// Azure service principal client ID (for Entra/Cloud authentication)
+	ClientID *string `json:"client_id,omitempty"`
+	// Azure service principal client secret (for Entra/Cloud authentication)
+	ClientSecret *string `json:"client_secret,omitempty"`
 }
 
 func (a AzureCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure\", batchName: .batch_name, storageName: .storage_name, batchKey: .batch_key, storageKey: .storage_key, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .batch_key, .storage_key, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { batch_name: .keys.batchName, storage_name: .keys.storageName, batch_key: .keys.batchKey, storage_key: .keys.storageKey, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCredential) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureCredential) GetCredentialsID() *string {
@@ -227,57 +146,60 @@ func (a *AzureCredential) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureCredential) GetKeys() AzureCredentialKeys {
-	if a == nil {
-		return AzureCredentialKeys{}
-	}
-	return a.Keys
-}
-
-type AzureCredentialKeysOutput struct {
-	// Authentication mode discriminator (azure, azure-entra, or azure-cloud)
-	Discriminator *AzureCredentialDiscriminator `default:"azure" json:"discriminator"`
-	// Azure Batch account name (required)
-	BatchName string `json:"batchName"`
-	// Azure Blob Storage account name (required)
-	StorageName string `json:"storageName"`
-}
-
-func (a AzureCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *AzureCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *AzureCredentialKeysOutput) GetDiscriminator() *AzureCredentialDiscriminator {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AzureCredentialKeysOutput) GetBatchName() string {
+func (a *AzureCredential) GetBatchName() string {
 	if a == nil {
 		return ""
 	}
 	return a.BatchName
 }
 
-func (a *AzureCredentialKeysOutput) GetStorageName() string {
+func (a *AzureCredential) GetStorageName() string {
 	if a == nil {
 		return ""
 	}
 	return a.StorageName
 }
 
+func (a *AzureCredential) GetBatchKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.BatchKey
+}
+
+func (a *AzureCredential) GetStorageKey() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StorageKey
+}
+
+func (a *AzureCredential) GetTenantID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.TenantID
+}
+
+func (a *AzureCredential) GetClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientID
+}
+
+func (a *AzureCredential) GetClientSecret() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientSecret
+}
+
 type AzureCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -289,19 +211,42 @@ type AzureCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                `json:"lastUpdated,omitempty"`
-	Keys        AzureCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Azure Batch account name (required)
+	BatchName string `json:"batch_name"`
+	// Azure Blob Storage account name (required)
+	StorageName string `json:"storage_name"`
 }
 
 func (a AzureCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+	jsonBytes, err := utils.MarshalJSON(a, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { discriminator: \"azure\", batchName: .batch_name, storageName: .storage_name, batchKey: .batch_key, storageKey: .storage_key, tenantId: .tenant_id, clientId: .client_id, clientSecret: .client_secret } } | del(.batch_name, .storage_name, .batch_key, .storage_key, .tenant_id, .client_id, .client_secret, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (a *AzureCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { batch_name: .keys.batchName, storage_name: .keys.storageName, batch_key: .keys.batchKey, storage_key: .keys.storageKey, tenant_id: .keys.tenantId, client_id: .keys.clientId, client_secret: .keys.clientSecret, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCredentialOutput) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
 }
 
 func (a *AzureCredentialOutput) GetCredentialsID() *string {
@@ -353,9 +298,16 @@ func (a *AzureCredentialOutput) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AzureCredentialOutput) GetKeys() AzureCredentialKeysOutput {
+func (a *AzureCredentialOutput) GetBatchName() string {
 	if a == nil {
-		return AzureCredentialKeysOutput{}
+		return ""
 	}
-	return a.Keys
+	return a.BatchName
+}
+
+func (a *AzureCredentialOutput) GetStorageName() string {
+	if a == nil {
+		return ""
+	}
+	return a.StorageName
 }

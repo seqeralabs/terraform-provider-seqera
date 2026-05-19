@@ -41,32 +41,20 @@ func (r *GithubCredentialResourceModel) RefreshFromSharedDescribeGithubCredentia
 	return diags
 }
 
-func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialKeysOutput(ctx context.Context, resp *shared.GithubCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Username = types.StringValue(resp.Username)
-
-	return diags
-}
-
 func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialOutput(ctx context.Context, resp *shared.GithubCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedGithubCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.Username = types.StringValue(resp.Username)
 	}
 
 	return diags
@@ -172,6 +160,12 @@ func (r *GithubCredentialResourceModel) ToSharedCreateGithubCredentialsRequest(c
 func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Context, opts *GithubCredentialResourceModelOptions) (*shared.GithubCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -193,36 +187,20 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Con
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedGithubCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.GithubCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *GithubCredentialResourceModel) ToSharedGithubCredentialKeys(ctx context.Context, opts *GithubCredentialResourceModelOptions) (*shared.GithubCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var username string
 	username = r.Username.ValueString()
 
 	var accessToken string
 	accessToken = opts.Config.AccessToken.ValueString()
 
-	out := shared.GithubCredentialKeys{
-		Username:    username,
-		AccessToken: accessToken,
+	out := shared.GithubCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Username:      username,
+		AccessToken:   accessToken,
 	}
 
 	return &out, diags

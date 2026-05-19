@@ -12,14 +12,6 @@ Best practices for creating and maintaining Speakeasy overlay files. Covers:
 - Custom validator implementation
 - Documentation verification
 
-### [CREDS_HOISTING_GUIDE.md](./CREDS_HOISTING_GUIDE.md)
-Guide for implementing credential hoisting in Terraform resources. Based on working AWS credentials implementation. Covers:
-- What hoisting is and why to use it
-- Step-by-step implementation pattern
-- Request/response schema patterns
-- WriteOnly field handling via overlay actions
-- Testing and verification
-
 ### [SPEAKEASY_EXTENSIONS_REFERENCE.md](./SPEAKEASY_EXTENSIONS_REFERENCE.md)
 Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provider generation. Covers:
 - General SDK extensions (naming, enums, documentation, runtime behavior)

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -34,6 +35,7 @@ type LabelsResource struct {
 
 // LabelsResourceModel describes the resource data model.
 type LabelsResourceModel struct {
+	ID          types.Int64  `tfsdk:"id"`
 	IsDefault   types.Bool   `tfsdk:"is_default"`
 	LabelID     types.Int64  `tfsdk:"label_id"`
 	Name        types.String `tfsdk:"name"`
@@ -50,6 +52,9 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage labels for organizing and categorizing resources.\n\nLabels provide metadata tagging capabilities for pipelines, workflows,\nand other platform resources, enabling resource organization, filtering,\nand management across the platform.\n",
 		Attributes: map[string]schema.Attribute{
+			"id": schema.Int64Attribute{
+				Computed: true,
+			},
 			"is_default": schema.BoolAttribute{
 				Computed:    true,
 				Optional:    true,
@@ -59,7 +64,10 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"label_id": schema.Int64Attribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
 				Description: `Label numeric identifier`,
 			},
 			"name": schema.StringAttribute{

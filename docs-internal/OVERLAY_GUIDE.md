@@ -184,21 +184,105 @@ description: Name of the organization in the system  # Vague
 
 ## Response Field Mapping
 
-### Mapping API Response Fields to Terraform IDs
+### Adding a `.id` Alias to a Resource (Additive — Preferred)
 
-Terraform resources require an `id` field in the state, but many APIs return different field names in their Create responses (e.g., `credentialsId`, `pipelineId`, `workspaceId`). Use `x-speakeasy-name-override` and `x-speakeasy-match` to properly map these fields.
+Most Seqera entities expose their primary key under a name like `pipelineId`,
+`credentialsId`, `labelId`, `computeEnvId`. Terraform users expect to be able
+to write `seqera_pipeline.foo.id` regardless. The right tool for this is
+`x-speakeasy-transform-from-api` — it adds a synthetic `id` field to the
+response *alongside* the existing `{entity}Id`, with no wire-format change
+and no state migration.
 
-#### The ID Mapping Pattern
+**Skip resources that lack a single primary key.** Not every entity has one.
+`seqera_custom_role` is addressed server-side by the composite
+`(org_id, name)` tuple — the user-facing identifier is the role NAME, and
+that's what gets interpolated into `seqera_workspace_participant.role_names`.
+Synthesizing an `id` (whether from the name or a composite encoding) would
+imply a primary key that doesn't exist and confuse customers about how to
+reference the role. `seqera_primary_compute_env` is similar — it's an
+action-like resource that sets one CE as primary for a workspace, with no
+entity identity of its own. Leave these resources without an `.id` alias.
 
-When an API returns a different field name than `id` in the Create response:
+#### The Additive Alias Pattern
 
 ```yaml
-# Step 1: Map the response field to 'id' in the Go struct
+# Add a parallel `id` attribute that aliases `pipelineId`. The jq
+# expression runs on response deserialization; the wire payload is
+# unchanged. Existing state with `pipeline_id` keeps validating —
+# `id` is purely additive.
+- target: $.components.schemas.PipelineDbDto
+  update:
+    x-speakeasy-transform-from-api:
+      jq: '. + { id: .pipelineId }'
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: Alias of `pipeline_id` for Terraform convention.
+        x-speakeasy-param-readonly: true
+```
+
+The `properties.id` block under `update` declares the new attribute to
+Speakeasy so the TF schema gains a Computed `id` field. The `jq`
+expression populates it from `pipelineId` at read time.
+
+**What you get:**
+- `seqera_pipeline.foo.id` resolves (Int64) — TF convention satisfied
+- `seqera_pipeline.foo.pipeline_id` still works — no breaking change
+- Same value: `id == pipeline_id`
+- Wire format unchanged (`pipelineId` over HTTP)
+- No state upgrader needed — existing state is forward-compatible
+- No downstream HCL or docs breakage
+
+**If the update/create endpoints reject extra fields:** pair the transform
+with an outbound strip so `id` isn't sent on requests:
+
+```yaml
+- target: $.components.schemas.UpdatePipelineRequest
+  update:
+    x-speakeasy-transform-to-api:
+      jq: 'del(.id)'
+```
+
+In practice the Seqera API ignores unknown fields, so this is rarely
+required — verify with `terraform apply` before adding it.
+
+**Type alignment matters.** The synthetic `id` attribute's `type` and
+`format` must match the source field. For string IDs (`credentialsId`,
+`computeEnvId`, `workflowId`):
+
+```yaml
+properties:
+  id:
+    type: string
+    description: Alias of `credentials_id` for Terraform convention.
+    x-speakeasy-param-readonly: true
+```
+
+### The Rename Pattern (Destructive — Avoid for Existing Resources)
+
+`x-speakeasy-name-override: id` paired with `x-speakeasy-match: id` on path
+parameters does work, and is documented in the Speakeasy guide for *new*
+resources. **Do not use it on a resource that already exists** — the rename
+removes the original `{entity}_id` attribute, breaking:
+
+- existing Terraform state (decode errors on the next plan — requires a
+  custom `StateUpgrader` for every renamed resource)
+- customer HCL referencing `seqera_*.foo.{entity}_id`
+- generated docs / examples / showcase repo
+
+Reach for the rename only when greenfielding a brand-new resource where
+no consumer has the old shape. For everything else, use the additive
+pattern above.
+
+For reference, the rename pattern looks like:
+
+```yaml
+# DESTRUCTIVE — only use on greenfield resources.
 - target: $.components.schemas.CreateResourceResponse.properties.credentialsId
   update:
     x-speakeasy-name-override: id
 
-# Step 2: Link path parameters to the mapped 'id' field for Read, Update, Delete operations
 - target: $["paths"]["/resource/{credentialsId}"]["get"]["parameters"][?(@.name == "credentialsId")]
   update:
     x-speakeasy-match: id
@@ -212,41 +296,9 @@ When an API returns a different field name than `id` in the Create response:
     x-speakeasy-match: id
 ```
 
-**What This Does:**
-- `x-speakeasy-name-override: id` maps the API's `credentialsId` field to the Go struct's `ID` field
-- `x-speakeasy-match: id` tells Speakeasy that path parameters should use the `ID` field value
-- This ensures Terraform's required `id` field gets populated from the Create response
-- The Read, Update, and Delete operations correctly use the `id` value in their requests
-
-**Generated Go Code:**
-```go
-// Before mapping - causes "unknown value for id" error
-type CreateResourceResponse struct {
-    CredentialsID *string `json:"credentialsId,omitempty"`
-}
-
-func (r *ResourceModel) RefreshFromSharedCreateResourceResponse(ctx context.Context, resp *shared.CreateResourceResponse) diag.Diagnostics {
-    var diags diag.Diagnostics
-    if resp != nil {
-        r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-        // r.ID is not set - Terraform error!
-    }
-    return diags
-}
-
-// After mapping - works correctly
-type CreateResourceResponse struct {
-    ID *string `json:"credentialsId,omitempty"`  // Go field: ID, JSON field: credentialsId
-}
-
-func (r *ResourceModel) RefreshFromSharedCreateResourceResponse(ctx context.Context, resp *shared.CreateResourceResponse) diag.Diagnostics {
-    var diags diag.Diagnostics
-    if resp != nil {
-        r.ID = types.StringPointerValue(resp.ID)  // Terraform id field properly set
-    }
-    return diags
-}
-```
+This rewrites the Go struct field to `ID` while keeping the JSON tag at
+`credentialsId`, and threads the value into URL parameters via the match
+extension.
 
 #### Path Anchor Considerations
 
@@ -264,6 +316,109 @@ Ensure the path anchor in your overlay target matches the actual API path:
 - Google credentials: `#google` (not `#gcp`)
 - Kubernetes credentials: `#k8s` (not `#kubernetes`)
 - Tower Agent credentials: `#agent` (not `#tower-agent`)
+
+## Hoisting Nested API Structures into Flat Terraform Resources
+
+The Seqera API frequently returns credential-like payloads where the
+meaningful fields live one level down, e.g.
+`{ "name": "...", "provider": "aws", "keys": { "accessKey": "...",
+"secretKey": "..." } }`. Terraform users expect those fields at the
+resource root (`access_key`, `secret_key`) rather than under a `keys`
+block. Two patterns exist for closing that gap.
+
+### Pattern A: Transform-based hoisting (recommended for new work)
+
+Use `x-speakeasy-transform-from-api` to flatten nested fields into the
+top level on read, and `x-speakeasy-transform-to-api` to put them back
+under the nested key on write. The wire format stays nested; the
+Terraform schema stays flat.
+
+```yaml
+- target: $.components.schemas.AWSCredential
+  update:
+    x-speakeasy-entity: AWSCredential
+    x-speakeasy-transform-from-api:
+      jq: |
+        . + {
+          access_key:      .keys.accessKey,
+          secret_key:      .keys.secretKey,
+          assume_role_arn: .keys.assumeRoleArn,
+          mode:            .keys.mode,
+          external_id:     .keys.externalId
+        } | del(.keys)
+    x-speakeasy-transform-to-api:
+      jq: |
+        . + { keys: {
+          accessKey:     .access_key,
+          secretKey:     .secret_key,
+          assumeRoleArn: .assume_role_arn,
+          mode:          .mode,
+          externalId:    .external_id
+        }} | del(.access_key, .secret_key, .assume_role_arn,
+                  .mode, .external_id)
+    properties:
+      access_key:
+        type: string
+        minLength: 16
+        maxLength: 128
+        pattern: ^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$
+        example: AKIAIOSFODNN7EXAMPLE
+        x-speakeasy-param-optional: true
+        x-speakeasy-plan-validators: AWSCredentialKeysValidator
+      secret_key:
+        type: string
+        minLength: 40
+        x-speakeasy-param-sensitive: true
+        x-speakeasy-terraform-write-only: true
+        x-speakeasy-param-optional: true
+        x-speakeasy-plan-validators: AWSCredentialKeysValidator
+      # ... assume_role_arn, mode, external_id
+```
+
+**Why prefer this for new resources:**
+- The `x-speakeasy-entity` annotation lives on the parent schema, where
+  it belongs — no nested-entity gymnastics.
+- Field naming happens once in the jq pipeline. No per-field
+  `x-speakeasy-name-override`.
+- All field metadata (validators, sensitivity, write-only, examples)
+  sits at the entity root. Easy to scan, easy to extend.
+- Adding a new hoisted field is a three-line change (one jq line each
+  direction + the `properties` block).
+- Wire format unchanged — backend never sees the flattened shape.
+
+**Risks to manage:**
+- **Bidirectional drift.** Forget to keep the `from-api` and `to-api`
+  expressions in sync and writes silently corrupt the request body.
+  Treat the two `jq` blocks as one unit; review them together.
+- **Sensitive / write-only fields.** Annotations still go on the
+  hoisted property in `properties:` — jq doesn't carry them across.
+- **Field-count scaling.** jq grows linearly with the number of
+  hoisted fields. Fine up to ~10; consider splitting into helper
+  schemas beyond that.
+
+### Pattern B: Nested-entity placement (legacy — not used anywhere today)
+
+The older approach placed `x-speakeasy-entity` *inside* the nested
+property (e.g. `AWSCredential.properties.keys`), defined the hoisted
+fields inline under `keys.properties`, and used
+`x-speakeasy-name-override` to snake_case each one.
+
+Drawbacks compared to Pattern A:
+- Entity annotation lives in an unusual location relative to the
+  schema's natural root.
+- Every nested field needs `x-speakeasy-name-override` for the snake_case
+  TF attribute name.
+- Schema structure cannot use `$ref` — properties must be inlined,
+  which duplicates definitions if multiple resources share a payload
+  shape.
+- Adding or renaming a hoisted field touches both the nested location
+  and any related path-anchor overlays.
+
+All credentials + `seqera_managed_compute_ce` were migrated off Pattern B
+in 0.40.0-RC6 (the generated TF schemas were byte-identical pre/post
+migration). Pattern B is no longer in use anywhere in this provider.
+Documented here for reference if you encounter it in older overlays or
+historical PR review.
 
 ### User-Provided Optional Fields
 

@@ -16,32 +16,20 @@ type ContainerRegistryCredentialResourceModelOptions struct {
 	State  *ContainerRegistryCredentialResourceModel
 }
 
-func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx context.Context, resp *shared.ContainerRegistryCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.Registry = types.StringPointerValue(resp.Registry)
-	r.UserName = types.StringValue(resp.UserName)
-
-	return diags
-}
-
 func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedContainerRegistryCredentialOutput(ctx context.Context, resp *shared.ContainerRegistryCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.Registry = types.StringPointerValue(resp.Registry)
+		r.UserName = types.StringValue(resp.UserName)
 	}
 
 	return diags
@@ -155,6 +143,12 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRe
 func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredential(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.ContainerRegistryCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	credentialsID := new(string)
 	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
 		*credentialsID = r.CredentialsID.ValueString()
@@ -170,26 +164,6 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCred
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedContainerRegistryCredentialKeys(ctx, opts)
-	diags.Append(keysDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.ContainerRegistryCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
-	}
-
-	return &out, diags
-}
-
-func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredentialKeys(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.ContainerRegistryCredentialKeys, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
 	var userName string
 	userName = r.UserName.ValueString()
 
@@ -202,10 +176,14 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCred
 	} else {
 		registry = nil
 	}
-	out := shared.ContainerRegistryCredentialKeys{
-		UserName: userName,
-		Password: password,
-		Registry: registry,
+	out := shared.ContainerRegistryCredential{
+		ID:            id,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		UserName:      userName,
+		Password:      password,
+		Registry:      registry,
 	}
 
 	return &out, diags

@@ -33,50 +33,11 @@ func (e *SSHCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type SSHCredentialKeys struct {
-	// SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
-	PrivateKey string `json:"privateKey"`
-	// Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
-	Passphrase *string `json:"passphrase,omitempty"`
-	// Type of key (always "ssh") - not exposed in Terraform
-	KeyType *string `default:"ssh" json:"keyType"`
-}
-
-func (s SSHCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SSHCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *SSHCredentialKeys) GetPrivateKey() string {
-	if s == nil {
-		return ""
-	}
-	return s.PrivateKey
-}
-
-func (s *SSHCredentialKeys) GetPassphrase() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Passphrase
-}
-
-func (s *SSHCredentialKeys) GetKeyType() *string {
-	if s == nil {
-		return nil
-	}
-	return s.KeyType
-}
-
 type SSHCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -88,19 +49,42 @@ type SSHCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time        `json:"lastUpdated,omitempty"`
-	Keys        SSHCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
+	PrivateKey string `json:"private_key"`
+	// Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
+	Passphrase *string `json:"passphrase,omitempty"`
 }
 
 func (s SSHCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
+	jsonBytes, err := utils.MarshalJSON(s, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { keyType: \"ssh\", privateKey: .private_key, passphrase: .passphrase } } | del(.private_key, .passphrase, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (s *SSHCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { private_key: .keys.privateKey, passphrase: .keys.passphrase, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *SSHCredential) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
 }
 
 func (s *SSHCredential) GetCredentialsID() *string {
@@ -152,39 +136,25 @@ func (s *SSHCredential) GetLastUpdated() *time.Time {
 	return s.LastUpdated
 }
 
-func (s *SSHCredential) GetKeys() SSHCredentialKeys {
+func (s *SSHCredential) GetPrivateKey() string {
 	if s == nil {
-		return SSHCredentialKeys{}
+		return ""
 	}
-	return s.Keys
+	return s.PrivateKey
 }
 
-type SSHCredentialKeysOutput struct {
-	// Type of key (always "ssh") - not exposed in Terraform
-	KeyType *string `default:"ssh" json:"keyType"`
-}
-
-func (s SSHCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SSHCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *SSHCredentialKeysOutput) GetKeyType() *string {
+func (s *SSHCredential) GetPassphrase() *string {
 	if s == nil {
 		return nil
 	}
-	return s.KeyType
+	return s.Passphrase
 }
 
 type SSHCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -196,19 +166,38 @@ type SSHCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time              `json:"lastUpdated,omitempty"`
-	Keys        SSHCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }
 
 func (s SSHCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
+	jsonBytes, err := utils.MarshalJSON(s, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { keyType: \"ssh\", privateKey: .private_key, passphrase: .passphrase } } | del(.private_key, .passphrase, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (s *SSHCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { private_key: .keys.privateKey, passphrase: .keys.passphrase, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *SSHCredentialOutput) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
 }
 
 func (s *SSHCredentialOutput) GetCredentialsID() *string {
@@ -258,11 +247,4 @@ func (s *SSHCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return s.LastUpdated
-}
-
-func (s *SSHCredentialOutput) GetKeys() SSHCredentialKeysOutput {
-	if s == nil {
-		return SSHCredentialKeysOutput{}
-	}
-	return s.Keys
 }

@@ -238,14 +238,74 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 
 ### Data Mapping
 
+#### x-speakeasy-transform-from-api / x-speakeasy-transform-to-api
+- **Purpose**: Reshape data between the wire format and the Terraform-facing
+  schema using a [jq](https://jqlang.org/manual/) expression.
+- **Level**: Schema (component) or operation request/response body.
+- **Direction**: `from-api` runs on deserialization (server → provider);
+  `to-api` runs on serialization (provider → server).
+- **Use cases**:
+  - Add a parallel `.id` alias on a resource whose primary key is named
+    `{entity}Id` — see [Adding a `.id` Alias to a Resource](OVERLAY_GUIDE.md#adding-a-id-alias-to-a-resource-additive--preferred).
+  - Derive a Computed field from other response fields (e.g. composite IDs).
+  - Strip provider-only synthetic fields before sending a request body.
+  - Flatten or hoist nested response structure into the top level.
+- **Note**: prefer this over `x-speakeasy-terraform-alias-to` (see below)
+  and over destructive renames (`x-speakeasy-name-override: id`) for any
+  resource that already ships — transforms are additive and don't require
+  a state upgrader.
+
+Canonical worked example (additive `id` alias on `PipelineDbDto`) and
+hoisting walkthroughs live in
+[OVERLAY_GUIDE.md → Response Field Mapping](./OVERLAY_GUIDE.md#response-field-mapping).
+Stock jq patterns documented by Speakeasy:
+
+```yaml
+# Copy a field (keeps original)
+x-speakeasy-transform-from-api:
+  jq: '. + { backup_id: .id }'
+
+# Rename a field on the way out
+x-speakeasy-transform-to-api:
+  jq: '{ displayName: .name }'
+
+# Derive a field
+x-speakeasy-transform-from-api:
+  jq: '. + { display_name: .first_name + " " + .last_name }'
+
+# Flatten nested structure
+x-speakeasy-transform-from-api:
+  jq: '. + { status: .metadata.status } | del(.metadata)'
+
+# Composite identifier
+x-speakeasy-transform-from-api:
+  jq: '.id = "projects/\(.project_id)/regions/\(.region)/databases/\(.name)"'
+
+# Strip a provider-synthetic field before sending
+x-speakeasy-transform-to-api:
+  jq: 'del(.id)'
+```
+
 #### x-speakeasy-terraform-alias-to
-- **Purpose**: Remap API response data to different property names
-- **Level**: Property
-- **Use**: Transform API field names to Terraform property names
+- **Purpose** (per Speakeasy docs): Remap API response data to a different
+  property name.
+- **Level**: Property.
+- **Status in this provider**: ⚠️ Tried in the 0.41.0 pipeline pilot
+  (2026-05-19) — Speakeasy v1.763.1 emitted broken Go
+  (`r.PipelineID.ID = r.PipelineID`, which doesn't compile against
+  `types.Int64`). Avoid until Speakeasy fixes or we understand the
+  intended use case. Use `x-speakeasy-transform-from-api` instead for
+  alias creation.
 
 #### x-speakeasy-match
-- **Purpose**: Align API parameter names with Terraform state properties
-- **Level**: Parameter
+- **Purpose**: Align an API path parameter with a renamed Terraform state
+  property — pairs with `x-speakeasy-name-override: id` on the response
+  field so URL placeholders like `{credentialsId}` are filled from the
+  model's `id` field.
+- **Level**: Parameter (path/query/header). Does **not** work at the
+  schema-property level.
+- **Note**: Only relevant when you've taken the destructive rename path;
+  the additive transform pattern doesn't need it.
 
 #### x-speakeasy-wrapped-attribute
 - **Purpose**: Wrap API response data in Terraform schemas (primarily for arrays or additional operation data)
@@ -268,22 +328,44 @@ This extension is NOT documented in Speakeasy. Do not use it.
 
 ### Terraform Property Mapping
 For Terraform providers, use these for field mapping:
-- `x-speakeasy-terraform-alias-to` - Remap response data
-- `x-speakeasy-match` - Align parameter names
-- `x-speakeasy-name-override` - Rename at schema level
+- `x-speakeasy-transform-from-api` / `x-speakeasy-transform-to-api` —
+  jq-based reshaping in either direction. **First choice** for adding
+  alias attributes (`.id` ↔ `{entity}_id`) or deriving Computed fields
+  without breaking existing state.
+- `x-speakeasy-name-override` — Rename a Go/TF property while keeping
+  the JSON wire name intact. **Destructive** — removes the original
+  attribute, so only safe for greenfield resources or paired with a
+  state upgrader.
+- `x-speakeasy-match` — Pairs with `name-override`. Tells Speakeasy
+  which Terraform model field fills a URL path parameter. Parameter-
+  level only.
+- `x-speakeasy-terraform-alias-to` — Documented by Speakeasy for
+  property-level remapping but emitted broken Go in the 0.41.0 pilot.
+  Avoid until verified.
 
 ### Hoisting Nested Structures in Terraform
-To hoist nested API structures to the root level while preserving API compatibility:
-1. Place `x-speakeasy-entity` annotation at the nested property level (e.g., `keys` property)
-2. **CRITICAL**: Define properties **inline** using `type: object` and `properties:` (NOT using `$ref`)
-3. Use `x-speakeasy-name-override` for Terraform field names
 
-**Why this works:**
-- Terraform schema gets hoisted fields at root level
-- API structure preserved with nested objects in JSON
-- Speakeasy handles marshaling/unmarshaling automatically
+Two patterns exist. See [OVERLAY_GUIDE.md → Hoisting Nested API
+Structures](./OVERLAY_GUIDE.md#hoisting-nested-api-structures-into-flat-terraform-resources)
+for the worked AWS-credential example.
 
-See `internal-docs/CREDS_HOISTING_GUIDE.md` for complete examples.
+**Pattern A — Transform-based (recommended for new resources):**
+- `x-speakeasy-entity` on the parent schema.
+- `x-speakeasy-transform-from-api` + `x-speakeasy-transform-to-api` with
+  jq expressions to flatten on read and re-nest on write.
+- Hoisted properties declared at the entity root under `properties:`.
+
+**Pattern B — Nested-entity placement (legacy):**
+- `x-speakeasy-entity` annotation **inside** the nested property
+  (e.g. `keys`).
+- Properties defined **inline** under that nested location (NOT using
+  `$ref`).
+- `x-speakeasy-name-override` on every nested field for snake_casing.
+
+Both keep the API wire format nested while exposing flat Terraform
+attributes. Pattern A is the only pattern in use across this provider
+today (all credentials + `seqera_managed_compute_ce` were migrated off
+Pattern B). New hoisting should always use Pattern A.
 
 ### Common Patterns
 

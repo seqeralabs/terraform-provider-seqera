@@ -1060,6 +1060,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		headJobMemoryMb = nil
 	}
+	id := new(string)
+	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+		*id = r.Launch.ID.ValueString()
+	} else {
+		id = nil
+	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex := range r.Launch.LabelIds {
 		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
@@ -1160,6 +1166,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		ID:               id,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,
@@ -1300,6 +1307,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		headJobMemoryMb = nil
 	}
+	id := new(string)
+	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+		*id = r.Launch.ID.ValueString()
+	} else {
+		id = nil
+	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex := range r.Launch.LabelIds {
 		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
@@ -1400,6 +1413,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		ID:               id,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,

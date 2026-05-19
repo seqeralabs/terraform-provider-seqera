@@ -2336,6 +2336,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `Launch identifier. Server-generated on workflow launch and pipeline` + "\n" +
+							`create — leave unset. Echoed back by the provider on` + "\n" +
+							`` + "`" + `seqera_action` + "`" + ` updates so the backend can confirm the launch` + "\n" +
+							`identity hasn't changed.`,
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,

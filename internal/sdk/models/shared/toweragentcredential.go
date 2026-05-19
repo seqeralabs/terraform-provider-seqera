@@ -33,41 +33,11 @@ func (e *TowerAgentCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type TowerAgentCredentialKeys struct {
-	// Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
-	ConnectionID string `json:"connectionId"`
-	// When enabled, all workspace users can access the same Tower Agent instance
-	Shared *bool `default:"false" json:"shared"`
-}
-
-func (t TowerAgentCredentialKeys) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
-}
-
-func (t *TowerAgentCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (t *TowerAgentCredentialKeys) GetConnectionID() string {
-	if t == nil {
-		return ""
-	}
-	return t.ConnectionID
-}
-
-func (t *TowerAgentCredentialKeys) GetShared() *bool {
-	if t == nil {
-		return nil
-	}
-	return t.Shared
-}
-
 type TowerAgentCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -79,19 +49,42 @@ type TowerAgentCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        TowerAgentCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
+	ConnectionID string `json:"connection_id"`
+	// When enabled, all workspace users can access the same Tower Agent instance
+	Shared *bool `default:"false" json:"shared"`
 }
 
 func (t TowerAgentCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
+	jsonBytes, err := utils.MarshalJSON(t, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { connectionId: .connection_id, shared: .shared } } | del(.connection_id, .shared, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (t *TowerAgentCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { connection_id: .keys.connectionId, shared: .keys.shared, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (t *TowerAgentCredential) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
 }
 
 func (t *TowerAgentCredential) GetCredentialsID() *string {
@@ -143,30 +136,14 @@ func (t *TowerAgentCredential) GetLastUpdated() *time.Time {
 	return t.LastUpdated
 }
 
-func (t *TowerAgentCredential) GetKeys() TowerAgentCredentialKeys {
+func (t *TowerAgentCredential) GetConnectionID() string {
 	if t == nil {
-		return TowerAgentCredentialKeys{}
+		return ""
 	}
-	return t.Keys
+	return t.ConnectionID
 }
 
-type TowerAgentCredentialKeysOutput struct {
-	// When enabled, all workspace users can access the same Tower Agent instance
-	Shared *bool `default:"false" json:"shared"`
-}
-
-func (t TowerAgentCredentialKeysOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
-}
-
-func (t *TowerAgentCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (t *TowerAgentCredentialKeysOutput) GetShared() *bool {
+func (t *TowerAgentCredential) GetShared() *bool {
 	if t == nil {
 		return nil
 	}
@@ -175,7 +152,9 @@ func (t *TowerAgentCredentialKeysOutput) GetShared() *bool {
 
 type TowerAgentCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -187,19 +166,40 @@ type TowerAgentCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        TowerAgentCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// When enabled, all workspace users can access the same Tower Agent instance
+	Shared *bool `default:"false" json:"shared"`
 }
 
 func (t TowerAgentCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(t, "", false)
+	jsonBytes, err := utils.MarshalJSON(t, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { connectionId: .connection_id, shared: .shared } } | del(.connection_id, .shared, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (t *TowerAgentCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { connection_id: .keys.connectionId, shared: .keys.shared, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (t *TowerAgentCredentialOutput) GetID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ID
 }
 
 func (t *TowerAgentCredentialOutput) GetCredentialsID() *string {
@@ -251,9 +251,9 @@ func (t *TowerAgentCredentialOutput) GetLastUpdated() *time.Time {
 	return t.LastUpdated
 }
 
-func (t *TowerAgentCredentialOutput) GetKeys() TowerAgentCredentialKeysOutput {
+func (t *TowerAgentCredentialOutput) GetShared() *bool {
 	if t == nil {
-		return TowerAgentCredentialKeysOutput{}
+		return nil
 	}
-	return t.Keys
+	return t.Shared
 }

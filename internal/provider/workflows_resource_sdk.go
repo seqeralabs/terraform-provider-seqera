@@ -245,6 +245,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		headJobMemoryMb = nil
 	}
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
+	} else {
+		id = nil
+	}
 	labelIds := make([]int64, 0, len(r.LabelIds))
 	for labelIdsIndex := range r.LabelIds {
 		labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
@@ -345,6 +351,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
+		ID:               id,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,

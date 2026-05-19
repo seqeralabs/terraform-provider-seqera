@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
 // MemberRole - Member role (can be null for collaborators)
@@ -57,6 +58,24 @@ type OrganizationDbDto struct {
 	OrgID *int64 `json:"orgId,omitempty"`
 	// Official website URL for the organization
 	Website *string `json:"website,omitempty"`
+	// Alias of `org_id` for Terraform convention.
+	ID *int64 `json:"id,omitempty"`
+}
+
+func (o OrganizationDbDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(o, "", false)
+}
+
+func (o *OrganizationDbDto) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .orgId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &o, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *OrganizationDbDto) GetDescription() *string {
@@ -113,4 +132,11 @@ func (o *OrganizationDbDto) GetWebsite() *string {
 		return nil
 	}
 	return o.Website
+}
+
+func (o *OrganizationDbDto) GetID() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.ID
 }

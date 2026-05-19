@@ -43,6 +43,7 @@ resource "seqera_teams" "my_teams" {
 ### Read-Only
 
 - `avatar_url` (String) URL to the team's avatar or profile image
+- `id` (Number) Alias of `team_id` for Terraform convention.
 - `members_count` (Number) Total number of members in the team
 - `team_id` (Number) Team numeric identifier
 

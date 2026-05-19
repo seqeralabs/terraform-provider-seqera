@@ -33,30 +33,11 @@ func (e *GithubCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type GithubCredentialKeys struct {
-	// GitHub account username associated with the access token.
-	Username string `json:"username"`
-	// GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
-	AccessToken string `json:"password"`
-}
-
-func (g *GithubCredentialKeys) GetUsername() string {
-	if g == nil {
-		return ""
-	}
-	return g.Username
-}
-
-func (g *GithubCredentialKeys) GetAccessToken() string {
-	if g == nil {
-		return ""
-	}
-	return g.AccessToken
-}
-
 type GithubCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -70,19 +51,42 @@ type GithubCredential struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
-	BaseURL *string              `json:"baseUrl,omitempty"`
-	Keys    GithubCredentialKeys `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// GitHub account username associated with the access token.
+	Username string `json:"username"`
+	// GitHub Personal Access Token (PAT) — classic or fine-grained. Typically requires `repo` scope; the backend does not enforce specific scopes. Sensitive.
+	AccessToken string `json:"access_token"`
 }
 
 func (g GithubCredential) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .access_token } } | del(.username, .access_token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GithubCredential) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, access_token: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GithubCredential) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GithubCredential) GetCredentialsID() *string {
@@ -141,28 +145,25 @@ func (g *GithubCredential) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GithubCredential) GetKeys() GithubCredentialKeys {
-	if g == nil {
-		return GithubCredentialKeys{}
-	}
-	return g.Keys
-}
-
-type GithubCredentialKeysOutput struct {
-	// GitHub account username associated with the access token.
-	Username string `json:"username"`
-}
-
-func (g *GithubCredentialKeysOutput) GetUsername() string {
+func (g *GithubCredential) GetUsername() string {
 	if g == nil {
 		return ""
 	}
 	return g.Username
 }
 
+func (g *GithubCredential) GetAccessToken() string {
+	if g == nil {
+		return ""
+	}
+	return g.AccessToken
+}
+
 type GithubCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type. Always set by the provider for this resource.
@@ -176,19 +177,40 @@ type GithubCredentialOutput struct {
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 	// Repository base URL (optional, recommended). When multiple GitHub credentials exist in a workspace, Seqera selects the credential whose `base_url` is the longest prefix of the target repository URL; ties are broken by most recently updated. If no credential has a `base_url`, the most recently updated GitHub credential is used. For GitHub Enterprise Server, set this to the server URL. Example: https://github.com/seqeralabs
-	BaseURL *string                    `json:"baseUrl,omitempty"`
-	Keys    GithubCredentialKeysOutput `json:"keys"`
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// GitHub account username associated with the access token.
+	Username string `json:"username"`
 }
 
 func (g GithubCredentialOutput) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
+	jsonBytes, err := utils.MarshalJSON(g, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { username: .username, password: .access_token } } | del(.username, .access_token, .credentials_id)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (g *GithubCredentialOutput) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { username: .keys.username, access_token: .keys.password, credentials_id: .id } | del(.keys)"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (g *GithubCredentialOutput) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
 }
 
 func (g *GithubCredentialOutput) GetCredentialsID() *string {
@@ -247,9 +269,9 @@ func (g *GithubCredentialOutput) GetBaseURL() *string {
 	return g.BaseURL
 }
 
-func (g *GithubCredentialOutput) GetKeys() GithubCredentialKeysOutput {
+func (g *GithubCredentialOutput) GetUsername() string {
 	if g == nil {
-		return GithubCredentialKeysOutput{}
+		return ""
 	}
-	return g.Keys
+	return g.Username
 }

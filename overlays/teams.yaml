@@ -37,13 +37,24 @@ actions:
     update:
       x-speakeasy-param-optional: true
 
-  # Updated overlay annotations
+  # Updated overlay annotations. TeamDbDto is the read-response shape;
+  # adding transform-from-api here surfaces `id` (TF convention) alongside
+  # the existing `team_id` attribute. Both Computed, same value.
   - target: $["components"]["schemas"]["Team"]
     update:
       x-speakeasy-entity: Teams
   - target: $["components"]["schemas"]["TeamDbDto"]
     update:
       x-speakeasy-entity: Teams
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .teamId }'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Alias of `team_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
 
   # Request examples for Teams
   - target: $.components.schemas.CreateTeamRequest.properties.avatarId

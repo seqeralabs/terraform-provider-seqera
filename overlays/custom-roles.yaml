@@ -85,6 +85,16 @@ actions:
   # -------------------------------------------------------------------------
   # Entity binding on RoleDto (the Read response shape)
   # -------------------------------------------------------------------------
+  #
+  # NOTE: do NOT add an `.id` alias on this resource. Custom roles are
+  # addressed server-side by the composite `(org_id, name)` tuple — there is
+  # no single primary key. The user-facing identifier is the role NAME,
+  # which is what gets interpolated into downstream resources (e.g.
+  # `seqera_workspace_participant.role_names`). Synthesizing a top-level
+  # `id` (whether from name or any composite encoding) would imply a
+  # primary key that doesn't exist and create confusion about how to
+  # reference the role. Customers should always use
+  # `seqera_custom_role.foo.name`.
 
   - target: $.components.schemas.RoleDto
     update:

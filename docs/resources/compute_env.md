@@ -93,6 +93,7 @@ resource "seqera_compute_env" "my_computeenv" {
 ### Read-Only
 
 - `compute_env_id` (String) Compute environment string identifier
+- `id` (String) Alias of `compute_env_id` for Terraform convention.
 
 <a id="nestedatt--compute_env"></a>
 ### Nested Schema for `compute_env`
