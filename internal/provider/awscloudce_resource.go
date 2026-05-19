@@ -58,7 +58,7 @@ type AwsCloudCEResourceModel struct {
 	Config        *tfTypes.AwsCloudConfig `tfsdk:"config"`
 	CredentialsID types.String            `tfsdk:"credentials_id"`
 	DateCreated   types.String            `tfsdk:"date_created"`
-	Deleted       types.Bool              `tfsdk:"deleted"`
+	Deleted       types.Bool              `tfsdk:"-"`
 	Description   types.String            `tfsdk:"description"`
 	ID            types.String            `tfsdk:"id"`
 	LabelIds      []types.Int64           `tfsdk:"label_ids"`
@@ -426,13 +426,6 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Description: `Timestamp when the compute environment was created`,
 			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the compute environment has been deleted`,
-			},
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
@@ -683,6 +676,11 @@ func (r *AwsCloudCEResource) Read(ctx context.Context, req resource.ReadRequest,
 	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAwsCloudCEResponse(ctx, res.DescribeAwsCloudCEResponse)...)
 
 	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if !data.Deleted.IsNull() {
+		resp.State.RemoveResource(ctx)
 		return
 	}
 

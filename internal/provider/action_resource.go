@@ -40,20 +40,20 @@ type ActionResource struct {
 
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
-	ActionID      types.String                   `tfsdk:"action_id"`
-	Bucket        *tfTypes.BucketActionRequest   `tfsdk:"bucket"`
-	Config        *tfTypes.ActionConfigType      `tfsdk:"config"`
-	Cron          *tfTypes.CronActionRequest     `tfsdk:"cron"`
-	Error         types.String                   `tfsdk:"error"`
-	HookID        types.String                   `tfsdk:"hook_id"`
-	HookURL       types.String                   `tfsdk:"hook_url"`
-	ID            types.String                   `tfsdk:"id"`
-	Launch        *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Name          types.String                   `tfsdk:"name"`
-	NextExecution types.String                   `tfsdk:"next_execution"`
-	Source        types.String                   `tfsdk:"source"`
-	Status        types.String                   `tfsdk:"status"`
-	WorkspaceID   types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActionID      types.String                 `tfsdk:"action_id"`
+	Bucket        *tfTypes.BucketActionRequest `tfsdk:"bucket"`
+	Config        *tfTypes.ActionConfigType    `tfsdk:"config"`
+	Cron          *tfTypes.CronActionRequest   `tfsdk:"cron"`
+	Error         types.String                 `tfsdk:"error"`
+	HookID        types.String                 `tfsdk:"hook_id"`
+	HookURL       types.String                 `tfsdk:"hook_url"`
+	ID            types.String                 `tfsdk:"id"`
+	Launch        *tfTypes.ActionLaunchRequest `tfsdk:"launch"`
+	Name          types.String                 `tfsdk:"name"`
+	NextExecution types.String                 `tfsdk:"next_execution"`
+	Source        types.String                 `tfsdk:"source"`
+	Status        types.String                 `tfsdk:"status"`
+	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -2262,9 +2262,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"date_created": schema.StringAttribute{
 								Computed: true,
 							},
-							"deleted": schema.BoolAttribute{
-								Computed: true,
-							},
 							"description": schema.StringAttribute{
 								Computed: true,
 							},
@@ -2335,11 +2332,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Head job memory allocation in MB`,
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
-						MarkdownDescription: `Launch identifier. Server-generated on workflow launch and pipeline` + "\n" +
-							`create — leave unset. Echoed back by the provider on` + "\n" +
-							`` + "`" + `seqera_action` + "`" + ` updates so the backend can confirm the launch` + "\n" +
-							`identity hasn't changed.`,
+						Computed:    true,
+						Description: `Server-generated launch identifier; echoed back on Update.`,
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,
@@ -2463,6 +2457,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						ElementType: types.StringType,
 					},
 				},
+				Description: `Launch payload for ` + "`" + `seqera_action` + "`" + ` Create / Update endpoints.`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

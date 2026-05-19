@@ -85,5 +85,8 @@ examples/resources/seqera_workspace_participant/import.sh
 # Custom pipeline_schema examples
 examples/resources/seqera_pipeline_schema/resource*.tf
 
+# Custom workflows examples (contrasts with seqera_pipeline)
+examples/resources/seqera_workflows/resource*.tf
+
 # Custom doc templates for subcategory grouping
 templates/

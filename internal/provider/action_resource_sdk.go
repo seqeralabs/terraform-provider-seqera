@@ -56,7 +56,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Launch != nil {
 			launchPriorData := r.Launch
-			r.Launch = &tfTypes.WorkflowLaunchRequest{}
+			r.Launch = &tfTypes.ActionLaunchRequest{}
 			if resp.Launch.ComputeEnv == nil {
 				r.Launch.ComputeEnv = nil
 			} else {
@@ -1159,7 +1159,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
 		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
-	launch := shared.WorkflowLaunchRequest{
+	launch := shared.ActionLaunchRequest{
 		ComputeEnvID:     computeEnvID,
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
@@ -1272,7 +1272,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 			Timezone:   timezone,
 		}
 	}
-	var launch *shared.WorkflowLaunchRequest
+	var launch *shared.ActionLaunchRequest
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -1406,7 +1406,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
 		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
-	launch = &shared.WorkflowLaunchRequest{
+	launch = &shared.ActionLaunchRequest{
 		ComputeEnvID:     computeEnvID,
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,

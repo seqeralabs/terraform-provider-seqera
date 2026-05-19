@@ -2,19 +2,26 @@
 page_title: "seqera_pipeline Resource - terraform-provider-seqera"
 subcategory: "Pipelines"
 description: |-
-  Manage Nextflow pipeline definitions and configurations.
-  Pipelines define reusable workflow templates with parameters,
-  compute environment settings, and execution configurations
-  for scalable bioinformatics and data processing workflows.
+  Manage saved pipeline definitions on the Seqera Platform Launchpad.
+  A seqera_pipeline is a reusable launch template — repository,
+  revision, default parameters, and a default compute environment —
+  that users can launch on demand from the UI or API.
+  Reach for seqera_workflows instead when Terraform itself should
+  trigger an individual workflow run (for example, a validation
+  launch after a compute environment change).
 ---
 
 # seqera_pipeline (Resource)
 
-Manage Nextflow pipeline definitions and configurations.
+Manage saved pipeline definitions on the Seqera Platform Launchpad.
 
-Pipelines define reusable workflow templates with parameters,
-compute environment settings, and execution configurations
-for scalable bioinformatics and data processing workflows.
+A `seqera_pipeline` is a reusable launch template — repository,
+revision, default parameters, and a default compute environment —
+that users can launch on demand from the UI or API.
+
+Reach for `seqera_workflows` instead when Terraform itself should
+trigger an individual workflow run (for example, a validation
+launch after a compute environment change).
 
 ## Example Usage
 
@@ -136,10 +143,6 @@ Optional:
 Read-Only:
 
 - `compute_env` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env))
-- `id` (String) Launch identifier. Server-generated on workflow launch and pipeline
-create — leave unset. Echoed back by the provider on
-`seqera_action` updates so the backend can confirm the launch
-identity hasn't changed.
 - `launch_container` (String)
 - `optimization_id` (String) Optimization profile ID
 - `optimization_targets` (String) Optimization targets
@@ -157,7 +160,6 @@ Read-Only:
 pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--launch--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
-- `deleted` (Boolean)
 - `description` (String)
 - `last_updated` (String)
 - `last_used` (String)

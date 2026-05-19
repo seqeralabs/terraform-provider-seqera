@@ -772,7 +772,6 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			r.Launch.EntryName = types.StringPointerValue(resp.Launch.EntryName)
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
-			r.Launch.ID = types.StringPointerValue(resp.Launch.ID)
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
 			r.Launch.MainScript = types.StringPointerValue(resp.Launch.MainScript)
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
@@ -1029,12 +1028,6 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		headJobMemoryMb = nil
 	}
-	id := new(string)
-	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
-		*id = r.Launch.ID.ValueString()
-	} else {
-		id = nil
-	}
 	labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex1 := range r.Launch.LabelIds {
 		labelIds1 = append(labelIds1, r.Launch.LabelIds[labelIdsIndex1].ValueInt64())
@@ -1135,7 +1128,6 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
-		ID:               id,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,
@@ -1234,12 +1226,6 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
 	} else {
 		headJobMemoryMb = nil
-	}
-	id := new(string)
-	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
-		*id = r.Launch.ID.ValueString()
-	} else {
-		id = nil
 	}
 	labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
 	for labelIdsIndex1 := range r.Launch.LabelIds {
@@ -1341,7 +1327,6 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		EntryName:        entryName,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
-		ID:               id,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
 		ParamsText:       paramsText,

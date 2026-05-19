@@ -15651,6 +15651,8 @@ components:
           type: boolean
           nullable: true
           description: Whether compute environment is deleted (null means not deleted)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         description:
           type: string
           nullable: true
@@ -15745,6 +15747,7 @@ components:
           type: boolean
           readOnly: true
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         description:
           type: string
           maxLength: 2000
@@ -15941,7 +15944,7 @@ components:
         cron:
           $ref: '#/components/schemas/CronActionRequest'
         launch:
-          $ref: '#/components/schemas/WorkflowLaunchRequest'
+          $ref: '#/components/schemas/ActionLaunchRequest'
         name:
           type: string
         source:
@@ -17486,11 +17489,17 @@ components:
           nullable: true
       x-speakeasy-entity: Workflows
       x-speakeasy-entity-description: |
-        Manage workflow executions and pipeline runs.
+        Launch and track an individual workflow run on the Seqera Platform
+        — equivalent to a Run on the Runs page.
 
-        Workflows represent individual executions of Nextflow pipelines,
-        containing execution status, parameters, results, and monitoring
-        information for computational workflows.
+        Each `seqera_workflows` resource maps to one execution of a
+        Nextflow pipeline against a specific compute environment. Use it
+        when Terraform itself should trigger runs (one-off validations,
+        CI fan-outs, post-CE-change smoke tests).
+
+        Reach for `seqera_pipeline` instead when you want a persistent,
+        re-launchable definition on the Launchpad rather than a single
+        run.
     DescribeWorkspaceResponse:
       type: object
       properties:
@@ -20161,11 +20170,15 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Pipeline
       x-speakeasy-entity-description: |
-        Manage Nextflow pipeline definitions and configurations.
+        Manage saved pipeline definitions on the Seqera Platform Launchpad.
 
-        Pipelines define reusable workflow templates with parameters,
-        compute environment settings, and execution configurations
-        for scalable bioinformatics and data processing workflows.
+        A `seqera_pipeline` is a reusable launch template — repository,
+        revision, default parameters, and a default compute environment —
+        that users can launch on demand from the UI or API.
+
+        Reach for `seqera_workflows` instead when Terraform itself should
+        trigger an individual workflow run (for example, a validation
+        launch after a compute environment change).
       description: |
         Represents a pipeline configuration in the Seqera Platform.
         Contains pipeline metadata, configuration settings, and execution parameters
@@ -21737,7 +21750,7 @@ components:
         cron:
           $ref: '#/components/schemas/CronActionRequest'
         launch:
-          $ref: '#/components/schemas/WorkflowLaunchRequest'
+          $ref: '#/components/schemas/ActionLaunchRequest'
         name:
           type: string
     UpdateComputeEnvRequest:
@@ -22585,12 +22598,9 @@ components:
           example: 4096
         id:
           type: string
-          description: |
-            Launch identifier. Server-generated on workflow launch and pipeline
-            create — leave unset. Echoed back by the provider on
-            `seqera_action` updates so the backend can confirm the launch
-            identity hasn't changed.
+          description: Server-generated launch identifier.
           x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         labelIds:
           type: array
           items:
@@ -23093,6 +23103,16 @@ components:
       x-enum-varnames:
         - individual
         - team
+    ActionLaunchRequest:
+      type: object
+      description: Launch payload for `seqera_action` Create / Update endpoints.
+      allOf:
+        - $ref: '#/components/schemas/WorkflowLaunchRequest'
+      properties:
+        id:
+          type: string
+          description: Server-generated launch identifier; echoed back on Update.
+          x-speakeasy-param-readonly: true
     # AWS-specific compute environment schema
     AWSComputeEnv_ComputeConfig:
       x-speakeasy-entity: AWSComputeEnv
@@ -23281,6 +23301,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: AWS-specific compute environment configuration
           $ref: '#/components/schemas/AwsBatchConfig'
@@ -23420,6 +23441,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: AWS Cloud compute environment configuration
           $ref: '#/components/schemas/AwsCloudConfig'
@@ -23533,6 +23555,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: Azure Batch compute environment configuration
           $ref: '#/components/schemas/AzBatchConfig'
@@ -23646,6 +23669,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: Azure Cloud compute environment configuration
           $ref: '#/components/schemas/AzCloudConfig'
@@ -23758,6 +23782,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: Google Cloud Batch compute environment configuration
           $ref: '#/components/schemas/GoogleBatchConfig'
@@ -23871,6 +23896,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         config:
           description: Google Cloud compute environment configuration
           $ref: '#/components/schemas/GoogleCloudConfig'
@@ -23999,6 +24025,7 @@ components:
           type: boolean
           description: Flag indicating if the compute environment has been deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-soft-delete-property: true
         region:
           type: string
           description: |
@@ -25087,12 +25114,7 @@ components:
         credentials:
           $ref: '#/components/schemas/GoogleCredential'
     GiteaCredential:
-      # PILOT: transform-based hoisting (see OVERLAY_GUIDE.md →
-      # "Hoisting Nested API Structures"). The API wire format is
-      # { name, provider, keys: { username, password }, ... }. The
-      # transform flattens that on read and re-nests it on write so
-      # the Terraform schema sees `username` and `password` at the
-      # resource root — no `keys` block, no per-field name-overrides.
+      # See docs-internal/OVERLAY_GUIDE.md → "Hoisting Nested API Structures".
       x-speakeasy-entity: GiteaCredential
       x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.

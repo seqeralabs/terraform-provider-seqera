@@ -3,11 +3,12 @@
 package shared
 
 type CreateActionRequest struct {
-	Bucket *BucketActionRequest  `json:"bucket,omitempty"`
-	Cron   *CronActionRequest    `json:"cron,omitempty"`
-	Launch WorkflowLaunchRequest `json:"launch"`
-	Name   string                `json:"name"`
-	Source *ActionSource         `json:"source,omitempty"`
+	Bucket *BucketActionRequest `json:"bucket,omitempty"`
+	Cron   *CronActionRequest   `json:"cron,omitempty"`
+	// Launch payload for `seqera_action` Create / Update endpoints.
+	Launch ActionLaunchRequest `json:"launch"`
+	Name   string              `json:"name"`
+	Source *ActionSource       `json:"source,omitempty"`
 }
 
 func (c *CreateActionRequest) GetBucket() *BucketActionRequest {
@@ -24,9 +25,9 @@ func (c *CreateActionRequest) GetCron() *CronActionRequest {
 	return c.Cron
 }
 
-func (c *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
+func (c *CreateActionRequest) GetLaunch() ActionLaunchRequest {
 	if c == nil {
-		return WorkflowLaunchRequest{}
+		return ActionLaunchRequest{}
 	}
 	return c.Launch
 }

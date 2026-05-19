@@ -37,11 +37,17 @@ actions:
     update:
       x-speakeasy-entity: Workflows
       x-speakeasy-entity-description: |
-        Manage workflow executions and pipeline runs.
+        Launch and track an individual workflow run on the Seqera Platform
+        — equivalent to a Run on the Runs page.
 
-        Workflows represent individual executions of Nextflow pipelines,
-        containing execution status, parameters, results, and monitoring
-        information for computational workflows.
+        Each `seqera_workflows` resource maps to one execution of a
+        Nextflow pipeline against a specific compute environment. Use it
+        when Terraform itself should trigger runs (one-off validations,
+        CI fan-outs, post-CE-change smoke tests).
+
+        Reach for `seqera_pipeline` instead when you want a persistent,
+        re-launchable definition on the Launchpad rather than a single
+        run.
 
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
     update:
@@ -257,24 +263,17 @@ actions:
   # CLEANUP - Remove unmanageable, internal, and deprecated fields
   # ============================================================================
 
-  # Remove internal/computed fields from WorkflowLaunchRequest that aren't user-configurable.
-  #
-  # NOTE: `id` is intentionally NOT removed — the seqera_action Update endpoint
-  # reuses this request shape and the backend validates that the incoming
-  # `launch.id` matches the action's existing launch (rejecting with HTTP 400
-  # "Launch ID value can't change" when absent). Removing it broke every
-  # action update, which surfaced to users as "actions can't be updated when
-  # secrets are involved". Mark it Read-Only instead so it stays Computed
-  # for create paths (workflow launch, pipeline create) but is echoed back
-  # by the provider on action updates.
+  # `id` is kept on the SDK type (readonly) but hidden from the TF schema
+  # (terraform-ignore). The Update body for `seqera_action` needs it on the
+  # wire, but `seqera_workflows` has no response field to populate a
+  # top-level `id` from, so exposing it would leave the attribute unknown
+  # after apply. `seqera_action.launch.id` is supplied separately by
+  # ActionLaunchRequest (see overlays/actions.yaml).
   - target: $.components.schemas.WorkflowLaunchRequest.properties.id
     update:
-      description: |
-        Launch identifier. Server-generated on workflow launch and pipeline
-        create — leave unset. Echoed back by the provider on
-        `seqera_action` updates so the backend can confirm the launch
-        identity hasn't changed.
+      description: Server-generated launch identifier.
       x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["sessionId"]
     remove: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["resumeDir"]

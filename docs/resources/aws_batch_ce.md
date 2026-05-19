@@ -120,7 +120,6 @@ resource "seqera_aws_batch_ce" "manual" {
 
 - `compute_env_id` (String) Compute environment string identifier
 - `date_created` (String) Timestamp when the compute environment was created
-- `deleted` (Boolean) Flag indicating if the compute environment has been deleted
 - `id` (String) Unique identifier for the compute environment
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used

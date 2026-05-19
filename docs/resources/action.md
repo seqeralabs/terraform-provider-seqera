@@ -122,7 +122,7 @@ resource "seqera_action" "tower_advanced" {
 
 ### Required
 
-- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
+- `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. (see [below for nested schema](#nestedatt--launch))
 - `name` (String) Human-readable name for the action
 - `workspace_id` (Number) Workspace numeric identifier
 
@@ -178,10 +178,7 @@ Optional:
 Read-Only:
 
 - `compute_env` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env))
-- `id` (String) Launch identifier. Server-generated on workflow launch and pipeline
-create — leave unset. Echoed back by the provider on
-`seqera_action` updates so the backend can confirm the launch
-identity hasn't changed.
+- `id` (String) Server-generated launch identifier; echoed back on Update.
 - `launch_container` (String)
 - `optimization_id` (String) Optimization profile ID
 - `optimization_targets` (String) Optimization targets
@@ -199,7 +196,6 @@ Read-Only:
 pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--launch--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
-- `deleted` (Boolean)
 - `description` (String)
 - `last_updated` (String)
 - `last_used` (String)

@@ -19,7 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
-	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -48,7 +47,6 @@ type WorkflowsResourceModel struct {
 	Force                     types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
 	HeadJobCpus               types.Int32                      `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb           types.Int32                      `tfsdk:"head_job_memory_mb"`
-	ID                        types.String                     `tfsdk:"id"`
 	IntelligentComputeEnabled types.Bool                       `tfsdk:"intelligent_compute_enabled"`
 	LabelIds                  []types.Int64                    `tfsdk:"label_ids"`
 	MainScript                types.String                     `tfsdk:"main_script"`
@@ -80,7 +78,7 @@ func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataR
 
 func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage workflow executions and pipeline runs.\n\nWorkflows represent individual executions of Nextflow pipelines,\ncontaining execution status, parameters, results, and monitoring\ninformation for computational workflows.\n",
+		MarkdownDescription: "Launch and track an individual workflow run on the Seqera Platform\n— equivalent to a Run on the Runs page.\n\nEach `seqera_workflows` resource maps to one execution of a\nNextflow pipeline against a specific compute environment. Use it\nwhen Terraform itself should trigger runs (one-off validations,\nCI fan-outs, post-CE-change smoke tests).\n\nReach for `seqera_pipeline` instead when you want a persistent,\nre-launchable definition on the Launchpad rather than a single\nrun.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Optional: true,
@@ -128,16 +126,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					int32planmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Head job memory allocation in MB. Requires replacement if changed.`,
-			},
-			"id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				MarkdownDescription: `Launch identifier. Server-generated on workflow launch and pipeline` + "\n" +
-					`create — leave unset. Echoed back by the provider on` + "\n" +
-					`` + "`" + `seqera_action` + "`" + ` updates so the backend can confirm the launch` + "\n" +
-					`identity hasn't changed.`,
 			},
 			"intelligent_compute_enabled": schema.BoolAttribute{
 				Computed: true,

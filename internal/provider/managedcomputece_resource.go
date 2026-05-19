@@ -55,7 +55,7 @@ type ManagedComputeCEResourceModel struct {
 	ComputeEnvID        types.String                `tfsdk:"compute_env_id"`
 	DataRetentionPolicy types.Bool                  `tfsdk:"data_retention_policy"`
 	DateCreated         types.String                `tfsdk:"date_created"`
-	Deleted             types.Bool                  `tfsdk:"deleted"`
+	Deleted             types.Bool                  `tfsdk:"-"`
 	Environment         []tfTypes.ConfigEnvVariable `tfsdk:"environment"`
 	ID                  types.String                `tfsdk:"id"`
 	InstanceSize        types.String                `tfsdk:"instance_size"`
@@ -106,13 +106,6 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the compute environment was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the compute environment has been deleted`,
 			},
 			"environment": schema.ListNestedAttribute{
 				Computed: true,
@@ -504,6 +497,11 @@ func (r *ManagedComputeCEResource) Read(ctx context.Context, req resource.ReadRe
 	resp.Diagnostics.Append(data.RefreshFromSharedDescribeManagedComputeCEResponse(ctx, res.DescribeManagedComputeCEResponse)...)
 
 	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if !data.Deleted.IsNull() {
+		resp.State.RemoveResource(ctx)
 		return
 	}
 

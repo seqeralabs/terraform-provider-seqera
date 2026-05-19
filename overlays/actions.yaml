@@ -176,6 +176,33 @@ actions:
       - name
       - launch
 
+  # `ActionLaunchRequest` wraps `WorkflowLaunchRequest` and re-adds the `id`
+  # field that workflows.yaml hides. `seqera_action` Update echoes the
+  # existing launch id back to the backend; `seqera_workflows` doesn't need
+  # (or have a source for) the same field — keeping the schemas separate
+  # avoids cross-resource interference.
+
+  - target: $.components.schemas
+    update:
+      ActionLaunchRequest:
+        type: object
+        description: Launch payload for `seqera_action` Create / Update endpoints.
+        allOf:
+          - $ref: '#/components/schemas/WorkflowLaunchRequest'
+        properties:
+          id:
+            type: string
+            description: Server-generated launch identifier; echoed back on Update.
+            x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.CreateActionRequest.properties.launch
+    update:
+      $ref: '#/components/schemas/ActionLaunchRequest'
+
+  - target: $.components.schemas.UpdateActionRequest.properties.launch
+    update:
+      $ref: '#/components/schemas/ActionLaunchRequest'
+
   # ============================================================================
   # SCHEMA DESCRIPTIONS
   # ============================================================================
