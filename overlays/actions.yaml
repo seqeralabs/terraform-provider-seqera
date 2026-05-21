@@ -342,3 +342,14 @@ actions:
   - target: $.components.schemas.LaunchDbDto.properties.launchContainer
     update:
       x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.CreateActionResponse
+    update:
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .actionId }'
+      properties:
+        id:
+          type: string
+          description: Alias of `action_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true

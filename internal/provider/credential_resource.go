@@ -85,14 +85,10 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
 			},
 			"keys": schema.SingleNestedAttribute{
 				Required: true,

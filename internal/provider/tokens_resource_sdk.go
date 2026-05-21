@@ -27,6 +27,7 @@ func (r *TokensResourceModel) RefreshFromSharedCreateAccessTokenResponse(ctx con
 
 	if resp != nil {
 		r.AccessKey = types.StringPointerValue(resp.AccessKey)
+		r.ID = types.Int64PointerValue(resp.ID)
 		if resp.Token == nil {
 			r.Token = nil
 		} else {

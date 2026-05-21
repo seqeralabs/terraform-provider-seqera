@@ -116,6 +116,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedCreateAzureBatchCEResponse(
 
 	if resp != nil {
 		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags

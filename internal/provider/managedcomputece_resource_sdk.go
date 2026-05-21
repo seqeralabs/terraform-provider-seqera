@@ -18,6 +18,7 @@ func (r *ManagedComputeCEResourceModel) RefreshFromSharedCreateManagedComputeCER
 
 	if resp != nil {
 		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags

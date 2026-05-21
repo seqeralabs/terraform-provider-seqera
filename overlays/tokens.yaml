@@ -158,7 +158,20 @@ actions:
   ####################################################################
   ####                Schema Overrides                            ####
   ####################################################################
-  # Response schema annotations
+  # Response schema annotations. Also lift the nested `token.id` to a
+  # top-level `id` alias so the resource's Computed `id` attribute is
+  # populated after Create — without this the Create refresh leaves
+  # `seqera_tokens.foo.id` Unknown and Terraform errors with
+  # "Provider returned invalid result object after apply".
   - target: $.components.schemas.CreateAccessTokenResponse
     update:
       x-speakeasy-entity: Tokens
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .token.id }'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the token. Mirrors `token.id`.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true

@@ -850,6 +850,7 @@ func (r *ActionResourceModel) RefreshFromSharedCreateActionResponse(ctx context.
 
 	if resp != nil {
 		r.ActionID = types.StringPointerValue(resp.ActionID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags

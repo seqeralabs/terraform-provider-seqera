@@ -2,8 +2,37 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateCodecommitCredentialsResponse struct {
+	// Alias of `credentials_id` for Terraform convention.
+	ID            *string `json:"id,omitempty"`
 	CredentialsID *string `json:"credentialsId,omitempty"`
+}
+
+func (c CreateCodecommitCredentialsResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateCodecommitCredentialsResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .credentialsId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CreateCodecommitCredentialsResponse) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }
 
 func (c *CreateCodecommitCredentialsResponse) GetCredentialsID() *string {
