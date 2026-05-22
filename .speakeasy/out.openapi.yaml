@@ -15935,7 +15935,15 @@ components:
           $ref: '#/components/schemas/AccessToken'
           description: Token metadata returned after creation
           x-speakeasy-param-ordering: 2
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the token. Mirrors `token.id`.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-entity: Tokens
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .token.id }'
     CreateActionRequest:
       type: object
       properties:
@@ -15959,6 +15967,13 @@ components:
       properties:
         actionId:
           type: string
+        id:
+          type: string
+          description: Alias of `action_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .actionId }'
     CreateAvatarResponse:
       type: object
       properties:
@@ -16015,6 +16030,13 @@ components:
       properties:
         credentialsId:
           type: string
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
     CreateDatasetRequest:
       type: object
       properties:
@@ -16203,6 +16225,14 @@ components:
         secretId:
           type: integer
           format: int64
+        id:
+          type: integer
+          format: int64
+          description: Alias of `secret_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .secretId }'
     CreatePipelineVersionRequest:
       type: object
       properties:
@@ -23207,7 +23237,14 @@ components:
             format: int64
     CreateAWSComputeEnvResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateAWSComputeEnvRequest:
@@ -23319,7 +23356,14 @@ components:
             format: int64
     CreateAWSBatchCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateAWSBatchCERequest:
@@ -23459,7 +23503,14 @@ components:
             format: int64
     CreateAwsCloudCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateAwsCloudCERequest:
@@ -23573,7 +23624,14 @@ components:
             format: int64
     CreateAzureBatchCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateAzureBatchCERequest:
@@ -23687,7 +23745,14 @@ components:
             format: int64
     CreateAzureCloudCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateAzureCloudCERequest:
@@ -23800,7 +23865,14 @@ components:
             format: int64
     CreateGCPBatchCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateGCPBatchCERequest:
@@ -23914,7 +23986,14 @@ components:
             format: int64
     CreateGCPCloudCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateGCPCloudCERequest:
@@ -24110,7 +24189,14 @@ components:
             format: int64
     CreateManagedComputeCEResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
       properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         computeEnvId:
           type: string
     UpdateManagedComputeCERequest:
@@ -24245,7 +24331,14 @@ components:
           $ref: '#/components/schemas/AWSCredential'
     CreateAWSCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateAWSCredentialsRequest:
@@ -24392,7 +24485,14 @@ components:
           $ref: '#/components/schemas/AzureCredential'
     CreateAzureCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateAzureCredentialsRequest:
@@ -24517,7 +24617,14 @@ components:
           $ref: '#/components/schemas/AzureEntraCredential'
     CreateAzureEntraCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateAzureEntraCredentialsRequest:
@@ -24645,7 +24752,14 @@ components:
           $ref: '#/components/schemas/AzureCloudCredential'
     CreateAzureCloudCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateAzureCloudCredentialsRequest:
@@ -24764,7 +24878,14 @@ components:
           $ref: '#/components/schemas/BitbucketCredential'
     CreateBitbucketCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateBitbucketCredentialsRequest:
@@ -24873,7 +24994,14 @@ components:
           $ref: '#/components/schemas/CodecommitCredential'
     CreateCodecommitCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateCodecommitCredentialsRequest:
@@ -24980,7 +25108,14 @@ components:
           $ref: '#/components/schemas/ContainerRegistryCredential'
     CreateContainerRegistryCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateContainerRegistryCredentialsRequest:
@@ -25098,7 +25233,14 @@ components:
           $ref: '#/components/schemas/GoogleCredential'
     CreateGoogleCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateGoogleCredentialsRequest:
@@ -25209,7 +25351,14 @@ components:
           $ref: '#/components/schemas/GiteaCredential'
     CreateGiteaCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateGiteaCredentialsRequest:
@@ -25317,7 +25466,14 @@ components:
           $ref: '#/components/schemas/GithubCredential'
     CreateGithubCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateGithubCredentialsRequest:
@@ -25425,7 +25581,14 @@ components:
           $ref: '#/components/schemas/GitlabCredential'
     CreateGitlabCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateGitlabCredentialsRequest:
@@ -25529,7 +25692,14 @@ components:
           $ref: '#/components/schemas/KubernetesCredential'
     CreateKubernetesCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateKubernetesCredentialsRequest:
@@ -25623,7 +25793,14 @@ components:
           $ref: '#/components/schemas/SSHCredential'
     CreateSSHCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateSSHCredentialsRequest:
@@ -25730,7 +25907,14 @@ components:
           $ref: "#/components/schemas/TowerAgentCredential"
     CreateTowerAgentCredentialsResponse:
       type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
       properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         credentialsId:
           type: string
     UpdateTowerAgentCredentialsRequest:

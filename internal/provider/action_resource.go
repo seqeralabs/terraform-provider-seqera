@@ -187,7 +187,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `URL endpoint for the webhook that triggers this action`,
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the action`,
 			},
 			"launch": schema.SingleNestedAttribute{

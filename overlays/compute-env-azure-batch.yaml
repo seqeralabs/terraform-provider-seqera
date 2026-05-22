@@ -340,7 +340,14 @@ actions:
 
       CreateAzureBatchCEResponse:
         type: object
+        x-speakeasy-transform-from-api:
+          jq: '. + { id: .computeEnvId }'
         properties:
+          id:
+            type: string
+            description: Alias of `compute_env_id` for Terraform convention.
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-suppress-computed-diff: true
           computeEnvId:
             type: string
 

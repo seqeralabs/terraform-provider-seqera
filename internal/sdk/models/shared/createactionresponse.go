@@ -2,8 +2,30 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateActionResponse struct {
 	ActionID *string `json:"actionId,omitempty"`
+	// Alias of `action_id` for Terraform convention.
+	ID *string `json:"id,omitempty"`
+}
+
+func (c CreateActionResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateActionResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .actionId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateActionResponse) GetActionID() *string {
@@ -11,4 +33,11 @@ func (c *CreateActionResponse) GetActionID() *string {
 		return nil
 	}
 	return c.ActionID
+}
+
+func (c *CreateActionResponse) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }

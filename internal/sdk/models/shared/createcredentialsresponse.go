@@ -2,8 +2,30 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateCredentialsResponse struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
+	// Alias of `credentials_id` for Terraform convention.
+	ID *string `json:"id,omitempty"`
+}
+
+func (c CreateCredentialsResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateCredentialsResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .credentialsId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateCredentialsResponse) GetCredentialsID() *string {
@@ -11,4 +33,11 @@ func (c *CreateCredentialsResponse) GetCredentialsID() *string {
 		return nil
 	}
 	return c.CredentialsID
+}
+
+func (c *CreateCredentialsResponse) GetID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }

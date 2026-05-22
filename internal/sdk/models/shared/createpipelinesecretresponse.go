@@ -2,8 +2,30 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreatePipelineSecretResponse struct {
 	SecretID *int64 `json:"secretId,omitempty"`
+	// Alias of `secret_id` for Terraform convention.
+	ID *int64 `json:"id,omitempty"`
+}
+
+func (c CreatePipelineSecretResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreatePipelineSecretResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .secretId }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreatePipelineSecretResponse) GetSecretID() *int64 {
@@ -11,4 +33,11 @@ func (c *CreatePipelineSecretResponse) GetSecretID() *int64 {
 		return nil
 	}
 	return c.SecretID
+}
+
+func (c *CreatePipelineSecretResponse) GetID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }

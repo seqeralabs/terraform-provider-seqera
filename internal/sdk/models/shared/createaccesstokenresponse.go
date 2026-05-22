@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreateAccessTokenResponse struct {
 	// The actual token value for authentication. This sensitive value is ONLY
 	// returned when the token is created and cannot be retrieved later.
@@ -12,6 +16,24 @@ type CreateAccessTokenResponse struct {
 	// Contains the token ID, name, and usage metadata.
 	//
 	Token *AccessToken `json:"token,omitempty"`
+	// Unique identifier for the token. Mirrors `token.id`.
+	ID *int64 `json:"id,omitempty"`
+}
+
+func (c CreateAccessTokenResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateAccessTokenResponse) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ". + { id: .token.id }"); err != nil {
+		return err
+	} else {
+		data = out
+	}
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateAccessTokenResponse) GetAccessKey() *string {
@@ -26,4 +48,11 @@ func (c *CreateAccessTokenResponse) GetToken() *AccessToken {
 		return nil
 	}
 	return c.Token
+}
+
+func (c *CreateAccessTokenResponse) GetID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ID
 }

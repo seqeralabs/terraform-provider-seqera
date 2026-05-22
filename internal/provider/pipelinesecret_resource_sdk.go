@@ -15,6 +15,7 @@ func (r *PipelineSecretResourceModel) RefreshFromSharedCreatePipelineSecretRespo
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ID = types.Int64PointerValue(resp.ID)
 		r.SecretID = types.Int64PointerValue(resp.SecretID)
 	}
 

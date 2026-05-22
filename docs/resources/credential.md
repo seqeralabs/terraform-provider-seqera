@@ -113,11 +113,11 @@ must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github"
 - `category` (String) Credentials category
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
 - `description` (String) Optional description explaining the purpose of the credential
-- `id` (String) Unique identifier for the credential (max 22 characters)
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
+- `id` (String) Unique identifier for the credential (max 22 characters)
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

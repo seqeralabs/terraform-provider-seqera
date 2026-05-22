@@ -40,6 +40,7 @@ func (r *BitbucketCredentialResourceModel) RefreshFromSharedCreateBitbucketCrede
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags
