@@ -232,9 +232,15 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Read-Only
 
+- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
 - `id` (String) Alias of `session_id` for Terraform convention.
+- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
+- `remote_config` (Attributes) (see [below for nested schema](#nestedatt--remote_config))
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
+- `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
+- `template` (Attributes) (see [below for nested schema](#nestedatt--template))
+- `user` (Attributes) (see [below for nested schema](#nestedatt--user))
 
 <a id="nestedatt--configuration"></a>
 ### Nested Schema for `configuration`
@@ -261,6 +267,40 @@ Optional:
 
 
 
+<a id="nestedatt--compute_env"></a>
+### Nested Schema for `compute_env`
+
+Read-Only:
+
+- `credentials_id` (String)
+- `id` (String)
+- `name` (String)
+- `platform` (String)
+- `region` (String) Compute environment region
+- `work_dir` (String)
+
+
+<a id="nestedatt--parent_checkpoint"></a>
+### Nested Schema for `parent_checkpoint`
+
+Read-Only:
+
+- `checkpoint_id` (Number)
+- `checkpoint_name` (String)
+- `session_id` (String)
+- `studio_name` (String)
+
+
+<a id="nestedatt--remote_config"></a>
+### Nested Schema for `remote_config`
+
+Read-Only:
+
+- `commit_id` (String)
+- `repository` (String)
+- `revision` (String)
+
+
 <a id="nestedatt--ssh_details"></a>
 ### Nested Schema for `ssh_details`
 
@@ -270,6 +310,39 @@ Read-Only:
 - `host` (String) The hostname to connect to
 - `port` (Number) The SSH port number
 - `user` (String) The user in the format 'username@sessionId'
+
+
+<a id="nestedatt--status_info"></a>
+### Nested Schema for `status_info`
+
+Read-Only:
+
+- `last_update` (String)
+- `message` (String)
+- `status` (String)
+- `stop_reason` (String)
+
+
+<a id="nestedatt--template"></a>
+### Nested Schema for `template`
+
+Read-Only:
+
+- `icon` (String) Icon identifier or URL for visual representation
+- `repository` (String)
+- `status` (String)
+- `tool` (String)
+
+
+<a id="nestedatt--user"></a>
+### Nested Schema for `user`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)
 
 ## Import
 

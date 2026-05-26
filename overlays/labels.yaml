@@ -220,10 +220,12 @@ actions:
 
   # Remove the 'labels' list from response schemas (single label resource shouldn't show a list)
   - target: $["components"]["schemas"]["ListLabelsResponse"]["properties"]["labels"]
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   - target: $["components"]["schemas"]["ListLabelsResponse"]["properties"]["totalSize"]
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # ID field name override removed — `id` now flows through as `id` in
   # the Terraform schema. `label_id` is added as a synthetic alias above.

@@ -19,6 +19,16 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 
 	if resp != nil {
 		r.IntelligentComputeEnabled = types.BoolPointerValue(resp.IntelligentComputeEnabled)
+		if resp.JobInfo == nil {
+			r.JobInfo = nil
+		} else {
+			r.JobInfo = &tfTypes.JobInfoDto{}
+			r.JobInfo.ExitCode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.JobInfo.ExitCode))
+			r.JobInfo.ID = types.Int64PointerValue(resp.JobInfo.ID)
+			r.JobInfo.Message = types.StringPointerValue(resp.JobInfo.Message)
+			r.JobInfo.OperationID = types.StringPointerValue(resp.JobInfo.OperationID)
+			r.JobInfo.Status = types.StringPointerValue(resp.JobInfo.Status)
+		}
 		if resp.PipelineInfo == nil {
 			r.PipelineInfo = nil
 		} else {
@@ -37,6 +47,13 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.PipelineInfo.Version.Name = types.StringPointerValue(resp.PipelineInfo.Version.Name)
 			}
 			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
+		}
+		if resp.Platform == nil {
+			r.Platform = nil
+		} else {
+			r.Platform = &tfTypes.ComputePlatformDto{}
+			r.Platform.ID = types.StringPointerValue(resp.Platform.ID)
+			r.Platform.Name = types.StringPointerValue(resp.Platform.Name)
 		}
 		if resp.Workflow == nil {
 			r.Workflow = nil

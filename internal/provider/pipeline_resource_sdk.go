@@ -829,10 +829,24 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.ComputeEnv == nil {
+			r.ComputeEnv = nil
+		} else {
+			r.ComputeEnv = &tfTypes.ComputeEnvDbDto{}
+			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
+			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
+			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
+			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
+		}
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Icon = types.StringPointerValue(resp.Icon)
 		r.ID = types.Int64PointerValue(resp.ID)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.OptimizationStatus != nil {
+			r.OptimizationStatus = types.StringValue(string(*resp.OptimizationStatus))
+		} else {
+			r.OptimizationStatus = types.StringNull()
+		}
 		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
 		r.Repository = types.StringPointerValue(resp.Repository)
 		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)

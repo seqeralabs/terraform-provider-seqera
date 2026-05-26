@@ -3,11 +3,18 @@
 package shared
 
 type JobInfoDto struct {
-	ID          *int64  `json:"id,omitempty"`
-	OperationID *string `json:"operationId,omitempty"`
-	Message     *string `json:"message,omitempty"`
-	Status      *string `json:"status,omitempty"`
 	ExitCode    *int    `json:"exitCode,omitempty"`
+	ID          *int64  `json:"id,omitempty"`
+	Message     *string `json:"message,omitempty"`
+	OperationID *string `json:"operationId,omitempty"`
+	Status      *string `json:"status,omitempty"`
+}
+
+func (j *JobInfoDto) GetExitCode() *int {
+	if j == nil {
+		return nil
+	}
+	return j.ExitCode
 }
 
 func (j *JobInfoDto) GetID() *int64 {
@@ -17,13 +24,6 @@ func (j *JobInfoDto) GetID() *int64 {
 	return j.ID
 }
 
-func (j *JobInfoDto) GetOperationID() *string {
-	if j == nil {
-		return nil
-	}
-	return j.OperationID
-}
-
 func (j *JobInfoDto) GetMessage() *string {
 	if j == nil {
 		return nil
@@ -31,16 +31,16 @@ func (j *JobInfoDto) GetMessage() *string {
 	return j.Message
 }
 
+func (j *JobInfoDto) GetOperationID() *string {
+	if j == nil {
+		return nil
+	}
+	return j.OperationID
+}
+
 func (j *JobInfoDto) GetStatus() *string {
 	if j == nil {
 		return nil
 	}
 	return j.Status
-}
-
-func (j *JobInfoDto) GetExitCode() *int {
-	if j == nil {
-		return nil
-	}
-	return j.ExitCode
 }

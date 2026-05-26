@@ -13,18 +13,36 @@ import (
 type WorkflowMaxDbDto struct {
 	// Command line
 	CommandLine *string `json:"commandLine,omitempty"`
+	// Commit ID
+	CommitID *string `json:"commitId,omitempty"`
 	// Timestamp when the workflow execution completed
 	Complete *time.Time `json:"complete,omitempty"`
 	// Config files (can be null)
 	ConfigFiles []string `json:"configFiles,omitempty"`
 	// Config text
-	ConfigText  *string    `json:"configText,omitempty"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	ConfigText *string `json:"configText,omitempty"`
+	// Container
+	Container *string `json:"container,omitempty"`
+	// Container engine
+	ContainerEngine *string    `json:"containerEngine,omitempty"`
+	DateCreated     *time.Time `json:"dateCreated,omitempty"`
 	// Whether the workflow is deleted
 	Deleted *bool `json:"deleted,omitempty"`
+	// Duration (null if not completed)
+	Duration *int64 `json:"duration,omitempty"`
+	// Error message (null if no error)
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	// Error report (null if no error)
+	ErrorReport *string `json:"errorReport,omitempty"`
+	// Exit status (null if not completed)
+	ExitStatus *int `json:"exitStatus,omitempty"`
+	// Home directory
+	HomeDir *string `json:"homeDir,omitempty"`
 	// Unique identifier for the workflow execution
 	ID          *string    `json:"id,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Launch directory
+	LaunchDir *string `json:"launchDir,omitempty"`
 	// Launch ID
 	LaunchID *string `json:"launchId,omitempty"`
 	// Numeric identifier of the user who owns this workflow
@@ -33,6 +51,8 @@ type WorkflowMaxDbDto struct {
 	Params map[string]any `json:"params,omitempty"`
 	// Profile
 	Profile *string `json:"profile,omitempty"`
+	// Project directory
+	ProjectDir *string `json:"projectDir,omitempty"`
 	// Project name
 	ProjectName *string `json:"projectName,omitempty"`
 	// Repository
@@ -45,6 +65,10 @@ type WorkflowMaxDbDto struct {
 	Revision *string `json:"revision,omitempty"`
 	// Run name
 	RunName *string `json:"runName,omitempty"`
+	// Script file
+	ScriptFile *string `json:"scriptFile,omitempty"`
+	// Script ID
+	ScriptID *string `json:"scriptId,omitempty"`
 	// Script name
 	ScriptName *string `json:"scriptName,omitempty"`
 	// Session ID
@@ -54,6 +78,10 @@ type WorkflowMaxDbDto struct {
 	Status *WorkflowStatus `json:"status,omitempty"`
 	// Timestamp when the workflow was submitted for execution
 	Submit *time.Time `json:"submit,omitempty"`
+	// Success flag
+	Success *bool `json:"success,omitempty"`
+	// User name
+	UserName *string `json:"userName,omitempty"`
 	// Work directory
 	WorkDir     *string       `json:"workDir,omitempty"`
 	Fusion      *WfFusionMeta `json:"fusion,omitempty"`
@@ -81,6 +109,13 @@ func (w *WorkflowMaxDbDto) GetCommandLine() *string {
 	return w.CommandLine
 }
 
+func (w *WorkflowMaxDbDto) GetCommitID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.CommitID
+}
+
 func (w *WorkflowMaxDbDto) GetComplete() *time.Time {
 	if w == nil {
 		return nil
@@ -102,6 +137,20 @@ func (w *WorkflowMaxDbDto) GetConfigText() *string {
 	return w.ConfigText
 }
 
+func (w *WorkflowMaxDbDto) GetContainer() *string {
+	if w == nil {
+		return nil
+	}
+	return w.Container
+}
+
+func (w *WorkflowMaxDbDto) GetContainerEngine() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ContainerEngine
+}
+
 func (w *WorkflowMaxDbDto) GetDateCreated() *time.Time {
 	if w == nil {
 		return nil
@@ -116,6 +165,41 @@ func (w *WorkflowMaxDbDto) GetDeleted() *bool {
 	return w.Deleted
 }
 
+func (w *WorkflowMaxDbDto) GetDuration() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.Duration
+}
+
+func (w *WorkflowMaxDbDto) GetErrorMessage() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ErrorMessage
+}
+
+func (w *WorkflowMaxDbDto) GetErrorReport() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ErrorReport
+}
+
+func (w *WorkflowMaxDbDto) GetExitStatus() *int {
+	if w == nil {
+		return nil
+	}
+	return w.ExitStatus
+}
+
+func (w *WorkflowMaxDbDto) GetHomeDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.HomeDir
+}
+
 func (w *WorkflowMaxDbDto) GetID() *string {
 	if w == nil {
 		return nil
@@ -128,6 +212,13 @@ func (w *WorkflowMaxDbDto) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return w.LastUpdated
+}
+
+func (w *WorkflowMaxDbDto) GetLaunchDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchDir
 }
 
 func (w *WorkflowMaxDbDto) GetLaunchID() *string {
@@ -156,6 +247,13 @@ func (w *WorkflowMaxDbDto) GetProfile() *string {
 		return nil
 	}
 	return w.Profile
+}
+
+func (w *WorkflowMaxDbDto) GetProjectDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ProjectDir
 }
 
 func (w *WorkflowMaxDbDto) GetProjectName() *string {
@@ -200,6 +298,20 @@ func (w *WorkflowMaxDbDto) GetRunName() *string {
 	return w.RunName
 }
 
+func (w *WorkflowMaxDbDto) GetScriptFile() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptFile
+}
+
+func (w *WorkflowMaxDbDto) GetScriptID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ScriptID
+}
+
 func (w *WorkflowMaxDbDto) GetScriptName() *string {
 	if w == nil {
 		return nil
@@ -233,6 +345,20 @@ func (w *WorkflowMaxDbDto) GetSubmit() *time.Time {
 		return nil
 	}
 	return w.Submit
+}
+
+func (w *WorkflowMaxDbDto) GetSuccess() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Success
+}
+
+func (w *WorkflowMaxDbDto) GetUserName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.UserName
 }
 
 func (w *WorkflowMaxDbDto) GetWorkDir() *string {

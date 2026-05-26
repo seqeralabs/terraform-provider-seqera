@@ -11,17 +11,29 @@ import (
 // Contains dataset metadata, versioning information, and access
 // controls for data management and sharing.
 type DatasetDto struct {
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Whether dataset is deleted
+	Deleted *bool `json:"deleted,omitempty"`
 	// Detailed description of the dataset contents and purpose (max 1000 characters)
 	Description *string `json:"description,omitempty"`
+	// Whether dataset is hidden
+	Hidden *bool `json:"hidden,omitempty"`
 	// Unique identifier for the dataset (max 22 characters)
 	ID *string `json:"id,omitempty"`
+	// Dataset labels (can be null)
+	Labels []LabelDbDto `json:"labels,omitempty"`
 	// Timestamp when the dataset was last modified
-	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	LastUpdated   *time.Time `json:"lastUpdated,omitempty"`
+	LastUpdatedBy *UserInfo  `json:"lastUpdatedBy,omitempty"`
 	// MIME type or media type of the dataset content (max 80 characters)
 	MediaType *string `json:"mediaType,omitempty"`
 	// Dataset name following naming conventions (1-100 characters)
-	Name       *string     `json:"name,omitempty"`
-	SourceType *SourceType `json:"sourceType,omitempty"`
+	Name           *string          `json:"name,omitempty"`
+	OrganizationID *int64           `json:"organizationId,omitempty"`
+	RunsInfo       *DatasetRunsInfo `json:"runsInfo,omitempty"`
+	SourceType     *SourceType      `json:"sourceType,omitempty"`
+	User           *UserInfo        `json:"user,omitempty"`
+	Version        *int64           `json:"version,omitempty"`
 	// Numeric identifier of the workspace containing this dataset
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 }
@@ -37,11 +49,32 @@ func (d *DatasetDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DatasetDto) GetDateCreated() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.DateCreated
+}
+
+func (d *DatasetDto) GetDeleted() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Deleted
+}
+
 func (d *DatasetDto) GetDescription() *string {
 	if d == nil {
 		return nil
 	}
 	return d.Description
+}
+
+func (d *DatasetDto) GetHidden() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Hidden
 }
 
 func (d *DatasetDto) GetID() *string {
@@ -51,11 +84,25 @@ func (d *DatasetDto) GetID() *string {
 	return d.ID
 }
 
+func (d *DatasetDto) GetLabels() []LabelDbDto {
+	if d == nil {
+		return nil
+	}
+	return d.Labels
+}
+
 func (d *DatasetDto) GetLastUpdated() *time.Time {
 	if d == nil {
 		return nil
 	}
 	return d.LastUpdated
+}
+
+func (d *DatasetDto) GetLastUpdatedBy() *UserInfo {
+	if d == nil {
+		return nil
+	}
+	return d.LastUpdatedBy
 }
 
 func (d *DatasetDto) GetMediaType() *string {
@@ -72,11 +119,39 @@ func (d *DatasetDto) GetName() *string {
 	return d.Name
 }
 
+func (d *DatasetDto) GetOrganizationID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.OrganizationID
+}
+
+func (d *DatasetDto) GetRunsInfo() *DatasetRunsInfo {
+	if d == nil {
+		return nil
+	}
+	return d.RunsInfo
+}
+
 func (d *DatasetDto) GetSourceType() *SourceType {
 	if d == nil {
 		return nil
 	}
 	return d.SourceType
+}
+
+func (d *DatasetDto) GetUser() *UserInfo {
+	if d == nil {
+		return nil
+	}
+	return d.User
+}
+
+func (d *DatasetDto) GetVersion() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.Version
 }
 
 func (d *DatasetDto) GetWorkspaceID() *int64 {

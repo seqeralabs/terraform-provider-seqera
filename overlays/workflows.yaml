@@ -305,51 +305,71 @@ actions:
   - target: $.components.schemas.DescribeWorkflowResponse.properties.progress
     remove: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.messages
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.jobInfo
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.platform
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.optimized
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime organizational context from DescribeWorkflowResponse
   - target: $.components.schemas.DescribeWorkflowResponse.properties.orgId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.orgName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.workspaceName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime label associations from DescribeWorkflowResponse
   - target: $.components.schemas.DescribeWorkflowResponse.properties.labels
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove additional runtime fields from WorkflowDbDto
   - target: $.components.schemas.WorkflowDbDto.properties.userName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.commitId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.scriptId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.projectDir
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.homeDir
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.launchDir
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.container
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.containerEngine
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.scriptFile
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.duration
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.exitStatus
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.success
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.manifest
     remove: true
   - target: $.components.schemas.WorkflowDbDto.properties.nextflow
@@ -357,9 +377,11 @@ actions:
   - target: $.components.schemas.WorkflowDbDto.properties.stats
     remove: true
   - target: $.components.schemas.WorkflowDbDto.properties.errorMessage
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.WorkflowDbDto.properties.errorReport
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # ============================================================================
   # WORKFLOW LOAD SCHEMA MODIFICATIONS

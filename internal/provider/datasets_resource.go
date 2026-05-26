@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
@@ -35,13 +36,16 @@ type DatasetsResource struct {
 
 // DatasetsResourceModel describes the resource data model.
 type DatasetsResourceModel struct {
-	Description types.String `tfsdk:"description"`
-	ID          types.String `tfsdk:"id"`
-	LastUpdated types.String `tfsdk:"last_updated"`
-	MediaType   types.String `tfsdk:"media_type"`
-	Name        types.String `tfsdk:"name"`
-	SourceType  types.String `tfsdk:"source_type"`
-	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Description   types.String             `tfsdk:"description"`
+	ID            types.String             `tfsdk:"id"`
+	LastUpdated   types.String             `tfsdk:"last_updated"`
+	LastUpdatedBy *tfTypes.UserInfo        `tfsdk:"last_updated_by"`
+	MediaType     types.String             `tfsdk:"media_type"`
+	Name          types.String             `tfsdk:"name"`
+	RunsInfo      *tfTypes.DatasetRunsInfo `tfsdk:"runs_info"`
+	SourceType    types.String             `tfsdk:"source_type"`
+	User          *tfTypes.UserInfo        `tfsdk:"user"`
+	WorkspaceID   types.Int64              `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,6 +73,23 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:    true,
 				Description: `Timestamp when the dataset was last modified`,
 			},
+			"last_updated_by": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"avatar": schema.StringAttribute{
+						Computed: true,
+					},
+					"email": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"user_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
 			"media_type": schema.StringAttribute{
 				Computed:    true,
 				Description: `MIME type or media type of the dataset content (max 80 characters)`,
@@ -80,6 +101,19 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Dataset name following naming conventions (1-100 characters). Requires replacement if changed.`,
+			},
+			"runs_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"last_used": schema.StringAttribute{
+						Computed:    true,
+						Description: `Last used timestamp (null if never used)`,
+					},
+					"runs_count": schema.Int64Attribute{
+						Computed:    true,
+						Description: `Number of runs`,
+					},
+				},
 			},
 			"source_type": schema.StringAttribute{
 				Computed: true,
@@ -94,6 +128,23 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 						"UPLOADED",
 						"LINKED",
 					),
+				},
+			},
+			"user": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"avatar": schema.StringAttribute{
+						Computed: true,
+					},
+					"email": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"user_name": schema.StringAttribute{
+						Computed: true,
+					},
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

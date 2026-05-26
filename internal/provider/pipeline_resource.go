@@ -44,19 +44,21 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	Description   types.String                          `tfsdk:"description"`
-	Icon          types.String                          `tfsdk:"icon"`
-	ID            types.Int64                           `tfsdk:"id"`
-	LabelIds      []types.Int64                         `tfsdk:"label_ids"`
-	Launch        *tfTypes.WorkflowLaunchRequest        `tfsdk:"launch"`
-	Name          types.String                          `tfsdk:"name"`
-	PipelineID    types.Int64                           `tfsdk:"pipeline_id"`
-	Repository    types.String                          `tfsdk:"repository"`
-	UserFirstName types.String                          `tfsdk:"user_first_name"`
-	UserID        types.Int64                           `tfsdk:"user_id"`
-	UserName      types.String                          `tfsdk:"user_name"`
-	Version       *tfTypes.CreatePipelineVersionRequest `tfsdk:"version"`
-	WorkspaceID   types.Int64                           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnv         *tfTypes.ComputeEnvDbDto              `tfsdk:"compute_env"`
+	Description        types.String                          `tfsdk:"description"`
+	Icon               types.String                          `tfsdk:"icon"`
+	ID                 types.Int64                           `tfsdk:"id"`
+	LabelIds           []types.Int64                         `tfsdk:"label_ids"`
+	Launch             *tfTypes.WorkflowLaunchRequest        `tfsdk:"launch"`
+	Name               types.String                          `tfsdk:"name"`
+	OptimizationStatus types.String                          `tfsdk:"optimization_status"`
+	PipelineID         types.Int64                           `tfsdk:"pipeline_id"`
+	Repository         types.String                          `tfsdk:"repository"`
+	UserFirstName      types.String                          `tfsdk:"user_first_name"`
+	UserID             types.Int64                           `tfsdk:"user_id"`
+	UserName           types.String                          `tfsdk:"user_name"`
+	Version            *tfTypes.CreatePipelineVersionRequest `tfsdk:"version"`
+	WorkspaceID        types.Int64                           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -67,6 +69,24 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage saved pipeline definitions on the Seqera Platform Launchpad.\n\nA `seqera_pipeline` is a reusable launch template — repository,\nrevision, default parameters, and a default compute environment —\nthat users can launch on demand from the UI or API.\n\nReach for `seqera_workflows` instead when Terraform itself should\ntrigger an individual workflow run (for example, a validation\nlaunch after a compute environment change).\n",
 		Attributes: map[string]schema.Attribute{
+			"compute_env": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"platform": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `Compute environment region`,
+					},
+				},
+			},
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
@@ -2358,6 +2378,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Validators: []validator.String{
 					custom_stringvalidators.PipelineNameValidator(),
 				},
+			},
+			"optimization_status": schema.StringAttribute{
+				Computed: true,
 			},
 			"pipeline_id": schema.Int64Attribute{
 				Computed:    true,

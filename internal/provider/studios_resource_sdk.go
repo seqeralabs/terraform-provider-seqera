@@ -31,6 +31,16 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.ComputeEnv == nil {
+			r.ComputeEnv = nil
+		} else {
+			r.ComputeEnv.CredentialsID = types.StringPointerValue(resp.ComputeEnv.CredentialsID)
+			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
+			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
+			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
+			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
+			r.ComputeEnv.WorkDir = types.StringPointerValue(resp.ComputeEnv.WorkDir)
+		}
 		if resp.Configuration != nil {
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
@@ -71,6 +81,23 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		r.ID = types.StringPointerValue(resp.ID)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.ParentCheckpoint == nil {
+			r.ParentCheckpoint = nil
+		} else {
+			r.ParentCheckpoint = &tfTypes.DataStudioDtoParentCheckpoint{}
+			r.ParentCheckpoint.CheckpointID = types.Int64PointerValue(resp.ParentCheckpoint.CheckpointID)
+			r.ParentCheckpoint.CheckpointName = types.StringPointerValue(resp.ParentCheckpoint.CheckpointName)
+			r.ParentCheckpoint.SessionID = types.StringPointerValue(resp.ParentCheckpoint.SessionID)
+			r.ParentCheckpoint.StudioName = types.StringPointerValue(resp.ParentCheckpoint.StudioName)
+		}
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.StudioRemoteConfiguration{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.SSHDetails == nil {
 			r.SSHDetails = nil
@@ -80,6 +107,45 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.SSHDetails.Host = types.StringValue(resp.SSHDetails.Host)
 			r.SSHDetails.Port = types.Int32Value(int32(resp.SSHDetails.Port))
 			r.SSHDetails.User = types.StringValue(resp.SSHDetails.User)
+		}
+		if resp.StatusInfo == nil {
+			r.StatusInfo = nil
+		} else {
+			r.StatusInfo = &tfTypes.DataStudioStatusInfo{}
+			r.StatusInfo.LastUpdate = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StatusInfo.LastUpdate))
+			r.StatusInfo.Message = types.StringPointerValue(resp.StatusInfo.Message)
+			if resp.StatusInfo.Status != nil {
+				r.StatusInfo.Status = types.StringValue(string(*resp.StatusInfo.Status))
+			} else {
+				r.StatusInfo.Status = types.StringNull()
+			}
+			if resp.StatusInfo.StopReason != nil {
+				r.StatusInfo.StopReason = types.StringValue(string(*resp.StatusInfo.StopReason))
+			} else {
+				r.StatusInfo.StopReason = types.StringNull()
+			}
+		}
+		if resp.Template == nil {
+			r.Template = nil
+		} else {
+			r.Template = &tfTypes.DataStudioTemplate{}
+			r.Template.Icon = types.StringPointerValue(resp.Template.Icon)
+			r.Template.Repository = types.StringPointerValue(resp.Template.Repository)
+			if resp.Template.Status != nil {
+				r.Template.Status = types.StringValue(string(*resp.Template.Status))
+			} else {
+				r.Template.Status = types.StringNull()
+			}
+			r.Template.Tool = types.StringPointerValue(resp.Template.Tool)
+		}
+		if resp.User == nil {
+			r.User = nil
+		} else {
+			r.User = &tfTypes.UserInfo{}
+			r.User.Avatar = types.StringPointerValue(resp.User.Avatar)
+			r.User.Email = types.StringPointerValue(resp.User.Email)
+			r.User.ID = types.Int64PointerValue(resp.User.ID)
+			r.User.UserName = types.StringPointerValue(resp.User.UserName)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}

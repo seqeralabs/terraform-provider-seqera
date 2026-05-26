@@ -51,6 +51,41 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			}
 		}
 		r.Error = types.StringPointerValue(resp.Error)
+		if resp.Event != nil {
+			r.Event = &tfTypes.ActionEventType{}
+			if resp.Event.GithubActionEvent != nil {
+				r.Event.Github = &tfTypes.GithubActionEvent{}
+				r.Event.Github.CommitID = types.StringPointerValue(resp.Event.GithubActionEvent.CommitID)
+				r.Event.Github.CommitMessage = types.StringPointerValue(resp.Event.GithubActionEvent.CommitMessage)
+				r.Event.Github.Discriminator = types.StringPointerValue(resp.Event.GithubActionEvent.Discriminator)
+				r.Event.Github.PusherEmail = types.StringPointerValue(resp.Event.GithubActionEvent.PusherEmail)
+				r.Event.Github.PusherName = types.StringPointerValue(resp.Event.GithubActionEvent.PusherName)
+				r.Event.Github.Ref = types.StringPointerValue(resp.Event.GithubActionEvent.Ref)
+				r.Event.Github.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.GithubActionEvent.Timestamp))
+			}
+			if resp.Event.ActionTowerActionEvent != nil {
+				r.Event.Tower = &tfTypes.ActionTowerActionEvent{}
+				r.Event.Tower.Discriminator = types.StringPointerValue(resp.Event.ActionTowerActionEvent.Discriminator)
+				r.Event.Tower.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.ActionTowerActionEvent.Timestamp))
+				r.Event.Tower.WorkflowID = types.StringPointerValue(resp.Event.ActionTowerActionEvent.WorkflowID)
+			}
+			if resp.Event.BucketActionEvent != nil {
+				r.Event.Bucket = &tfTypes.BucketActionEvent{}
+				r.Event.Bucket.BucketName = types.StringPointerValue(resp.Event.BucketActionEvent.BucketName)
+				r.Event.Bucket.Discriminator = types.StringPointerValue(resp.Event.BucketActionEvent.Discriminator)
+				r.Event.Bucket.EventName = types.StringPointerValue(resp.Event.BucketActionEvent.EventName)
+				r.Event.Bucket.Provider = types.StringPointerValue(resp.Event.BucketActionEvent.Provider)
+				r.Event.Bucket.RecordCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Event.BucketActionEvent.RecordCount))
+				r.Event.Bucket.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.BucketActionEvent.Timestamp))
+			}
+			if resp.Event.CronActionEvent != nil {
+				r.Event.Cron = &tfTypes.CronActionEvent{}
+				r.Event.Cron.Discriminator = types.StringPointerValue(resp.Event.CronActionEvent.Discriminator)
+				r.Event.Cron.ScheduledTime = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.CronActionEvent.ScheduledTime))
+				r.Event.Cron.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.CronActionEvent.Timestamp))
+				r.Event.Cron.WorkflowID = types.StringPointerValue(resp.Event.CronActionEvent.WorkflowID)
+			}
+		}
 		r.HookID = types.StringPointerValue(resp.HookID)
 		r.HookURL = types.StringPointerValue(resp.HookURL)
 		r.ID = types.StringPointerValue(resp.ID)

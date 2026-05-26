@@ -2,19 +2,28 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
+)
+
 type LaunchDbDto struct {
+	// Git commit ID
+	CommitID       *string                  `json:"commitId,omitempty"`
 	ComputeEnv     *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
 	ConfigProfiles []string                 `json:"configProfiles,omitempty"`
 	// Nextflow configuration text
-	ConfigText *string `json:"configText,omitempty"`
+	ConfigText  *string    `json:"configText,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	ID              *string `json:"id,omitempty"`
-	LaunchContainer *string `json:"launchContainer,omitempty"`
+	HeadJobMemoryMb *int       `json:"headJobMemoryMb,omitempty"`
+	ID              *string    `json:"id,omitempty"`
+	LastUpdated     *time.Time `json:"lastUpdated,omitempty"`
+	LaunchContainer *string    `json:"launchContainer,omitempty"`
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
 	// Optimization profile ID
@@ -51,6 +60,24 @@ type LaunchDbDto struct {
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
 }
 
+func (l LaunchDbDto) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LaunchDbDto) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *LaunchDbDto) GetCommitID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CommitID
+}
+
 func (l *LaunchDbDto) GetComputeEnv() *ComputeEnvComputeConfig {
 	if l == nil {
 		return nil
@@ -70,6 +97,13 @@ func (l *LaunchDbDto) GetConfigText() *string {
 		return nil
 	}
 	return l.ConfigText
+}
+
+func (l *LaunchDbDto) GetDateCreated() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.DateCreated
 }
 
 func (l *LaunchDbDto) GetEntryName() *string {
@@ -98,6 +132,13 @@ func (l *LaunchDbDto) GetID() *string {
 		return nil
 	}
 	return l.ID
+}
+
+func (l *LaunchDbDto) GetLastUpdated() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.LastUpdated
 }
 
 func (l *LaunchDbDto) GetLaunchContainer() *string {

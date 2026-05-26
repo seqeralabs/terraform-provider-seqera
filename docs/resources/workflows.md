@@ -113,11 +113,25 @@ resource "seqera_workflows" "with_params" {
 ### Read-Only
 
 - `intelligent_compute_enabled` (Boolean)
+- `job_info` (Attributes) (see [below for nested schema](#nestedatt--job_info))
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
+- `platform` (Attributes) (see [below for nested schema](#nestedatt--platform))
 - `workflow` (Attributes) Represents a workflow execution record.
 Contains execution status, metadata, and results from pipeline
 runs including logs and performance metrics. (see [below for nested schema](#nestedatt--workflow))
 - `workflow_id` (String) Workflow string identifier
+
+<a id="nestedatt--job_info"></a>
+### Nested Schema for `job_info`
+
+Read-Only:
+
+- `exit_code` (Number)
+- `id` (Number)
+- `message` (String)
+- `operation_id` (String)
+- `status` (String)
+
 
 <a id="nestedatt--pipeline_info"></a>
 ### Nested Schema for `pipeline_info`
@@ -141,6 +155,15 @@ Read-Only:
 - `last_updated` (String)
 - `name` (String)
 
+
+
+<a id="nestedatt--platform"></a>
+### Nested Schema for `platform`
+
+Read-Only:
+
+- `id` (String)
+- `name` (String)
 
 
 <a id="nestedatt--workflow"></a>

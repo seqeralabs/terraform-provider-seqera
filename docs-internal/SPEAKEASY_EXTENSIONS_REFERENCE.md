@@ -175,9 +175,20 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 - **Use**: Immutable properties
 
 #### x-speakeasy-param-computed
-- **Purpose**: Mark properties as computed (allow unknown values after apply)
+- **Purpose**: Control whether a property is generated with the `Computed`
+  marker. `true` forces Computed (allow unknown values after apply); `false`
+  strips the Computed marker that Speakeasy would otherwise auto-emit when
+  a field appears in a response schema.
 - **Level**: Property
-- **Caveat**: API must not modify computed values vs configuration
+- **Caveat**: When set to `true`, the API must not modify the value relative
+  to configuration. When set to `false`, this is the **preferred** way to
+  fix the "removable user-input field" bug — a field that appears in both
+  request and response defaults to `Optional+Computed`, which causes
+  removal from config to no-op. `param-computed: false` makes it cleanly
+  `Optional`-only.
+- **Does not strip Computed when**: the parent schema lists the property in
+  its `required:` block. Observed on `RoleDto.permissions`; use
+  `x-speakeasy-terraform-plan-only: true` as the fallback in that case.
 
 #### x-speakeasy-param-optional
 - **Purpose**: Force property to be optional, overriding JSON Schema requirements
@@ -233,8 +244,38 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 - **Level**: Property
 
 #### x-speakeasy-terraform-plan-only
-- **Purpose**: Use only plan values during updates, ignoring prior state
+- **Purpose**: Use only plan values during updates, overriding any prior
+  state or default values provided by the API. Prevents the framework from
+  merging prior state into the update request body so that omitted or null
+  values in the plan reach the API faithfully.
 - **Level**: Property
+- **Schema effect**: Strips the `Computed` marker AND attaches the
+  `UseConfigValue()` plan modifier (`planned = config`).
+- **Preferred alternative**: `x-speakeasy-param-computed: false` —
+  same Computed-stripping outcome without the `UseConfigValue()` modifier,
+  producing cleaner, more idiomatic Optional-only Terraform attributes.
+  Reach for plan-only only when `param-computed: false` does not take
+  effect (e.g., when the parent schema declares the field as `required:`).
+- **Use when**:
+  - A field is in both request and response schemas, the user owns its
+    value, the API's Update endpoint clears the field when given `null`
+    or an omitted entry, AND `param-computed: false` does not strip
+    Computed for this field.
+- **Do NOT use when**:
+  - The API treats `null`/omit as "leave unchanged" (PATCH-merge
+    semantics) — the planned `null` will be ignored, Refresh will
+    re-import the server value, and plan will loop forever. See the
+    compute environment `description` case in
+    `overlays/plan-only-user-input.yaml` for a documented example.
+  - The API normalizes the value (trims whitespace, strips trailing
+    slashes, lowercases, etc.). Config will perpetually disagree with
+    the Read-synced state. Add a plan-time validator that rejects the
+    un-normalized form instead (see `WorkDirFormatValidator`).
+  - The field is server-managed — use `x-speakeasy-param-readonly`.
+- **Drift detection**: Still works. Refresh pulls the server value into
+  state; planned (from config) is compared against state; out-of-band
+  changes appear as a diff and TF proposes to revert.
+- **Reference**: https://www.speakeasy.com/docs/terraform/customize-terraform/advanced-features
 
 ### Data Mapping
 

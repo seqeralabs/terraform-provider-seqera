@@ -269,68 +269,86 @@ actions:
 
   # Remove runtime checkpoint reference
   - target: $.components.schemas.DataStudioDto.properties.parentCheckpoint
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove user information (runtime data)
   - target: $.components.schemas.DataStudioDto.properties.user
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove dynamically generated URL
   - target: $.components.schemas.DataStudioDto.properties.studioUrl
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove expanded compute environment reference
   - target: $.components.schemas.DataStudioDto.properties.computeEnv
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime template information
   - target: $.components.schemas.DataStudioDto.properties.template
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove timestamp fields
   - target: $.components.schemas.DataStudioDto.properties.dateCreated
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DataStudioDto.properties.lastUpdated
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DataStudioDto.properties.lastStarted
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove computed lifespan field
   - target: $.components.schemas.DataStudioDto.properties.effectiveLifespanHours
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime connection state
   - target: $.components.schemas.DataStudioDto.properties.activeConnections
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime status information
   - target: $.components.schemas.DataStudioDto.properties.statusInfo
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime build URL
   - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime image information
   - target: $.components.schemas.DataStudioDto.properties.baseImage
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DataStudioDto.properties.customImage
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime mounted data links
   - target: $.components.schemas.DataStudioDto.properties.mountedDataLinks
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime progress steps
   - target: $.components.schemas.DataStudioDto.properties.progress
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.DataStudioDto.properties.labels
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove remoteConfig (not supported yet)
   - target: $.components.schemas.DataStudioDto.properties.remoteConfig
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
     remove: true

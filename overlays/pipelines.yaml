@@ -284,43 +284,55 @@ actions:
 
   # Remove user information fields (already readonly, but should not be in schema)
   - target: $.components.schemas.PipelineDbDto.properties.userLastName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime organizational context fields
   - target: $.components.schemas.PipelineDbDto.properties.orgId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PipelineDbDto.properties.orgName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PipelineDbDto.properties.workspaceName
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove internal deletion flag
   - target: $.components.schemas.PipelineDbDto.properties.deleted
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove timestamp fields
   - target: $.components.schemas.PipelineDbDto.properties.lastUpdated
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime optimization data
   - target: $.components.schemas.PipelineDbDto.properties.optimizationId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PipelineDbDto.properties.optimizationTargets
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PipelineDbDto.properties.optimizationStatus
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.PipelineDbDto.properties.labels
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove expanded compute environment reference (use computeEnvId instead)
   - target: $.components.schemas.PipelineDbDto.properties.computeEnv
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove computed/inherited field
   - target: $.components.schemas.PipelineDbDto.properties.visibility
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove computed repository information from PipelineInfo
   # These fields are discovered from the git repository, not user-provided
@@ -347,6 +359,8 @@ actions:
 
   # TODO - Review once pipeline versioning goes live
   - target: $.components.schemas.PipelineDbDto.properties.commitId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.LaunchDbDto.properties.commitId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true

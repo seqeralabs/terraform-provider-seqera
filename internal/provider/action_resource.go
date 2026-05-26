@@ -45,6 +45,7 @@ type ActionResourceModel struct {
 	Config        *tfTypes.ActionConfigType    `tfsdk:"config"`
 	Cron          *tfTypes.CronActionRequest   `tfsdk:"cron"`
 	Error         types.String                 `tfsdk:"error"`
+	Event         *tfTypes.ActionEventType     `tfsdk:"event"`
 	HookID        types.String                 `tfsdk:"hook_id"`
 	HookURL       types.String                 `tfsdk:"hook_url"`
 	ID            types.String                 `tfsdk:"id"`
@@ -177,6 +178,91 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			},
 			"error": schema.StringAttribute{
 				Computed: true,
+			},
+			"event": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"bucket": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"bucket_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"event_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"provider": schema.StringAttribute{
+								Computed: true,
+							},
+							"record_count": schema.Int32Attribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"cron": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"scheduled_time": schema.StringAttribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+							"workflow_id": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"github": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"commit_message": schema.StringAttribute{
+								Computed: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"pusher_email": schema.StringAttribute{
+								Computed: true,
+							},
+							"pusher_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"ref": schema.StringAttribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"tower": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+							"workflow_id": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+				},
 			},
 			"hook_id": schema.StringAttribute{
 				Computed:    true,

@@ -137,6 +137,7 @@ resource "seqera_action" "tower_advanced" {
 - `action_id` (String) Action string identifier
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
 - `error` (String)
+- `event` (Attributes) (see [below for nested schema](#nestedatt--event))
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
@@ -1292,6 +1293,65 @@ Read-Only:
 Read-Only:
 
 - `discriminator` (String)
+
+
+
+<a id="nestedatt--event"></a>
+### Nested Schema for `event`
+
+Read-Only:
+
+- `bucket` (Attributes) (see [below for nested schema](#nestedatt--event--bucket))
+- `cron` (Attributes) (see [below for nested schema](#nestedatt--event--cron))
+- `github` (Attributes) (see [below for nested schema](#nestedatt--event--github))
+- `tower` (Attributes) (see [below for nested schema](#nestedatt--event--tower))
+
+<a id="nestedatt--event--bucket"></a>
+### Nested Schema for `event.bucket`
+
+Read-Only:
+
+- `bucket_name` (String)
+- `discriminator` (String)
+- `event_name` (String)
+- `provider` (String)
+- `record_count` (Number)
+- `timestamp` (String)
+
+
+<a id="nestedatt--event--cron"></a>
+### Nested Schema for `event.cron`
+
+Read-Only:
+
+- `discriminator` (String)
+- `scheduled_time` (String)
+- `timestamp` (String)
+- `workflow_id` (String)
+
+
+<a id="nestedatt--event--github"></a>
+### Nested Schema for `event.github`
+
+Read-Only:
+
+- `commit_id` (String)
+- `commit_message` (String)
+- `discriminator` (String)
+- `pusher_email` (String)
+- `pusher_name` (String)
+- `ref` (String)
+- `timestamp` (String)
+
+
+<a id="nestedatt--event--tower"></a>
+### Nested Schema for `event.tower`
+
+Read-Only:
+
+- `discriminator` (String)
+- `timestamp` (String)
+- `workflow_id` (String)
 
 ## Import
 

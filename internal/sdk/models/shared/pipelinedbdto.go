@@ -4,28 +4,44 @@ package shared
 
 import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
 )
 
 // PipelineDbDto - Represents a pipeline configuration in the Seqera Platform.
 // Contains pipeline metadata, configuration settings, and execution parameters
 // for Nextflow workflows.
 type PipelineDbDto struct {
+	ComputeEnv *ComputeEnvDbDto `json:"computeEnv,omitempty"`
+	Deleted    *bool            `json:"deleted,omitempty"`
 	// Detailed description of the pipeline's purpose and functionality
 	Description *string `json:"description,omitempty"`
 	// Icon identifier or URL for visual representation
-	Icon *string `json:"icon,omitempty"`
+	Icon        *string      `json:"icon,omitempty"`
+	Labels      []LabelDbDto `json:"labels,omitempty"`
+	LastUpdated *time.Time   `json:"lastUpdated,omitempty"`
 	// Display name for the pipeline
 	Name *string `json:"name,omitempty"`
+	// Pipeline optimization ID
+	OptimizationID     *string                     `json:"optimizationId,omitempty"`
+	OptimizationStatus *PipelineOptimizationStatus `json:"optimizationStatus,omitempty"`
+	// Pipeline optimization targets
+	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
+	OrgID               *int64  `json:"orgId,omitempty"`
+	OrgName             *string `json:"orgName,omitempty"`
 	// Unique numeric identifier for the pipeline
 	PipelineID *int64 `json:"pipelineId,omitempty"`
 	// Git repository URL containing the pipeline source code
 	Repository *string `json:"repository,omitempty"`
 	// User first name
-	UserFirstName *string                     `json:"userFirstName,omitempty"`
-	UserID        *int64                      `json:"userId,omitempty"`
+	UserFirstName *string `json:"userFirstName,omitempty"`
+	UserID        *int64  `json:"userId,omitempty"`
+	// User last name
+	UserLastName  *string                     `json:"userLastName,omitempty"`
 	UserName      *string                     `json:"userName,omitempty"`
 	Version       *PipelineVersionFullInfoDto `json:"version,omitempty"`
+	Visibility    *string                     `json:"visibility,omitempty"`
 	WorkspaceID   *int64                      `json:"workspaceId,omitempty"`
+	WorkspaceName *string                     `json:"workspaceName,omitempty"`
 	// Alias of `pipeline_id` for Terraform convention.
 	ID *int64 `json:"id,omitempty"`
 }
@@ -46,6 +62,20 @@ func (p *PipelineDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *PipelineDbDto) GetComputeEnv() *ComputeEnvDbDto {
+	if p == nil {
+		return nil
+	}
+	return p.ComputeEnv
+}
+
+func (p *PipelineDbDto) GetDeleted() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Deleted
+}
+
 func (p *PipelineDbDto) GetDescription() *string {
 	if p == nil {
 		return nil
@@ -60,11 +90,60 @@ func (p *PipelineDbDto) GetIcon() *string {
 	return p.Icon
 }
 
+func (p *PipelineDbDto) GetLabels() []LabelDbDto {
+	if p == nil {
+		return nil
+	}
+	return p.Labels
+}
+
+func (p *PipelineDbDto) GetLastUpdated() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUpdated
+}
+
 func (p *PipelineDbDto) GetName() *string {
 	if p == nil {
 		return nil
 	}
 	return p.Name
+}
+
+func (p *PipelineDbDto) GetOptimizationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OptimizationID
+}
+
+func (p *PipelineDbDto) GetOptimizationStatus() *PipelineOptimizationStatus {
+	if p == nil {
+		return nil
+	}
+	return p.OptimizationStatus
+}
+
+func (p *PipelineDbDto) GetOptimizationTargets() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OptimizationTargets
+}
+
+func (p *PipelineDbDto) GetOrgID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.OrgID
+}
+
+func (p *PipelineDbDto) GetOrgName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OrgName
 }
 
 func (p *PipelineDbDto) GetPipelineID() *int64 {
@@ -95,6 +174,13 @@ func (p *PipelineDbDto) GetUserID() *int64 {
 	return p.UserID
 }
 
+func (p *PipelineDbDto) GetUserLastName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserLastName
+}
+
 func (p *PipelineDbDto) GetUserName() *string {
 	if p == nil {
 		return nil
@@ -109,11 +195,25 @@ func (p *PipelineDbDto) GetVersion() *PipelineVersionFullInfoDto {
 	return p.Version
 }
 
+func (p *PipelineDbDto) GetVisibility() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Visibility
+}
+
 func (p *PipelineDbDto) GetWorkspaceID() *int64 {
 	if p == nil {
 		return nil
 	}
 	return p.WorkspaceID
+}
+
+func (p *PipelineDbDto) GetWorkspaceName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.WorkspaceName
 }
 
 func (p *PipelineDbDto) GetID() *int64 {

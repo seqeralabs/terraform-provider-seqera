@@ -95,39 +95,48 @@ actions:
 
   # Remove user information (runtime data - who created the dataset)
   - target: $.components.schemas.DatasetDto.properties.user
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove lastUpdatedBy (runtime data - who last modified)
   - target: $.components.schemas.DatasetDto.properties.lastUpdatedBy
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove runsInfo (runtime statistics)
   - target: $.components.schemas.DatasetDto.properties.runsInfo
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove labels (managed separately via label resources)
   - target: $.components.schemas.DatasetDto.properties.labels
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove hidden (internal visibility state)
   - target: $.components.schemas.DatasetDto.properties.hidden
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove deleted (internal deletion flag)
   - target: $.components.schemas.DatasetDto.properties.deleted
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove organizationId (derived from workspace)
   - target: $.components.schemas.DatasetDto.properties.organizationId
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove version (read-only internal versioning)
   - target: $.components.schemas.DatasetDto.properties.version
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Remove dateCreated (use lastUpdated instead)
   - target: $.components.schemas.DatasetDto.properties.dateCreated
-    remove: true
+    update:
+      x-speakeasy-terraform-ignore: true
 
   # Mark lastUpdated as read-only
   - target: $.components.schemas.DatasetDto.properties.lastUpdated

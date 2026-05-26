@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -33,12 +34,37 @@ func (r *DatasetsResourceModel) RefreshFromSharedDatasetDto(ctx context.Context,
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		if resp.LastUpdatedBy == nil {
+			r.LastUpdatedBy = nil
+		} else {
+			r.LastUpdatedBy = &tfTypes.UserInfo{}
+			r.LastUpdatedBy.Avatar = types.StringPointerValue(resp.LastUpdatedBy.Avatar)
+			r.LastUpdatedBy.Email = types.StringPointerValue(resp.LastUpdatedBy.Email)
+			r.LastUpdatedBy.ID = types.Int64PointerValue(resp.LastUpdatedBy.ID)
+			r.LastUpdatedBy.UserName = types.StringPointerValue(resp.LastUpdatedBy.UserName)
+		}
 		r.MediaType = types.StringPointerValue(resp.MediaType)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.RunsInfo == nil {
+			r.RunsInfo = nil
+		} else {
+			r.RunsInfo = &tfTypes.DatasetRunsInfo{}
+			r.RunsInfo.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.RunsInfo.LastUsed))
+			r.RunsInfo.RunsCount = types.Int64PointerValue(resp.RunsInfo.RunsCount)
+		}
 		if resp.SourceType != nil {
 			r.SourceType = types.StringValue(string(*resp.SourceType))
 		} else {
 			r.SourceType = types.StringNull()
+		}
+		if resp.User == nil {
+			r.User = nil
+		} else {
+			r.User = &tfTypes.UserInfo{}
+			r.User.Avatar = types.StringPointerValue(resp.User.Avatar)
+			r.User.Email = types.StringPointerValue(resp.User.Email)
+			r.User.ID = types.Int64PointerValue(resp.User.ID)
+			r.User.UserName = types.StringPointerValue(resp.User.UserName)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}

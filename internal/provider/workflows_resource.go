@@ -48,12 +48,14 @@ type WorkflowsResourceModel struct {
 	HeadJobCpus               types.Int32                      `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb           types.Int32                      `tfsdk:"head_job_memory_mb"`
 	IntelligentComputeEnabled types.Bool                       `tfsdk:"intelligent_compute_enabled"`
+	JobInfo                   *tfTypes.JobInfoDto              `tfsdk:"job_info"`
 	LabelIds                  []types.Int64                    `tfsdk:"label_ids"`
 	MainScript                types.String                     `tfsdk:"main_script"`
 	ParamsText                types.String                     `tfsdk:"params_text"`
 	Pipeline                  types.String                     `tfsdk:"pipeline"`
 	PipelineInfo              *tfTypes.PipelineMinInfoResponse `tfsdk:"pipeline_info"`
 	PipelineSchemaID          types.Int64                      `tfsdk:"pipeline_schema_id"`
+	Platform                  *tfTypes.ComputePlatformDto      `tfsdk:"platform"`
 	PostRunScript             types.String                     `tfsdk:"post_run_script"`
 	PreRunScript              types.String                     `tfsdk:"pre_run_script"`
 	PullLatest                types.Bool                       `tfsdk:"pull_latest"`
@@ -130,6 +132,26 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 			"intelligent_compute_enabled": schema.BoolAttribute{
 				Computed: true,
 			},
+			"job_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"exit_code": schema.Int32Attribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"message": schema.StringAttribute{
+						Computed: true,
+					},
+					"operation_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
@@ -202,6 +224,17 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
+			},
+			"platform": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"post_run_script": schema.StringAttribute{
 				Optional: true,

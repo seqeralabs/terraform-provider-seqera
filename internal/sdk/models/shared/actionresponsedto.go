@@ -11,15 +11,20 @@ import (
 // Contains action configuration, triggers, and execution settings
 // for automated pipeline workflows.
 type ActionResponseDto struct {
-	Config *ActionConfigType `json:"config,omitempty"`
-	Error  *string           `json:"error,omitempty"`
+	Config      *ActionConfigType `json:"config,omitempty"`
+	DateCreated *time.Time        `json:"dateCreated,omitempty"`
+	Error       *string           `json:"error,omitempty"`
+	Event       *ActionEventType  `json:"event,omitempty"`
 	// Identifier for the webhook associated with this action
 	HookID *string `json:"hookId,omitempty"`
 	// URL endpoint for the webhook that triggers this action
 	HookURL *string `json:"hookUrl,omitempty"`
 	// Unique identifier for the action
-	ID     *string      `json:"id,omitempty"`
-	Launch *LaunchDbDto `json:"launch,omitempty"`
+	ID          *string      `json:"id,omitempty"`
+	Labels      []LabelDbDto `json:"labels,omitempty"`
+	LastSeen    *time.Time   `json:"lastSeen,omitempty"`
+	LastUpdated *time.Time   `json:"lastUpdated,omitempty"`
+	Launch      *LaunchDbDto `json:"launch,omitempty"`
 	// Human-readable name for the action
 	Name          *string       `json:"name,omitempty"`
 	NextExecution *time.Time    `json:"nextExecution,omitempty"`
@@ -73,11 +78,53 @@ func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
 	return nil
 }
 
+func (a *ActionResponseDto) GetDateCreated() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.DateCreated
+}
+
 func (a *ActionResponseDto) GetError() *string {
 	if a == nil {
 		return nil
 	}
 	return a.Error
+}
+
+func (a *ActionResponseDto) GetEvent() *ActionEventType {
+	if a == nil {
+		return nil
+	}
+	return a.Event
+}
+
+func (a *ActionResponseDto) GetEventBucket() *BucketActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetEventCron() *CronActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.CronActionEvent
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetEventGithub() *GithubActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetEventTower() *ActionTowerActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.ActionTowerActionEvent
+	}
+	return nil
 }
 
 func (a *ActionResponseDto) GetHookID() *string {
@@ -99,6 +146,27 @@ func (a *ActionResponseDto) GetID() *string {
 		return nil
 	}
 	return a.ID
+}
+
+func (a *ActionResponseDto) GetLabels() []LabelDbDto {
+	if a == nil {
+		return nil
+	}
+	return a.Labels
+}
+
+func (a *ActionResponseDto) GetLastSeen() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.LastSeen
+}
+
+func (a *ActionResponseDto) GetLastUpdated() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.LastUpdated
 }
 
 func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {

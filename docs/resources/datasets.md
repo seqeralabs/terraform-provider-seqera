@@ -47,4 +47,37 @@ resource "seqera_datasets" "my_datasets" {
 
 - `id` (String) Unique identifier for the dataset (max 22 characters)
 - `last_updated` (String) Timestamp when the dataset was last modified
+- `last_updated_by` (Attributes) (see [below for nested schema](#nestedatt--last_updated_by))
 - `media_type` (String) MIME type or media type of the dataset content (max 80 characters)
+- `runs_info` (Attributes) (see [below for nested schema](#nestedatt--runs_info))
+- `user` (Attributes) (see [below for nested schema](#nestedatt--user))
+
+<a id="nestedatt--last_updated_by"></a>
+### Nested Schema for `last_updated_by`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)
+
+
+<a id="nestedatt--runs_info"></a>
+### Nested Schema for `runs_info`
+
+Read-Only:
+
+- `last_used` (String) Last used timestamp (null if never used)
+- `runs_count` (Number) Number of runs
+
+
+<a id="nestedatt--user"></a>
+### Nested Schema for `user`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)

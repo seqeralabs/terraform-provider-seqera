@@ -14275,8 +14275,15 @@ components:
           $ref: '#/components/schemas/Action.ConfigType'
           description: Configuration type and settings for the action trigger
           x-speakeasy-param-ordering: 4
+        dateCreated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         error:
           type: string
+        event:
+          $ref: '#/components/schemas/Action.EventType'
+          x-speakeasy-terraform-ignore: true
         hookId:
           type: string
           nullable: true
@@ -14294,6 +14301,19 @@ components:
           description: Unique identifier for the action
           x-speakeasy-param-ordering: 1
           x-speakeasy-param-readonly: true
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          x-speakeasy-terraform-ignore: true
+        lastSeen:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         launch:
           $ref: '#/components/schemas/LaunchDbDto'
           description: Launch configuration and parameters for the pipeline execution
@@ -16912,18 +16932,76 @@ components:
     DataStudioDto:
       type: object
       properties:
+        activeConnections:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActiveConnection'
+          x-speakeasy-terraform-ignore: true
+        baseImage:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        computeEnv:
+          $ref: '#/components/schemas/DataStudioComputeEnvDto'
+          x-speakeasy-terraform-ignore: true
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customImage:
+          type: boolean
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           nullable: true
           description: Description of the Studio session's purpose
+        effectiveLifespanHours:
+          type: integer
+          format: int32
+          nullable: true
+          x-speakeasy-terraform-ignore: true
         isPrivate:
           type: boolean
           nullable: true
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        lastStarted:
+          type: string
+          format: date-time
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
+        mountedDataLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataLinkDto'
+          nullable: true
+          x-speakeasy-terraform-ignore: true
         name:
           type: string
           description: Display name for the Studio session
+        parentCheckpoint:
+          $ref: '#/components/schemas/DataStudioDto.ParentCheckpoint'
+          x-speakeasy-terraform-ignore: true
+        progress:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStudioProgressStep'
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        remoteConfig:
+          $ref: '#/components/schemas/StudioRemoteConfiguration'
+          x-speakeasy-terraform-ignore: true
         sessionId:
           type: string
           x-speakeasy-param-readonly: true
@@ -16934,6 +17012,23 @@ components:
           allOf:
             - $ref: '#/components/schemas/StudioSshDetailsDto'
           nullable: true
+        statusInfo:
+          $ref: '#/components/schemas/DataStudioStatusInfo'
+          x-speakeasy-terraform-ignore: true
+        studioUrl:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        template:
+          $ref: '#/components/schemas/DataStudioTemplate'
+          x-speakeasy-terraform-ignore: true
+        user:
+          $ref: '#/components/schemas/UserInfo'
+          x-speakeasy-terraform-ignore: true
+        waveBuildUrl:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
         workspaceId:
           type: integer
           format: int64
@@ -17227,18 +17322,42 @@ components:
     DatasetDto:
       type: object
       properties:
+        dateCreated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
+        deleted:
+          type: boolean
+          nullable: true
+          description: Whether dataset is deleted
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           nullable: true
           description: Detailed description of the dataset contents and purpose (max 1000 characters)
+        hidden:
+          type: boolean
+          nullable: true
+          description: Whether dataset is hidden
+          x-speakeasy-terraform-ignore: true
         id:
           type: string
           description: Unique identifier for the dataset (max 22 characters)
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
+          description: Dataset labels (can be null)
+          x-speakeasy-terraform-ignore: true
         lastUpdated:
           type: string
           format: date-time
           x-speakeasy-param-readonly: true
           description: Timestamp when the dataset was last modified
+        lastUpdatedBy:
+          $ref: '#/components/schemas/UserInfo'
+          x-speakeasy-terraform-ignore: true
         mediaType:
           type: string
           nullable: true
@@ -17246,8 +17365,22 @@ components:
         name:
           type: string
           description: Dataset name following naming conventions (1-100 characters)
+        organizationId:
+          type: integer
+          format: int64
+          x-speakeasy-terraform-ignore: true
+        runsInfo:
+          $ref: '#/components/schemas/DatasetRunsInfo'
+          x-speakeasy-terraform-ignore: true
         sourceType:
           $ref: '#/components/schemas/SourceType'
+        user:
+          $ref: '#/components/schemas/UserInfo'
+          x-speakeasy-terraform-ignore: true
+        version:
+          type: integer
+          format: int64
+          x-speakeasy-terraform-ignore: true
         workspaceId:
           type: integer
           format: int64
@@ -17505,8 +17638,39 @@ components:
     DescribeWorkflowResponse:
       type: object
       properties:
+        jobInfo:
+          $ref: '#/components/schemas/JobInfoDto'
+          x-speakeasy-terraform-ignore: true
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        messages:
+          type: array
+          items:
+            type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        optimized:
+          type: boolean
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        orgId:
+          type: integer
+          format: int64
+          nullable: true
+          x-speakeasy-terraform-ignore: true
+        orgName:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
         pipelineInfo:
           $ref: '#/components/schemas/PipelineMinInfoResponse'
+        platform:
+          $ref: '#/components/schemas/ComputePlatformDto'
+          x-speakeasy-terraform-ignore: true
         schedEnabled:
           type: boolean
           nullable: true
@@ -17517,6 +17681,10 @@ components:
           type: integer
           format: int64
           nullable: true
+        workspaceName:
+          type: string
+          nullable: true
+          x-speakeasy-terraform-ignore: true
       x-speakeasy-entity: Workflows
       x-speakeasy-entity-description: |
         Launch and track an individual workflow run on the Seqera Platform
@@ -19064,6 +19232,12 @@ components:
     LaunchDbDto:
       type: object
       properties:
+        commitId:
+          type: string
+          maxLength: 40
+          nullable: true
+          description: Git commit ID
+          x-speakeasy-terraform-ignore: true
         computeEnv:
           $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
           x-speakeasy-param-readonly: true
@@ -19075,6 +19249,10 @@ components:
           type: string
           nullable: true
           description: Nextflow configuration text
+        dateCreated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         entryName:
           type: string
           maxLength: 80
@@ -19093,6 +19271,10 @@ components:
         id:
           type: string
           x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         launchContainer:
           type: string
           x-speakeasy-param-readonly: true
@@ -19344,7 +19526,16 @@ components:
             $ref: '#/components/schemas/EventType'
     ListLabelsResponse:
       type: object
-      properties: {}
+      properties:
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          x-speakeasy-terraform-ignore: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-terraform-ignore: true
     ListManagedCredentialsRespDto:
       type: object
       properties:
@@ -20154,6 +20345,12 @@ components:
     PipelineDbDto:
       type: object
       properties:
+        computeEnv:
+          $ref: '#/components/schemas/ComputeEnvDbDto'
+          x-speakeasy-terraform-ignore: true
+        deleted:
+          type: boolean
+          x-speakeasy-terraform-ignore: true
         description:
           type: string
           nullable: true
@@ -20164,10 +20361,39 @@ components:
           nullable: true
           description: Icon identifier or URL for visual representation
           x-speakeasy-param-ordering: 5
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelDbDto'
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          x-speakeasy-terraform-ignore: true
         name:
           type: string
           description: Display name for the pipeline
           x-speakeasy-param-ordering: 2
+        optimizationId:
+          type: string
+          nullable: true
+          description: Pipeline optimization ID
+          x-speakeasy-terraform-ignore: true
+        optimizationStatus:
+          $ref: '#/components/schemas/PipelineOptimizationStatus'
+          x-speakeasy-terraform-ignore: true
+        optimizationTargets:
+          type: string
+          nullable: true
+          description: Pipeline optimization targets
+          x-speakeasy-terraform-ignore: true
+        orgId:
+          type: integer
+          format: int64
+          x-speakeasy-terraform-ignore: true
+        orgName:
+          type: string
+          x-speakeasy-terraform-ignore: true
         pipelineId:
           type: integer
           format: int64
@@ -20185,13 +20411,24 @@ components:
         userId:
           type: integer
           format: int64
+        userLastName:
+          type: string
+          nullable: true
+          description: User last name
+          x-speakeasy-terraform-ignore: true
         userName:
           type: string
         version:
           $ref: '#/components/schemas/PipelineVersionFullInfoDto'
+        visibility:
+          type: string
+          x-speakeasy-terraform-ignore: true
         workspaceId:
           type: integer
           format: int64
+        workspaceName:
+          type: string
+          x-speakeasy-terraform-ignore: true
         id:
           type: integer
           format: int64
@@ -22482,6 +22719,11 @@ components:
           type: string
           nullable: true
           description: Command line
+        commitId:
+          type: string
+          nullable: true
+          description: Commit ID
+          x-speakeasy-terraform-ignore: true
         complete:
           type: string
           format: date-time
@@ -22498,6 +22740,16 @@ components:
           type: string
           nullable: true
           description: Config text
+        container:
+          type: string
+          nullable: true
+          description: Container
+          x-speakeasy-terraform-ignore: true
+        containerEngine:
+          type: string
+          nullable: true
+          description: Container engine
+          x-speakeasy-terraform-ignore: true
         dateCreated:
           type: string
           format: date-time
@@ -22507,6 +22759,33 @@ components:
           nullable: true
           description: Whether the workflow is deleted
           x-speakeasy-param-readonly: true
+        duration:
+          type: integer
+          format: int64
+          nullable: true
+          description: Duration (null if not completed)
+          x-speakeasy-terraform-ignore: true
+        errorMessage:
+          type: string
+          nullable: true
+          description: Error message (null if no error)
+          x-speakeasy-terraform-ignore: true
+        errorReport:
+          type: string
+          nullable: true
+          description: Error report (null if no error)
+          x-speakeasy-terraform-ignore: true
+        exitStatus:
+          type: integer
+          format: int32
+          nullable: true
+          description: Exit status (null if not completed)
+          x-speakeasy-terraform-ignore: true
+        homeDir:
+          type: string
+          nullable: true
+          description: Home directory
+          x-speakeasy-terraform-ignore: true
         id:
           type: string
           description: Unique identifier for the workflow execution
@@ -22515,6 +22794,11 @@ components:
           type: string
           format: date-time
           x-speakeasy-param-readonly: true
+        launchDir:
+          type: string
+          nullable: true
+          description: Launch directory
+          x-speakeasy-terraform-ignore: true
         launchId:
           type: string
           nullable: true
@@ -22534,6 +22818,11 @@ components:
           type: string
           nullable: true
           description: Profile
+        projectDir:
+          type: string
+          nullable: true
+          description: Project directory
+          x-speakeasy-terraform-ignore: true
         projectName:
           type: string
           nullable: true
@@ -22558,6 +22847,16 @@ components:
           type: string
           nullable: true
           description: Run name
+        scriptFile:
+          type: string
+          nullable: true
+          description: Script file
+          x-speakeasy-terraform-ignore: true
+        scriptId:
+          type: string
+          nullable: true
+          description: Script ID
+          x-speakeasy-terraform-ignore: true
         scriptName:
           type: string
           nullable: true
@@ -22580,6 +22879,16 @@ components:
           format: date-time
           description: Timestamp when the workflow was submitted for execution
           x-speakeasy-param-readonly: true
+        success:
+          type: boolean
+          nullable: true
+          description: Success flag
+          x-speakeasy-terraform-ignore: true
+        userName:
+          type: string
+          nullable: true
+          description: User name
+          x-speakeasy-terraform-ignore: true
         workDir:
           type: string
           nullable: true

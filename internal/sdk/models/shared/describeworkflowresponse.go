@@ -3,10 +3,60 @@
 package shared
 
 type DescribeWorkflowResponse struct {
+	JobInfo                   *JobInfoDto              `json:"jobInfo,omitempty"`
+	Labels                    []LabelDbDto             `json:"labels,omitempty"`
+	Messages                  []string                 `json:"messages,omitempty"`
+	Optimized                 *bool                    `json:"optimized,omitempty"`
+	OrgID                     *int64                   `json:"orgId,omitempty"`
+	OrgName                   *string                  `json:"orgName,omitempty"`
 	PipelineInfo              *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
+	Platform                  *ComputePlatformDto      `json:"platform,omitempty"`
 	IntelligentComputeEnabled *bool                    `json:"schedEnabled,omitempty"`
 	Workflow                  *WorkflowMaxDbDto        `json:"workflow,omitempty"`
 	WorkspaceID               *int64                   `json:"workspaceId,omitempty"`
+	WorkspaceName             *string                  `json:"workspaceName,omitempty"`
+}
+
+func (d *DescribeWorkflowResponse) GetJobInfo() *JobInfoDto {
+	if d == nil {
+		return nil
+	}
+	return d.JobInfo
+}
+
+func (d *DescribeWorkflowResponse) GetLabels() []LabelDbDto {
+	if d == nil {
+		return nil
+	}
+	return d.Labels
+}
+
+func (d *DescribeWorkflowResponse) GetMessages() []string {
+	if d == nil {
+		return nil
+	}
+	return d.Messages
+}
+
+func (d *DescribeWorkflowResponse) GetOptimized() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Optimized
+}
+
+func (d *DescribeWorkflowResponse) GetOrgID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.OrgID
+}
+
+func (d *DescribeWorkflowResponse) GetOrgName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.OrgName
 }
 
 func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
@@ -14,6 +64,13 @@ func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
 		return nil
 	}
 	return d.PipelineInfo
+}
+
+func (d *DescribeWorkflowResponse) GetPlatform() *ComputePlatformDto {
+	if d == nil {
+		return nil
+	}
+	return d.Platform
 }
 
 func (d *DescribeWorkflowResponse) GetIntelligentComputeEnabled() *bool {
@@ -35,4 +92,11 @@ func (d *DescribeWorkflowResponse) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
+}
+
+func (d *DescribeWorkflowResponse) GetWorkspaceName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.WorkspaceName
 }

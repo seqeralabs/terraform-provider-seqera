@@ -420,7 +420,7 @@ migration). Pattern B is no longer in use anywhere in this provider.
 Documented here for reference if you encounter it in older overlays or
 historical PR review.
 
-### User-Provided Optional Fields
+### User-Provided Optional Fields (Removable)
 
 When a field is user-provided and optional (not computed by the API), use `x-speakeasy-param-computed: false`:
 
@@ -435,18 +435,51 @@ When a field is user-provided and optional (not computed by the API), use `x-spe
 ```
 
 **Why This Matters:**
-- `x-speakeasy-param-computed: true` tells Terraform to expect the API to return/compute the value
-- If the API doesn't return it in the Create response, Terraform shows "unknown value" error
-- `x-speakeasy-param-computed: false` makes it a simple optional field that stores user input
+- Fields that appear in *both* the request and response schema default to
+  `Optional + Computed` in the generated Terraform attribute. That
+  combination has a quiet bug: when the user deletes the attribute from
+  config, Terraform interprets absence as "use prior computed state value"
+  rather than "set to null". No diff is planned, Update is never called,
+  and the server keeps the stale value.
+- `x-speakeasy-param-computed: false` strips the `Computed` marker, making
+  the attribute cleanly `Optional`-only. Read still syncs state from the
+  API (drift detection works); removing the attribute from config now
+  produces a real diff and sends `null` on the wire.
+- `x-speakeasy-param-computed: true` is the inverse — it *forces* Computed
+  and is only correct when the API guarantees a value the user shouldn't override.
 
 **When to Use:**
 - Optional configuration fields (URLs, paths, flags)
 - Fields where user input should be preserved as-is
-- Fields not returned in Create responses
+- Fields the user must be able to clear by removing from config
+- Fields the API returns on Read but doesn't auto-populate or normalize
 
 **When NOT to Use:**
 - Fields that are actually computed by the API (timestamps, IDs, status)
 - Fields marked as `x-speakeasy-param-readonly: true`
+- Fields the API normalizes (whitespace, trailing slashes, case) — config
+  will perpetually disagree with the Read-synced state. Pair a strict
+  plan-time validator with the canonical form instead (see
+  `WorkDirFormatValidator`).
+- Fields where the API's Update endpoint uses PATCH-merge semantics
+  (null/omit is ignored, only an explicit value clears). Documented
+  exception: compute environment `description`. Leave Optional+Computed
+  there and accept the "removal doesn't work" wart.
+
+**Fallback — `x-speakeasy-terraform-plan-only: true`:**
+
+If `param-computed: false` does not strip `Computed` for a field (observed
+when the parent schema lists the property in its `required:` block, e.g.
+`RoleDto.permissions`), reach for `x-speakeasy-terraform-plan-only: true`
+instead. It strips Computed AND attaches a `UseConfigValue()` plan modifier
+(meaning planned = config, state is ignored at plan time). Behaviorally
+equivalent for our purposes — same drift detection, same removal semantics
+— but slightly less idiomatic because of the extra plan modifier in the
+generated schema. Prefer `param-computed: false` when both work.
+
+See `overlays/plan-only-user-input.yaml` for the full sweep that applies
+this pattern across launch fields, metadata descriptions, and credential
+hoisted fields.
 
 #### Complete Credential Resource Example
 

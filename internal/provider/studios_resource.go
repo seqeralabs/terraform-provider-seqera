@@ -51,20 +51,26 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
-	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
-	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
-	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
-	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
-	Description         types.String                     `tfsdk:"description"`
-	ID                  types.String                     `tfsdk:"id"`
-	InitialCheckpointID types.Int64                      `tfsdk:"initial_checkpoint_id"`
-	IsPrivate           types.Bool                       `tfsdk:"is_private"`
-	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
-	Name                types.String                     `tfsdk:"name"`
-	SessionID           types.String                     `tfsdk:"session_id"`
-	Spot                types.Bool                       `tfsdk:"spot"`
-	SSHDetails          *tfTypes.SSHDetails              `tfsdk:"ssh_details"`
-	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AutoStart           types.Bool                             `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	ComputeEnv          *tfTypes.DataStudioComputeEnvDto       `tfsdk:"compute_env"`
+	ComputeEnvID        types.String                           `tfsdk:"compute_env_id"`
+	Configuration       *tfTypes.DataStudioConfiguration       `tfsdk:"configuration"`
+	DataStudioToolURL   types.String                           `tfsdk:"data_studio_tool_url"`
+	Description         types.String                           `tfsdk:"description"`
+	ID                  types.String                           `tfsdk:"id"`
+	InitialCheckpointID types.Int64                            `tfsdk:"initial_checkpoint_id"`
+	IsPrivate           types.Bool                             `tfsdk:"is_private"`
+	LabelIds            []types.Int64                          `tfsdk:"label_ids"`
+	Name                types.String                           `tfsdk:"name"`
+	ParentCheckpoint    *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
+	RemoteConfig        *tfTypes.StudioRemoteConfiguration     `tfsdk:"remote_config"`
+	SessionID           types.String                           `tfsdk:"session_id"`
+	Spot                types.Bool                             `tfsdk:"spot"`
+	SSHDetails          *tfTypes.SSHDetails                    `tfsdk:"ssh_details"`
+	StatusInfo          *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
+	Template            *tfTypes.DataStudioTemplate            `tfsdk:"template"`
+	User                *tfTypes.UserInfo                      `tfsdk:"user"`
+	WorkspaceID         types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,6 +87,30 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.`,
+			},
+			"compute_env": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"credentials_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"platform": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed:    true,
+						Description: `Compute environment region`,
+					},
+					"work_dir": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"compute_env_id": schema.StringAttribute{
 				Required: true,
@@ -297,6 +327,37 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.UTF8LengthBetween(1, 80),
 				},
 			},
+			"parent_checkpoint": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"checkpoint_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"checkpoint_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"session_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"studio_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"remote_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Studio session numeric identifier`,
@@ -329,6 +390,58 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					},
 				},
 				Description: `SSH connection details for a Studio session`,
+			},
+			"status_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"last_update": schema.StringAttribute{
+						Computed: true,
+					},
+					"message": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed: true,
+					},
+					"stop_reason": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"template": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"icon": schema.StringAttribute{
+						Computed:    true,
+						Description: `Icon identifier or URL for visual representation`,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed: true,
+					},
+					"tool": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"user": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"avatar": schema.StringAttribute{
+						Computed: true,
+					},
+					"email": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"user_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,

@@ -101,7 +101,9 @@ resource "seqera_pipeline" "shared" {
 
 ### Read-Only
 
+- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
 - `id` (Number) Alias of `pipeline_id` for Terraform convention.
+- `optimization_status` (String)
 - `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
 - `user_first_name` (String) User first name
@@ -1202,6 +1204,17 @@ Read-Only:
 - `id` (String)
 - `is_default` (Boolean)
 - `last_updated` (String)
+
+
+<a id="nestedatt--compute_env"></a>
+### Nested Schema for `compute_env`
+
+Read-Only:
+
+- `id` (String)
+- `name` (String)
+- `platform` (String)
+- `region` (String) Compute environment region
 
 ## Import
 
