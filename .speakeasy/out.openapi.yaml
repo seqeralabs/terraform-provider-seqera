@@ -13385,6 +13385,185 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  /credentials#github_app:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubAppCredential#create
+      x-speakeasy-name-override: CreateGithubAppCredentials
+      summary: Create GitHub App credentials
+      description: Creates new GitHub App credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateGithubAppCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: GitHub App credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGithubAppCredentialsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGithubAppCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+  /credentials/{credentialsId}#github_app:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubAppCredential#read
+      x-speakeasy-name-override: DescribeGithubAppCredentials
+      summary: Describe GitHub App credentials
+      description: Retrieves the details of the GitHub App credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeGithubAppCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeGithubAppCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubAppCredential#update
+      x-speakeasy-name-override: UpdateGithubAppCredentials
+      summary: Update GitHub App credentials
+      description: Updates the details of the GitHub App credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateGithubAppCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: GitHub App credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGithubAppCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubAppCredential#delete
+      x-speakeasy-name-override: DeleteGithubAppCredentials
+      summary: Delete GitHub App credentials
+      description: Deletes the GitHub App credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteGithubAppCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   /credentials#gitlab:
     post:
       x-speakeasy-entity-operation:
@@ -25492,6 +25671,129 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/GithubCredential'
+    GithubAppCredential:
+      x-speakeasy-entity: GithubAppCredential
+      x-speakeasy-entity-version: 1
+      x-speakeasy-terraform-resource-name: github_app_credential
+      x-speakeasy-entity-description: 'Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+
+
+        GitHub App credentials provide access to private repositories for pipeline execution, as an alternative to a personal access token. This resource registers a pre-existing GitHub App (one you have already created and installed on GitHub); to find the required values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.
+
+'
+      x-speakeasy-transform-from-api:
+        jq: '. + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key } } | del(.app_id, .client_id, .private_key, .credentials_id)'
+      required:
+        - name
+        - app_id
+        - client_id
+        - private_key
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentials_id:
+          type: string
+          description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          minLength: 2
+          maxLength: 99
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum:
+            - github_app
+          default: github_app
+          description: Cloud provider type. Always set by the provider for this resource.
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL (optional). Use your GitHub Enterprise Server base URL, or scope to a specific repository, e.g., https://github.com/seqeralabs.'
+          example: https://github.com/seqeralabs
+          x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
+        app_id:
+          type: string
+          description: GitHub App ID. Find this in your GitHub App settings (**Settings > Developer settings > GitHub Apps > [your app]** on GitHub).
+          example: "123456"
+          x-speakeasy-param-computed: false
+        client_id:
+          type: string
+          description: GitHub App client ID. Find this in your GitHub App settings (**Settings > Developer settings > GitHub Apps > [your app]** on GitHub).
+          example: Iv1.1234567890abcdef
+          x-speakeasy-param-computed: false
+        private_key:
+          type: string
+          description: GitHub App private key in PEM format. Download this from your GitHub App settings.
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+          example: |
+            -----BEGIN RSA PRIVATE KEY-----
+            ...
+            -----END RSA PRIVATE KEY-----
+          writeOnly: true
+    CreateGithubAppCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GithubAppCredential'
+    CreateGithubAppCredentialsResponse:
+      type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .credentialsId }'
+      properties:
+        id:
+          type: string
+          description: Alias of `credentials_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        credentialsId:
+          type: string
+    UpdateGithubAppCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GithubAppCredential'
+    DescribeGithubAppCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GithubAppCredential'
     GitlabCredential:
       x-speakeasy-entity: GitlabCredential
       x-speakeasy-entity-version: 1

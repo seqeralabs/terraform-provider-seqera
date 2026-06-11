@@ -1,3 +1,9 @@
+# v0.40.1
+
+FEATURES:
+
+- **New `seqera_github_app_credential` resource** for authenticating against a pre-existing GitHub App, as an alternative to a personal access token (`seqera_github_credential`).
+
 # v0.40.0
 
 FEATURES:
