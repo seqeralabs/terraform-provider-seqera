@@ -13,15 +13,13 @@ This guide shows how to define dynamic resource labels with the `seqera_labels` 
 
 ## Variable placeholders
 
-Dynamic resource labels use variable placeholders. You can use any of the three placeholders below; Seqera and Nextflow resolve them when a workflow runs. For example, a dynamic resource label `platform-run-id=${workflowId}` becomes `platform-run-id=12345abcde` on the resources a run provisions.
+Dynamic resource labels use variable placeholders. The supported placeholders are `${sessionId}`, `${workflowId}`, and `${userName}`; Seqera and Nextflow resolve them when a workflow runs. For example, a dynamic resource label `platform-run-id=${workflowId}` becomes `platform-run-id=12345abcde` on the resources a run provisions.
 
 | Placeholder     | Resolves to                                |
 | --------------- | ------------------------------------------ |
 | `${sessionId}`  | Nextflow session ID                        |
 | `${workflowId}` | Platform run ID                            |
 | `${userName}`   | Platform username (run launch user)        |
-
-The provider rejects any other `${...}` value at plan time.
 
 ## Define a dynamic resource label
 
@@ -85,9 +83,7 @@ resource "seqera_gcp_batch_ce" "main" {
 
 The same `label_ids` field is available on `seqera_pipeline` and the other compute environment resources, including `seqera_aws_batch_ce` and `seqera_azure_batch_ce`.
 
-~> **`config.labels` is a different feature.** The `config.labels` map sets static cloud-provider labels on the compute environment itself at creation time. You can use them for cost tracking, billing allocation, and resource organization, and they follow your cloud provider's own label constraints (allowed characters, length, and — on Google Cloud — lowercasing). Modifying them after creation forces the compute environment to be recreated.
-
-Dynamic resource labels are not compatible with `config.labels`. A placeholder such as `${sessionId}` is resolved at workflow submission time, not at creation time, so it is stored as a literal value — which is not a valid cloud label and causes runs on the compute environment to fail to start with `Bad Request`. For Google compute environments the provider rejects this at plan time. Define dynamic resource labels as `seqera_labels` resources and attach them through `label_ids`.
+-> **Note:** `config.labels` is a different feature — static cloud-provider labels set on the compute environment at creation time, following your cloud provider's label constraints and forcing recreation when changed. Dynamic resource labels are not compatible with it; use `seqera_labels` and `label_ids` instead. For Google compute environments the provider rejects placeholders in `config.labels` at plan time.
 
 ## Value format
 
@@ -113,23 +109,3 @@ ${workflowId}, or ${userName}.
 - **Dynamic label values cannot be changed in place.** The platform does not allow updating the value of an existing dynamic resource label and returns `Bad Request`. To change a value, replace the resource: `terraform apply -replace=seqera_labels.session_id`.
 - **Dynamic resource labels are not supported for Studios.** The platform rejects associating a dynamic resource label with a Studio.
 - **Labels apply at submission and execution time.** Nextflow applies dynamic resource labels when a workflow is submitted and runs, not when the compute environment is created.
-
-## Verify the label
-
-After you apply, the platform reports a dynamic resource label with `isDynamic` set to `true`:
-
-```console
-$ curl -s -H "Authorization: Bearer $SEQERA_TOKEN" \
-    "$SEQERA_API_URL/labels?workspaceId=<id>" | jq '.labels[] | select(.name=="nextflow-session-id")'
-{
-  "id": 104165001207020,
-  "name": "nextflow-session-id",
-  "value": "${sessionId}",
-  "resource": true,
-  "isDefault": true,
-  "isDynamic": true,
-  "isInterpolated": false
-}
-```
-
-`isDynamic: true` confirms the platform recognized the placeholder. `isInterpolated: false` is expected: the stored value is the template, which Seqera resolves only when a run is submitted.
