@@ -796,7 +796,10 @@ Required when `enable_fusion` is true.
 Overrides other VM configuration settings for the head job.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB.
 - `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+for cost tracking and organization. These are static Google Cloud labels
+set at compute environment creation time, not Seqera dynamic resource
+labels. For dynamic resource labels (${sessionId}, ${workflowId},
+${userName}), create seqera_labels resources and attach them via label_ids.
 - `location` (String) Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
 - `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 Supports patterns like "c2-*" to allow any machine in a family.
@@ -896,7 +899,10 @@ Read-Only:
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB.
 - `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+for cost tracking and organization. These are static Google Cloud labels
+set at compute environment creation time, not Seqera dynamic resource
+labels. For dynamic resource labels (${sessionId}, ${workflowId},
+${userName}), create seqera_labels resources and attach them via label_ids.
 - `location` (String) Google Cloud location for the Life Sciences API endpoint.
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nfs_mount` (String) Local mount path for the NFS file system on compute instances.

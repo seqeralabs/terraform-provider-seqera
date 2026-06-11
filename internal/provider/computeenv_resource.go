@@ -2762,10 +2762,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-											`for cost tracking and organization.` + "\n" +
+											`for cost tracking and organization. These are static Google Cloud labels` + "\n" +
+											`set at compute environment creation time, not Seqera dynamic resource` + "\n" +
+											`labels. For dynamic resource labels (${sessionId}, ${workflowId},` + "\n" +
+											`${userName}), create seqera_labels resources and attach them via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
+										Validators: []validator.Map{
+											custom_mapvalidators.GoogleResourceLabelsValidator(),
+										},
 									},
 									"location": schema.StringAttribute{
 										Computed: true,
@@ -3282,10 +3287,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-											`for cost tracking and organization.` + "\n" +
+											`for cost tracking and organization. These are static Google Cloud labels` + "\n" +
+											`set at compute environment creation time, not Seqera dynamic resource` + "\n" +
+											`labels. For dynamic resource labels (${sessionId}, ${workflowId},` + "\n" +
+											`${userName}), create seqera_labels resources and attach them via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
+										Validators: []validator.Map{
+											custom_mapvalidators.GoogleResourceLabelsValidator(),
+										},
 									},
 									"location": schema.StringAttribute{
 										Computed: true,

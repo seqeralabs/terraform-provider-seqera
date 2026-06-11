@@ -151,7 +151,10 @@ Overrides other VM configuration settings for the head job.
 Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
 - `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+for cost tracking and organization. These are static Google Cloud labels
+set at compute environment creation time, not Seqera dynamic resource
+labels. For dynamic resource labels (${sessionId}, ${workflowId},
+${userName}), create seqera_labels resources and attach them via label_ids.
 Requires replacement if changed.
 - `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 Supports patterns like "c2-*" to allow any machine in a family.

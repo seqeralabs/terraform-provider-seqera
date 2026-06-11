@@ -26,6 +26,17 @@ resource "seqera_labels" "environment" {
   resource     = true
   is_default   = false
 }
+
+# Dynamic resource label. The value is interpolated by the Platform at workflow
+# submission time. Supported placeholders: $${sessionId}, $${workflowId}, $${userName}.
+# Note: the $$ escapes Terraform interpolation so the literal $${sessionId} is sent.
+resource "seqera_labels" "session" {
+  workspace_id = seqera_workspace.main.id
+  name         = "nextflow-session-id"
+  value        = "$${sessionId}"
+  resource     = true
+  is_default   = true
+}
 ```
 
 ### Default Labels
@@ -58,22 +69,6 @@ resource "seqera_labels" "critical" {
   name         = "critical"
   resource     = false
   is_default   = false
-}
-```
-
-### Dynamic Resource Label
-
-The value is interpolated by the Platform at workflow submission time. Supported
-placeholders are `${sessionId}`, `${workflowId}`, and `${userName}`. The `$$`
-escapes Terraform interpolation so the literal `${sessionId}` is sent to the API.
-
-```terraform
-resource "seqera_labels" "session" {
-  workspace_id = seqera_workspace.main.id
-  name         = "nextflow-session-id"
-  value        = "$${sessionId}"
-  resource     = true
-  is_default   = true
 }
 ```
 

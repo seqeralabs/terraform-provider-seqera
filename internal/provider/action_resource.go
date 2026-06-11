@@ -21,7 +21,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
@@ -1402,9 +1401,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"labels": schema.MapAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 												MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-													`for cost tracking and organization.`,
+													`for cost tracking and organization. These are static Google Cloud labels` + "\n" +
+													`set at compute environment creation time, not Seqera dynamic resource` + "\n" +
+													`labels. For dynamic resource labels (${sessionId}, ${workflowId},` + "\n" +
+													`${userName}), create seqera_labels resources and attach them via label_ids.`,
 											},
 											"location": schema.StringAttribute{
 												Computed:    true,
@@ -1634,9 +1635,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"labels": schema.MapAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 												MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-													`for cost tracking and organization.`,
+													`for cost tracking and organization. These are static Google Cloud labels` + "\n" +
+													`set at compute environment creation time, not Seqera dynamic resource` + "\n" +
+													`labels. For dynamic resource labels (${sessionId}, ${workflowId},` + "\n" +
+													`${userName}), create seqera_labels resources and attach them via label_ids.`,
 											},
 											"location": schema.StringAttribute{
 												Computed:    true,

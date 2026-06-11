@@ -16067,7 +16067,7 @@ components:
         name:
           type: string
           title: "Label Name"
-          description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+          description: "Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
           example: "environment"
           x-speakeasy-plan-validators: LabelNameValidator
         resource:
@@ -16077,7 +16077,7 @@ components:
         value:
           type: string
           title: "Label Value"
-          description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
+          description: "Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'"
           example: "production"
           x-speakeasy-plan-validators: LabelValueResourceValidator
       x-speakeasy-entity: Labels
@@ -18324,8 +18324,12 @@ components:
             type: string
           description: |
             Key-value map of Google Cloud resource labels applied to compute resources
-            for cost tracking and organization.
+            for cost tracking and organization. These are static Google Cloud labels
+            set at compute environment creation time, not Seqera dynamic resource
+            labels. For dynamic resource labels (${sessionId}, ${workflowId},
+            ${userName}), create seqera_labels resources and attach them via label_ids.
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: GoogleResourceLabelsValidator
         location:
           type: string
           description: |
@@ -18661,8 +18665,12 @@ components:
             type: string
           description: |
             Key-value map of Google Cloud resource labels applied to compute resources
-            for cost tracking and organization.
+            for cost tracking and organization. These are static Google Cloud labels
+            set at compute environment creation time, not Seqera dynamic resource
+            labels. For dynamic resource labels (${sessionId}, ${workflowId},
+            ${userName}), create seqera_labels resources and attach them via label_ids.
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: GoogleResourceLabelsValidator
         location:
           type: string
           description: |
@@ -21815,13 +21823,13 @@ components:
         name:
           type: string
           title: "Label Name"
-          description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+          description: "Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
           example: "environment"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           title: "Label Value"
-          description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
+          description: "Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'"
           example: "production"
           x-speakeasy-plan-validators: LabelValueResourceValidator
     UpdateLabelResponse:
