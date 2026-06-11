@@ -85,7 +85,7 @@ resource "seqera_gcp_batch_ce" "main" {
 
 The same `label_ids` field is available on `seqera_pipeline` and the other compute environment resources, including `seqera_aws_batch_ce` and `seqera_azure_batch_ce`.
 
-~> **Do not place variable placeholders in `config.labels`.** The `config.labels` map on a compute environment holds cloud-provider tags (for example, Google Cloud resource labels) that Seqera applies when it creates the compute environment. Dynamic resource labels are resolved at workflow submission time, not at compute environment creation time, so a placeholder such as `${sessionId}` is not a valid cloud tag there. The apply may appear to succeed, the resource labels section in the platform UI is left blank, and any run launched on that compute environment fails to start with `Bad Request`. Always model dynamic resource labels as `seqera_labels` resources and attach them through `label_ids`.
+~> **Do not place variable placeholders in `config.labels`.** The `config.labels` map on a compute environment holds cloud-provider tags (for example, Google Cloud resource labels) that Seqera applies when it creates the compute environment. Dynamic resource labels are resolved at workflow submission time, not at compute environment creation time, so a placeholder such as `${sessionId}` is not a valid cloud tag there. Left unchecked, the compute environment is created but every run launched on it fails to start with `Bad Request`. For Google compute environments the provider now rejects this at plan time with an `Invalid Google Cloud Resource Label Value` error. Always model dynamic resource labels as `seqera_labels` resources and attach them through `label_ids`.
 
 ## Value format
 

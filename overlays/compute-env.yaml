@@ -763,8 +763,12 @@ actions:
     update:
       description: |
         Key-value map of Google Cloud resource labels applied to compute resources
-        for cost tracking and organization.
+        for cost tracking and organization. These are static Google Cloud labels
+        set at compute environment creation time, not Seqera dynamic resource
+        labels. For dynamic resource labels (${sessionId}, ${workflowId},
+        ${userName}), create seqera_labels resources and attach them via label_ids.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: GoogleResourceLabelsValidator
 
   - target: $.components.schemas.GoogleBatchConfig.properties.headJobCpus
     update:
@@ -917,8 +921,12 @@ actions:
     update:
       description: |
         Key-value map of Google Cloud resource labels applied to compute resources
-        for cost tracking and organization.
+        for cost tracking and organization. These are static Google Cloud labels
+        set at compute environment creation time, not Seqera dynamic resource
+        labels. For dynamic resource labels (${sessionId}, ${workflowId},
+        ${userName}), create seqera_labels resources and attach them via label_ids.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: GoogleResourceLabelsValidator
 
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.headJobCpus
     update:

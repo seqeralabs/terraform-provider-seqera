@@ -37,6 +37,7 @@ import (
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
+	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -2761,6 +2762,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
+										Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
 											`for cost tracking and organization.` + "\n" +
 											`Requires replacement if changed.`,
@@ -3280,6 +3282,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
+										Validators:  []validator.Map{custom_mapvalidators.GoogleResourceLabelsValidator()},
 										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
 											`for cost tracking and organization.` + "\n" +
 											`Requires replacement if changed.`,
