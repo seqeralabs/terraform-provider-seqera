@@ -29,11 +29,9 @@ type GoogleLifeSciencesConfigurationRetired struct {
 	// Memory allocation for the Nextflow head job in MB.
 	//
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Key-value map of Google Cloud resource labels applied to compute resources
-	// for cost tracking and organization. These are static Google Cloud labels
-	// set at compute environment creation time, not Seqera dynamic resource
-	// labels. For dynamic resource labels (${sessionId}, ${workflowId},
-	// ${userName}), create seqera_labels resources and attach them via label_ids.
+	// Static Google Cloud resource labels applied to compute resources at creation
+	// time, for cost tracking and organization. For per-run dynamic resource labels,
+	// attach seqera_labels via label_ids.
 	//
 	Labels map[string]string `json:"labels,omitempty"`
 	// Google Cloud location for the Life Sciences API endpoint.
@@ -2397,11 +2395,9 @@ type GoogleBatchServiceConfiguration struct {
 	// Memory allocation for the Nextflow head job in MB.
 	//
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Key-value map of Google Cloud resource labels applied to compute resources
-	// for cost tracking and organization. These are static Google Cloud labels
-	// set at compute environment creation time, not Seqera dynamic resource
-	// labels. For dynamic resource labels (${sessionId}, ${workflowId},
-	// ${userName}), create seqera_labels resources and attach them via label_ids.
+	// Static Google Cloud resource labels applied to compute resources at creation
+	// time, for cost tracking and organization. For per-run dynamic resource labels,
+	// attach seqera_labels via label_ids.
 	//
 	Labels map[string]string `json:"labels,omitempty"`
 	// Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
