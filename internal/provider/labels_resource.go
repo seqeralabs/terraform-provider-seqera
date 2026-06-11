@@ -73,7 +73,7 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'`,
+				Description: `Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'`,
 				Validators: []validator.String{
 					custom_stringvalidators.LabelNameValidator(),
 				},
@@ -90,7 +90,7 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"value": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'`,
+				Description: `Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'`,
 				Validators: []validator.String{
 					custom_stringvalidators.LabelValueResourceValidator(),
 				},

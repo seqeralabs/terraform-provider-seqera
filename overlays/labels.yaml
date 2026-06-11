@@ -27,8 +27,8 @@ info:
 #
 # VALIDATION RULES:
 # -----------------
-# - name: 1-39 alphanumeric characters with dashes/underscores
-# - value: 1-39 alphanumeric characters with dashes/underscores (required if resource=true)
+# - name: 2-39 alphanumeric characters with dashes/underscores
+# - value: 2-39 alphanumeric characters with dashes/underscores (required if resource=true)
 # - is_default: can only be true if resource=true
 # - resource: determines if label can have values
 #
@@ -151,14 +151,14 @@ actions:
   - target: $.components.schemas.CreateLabelRequest.properties.name
     update:
       title: "Label Name"
-      description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+      description: "Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
       example: "environment"
       x-speakeasy-plan-validators: LabelNameValidator
 
   - target: $.components.schemas.CreateLabelRequest.properties.value
     update:
       title: "Label Value"
-      description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
+      description: "Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'"
       example: "production"
       x-speakeasy-plan-validators: LabelValueResourceValidator
 
@@ -190,14 +190,14 @@ actions:
   - target: $.components.schemas.UpdateLabelRequest.properties.name
     update:
       title: "Label Name"
-      description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+      description: "Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
       example: "environment"
       x-speakeasy-plan-validators: LabelNameValidator
 
   - target: $.components.schemas.UpdateLabelRequest.properties.value
     update:
       title: "Label Value"
-      description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
+      description: "Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'"
       example: "production"
       x-speakeasy-plan-validators: LabelValueResourceValidator
 

@@ -11,6 +11,8 @@ internal/sdk/internal/hooks/token_list_error_hook.go
 
 
 # Custom validators
+internal/validators/stringvalidators/label_name_validator.go
+internal/validators/stringvalidators/label_value_resource_validator.go
 internal/validators/mapvalidators/studio_environment_variable_validator.go
 internal/validators/objectvalidators/config_env_variable_validator.go
 internal/validators/stringvalidators/bitbucket_password_validator.go
