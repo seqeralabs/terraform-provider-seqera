@@ -77,7 +77,9 @@ type GoogleBatchConfig struct {
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud service account email for compute instances.

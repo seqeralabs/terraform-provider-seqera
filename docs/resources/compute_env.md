@@ -803,7 +803,6 @@ Format: hostname:/export/path
 Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
 - `service_account` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
@@ -821,6 +820,12 @@ Requires replacement if changed.
 Instances must have access to Google APIs via Private Google Access or a NAT gateway.
 Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+Read-Only:
+
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
@@ -918,7 +923,6 @@ Requires replacement if changed.
 - `preemptible` (Boolean) Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
 at any time and last at most 24 hours.
 Requires replacement if changed.
-- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
 - `region` (String) Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1). Requires replacement if changed.
 - `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.
 - `ssh_image` (String) Custom container image for the SSH daemon sidecar.
@@ -931,6 +935,12 @@ Requires replacement if changed.
 - `zones` (List of String) List of Google Cloud zones where compute instances can be created.
 Zones must be within the specified region.
 Requires replacement if changed.
+
+Read-Only:
+
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 
 <a id="nestedatt--compute_env--config--google_lifesciences--environment"></a>
 ### Nested Schema for `compute_env.config.google_lifesciences.environment`

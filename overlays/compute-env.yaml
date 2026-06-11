@@ -719,9 +719,10 @@ actions:
   - target: $.components.schemas.GoogleBatchConfig.properties.projectId
     update:
       description: |
-        Google Cloud project ID where compute resources will be created.
-      example: "my-gcp-project"
-      x-speakeasy-param-force-new: true
+        Google Cloud project for compute resources. Read-only and derived
+        automatically from the credential; to use a different project, supply a
+        credential for that project.
+      x-speakeasy-param-readonly: true
 
   - target: $.components.schemas.GoogleBatchConfig.properties.sshDaemon
     update:
@@ -878,9 +879,10 @@ actions:
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.projectId
     update:
       description: |
-        Google Cloud project ID where compute resources will be created.
-      example: "my-gcp-project"
-      x-speakeasy-param-force-new: true
+        Google Cloud project for compute resources. Read-only and derived
+        automatically from the credential; to use a different project, supply a
+        credential for that project.
+      x-speakeasy-param-readonly: true
 
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.sshDaemon
     update:

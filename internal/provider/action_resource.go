@@ -1448,8 +1448,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"project_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Google Cloud project ID where compute resources will be created.`,
+												Computed: true,
+												MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+													`automatically from the credential; to use a different project, supply a` + "\n" +
+													`credential for that project.`,
 											},
 											"service_account": schema.StringAttribute{
 												Computed: true,
@@ -1672,8 +1674,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													`at any time and last at most 24 hours.`,
 											},
 											"project_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Google Cloud project ID where compute resources will be created.`,
+												Computed: true,
+												MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+													`automatically from the credential; to use a different project, supply a` + "\n" +
+													`credential for that project.`,
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,

@@ -811,7 +811,9 @@ Supports patterns like "c2-*" to allow any machine in a family.
 Format: hostname:/export/path
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `project_id` (String) Google Cloud project ID where compute resources will be created.
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 - `service_account` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 - `spot` (Boolean) Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by
@@ -912,7 +914,9 @@ Format: hostname:/export/path
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `preemptible` (Boolean) Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
 at any time and last at most 24 hours.
-- `project_id` (String) Google Cloud project ID where compute resources will be created.
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 - `region` (String) Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
 - `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access.
 - `ssh_image` (String) Custom container image for the SSH daemon sidecar.

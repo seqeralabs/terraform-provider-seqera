@@ -56,7 +56,9 @@ type GoogleLifeSciencesConfigurationRetired struct {
 	Preemptible *bool `json:"preemptible,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
@@ -2428,7 +2430,9 @@ type GoogleBatchServiceConfiguration struct {
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud service account email for compute instances.

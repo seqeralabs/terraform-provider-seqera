@@ -410,12 +410,12 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"project_id": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
 						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
+						MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+							`automatically from the credential; to use a different project, supply a` + "\n" +
+							`credential for that project.`,
 					},
 					"service_account": schema.StringAttribute{
 						Computed: true,
