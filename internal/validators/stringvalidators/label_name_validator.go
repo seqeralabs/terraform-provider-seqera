@@ -14,7 +14,7 @@ type StringLabelNameValidatorValidator struct{}
 
 // Description describes the validation in plain text formatting.
 func (v StringLabelNameValidatorValidator) Description(_ context.Context) string {
-	return "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+	return "Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
 }
 
 // MarkdownDescription describes the validation in Markdown formatting.
@@ -31,11 +31,11 @@ func (v StringLabelNameValidatorValidator) ValidateString(ctx context.Context, r
 	value := req.ConfigValue.ValueString()
 
 	// Check length (this is also handled by UTF8LengthBetween, but we provide a clearer message)
-	if len(value) < 1 || len(value) > 39 {
+	if len(value) < 2 || len(value) > 39 {
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Invalid Label Name Length",
-			fmt.Sprintf("Label name must be between 1 and 39 characters long, got %d characters", len(value)),
+			fmt.Sprintf("Label name must be between 2 and 39 characters long, got %d characters", len(value)),
 		)
 		return
 	}

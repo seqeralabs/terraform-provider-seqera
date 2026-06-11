@@ -4,7 +4,6 @@ resource "seqera_gcp_batch_ce" "minimal" {
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
-    project_id      = "my-gcp-project"
     location        = "us-central1"
     work_dir        = "gs://my-bucket/work"
     machine_type    = "n1-standard-4"

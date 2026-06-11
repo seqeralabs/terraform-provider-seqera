@@ -5,11 +5,11 @@ package shared
 type CreateLabelRequest struct {
 	// Whether this label is automatically applied to new resources. Can only be true when resource=true.
 	IsDefault *bool `json:"isDefault,omitempty"`
-	// Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'
+	// Label name (key). Must be 2-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'
 	Name *string `json:"name,omitempty"`
 	// Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed.
 	Resource *bool `json:"resource,omitempty"`
-	// Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'
+	// Label value. Must be 2-39 alphanumeric characters, dashes, or underscores, or a dynamic placeholder (${sessionId}, ${workflowId}, ${userName}) for resource labels. Required when resource=true. Example: 'production', 'data-science', '${sessionId}'
 	Value *string `json:"value,omitempty"`
 }
 

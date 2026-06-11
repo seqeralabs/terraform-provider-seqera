@@ -784,8 +784,9 @@ Requires replacement if changed.
 Overrides other VM configuration settings for the head job.
 Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
-- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+- `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
+time, for cost tracking and organization. For per-run dynamic resource labels,
+attach seqera_labels via label_ids.
 Requires replacement if changed.
 - `location` (String) Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1). Not Null; Requires replacement if changed.
 - `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
@@ -800,7 +801,6 @@ Format: hostname:/export/path
 Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
 - `service_account` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
@@ -818,6 +818,12 @@ Requires replacement if changed.
 Instances must have access to Google APIs via Private Google Access or a NAT gateway.
 Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+Read-Only:
+
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
@@ -898,8 +904,9 @@ Optional:
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
-- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+- `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
+time, for cost tracking and organization. For per-run dynamic resource labels,
+attach seqera_labels via label_ids.
 Requires replacement if changed.
 - `location` (String) Google Cloud location for the Life Sciences API endpoint. Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
@@ -912,7 +919,6 @@ Requires replacement if changed.
 - `preemptible` (Boolean) Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
 at any time and last at most 24 hours.
 Requires replacement if changed.
-- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
 - `region` (String) Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1). Requires replacement if changed.
 - `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.
 - `ssh_image` (String) Custom container image for the SSH daemon sidecar.
@@ -925,6 +931,12 @@ Requires replacement if changed.
 - `zones` (List of String) List of Google Cloud zones where compute instances can be created.
 Zones must be within the specified region.
 Requires replacement if changed.
+
+Read-Only:
+
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 
 <a id="nestedatt--compute_env--config--google_lifesciences--environment"></a>
 ### Nested Schema for `compute_env.config.google_lifesciences.environment`

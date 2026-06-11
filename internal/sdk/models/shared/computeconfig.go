@@ -29,8 +29,9 @@ type GoogleLifeSciencesConfigurationRetired struct {
 	// Memory allocation for the Nextflow head job in MB.
 	//
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Key-value map of Google Cloud resource labels applied to compute resources
-	// for cost tracking and organization.
+	// Static Google Cloud resource labels applied to compute resources at creation
+	// time, for cost tracking and organization. For per-run dynamic resource labels,
+	// attach seqera_labels via label_ids.
 	//
 	Labels map[string]string `json:"labels,omitempty"`
 	// Google Cloud location for the Life Sciences API endpoint.
@@ -53,7 +54,9 @@ type GoogleLifeSciencesConfigurationRetired struct {
 	Preemptible *bool `json:"preemptible,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
@@ -2392,8 +2395,9 @@ type GoogleBatchServiceConfiguration struct {
 	// Memory allocation for the Nextflow head job in MB.
 	//
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Key-value map of Google Cloud resource labels applied to compute resources
-	// for cost tracking and organization.
+	// Static Google Cloud resource labels applied to compute resources at creation
+	// time, for cost tracking and organization. For per-run dynamic resource labels,
+	// attach seqera_labels via label_ids.
 	//
 	Labels map[string]string `json:"labels,omitempty"`
 	// Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
@@ -2422,7 +2426,9 @@ type GoogleBatchServiceConfiguration struct {
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud service account email for compute instances.

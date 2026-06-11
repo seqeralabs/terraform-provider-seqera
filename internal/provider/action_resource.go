@@ -1401,8 +1401,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"labels": schema.MapAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-													`for cost tracking and organization.`,
+												MarkdownDescription: `Static Google Cloud resource labels applied to compute resources at creation` + "\n" +
+													`time, for cost tracking and organization. For per-run dynamic resource labels,` + "\n" +
+													`attach seqera_labels via label_ids.`,
 											},
 											"location": schema.StringAttribute{
 												Computed:    true,
@@ -1445,8 +1446,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"project_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Google Cloud project ID where compute resources will be created.`,
+												Computed: true,
+												MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+													`automatically from the credential; to use a different project, supply a` + "\n" +
+													`credential for that project.`,
 											},
 											"service_account": schema.StringAttribute{
 												Computed: true,
@@ -1632,8 +1635,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"labels": schema.MapAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
-												MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-													`for cost tracking and organization.`,
+												MarkdownDescription: `Static Google Cloud resource labels applied to compute resources at creation` + "\n" +
+													`time, for cost tracking and organization. For per-run dynamic resource labels,` + "\n" +
+													`attach seqera_labels via label_ids.`,
 											},
 											"location": schema.StringAttribute{
 												Computed:    true,
@@ -1666,8 +1670,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													`at any time and last at most 24 hours.`,
 											},
 											"project_id": schema.StringAttribute{
-												Computed:    true,
-												Description: `Google Cloud project ID where compute resources will be created.`,
+												Computed: true,
+												MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+													`automatically from the credential; to use a different project, supply a` + "\n" +
+													`credential for that project.`,
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,

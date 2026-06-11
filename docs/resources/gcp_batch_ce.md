@@ -25,7 +25,6 @@ resource "seqera_gcp_batch_ce" "minimal" {
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
-    project_id      = "my-gcp-project"
     location        = "us-central1"
     work_dir        = "gs://my-bucket/work"
     machine_type    = "n1-standard-4"
@@ -45,7 +44,6 @@ resource "seqera_gcp_batch_ce" "fusion" {
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
-    project_id      = "my-gcp-project"
     location        = "us-central1"
     work_dir        = "gs://my-bucket/work"
     machine_type    = "n2-standard-4"
@@ -68,7 +66,6 @@ resource "seqera_gcp_batch_ce" "private_network" {
   credentials_id = seqera_google_credential.main.credentials_id
 
   config = {
-    project_id          = "my-gcp-project"
     location            = "us-central1"
     work_dir            = "gs://my-bucket/work"
     machine_type        = "n1-standard-4"
@@ -150,8 +147,9 @@ Requires replacement if changed.
 Overrides other VM configuration settings for the head job.
 Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
-- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+- `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
+time, for cost tracking and organization. For per-run dynamic resource labels,
+attach seqera_labels via label_ids.
 Requires replacement if changed.
 - `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 Supports patterns like "c2-*" to allow any machine in a family.
@@ -165,7 +163,6 @@ Format: hostname:/export/path
 Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
 - `service_account` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
@@ -182,6 +179,12 @@ Requires replacement if changed.
 - `use_private_address` (Boolean) Restrict compute instances to private IP addresses only (no public internet access).
 Instances must have access to Google APIs via Private Google Access or a NAT gateway.
 Requires replacement if changed.
+
+Read-Only:
+
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`

@@ -759,8 +759,9 @@ Required when `enable_fusion` is true.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB.
-- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+- `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
+time, for cost tracking and organization. For per-run dynamic resource labels,
+attach seqera_labels via label_ids.
 - `location` (String) Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
 - `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 Supports patterns like "c2-*" to allow any machine in a family.
@@ -772,7 +773,9 @@ Supports patterns like "c2-*" to allow any machine in a family.
 Format: hostname:/export/path
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `project_id` (String) Google Cloud project ID where compute resources will be created.
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 - `service_account` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 - `spot` (Boolean) Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by
@@ -859,8 +862,9 @@ Read-Only:
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB.
-- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
-for cost tracking and organization.
+- `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
+time, for cost tracking and organization. For per-run dynamic resource labels,
+attach seqera_labels via label_ids.
 - `location` (String) Google Cloud location for the Life Sciences API endpoint.
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nfs_mount` (String) Local mount path for the NFS file system on compute instances.
@@ -870,7 +874,9 @@ Format: hostname:/export/path
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `preemptible` (Boolean) Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
 at any time and last at most 24 hours.
-- `project_id` (String) Google Cloud project ID where compute resources will be created.
+- `project_id` (String) Google Cloud project for compute resources. Read-only and derived
+automatically from the credential; to use a different project, supply a
+credential for that project.
 - `region` (String) Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
 - `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access.
 - `ssh_image` (String) Custom container image for the SSH daemon sidecar.

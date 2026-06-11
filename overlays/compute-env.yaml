@@ -719,9 +719,10 @@ actions:
   - target: $.components.schemas.GoogleBatchConfig.properties.projectId
     update:
       description: |
-        Google Cloud project ID where compute resources will be created.
-      example: "my-gcp-project"
-      x-speakeasy-param-force-new: true
+        Google Cloud project for compute resources. Read-only and derived
+        automatically from the credential; to use a different project, supply a
+        credential for that project.
+      x-speakeasy-param-readonly: true
 
   - target: $.components.schemas.GoogleBatchConfig.properties.sshDaemon
     update:
@@ -762,9 +763,11 @@ actions:
   - target: $.components.schemas.GoogleBatchConfig.properties.labels
     update:
       description: |
-        Key-value map of Google Cloud resource labels applied to compute resources
-        for cost tracking and organization.
+        Static Google Cloud resource labels applied to compute resources at creation
+        time, for cost tracking and organization. For per-run dynamic resource labels,
+        attach seqera_labels via label_ids.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: GoogleResourceLabelsValidator
 
   - target: $.components.schemas.GoogleBatchConfig.properties.headJobCpus
     update:
@@ -874,9 +877,10 @@ actions:
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.projectId
     update:
       description: |
-        Google Cloud project ID where compute resources will be created.
-      example: "my-gcp-project"
-      x-speakeasy-param-force-new: true
+        Google Cloud project for compute resources. Read-only and derived
+        automatically from the credential; to use a different project, supply a
+        credential for that project.
+      x-speakeasy-param-readonly: true
 
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.sshDaemon
     update:
@@ -916,9 +920,11 @@ actions:
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.labels
     update:
       description: |
-        Key-value map of Google Cloud resource labels applied to compute resources
-        for cost tracking and organization.
+        Static Google Cloud resource labels applied to compute resources at creation
+        time, for cost tracking and organization. For per-run dynamic resource labels,
+        attach seqera_labels via label_ids.
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: GoogleResourceLabelsValidator
 
   - target: $.components.schemas.GoogleLifeSciencesConfig.properties.headJobCpus
     update:

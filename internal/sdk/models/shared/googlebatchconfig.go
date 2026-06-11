@@ -45,8 +45,9 @@ type GoogleBatchConfig struct {
 	// Memory allocation for the Nextflow head job in MB.
 	//
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Key-value map of Google Cloud resource labels applied to compute resources
-	// for cost tracking and organization.
+	// Static Google Cloud resource labels applied to compute resources at creation
+	// time, for cost tracking and organization. For per-run dynamic resource labels,
+	// attach seqera_labels via label_ids.
 	//
 	Labels map[string]string `json:"labels,omitempty"`
 	// Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
@@ -74,7 +75,9 @@ type GoogleBatchConfig struct {
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Google Cloud project ID where compute resources will be created.
+	// Google Cloud project for compute resources. Read-only and derived
+	// automatically from the credential; to use a different project, supply a
+	// credential for that project.
 	//
 	ProjectID *string `json:"projectId,omitempty"`
 	// Google Cloud service account email for compute instances.

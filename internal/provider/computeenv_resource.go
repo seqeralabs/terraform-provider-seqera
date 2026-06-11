@@ -37,6 +37,7 @@ import (
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
+	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -2761,9 +2762,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-											`for cost tracking and organization.` + "\n" +
+										MarkdownDescription: `Static Google Cloud resource labels applied to compute resources at creation` + "\n" +
+											`time, for cost tracking and organization. For per-run dynamic resource labels,` + "\n" +
+											`attach seqera_labels via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
+										Validators: []validator.Map{
+											custom_mapvalidators.GoogleResourceLabelsValidator(),
+										},
 									},
 									"location": schema.StringAttribute{
 										Computed: true,
@@ -2854,11 +2859,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+											`automatically from the credential; to use a different project, supply a` + "\n" +
+											`credential for that project.`,
 									},
 									"service_account": schema.StringAttribute{
 										Computed: true,
@@ -3280,9 +3283,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
-											`for cost tracking and organization.` + "\n" +
+										MarkdownDescription: `Static Google Cloud resource labels applied to compute resources at creation` + "\n" +
+											`time, for cost tracking and organization. For per-run dynamic resource labels,` + "\n" +
+											`attach seqera_labels via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
+										Validators: []validator.Map{
+											custom_mapvalidators.GoogleResourceLabelsValidator(),
+										},
 									},
 									"location": schema.StringAttribute{
 										Computed: true,
@@ -3352,11 +3359,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud project for compute resources. Read-only and derived` + "\n" +
+											`automatically from the credential; to use a different project, supply a` + "\n" +
+											`credential for that project.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,

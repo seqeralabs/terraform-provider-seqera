@@ -2,9 +2,23 @@ package stringvalidators
 
 import (
 	"context"
+	"regexp"
 
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+// labelValueSimplePattern matches a "simple" resource label value: 2-39
+// alphanumeric characters separated by single dashes or underscores.
+//
+// labelValueDynamicPattern matches a dynamic resource label value, which is
+// interpolated by the Platform at workflow submission time. The supported
+// placeholders are sessionId, workflowId, and userName.
+//
+// Together these mirror the Platform's documented resource label rules.
+var (
+	labelValueSimplePattern  = regexp.MustCompile(`^[a-zA-Z0-9]([-_]?[a-zA-Z0-9]){1,38}$`)
+	labelValueDynamicPattern = regexp.MustCompile(`^\$\{(sessionId|workflowId|userName)\}$`)
 )
 
 var _ validator.String = StringLabelValueResourceValidatorValidator{}
@@ -59,10 +73,19 @@ func (v StringLabelValueResourceValidatorValidator) ValidateString(ctx context.C
 		return
 	}
 
-	// Reuse LabelNameValidator for format validation
+	// Rule 3: Validate value format. A resource label value is either a
+	// "simple" value (2-39 alphanumeric characters separated by single dashes
+	// or underscores) or a dynamic placeholder (${sessionId}, ${workflowId},
+	// ${userName}) that the Platform interpolates at workflow submission time.
 	if !valueIsEmpty {
-		nameValidator := LabelNameValidator()
-		nameValidator.ValidateString(ctx, req, resp)
+		value := req.ConfigValue.ValueString()
+		if !labelValueSimplePattern.MatchString(value) && !labelValueDynamicPattern.MatchString(value) {
+			resp.Diagnostics.AddAttributeError(
+				req.Path,
+				"Invalid Label Value Format",
+				"Label value must be 2-39 alphanumeric characters (a-z, A-Z, 0-9) separated by single dashes (-) or underscores (_), or a dynamic placeholder: ${sessionId}, ${workflowId}, or ${userName}.",
+			)
+		}
 	}
 }
 
