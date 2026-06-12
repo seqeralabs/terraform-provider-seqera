@@ -47,7 +47,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.40.0"
+      version = "0.40.2"
     }
   }
 }
@@ -101,6 +101,7 @@ Available configuration:
 * [seqera_gcp_batch_ce](docs/resources/gcp_batch_ce.md)
 * [seqera_gcp_cloud_ce](docs/resources/gcp_cloud_ce.md)
 * [seqera_gitea_credential](docs/resources/gitea_credential.md)
+* [seqera_github_app_credential](docs/resources/github_app_credential.md)
 * [seqera_github_credential](docs/resources/github_credential.md)
 * [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
 * [seqera_google_credential](docs/resources/google_credential.md)

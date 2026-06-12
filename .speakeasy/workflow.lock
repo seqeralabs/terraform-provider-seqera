@@ -2,8 +2,8 @@ speakeasyVersion: 1.777.2
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:37dc663cbdba4d1cf240ea9a7738fd594c3ec8354d756ea36694fb976144ba6a
-        sourceBlobDigest: sha256:c97a75c16aac000b9310d37e20dd20b3eb22c16c82ff77330466fdeced4cbfd2
+        sourceRevisionDigest: sha256:df1cf07b45f3ff1fba75809101244f83ec1b981affd4299a1c58cf87176389e9
+        sourceBlobDigest: sha256:60543bc1ddc4d4ff704c74080a97e844a6ef1a9f750a5a6ecfb868617a06b489
         tags:
             - latest
             - 1.153.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:37dc663cbdba4d1cf240ea9a7738fd594c3ec8354d756ea36694fb976144ba6a
-        sourceBlobDigest: sha256:c97a75c16aac000b9310d37e20dd20b3eb22c16c82ff77330466fdeced4cbfd2
+        sourceRevisionDigest: sha256:df1cf07b45f3ff1fba75809101244f83ec1b981affd4299a1c58cf87176389e9
+        sourceBlobDigest: sha256:60543bc1ddc4d4ff704c74080a97e844a6ef1a9f750a5a6ecfb868617a06b489
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -44,6 +44,7 @@ workflow:
                 - location: overlays/credentials-gcp.yaml
                 - location: overlays/credentials-gitea.yaml
                 - location: overlays/credentials-github.yaml
+                - location: overlays/credentials-github-app.yaml
                 - location: overlays/credentials-gitlab.yaml
                 - location: overlays/credentials-kubernetes.yaml
                 - location: overlays/credentials-ssh.yaml

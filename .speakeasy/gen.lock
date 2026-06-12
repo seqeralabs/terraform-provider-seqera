@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 2fb2f81acd1df73052d225dfce8badb6
+  docChecksum: ca0e12ecb5f8474a4a41b67f1a91c086
   docVersion: 1.153.0
   speakeasyVersion: 1.777.2
   generationVersion: 2.903.5
-  releaseVersion: 0.40.0
-  configChecksum: 5806551663291652221bdae0d7c2feba
+  releaseVersion: 0.40.2
+  configChecksum: be5287cb9bc8dbd12dec8d589bf94764
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -40,7 +40,7 @@ trackedFiles:
     pristine_git_object: 8e707bb129af1da185ba30b4c289b0160819c437
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:84a5b8c5945a84bca4747b35fa6dacf5a00b2839
+    last_write_checksum: sha1:a03922adeca9ee59546275c5c5ebbc2cb7c69eb9
     pristine_git_object: 7b241353e887cd10c08b0653d13c2227ce91f456
   examples/resources/seqera_action/import-by-string-id.tf:
     id: 7b9e1b28088a
@@ -186,6 +186,10 @@ trackedFiles:
     id: 8c0e614b09f4
     last_write_checksum: sha1:4681c9452c3a5db6a2ac5eadc7f9d01cf48ef42e
     pristine_git_object: f6811dac82b57092419a4dd94f44e967bf3eaa58
+  examples/resources/seqera_github_app_credential/import-by-string-id.tf:
+    last_write_checksum: sha1:53924ca62112185d94db1c511ebf5907f84c1f33
+  examples/resources/seqera_github_app_credential/import.sh:
+    last_write_checksum: sha1:bd7143844d6ee4d5ac59e6c627536b6f90114363
   examples/resources/seqera_github_credential/import-by-string-id.tf:
     id: cec576dc44c5
     last_write_checksum: sha1:b4cc4d7bbb39c46c5a97f5ddf5260b14fb2914c4
@@ -572,6 +576,10 @@ trackedFiles:
     id: 63ee809ee195
     last_write_checksum: sha1:002b5c5e8f4a426190b04e60d831321fa1ad8a70
     pristine_git_object: 71e29ff10c22205eab4418ac0b8a92152cc5b23d
+  internal/provider/githubappcredential_resource.go:
+    last_write_checksum: sha1:a546edc6420a15bf815803eade73cfc3d413f000
+  internal/provider/githubappcredential_resource_sdk.go:
+    last_write_checksum: sha1:e1db7772edde1b145bbb5ac9fe01b03811a903ff
   internal/provider/githubcredential_resource.go:
     id: e1f090a0cb9e
     last_write_checksum: sha1:5c99fc9cce9b283fa08d88a9ccabc8b294d7534e
@@ -652,7 +660,7 @@ trackedFiles:
     pristine_git_object: 8271b7fae7ec72fa236df95b6cb1c021ff466b99
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:943714b865e9c9bfaba5dc531c3e6a31ce0be3f2
+    last_write_checksum: sha1:95c8cc0ac53445f8a9d6b8d7111f24c14dbfe09b
     pristine_git_object: 6c768261d1bb7b8f84d2db80197389871642d002
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -1038,7 +1046,7 @@ trackedFiles:
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
-    last_write_checksum: sha1:51623a32a31049b7ed080b914616dccc52c82d92
+    last_write_checksum: sha1:e34dfd5e7d4e5bd015463032ac7c45696f520c4a
     pristine_git_object: 47bd93d33a5187778e37e15f28a86920d700bb6d
   internal/sdk/datalinks.go:
     id: ef6966e16293
@@ -1248,6 +1256,8 @@ trackedFiles:
     id: 5cb205a6f6b9
     last_write_checksum: sha1:2df21b7fb233923546241013571a40f229dcd03a
     pristine_git_object: f51216c5031cb68f6624ce740783103247cebdc9
+  internal/sdk/models/operations/creategithubappcredentials.go:
+    last_write_checksum: sha1:e4e5978201822141dbbbdff0d341ccb525e63c87
   internal/sdk/models/operations/creategithubcredentials.go:
     id: 920ae55ba490
     last_write_checksum: sha1:0863a8a1d903173cac41401cce4c6f998f754765
@@ -1428,6 +1438,8 @@ trackedFiles:
     id: 3b2e3ae86aae
     last_write_checksum: sha1:bff908119cf35a9c9def60e03a8766dda3fbd7da
     pristine_git_object: 4a9730804454571d9716d29a55526e98c20727ed
+  internal/sdk/models/operations/deletegithubappcredentials.go:
+    last_write_checksum: sha1:0179dac4788bd946b56e81f9708a1822b67ca535
   internal/sdk/models/operations/deletegithubcredentials.go:
     id: 1b45e72d2ff4
     last_write_checksum: sha1:99402cca559be01d06b83c0b67d6a441b82eb0ff
@@ -1600,6 +1612,8 @@ trackedFiles:
     id: 37766e51b23b
     last_write_checksum: sha1:b25a1cf11e00202dff364881770e54922b7466df
     pristine_git_object: eed1e5430625595f6216e7f8ffc2e5f55516fc6f
+  internal/sdk/models/operations/describegithubappcredentials.go:
+    last_write_checksum: sha1:e431aed86f5e7d0c473ea0108e2a5ee0fd09118d
   internal/sdk/models/operations/describegithubcredentials.go:
     id: e3220a54e087
     last_write_checksum: sha1:026d32046738383ed337fe521a5bc94d8524dec2
@@ -2132,6 +2146,8 @@ trackedFiles:
     id: e445df842b48
     last_write_checksum: sha1:44613491091e9a58d37c897b9bd7e8c96ef30ea7
     pristine_git_object: 2493ed41288f678b0616b40ada2b8aca9f9bcb2d
+  internal/sdk/models/operations/updategithubappcredentials.go:
+    last_write_checksum: sha1:5415d8436b3c16ec6ab770d512c135987c4b7fc5
   internal/sdk/models/operations/updategithubcredentials.go:
     id: 43c4f783e72c
     last_write_checksum: sha1:acbd3c77a14949ebd577222c6a3d1a0e8e3dfde1
@@ -2630,6 +2646,10 @@ trackedFiles:
     id: 13c2c7dd7c30
     last_write_checksum: sha1:2392452c8f8a9ba1280d15326202214fe149c650
     pristine_git_object: 34a8eacc222c93883d317a356c88d2e0eab8d946
+  internal/sdk/models/shared/creategithubappcredentialsrequest.go:
+    last_write_checksum: sha1:6b93f13bcda487c87982a125daebfc6e10c4fec4
+  internal/sdk/models/shared/creategithubappcredentialsresponse.go:
+    last_write_checksum: sha1:2e19d5fc6ad6242803bee08bca408fcce02cec66
   internal/sdk/models/shared/creategithubcredentialsrequest.go:
     id: c74ef2fb8373
     last_write_checksum: sha1:73b16e547c021ac4436038afc53779689b166ae3
@@ -3052,6 +3072,8 @@ trackedFiles:
     id: 503b0436a476
     last_write_checksum: sha1:6c0cbbb5c8831aa837c28aae30b0d8cb52e595be
     pristine_git_object: 2d3204c2182912ba37e46ece72f680c0d3212980
+  internal/sdk/models/shared/describegithubappcredentialsresponse.go:
+    last_write_checksum: sha1:7ffcc923de3ee1ae6979cef1bb4ab2123a74acb3
   internal/sdk/models/shared/describegithubcredentialsresponse.go:
     id: ab4393e59108
     last_write_checksum: sha1:7aaf3bff76803e3babcd1b15305a2e9a34e9c382
@@ -3192,6 +3214,8 @@ trackedFiles:
     id: a0d80eab2a2b
     last_write_checksum: sha1:58e9de2f520107f6e2ff72bf5be064c3d2e6be20
     pristine_git_object: 17c90fd61a9fdd0f3467eccfeab719d950ad8d75
+  internal/sdk/models/shared/githubappcredential.go:
+    last_write_checksum: sha1:3769399b2c35c72cb446514d73392fefcc829f48
   internal/sdk/models/shared/githubcredential.go:
     id: ff7ad720d02c
     last_write_checksum: sha1:ff15a41d5840fee94ba6f00c7f14f1df8bfa4269
@@ -3754,6 +3778,8 @@ trackedFiles:
     id: a0e01a63f60b
     last_write_checksum: sha1:6aed2817e64b94fe63a29e9c1c67664f14b7a2c6
     pristine_git_object: 48f41016ae3ddb1d4b5ec5a2df6b826290df5b65
+  internal/sdk/models/shared/updategithubappcredentialsrequest.go:
+    last_write_checksum: sha1:433a419256a058a6552565d0f160e31bd4bc8713
   internal/sdk/models/shared/updategithubcredentialsrequest.go:
     id: 11d125e6edf5
     last_write_checksum: sha1:fe1cb3b65e8bbeb0371fc8f797d99f986cc227d2
@@ -3976,7 +4002,7 @@ trackedFiles:
     last_write_checksum: sha1:4254ac7cabfdf1410c8e69888cc51a81318bbfb4
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:063d7827aada6363c419055db5ee554426eca547
+    last_write_checksum: sha1:a070d59091ee9976ba711cce3457c3bd8056b550
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
@@ -7248,6 +7274,52 @@ examples:
           workspaceId: 99706
       requestBody:
         application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGithubAppCredentials:
+    speakeasy-default-create-github-app-credentials:
+      parameters:
+        query:
+          workspaceId: 823665
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github_app", "baseUrl": "https://github.com/seqeralabs", "app_id": "123456", "client_id": "Iv1.1234567890abcdef", "private_key": "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----\n"}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGithubAppCredentials:
+    speakeasy-default-describe-github-app-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+        query:
+          workspaceId: 834698
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "github_app", "baseUrl": "https://github.com/seqeralabs", "app_id": "123456", "client_id": "Iv1.1234567890abcdef"}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGithubAppCredentials:
+    speakeasy-default-update-github-app-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+        query:
+          workspaceId: 10445
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github_app", "baseUrl": "https://github.com/seqeralabs", "app_id": "123456", "client_id": "Iv1.1234567890abcdef", "private_key": "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----\n"}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGithubAppCredentials:
+    speakeasy-default-delete-github-app-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+        query:
+          workspaceId: 867972
       responses:
         "400":
           application/json: {"message": "<value>"}

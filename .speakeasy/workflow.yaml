@@ -28,6 +28,7 @@ sources:
             - location: overlays/credentials-gcp.yaml
             - location: overlays/credentials-gitea.yaml
             - location: overlays/credentials-github.yaml
+            - location: overlays/credentials-github-app.yaml
             - location: overlays/credentials-gitlab.yaml
             - location: overlays/credentials-kubernetes.yaml
             - location: overlays/credentials-ssh.yaml

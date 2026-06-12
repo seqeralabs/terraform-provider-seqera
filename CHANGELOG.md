@@ -28,6 +28,12 @@ UPGRADE NOTES:
 
 - On the first plan after upgrading, existing `seqera_workflows` resources show a one-time in-place update materialising the new defaults (`user_secrets`/`workspace_secrets` `null -> []`, and `pull_latest`/`stub_run` `null -> false` where they weren't set). Applying it is a state-only write — no API calls are made and no runs are launched, replaced, or modified.
 
+# v0.40.1
+
+FEATURES:
+
+- **New `seqera_github_app_credential` resource** for authenticating against a pre-existing GitHub App, as an alternative to a personal access token (`seqera_github_credential`).
+
 # v0.40.0
 
 FEATURES:
