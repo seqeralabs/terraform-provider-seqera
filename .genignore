@@ -68,6 +68,7 @@ examples/resources/seqera_codecommit_credential/resource.tf
 examples/resources/seqera_container_registry_credential/resource*.tf
 examples/resources/seqera_gitea_credential/resource.tf
 examples/resources/seqera_github_credential/resource*.tf
+examples/resources/seqera_github_app_credential/resource*.tf
 examples/resources/seqera_gitlab_credential/resource*.tf
 examples/resources/seqera_ssh_credential/resource.tf
 examples/resources/seqera_tower_agent_credential/resource*.tf
