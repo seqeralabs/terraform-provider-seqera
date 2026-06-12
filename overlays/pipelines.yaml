@@ -78,7 +78,6 @@ actions:
   - target: $.paths["/pipelines"].post
     update:
       x-speakeasy-entity-operation:
-
         terraform-datasource: null
 
         terraform-resource: Pipeline#create
@@ -87,7 +86,6 @@ actions:
   - target: $.paths["/pipelines/{pipelineId}"].get
     update:
       x-speakeasy-entity-operation:
-
         terraform-datasource: null
 
         terraform-resource: Pipeline#read#1
@@ -99,7 +97,6 @@ actions:
   - target: $.paths["/pipelines/{pipelineId}/launch"].get
     update:
       x-speakeasy-entity-operation:
-
         terraform-datasource: null
 
         terraform-resource: Pipeline#read#2
@@ -108,7 +105,6 @@ actions:
   - target: $.paths["/pipelines/{pipelineId}"].put
     update:
       x-speakeasy-entity-operation:
-
         terraform-datasource: null
 
         terraform-resource: Pipeline#update
@@ -117,7 +113,6 @@ actions:
   - target: $.paths["/pipelines/{pipelineId}"].delete
     update:
       x-speakeasy-entity-operation:
-
         terraform-datasource: null
 
         terraform-resource: Pipeline#delete
@@ -200,6 +195,146 @@ actions:
     update:
       x-speakeasy-param-optional: true
 
+  # Remove-is-silent fix: Optional+Computed attributes inherit prior state
+  # when the config value is null, so deleting one from config plans "no
+  # changes". These fields are stored and echoed verbatim by the API, so
+  # plain Optional is correct — omitting a field on update clears it
+  # server-side. The extension must be set on BOTH the request schema and
+  # the Read#2 response schema (LaunchDbDto), or the merged entity
+  # attribute stays Computed. Deliberately NOT un-computed
+  # (server-managed/defaulted): computeEnv, launchContainer,
+  # optimizationId/Targets, resumeLaunchId, sessionId, workspaceId,
+  # syntaxParser.
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.paramsText
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.paramsText
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.revision
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.revision
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.configText
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.configText
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.towerConfig
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.towerConfig
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.preRunScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.preRunScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.postRunScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.postRunScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.mainScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.mainScript
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.entryName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.entryName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.schemaName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.schemaName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.runName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.runName
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobCpus
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.headJobCpus
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobMemoryMb
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.headJobMemoryMb
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.pipelineSchemaId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.pipelineSchemaId
+    update:
+      x-speakeasy-param-computed: false
+  # The three list fields cannot be plain Optional: the generated refresh
+  # code maps a missing/null API list to an empty list (make([]T, 0)), so
+  # an unset list comes back as [] and a null plan can never round-trip.
+  # `default: []` is the mechanism — it generates listdefault.StaticValue
+  # (which implies Computed+Optional), so removing e.g. config_profiles =
+  # ["docker"] plans `-> []`, matching what refresh returns. Live-verified:
+  # set → remove → re-add round-trips cleanly against the dev API.
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.configProfiles
+    update:
+      default: []
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.userSecrets
+    update:
+      default: []
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workspaceSecrets
+    update:
+      default: []
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workDir
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.workDir
+    update:
+      x-speakeasy-param-computed: false
+
+  # The launch booleans (pullLatest, stubRun) are primitive `boolean` on
+  # both the request DTO and the Launch entity: an omitted field coerces to
+  # false on the way in and the API always echoes an explicit true/false.
+  # They can never round-trip as null, so instead of un-computing them they
+  # get `default: false` — Speakeasy generates a Terraform booldefault, so
+  # removing e.g. `pull_latest = true` plans `true -> false`, which is
+  # exactly what the backend will do.
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.pullLatest
+    update:
+      default: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.stubRun
+    update:
+      default: false
+
+  # `resume` is a dead toggle through Terraform: Nextflow -resume needs the
+  # prior session (WorkflowLaunchRequest.id + sessionId), and both are
+  # stripped from the Terraform surface by overlays/workflows.yaml — so
+  # resume=true flags a resume with no session attached and the run starts
+  # fresh anyway. Resuming a failed run is an operational action (UI/sctl),
+  # not declarative config. Ignored on both the request and the Read#2 echo
+  # so the attribute disappears from seqera_workflows, seqera_pipeline.launch
+  # and seqera_action.launch alike.
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.resume
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.LaunchDbDto.properties.resume
+    update:
+      x-speakeasy-terraform-ignore: true
+
   # Rename provider field to avoid conflicts with Terraform provider keyword
   - target: $.components.schemas.PipelineInfo.properties.provider
     update:
@@ -235,17 +370,44 @@ actions:
       description: Icon identifier or URL for visual representation
       x-speakeasy-param-ordering: 5
 
-  # Note: User fields (userId, userName, userFirstName, userLastName) are removed in cleanup section
+  # Note: userLastName is removed in the cleanup section; userId/userName/
+  # userFirstName are kept (the seqera_pipeline data source exposes them as
+  # creator attribution) and suppress-computed-diff'd in the READ-ONLY
+  # FIELDS section below.
 
   # ============================================================================
   # READ-ONLY FIELDS
   # ============================================================================
 
-  # Mark server-managed ID field as read-only in PipelineDbDto
-  # Note: User fields (userId, userName, userFirstName) are removed entirely in cleanup section
+  # Mark server-managed ID field as read-only in PipelineDbDto.
+  # Immutable after create, so suppress the "(known after apply)" flip on
+  # in-place updates (matches the `id` alias below).
   - target: $.components.schemas.PipelineDbDto.properties.pipelineId
     update:
       x-speakeasy-param-readonly: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # Run-specific / server-managed launch fields that are always null or
+  # immutable on a TEMPLATE launch: keep them from flipping to
+  # "(known after apply)" on every in-place update.
+  - target: $.components.schemas.LaunchDbDto.properties.launchContainer
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationTargets
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.LaunchDbDto.properties.resumeLaunchId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.LaunchDbDto.properties.sessionId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.LaunchDbDto.properties.workspaceId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
 
   # Add a parallel `id` attribute that aliases `pipelineId` so users can
   # reference the pipeline with the conventional `seqera_pipeline.foo.id`
@@ -256,7 +418,7 @@ actions:
   - target: $.components.schemas.PipelineDbDto
     update:
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .pipelineId }'
+        jq: ". + { id: .pipelineId }"
       properties:
         id:
           type: integer
@@ -285,6 +447,20 @@ actions:
   # Remove user information fields (already readonly, but should not be in schema)
   - target: $.components.schemas.PipelineDbDto.properties.userLastName
     remove: true
+
+  # Creator-attribution fields are kept (the seqera_pipeline data source
+  # exposes them usefully) but suppressed on the resource: pipeline.user is
+  # set at creation and never reassigned by updatePipeline, so propagating
+  # prior state instead of "(known after apply)" is always correct.
+  - target: $.components.schemas.PipelineDbDto.properties.userId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PipelineDbDto.properties.userName
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
 
   # Remove runtime organizational context fields
   - target: $.components.schemas.PipelineDbDto.properties.orgId
@@ -317,6 +493,22 @@ actions:
   # Remove expanded compute environment reference (use computeEnvId instead)
   - target: $.components.schemas.PipelineDbDto.properties.computeEnv
     remove: true
+
+  # Same for the launch template echo (read#2): the full ComputeEnv object
+  # duplicates what the compute-env resources manage and dominates plan
+  # output whenever the referenced CE changes (the whole config/forge tree
+  # flips to "known after apply"). launch.compute_env_id is the input;
+  # affects seqera_pipeline and seqera_action (both read via LaunchDbDto).
+  # terraform-ignore (not remove) keeps the field in the SDK models — only
+  # the Terraform schema drops it. The extension is dropped if left as a
+  # $ref sibling, so unwrap into allOf.
+  - target: $["components"]["schemas"]["LaunchDbDto"]["properties"]["computeEnv"]["$ref"]
+    remove: true
+  - target: $.components.schemas.LaunchDbDto.properties.computeEnv
+    update:
+      allOf:
+        - $ref: "#/components/schemas/ComputeEnv_ComputeConfig_"
+      x-speakeasy-terraform-ignore: true
 
   # Remove computed/inherited field
   - target: $.components.schemas.PipelineDbDto.properties.visibility

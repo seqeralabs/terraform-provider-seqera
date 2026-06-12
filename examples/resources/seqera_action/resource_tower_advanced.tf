@@ -36,7 +36,6 @@ resource "seqera_action" "tower_advanced" {
       aws s3 sync ./results s3://my-bucket/results
     EOT
 
-    resume      = true
     pull_latest = true
   }
 }

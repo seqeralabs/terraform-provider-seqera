@@ -113,7 +113,6 @@ resource "seqera_action" "my_action" {
     post_run_script = file("${path.module}/scripts/post-run.sh")
 
     pull_latest = true
-    resume      = true
     revision    = "master"
     work_dir    = var.work_dir
   }

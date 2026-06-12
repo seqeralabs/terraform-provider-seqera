@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
@@ -22,7 +20,7 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 		if resp.PipelineInfo == nil {
 			r.PipelineInfo = nil
 		} else {
-			r.PipelineInfo = &tfTypes.PipelineMinInfoResponse{}
+			r.PipelineInfo = &tfTypes.DescribeWorkflowResponsePipelineInfo{}
 			r.PipelineInfo.ID = types.Int64PointerValue(resp.PipelineInfo.ID)
 			if resp.PipelineInfo.Version == nil {
 				r.PipelineInfo.Version = nil
@@ -37,68 +35,6 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.PipelineInfo.Version.Name = types.StringPointerValue(resp.PipelineInfo.Version.Name)
 			}
 			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
-		}
-		if resp.Workflow == nil {
-			r.Workflow = nil
-		} else {
-			r.Workflow = &tfTypes.WorkflowMaxDbDto{}
-			r.Workflow.CommandLine = types.StringPointerValue(resp.Workflow.CommandLine)
-			r.Workflow.Complete = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Complete))
-			if resp.Workflow.ConfigFiles != nil {
-				r.Workflow.ConfigFiles = make([]types.String, 0, len(resp.Workflow.ConfigFiles))
-				for _, v := range resp.Workflow.ConfigFiles {
-					r.Workflow.ConfigFiles = append(r.Workflow.ConfigFiles, types.StringValue(v))
-				}
-			} else {
-				r.Workflow.ConfigFiles = nil
-			}
-			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
-			r.Workflow.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.DateCreated))
-			r.Workflow.Deleted = types.BoolPointerValue(resp.Workflow.Deleted)
-			if resp.Workflow.Fusion == nil {
-				r.Workflow.Fusion = nil
-			} else {
-				r.Workflow.Fusion = &tfTypes.WfFusionMeta{}
-				r.Workflow.Fusion.Enabled = types.BoolPointerValue(resp.Workflow.Fusion.Enabled)
-				r.Workflow.Fusion.Version = types.StringPointerValue(resp.Workflow.Fusion.Version)
-			}
-			r.Workflow.ID = types.StringPointerValue(resp.Workflow.ID)
-			r.Workflow.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.LastUpdated))
-			r.Workflow.LaunchID = types.StringPointerValue(resp.Workflow.LaunchID)
-			r.Workflow.LogFile = types.StringPointerValue(resp.Workflow.LogFile)
-			r.Workflow.OperationID = types.StringPointerValue(resp.Workflow.OperationID)
-			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
-			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
-			if resp.Workflow.Params != nil {
-				r.Workflow.Params = make(map[string]jsontypes.Normalized, len(resp.Workflow.Params))
-				for key, value := range resp.Workflow.Params {
-					result, _ := json.Marshal(value)
-					r.Workflow.Params[key] = jsontypes.NewNormalizedValue(string(result))
-				}
-			}
-			r.Workflow.Profile = types.StringPointerValue(resp.Workflow.Profile)
-			r.Workflow.ProjectName = types.StringPointerValue(resp.Workflow.ProjectName)
-			r.Workflow.Repository = types.StringPointerValue(resp.Workflow.Repository)
-			r.Workflow.RequiresAttention = types.BoolPointerValue(resp.Workflow.RequiresAttention)
-			r.Workflow.Resume = types.BoolPointerValue(resp.Workflow.Resume)
-			r.Workflow.Revision = types.StringPointerValue(resp.Workflow.Revision)
-			r.Workflow.RunName = types.StringPointerValue(resp.Workflow.RunName)
-			r.Workflow.ScriptName = types.StringPointerValue(resp.Workflow.ScriptName)
-			r.Workflow.SessionID = types.StringPointerValue(resp.Workflow.SessionID)
-			r.Workflow.Start = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Start))
-			if resp.Workflow.Status != nil {
-				r.Workflow.Status = types.StringValue(string(*resp.Workflow.Status))
-			} else {
-				r.Workflow.Status = types.StringNull()
-			}
-			r.Workflow.Submit = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Submit))
-			if resp.Workflow.Wave == nil {
-				r.Workflow.Wave = nil
-			} else {
-				r.Workflow.Wave = &tfTypes.WfWaveMeta{}
-				r.Workflow.Wave.Enabled = types.BoolPointerValue(resp.Workflow.Wave.Enabled)
-			}
-			r.Workflow.WorkDir = types.StringPointerValue(resp.Workflow.WorkDir)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -288,12 +224,6 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		pullLatest = nil
 	}
-	resume := new(bool)
-	if !r.Resume.IsUnknown() && !r.Resume.IsNull() {
-		*resume = r.Resume.ValueBool()
-	} else {
-		resume = nil
-	}
 	revision := new(string)
 	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {
 		*revision = r.Revision.ValueString()
@@ -353,7 +283,6 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		PostRunScript:    postRunScript,
 		PreRunScript:     preRunScript,
 		PullLatest:       pullLatest,
-		Resume:           resume,
 		Revision:         revision,
 		RunName:          runName,
 		SchemaName:       schemaName,

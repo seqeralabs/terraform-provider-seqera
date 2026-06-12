@@ -2,14 +2,316 @@
 
 package shared
 
-type DescribeWorkflowResponse struct {
-	PipelineInfo              *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
-	IntelligentComputeEnabled *bool                    `json:"schedEnabled,omitempty"`
-	Workflow                  *WorkflowMaxDbDto        `json:"workflow,omitempty"`
-	WorkspaceID               *int64                   `json:"workspaceId,omitempty"`
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
+)
+
+type DescribeWorkflowResponsePipelineInfo struct {
+	ID          *int64                                                 `json:"id,omitempty"`
+	Version     *PipelineMinInfoResponsePipelineVersionMinInfoResponse `json:"version,omitempty"`
+	WorkspaceID *int64                                                 `json:"workspaceId,omitempty"`
 }
 
-func (d *DescribeWorkflowResponse) GetPipelineInfo() *PipelineMinInfoResponse {
+func (d *DescribeWorkflowResponsePipelineInfo) GetID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DescribeWorkflowResponsePipelineInfo) GetVersion() *PipelineMinInfoResponsePipelineVersionMinInfoResponse {
+	if d == nil {
+		return nil
+	}
+	return d.Version
+}
+
+func (d *DescribeWorkflowResponsePipelineInfo) GetWorkspaceID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.WorkspaceID
+}
+
+// DescribeWorkflowResponseWorkflow - Represents a workflow execution record.
+// Contains execution status, metadata, and results from pipeline
+// runs including logs and performance metrics.
+type DescribeWorkflowResponseWorkflow struct {
+	// Command line
+	CommandLine *string `json:"commandLine,omitempty"`
+	// Timestamp when the workflow execution completed
+	Complete *time.Time `json:"complete,omitempty"`
+	// Config files (can be null)
+	ConfigFiles []string `json:"configFiles,omitempty"`
+	// Config text
+	ConfigText  *string    `json:"configText,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Whether the workflow is deleted
+	Deleted *bool `json:"deleted,omitempty"`
+	// Unique identifier for the workflow execution
+	ID          *string    `json:"id,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Launch ID
+	LaunchID *string `json:"launchId,omitempty"`
+	// Numeric identifier of the user who owns this workflow
+	OwnerID *int64 `json:"ownerId,omitempty"`
+	// Workflow parameters (can be null)
+	Params map[string]any `json:"params,omitempty"`
+	// Profile
+	Profile *string `json:"profile,omitempty"`
+	// Project name
+	ProjectName *string `json:"projectName,omitempty"`
+	// Repository
+	Repository *string `json:"repository,omitempty"`
+	// Requires attention flag
+	RequiresAttention *bool `json:"requiresAttention,omitempty"`
+	// Resume flag
+	Resume *bool `json:"resume,omitempty"`
+	// Revision
+	Revision *string `json:"revision,omitempty"`
+	// Run name
+	RunName *string `json:"runName,omitempty"`
+	// Script name
+	ScriptName *string `json:"scriptName,omitempty"`
+	// Session ID
+	SessionID *string `json:"sessionId,omitempty"`
+	// Timestamp when the workflow execution actually started
+	Start  *time.Time      `json:"start,omitempty"`
+	Status *WorkflowStatus `json:"status,omitempty"`
+	// Timestamp when the workflow was submitted for execution
+	Submit *time.Time `json:"submit,omitempty"`
+	// Work directory
+	WorkDir     *string       `json:"workDir,omitempty"`
+	Fusion      *WfFusionMeta `json:"fusion,omitempty"`
+	LogFile     *string       `json:"logFile,omitempty"`
+	OperationID *string       `json:"operationId,omitempty"`
+	OutFile     *string       `json:"outFile,omitempty"`
+	Wave        *WfWaveMeta   `json:"wave,omitempty"`
+}
+
+func (d DescribeWorkflowResponseWorkflow) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DescribeWorkflowResponseWorkflow) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetCommandLine() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CommandLine
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetComplete() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.Complete
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetConfigFiles() []string {
+	if d == nil {
+		return nil
+	}
+	return d.ConfigFiles
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetConfigText() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ConfigText
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetDateCreated() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.DateCreated
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetDeleted() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Deleted
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ID
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetLastUpdated() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.LastUpdated
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetLaunchID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LaunchID
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetOwnerID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.OwnerID
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetParams() map[string]any {
+	if d == nil {
+		return nil
+	}
+	return d.Params
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetProfile() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Profile
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetProjectName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ProjectName
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetRepository() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Repository
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetRequiresAttention() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.RequiresAttention
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetResume() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Resume
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetRevision() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Revision
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetRunName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.RunName
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetScriptName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ScriptName
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetSessionID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.SessionID
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetStart() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.Start
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetStatus() *WorkflowStatus {
+	if d == nil {
+		return nil
+	}
+	return d.Status
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetSubmit() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.Submit
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetWorkDir() *string {
+	if d == nil {
+		return nil
+	}
+	return d.WorkDir
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetFusion() *WfFusionMeta {
+	if d == nil {
+		return nil
+	}
+	return d.Fusion
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetLogFile() *string {
+	if d == nil {
+		return nil
+	}
+	return d.LogFile
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetOperationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.OperationID
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetOutFile() *string {
+	if d == nil {
+		return nil
+	}
+	return d.OutFile
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetWave() *WfWaveMeta {
+	if d == nil {
+		return nil
+	}
+	return d.Wave
+}
+
+type DescribeWorkflowResponse struct {
+	PipelineInfo              *DescribeWorkflowResponsePipelineInfo `json:"pipelineInfo,omitempty"`
+	IntelligentComputeEnabled *bool                                 `json:"schedEnabled,omitempty"`
+	Workflow                  *DescribeWorkflowResponseWorkflow     `json:"workflow,omitempty"`
+	WorkspaceID               *int64                                `json:"workspaceId,omitempty"`
+}
+
+func (d *DescribeWorkflowResponse) GetPipelineInfo() *DescribeWorkflowResponsePipelineInfo {
 	if d == nil {
 		return nil
 	}
@@ -23,7 +325,7 @@ func (d *DescribeWorkflowResponse) GetIntelligentComputeEnabled() *bool {
 	return d.IntelligentComputeEnabled
 }
 
-func (d *DescribeWorkflowResponse) GetWorkflow() *WorkflowMaxDbDto {
+func (d *DescribeWorkflowResponse) GetWorkflow() *DescribeWorkflowResponseWorkflow {
 	if d == nil {
 		return nil
 	}

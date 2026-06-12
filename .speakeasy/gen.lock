@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 3bd3fe0faf20b958e1fb44dcf1170fea
+  docChecksum: 2fb2f81acd1df73052d225dfce8badb6
   docVersion: 1.153.0
-  speakeasyVersion: 1.777.0
-  generationVersion: 2.903.0
+  speakeasyVersion: 1.777.2
+  generationVersion: 2.903.5
   releaseVersion: 0.40.0
   configChecksum: 5806551663291652221bdae0d7c2feba
 persistentEdits:
@@ -302,7 +302,7 @@ trackedFiles:
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:34f2b6e4e3863d2776e0a9e3c873b0a11d6b4ca9
+    last_write_checksum: sha1:1c577c00db60936b589c66abbafac202a0d0504b
     pristine_git_object: 0197aba33874c19d2d4a76f51d3c37929a4d811e
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
@@ -422,11 +422,11 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:b027f6f3aab6f94769ad52d20adbacbea3c1498d
+    last_write_checksum: sha1:3aaf2d184814c4f1609a2fa96db43c1f6be77507
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
-    last_write_checksum: sha1:ebaab06830745dcbec775adb9f231a056b9956ef
+    last_write_checksum: sha1:2934a75a2452d99b09153566dc113b8408a8b1d2
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
@@ -498,7 +498,7 @@ trackedFiles:
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:569acc03f08555cae61d000704fb79a89bdddef1
+    last_write_checksum: sha1:e7f3533c0944b86532fe2fc33d927255fde393cf
     pristine_git_object: d5550a0a3bc980d281c55531d71458e7e4968b48
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
@@ -629,10 +629,10 @@ trackedFiles:
     last_write_checksum: sha1:62e7d80e48a82f86cdf811dca8a8c84aa1d41f82
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
-    last_write_checksum: sha1:f77ca6e9597778e5ef1aabc805d448305a6d2822
+    last_write_checksum: sha1:44a3a60e12542ef85beaf0eab92bd2058fb33537
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
-    last_write_checksum: sha1:2e27fe60f7e2059a3d5841149d4010626af3742d
+    last_write_checksum: sha1:50b29b72fc2088c5865c96015ece1044f3d15b07
     pristine_git_object: eb186d4cf2287bf1eec7eb07d9b9c7e0386b7b26
   internal/provider/pipelinesecret_resource.go:
     id: 5319f8284106
@@ -767,7 +767,7 @@ trackedFiles:
     last_write_checksum: sha1:6f4934c3be48ebd95c2a3394bf20d66416bbf201
     pristine_git_object: 34466719915d7901b6891482d43ebdf8a82252b5
   internal/provider/types/action_launch_request.go:
-    last_write_checksum: sha1:b7cc63d8b2a9d50ca2e05896b2b94fa6b19eb1bc
+    last_write_checksum: sha1:c8db62ceaba6c73e80869964f72a4eee7846db82
   internal/provider/types/action_tower_action_config.go:
     id: 0636d437cb70
     last_write_checksum: sha1:88f1aa72102b724b6169fdafab127e8f23d62790
@@ -778,7 +778,7 @@ trackedFiles:
     pristine_git_object: 623a5ee4c19452cb4a167a68975847f273281e71
   internal/provider/types/amazon_eks_cluster_configuration.go:
     id: 7936e8a5dc0b
-    last_write_checksum: sha1:b464a6b87ca9be7b5031a66185b6ed13997ba821
+    last_write_checksum: sha1:1d1dc511aefbe6bf9d2aab36dacfc35efdb0d41c
     pristine_git_object: 976221f26c4f0222c2d5945be36da82a9afff191
   internal/provider/types/aws_batch_config.go:
     id: 75b92191a3bd
@@ -786,13 +786,13 @@ trackedFiles:
     pristine_git_object: 555d5f732c12cfc2b22d4fb1acaa75a30f7ec604
   internal/provider/types/aws_batch_configuration.go:
     id: f48dc5af48a6
-    last_write_checksum: sha1:db767b32bfc2fb4189addc2e19f8f72cd0911823
+    last_write_checksum: sha1:ad52fa89d1919b5897b10da7a4025a7b9d02c8ac
     pristine_git_object: 7db3202471193f93826bdf67c90bd74b9dab4c88
   internal/provider/types/aws_cloud_config.go:
     last_write_checksum: sha1:2e5b6470024757b7ccff0882b57ee4d5a9fc5e10
   internal/provider/types/aws_cloud_configuration.go:
     id: db2f67953459
-    last_write_checksum: sha1:1e1d73343d108dae3d056651be00660c29e3f178
+    last_write_checksum: sha1:a71cd884dc4177bc0634a518d065f560115ae1af
     pristine_git_object: 62842b6d7f36077a795bcfce869fcaff8d351e2d
   internal/provider/types/aws_code_commit_credentials.go:
     id: 78d63242bf3a
@@ -814,7 +814,7 @@ trackedFiles:
     last_write_checksum: sha1:50a6f99e1fe960d077ed0eebffaa5bf3d7597c1c
   internal/provider/types/azure_batch_configuration.go:
     id: c880ec503280
-    last_write_checksum: sha1:b0782c5246ede6bf1781ff620c200c67bf7badab
+    last_write_checksum: sha1:d26040afc87f4c3e77983990dbfbd54610258343
     pristine_git_object: cb480f8f017e553bf3999b583fe1ba3dc0e2ca4b
   internal/provider/types/azure_cloud_configuration.go:
     id: 82511ba85861
@@ -845,13 +845,11 @@ trackedFiles:
   internal/provider/types/bucket_action_request.go:
     last_write_checksum: sha1:a6c493761b5382f818c542ea3383d88fdf48e84c
   internal/provider/types/compute_config.go:
-    last_write_checksum: sha1:66a7936e0f73a5446275df3e2b07fc1fa286edb4
+    last_write_checksum: sha1:0b3635eda86d3d0c0356c383f8bc38d5bef63d41
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
-    last_write_checksum: sha1:b0930c86e9284d2b6b2a5aace944103e86ace4ec
+    last_write_checksum: sha1:c85553d2d0342a805e8e52ce6f43910da261b4a0
     pristine_git_object: 4e2b91d1eb0b29699d4a1d4e6603011abd8a7418
-  internal/provider/types/compute_env_compute_config1.go:
-    last_write_checksum: sha1:e7da0bbd53931459d7ea789e3dd9b5b4278726b5
   internal/provider/types/compute_env_response_dto_resources.go:
     id: 3bca39bd37e3
     last_write_checksum: sha1:7a1754b0c9d14a5b1c9bd9668b219a56176ecfef
@@ -886,6 +884,8 @@ trackedFiles:
     id: 25a48f67c4fb
     last_write_checksum: sha1:4aa6c7d0c1dd711fb5de49dc4b8c39d409fad4a8
     pristine_git_object: 5d2f7ae2dd4a0505cb1dbb535e1e664771fcc9ed
+  internal/provider/types/describe_workflow_response_pipeline_info.go:
+    last_write_checksum: sha1:4161b63feea1f9acc06db69b6e1256b0700ebadb
   internal/provider/types/forge_config.go:
     id: 59cc8ac25831
     last_write_checksum: sha1:1e0e577a94fb9505a2ef91ab9e7856143d920ab4
@@ -912,7 +912,7 @@ trackedFiles:
     last_write_checksum: sha1:2ea12c8796c60aef5282c4abaf10b92260fa1873
   internal/provider/types/google_batch_service_configuration.go:
     id: 5a581f1c4635
-    last_write_checksum: sha1:424253fca68124a48d60eb944d8acac635303f13
+    last_write_checksum: sha1:9468b518adc8e95315d52acc6d5df43935d287c3
     pristine_git_object: 3b1d18b5efc8fd5120b4d3f2f7a9a56feafa342c
   internal/provider/types/google_cloud_config.go:
     last_write_checksum: sha1:9c0bf7121f7c5699a63c0644927e9f4fcfdfb617
@@ -926,10 +926,10 @@ trackedFiles:
     pristine_git_object: c16ad2a4da463a9e38d539019bdee713a89d6db8
   internal/provider/types/google_gke_cluster_configuration.go:
     id: d670e605e603
-    last_write_checksum: sha1:6ef12d5b6faa2c8a8195757786097a840aa95bc8
+    last_write_checksum: sha1:4e5ee0e22543aebebef80ac957f2141ed567bf59
     pristine_git_object: 1314ce36e4cb0dfd552031415264b763974c34cc
   internal/provider/types/google_life_sciences_configuration_retired.go:
-    last_write_checksum: sha1:f48e40d62aae53f4f9c47a491121b7be059927ab
+    last_write_checksum: sha1:aa810f198e04fa3090d4d7017db9e95df5143650
   internal/provider/types/ibmlsf_configuration.go:
     id: 601a3c320ae8
     last_write_checksum: sha1:98c23e932b6aec2cd918743d45a09eb0d786e11f
@@ -947,7 +947,7 @@ trackedFiles:
     last_write_checksum: sha1:68cb7e7586e62cd6f11fd900f9d3e2322e62c82e
     pristine_git_object: 57a30b21ca693cde4f2e4d6dd6d128505280451a
   internal/provider/types/local_execution_configuration.go:
-    last_write_checksum: sha1:87f69a75df8856ceb8c4c3b1af880f7283ba2702
+    last_write_checksum: sha1:db33b4ea67883dfc99edec292ed8243e864ceabe
   internal/provider/types/local_security_keys.go:
     id: 9d6f76c965ee
     last_write_checksum: sha1:74916914478277178628509bd7afb7bdaf23f5eb
@@ -958,8 +958,6 @@ trackedFiles:
     pristine_git_object: eb84f2d23ae2970348690f068e599fb67cc3f359
   internal/provider/types/mount_data.go:
     last_write_checksum: sha1:6439db35cbcddc245d8e0a590878d02639f4f221
-  internal/provider/types/pipeline_min_info_response.go:
-    last_write_checksum: sha1:61a7652784a8c1a055c8e006653d2872e806e28e
   internal/provider/types/pipeline_min_info_response_pipeline_version_min_info_response.go:
     last_write_checksum: sha1:d149cbaa16b13ea7d9034623bbcb8d0a6666c666
   internal/provider/types/s3_compatible_credentials.go:
@@ -998,27 +996,21 @@ trackedFiles:
     id: 1bff7795c6ea
     last_write_checksum: sha1:64d058d21c656d6f0fcc84c9551a5d09f4c1bc30
     pristine_git_object: 4103cca9f88b2e8e142ba6023efb0383d00b211a
-  internal/provider/types/wf_fusion_meta.go:
-    last_write_checksum: sha1:b8466e2429b1f6cf552d01cb1f7d9eb4f170ac52
-  internal/provider/types/wf_wave_meta.go:
-    last_write_checksum: sha1:8c29831f2b0773a5637372ca12724590a7822cba
   internal/provider/types/workflow_launch_request.go:
     id: af36165a8643
-    last_write_checksum: sha1:da6a2369d040d118d0f6a679374c1c78b66f5fb7
+    last_write_checksum: sha1:cd59229333c381d7582c3d171738e5c6c0b293c3
     pristine_git_object: 11b31ac54b41f1ff6655e5775689da9baec929f7
-  internal/provider/types/workflow_max_db_dto.go:
-    last_write_checksum: sha1:8df582ee6d45569a8cbae0de0bb43d90b6c1ff59
   internal/provider/utils.go:
     id: 312d50f148af
     last_write_checksum: sha1:ebb9748832af8f468cc80deac9ce582a4dddd690
     pristine_git_object: 9cc78dd1f7684941df14144df744dad2b23885f9
   internal/provider/workflows_resource.go:
     id: efcad015245a
-    last_write_checksum: sha1:335b12b5b9ec8277986b15fa4c56d0c69f18843d
+    last_write_checksum: sha1:0e9af35f0cca8946c35a24878a2d8dbbdcff3f2c
     pristine_git_object: 2ec8cdfba570a37c74c14055a3d9ffa12fe8881c
   internal/provider/workflows_resource_sdk.go:
     id: ee2d992725aa
-    last_write_checksum: sha1:0ae2d06bab1aedbad8e9fd41e6078eb7efc9599e
+    last_write_checksum: sha1:c9d2366d190263bacc49a1011444bd13afac34c7
     pristine_git_object: 32dd5a54a21939c3cfa3c2ada55b841cb54032f9
   internal/provider/workspace_resource.go:
     id: 4255ab3c913f
@@ -2313,7 +2305,7 @@ trackedFiles:
     last_write_checksum: sha1:ad02e4ee4991f38caab91983a4832a9eb47be28e
     pristine_git_object: 730a625fa6922c93c90574273666fec9cdc3b496
   internal/sdk/models/shared/actionlaunchrequest.go:
-    last_write_checksum: sha1:26d364b7453683e375bf24864057b6167e4a425c
+    last_write_checksum: sha1:61d30b92f03a93e330a4ad543a6b3c32bfc6e38f
   internal/sdk/models/shared/actionqueryattribute.go:
     id: fc49f81f9928
     last_write_checksum: sha1:4b9dd187de1586826868830da4ff5ae13fbbcef7
@@ -2468,8 +2460,8 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     last_write_checksum: sha1:5229eb62d2673b3616eddcffdc24517f7db05b42
-  internal/sdk/models/shared/computeenvcomputeconfig.go:
-    last_write_checksum: sha1:4164a145840d6564dcfad17ce60af7d585ef5480
+  internal/sdk/models/shared/computeenvcomputeconfiginput.go:
+    last_write_checksum: sha1:1bb6756bcedb7ad94f82cfa537689b6a6ba4f953
   internal/sdk/models/shared/computeenvqueryattribute.go:
     id: e1c918e85834
     last_write_checksum: sha1:2a23d6eeb2fe769fcc665b88dcf77feadbbb1fe8
@@ -3138,7 +3130,7 @@ trackedFiles:
     pristine_git_object: 4d50a2aa4f9d347610611cd2c7dbb0c13584944a
   internal/sdk/models/shared/describeworkflowresponse.go:
     id: cb46c0306832
-    last_write_checksum: sha1:ebb56a1f9435cc3ae0c890df2525e67dd3d36a4e
+    last_write_checksum: sha1:5fa2c2ab4d9d4ce261a0f01244e342e719ab1ae3
     pristine_git_object: 43bc140ba6761af9a9802c976cd34258868edbe5
   internal/sdk/models/shared/describeworkspaceresponse.go:
     id: 5b7149929e4d
@@ -3277,7 +3269,7 @@ trackedFiles:
     last_write_checksum: sha1:df630144fbe276623a0d21b4fb5771e4c829b062
     pristine_git_object: 0ac170c9ca4204d1d3cd7e2cdd67041692cd6449
   internal/sdk/models/shared/launchdbdto.go:
-    last_write_checksum: sha1:f02b3fc9cfd4ac2a68352ab4e3ba0a19cce30a9a
+    last_write_checksum: sha1:4266db95456c399435271cfe25f439063e9dad0c
   internal/sdk/models/shared/linkedsourcedto.go:
     last_write_checksum: sha1:aaca7862a2fa767873e9216ae73228ed828d3d1d
   internal/sdk/models/shared/linkversionrequest.go:
@@ -3668,7 +3660,7 @@ trackedFiles:
     pristine_git_object: df7b2a4139a0d7d29eba4b5e4bfc4cf25af30f96
   internal/sdk/models/shared/tracebeginrequest.go:
     id: 14c21c68d13b
-    last_write_checksum: sha1:4d70a49b1846504ba872b275610bba2ae51c16be
+    last_write_checksum: sha1:c28234069f71e35c33a69b85080f980b07d42ef1
     pristine_git_object: ca89d9361eaaac4dd4ca92b5eab695b1cb9f6ed0
   internal/sdk/models/shared/tracebeginresponse.go:
     id: 61d6797554ac
@@ -3676,7 +3668,7 @@ trackedFiles:
     pristine_git_object: 07a7851e2ce7ec84db0a19a5abe940bed88f9474
   internal/sdk/models/shared/tracecompleterequest.go:
     id: ed2809b2abeb
-    last_write_checksum: sha1:d9b98a55ea6e33588a4e78e3bac15725f951f8fe
+    last_write_checksum: sha1:97c5907e5abd005f08290e99b8c9131f9c9e29ce
     pristine_git_object: 2bad0176f68e8c1533a3ba7a445c730e8fb22203
   internal/sdk/models/shared/tracecompleteresponse.go:
     id: 21433f9f0d09
@@ -3898,17 +3890,15 @@ trackedFiles:
     pristine_git_object: f43f1d0001435091a6c4b982fce923c16604d4f5
   internal/sdk/models/shared/wfwavemeta.go:
     last_write_checksum: sha1:f387b2895aed69dc047ac75996f00eb55604eaa1
-  internal/sdk/models/shared/workflow.go:
-    id: b060f88ddfde
-    last_write_checksum: sha1:59834296cfc1789104936cd6311bc90fcc35b0c4
-    pristine_git_object: 1c166917d98a322d7c22deda4fc9fdb35be5881f
   internal/sdk/models/shared/workflowdbdto.go:
     id: e47bdf72a96a
     last_write_checksum: sha1:951cdc274eaa2f472100b49c9c744daae93ac35f
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
+  internal/sdk/models/shared/workflowinput.go:
+    last_write_checksum: sha1:16102510d016ad90544f6b4a708cc1c5d298db3a
   internal/sdk/models/shared/workflowlaunchrequest.go:
     id: 2b0df021cbad
-    last_write_checksum: sha1:e1b8f6cefabaf32216c2207d9813ecac742d389d
+    last_write_checksum: sha1:71ec980aca6b037c1c0d963994bb8610d321749d
     pristine_git_object: 610d44495458858e298def213b53372951961f8e
   internal/sdk/models/shared/workflowlaunchresponse.go:
     id: 58befbe96295
@@ -3922,8 +3912,6 @@ trackedFiles:
     id: a72344038467
     last_write_checksum: sha1:90a4051bc431a3973fdf8802dabf0e73fec28ae7
     pristine_git_object: 56d0ef18ecdaf77866c74900461affc550f200c4
-  internal/sdk/models/shared/workflowmaxdbdto.go:
-    last_write_checksum: sha1:e759995f5122516935b6e027b512578019514519
   internal/sdk/models/shared/workflowmetrics.go:
     id: 7011b720dc2e
     last_write_checksum: sha1:dbf3e203b806a8b8e8d2d122f778f26092ab7e56
@@ -3988,7 +3976,7 @@ trackedFiles:
     last_write_checksum: sha1:4254ac7cabfdf1410c8e69888cc51a81318bbfb4
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:52b9ae25bc5d00c9ffe1db006c9e231f8dfe6c09
+    last_write_checksum: sha1:063d7827aada6363c419055db5ee554426eca547
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
@@ -4130,7 +4118,7 @@ examples:
         query:
           workspaceId: 547784
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "<value>"}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -4164,7 +4152,7 @@ examples:
         path:
           actionId: "<id>"
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6101,7 +6089,7 @@ examples:
         query:
           workspaceId: 140455
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "<value>"}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -6146,7 +6134,7 @@ examples:
         query:
           workspaceId: 936263
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "rna-seq-analysis"}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "rna-seq-analysis"}
       responses:
         "200":
           application/json: {}
@@ -6480,7 +6468,7 @@ examples:
         query:
           workspaceId: 714137
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}}
       responses:
         "200":
           application/json: {}
@@ -6699,7 +6687,7 @@ examples:
           pipelineId: 644348
           versionId: "<id>"
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "resume": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "rna-seq-analysis"}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}, "name": "rna-seq-analysis"}
       responses:
         "200":
           application/json: {}

@@ -12,9 +12,10 @@ type AzureBatchConfiguration struct {
 	DeleteJobsOnCompletionEnabled types.Bool          `tfsdk:"delete_jobs_on_completion_enabled"`
 	DeletePoolsOnCompletion       types.Bool          `tfsdk:"delete_pools_on_completion"`
 	DeleteTasksOnCompletion       types.Bool          `tfsdk:"delete_tasks_on_completion"`
+	EnableFusion                  types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave                    types.Bool          `tfsdk:"enable_wave"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	Forge                         *AzBatchForgeConfig `tfsdk:"forge"`
-	EnableFusion                  types.Bool          `tfsdk:"enable_fusion"`
 	HeadJobCpus                   types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb               types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadPool                      types.String        `tfsdk:"head_pool"`
@@ -30,7 +31,6 @@ type AzureBatchConfiguration struct {
 	SubnetID                      types.String        `tfsdk:"subnet_id"`
 	TerminateJobsOnCompletion     types.Bool          `tfsdk:"terminate_jobs_on_completion"`
 	TokenDuration                 types.String        `tfsdk:"token_duration"`
-	EnableWave                    types.Bool          `tfsdk:"enable_wave"`
 	WorkDir                       types.String        `tfsdk:"work_dir"`
 	WorkerPool                    types.String        `tfsdk:"worker_pool"`
 }

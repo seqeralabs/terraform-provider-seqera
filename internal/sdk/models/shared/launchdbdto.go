@@ -2,9 +2,330 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
+)
+
+type LaunchDbDtoPlatform string
+
+const (
+	LaunchDbDtoPlatformAwsBatch              LaunchDbDtoPlatform = "aws-batch"
+	LaunchDbDtoPlatformAwsCloud              LaunchDbDtoPlatform = "aws-cloud"
+	LaunchDbDtoPlatformGoogleLifesciences    LaunchDbDtoPlatform = "google-lifesciences"
+	LaunchDbDtoPlatformGoogleBatch           LaunchDbDtoPlatform = "google-batch"
+	LaunchDbDtoPlatformGoogleCloud           LaunchDbDtoPlatform = "google-cloud"
+	LaunchDbDtoPlatformAzureBatch            LaunchDbDtoPlatform = "azure-batch"
+	LaunchDbDtoPlatformAzureCloud            LaunchDbDtoPlatform = "azure-cloud"
+	LaunchDbDtoPlatformK8sPlatform           LaunchDbDtoPlatform = "k8s-platform"
+	LaunchDbDtoPlatformEksPlatform           LaunchDbDtoPlatform = "eks-platform"
+	LaunchDbDtoPlatformGkePlatform           LaunchDbDtoPlatform = "gke-platform"
+	LaunchDbDtoPlatformUgePlatform           LaunchDbDtoPlatform = "uge-platform"
+	LaunchDbDtoPlatformSlurmPlatform         LaunchDbDtoPlatform = "slurm-platform"
+	LaunchDbDtoPlatformLsfPlatform           LaunchDbDtoPlatform = "lsf-platform"
+	LaunchDbDtoPlatformAltairPlatform        LaunchDbDtoPlatform = "altair-platform"
+	LaunchDbDtoPlatformMoabPlatform          LaunchDbDtoPlatform = "moab-platform"
+	LaunchDbDtoPlatformSeqeracomputePlatform LaunchDbDtoPlatform = "seqeracompute-platform"
+)
+
+func (e LaunchDbDtoPlatform) ToPointer() *LaunchDbDtoPlatform {
+	return &e
+}
+func (e *LaunchDbDtoPlatform) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "aws-batch":
+		fallthrough
+	case "aws-cloud":
+		fallthrough
+	case "google-lifesciences":
+		fallthrough
+	case "google-batch":
+		fallthrough
+	case "google-cloud":
+		fallthrough
+	case "azure-batch":
+		fallthrough
+	case "azure-cloud":
+		fallthrough
+	case "k8s-platform":
+		fallthrough
+	case "eks-platform":
+		fallthrough
+	case "gke-platform":
+		fallthrough
+	case "uge-platform":
+		fallthrough
+	case "slurm-platform":
+		fallthrough
+	case "lsf-platform":
+		fallthrough
+	case "altair-platform":
+		fallthrough
+	case "moab-platform":
+		fallthrough
+	case "seqeracompute-platform":
+		*e = LaunchDbDtoPlatform(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for LaunchDbDtoPlatform: %v", v)
+	}
+}
+
+type LaunchDbDtoStatus string
+
+const (
+	LaunchDbDtoStatusCreating  LaunchDbDtoStatus = "CREATING"
+	LaunchDbDtoStatusAvailable LaunchDbDtoStatus = "AVAILABLE"
+	LaunchDbDtoStatusDisabled  LaunchDbDtoStatus = "DISABLED"
+	LaunchDbDtoStatusDeleting  LaunchDbDtoStatus = "DELETING"
+	LaunchDbDtoStatusErrored   LaunchDbDtoStatus = "ERRORED"
+	LaunchDbDtoStatusInvalid   LaunchDbDtoStatus = "INVALID"
+	LaunchDbDtoStatusDeleted   LaunchDbDtoStatus = "DELETED"
+)
+
+func (e LaunchDbDtoStatus) ToPointer() *LaunchDbDtoStatus {
+	return &e
+}
+func (e *LaunchDbDtoStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CREATING":
+		fallthrough
+	case "AVAILABLE":
+		fallthrough
+	case "DISABLED":
+		fallthrough
+	case "DELETING":
+		fallthrough
+	case "ERRORED":
+		fallthrough
+	case "INVALID":
+		fallthrough
+	case "DELETED":
+		*e = LaunchDbDtoStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for LaunchDbDtoStatus: %v", v)
+	}
+}
+
+type ComputeEnv struct {
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config        ComputeConfig       `json:"config"`
+	CredentialsID string              `json:"credentialsId"`
+	DateCreated   *time.Time          `json:"dateCreated,omitempty"`
+	Deleted       *bool               `json:"deleted,omitempty"`
+	Description   *string             `json:"description,omitempty"`
+	ComputeEnvID  *string             `json:"id,omitempty"`
+	LastUpdated   *time.Time          `json:"lastUpdated,omitempty"`
+	LastUsed      *time.Time          `json:"lastUsed,omitempty"`
+	Message       *string             `json:"message,omitempty"`
+	Name          string              `json:"name"`
+	OrgID         *int64              `json:"orgId,omitempty"`
+	Platform      LaunchDbDtoPlatform `json:"platform"`
+	Primary       *bool               `json:"primary,omitempty"`
+	Status        *LaunchDbDtoStatus  `json:"status,omitempty"`
+	WorkspaceID   *int64              `json:"workspaceId,omitempty"`
+}
+
+func (c ComputeEnv) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *ComputeEnv) GetConfig() ComputeConfig {
+	if c == nil {
+		return ComputeConfig{}
+	}
+	return c.Config
+}
+
+func (c *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	return c.GetConfig().AltairPBSConfiguration
+}
+
+func (c *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
+	return c.GetConfig().AWSBatchConfiguration
+}
+
+func (c *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
+	return c.GetConfig().AWSCloudConfiguration
+}
+
+func (c *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
+	return c.GetConfig().AzureBatchConfiguration
+}
+
+func (c *ComputeEnv) GetConfigAzureCloud() *AzureCloudConfiguration {
+	return c.GetConfig().AzureCloudConfiguration
+}
+
+func (c *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	return c.GetConfig().AmazonEKSClusterConfiguration
+}
+
+func (c *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	return c.GetConfig().GoogleGKEClusterConfiguration
+}
+
+func (c *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	return c.GetConfig().GoogleBatchServiceConfiguration
+}
+
+func (c *ComputeEnv) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	return c.GetConfig().GoogleCloudConfiguration
+}
+
+func (c *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	return c.GetConfig().GoogleLifeSciencesConfigurationRetired
+}
+
+func (c *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	return c.GetConfig().KubernetesComputeConfiguration
+}
+
+func (c *ComputeEnv) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	return c.GetConfig().LocalExecutionConfiguration
+}
+
+func (c *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	return c.GetConfig().IBMLSFConfiguration
+}
+
+func (c *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
+	return c.GetConfig().MoabConfiguration
+}
+
+func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	return c.GetConfig().SeqeraComputeConfiguration
+}
+
+func (c *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
+	return c.GetConfig().SlurmConfiguration
+}
+
+func (c *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	return c.GetConfig().UnivaGridEngineConfiguration
+}
+
+func (c *ComputeEnv) GetCredentialsID() string {
+	if c == nil {
+		return ""
+	}
+	return c.CredentialsID
+}
+
+func (c *ComputeEnv) GetDateCreated() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.DateCreated
+}
+
+func (c *ComputeEnv) GetDeleted() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Deleted
+}
+
+func (c *ComputeEnv) GetDescription() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Description
+}
+
+func (c *ComputeEnv) GetComputeEnvID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ComputeEnvID
+}
+
+func (c *ComputeEnv) GetLastUpdated() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.LastUpdated
+}
+
+func (c *ComputeEnv) GetLastUsed() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.LastUsed
+}
+
+func (c *ComputeEnv) GetMessage() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Message
+}
+
+func (c *ComputeEnv) GetName() string {
+	if c == nil {
+		return ""
+	}
+	return c.Name
+}
+
+func (c *ComputeEnv) GetOrgID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.OrgID
+}
+
+func (c *ComputeEnv) GetPlatform() LaunchDbDtoPlatform {
+	if c == nil {
+		return LaunchDbDtoPlatform("")
+	}
+	return c.Platform
+}
+
+func (c *ComputeEnv) GetPrimary() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Primary
+}
+
+func (c *ComputeEnv) GetStatus() *LaunchDbDtoStatus {
+	if c == nil {
+		return nil
+	}
+	return c.Status
+}
+
+func (c *ComputeEnv) GetWorkspaceID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.WorkspaceID
+}
+
 type LaunchDbDto struct {
-	ComputeEnv     *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
-	ConfigProfiles []string                 `json:"configProfiles,omitempty"`
+	ComputeEnv     *ComputeEnv `json:"computeEnv,omitempty"`
+	ConfigProfiles []string    `json:"configProfiles,omitempty"`
 	// Nextflow configuration text
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
@@ -51,7 +372,7 @@ type LaunchDbDto struct {
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
 }
 
-func (l *LaunchDbDto) GetComputeEnv() *ComputeEnvComputeConfig {
+func (l *LaunchDbDto) GetComputeEnv() *ComputeEnv {
 	if l == nil {
 		return nil
 	}

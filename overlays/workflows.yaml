@@ -238,9 +238,9 @@ actions:
   - target: $.components.schemas.WorkflowLaunchRequest.properties.schemaName
     update:
       example: "nextflow_schema.json"
-  - target: $.components.schemas.WorkflowLaunchRequest.properties.resume
-    update:
-      example: true
+  # (resume has no example: it is terraform-ignored — see the resume block
+  # in overlays/pipelines.yaml, which owns the launch-field surface for the
+  # shared WorkflowLaunchRequest/LaunchDbDto schemas.)
   - target: $.components.schemas.WorkflowLaunchRequest.properties.pullLatest
     update:
       example: true
@@ -360,6 +360,77 @@ actions:
     remove: true
   - target: $.components.schemas.WorkflowDbDto.properties.errorReport
     remove: true
+
+  # Heavyweight run-report internals, ignored on WorkflowDbDto in case it
+  # surfaces via future data sources. None of them are launch inputs — they
+  # describe what the runtime executed. terraform-ignore (not remove) keeps
+  # them in the SDK models; only the Terraform schema drops them.
+  - target: $.components.schemas.WorkflowDbDto.properties.commandLine
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.configText
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.configFiles
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.params
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.deleted
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.requiresAttention
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.profile
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptName
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # Drop the read-only `workflow` run-report block from the Terraform
+  # resource entirely. It held either echoes of launch inputs, a duplicate
+  # of the top-level workflow_id, or run telemetry (status, timestamps)
+  # that is stale by the time Terraform reads it — apply returns at
+  # submission, so state captures whatever was true at the last refresh.
+  # Run outcomes belong to the Platform UI/API/sctl; workflow_id (kept
+  # top-level) is the join key. Dropping schema attributes needs no state
+  # upgrader — the framework silently drops them on the next state write.
+  # terraform-ignore keeps the field in the SDK; allOf-unwrapped because
+  # extensions next to a $ref are dropped.
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["workflow"]["$ref"]
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.workflow
+    update:
+      allOf:
+        - $ref: "#/components/schemas/WorkflowMaxDbDto"
+      x-speakeasy-terraform-ignore: true
+
+  # Suppress "(known after apply)" noise on the remaining read-only
+  # attributes during in-place updates: SuppressDiff propagates the prior
+  # state value into the plan instead of unknown. (On replacement Terraform
+  # re-plans the create with null prior state, so these still show as
+  # unknown there — that's core Terraform behavior for computed attributes.)
+  # pipelineInfo is a $ref property; extensions as $ref siblings are
+  # dropped, so unwrap into allOf to carry the extension.
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["pipelineInfo"]["$ref"]
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.pipelineInfo
+    update:
+      allOf:
+        - $ref: "#/components/schemas/PipelineMinInfoResponse"
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.schedEnabled
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SubmitWorkflowLaunchResponse.properties.workflowId
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
 
   # ============================================================================
   # WORKFLOW LOAD SCHEMA MODIFICATIONS

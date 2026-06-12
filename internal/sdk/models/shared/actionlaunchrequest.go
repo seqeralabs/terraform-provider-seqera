@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 // ActionLaunchRequest - Launch payload for `seqera_action` Create / Update endpoints.
 type ActionLaunchRequest struct {
 	ComputeEnvID   *string  `json:"computeEnvId,omitempty"`
@@ -27,7 +31,7 @@ type ActionLaunchRequest struct {
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Script to run before pipeline execution
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	PullLatest   *bool   `json:"pullLatest,omitempty"`
+	PullLatest   *bool   `default:"false" json:"pullLatest"`
 	Resume       *bool   `json:"resume,omitempty"`
 	// Pipeline revision
 	Revision *string `json:"revision,omitempty"`
@@ -35,13 +39,24 @@ type ActionLaunchRequest struct {
 	RunName *string `json:"runName,omitempty"`
 	// Pipeline schema name
 	SchemaName *string `json:"schemaName,omitempty"`
-	StubRun    *bool   `json:"stubRun,omitempty"`
+	StubRun    *bool   `default:"false" json:"stubRun"`
 	// Tower-specific configuration
 	TowerConfig *string  `json:"towerConfig,omitempty"`
 	UserSecrets []string `json:"userSecrets,omitempty"`
 	// Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
 	WorkDir          *string  `json:"workDir"`
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
+}
+
+func (a ActionLaunchRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *ActionLaunchRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *ActionLaunchRequest) GetComputeEnvID() *string {

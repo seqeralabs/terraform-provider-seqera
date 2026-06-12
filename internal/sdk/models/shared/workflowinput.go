@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type Workflow struct {
+type WorkflowInput struct {
 	CommandLine string `json:"commandLine"`
 	// Workflow completion time (null if not completed)
 	Complete        *time.Time `json:"complete,omitempty"`
@@ -53,284 +53,284 @@ type Workflow struct {
 	WorkDir  string          `json:"workDir"`
 }
 
-func (w Workflow) MarshalJSON() ([]byte, error) {
+func (w WorkflowInput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(w, "", false)
 }
 
-func (w *Workflow) UnmarshalJSON(data []byte) error {
+func (w *WorkflowInput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (w *Workflow) GetCommandLine() string {
+func (w *WorkflowInput) GetCommandLine() string {
 	if w == nil {
 		return ""
 	}
 	return w.CommandLine
 }
 
-func (w *Workflow) GetComplete() *time.Time {
+func (w *WorkflowInput) GetComplete() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.Complete
 }
 
-func (w *Workflow) GetConfigFiles() []string {
+func (w *WorkflowInput) GetConfigFiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigFiles
 }
 
-func (w *Workflow) GetConfigText() *string {
+func (w *WorkflowInput) GetConfigText() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigText
 }
 
-func (w *Workflow) GetContainer() *string {
+func (w *WorkflowInput) GetContainer() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Container
 }
 
-func (w *Workflow) GetContainerEngine() *string {
+func (w *WorkflowInput) GetContainerEngine() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ContainerEngine
 }
 
-func (w *Workflow) GetDuration() *int64 {
+func (w *WorkflowInput) GetDuration() *int64 {
 	if w == nil {
 		return nil
 	}
 	return w.Duration
 }
 
-func (w *Workflow) GetErrorMessage() *string {
+func (w *WorkflowInput) GetErrorMessage() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ErrorMessage
 }
 
-func (w *Workflow) GetErrorReport() *string {
+func (w *WorkflowInput) GetErrorReport() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ErrorReport
 }
 
-func (w *Workflow) GetExitStatus() *int {
+func (w *WorkflowInput) GetExitStatus() *int {
 	if w == nil {
 		return nil
 	}
 	return w.ExitStatus
 }
 
-func (w *Workflow) GetHomeDir() *string {
+func (w *WorkflowInput) GetHomeDir() *string {
 	if w == nil {
 		return nil
 	}
 	return w.HomeDir
 }
 
-func (w *Workflow) GetID() *string {
+func (w *WorkflowInput) GetID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ID
 }
 
-func (w *Workflow) GetLaunchDir() *string {
+func (w *WorkflowInput) GetLaunchDir() *string {
 	if w == nil {
 		return nil
 	}
 	return w.LaunchDir
 }
 
-func (w *Workflow) GetLaunchID() *string {
+func (w *WorkflowInput) GetLaunchID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.LaunchID
 }
 
-func (w *Workflow) GetLogFile() *string {
+func (w *WorkflowInput) GetLogFile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.LogFile
 }
 
-func (w *Workflow) GetManifest() *WfManifest {
+func (w *WorkflowInput) GetManifest() *WfManifest {
 	if w == nil {
 		return nil
 	}
 	return w.Manifest
 }
 
-func (w *Workflow) GetNextflow() *WfNextflow {
+func (w *WorkflowInput) GetNextflow() *WfNextflow {
 	if w == nil {
 		return nil
 	}
 	return w.Nextflow
 }
 
-func (w *Workflow) GetOperationID() *string {
+func (w *WorkflowInput) GetOperationID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.OperationID
 }
 
-func (w *Workflow) GetOutFile() *string {
+func (w *WorkflowInput) GetOutFile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.OutFile
 }
 
-func (w *Workflow) GetParams() map[string]any {
+func (w *WorkflowInput) GetParams() map[string]any {
 	if w == nil {
 		return nil
 	}
 	return w.Params
 }
 
-func (w *Workflow) GetProfile() *string {
+func (w *WorkflowInput) GetProfile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Profile
 }
 
-func (w *Workflow) GetProjectDir() *string {
+func (w *WorkflowInput) GetProjectDir() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ProjectDir
 }
 
-func (w *Workflow) GetProjectName() string {
+func (w *WorkflowInput) GetProjectName() string {
 	if w == nil {
 		return ""
 	}
 	return w.ProjectName
 }
 
-func (w *Workflow) GetRepository() *string {
+func (w *WorkflowInput) GetRepository() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Repository
 }
 
-func (w *Workflow) GetRequiresAttention() *bool {
+func (w *WorkflowInput) GetRequiresAttention() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.RequiresAttention
 }
 
-func (w *Workflow) GetResume() *bool {
+func (w *WorkflowInput) GetResume() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Resume
 }
 
-func (w *Workflow) GetRevision() *string {
+func (w *WorkflowInput) GetRevision() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Revision
 }
 
-func (w *Workflow) GetRunName() string {
+func (w *WorkflowInput) GetRunName() string {
 	if w == nil {
 		return ""
 	}
 	return w.RunName
 }
 
-func (w *Workflow) GetScriptFile() *string {
+func (w *WorkflowInput) GetScriptFile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ScriptFile
 }
 
-func (w *Workflow) GetScriptID() *string {
+func (w *WorkflowInput) GetScriptID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ScriptID
 }
 
-func (w *Workflow) GetScriptName() *string {
+func (w *WorkflowInput) GetScriptName() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ScriptName
 }
 
-func (w *Workflow) GetSessionID() string {
+func (w *WorkflowInput) GetSessionID() string {
 	if w == nil {
 		return ""
 	}
 	return w.SessionID
 }
 
-func (w *Workflow) GetStart() *time.Time {
+func (w *WorkflowInput) GetStart() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.Start
 }
 
-func (w *Workflow) GetStats() *WfStats {
+func (w *WorkflowInput) GetStats() *WfStats {
 	if w == nil {
 		return nil
 	}
 	return w.Stats
 }
 
-func (w *Workflow) GetStatus() *WorkflowStatus {
+func (w *WorkflowInput) GetStatus() *WorkflowStatus {
 	if w == nil {
 		return nil
 	}
 	return w.Status
 }
 
-func (w *Workflow) GetSubmit() time.Time {
+func (w *WorkflowInput) GetSubmit() time.Time {
 	if w == nil {
 		return time.Time{}
 	}
 	return w.Submit
 }
 
-func (w *Workflow) GetSuccess() *bool {
+func (w *WorkflowInput) GetSuccess() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Success
 }
 
-func (w *Workflow) GetUserName() string {
+func (w *WorkflowInput) GetUserName() string {
 	if w == nil {
 		return ""
 	}
 	return w.UserName
 }
 
-func (w *Workflow) GetWorkDir() string {
+func (w *WorkflowInput) GetWorkDir() string {
 	if w == nil {
 		return ""
 	}

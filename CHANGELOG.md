@@ -1,3 +1,33 @@
+# v0.40.2
+
+BREAKING CHANGES:
+
+- **`resume` removed from `seqera_workflows`, `seqera_pipeline.launch`, and `seqera_action.launch`.** The toggle was non-functional through Terraform: Nextflow `-resume` needs the prior run's launch ID and session ID, neither of which the provider exposes, so `resume = true` flagged a resume with no session attached and the run started fresh anyway. Resuming a failed run is an operational action — use the Platform UI or `tw`/`sctl`. Configs that set `resume` fail with `Unsupported argument` until the line is deleted; no other change is needed.
+
+- **The read-only `workflow` run-report block removed from `seqera_workflows`.** Everything in it was either an echo of your inputs, a duplicate of the top-level `workflow_id`, or run telemetry (`status`, timestamps, resolved config) that is stale by the time Terraform reads it — `terraform apply` returns at submission, so state captured whatever was true at the last refresh, making it unreliable for gating on run outcome. `workflow_id` remains as the join key to the Platform UI and API. References such as `seqera_workflows.x.workflow.status` must be removed.
+
+- **The read-only `launch.compute_env` object removed from `seqera_pipeline` and `seqera_action`.** It duplicated the full compute environment (config, Forge settings, …) already managed by the compute-env resources, and flooded plan output with "(known after apply)" whenever the referenced CE changed. `launch.compute_env_id` is unchanged; reference CE details from the CE resource itself.
+
+No state migration is required for any of the removals — Terraform drops the old attributes from state on the next write.
+
+BUGFIXES:
+
+- **Removing a launch field from config now applies the removal instead of silently planning "no changes".** Previously, deleting an attribute such as `params_text` from a `seqera_pipeline` or `seqera_action` launch block produced an empty plan and the old value lived on server-side; the only workaround was setting an empty value or tainting the resource. (`seqera_workflows` was not affected — its top-level launch fields never had this behavior.) Now, in the launch block of both resources:
+
+  - `params_text`, `revision`, `config_text`, `tower_config`, `pre_run_script`, `post_run_script`, `main_script`, `entry_name`, `schema_name`, `run_name`, `head_job_cpus`, `head_job_memory_mb`, `pipeline_schema_id`, and `work_dir` plan to `null` on removal and are cleared on the Platform side by the update.
+  - `pull_latest` and `stub_run` now default to `false` (the API treats absent as false), so removing `pull_latest = true` plans `true -> false`.
+  - `config_profiles`, `user_secrets`, and `workspace_secrets` now default to `[]`, so removing a populated list plans back to empty.
+
+  The same defaults apply to the corresponding top-level fields on `seqera_workflows`, where removal previously planned to `null`; the server-side result is identical.
+
+ENHANCEMENTS:
+
+- **Dramatically quieter plans.** Server-managed echo fields (`pipeline_id`, creator attribution, `launch_container`, `optimization_*`, `session_id`, and friends) no longer flip to "(known after apply)" on every in-place update, and a `seqera_workflows` replacement diff now reads as the one line that caused it plus `workflow_id`, instead of ~120 lines of resolved Nextflow config and run telemetry.
+
+UPGRADE NOTES:
+
+- On the first plan after upgrading, existing `seqera_workflows` resources show a one-time in-place update materialising the new defaults (`user_secrets`/`workspace_secrets` `null -> []`, and `pull_latest`/`stub_run` `null -> false` where they weren't set). Applying it is a state-only write — no API calls are made and no runs are launched, replaced, or modified.
+
 # v0.40.0
 
 FEATURES:
