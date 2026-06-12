@@ -324,7 +324,7 @@ actions:
   # prior session (WorkflowLaunchRequest.id + sessionId), and both are
   # stripped from the Terraform surface by overlays/workflows.yaml — so
   # resume=true flags a resume with no session attached and the run starts
-  # fresh anyway. Resuming a failed run is an operational action (UI/sctl),
+  # fresh anyway. Resuming a failed run is an operational action (UI),
   # not declarative config. Ignored on both the request and the Read#2 echo
   # so the attribute disappears from seqera_workflows, seqera_pipeline.launch
   # and seqera_action.launch alike.
