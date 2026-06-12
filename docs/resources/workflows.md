@@ -86,7 +86,7 @@ resource "seqera_workflows" "with_params" {
 ### Optional
 
 - `compute_env_id` (String) Requires replacement if changed.
-- `config_profiles` (List of String) Requires replacement if changed.
+- `config_profiles` (List of String) Default: []; Requires replacement if changed.
 - `config_text` (String) Nextflow configuration text. Requires replacement if changed.
 - `entry_name` (String) Entry workflow name. Requires replacement if changed.
 - `force` (Boolean) Force the deletion even if the workflow is active
@@ -98,25 +98,21 @@ resource "seqera_workflows" "with_params" {
 - `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
 - `pre_run_script` (String) Script to run before pipeline execution. Requires replacement if changed.
-- `pull_latest` (Boolean) Requires replacement if changed.
-- `resume` (Boolean) Requires replacement if changed.
+- `pull_latest` (Boolean) Default: false; Requires replacement if changed.
 - `revision` (String) Pipeline revision. Requires replacement if changed.
 - `run_name` (String) Custom run name. Requires replacement if changed.
 - `schema_name` (String) Pipeline schema name. Requires replacement if changed.
 - `source_workspace_id` (Number) Source workspace numeric identifier. Requires replacement if changed.
-- `stub_run` (Boolean) Requires replacement if changed.
+- `stub_run` (Boolean) Default: false; Requires replacement if changed.
 - `tower_config` (String) Tower-specific configuration. Requires replacement if changed.
-- `user_secrets` (List of String) Requires replacement if changed.
+- `user_secrets` (List of String) Default: []; Requires replacement if changed.
 - `work_dir` (String) Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir. Requires replacement if changed.
-- `workspace_secrets` (List of String) Requires replacement if changed.
+- `workspace_secrets` (List of String) Default: []; Requires replacement if changed.
 
 ### Read-Only
 
 - `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
-- `workflow` (Attributes) Represents a workflow execution record.
-Contains execution status, metadata, and results from pipeline
-runs including logs and performance metrics. (see [below for nested schema](#nestedatt--workflow))
 - `workflow_id` (String) Workflow string identifier
 
 <a id="nestedatt--pipeline_info"></a>
@@ -140,59 +136,6 @@ Read-Only:
 - `is_draft_version` (Boolean)
 - `last_updated` (String)
 - `name` (String)
-
-
-
-<a id="nestedatt--workflow"></a>
-### Nested Schema for `workflow`
-
-Read-Only:
-
-- `command_line` (String) Command line
-- `complete` (String) Timestamp when the workflow execution completed
-- `config_files` (List of String) Config files (can be null)
-- `config_text` (String) Config text
-- `date_created` (String)
-- `deleted` (Boolean) Whether the workflow is deleted
-- `fusion` (Attributes) (see [below for nested schema](#nestedatt--workflow--fusion))
-- `id` (String) Unique identifier for the workflow execution
-- `last_updated` (String)
-- `launch_id` (String) Launch ID
-- `log_file` (String)
-- `operation_id` (String)
-- `out_file` (String)
-- `owner_id` (Number) Numeric identifier of the user who owns this workflow
-- `params` (Map of String) Workflow parameters (can be null)
-- `profile` (String) Profile
-- `project_name` (String) Project name
-- `repository` (String) Repository
-- `requires_attention` (Boolean) Requires attention flag
-- `resume` (Boolean) Resume flag
-- `revision` (String) Revision
-- `run_name` (String) Run name
-- `script_name` (String) Script name
-- `session_id` (String) Session ID
-- `start` (String) Timestamp when the workflow execution actually started
-- `status` (String)
-- `submit` (String) Timestamp when the workflow was submitted for execution
-- `wave` (Attributes) (see [below for nested schema](#nestedatt--workflow--wave))
-- `work_dir` (String) Work directory
-
-<a id="nestedatt--workflow--fusion"></a>
-### Nested Schema for `workflow.fusion`
-
-Read-Only:
-
-- `enabled` (Boolean)
-- `version` (String)
-
-
-<a id="nestedatt--workflow--wave"></a>
-### Nested Schema for `workflow.wave`
-
-Read-Only:
-
-- `enabled` (Boolean)
 
 ## Import
 

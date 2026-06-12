@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type PipelineMinInfoResponse struct {
+type DescribeWorkflowResponsePipelineInfo struct {
 	ID          types.Int64                                            `tfsdk:"id"`
 	Version     *PipelineMinInfoResponsePipelineVersionMinInfoResponse `tfsdk:"version"`
 	WorkspaceID types.Int64                                            `tfsdk:"workspace_id"`

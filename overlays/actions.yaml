@@ -97,7 +97,6 @@ info:
 #     compute_env_id = seqera_compute_env.aws.id
 #     work_dir       = "s3://my-bucket/api-work"
 #     revision       = "main"
-#     resume         = true
 #     pull_latest    = true
 #   }
 # }
@@ -188,7 +187,7 @@ actions:
         type: object
         description: Launch payload for `seqera_action` Create / Update endpoints.
         allOf:
-          - $ref: '#/components/schemas/WorkflowLaunchRequest'
+          - $ref: "#/components/schemas/WorkflowLaunchRequest"
         properties:
           id:
             type: string
@@ -197,11 +196,11 @@ actions:
 
   - target: $.components.schemas.CreateActionRequest.properties.launch
     update:
-      $ref: '#/components/schemas/ActionLaunchRequest'
+      $ref: "#/components/schemas/ActionLaunchRequest"
 
   - target: $.components.schemas.UpdateActionRequest.properties.launch
     update:
-      $ref: '#/components/schemas/ActionLaunchRequest'
+      $ref: "#/components/schemas/ActionLaunchRequest"
 
   # ============================================================================
   # SCHEMA DESCRIPTIONS
@@ -313,11 +312,13 @@ actions:
   - target: $.components.schemas.LaunchDbDto.properties.lastUpdated
     remove: true
 
-  # Mark computeEnv as read-only — the nested compute environment object is
-  # populated only on responses (GET /pipelines/{id}/launch). Keeping it
-  # readable lets the seqera_pipeline resource refresh compute_env_id on
-  # Read; marking it read-only keeps Speakeasy from treating it as a
-  # request input.
+  # computeEnv is terraform-ignored in overlays/pipelines.yaml (the full CE
+  # object duplicates what the compute-env resources manage; compute_env_id
+  # is preserved from prior state by the generated refresh, not from this
+  # object). The readonly marker is kept so Speakeasy never treats it as a
+  # request input even if the ignore is revisited. Note: pipelines.yaml
+  # unwraps this property's $ref into allOf — extensions (including this
+  # one) are dropped while they sit next to a bare $ref.
   - target: $.components.schemas.LaunchDbDto.properties.computeEnv
     update:
       x-speakeasy-param-readonly: true
@@ -346,7 +347,7 @@ actions:
   - target: $.components.schemas.CreateActionResponse
     update:
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .actionId }'
+        jq: ". + { id: .actionId }"
       properties:
         id:
           type: string

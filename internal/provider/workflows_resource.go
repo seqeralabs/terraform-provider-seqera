@@ -5,20 +5,25 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -40,36 +45,34 @@ type WorkflowsResource struct {
 
 // WorkflowsResourceModel describes the resource data model.
 type WorkflowsResourceModel struct {
-	ComputeEnvID              types.String                     `tfsdk:"compute_env_id"`
-	ConfigProfiles            []types.String                   `tfsdk:"config_profiles"`
-	ConfigText                types.String                     `tfsdk:"config_text"`
-	EntryName                 types.String                     `tfsdk:"entry_name"`
-	Force                     types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
-	HeadJobCpus               types.Int32                      `tfsdk:"head_job_cpus"`
-	HeadJobMemoryMb           types.Int32                      `tfsdk:"head_job_memory_mb"`
-	IntelligentComputeEnabled types.Bool                       `tfsdk:"intelligent_compute_enabled"`
-	LabelIds                  []types.Int64                    `tfsdk:"label_ids"`
-	MainScript                types.String                     `tfsdk:"main_script"`
-	ParamsText                types.String                     `tfsdk:"params_text"`
-	Pipeline                  types.String                     `tfsdk:"pipeline"`
-	PipelineInfo              *tfTypes.PipelineMinInfoResponse `tfsdk:"pipeline_info"`
-	PipelineSchemaID          types.Int64                      `tfsdk:"pipeline_schema_id"`
-	PostRunScript             types.String                     `tfsdk:"post_run_script"`
-	PreRunScript              types.String                     `tfsdk:"pre_run_script"`
-	PullLatest                types.Bool                       `tfsdk:"pull_latest"`
-	Resume                    types.Bool                       `tfsdk:"resume"`
-	Revision                  types.String                     `tfsdk:"revision"`
-	RunName                   types.String                     `tfsdk:"run_name"`
-	SchemaName                types.String                     `tfsdk:"schema_name"`
-	SourceWorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
-	StubRun                   types.Bool                       `tfsdk:"stub_run"`
-	TowerConfig               types.String                     `tfsdk:"tower_config"`
-	UserSecrets               []types.String                   `tfsdk:"user_secrets"`
-	WorkDir                   types.String                     `tfsdk:"work_dir"`
-	Workflow                  *tfTypes.WorkflowMaxDbDto        `tfsdk:"workflow"`
-	WorkflowID                types.String                     `tfsdk:"workflow_id"`
-	WorkspaceID               types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceSecrets          []types.String                   `tfsdk:"workspace_secrets"`
+	ComputeEnvID              types.String                                  `tfsdk:"compute_env_id"`
+	ConfigProfiles            []types.String                                `tfsdk:"config_profiles"`
+	ConfigText                types.String                                  `tfsdk:"config_text"`
+	EntryName                 types.String                                  `tfsdk:"entry_name"`
+	Force                     types.Bool                                    `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	HeadJobCpus               types.Int32                                   `tfsdk:"head_job_cpus"`
+	HeadJobMemoryMb           types.Int32                                   `tfsdk:"head_job_memory_mb"`
+	IntelligentComputeEnabled types.Bool                                    `tfsdk:"intelligent_compute_enabled"`
+	LabelIds                  []types.Int64                                 `tfsdk:"label_ids"`
+	MainScript                types.String                                  `tfsdk:"main_script"`
+	ParamsText                types.String                                  `tfsdk:"params_text"`
+	Pipeline                  types.String                                  `tfsdk:"pipeline"`
+	PipelineInfo              *tfTypes.DescribeWorkflowResponsePipelineInfo `tfsdk:"pipeline_info"`
+	PipelineSchemaID          types.Int64                                   `tfsdk:"pipeline_schema_id"`
+	PostRunScript             types.String                                  `tfsdk:"post_run_script"`
+	PreRunScript              types.String                                  `tfsdk:"pre_run_script"`
+	PullLatest                types.Bool                                    `tfsdk:"pull_latest"`
+	Revision                  types.String                                  `tfsdk:"revision"`
+	RunName                   types.String                                  `tfsdk:"run_name"`
+	SchemaName                types.String                                  `tfsdk:"schema_name"`
+	SourceWorkspaceID         types.Int64                                   `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
+	StubRun                   types.Bool                                    `tfsdk:"stub_run"`
+	TowerConfig               types.String                                  `tfsdk:"tower_config"`
+	UserSecrets               []types.String                                `tfsdk:"user_secrets"`
+	WorkDir                   types.String                                  `tfsdk:"work_dir"`
+	WorkflowID                types.String                                  `tfsdk:"workflow_id"`
+	WorkspaceID               types.Int64                                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceSecrets          []types.String                                `tfsdk:"workspace_secrets"`
 }
 
 func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,12 +91,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Requires replacement if changed.`,
 			},
 			"config_profiles": schema.ListAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
+				Description: `Default: []; Requires replacement if changed.`,
 			},
 			"config_text": schema.StringAttribute{
 				Optional: true,
@@ -129,6 +134,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"intelligent_compute_enabled": schema.BoolAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.Bool{
+					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+				},
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,
@@ -161,38 +169,71 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"pipeline_info": schema.SingleNestedAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"id": schema.Int64Attribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
 					},
 					"version": schema.SingleNestedAttribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"date_created": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"hash": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"id": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"is_default": schema.BoolAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 							},
 							"is_draft_version": schema.BoolAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 						},
 					},
 					"workspace_id": schema.Int64Attribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
 					},
 				},
 			},
@@ -224,18 +265,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"pull_latest": schema.BoolAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  booldefault.StaticBool(false),
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
-			},
-			"resume": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
+				Description: `Default: false; Requires replacement if changed.`,
 			},
 			"revision": schema.StringAttribute{
 				Optional: true,
@@ -266,11 +302,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Source workspace numeric identifier. Requires replacement if changed.`,
 			},
 			"stub_run": schema.BoolAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  booldefault.StaticBool(false),
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Default: false; Requires replacement if changed.`,
 			},
 			"tower_config": schema.StringAttribute{
 				Optional: true,
@@ -280,12 +318,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Tower-specific configuration. Requires replacement if changed.`,
 			},
 			"user_secrets": schema.ListAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
+				Description: `Default: []; Requires replacement if changed.`,
 			},
 			"work_dir": schema.StringAttribute{
 				Optional: true,
@@ -297,139 +337,11 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					custom_stringvalidators.WorkDirFormatValidator(),
 				},
 			},
-			"workflow": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"command_line": schema.StringAttribute{
-						Computed:    true,
-						Description: `Command line`,
-					},
-					"complete": schema.StringAttribute{
-						Computed:    true,
-						Description: `Timestamp when the workflow execution completed`,
-					},
-					"config_files": schema.ListAttribute{
-						Computed:    true,
-						ElementType: types.StringType,
-						Description: `Config files (can be null)`,
-					},
-					"config_text": schema.StringAttribute{
-						Computed:    true,
-						Description: `Config text`,
-					},
-					"date_created": schema.StringAttribute{
-						Computed: true,
-					},
-					"deleted": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Whether the workflow is deleted`,
-					},
-					"fusion": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"enabled": schema.BoolAttribute{
-								Computed: true,
-							},
-							"version": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the workflow execution`,
-					},
-					"last_updated": schema.StringAttribute{
-						Computed: true,
-					},
-					"launch_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Launch ID`,
-					},
-					"log_file": schema.StringAttribute{
-						Computed: true,
-					},
-					"operation_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"out_file": schema.StringAttribute{
-						Computed: true,
-					},
-					"owner_id": schema.Int64Attribute{
-						Computed:    true,
-						Description: `Numeric identifier of the user who owns this workflow`,
-					},
-					"params": schema.MapAttribute{
-						Computed:    true,
-						ElementType: jsontypes.NormalizedType{},
-						Description: `Workflow parameters (can be null)`,
-					},
-					"profile": schema.StringAttribute{
-						Computed:    true,
-						Description: `Profile`,
-					},
-					"project_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Project name`,
-					},
-					"repository": schema.StringAttribute{
-						Computed:    true,
-						Description: `Repository`,
-					},
-					"requires_attention": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Requires attention flag`,
-					},
-					"resume": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Resume flag`,
-					},
-					"revision": schema.StringAttribute{
-						Computed:    true,
-						Description: `Revision`,
-					},
-					"run_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Run name`,
-					},
-					"script_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Script name`,
-					},
-					"session_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Session ID`,
-					},
-					"start": schema.StringAttribute{
-						Computed:    true,
-						Description: `Timestamp when the workflow execution actually started`,
-					},
-					"status": schema.StringAttribute{
-						Computed: true,
-					},
-					"submit": schema.StringAttribute{
-						Computed:    true,
-						Description: `Timestamp when the workflow was submitted for execution`,
-					},
-					"wave": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"enabled": schema.BoolAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"work_dir": schema.StringAttribute{
-						Computed:    true,
-						Description: `Work directory`,
-					},
-				},
-				MarkdownDescription: `Represents a workflow execution record.` + "\n" +
-					`Contains execution status, metadata, and results from pipeline` + "\n" +
-					`runs including logs and performance metrics.`,
-			},
 			"workflow_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Workflow string identifier`,
 			},
 			"workspace_id": schema.Int64Attribute{
@@ -441,12 +353,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
 			"workspace_secrets": schema.ListAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
+				Description: `Default: []; Requires replacement if changed.`,
 			},
 		},
 	}

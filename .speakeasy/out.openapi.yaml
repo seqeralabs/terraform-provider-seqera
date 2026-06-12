@@ -16152,7 +16152,7 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .actionId }'
+        jq: ". + { id: .actionId }"
     CreateAvatarResponse:
       type: object
       properties:
@@ -17685,13 +17685,18 @@ components:
       type: object
       properties:
         pipelineInfo:
-          $ref: '#/components/schemas/PipelineMinInfoResponse'
+          allOf:
+            - $ref: "#/components/schemas/PipelineMinInfoResponse"
+          x-speakeasy-param-suppress-computed-diff: true
         schedEnabled:
           type: boolean
           nullable: true
           x-speakeasy-name-override: intelligent_compute_enabled
+          x-speakeasy-param-suppress-computed-diff: true
         workflow:
-          $ref: '#/components/schemas/WorkflowMaxDbDto'
+          allOf:
+            - $ref: "#/components/schemas/WorkflowMaxDbDto"
+          x-speakeasy-terraform-ignore: true
         workspaceId:
           type: integer
           format: int64
@@ -19250,8 +19255,10 @@ components:
       type: object
       properties:
         computeEnv:
-          $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
           x-speakeasy-param-readonly: true
+          allOf:
+            - $ref: "#/components/schemas/ComputeEnv_ComputeConfig_"
+          x-speakeasy-terraform-ignore: true
         configProfiles:
           type: array
           items:
@@ -19260,96 +19267,115 @@ components:
           type: string
           nullable: true
           description: Nextflow configuration text
+          x-speakeasy-param-computed: false
         entryName:
           type: string
           maxLength: 80
           nullable: true
           description: Entry workflow name
+          x-speakeasy-param-computed: false
         headJobCpus:
           type: integer
           format: int32
           nullable: true
           description: Head job CPU allocation
+          x-speakeasy-param-computed: false
         headJobMemoryMb:
           type: integer
           format: int32
           nullable: true
           description: Head job memory allocation in MB
+          x-speakeasy-param-computed: false
         id:
           type: string
           x-speakeasy-param-readonly: true
         launchContainer:
           type: string
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         mainScript:
           type: string
           maxLength: 200
           nullable: true
           description: Main script path
+          x-speakeasy-param-computed: false
         optimizationId:
           type: string
           nullable: true
           description: Optimization profile ID
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         optimizationTargets:
           type: string
           nullable: true
           description: Optimization targets
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         paramsText:
           type: string
           nullable: true
           description: Pipeline parameters text
+          x-speakeasy-param-computed: false
         pipeline:
           type: string
         pipelineSchemaId:
           type: integer
           format: int64
+          x-speakeasy-param-computed: false
         postRunScript:
           type: string
           nullable: true
           description: Script to run after pipeline execution
+          x-speakeasy-param-computed: false
         preRunScript:
           type: string
           nullable: true
           description: Script to run before pipeline execution
+          x-speakeasy-param-computed: false
         pullLatest:
           type: boolean
         resume:
           type: boolean
+          x-speakeasy-terraform-ignore: true
         resumeLaunchId:
           type: string
           maxLength: 22
           nullable: true
           description: Launch ID to resume from
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         revision:
           type: string
           maxLength: 100
           nullable: true
           description: Pipeline revision
+          x-speakeasy-param-computed: false
         runName:
           type: string
           maxLength: 80
           nullable: true
           description: Custom run name
+          x-speakeasy-param-computed: false
         schemaName:
           type: string
           maxLength: 100
           nullable: true
           description: Pipeline schema name
+          x-speakeasy-param-computed: false
         sessionId:
           type: string
           maxLength: 36
           nullable: true
           description: Session ID for resuming
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         stubRun:
           type: boolean
         towerConfig:
           type: string
           nullable: true
           description: Tower-specific configuration
+          x-speakeasy-param-computed: false
         userSecrets:
           type: array
           items:
@@ -19358,9 +19384,11 @@ components:
           type: string
           nullable: true
           description: Working directory
+          x-speakeasy-param-computed: false
         workspaceId:
           type: integer
           format: int64
+          x-speakeasy-param-suppress-computed-diff: true
         workspaceSecrets:
           type: array
           items:
@@ -20359,6 +20387,7 @@ components:
           description: Unique numeric identifier for the pipeline
           x-speakeasy-param-ordering: 1
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         repository:
           type: string
           description: Git repository URL containing the pipeline source code
@@ -20367,11 +20396,14 @@ components:
           type: string
           nullable: true
           description: User first name
+          x-speakeasy-param-suppress-computed-diff: true
         userId:
           type: integer
           format: int64
+          x-speakeasy-param-suppress-computed-diff: true
         userName:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         version:
           $ref: '#/components/schemas/PipelineVersionFullInfoDto'
         workspaceId:
@@ -20399,7 +20431,7 @@ components:
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .pipelineId }'
+        jq: ". + { id: .pipelineId }"
     PipelineInfo:
       type: object
       properties:
@@ -21311,6 +21343,7 @@ components:
       properties:
         workflowId:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
     Subnet:
       type: object
       properties:
@@ -22667,6 +22700,7 @@ components:
           type: string
           nullable: true
           description: Command line
+          x-speakeasy-terraform-ignore: true
         complete:
           type: string
           format: date-time
@@ -22679,10 +22713,12 @@ components:
             type: string
           nullable: true
           description: Config files (can be null)
+          x-speakeasy-terraform-ignore: true
         configText:
           type: string
           nullable: true
           description: Config text
+          x-speakeasy-terraform-ignore: true
         dateCreated:
           type: string
           format: date-time
@@ -22692,6 +22728,7 @@ components:
           nullable: true
           description: Whether the workflow is deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         id:
           type: string
           description: Unique identifier for the workflow execution
@@ -22710,15 +22747,18 @@ components:
           nullable: true
           description: Numeric identifier of the user who owns this workflow
           x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         params:
           type: object
           additionalProperties: true
           nullable: true
           description: Workflow parameters (can be null)
+          x-speakeasy-terraform-ignore: true
         profile:
           type: string
           nullable: true
           description: Profile
+          x-speakeasy-terraform-ignore: true
         projectName:
           type: string
           nullable: true
@@ -22731,6 +22771,7 @@ components:
           type: boolean
           nullable: true
           description: Requires attention flag
+          x-speakeasy-terraform-ignore: true
         resume:
           type: boolean
           nullable: true
@@ -22747,6 +22788,7 @@ components:
           type: string
           nullable: true
           description: Script name
+          x-speakeasy-terraform-ignore: true
         sessionId:
           type: string
           nullable: true
@@ -22784,11 +22826,13 @@ components:
           type: array
           items:
             type: string
+          default: []
           example: ["docker", "aws"]
         configText:
           type: string
           nullable: true
           description: Nextflow configuration text
+          x-speakeasy-param-computed: false
           example: |
             process {
               executor = 'awsbatch'
@@ -22798,18 +22842,21 @@ components:
           type: string
           nullable: true
           description: Entry workflow name
+          x-speakeasy-param-computed: false
           example: "main.nf"
         headJobCpus:
           type: integer
           format: int32
           nullable: true
           description: Head job CPU allocation
+          x-speakeasy-param-computed: false
           example: 2
         headJobMemoryMb:
           type: integer
           format: int32
           nullable: true
           description: Head job memory allocation in MB
+          x-speakeasy-param-computed: false
           example: 4096
         id:
           type: string
@@ -22826,11 +22873,13 @@ components:
           type: string
           nullable: true
           description: Main script path
+          x-speakeasy-param-computed: false
           example: "main.nf"
         paramsText:
           type: string
           nullable: true
           description: Pipeline parameters text
+          x-speakeasy-param-computed: false
           example: |
             {
               "input": "s3://my-bucket/input.csv",
@@ -22842,10 +22891,12 @@ components:
         pipelineSchemaId:
           type: integer
           format: int64
+          x-speakeasy-param-computed: false
         postRunScript:
           type: string
           nullable: true
           description: Script to run after pipeline execution
+          x-speakeasy-param-computed: false
           example: |
             #!/bin/bash
             echo "Workflow completed"
@@ -22855,6 +22906,7 @@ components:
           type: string
           nullable: true
           description: Script to run before pipeline execution
+          x-speakeasy-param-computed: false
           example: |
             #!/bin/bash
             echo "Starting workflow execution"
@@ -22862,36 +22914,43 @@ components:
           x-speakeasy-plan-validators: RunScriptSizeValidator
         pullLatest:
           type: boolean
+          default: false
           example: true
         resume:
           type: boolean
-          example: true
+          x-speakeasy-terraform-ignore: true
         revision:
           type: string
           nullable: true
           description: Pipeline revision
+          x-speakeasy-param-computed: false
           example: "main"
         runName:
           type: string
           nullable: true
           description: Custom run name
+          x-speakeasy-param-computed: false
           example: "nextflow-hello"
         schemaName:
           type: string
           nullable: true
           description: Pipeline schema name
+          x-speakeasy-param-computed: false
           example: "nextflow_schema.json"
         stubRun:
           type: boolean
+          default: false
           example: false
         towerConfig:
           type: string
           nullable: true
           description: Tower-specific configuration
+          x-speakeasy-param-computed: false
         userSecrets:
           type: array
           items:
             type: string
+          default: []
           example: ["MY_API_KEY", "DATABASE_PASSWORD"]
         workDir:
           type: string
@@ -22901,10 +22960,12 @@ components:
           example: "s3://my-bucket/work"
           x-speakeasy-plan-validators: WorkDirFormatValidator
           x-speakeasy-param-optional: true
+          x-speakeasy-param-computed: false
         workspaceSecrets:
           type: array
           items:
             type: string
+          default: []
           example: ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]
       required: [pipeline, workDir]
       x-speakeasy-entity: Workflows
@@ -23322,7 +23383,7 @@ components:
       type: object
       description: Launch payload for `seqera_action` Create / Update endpoints.
       allOf:
-        - $ref: '#/components/schemas/WorkflowLaunchRequest'
+        - $ref: "#/components/schemas/WorkflowLaunchRequest"
       properties:
         id:
           type: string

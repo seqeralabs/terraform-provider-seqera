@@ -17,13 +17,13 @@ type AWSCloudConfiguration struct {
 	ImageID                   types.String        `tfsdk:"image_id"`
 	InstanceProfileArn        types.String        `tfsdk:"instance_profile_arn"`
 	InstanceType              types.String        `tfsdk:"instance_type"`
+	IntelligentComputeConfig  *SchedConfig        `tfsdk:"intelligent_compute_config"`
+	IntelligentComputeEnabled types.Bool          `tfsdk:"intelligent_compute_enabled"`
 	LogGroup                  types.String        `tfsdk:"log_group"`
 	NextflowConfig            types.String        `tfsdk:"nextflow_config"`
 	PostRunScript             types.String        `tfsdk:"post_run_script"`
 	PreRunScript              types.String        `tfsdk:"pre_run_script"`
 	Region                    types.String        `tfsdk:"region"`
-	IntelligentComputeConfig  *SchedConfig        `tfsdk:"intelligent_compute_config"`
-	IntelligentComputeEnabled types.Bool          `tfsdk:"intelligent_compute_enabled"`
 	SecurityGroups            basetypes.ListValue `tfsdk:"security_groups"`
 	SubnetID                  types.String        `tfsdk:"subnet_id"`
 	WorkDir                   types.String        `tfsdk:"work_dir"`

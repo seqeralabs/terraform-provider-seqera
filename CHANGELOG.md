@@ -1,3 +1,32 @@
+# v0.40.2
+
+BREAKING CHANGES:
+
+- **`resume` removed** from `seqera_workflows`, `seqera_pipeline.launch`, and `seqera_action.launch`. As it was non-functional.
+
+- **Read-only `workflow` run-report block removed** from `seqera_workflows`.
+
+- **Read-only `launch.compute_env` object removed** from `seqera_pipeline` and `seqera_action`. It duplicated CE config already managed by the compute-env resources. `launch.compute_env_id` is unchanged.
+
+No state migration is required — Terraform drops the old attributes on the next write.
+
+BUGFIXES:
+
+- **Removing a launch field from config now applies the removal** instead of silently planning "no changes". Previously, deleting an attribute such as `params_text` from a `seqera_pipeline` or `seqera_action` launch block left the old value server-side. Now:
+
+  - `params_text`, `revision`, `config_text`, `tower_config`, `pre_run_script`, `post_run_script`, `main_script`, `entry_name`, `schema_name`, `run_name`, `head_job_cpus`, `head_job_memory_mb`, `pipeline_schema_id`, and `work_dir` clear on removal.
+  - `pull_latest` and `stub_run` default to `false`; `config_profiles`, `user_secrets`, and `workspace_secrets` default to `[]`.
+
+  The same defaults apply to the corresponding top-level fields on `seqera_workflows`.
+
+ENHANCEMENTS:
+
+- **Quieter plans.** Server-managed echo fields (`pipeline_id`, creator attribution, `launch_container`, `optimization_*`, `session_id`, etc.) no longer flip to "(known after apply)" on every in-place update, and a `seqera_workflows` replacement diff now shows the triggering line plus `workflow_id` instead of ~120 lines of resolved config.
+
+UPGRADE NOTES:
+
+- The first plan after upgrading shows a one-time in-place update on existing `seqera_workflows` resources, materialising the new defaults (`user_secrets`/`workspace_secrets` `null -> []`, `pull_latest`/`stub_run` `null -> false`). Applying it is a state-only write — no API calls, no runs launched or modified.
+
 # v0.40.1
 
 FEATURES:
