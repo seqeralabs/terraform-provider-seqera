@@ -13,9 +13,10 @@ resource "seqera_azure_batch_ce" "managed_identity" {
     managed_identity_pool_client_id   = "11111111-1111-1111-1111-111111111111"
     managed_identity_pool_resource_id = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-pool"
     forge = {
-      vm_type    = "Standard_D4s_v3"
-      vm_count   = 5
-      auto_scale = true
+      vm_type           = "Standard_D4s_v3"
+      vm_count          = 5
+      auto_scale        = true
+      boot_disk_size_gb = 100
     }
   }
 }

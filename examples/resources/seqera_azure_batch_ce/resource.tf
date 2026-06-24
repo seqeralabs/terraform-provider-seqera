@@ -16,6 +16,7 @@ resource "seqera_azure_batch_ce" "minimal" {
     forge = {
       vm_type             = "Standard_D4s_v3"
       vm_count            = 5
+      boot_disk_size_gb   = 100
       auto_scale          = true
       dispose_on_deletion = true
     }

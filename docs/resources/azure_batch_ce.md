@@ -39,6 +39,7 @@ resource "seqera_azure_batch_ce" "minimal" {
     forge = {
       vm_type             = "Standard_D4s_v3"
       vm_count            = 5
+      boot_disk_size_gb   = 100
       auto_scale          = true
       dispose_on_deletion = true
     }
@@ -63,15 +64,18 @@ resource "seqera_azure_batch_ce" "dual_pool" {
     forge = {
       dual_pool_config    = true
       dispose_on_deletion = true
+      boot_disk_size_gb   = 100
       head_pool = {
-        vm_type    = "Standard_E8s_v3"
-        vm_count   = 1
-        auto_scale = false
+        vm_type           = "Standard_E8s_v3"
+        vm_count          = 1
+        auto_scale        = false
+        boot_disk_size_gb = 128
       }
       worker_pool = {
-        vm_type    = "Standard_D4s_v3"
-        vm_count   = 10
-        auto_scale = true
+        vm_type           = "Standard_D4s_v3"
+        vm_count          = 10
+        auto_scale        = true
+        boot_disk_size_gb = 256
       }
     }
   }
@@ -96,9 +100,10 @@ resource "seqera_azure_batch_ce" "managed_identity" {
     managed_identity_pool_client_id   = "11111111-1111-1111-1111-111111111111"
     managed_identity_pool_resource_id = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-pool"
     forge = {
-      vm_type    = "Standard_D4s_v3"
-      vm_count   = 5
-      auto_scale = true
+      vm_type           = "Standard_D4s_v3"
+      vm_count          = 5
+      auto_scale        = true
+      boot_disk_size_gb = 100
     }
   }
 }
@@ -196,6 +201,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
 - `container_reg_ids` (List of String) List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
 - `dual_pool_config` (Boolean) Requires replacement if changed.
@@ -210,6 +216,7 @@ Optional:
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 
@@ -220,6 +227,7 @@ Optional:
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 

@@ -8,9 +8,11 @@ import (
 
 // AzBatchPoolConfig - Azure Batch pool configuration for head or worker pool
 type AzBatchPoolConfig struct {
-	AutoScale *bool   `json:"autoScale,omitempty"`
-	VMCount   *int    `json:"vmCount,omitempty"`
-	VMType    *string `json:"vmType,omitempty"`
+	AutoScale *bool `json:"autoScale,omitempty"`
+	// Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
+	BootDiskSizeGB *int    `json:"bootDiskSizeGB,omitempty"`
+	VMCount        *int    `json:"vmCount,omitempty"`
+	VMType         *string `json:"vmType,omitempty"`
 }
 
 func (a AzBatchPoolConfig) MarshalJSON() ([]byte, error) {
@@ -29,6 +31,13 @@ func (a *AzBatchPoolConfig) GetAutoScale() *bool {
 		return nil
 	}
 	return a.AutoScale
+}
+
+func (a *AzBatchPoolConfig) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzBatchPoolConfig) GetVMCount() *int {

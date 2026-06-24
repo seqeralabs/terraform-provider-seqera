@@ -15278,6 +15278,14 @@ components:
       properties:
         autoScale:
           type: boolean
+        bootDiskSizeGB:
+          type: integer
+          format: int32
+          minimum: 50
+          maximum: 4095
+          example: 100
+          nullable: true
+          description: Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
         containerRegIds:
           type: array
           items:
@@ -15338,6 +15346,14 @@ components:
       properties:
         autoScale:
           type: boolean
+        bootDiskSizeGB:
+          type: integer
+          format: int32
+          minimum: 50
+          maximum: 4095
+          example: 100
+          nullable: true
+          description: Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
         vmCount:
           type: integer
           format: int32

@@ -8,6 +8,8 @@ import (
 
 type AzBatchForgeConfig struct {
 	AutoScale *bool `json:"autoScale,omitempty"`
+	// Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
 	// List of Azure Container Registry IDs whose images compute jobs may pull.
 	//
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
@@ -37,6 +39,13 @@ func (a *AzBatchForgeConfig) GetAutoScale() *bool {
 		return nil
 	}
 	return a.AutoScale
+}
+
+func (a *AzBatchForgeConfig) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzBatchForgeConfig) GetContainerRegIds() []string {
