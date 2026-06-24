@@ -8,6 +8,7 @@ resource "seqera_action" "tower_advanced" {
     compute_env_id = seqera_compute_env.aws.id
     work_dir       = "s3://my-bucket/production/work"
     revision       = "master"
+    syntax_parser  = "v2"
 
     params_text = jsonencode({
       input_data  = "s3://my-bucket/input/data.csv"
