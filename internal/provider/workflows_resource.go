@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -67,6 +68,7 @@ type WorkflowsResourceModel struct {
 	SchemaName                types.String                                  `tfsdk:"schema_name"`
 	SourceWorkspaceID         types.Int64                                   `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
 	StubRun                   types.Bool                                    `tfsdk:"stub_run"`
+	SyntaxParser              types.String                                  `tfsdk:"syntax_parser"`
 	TowerConfig               types.String                                  `tfsdk:"tower_config"`
 	UserSecrets               []types.String                                `tfsdk:"user_secrets"`
 	WorkDir                   types.String                                  `tfsdk:"work_dir"`
@@ -309,6 +311,16 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Default: false; Requires replacement if changed.`,
+			},
+			"syntax_parser": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `must be one of ["v1", "v2"]; Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.OneOf("v1", "v2"),
+				},
 			},
 			"tower_config": schema.StringAttribute{
 				Optional: true,

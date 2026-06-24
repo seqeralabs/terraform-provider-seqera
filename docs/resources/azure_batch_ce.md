@@ -196,6 +196,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode. Requires replacement if changed.
 - `container_reg_ids` (List of String) List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
 - `dual_pool_config` (Boolean) Requires replacement if changed.
@@ -210,6 +211,7 @@ Optional:
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 
@@ -220,6 +222,7 @@ Optional:
 Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 

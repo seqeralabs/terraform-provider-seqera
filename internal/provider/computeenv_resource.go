@@ -1486,6 +1486,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 												Description: `Requires replacement if changed.`,
 											},
+											"boot_disk_size_gb": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode. Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													int32validator.Between(50, 4095),
+												},
+											},
 											"container_reg_ids": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 												Computed:   true,
@@ -1526,6 +1537,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															boolplanmodifier.RequiresReplaceIfConfigured(),
 														},
 														Description: `Requires replacement if changed.`,
+													},
+													"boot_disk_size_gb": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
+														Validators: []validator.Int32{
+															int32validator.Between(50, 4095),
+														},
 													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,
@@ -1579,6 +1601,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															boolplanmodifier.RequiresReplaceIfConfigured(),
 														},
 														Description: `Requires replacement if changed.`,
+													},
+													"boot_disk_size_gb": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
+														Validators: []validator.Int32{
+															int32validator.Between(50, 4095),
+														},
 													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,

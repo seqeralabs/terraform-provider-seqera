@@ -3,8 +3,36 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
+
+type ActionLaunchRequestSyntaxParser string
+
+const (
+	ActionLaunchRequestSyntaxParserV1 ActionLaunchRequestSyntaxParser = "v1"
+	ActionLaunchRequestSyntaxParserV2 ActionLaunchRequestSyntaxParser = "v2"
+)
+
+func (e ActionLaunchRequestSyntaxParser) ToPointer() *ActionLaunchRequestSyntaxParser {
+	return &e
+}
+func (e *ActionLaunchRequestSyntaxParser) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "v1":
+		fallthrough
+	case "v2":
+		*e = ActionLaunchRequestSyntaxParser(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ActionLaunchRequestSyntaxParser: %v", v)
+	}
+}
 
 // ActionLaunchRequest - Launch payload for `seqera_action` Create / Update endpoints.
 type ActionLaunchRequest struct {
@@ -38,8 +66,9 @@ type ActionLaunchRequest struct {
 	// Custom run name
 	RunName *string `json:"runName,omitempty"`
 	// Pipeline schema name
-	SchemaName *string `json:"schemaName,omitempty"`
-	StubRun    *bool   `default:"false" json:"stubRun"`
+	SchemaName   *string                          `json:"schemaName,omitempty"`
+	StubRun      *bool                            `default:"false" json:"stubRun"`
+	SyntaxParser *ActionLaunchRequestSyntaxParser `json:"syntaxParser,omitempty"`
 	// Tower-specific configuration
 	TowerConfig *string  `json:"towerConfig,omitempty"`
 	UserSecrets []string `json:"userSecrets,omitempty"`
@@ -197,6 +226,13 @@ func (a *ActionLaunchRequest) GetStubRun() *bool {
 		return nil
 	}
 	return a.StubRun
+}
+
+func (a *ActionLaunchRequest) GetSyntaxParser() *ActionLaunchRequestSyntaxParser {
+	if a == nil {
+		return nil
+	}
+	return a.SyntaxParser
 }
 
 func (a *ActionLaunchRequest) GetTowerConfig() *string {

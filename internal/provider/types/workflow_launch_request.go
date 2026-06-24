@@ -30,6 +30,7 @@ type WorkflowLaunchRequest struct {
 	SchemaName          types.String   `tfsdk:"schema_name"`
 	SessionID           types.String   `tfsdk:"session_id"`
 	StubRun             types.Bool     `tfsdk:"stub_run"`
+	SyntaxParser        types.String   `tfsdk:"syntax_parser"`
 	TowerConfig         types.String   `tfsdk:"tower_config"`
 	UserSecrets         []types.String `tfsdk:"user_secrets"`
 	WorkDir             types.String   `tfsdk:"work_dir"`

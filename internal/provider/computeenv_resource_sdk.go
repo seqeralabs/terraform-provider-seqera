@@ -280,6 +280,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
 						r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
+						r.ComputeEnv.Config.AzureBatch.Forge.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.BootDiskSizeGB))
 						containerRegIdsValue, containerRegIdsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds)
 						diags.Append(containerRegIdsDiags...)
 						containerRegIdsValuable, containerRegIdsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, containerRegIdsValue)
@@ -292,6 +293,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						} else {
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool = &tfTypes.AzBatchPoolConfig{}
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.AutoScale)
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.BootDiskSizeGB))
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMCount))
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMType)
 						}
@@ -302,6 +304,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						} else {
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool = &tfTypes.AzBatchPoolConfig{}
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.AutoScale)
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.BootDiskSizeGB))
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMCount))
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMType)
 						}
@@ -2004,6 +2007,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				autoScale = nil
 			}
+			bootDiskSizeGB := new(int)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.BootDiskSizeGB.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.BootDiskSizeGB.IsNull() {
+				*bootDiskSizeGB = int(r.ComputeEnv.Config.AzureBatch.Forge.BootDiskSizeGB.ValueInt32())
+			} else {
+				bootDiskSizeGB = nil
+			}
 			var containerRegIds []string
 			if !r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.IsNull() {
 				diags.Append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds.ElementsAs(ctx, &containerRegIds, true)...)
@@ -2028,6 +2037,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				} else {
 					autoScale1 = nil
 				}
+				bootDiskSizeGb2 := new(int)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.BootDiskSizeGB.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.BootDiskSizeGB.IsNull() {
+					*bootDiskSizeGb2 = int(r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.BootDiskSizeGB.ValueInt32())
+				} else {
+					bootDiskSizeGb2 = nil
+				}
 				vmCount := new(int)
 				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsNull() {
 					*vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.ValueInt32())
@@ -2041,9 +2056,10 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 					vmType = nil
 				}
 				headPool = &shared.AzBatchPoolConfig{
-					AutoScale: autoScale1,
-					VMCount:   vmCount,
-					VMType:    vmType,
+					AutoScale:      autoScale1,
+					BootDiskSizeGB: bootDiskSizeGb2,
+					VMCount:        vmCount,
+					VMType:         vmType,
 				}
 			}
 			var vmCount1 int
@@ -2063,6 +2079,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				} else {
 					autoScale2 = nil
 				}
+				bootDiskSizeGb3 := new(int)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.BootDiskSizeGB.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.BootDiskSizeGB.IsNull() {
+					*bootDiskSizeGb3 = int(r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.BootDiskSizeGB.ValueInt32())
+				} else {
+					bootDiskSizeGb3 = nil
+				}
 				vmCount2 := new(int)
 				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsNull() {
 					*vmCount2 = int(r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.ValueInt32())
@@ -2076,13 +2098,15 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 					vmType2 = nil
 				}
 				workerPool = &shared.AzBatchPoolConfig{
-					AutoScale: autoScale2,
-					VMCount:   vmCount2,
-					VMType:    vmType2,
+					AutoScale:      autoScale2,
+					BootDiskSizeGB: bootDiskSizeGb3,
+					VMCount:        vmCount2,
+					VMType:         vmType2,
 				}
 			}
 			forge1 = &shared.AzBatchForgeConfig{
 				AutoScale:         autoScale,
+				BootDiskSizeGB:    bootDiskSizeGB,
 				ContainerRegIds:   containerRegIds,
 				DisposeOnDeletion: disposeOnDeletion1,
 				DualPoolConfig:    dualPoolConfig,
@@ -3674,11 +3698,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	}
 	var googleLifeSciencesConfigurationRetired *shared.GoogleLifeSciencesConfigurationRetired
 	if r.ComputeEnv.Config.GoogleLifesciences != nil {
-		bootDiskSizeGb2 := new(int)
+		bootDiskSizeGb4 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsNull() {
-			*bootDiskSizeGb2 = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
+			*bootDiskSizeGb4 = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
 		} else {
-			bootDiskSizeGb2 = nil
+			bootDiskSizeGb4 = nil
 		}
 		copyImage1 := new(string)
 		if !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsNull() {
@@ -3827,7 +3851,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			zones = append(zones, r.ComputeEnv.Config.GoogleLifesciences.Zones[zonesIndex].ValueString())
 		}
 		googleLifeSciencesConfigurationRetired = &shared.GoogleLifeSciencesConfigurationRetired{
-			BootDiskSizeGb:    bootDiskSizeGb2,
+			BootDiskSizeGb:    bootDiskSizeGb4,
 			CopyImage:         copyImage1,
 			DebugMode:         debugMode1,
 			Environment:       environment16,

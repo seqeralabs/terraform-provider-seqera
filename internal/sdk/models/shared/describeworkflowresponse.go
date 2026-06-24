@@ -82,12 +82,16 @@ type DescribeWorkflowResponseWorkflow struct {
 	// Timestamp when the workflow was submitted for execution
 	Submit *time.Time `json:"submit,omitempty"`
 	// Work directory
-	WorkDir     *string       `json:"workDir,omitempty"`
-	Fusion      *WfFusionMeta `json:"fusion,omitempty"`
-	LogFile     *string       `json:"logFile,omitempty"`
-	OperationID *string       `json:"operationId,omitempty"`
-	OutFile     *string       `json:"outFile,omitempty"`
-	Wave        *WfWaveMeta   `json:"wave,omitempty"`
+	WorkDir        *string       `json:"workDir,omitempty"`
+	Fusion         *WfFusionMeta `json:"fusion,omitempty"`
+	LogFile        *string       `json:"logFile,omitempty"`
+	NextflowConfig *string       `json:"nextflowConfig,omitempty"`
+	OperationID    *string       `json:"operationId,omitempty"`
+	OutFile        *string       `json:"outFile,omitempty"`
+	PostRunScript  *string       `json:"postRunScript,omitempty"`
+	PreRunScript   *string       `json:"preRunScript,omitempty"`
+	TowerConfig    *string       `json:"towerConfig,omitempty"`
+	Wave           *WfWaveMeta   `json:"wave,omitempty"`
 }
 
 func (d DescribeWorkflowResponseWorkflow) MarshalJSON() ([]byte, error) {
@@ -283,6 +287,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetLogFile() *string {
 	return d.LogFile
 }
 
+func (d *DescribeWorkflowResponseWorkflow) GetNextflowConfig() *string {
+	if d == nil {
+		return nil
+	}
+	return d.NextflowConfig
+}
+
 func (d *DescribeWorkflowResponseWorkflow) GetOperationID() *string {
 	if d == nil {
 		return nil
@@ -295,6 +306,27 @@ func (d *DescribeWorkflowResponseWorkflow) GetOutFile() *string {
 		return nil
 	}
 	return d.OutFile
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetPostRunScript() *string {
+	if d == nil {
+		return nil
+	}
+	return d.PostRunScript
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetPreRunScript() *string {
+	if d == nil {
+		return nil
+	}
+	return d.PreRunScript
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetTowerConfig() *string {
+	if d == nil {
+		return nil
+	}
+	return d.TowerConfig
 }
 
 func (d *DescribeWorkflowResponseWorkflow) GetWave() *WfWaveMeta {

@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.153.0
+  version: 1.159.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -7914,6 +7914,14 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: attributes
+          in: query
+          description: 'Additional attribute values to include in the response (`labels`, `resources`). Returns an empty value (ex. `labels: null`) if omitted.'
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ComputeEnvQueryAttribute'
+          explode: false
       responses:
         '200':
           description: OK
@@ -15278,6 +15286,14 @@ components:
       properties:
         autoScale:
           type: boolean
+        bootDiskSizeGB:
+          description: Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode.
+          type: integer
+          format: int32
+          example: 100
+          maximum: 4095
+          minimum: 50
+          nullable: true
         containerRegIds:
           type: array
           items:
@@ -15338,6 +15354,14 @@ components:
       properties:
         autoScale:
           type: boolean
+        bootDiskSizeGB:
+          description: Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
+          type: integer
+          format: int32
+          example: 100
+          maximum: 4095
+          minimum: 50
+          nullable: true
         vmCount:
           type: integer
           format: int32
@@ -17491,6 +17515,9 @@ components:
           type: boolean
         fileName:
           type: string
+        fileSize:
+          type: integer
+          format: int64
         hasHeader:
           type: boolean
         lastUpdated:
@@ -19371,6 +19398,12 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         stubRun:
           type: boolean
+        syntaxParser:
+          type: string
+          enum:
+            - v1
+            - v2
+          nullable: true
         towerConfig:
           type: string
           nullable: true
@@ -22941,6 +22974,12 @@ components:
           type: boolean
           default: false
           example: false
+        syntaxParser:
+          type: string
+          enum:
+            - v1
+            - v2
+          nullable: true
         towerConfig:
           type: string
           nullable: true
@@ -23194,10 +23233,22 @@ components:
               $ref: '#/components/schemas/WfFusionMeta'
             logFile:
               type: string
+            nextflowConfig:
+              type: string
+              nullable: true
             operationId:
               type: string
             outFile:
               type: string
+            postRunScript:
+              type: string
+              nullable: true
+            preRunScript:
+              type: string
+              nullable: true
+            towerConfig:
+              type: string
+              nullable: true
             wave:
               $ref: '#/components/schemas/WfWaveMeta'
           type: object
