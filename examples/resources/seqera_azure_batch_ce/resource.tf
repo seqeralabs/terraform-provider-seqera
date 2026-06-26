@@ -18,6 +18,7 @@ resource "seqera_azure_batch_ce" "minimal" {
       vm_count            = 5
       auto_scale          = true
       dispose_on_deletion = true
+      boot_disk_size_gb   = 100
     }
   }
 }

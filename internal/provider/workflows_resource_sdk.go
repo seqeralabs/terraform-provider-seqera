@@ -248,6 +248,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		stubRun = nil
 	}
+	syntaxParser := new(shared.WorkflowLaunchRequestSyntaxParser)
+	if !r.SyntaxParser.IsUnknown() && !r.SyntaxParser.IsNull() {
+		*syntaxParser = shared.WorkflowLaunchRequestSyntaxParser(r.SyntaxParser.ValueString())
+	} else {
+		syntaxParser = nil
+	}
 	towerConfig := new(string)
 	if !r.TowerConfig.IsUnknown() && !r.TowerConfig.IsNull() {
 		*towerConfig = r.TowerConfig.ValueString()
@@ -287,6 +293,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		RunName:          runName,
 		SchemaName:       schemaName,
 		StubRun:          stubRun,
+		SyntaxParser:     syntaxParser,
 		TowerConfig:      towerConfig,
 		UserSecrets:      userSecrets,
 		WorkDir:          workDir,

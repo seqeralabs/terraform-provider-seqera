@@ -323,6 +323,32 @@ func (c *ComputeEnv) GetWorkspaceID() *int64 {
 	return c.WorkspaceID
 }
 
+type LaunchDbDtoSyntaxParser string
+
+const (
+	LaunchDbDtoSyntaxParserV1 LaunchDbDtoSyntaxParser = "v1"
+	LaunchDbDtoSyntaxParserV2 LaunchDbDtoSyntaxParser = "v2"
+)
+
+func (e LaunchDbDtoSyntaxParser) ToPointer() *LaunchDbDtoSyntaxParser {
+	return &e
+}
+func (e *LaunchDbDtoSyntaxParser) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "v1":
+		fallthrough
+	case "v2":
+		*e = LaunchDbDtoSyntaxParser(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for LaunchDbDtoSyntaxParser: %v", v)
+	}
+}
+
 type LaunchDbDto struct {
 	ComputeEnv     *ComputeEnv `json:"computeEnv,omitempty"`
 	ConfigProfiles []string    `json:"configProfiles,omitempty"`
@@ -361,8 +387,9 @@ type LaunchDbDto struct {
 	// Pipeline schema name
 	SchemaName *string `json:"schemaName,omitempty"`
 	// Session ID for resuming
-	SessionID *string `json:"sessionId,omitempty"`
-	StubRun   *bool   `json:"stubRun,omitempty"`
+	SessionID    *string                  `json:"sessionId,omitempty"`
+	StubRun      *bool                    `json:"stubRun,omitempty"`
+	SyntaxParser *LaunchDbDtoSyntaxParser `json:"syntaxParser,omitempty"`
 	// Tower-specific configuration
 	TowerConfig *string  `json:"towerConfig,omitempty"`
 	UserSecrets []string `json:"userSecrets,omitempty"`
@@ -538,6 +565,13 @@ func (l *LaunchDbDto) GetStubRun() *bool {
 		return nil
 	}
 	return l.StubRun
+}
+
+func (l *LaunchDbDto) GetSyntaxParser() *LaunchDbDtoSyntaxParser {
+	if l == nil {
+		return nil
+	}
+	return l.SyntaxParser
 }
 
 func (l *LaunchDbDto) GetTowerConfig() *string {

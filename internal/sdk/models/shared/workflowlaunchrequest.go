@@ -3,8 +3,36 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
+
+type WorkflowLaunchRequestSyntaxParser string
+
+const (
+	WorkflowLaunchRequestSyntaxParserV1 WorkflowLaunchRequestSyntaxParser = "v1"
+	WorkflowLaunchRequestSyntaxParserV2 WorkflowLaunchRequestSyntaxParser = "v2"
+)
+
+func (e WorkflowLaunchRequestSyntaxParser) ToPointer() *WorkflowLaunchRequestSyntaxParser {
+	return &e
+}
+func (e *WorkflowLaunchRequestSyntaxParser) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "v1":
+		fallthrough
+	case "v2":
+		*e = WorkflowLaunchRequestSyntaxParser(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for WorkflowLaunchRequestSyntaxParser: %v", v)
+	}
+}
 
 type WorkflowLaunchRequest struct {
 	ComputeEnvID   *string  `json:"computeEnvId,omitempty"`
@@ -37,8 +65,9 @@ type WorkflowLaunchRequest struct {
 	// Custom run name
 	RunName *string `json:"runName,omitempty"`
 	// Pipeline schema name
-	SchemaName *string `json:"schemaName,omitempty"`
-	StubRun    *bool   `default:"false" json:"stubRun"`
+	SchemaName   *string                            `json:"schemaName,omitempty"`
+	StubRun      *bool                              `default:"false" json:"stubRun"`
+	SyntaxParser *WorkflowLaunchRequestSyntaxParser `json:"syntaxParser,omitempty"`
 	// Tower-specific configuration
 	TowerConfig *string  `json:"towerConfig,omitempty"`
 	UserSecrets []string `json:"userSecrets,omitempty"`
@@ -196,6 +225,13 @@ func (w *WorkflowLaunchRequest) GetStubRun() *bool {
 		return nil
 	}
 	return w.StubRun
+}
+
+func (w *WorkflowLaunchRequest) GetSyntaxParser() *WorkflowLaunchRequestSyntaxParser {
+	if w == nil {
+		return nil
+	}
+	return w.SyntaxParser
 }
 
 func (w *WorkflowLaunchRequest) GetTowerConfig() *string {

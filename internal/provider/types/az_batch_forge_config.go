@@ -9,6 +9,7 @@ import (
 
 type AzBatchForgeConfig struct {
 	AutoScale         types.Bool          `tfsdk:"auto_scale"`
+	BootDiskSizeGB    types.Int32         `tfsdk:"boot_disk_size_gb"`
 	ContainerRegIds   basetypes.ListValue `tfsdk:"container_reg_ids"`
 	DisposeOnDeletion types.Bool          `tfsdk:"dispose_on_deletion"`
 	DualPoolConfig    types.Bool          `tfsdk:"dual_pool_config"`

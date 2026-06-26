@@ -47,6 +47,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 		} else {
 			r.Config.Forge = &tfTypes.AzBatchForgeConfig{}
 			r.Config.Forge.AutoScale = types.BoolPointerValue(resp.Config.Forge.AutoScale)
+			r.Config.Forge.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.BootDiskSizeGB))
 			containerRegIdsValue, containerRegIdsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.Forge.ContainerRegIds)
 			diags.Append(containerRegIdsDiags...)
 			containerRegIdsValuable, containerRegIdsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, containerRegIdsValue)
@@ -59,6 +60,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 			} else {
 				r.Config.Forge.HeadPool = &tfTypes.AzBatchPoolConfig{}
 				r.Config.Forge.HeadPool.AutoScale = types.BoolPointerValue(resp.Config.Forge.HeadPool.AutoScale)
+				r.Config.Forge.HeadPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.HeadPool.BootDiskSizeGB))
 				r.Config.Forge.HeadPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.HeadPool.VMCount))
 				r.Config.Forge.HeadPool.VMType = types.StringPointerValue(resp.Config.Forge.HeadPool.VMType)
 			}
@@ -69,6 +71,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 			} else {
 				r.Config.Forge.WorkerPool = &tfTypes.AzBatchPoolConfig{}
 				r.Config.Forge.WorkerPool.AutoScale = types.BoolPointerValue(resp.Config.Forge.WorkerPool.AutoScale)
+				r.Config.Forge.WorkerPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.WorkerPool.BootDiskSizeGB))
 				r.Config.Forge.WorkerPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.WorkerPool.VMCount))
 				r.Config.Forge.WorkerPool.VMType = types.StringPointerValue(resp.Config.Forge.WorkerPool.VMType)
 			}
@@ -351,6 +354,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		} else {
 			autoScale = nil
 		}
+		bootDiskSizeGB := new(int)
+		if !r.Config.Forge.BootDiskSizeGB.IsUnknown() && !r.Config.Forge.BootDiskSizeGB.IsNull() {
+			*bootDiskSizeGB = int(r.Config.Forge.BootDiskSizeGB.ValueInt32())
+		} else {
+			bootDiskSizeGB = nil
+		}
 		var containerRegIds []string
 		if !r.Config.Forge.ContainerRegIds.IsUnknown() && !r.Config.Forge.ContainerRegIds.IsNull() {
 			diags.Append(r.Config.Forge.ContainerRegIds.ElementsAs(ctx, &containerRegIds, true)...)
@@ -375,6 +384,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			} else {
 				autoScale1 = nil
 			}
+			bootDiskSizeGb1 := new(int)
+			if !r.Config.Forge.HeadPool.BootDiskSizeGB.IsUnknown() && !r.Config.Forge.HeadPool.BootDiskSizeGB.IsNull() {
+				*bootDiskSizeGb1 = int(r.Config.Forge.HeadPool.BootDiskSizeGB.ValueInt32())
+			} else {
+				bootDiskSizeGb1 = nil
+			}
 			vmCount := new(int)
 			if !r.Config.Forge.HeadPool.VMCount.IsUnknown() && !r.Config.Forge.HeadPool.VMCount.IsNull() {
 				*vmCount = int(r.Config.Forge.HeadPool.VMCount.ValueInt32())
@@ -388,9 +403,10 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 				vmType = nil
 			}
 			headPool = &shared.AzBatchPoolConfig{
-				AutoScale: autoScale1,
-				VMCount:   vmCount,
-				VMType:    vmType,
+				AutoScale:      autoScale1,
+				BootDiskSizeGB: bootDiskSizeGb1,
+				VMCount:        vmCount,
+				VMType:         vmType,
 			}
 		}
 		var vmCount1 int
@@ -410,6 +426,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			} else {
 				autoScale2 = nil
 			}
+			bootDiskSizeGb2 := new(int)
+			if !r.Config.Forge.WorkerPool.BootDiskSizeGB.IsUnknown() && !r.Config.Forge.WorkerPool.BootDiskSizeGB.IsNull() {
+				*bootDiskSizeGb2 = int(r.Config.Forge.WorkerPool.BootDiskSizeGB.ValueInt32())
+			} else {
+				bootDiskSizeGb2 = nil
+			}
 			vmCount2 := new(int)
 			if !r.Config.Forge.WorkerPool.VMCount.IsUnknown() && !r.Config.Forge.WorkerPool.VMCount.IsNull() {
 				*vmCount2 = int(r.Config.Forge.WorkerPool.VMCount.ValueInt32())
@@ -423,13 +445,15 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 				vmType2 = nil
 			}
 			workerPool = &shared.AzBatchPoolConfig{
-				AutoScale: autoScale2,
-				VMCount:   vmCount2,
-				VMType:    vmType2,
+				AutoScale:      autoScale2,
+				BootDiskSizeGB: bootDiskSizeGb2,
+				VMCount:        vmCount2,
+				VMType:         vmType2,
 			}
 		}
 		forge = &shared.AzBatchForgeConfig{
 			AutoScale:         autoScale,
+			BootDiskSizeGB:    bootDiskSizeGB,
 			ContainerRegIds:   containerRegIds,
 			DisposeOnDeletion: disposeOnDeletion,
 			DualPoolConfig:    dualPoolConfig,

@@ -12,6 +12,8 @@ type ListDataStudioCompatibleComputeEnvsRequest struct {
 	SessionID string `pathParam:"style=simple,explode=false,name=sessionId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Additional attribute values to include in the response (`labels`, `resources`). Returns an empty value (ex. `labels: null`) if omitted.
+	Attributes []shared.ComputeEnvQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
 func (l *ListDataStudioCompatibleComputeEnvsRequest) GetSessionID() string {
@@ -26,6 +28,13 @@ func (l *ListDataStudioCompatibleComputeEnvsRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return l.WorkspaceID
+}
+
+func (l *ListDataStudioCompatibleComputeEnvsRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.Attributes
 }
 
 type ListDataStudioCompatibleComputeEnvsResponse struct {

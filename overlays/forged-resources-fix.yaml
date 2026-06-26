@@ -17,6 +17,10 @@ actions:
 
   - target: $["components"]["schemas"]["AzCloudConfig"]["properties"]["forgedResources"]
     remove: true
+  - target: $["components"]["schemas"]["AzCloudConfig"]["properties"]["deletedResources"]
+    remove: true
 
   - target: $["components"]["schemas"]["GoogleCloudConfig"]["properties"]["forgedResources"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleCloudConfig"]["properties"]["deletedResources"]
     remove: true

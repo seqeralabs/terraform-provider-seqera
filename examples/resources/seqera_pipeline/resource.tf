@@ -13,6 +13,7 @@ resource "seqera_pipeline" "basic" {
     compute_env_id = seqera_compute_env.aws.compute_env.id
     work_dir       = "s3://my-bucket/work"
     revision       = "main"
+    syntax_parser  = "v2"
   }
 }
 

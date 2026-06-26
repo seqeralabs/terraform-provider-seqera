@@ -332,6 +332,14 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Default:     booldefault.StaticBool(false),
 						Description: `Default: false`,
 					},
+					"syntax_parser": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `must be one of ["v1", "v2"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf("v1", "v2"),
+						},
+					},
 					"tower_config": schema.StringAttribute{
 						Optional:    true,
 						Description: `Tower-specific configuration`,

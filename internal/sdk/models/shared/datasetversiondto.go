@@ -15,6 +15,7 @@ type DatasetVersionDto struct {
 	DateCreated        *time.Time       `json:"dateCreated,omitempty"`
 	Disabled           *bool            `json:"disabled,omitempty"`
 	FileName           *string          `json:"fileName,omitempty"`
+	FileSize           *int64           `json:"fileSize,omitempty"`
 	HasHeader          *bool            `json:"hasHeader,omitempty"`
 	LastUpdated        *time.Time       `json:"lastUpdated,omitempty"`
 	LinkedSource       *LinkedSourceDto `json:"linkedSource,omitempty"`
@@ -82,6 +83,13 @@ func (d *DatasetVersionDto) GetFileName() *string {
 		return nil
 	}
 	return d.FileName
+}
+
+func (d *DatasetVersionDto) GetFileSize() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.FileSize
 }
 
 func (d *DatasetVersionDto) GetHasHeader() *bool {

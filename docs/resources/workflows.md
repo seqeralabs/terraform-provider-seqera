@@ -104,6 +104,7 @@ resource "seqera_workflows" "with_params" {
 - `schema_name` (String) Pipeline schema name. Requires replacement if changed.
 - `source_workspace_id` (Number) Source workspace numeric identifier. Requires replacement if changed.
 - `stub_run` (Boolean) Default: false; Requires replacement if changed.
+- `syntax_parser` (String) must be one of ["v1", "v2"]; Requires replacement if changed.
 - `tower_config` (String) Tower-specific configuration. Requires replacement if changed.
 - `user_secrets` (List of String) Default: []; Requires replacement if changed.
 - `work_dir` (String) Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir. Requires replacement if changed.

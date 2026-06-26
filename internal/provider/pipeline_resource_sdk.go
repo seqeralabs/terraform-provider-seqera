@@ -58,6 +58,11 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			r.Launch.SchemaName = types.StringPointerValue(resp.Launch.SchemaName)
 			r.Launch.SessionID = types.StringPointerValue(resp.Launch.SessionID)
 			r.Launch.StubRun = types.BoolPointerValue(resp.Launch.StubRun)
+			if resp.Launch.SyntaxParser != nil {
+				r.Launch.SyntaxParser = types.StringValue(string(*resp.Launch.SyntaxParser))
+			} else {
+				r.Launch.SyntaxParser = types.StringNull()
+			}
 			r.Launch.TowerConfig = types.StringPointerValue(resp.Launch.TowerConfig)
 			r.Launch.UserSecrets = make([]types.String, 0, len(resp.Launch.UserSecrets))
 			for _, v := range resp.Launch.UserSecrets {
@@ -364,6 +369,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		stubRun = nil
 	}
+	syntaxParser := new(shared.WorkflowLaunchRequestSyntaxParser)
+	if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
+		*syntaxParser = shared.WorkflowLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
+	} else {
+		syntaxParser = nil
+	}
 	towerConfig := new(string)
 	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
 		*towerConfig = r.Launch.TowerConfig.ValueString()
@@ -403,6 +414,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		RunName:          runName,
 		SchemaName:       schemaName,
 		StubRun:          stubRun,
+		SyntaxParser:     syntaxParser,
 		TowerConfig:      towerConfig,
 		UserSecrets:      userSecrets,
 		WorkDir:          workDir,
@@ -556,6 +568,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		stubRun = nil
 	}
+	syntaxParser := new(shared.WorkflowLaunchRequestSyntaxParser)
+	if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
+		*syntaxParser = shared.WorkflowLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
+	} else {
+		syntaxParser = nil
+	}
 	towerConfig := new(string)
 	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
 		*towerConfig = r.Launch.TowerConfig.ValueString()
@@ -595,6 +613,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		RunName:          runName,
 		SchemaName:       schemaName,
 		StubRun:          stubRun,
+		SyntaxParser:     syntaxParser,
 		TowerConfig:      towerConfig,
 		UserSecrets:      userSecrets,
 		WorkDir:          workDir,
