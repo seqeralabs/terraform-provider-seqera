@@ -1039,6 +1039,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.` + "\n" +
 											`Requires replacement if changed.`,
 									},
+									"ebs_encrypted": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `When true, the boot EBS volume of provisioned instances is encrypted. Null/absent (the default) is treated as false — no encryption. Requires replacement if changed.`,
+									},
+									"ebs_kms_key_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Optional KMS key ARN used to encrypt the boot EBS volume. Only applied when ebsEncrypted is true. When omitted, the account/region default EBS encryption key is used. Requires replacement if changed.`,
+									},
 									"ec2_key_pair": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1153,6 +1169,36 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances. must be one of ["ECS", "EC2"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch. Requires replacement if changed.`,
+											},
 											"machine_types": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 												Computed:   true,
@@ -1167,6 +1213,56 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"nvme_enabled": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'. Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												Description: `Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency. Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted. Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
 												Computed: true,
@@ -1286,9 +1382,27 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
+										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										MarkdownDescription: `Subnet ID where compute instances will be launched.` + "\n" +
 											`Must be in the same VPC and region as the compute environment.` + "\n" +
 											`Requires replacement if changed.`,
+									},
+									"subnet_ids": schema.ListAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										Description: `Subnets to launch into. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+									},
+									"vpc_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `The VPC used to scope subnet and security-group selection. Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -3804,6 +3918,36 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances. must be one of ["ECS", "EC2"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch. Requires replacement if changed.`,
+											},
 											"machine_types": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 												Computed:   true,
@@ -3818,6 +3962,56 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"nvme_enabled": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'. Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												Description: `Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency. Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted. Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
 												Computed: true,
@@ -5109,6 +5303,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								PlanModifiers: []planmodifier.Float32{
 									speakeasy_float32planmodifier.SuppressDiff(speakeasy_float32planmodifier.ExplicitSuppress),
+								},
+							},
+							"gpu_enabled": schema.BoolAttribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
 							},
 							"gpus": schema.Int32Attribute{

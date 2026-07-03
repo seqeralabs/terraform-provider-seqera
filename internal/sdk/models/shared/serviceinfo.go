@@ -20,6 +20,7 @@ type ServiceInfo struct {
 	GroundswellEnabled           *bool         `json:"groundswellEnabled,omitempty"`
 	HeartbeatInterval            *int          `json:"heartbeatInterval,omitempty"`
 	LandingURL                   *string       `json:"landingUrl,omitempty"`
+	LaunchConfigTextMaxSize      *int          `json:"launchConfigTextMaxSize,omitempty"`
 	LaunchParamsTextMaxSize      *int          `json:"launchParamsTextMaxSize,omitempty"`
 	LlmEnabled                   *bool         `json:"llmEnabled,omitempty"`
 	LoginPath                    *string       `json:"loginPath,omitempty"`
@@ -144,6 +145,13 @@ func (s *ServiceInfo) GetLandingURL() *string {
 		return nil
 	}
 	return s.LandingURL
+}
+
+func (s *ServiceInfo) GetLaunchConfigTextMaxSize() *int {
+	if s == nil {
+		return nil
+	}
+	return s.LaunchConfigTextMaxSize
 }
 
 func (s *ServiceInfo) GetLaunchParamsTextMaxSize() *int {

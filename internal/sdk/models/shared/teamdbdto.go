@@ -13,7 +13,9 @@ type TeamDbDto struct {
 	// URL to the team's avatar or profile image
 	AvatarURL *string `json:"avatarUrl,omitempty"`
 	// Description of the team's purpose and responsibilities
-	Description *string `json:"description,omitempty"`
+	Description  *string `json:"description,omitempty"`
+	IdpGroupID   *int64  `json:"idpGroupId,omitempty"`
+	IdpGroupName *string `json:"idpGroupName,omitempty"`
 	// Total number of members in the team
 	MembersCount *int64 `json:"membersCount,omitempty"`
 	// Display name for the team
@@ -52,6 +54,20 @@ func (t *TeamDbDto) GetDescription() *string {
 		return nil
 	}
 	return t.Description
+}
+
+func (t *TeamDbDto) GetIdpGroupID() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.IdpGroupID
+}
+
+func (t *TeamDbDto) GetIdpGroupName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.IdpGroupName
 }
 
 func (t *TeamDbDto) GetMembersCount() *int64 {

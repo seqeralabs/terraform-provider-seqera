@@ -44,8 +44,12 @@ type CredentialResourceModel struct {
 	Description   types.String          `tfsdk:"description"`
 	ID            types.String          `tfsdk:"id"`
 	Keys          *tfTypes.SecurityKeys `tfsdk:"keys"`
+	LastValidated types.String          `tfsdk:"last_validated"`
+	Message       types.String          `tfsdk:"message"`
 	Name          types.String          `tfsdk:"name"`
 	ProviderType  types.String          `tfsdk:"provider_type"`
+	SetupSnippet  types.String          `tfsdk:"setup_snippet"`
+	Status        types.String          `tfsdk:"status"`
 	WorkspaceID   types.Int64           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -850,6 +854,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"last_validated": schema.StringAttribute{
+				Computed:    true,
+				Description: `Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.`,
+			},
+			"message": schema.StringAttribute{
+				Computed:    true,
+				Description: `Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing ' (truncated)' suffix when the underlying provider message exceeds that limit.`,
+			},
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `Display name for the credential (max 100 characters)`,
@@ -886,6 +898,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					),
 					custom_stringvalidators.CredentialsConfigValidator(),
 				},
+			},
+			"setup_snippet": schema.StringAttribute{
+				Computed:    true,
+				Description: `Server-rendered, read-only provider-side setup snippet (e.g. AWS IAM role trust policy) to paste at the cloud provider. Populated when a renderer is available for the credential type and the installation is configured for it; otherwise omitted.`,
+			},
+			"status": schema.StringAttribute{
+				Computed:    true,
+				Description: `Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,

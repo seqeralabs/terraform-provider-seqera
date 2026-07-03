@@ -3,15 +3,16 @@
 package shared
 
 type UpsertUserRequest struct {
-	Avatar       *string `json:"avatar,omitempty"`
-	AvatarID     *string `json:"avatarId,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	Email        string  `json:"email"`
-	FirstName    *string `json:"firstName,omitempty"`
-	LastName     *string `json:"lastName,omitempty"`
-	Notification *bool   `json:"notification,omitempty"`
-	Organization *string `json:"organization,omitempty"`
-	UserName     string  `json:"userName"`
+	Avatar             *string `json:"avatar,omitempty"`
+	AvatarID           *string `json:"avatarId,omitempty"`
+	DefaultWorkspaceID *int64  `json:"defaultWorkspaceId,omitempty"`
+	Description        *string `json:"description,omitempty"`
+	Email              string  `json:"email"`
+	FirstName          *string `json:"firstName,omitempty"`
+	LastName           *string `json:"lastName,omitempty"`
+	Notification       *bool   `json:"notification,omitempty"`
+	Organization       *string `json:"organization,omitempty"`
+	UserName           string  `json:"userName"`
 }
 
 func (u *UpsertUserRequest) GetAvatar() *string {
@@ -26,6 +27,13 @@ func (u *UpsertUserRequest) GetAvatarID() *string {
 		return nil
 	}
 	return u.AvatarID
+}
+
+func (u *UpsertUserRequest) GetDefaultWorkspaceID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.DefaultWorkspaceID
 }
 
 func (u *UpsertUserRequest) GetDescription() *string {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
@@ -267,8 +268,15 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.TowerAgentCredentials.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.TowerAgentCredentials.WorkDir)
 		}
+		r.LastValidated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastValidated))
+		r.Message = types.StringPointerValue(resp.Message)
 		r.Name = types.StringValue(resp.Name)
 		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.Status != nil {
+			r.Status = types.StringValue(string(*resp.Status))
+		} else {
+			r.Status = types.StringNull()
+		}
 	}
 
 	return diags
@@ -284,6 +292,7 @@ func (r *CredentialResourceModel) RefreshFromSharedDescribeCredentialsResponse(c
 			return diags
 		}
 
+		r.SetupSnippet = types.StringPointerValue(resp.SetupSnippet)
 	}
 
 	return diags

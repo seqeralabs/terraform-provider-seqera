@@ -2,8 +2,23 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type WfWaveMeta struct {
 	Enabled *bool `json:"enabled,omitempty"`
+}
+
+func (w WfWaveMeta) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(w, "", false)
+}
+
+func (w *WfWaveMeta) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (w *WfWaveMeta) GetEnabled() *bool {

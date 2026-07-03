@@ -17238,7 +17238,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/SchedConfig.Pool'
         predictionModel:
-          description: 'Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted.'
+          description: "Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted."
           type: string
         provisioningModel:
           type: string

@@ -83,6 +83,7 @@ resource "seqera_action" "tower_advanced" {
     compute_env_id = seqera_compute_env.aws.id
     work_dir       = "s3://my-bucket/production/work"
     revision       = "master"
+    syntax_parser  = "v2"
 
     params_text = jsonencode({
       input_data  = "s3://my-bucket/input/data.csv"
@@ -159,6 +160,7 @@ Optional:
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
 - `main_script` (String) Main script path
+- `output_dir` (String) Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
 - `params_text` (String) Pipeline parameters text
 - `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution

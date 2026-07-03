@@ -17,12 +17,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
@@ -49,13 +51,18 @@ type WorkflowsResourceModel struct {
 	ComputeEnvID              types.String                                  `tfsdk:"compute_env_id"`
 	ConfigProfiles            []types.String                                `tfsdk:"config_profiles"`
 	ConfigText                types.String                                  `tfsdk:"config_text"`
+	Cost                      types.Float64                                 `tfsdk:"cost"`
+	CostCurrency              types.String                                  `tfsdk:"cost_currency"`
+	CostIsEstimate            types.Bool                                    `tfsdk:"cost_is_estimate"`
 	EntryName                 types.String                                  `tfsdk:"entry_name"`
 	Force                     types.Bool                                    `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
 	HeadJobCpus               types.Int32                                   `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb           types.Int32                                   `tfsdk:"head_job_memory_mb"`
+	InstancesProvisioned      types.Int32                                   `tfsdk:"instances_provisioned"`
 	IntelligentComputeEnabled types.Bool                                    `tfsdk:"intelligent_compute_enabled"`
 	LabelIds                  []types.Int64                                 `tfsdk:"label_ids"`
 	MainScript                types.String                                  `tfsdk:"main_script"`
+	OutputDir                 types.String                                  `tfsdk:"output_dir"`
 	ParamsText                types.String                                  `tfsdk:"params_text"`
 	Pipeline                  types.String                                  `tfsdk:"pipeline"`
 	PipelineInfo              *tfTypes.DescribeWorkflowResponsePipelineInfo `tfsdk:"pipeline_info"`
@@ -65,6 +72,8 @@ type WorkflowsResourceModel struct {
 	PullLatest                types.Bool                                    `tfsdk:"pull_latest"`
 	Revision                  types.String                                  `tfsdk:"revision"`
 	RunName                   types.String                                  `tfsdk:"run_name"`
+	SchedConfig               *tfTypes.DescribeWorkflowResponseSchedConfig  `tfsdk:"sched_config"`
+	SchedRunID                types.String                                  `tfsdk:"sched_run_id"`
 	SchemaName                types.String                                  `tfsdk:"schema_name"`
 	SourceWorkspaceID         types.Int64                                   `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
 	StubRun                   types.Bool                                    `tfsdk:"stub_run"`
@@ -109,6 +118,15 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Nextflow configuration text. Requires replacement if changed.`,
 			},
+			"cost": schema.Float64Attribute{
+				Computed: true,
+			},
+			"cost_currency": schema.StringAttribute{
+				Computed: true,
+			},
+			"cost_is_estimate": schema.BoolAttribute{
+				Computed: true,
+			},
 			"entry_name": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -134,6 +152,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Head job memory allocation in MB. Requires replacement if changed.`,
 			},
+			"instances_provisioned": schema.Int32Attribute{
+				Computed: true,
+			},
 			"intelligent_compute_enabled": schema.BoolAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.Bool{
@@ -154,6 +175,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Main script path. Requires replacement if changed.`,
+			},
+			"output_dir": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax). Requires replacement if changed.`,
 			},
 			"params_text": schema.StringAttribute{
 				Optional: true,
@@ -288,6 +316,79 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Custom run name. Requires replacement if changed.`,
+			},
+			"sched_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"backend_strategy": schema.StringAttribute{
+						Computed:    true,
+						Description: `Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances.`,
+					},
+					"disk_allocation": schema.StringAttribute{
+						Computed: true,
+					},
+					"fusion_snapshots": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch.`,
+					},
+					"machine_types": schema.ListAttribute{
+						CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+						Computed:   true,
+						PlanModifiers: []planmodifier.List{
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+							`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
+							`types per task. When populated, the scheduler is restricted to this` + "\n" +
+							`whitelist; types outside the platform's filtered catalog for the` + "\n" +
+							`scheduler are accepted by the API but may produce warnings.`,
+					},
+					"nvme_enabled": schema.BoolAttribute{
+						Computed:    true,
+						Description: `When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.`,
+					},
+					"pool": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"desired_warm": schema.Int32Attribute{
+								Computed:    true,
+								Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters.`,
+							},
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs.`,
+							},
+							"scale_to_zero_secs": schema.Int32Attribute{
+								Computed:    true,
+								Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero.`,
+							},
+						},
+						Description: `Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.`,
+					},
+					"prediction_model": schema.StringAttribute{
+						Computed:    true,
+						Description: `Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted.`,
+					},
+					"provisioning_model": schema.StringAttribute{
+						Computed: true,
+						Default:  stringdefault.StaticString(`spotFirst`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+							`Case-sensitive — must be one of:` + "\n" +
+							`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
+							`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
+							`- ` + "`" + `ondemand` + "`" + `: on-demand instances only — maximum reliability at a higher cost.` + "\n" +
+							`` + "\n" +
+							`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
+							`Default: "spotFirst"`,
+					},
+				},
+			},
+			"sched_run_id": schema.StringAttribute{
+				Computed: true,
 			},
 			"schema_name": schema.StringAttribute{
 				Optional: true,

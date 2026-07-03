@@ -26,6 +26,8 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.AllowBuckets, _ = allowBucketsValuable.(basetypes.ListValue)
 		r.Config.Arm64Enabled = types.BoolPointerValue(resp.Config.Arm64Enabled)
 		r.Config.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.EbsBootSize))
+		r.Config.EbsEncrypted = types.BoolPointerValue(resp.Config.EbsEncrypted)
+		r.Config.EbsKmsKeyID = types.StringPointerValue(resp.Config.EbsKmsKeyID)
 		r.Config.Ec2KeyPair = types.StringPointerValue(resp.Config.Ec2KeyPair)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
@@ -47,11 +49,28 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			r.Config.IntelligentComputeConfig = nil
 		} else {
 			r.Config.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+			if resp.Config.IntelligentComputeConfig.BackendStrategy != nil {
+				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.Config.IntelligentComputeConfig.BackendStrategy))
+			} else {
+				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+			}
+			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
+			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
 			diags.Append(machineTypesDiags...)
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.NvmeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.NvmeEnabled)
+			if resp.Config.IntelligentComputeConfig.Pool == nil {
+				r.Config.IntelligentComputeConfig.Pool = nil
+			} else {
+				r.Config.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+				r.Config.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.Pool.DesiredWarm))
+				r.Config.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.Pool.Enabled)
+				r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+			}
+			r.Config.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.Config.IntelligentComputeConfig.PredictionModel)
 			if resp.Config.IntelligentComputeConfig.ProvisioningModel != nil {
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.Config.IntelligentComputeConfig.ProvisioningModel))
 			} else {
@@ -70,6 +89,11 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		diags.Append(securityGroupsDiags...)
 		r.Config.SecurityGroups, _ = securityGroupsValuable.(basetypes.ListValue)
 		r.Config.SubnetID = types.StringPointerValue(resp.Config.SubnetID)
+		r.Config.SubnetIds = make([]types.String, 0, len(resp.Config.SubnetIds))
+		for _, v := range resp.Config.SubnetIds {
+			r.Config.SubnetIds = append(r.Config.SubnetIds, types.StringValue(v))
+		}
+		r.Config.VpcID = types.StringPointerValue(resp.Config.VpcID)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
@@ -277,6 +301,18 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		ebsBootSize = nil
 	}
+	ebsEncrypted := new(bool)
+	if !r.Config.EbsEncrypted.IsUnknown() && !r.Config.EbsEncrypted.IsNull() {
+		*ebsEncrypted = r.Config.EbsEncrypted.ValueBool()
+	} else {
+		ebsEncrypted = nil
+	}
+	ebsKmsKeyID := new(string)
+	if !r.Config.EbsKmsKeyID.IsUnknown() && !r.Config.EbsKmsKeyID.IsNull() {
+		*ebsKmsKeyID = r.Config.EbsKmsKeyID.ValueString()
+	} else {
+		ebsKmsKeyID = nil
+	}
 	ec2KeyPair := new(string)
 	if !r.Config.Ec2KeyPair.IsUnknown() && !r.Config.Ec2KeyPair.IsNull() {
 		*ec2KeyPair = r.Config.Ec2KeyPair.ValueString()
@@ -369,18 +405,80 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 
 	var intelligentComputeConfig *shared.SchedConfig
 	if r.Config.IntelligentComputeConfig != nil {
+		backendStrategy := new(shared.SchedConfigBackendStrategy)
+		if !r.Config.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.Config.IntelligentComputeConfig.BackendStrategy.IsNull() {
+			*backendStrategy = shared.SchedConfigBackendStrategy(r.Config.IntelligentComputeConfig.BackendStrategy.ValueString())
+		} else {
+			backendStrategy = nil
+		}
+		diskAllocation := new(string)
+		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
+			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
+		} else {
+			diskAllocation = nil
+		}
+		fusionSnapshots := new(bool)
+		if !r.Config.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.Config.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Config.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots = nil
+		}
 		var machineTypes []string
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 		}
-		provisioningModel := new(shared.ProvisioningModel)
+		nvmeEnabled := new(bool)
+		if !r.Config.IntelligentComputeConfig.NvmeEnabled.IsUnknown() && !r.Config.IntelligentComputeConfig.NvmeEnabled.IsNull() {
+			*nvmeEnabled = r.Config.IntelligentComputeConfig.NvmeEnabled.ValueBool()
+		} else {
+			nvmeEnabled = nil
+		}
+		var pool *shared.SchedConfigPool
+		if r.Config.IntelligentComputeConfig.Pool != nil {
+			desiredWarm := new(int)
+			if !r.Config.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+				*desiredWarm = int(r.Config.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+			} else {
+				desiredWarm = nil
+			}
+			enabled := new(bool)
+			if !r.Config.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+				*enabled = r.Config.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+			} else {
+				enabled = nil
+			}
+			scaleToZeroSecs := new(int)
+			if !r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+				*scaleToZeroSecs = int(r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+			} else {
+				scaleToZeroSecs = nil
+			}
+			pool = &shared.SchedConfigPool{
+				DesiredWarm:     desiredWarm,
+				Enabled:         enabled,
+				ScaleToZeroSecs: scaleToZeroSecs,
+			}
+		}
+		predictionModel := new(string)
+		if !r.Config.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.Config.IntelligentComputeConfig.PredictionModel.IsNull() {
+			*predictionModel = r.Config.IntelligentComputeConfig.PredictionModel.ValueString()
+		} else {
+			predictionModel = nil
+		}
+		provisioningModel := new(shared.SchedConfigProvisioningModel)
 		if !r.Config.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.Config.IntelligentComputeConfig.ProvisioningModel.IsNull() {
-			*provisioningModel = shared.ProvisioningModel(r.Config.IntelligentComputeConfig.ProvisioningModel.ValueString())
+			*provisioningModel = shared.SchedConfigProvisioningModel(r.Config.IntelligentComputeConfig.ProvisioningModel.ValueString())
 		} else {
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
+			BackendStrategy:   backendStrategy,
+			DiskAllocation:    diskAllocation,
+			FusionSnapshots:   fusionSnapshots,
 			MachineTypes:      machineTypes,
+			NvmeEnabled:       nvmeEnabled,
+			Pool:              pool,
+			PredictionModel:   predictionModel,
 			ProvisioningModel: provisioningModel,
 		}
 	}
@@ -400,6 +498,16 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		subnetID = nil
 	}
+	subnetIds := make([]string, 0, len(r.Config.SubnetIds))
+	for subnetIdsIndex := range r.Config.SubnetIds {
+		subnetIds = append(subnetIds, r.Config.SubnetIds[subnetIdsIndex].ValueString())
+	}
+	vpcID := new(string)
+	if !r.Config.VpcID.IsUnknown() && !r.Config.VpcID.IsNull() {
+		*vpcID = r.Config.VpcID.ValueString()
+	} else {
+		vpcID = nil
+	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
 		*workDir = r.Config.WorkDir.ValueString()
@@ -410,6 +518,8 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		AllowBuckets:              allowBuckets,
 		Arm64Enabled:              arm64Enabled,
 		EbsBootSize:               ebsBootSize,
+		EbsEncrypted:              ebsEncrypted,
+		EbsKmsKeyID:               ebsKmsKeyID,
 		Ec2KeyPair:                ec2KeyPair,
 		Environment:               environment,
 		GpuEnabled:                gpuEnabled,
@@ -425,6 +535,8 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		IntelligentComputeEnabled: intelligentComputeEnabled,
 		SecurityGroups:            securityGroups,
 		SubnetID:                  subnetID,
+		SubnetIds:                 subnetIds,
+		VpcID:                     vpcID,
 		WorkDir:                   workDir,
 	}
 	out := shared.AwsCloudCEComputeConfigInput{

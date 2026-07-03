@@ -8,25 +8,52 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-// ProvisioningModel - EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+// SchedConfigBackendStrategy - Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances.
+type SchedConfigBackendStrategy string
+
+const (
+	SchedConfigBackendStrategyEcs SchedConfigBackendStrategy = "ECS"
+	SchedConfigBackendStrategyEc2 SchedConfigBackendStrategy = "EC2"
+)
+
+func (e SchedConfigBackendStrategy) ToPointer() *SchedConfigBackendStrategy {
+	return &e
+}
+func (e *SchedConfigBackendStrategy) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ECS":
+		fallthrough
+	case "EC2":
+		*e = SchedConfigBackendStrategy(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for SchedConfigBackendStrategy: %v", v)
+	}
+}
+
+// SchedConfigProvisioningModel - EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 // Case-sensitive — must be one of:
 // - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
 // - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
 // - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
 //
 // Note: `"onDemand"` / `"on-demand"` are rejected by the API.
-type ProvisioningModel string
+type SchedConfigProvisioningModel string
 
 const (
-	ProvisioningModelSpot      ProvisioningModel = "spot"
-	ProvisioningModelSpotFirst ProvisioningModel = "spotFirst"
-	ProvisioningModelOndemand  ProvisioningModel = "ondemand"
+	SchedConfigProvisioningModelSpot      SchedConfigProvisioningModel = "spot"
+	SchedConfigProvisioningModelSpotFirst SchedConfigProvisioningModel = "spotFirst"
+	SchedConfigProvisioningModelOndemand  SchedConfigProvisioningModel = "ondemand"
 )
 
-func (e ProvisioningModel) ToPointer() *ProvisioningModel {
+func (e SchedConfigProvisioningModel) ToPointer() *SchedConfigProvisioningModel {
 	return &e
 }
-func (e *ProvisioningModel) UnmarshalJSON(data []byte) error {
+func (e *SchedConfigProvisioningModel) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -37,14 +64,19 @@ func (e *ProvisioningModel) UnmarshalJSON(data []byte) error {
 	case "spotFirst":
 		fallthrough
 	case "ondemand":
-		*e = ProvisioningModel(v)
+		*e = SchedConfigProvisioningModel(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ProvisioningModel: %v", v)
+		return fmt.Errorf("invalid value for SchedConfigProvisioningModel: %v", v)
 	}
 }
 
 type SchedConfig struct {
+	// Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances.
+	BackendStrategy *SchedConfigBackendStrategy `json:"backendStrategy,omitempty"`
+	DiskAllocation  *string                     `json:"diskAllocation,omitempty"`
+	// Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch.
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// EC2 instance types eligible for Seqera Intelligent Compute nodes.
 	// Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 	// types per task. When populated, the scheduler is restricted to this
@@ -52,6 +84,12 @@ type SchedConfig struct {
 	// scheduler are accepted by the API but may produce warnings.
 	//
 	MachineTypes []string `json:"machineTypes,omitempty"`
+	// When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
+	NvmeEnabled *bool `json:"nvmeEnabled,omitempty"`
+	// Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+	Pool *SchedConfigPool `json:"pool,omitempty"`
+	// Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted.
+	PredictionModel *string `json:"predictionModel,omitempty"`
 	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 	// Case-sensitive — must be one of:
 	// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
@@ -60,7 +98,7 @@ type SchedConfig struct {
 	//
 	// Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 	//
-	ProvisioningModel *ProvisioningModel `default:"spotFirst" json:"provisioningModel"`
+	ProvisioningModel *SchedConfigProvisioningModel `default:"spotFirst" json:"provisioningModel"`
 }
 
 func (s SchedConfig) MarshalJSON() ([]byte, error) {
@@ -74,6 +112,27 @@ func (s *SchedConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *SchedConfig) GetBackendStrategy() *SchedConfigBackendStrategy {
+	if s == nil {
+		return nil
+	}
+	return s.BackendStrategy
+}
+
+func (s *SchedConfig) GetDiskAllocation() *string {
+	if s == nil {
+		return nil
+	}
+	return s.DiskAllocation
+}
+
+func (s *SchedConfig) GetFusionSnapshots() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.FusionSnapshots
+}
+
 func (s *SchedConfig) GetMachineTypes() []string {
 	if s == nil {
 		return nil
@@ -81,7 +140,28 @@ func (s *SchedConfig) GetMachineTypes() []string {
 	return s.MachineTypes
 }
 
-func (s *SchedConfig) GetProvisioningModel() *ProvisioningModel {
+func (s *SchedConfig) GetNvmeEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.NvmeEnabled
+}
+
+func (s *SchedConfig) GetPool() *SchedConfigPool {
+	if s == nil {
+		return nil
+	}
+	return s.Pool
+}
+
+func (s *SchedConfig) GetPredictionModel() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PredictionModel
+}
+
+func (s *SchedConfig) GetProvisioningModel() *SchedConfigProvisioningModel {
 	if s == nil {
 		return nil
 	}

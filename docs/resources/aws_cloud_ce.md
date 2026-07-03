@@ -192,6 +192,8 @@ Requires replacement if changed.
 - `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
 When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 Requires replacement if changed.
+- `ebs_encrypted` (Boolean) When true, the boot EBS volume of provisioned instances is encrypted. Null/absent (the default) is treated as false — no encryption. Requires replacement if changed.
+- `ebs_kms_key_id` (String) Optional KMS key ARN used to encrypt the boot EBS volume. Only applied when ebsEncrypted is true. When omitted, the account/region default EBS encryption key is used. Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
@@ -230,9 +232,11 @@ Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
-- `subnet_id` (String) Subnet ID where compute instances will be launched.
+- `subnet_id` (String, Deprecated) Subnet ID where compute instances will be launched.
 Must be in the same VPC and region as the compute environment.
 Requires replacement if changed.
+- `subnet_ids` (List of String) Subnets to launch into. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
+- `vpc_id` (String) The VPC used to scope subnet and security-group selection. Requires replacement if changed.
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`
@@ -256,12 +260,18 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances. must be one of ["ECS", "EC2"]; Requires replacement if changed.
+- `disk_allocation` (String) Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch. Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `nvme_enabled` (Boolean) When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'. Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency. Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted. Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
 - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
@@ -270,6 +280,15 @@ Case-sensitive — must be one of:
 
 Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--config--intelligent_compute_config--pool"></a>
+### Nested Schema for `config.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
 
 ## Import
 

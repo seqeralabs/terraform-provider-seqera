@@ -84,6 +84,7 @@ type ComputeEnvResponseDtoResources struct {
 	Cpus           *int     `json:"cpus,omitempty"`
 	DiskSize       *int     `json:"diskSize,omitempty"`
 	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	GpuEnabled     *bool    `json:"gpuEnabled,omitempty"`
 	Gpus           *int     `json:"gpus,omitempty"`
 	InstanceType   *string  `json:"instanceType,omitempty"`
 	Memory         *int     `json:"memory,omitempty"`
@@ -108,6 +109,13 @@ func (c *ComputeEnvResponseDtoResources) GetEstimatedPrice() *float32 {
 		return nil
 	}
 	return c.EstimatedPrice
+}
+
+func (c *ComputeEnvResponseDtoResources) GetGpuEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.GpuEnabled
 }
 
 func (c *ComputeEnvResponseDtoResources) GetGpus() *int {

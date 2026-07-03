@@ -39,6 +39,7 @@ type WorkflowInput struct {
 	Resume            *bool          `json:"resume,omitempty"`
 	Revision          *string        `json:"revision,omitempty"`
 	RunName           string         `json:"runName"`
+	Sched             *WfSched       `json:"sched,omitempty"`
 	ScriptFile        *string        `json:"scriptFile,omitempty"`
 	ScriptID          *string        `json:"scriptId,omitempty"`
 	ScriptName        *string        `json:"scriptName,omitempty"`
@@ -258,6 +259,13 @@ func (w *WorkflowInput) GetRunName() string {
 		return ""
 	}
 	return w.RunName
+}
+
+func (w *WorkflowInput) GetSched() *WfSched {
+	if w == nil {
+		return nil
+	}
+	return w.Sched
 }
 
 func (w *WorkflowInput) GetScriptFile() *string {

@@ -47,6 +47,8 @@ func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, res
 		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.Int64PointerValue(resp.ID)
+		r.IdpGroupID = types.Int64PointerValue(resp.IdpGroupID)
+		r.IdpGroupName = types.StringPointerValue(resp.IdpGroupName)
 		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.TeamID = types.Int64PointerValue(resp.TeamID)
@@ -144,6 +146,12 @@ func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*sh
 	} else {
 		avatarID = nil
 	}
+	idpGroupID := new(int64)
+	if !r.IdpGroupID.IsUnknown() && !r.IdpGroupID.IsNull() {
+		*idpGroupID = r.IdpGroupID.ValueInt64()
+	} else {
+		idpGroupID = nil
+	}
 	team, teamDiags := r.ToSharedTeam(ctx)
 	diags.Append(teamDiags...)
 
@@ -152,8 +160,9 @@ func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*sh
 	}
 
 	out := shared.CreateTeamRequest{
-		AvatarID: avatarID,
-		Team:     team,
+		AvatarID:   avatarID,
+		IdpGroupID: idpGroupID,
+		Team:       team,
 	}
 
 	return &out, diags
@@ -194,6 +203,12 @@ func (r *TeamsResourceModel) ToSharedUpdateTeamRequest(ctx context.Context) (*sh
 	} else {
 		description = nil
 	}
+	idpGroupID := new(int64)
+	if !r.IdpGroupID.IsUnknown() && !r.IdpGroupID.IsNull() {
+		*idpGroupID = r.IdpGroupID.ValueInt64()
+	} else {
+		idpGroupID = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -203,6 +218,7 @@ func (r *TeamsResourceModel) ToSharedUpdateTeamRequest(ctx context.Context) (*sh
 	out := shared.UpdateTeamRequest{
 		AvatarID:    avatarID,
 		Description: description,
+		IdpGroupID:  idpGroupID,
 		Name:        name,
 	}
 

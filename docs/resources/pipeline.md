@@ -41,6 +41,7 @@ resource "seqera_pipeline" "basic" {
     compute_env_id = seqera_compute_env.aws.compute_env.id
     work_dir       = "s3://my-bucket/work"
     revision       = "main"
+    syntax_parser  = "v2"
   }
 }
 
@@ -125,6 +126,7 @@ Optional:
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
 - `main_script` (String) Main script path
+- `output_dir` (String) Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
 - `params_text` (String) Pipeline parameters text
 - `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution

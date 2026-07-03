@@ -94,6 +94,7 @@ resource "seqera_workflows" "with_params" {
 - `head_job_memory_mb` (Number) Head job memory allocation in MB. Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
 - `main_script` (String) Main script path. Requires replacement if changed.
+- `output_dir` (String) Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax). Requires replacement if changed.
 - `params_text` (String) Pipeline parameters text. Requires replacement if changed.
 - `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
@@ -112,8 +113,14 @@ resource "seqera_workflows" "with_params" {
 
 ### Read-Only
 
+- `cost` (Number)
+- `cost_currency` (String)
+- `cost_is_estimate` (Boolean)
+- `instances_provisioned` (Number)
 - `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
+- `sched_config` (Attributes) (see [below for nested schema](#nestedatt--sched_config))
+- `sched_run_id` (String)
 - `workflow_id` (String) Workflow string identifier
 
 <a id="nestedatt--pipeline_info"></a>
@@ -137,6 +144,42 @@ Read-Only:
 - `is_draft_version` (Boolean)
 - `last_updated` (String)
 - `name` (String)
+
+
+
+<a id="nestedatt--sched_config"></a>
+### Nested Schema for `sched_config`
+
+Read-Only:
+
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances.
+- `disk_allocation` (String)
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+- `nvme_enabled` (Boolean) When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency. (see [below for nested schema](#nestedatt--sched_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"
+
+<a id="nestedatt--sched_config--pool"></a>
+### Nested Schema for `sched_config.pool`
+
+Read-Only:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero.
 
 ## Import
 

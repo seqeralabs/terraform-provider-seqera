@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.159.0
+  version: 1.176.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -520,6 +520,455 @@ paths:
         - BearerAuth: []
       tags:
         - actions
+  /admin/audit-logs-v2:
+    get:
+      operationId: ListAuditLogsV2
+      summary: List audit logs (v2)
+      description: Lists audit logs with token-based pagination, ordered by timestamp (descending). Supports filtering by timestamp range.
+      parameters:
+        - name: attributes
+          in: query
+          description: Additional attribute values to include in the response (`state` for pre/post image payloads).
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AuditLogV2QueryAttribute'
+          explode: false
+        - name: nextPageToken
+          in: query
+          description: Token for retrieving the next page of results
+          schema:
+            type: string
+        - name: max
+          in: query
+          description: Maximum number of records to return in the page
+          schema:
+            type: integer
+            format: int32
+        - name: timestampAfterOrEqual
+          in: query
+          description: Filter logs with timestamp on or after this date
+          schema:
+            type: string
+            format: date-time
+        - name: timestampBeforeOrEqual
+          in: query
+          description: Filter logs with timestamp on or before this date
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAuditLogV2Response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - admin
+  /admin/audit-logs-v2/export-csv:
+    get:
+      operationId: ExportAuditLogsV2Csv
+      summary: Export audit logs (v2) as CSV
+      description: Exports audit log entries as a CSV file. Supports filtering by timestamp range. Fails if the number of matching logs exceeds a certain maximum.
+      parameters:
+        - name: attributes
+          in: query
+          description: Additional attribute values to include in the response (`state` for pre/post image payloads).
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AuditLogV2QueryAttribute'
+          explode: false
+        - name: timestampAfterOrEqual
+          in: query
+          description: Filter logs with timestamp on or after this date
+          schema:
+            type: string
+            format: date-time
+        - name: timestampBeforeOrEqual
+          in: query
+          description: Filter logs with timestamp on or before this date
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - admin
+  /admin/audit-logs-v2/{auditLogId}:
+    get:
+      operationId: DescribeAuditLogV2
+      summary: Describe a single audit log (v2)
+      description: Retrieves the pre/post change images associated with a specific audit log V2 record.
+      parameters:
+        - name: auditLogId
+          in: path
+          description: Audit log V2 record ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: attributes
+          in: query
+          description: Additional attribute values to include in the response (`state` for pre/post change images). Returns an empty value if omitted.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AuditLogV2QueryAttribute'
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLogV2ResponseDto'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - admin
+  /agents:
+    get:
+      operationId: ListAgents
+      summary: List agents
+      description: Lists non-deleted agents in a workspace.
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: search
+          in: query
+          description: Filter by agent name
+          schema:
+            type: string
+        - name: max
+          in: query
+          description: Pagination max results
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAgentsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+    post:
+      operationId: CreateAgent
+      summary: Create agent
+      description: Creates an agent in a workspace.
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Agent create request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAgentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/{agentId}:
+    delete:
+      operationId: DeleteAgent
+      summary: Delete agent
+      description: Tombstones an agent in a workspace.
+      parameters:
+        - name: agentId
+          in: path
+          description: Agent string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+    get:
+      operationId: DescribeAgent
+      summary: Describe agent
+      description: Retrieves an agent in a workspace.
+      parameters:
+        - name: agentId
+          in: path
+          description: Agent string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+    put:
+      operationId: UpdateAgent
+      summary: Update agent
+      description: Updates an agent in a workspace.
+      parameters:
+        - name: agentId
+          in: path
+          description: Agent string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Agent update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAgentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/{agentId}/disable:
+    post:
+      operationId: DisableAgent
+      summary: Disable agent
+      description: Marks an active agent as inactive.
+      parameters:
+        - name: agentId
+          in: path
+          description: Agent string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/{agentId}/enable:
+    post:
+      operationId: EnableAgent
+      summary: Enable agent
+      description: Marks an inactive agent as active.
+      parameters:
+        - name: agentId
+          in: path
+          description: Agent string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
   /avatars:
     post:
       operationId: CreateAvatar
@@ -989,6 +1438,60 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: PrimaryComputeEnv#create
+  /compute-envs/{computeEnvId}/validate:
+    post:
+      operationId: ValidateComputeEnv
+      summary: Validate a compute environment
+      description: Re-runs the pre-flight checks (associated-credential validation and work-directory accessibility) for the compute environment identified by the given `computeEnvId` and persists the outcome to the compute environment and its credential. Intended to recover a compute environment marked `INVALID` after the underlying problem has been fixed. Available only while the pre-flight feature is enabled.
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyBodyRequest'
+      responses:
+        '200':
+          description: Validation outcome - inspect status and the transientError flag on the response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateComputeEnvResponse'
+        '400':
+          description: Compute environment is in a status that cannot be validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Pre-flight feature is disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - compute-envs
   /credentials:
     get:
       operationId: ListCredentialsDataSource
@@ -4222,6 +4725,117 @@ paths:
         - BearerAuth: []
       tags:
         - orgs
+  /orgs/{orgId}/idp-groups:
+    get:
+      operationId: ListOrganizationIdpGroups
+      summary: List IdP groups for an organization
+      description: Returns the IdP group catalog for the organization, including both SCIM-pushed and manually entered groups.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIdpGroupsResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled or organization not found
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+    post:
+      operationId: CreateOrganizationIdpGroup
+      summary: Manually add an IdP group to the catalog
+      description: Adds a group entry to the IdP group catalog via manual entry. The admin must enter the exact claim value their IdP sends in the groups claim.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: IdP group create request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIdpGroupRequest'
+      responses:
+        '200':
+          description: Group entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdpGroupEntry'
+        '400':
+          description: Invalid request (empty group value)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled or organization not found
+        '409':
+          description: Group with same value already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+  /orgs/{orgId}/idp-groups/{groupId}:
+    delete:
+      operationId: DeleteOrganizationIdpGroup
+      summary: Remove an IdP group from the catalog
+      description: Removes a manually-entered group from the catalog. SCIM-managed groups cannot be deleted via this endpoint.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: groupId
+          in: path
+          description: IdP group numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Group entry deleted
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled or group not found
+        '409':
+          description: Cannot delete SCIM-managed group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
   /orgs/{orgId}/members:
     get:
       operationId: ListOrganizationMembers
@@ -4456,6 +5070,113 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+  /orgs/{orgId}/scim/config:
+    get:
+      operationId: DescribeOrganizationScimConfig
+      summary: View SCIM configuration
+      description: Returns the SCIM configuration for the organization, including token metadata, group count, and SSO state. Accessible to all org members (read access).
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeScimConfigResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled or organization not found
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+  /orgs/{orgId}/scim/token:
+    delete:
+      operationId: RevokeOrganizationScimToken
+      summary: Revoke the active SCIM bearer token
+      description: Revokes the active SCIM bearer token for the organization. Returns 404 if no active token exists.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Token revoked
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled, organization not found, or no active token
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+    post:
+      operationId: CreateOrganizationScimToken
+      summary: Generate a SCIM bearer token
+      description: Generates a new SCIM bearer token for the organization. If an active token already exists it is revoked first. The plaintext token is returned only once.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScimTokenResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled or organization not found
+      security:
+        - BearerAuth: []
+      tags:
+        - orgs
+  /orgs/{orgId}/scim/token/rotate:
+    post:
+      operationId: RotateOrganizationScimToken
+      summary: Rotate the SCIM bearer token
+      description: Revokes the current active token and generates a new one. The new plaintext token is returned only once.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Token rotated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScimTokenResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Feature not enabled, organization not found, or no active token to rotate
       security:
         - BearerAuth: []
       tags:
@@ -8800,11 +9521,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/SubmitWorkflowLaunchResponse'
         '400':
-          description: Bad request
+          description: Bad request — single-failure launches return `ErrorResponse`; multi-failure launches return `WorkflowLaunchValidationErrorResponse` with a per-blocker `errors[]` array
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                oneOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - $ref: '#/components/schemas/WorkflowLaunchValidationErrorResponse'
         '403':
           description: Operation not allowed
       security:
@@ -8964,6 +9687,54 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Workflows#read
+    patch:
+      operationId: UpdateWorkflow
+      summary: Apply a partial update to the workflow-extension metadata for the given Workflow ID
+      description: Updates only the workflow-extension store; never a core workflow field. Designed to carry workflow-extension attributes generally so future fields reuse this operation. Returns the updated workflow representation.
+      parameters:
+        - name: workflowId
+          in: path
+          description: Workflow string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWorkflowRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeWorkflowResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict — a concurrent update prevented the write; the request may be retried
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - workflows
   /workflow/{workflowId}/cancel:
     post:
       operationId: CancelWorkflow
@@ -14376,6 +15147,19 @@ components:
       description: |
         API access token for platform authentication.
         Contains the token ID, name, and usage metadata.
+    AccessTokenImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        lastUsed:
+          type: string
+          format: date-time
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Access token audit image
     Action.ConfigType:
       type: object
       properties:
@@ -14449,6 +15233,35 @@ components:
         workflowId:
           type: string
       title: Tower action event
+    ActionImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        config:
+          $ref: '#/components/schemas/Action.ConfigType'
+        error:
+          type: string
+        event:
+          $ref: '#/components/schemas/Action.EventType'
+        hookId:
+          type: string
+        hookUrl:
+          type: string
+        lastSeen:
+          type: string
+          format: date-time
+        launch:
+          $ref: '#/components/schemas/LaunchImage'
+        name:
+          type: string
+        source:
+          type: string
+        status:
+          type: string
+      required:
+        - auditImageType
+      title: Action audit image
     ActionQueryAttribute:
       type: string
       enum:
@@ -14557,6 +15370,48 @@ components:
       properties:
         member:
           $ref: '#/components/schemas/MemberDbDto'
+    Agent.Status:
+      type: string
+      enum:
+        - active
+        - inactive
+        - deleted
+      x-enum-varnames:
+        - active
+        - inactive
+        - deleted
+    AgentDbDto:
+      type: object
+      properties:
+        createdBy:
+          type: integer
+          format: int64
+        dateCreated:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        id:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/Agent.Status'
+        systemPrompt:
+          type: string
+        templateId:
+          type: string
+          nullable: true
+        updatedBy:
+          type: integer
+          format: int64
+        workspaceId:
+          type: integer
+          format: int64
     AgentSecurityKeys:
       type: object
       properties:
@@ -14674,6 +15529,683 @@ components:
           type: array
           items:
             type: string
+    AuditActor.ActorType:
+      type: string
+      enum:
+        - user
+        - system
+      x-enum-varnames:
+        - user
+        - system
+    AuditEventType:
+      type: string
+      enum:
+        - workflow_launched
+        - workflow_created
+        - workflow_updated
+        - workflow_completed
+        - workflow_deleted
+        - workflow_dropped
+        - access_token_created
+        - access_token_deleted
+        - ssh_key_created
+        - ssh_key_deleted
+        - user_created
+        - user_updated
+        - user_deleted
+        - user_sign_in
+        - compute_environment_created
+        - compute_environment_updated
+        - compute_environment_deleted
+        - credentials_created
+        - credentials_updated
+        - credentials_deleted
+        - credentials_dropped
+        - action_created
+        - action_updated
+        - action_deleted
+        - agent_created
+        - agent_updated
+        - agent_enabled
+        - agent_disabled
+        - agent_deleted
+        - organization_created
+        - organization_updated
+        - organization_deleted
+        - organization_sso_created
+        - organization_sso_updated
+        - organization_sso_deleted
+        - team_created
+        - team_updated
+        - team_deleted
+        - workspace_created
+        - workspace_updated
+        - workspace_deleted
+        - pipeline_created
+        - pipeline_updated
+        - pipeline_deleted
+        - participant_created
+        - participant_deleted
+        - participant_role_updated
+        - member_created
+        - member_deleted
+        - member_role_updated
+        - team_member_created
+        - team_member_deleted
+        - pipeline_secret_created
+        - pipeline_secret_updated
+        - pipeline_secret_deleted
+        - dataset_created
+        - dataset_updated
+        - dataset_deleted
+        - dataset_content_uploaded
+        - dataset_content_downloaded
+        - data_link_created
+        - data_link_updated
+        - data_link_deleted
+        - data_link_hide
+        - data_link_show
+        - data_link_file_preview
+        - data_link_file_upload
+        - data_link_file_download
+        - data_link_file_deleted
+        - studio_session_created
+        - studio_session_deleted
+        - studio_session_started
+        - studio_session_stopped
+        - studio_session_updated
+        - studio_session_connected
+        - studio_session_disconnected
+        - studio_session_build_started
+        - studio_session_build_failed
+        - studio_session_build_succeeded
+        - studio_session_lifespan_extended
+        - studio_session_ssh_auth_succeeded
+        - studio_session_ssh_auth_failed
+        - label_created
+        - label_updated
+        - label_deleted
+        - resource_label_created
+        - resource_label_updated
+        - resource_label_deleted
+        - label_assignment_created
+        - label_assignment_deleted
+        - managed_identity_created
+        - managed_identity_edited
+        - managed_identity_deleted
+        - managed_credentials_created
+        - managed_credentials_updated
+        - managed_credentials_deleted
+        - credits_modified
+        - user_role_created
+        - user_role_updated
+        - user_role_deleted
+        - role_created
+        - role_updated
+        - role_deleted
+        - oauth_consent_granted
+        - oauth_consent_denied
+        - idp_group_created
+        - idp_group_updated
+        - idp_group_deleted
+        - compute_environment_made_primary
+        - compute_environment_made_non_primary
+        - compute_profile_created
+        - compute_profile_updated
+        - compute_profile_deleted
+        - compute_profile_made_primary
+        - compute_profile_made_non_primary
+        - organization_settings_updated
+        - participant_added
+        - participant_removed
+        - participant_role_update
+        - member_added
+        - member_removed
+        - member_role_update
+        - team_member_added
+        - team_member_removed
+        - data_link_file_delete
+        - data_studio_session_created
+        - data_studio_session_deleted
+        - data_studio_session_started
+        - data_studio_session_stopped
+        - data_studio_session_connected
+        - data_studio_session_disconnected
+        - data_studio_session_build_started
+        - data_studio_session_build_failed
+        - data_studio_session_build_succeeded
+        - data_studio_session_lifespan_extended
+        - data_studio_session_ssh_auth_succeeded
+        - data_studio_session_ssh_auth_failed
+        - role_grant_association_created
+        - role_grant_association_deleted
+        - pipeline_version_created
+        - action_paused
+        - action_unpaused
+        - user_trusted
+        - user_enabled
+        - user_disabled
+        - workflow_status_changed
+      x-deprecated:
+        - compute_environment_made_primary
+        - compute_environment_made_non_primary
+        - compute_profile_created
+        - compute_profile_updated
+        - compute_profile_deleted
+        - compute_profile_made_primary
+        - compute_profile_made_non_primary
+        - organization_settings_updated
+        - participant_added
+        - participant_removed
+        - participant_role_update
+        - member_added
+        - member_removed
+        - member_role_update
+        - team_member_added
+        - team_member_removed
+        - data_link_file_delete
+        - data_studio_session_created
+        - data_studio_session_deleted
+        - data_studio_session_started
+        - data_studio_session_stopped
+        - data_studio_session_connected
+        - data_studio_session_disconnected
+        - data_studio_session_build_started
+        - data_studio_session_build_failed
+        - data_studio_session_build_succeeded
+        - data_studio_session_lifespan_extended
+        - data_studio_session_ssh_auth_succeeded
+        - data_studio_session_ssh_auth_failed
+        - role_grant_association_created
+        - role_grant_association_deleted
+        - pipeline_version_created
+        - action_paused
+        - action_unpaused
+        - user_trusted
+        - user_enabled
+        - user_disabled
+        - workflow_status_changed
+      x-enum-varnames:
+        - workflow_launched
+        - workflow_created
+        - workflow_updated
+        - workflow_completed
+        - workflow_deleted
+        - workflow_dropped
+        - access_token_created
+        - access_token_deleted
+        - ssh_key_created
+        - ssh_key_deleted
+        - user_created
+        - user_updated
+        - user_deleted
+        - user_sign_in
+        - compute_environment_created
+        - compute_environment_updated
+        - compute_environment_deleted
+        - credentials_created
+        - credentials_updated
+        - credentials_deleted
+        - credentials_dropped
+        - action_created
+        - action_updated
+        - action_deleted
+        - agent_created
+        - agent_updated
+        - agent_enabled
+        - agent_disabled
+        - agent_deleted
+        - organization_created
+        - organization_updated
+        - organization_deleted
+        - organization_sso_created
+        - organization_sso_updated
+        - organization_sso_deleted
+        - team_created
+        - team_updated
+        - team_deleted
+        - workspace_created
+        - workspace_updated
+        - workspace_deleted
+        - pipeline_created
+        - pipeline_updated
+        - pipeline_deleted
+        - participant_created
+        - participant_deleted
+        - participant_role_updated
+        - member_created
+        - member_deleted
+        - member_role_updated
+        - team_member_created
+        - team_member_deleted
+        - pipeline_secret_created
+        - pipeline_secret_updated
+        - pipeline_secret_deleted
+        - dataset_created
+        - dataset_updated
+        - dataset_deleted
+        - dataset_content_uploaded
+        - dataset_content_downloaded
+        - data_link_created
+        - data_link_updated
+        - data_link_deleted
+        - data_link_hide
+        - data_link_show
+        - data_link_file_preview
+        - data_link_file_upload
+        - data_link_file_download
+        - data_link_file_deleted
+        - studio_session_created
+        - studio_session_deleted
+        - studio_session_started
+        - studio_session_stopped
+        - studio_session_updated
+        - studio_session_connected
+        - studio_session_disconnected
+        - studio_session_build_started
+        - studio_session_build_failed
+        - studio_session_build_succeeded
+        - studio_session_lifespan_extended
+        - studio_session_ssh_auth_succeeded
+        - studio_session_ssh_auth_failed
+        - label_created
+        - label_updated
+        - label_deleted
+        - resource_label_created
+        - resource_label_updated
+        - resource_label_deleted
+        - label_assignment_created
+        - label_assignment_deleted
+        - managed_identity_created
+        - managed_identity_edited
+        - managed_identity_deleted
+        - managed_credentials_created
+        - managed_credentials_updated
+        - managed_credentials_deleted
+        - credits_modified
+        - user_role_created
+        - user_role_updated
+        - user_role_deleted
+        - role_created
+        - role_updated
+        - role_deleted
+        - oauth_consent_granted
+        - oauth_consent_denied
+        - idp_group_created
+        - idp_group_updated
+        - idp_group_deleted
+        - compute_environment_made_primary
+        - compute_environment_made_non_primary
+        - compute_profile_created
+        - compute_profile_updated
+        - compute_profile_deleted
+        - compute_profile_made_primary
+        - compute_profile_made_non_primary
+        - organization_settings_updated
+        - participant_added
+        - participant_removed
+        - participant_role_update
+        - member_added
+        - member_removed
+        - member_role_update
+        - team_member_added
+        - team_member_removed
+        - data_link_file_delete
+        - data_studio_session_created
+        - data_studio_session_deleted
+        - data_studio_session_started
+        - data_studio_session_stopped
+        - data_studio_session_connected
+        - data_studio_session_disconnected
+        - data_studio_session_build_started
+        - data_studio_session_build_failed
+        - data_studio_session_build_succeeded
+        - data_studio_session_lifespan_extended
+        - data_studio_session_ssh_auth_succeeded
+        - data_studio_session_ssh_auth_failed
+        - role_grant_association_created
+        - role_grant_association_deleted
+        - pipeline_version_created
+        - action_paused
+        - action_unpaused
+        - user_trusted
+        - user_enabled
+        - user_disabled
+        - workflow_status_changed
+    AuditImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+    AuditImageType:
+      type: string
+      enum:
+        - user
+        - pipeline
+        - compute_env
+        - workspace
+        - team
+        - team_member
+        - organization
+        - label
+        - label_assignment
+        - participant
+        - credentials
+        - custom_role
+        - org_sso_connection
+        - credit_info
+        - data_studio
+        - data_studio_connection
+        - data_link
+        - data_link_metadata
+        - data_link_file
+        - action
+        - agent
+        - workflow
+        - dataset
+        - dataset_version
+        - managed_credentials
+        - managed_identity
+        - user_role
+        - member
+        - oauth_consent
+        - pipeline_secret
+        - access_token
+        - user_ssh_public_key
+        - idp_group
+      x-enum-varnames:
+        - user
+        - pipeline
+        - compute_env
+        - workspace
+        - team
+        - team_member
+        - organization
+        - label
+        - label_assignment
+        - participant
+        - credentials
+        - custom_role
+        - org_sso_connection
+        - credit_info
+        - data_studio
+        - data_studio_connection
+        - data_link
+        - data_link_metadata
+        - data_link_file
+        - action
+        - agent
+        - workflow
+        - dataset
+        - dataset_version
+        - managed_credentials
+        - managed_identity
+        - user_role
+        - member
+        - oauth_consent
+        - pipeline_secret
+        - access_token
+        - user_ssh_public_key
+        - idp_group
+    AuditLogTargetState:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/AuditLogTargetStateMetadata'
+        newState:
+          allOf:
+            - $ref: '#/components/schemas/AuditImage'
+            - discriminator:
+                mapping:
+                  access_token: '#/components/schemas/AccessTokenImage'
+                  action: '#/components/schemas/ActionImage'
+                  compute_env: '#/components/schemas/ComputeEnvImage'
+                  credentials: '#/components/schemas/CredentialsImage'
+                  credit_info: '#/components/schemas/CreditInfoImage'
+                  custom_role: '#/components/schemas/CustomRoleImage'
+                  data_link: '#/components/schemas/DataLinkImage'
+                  data_link_file: '#/components/schemas/DataLinkFileImage'
+                  data_link_metadata: '#/components/schemas/DataLinkMetadataImage'
+                  data_studio: '#/components/schemas/DataStudioImage'
+                  data_studio_connection: '#/components/schemas/DataStudioConnectionImage'
+                  dataset: '#/components/schemas/DatasetImage'
+                  dataset_version: '#/components/schemas/DatasetVersionImage'
+                  idp_group: '#/components/schemas/IdpGroupImage'
+                  label: '#/components/schemas/LabelImage'
+                  label_assignment: '#/components/schemas/LabelAssignmentImage'
+                  managed_credentials: '#/components/schemas/ManagedCredentialsImage'
+                  managed_identity: '#/components/schemas/ManagedIdentityImage'
+                  member: '#/components/schemas/MemberImage'
+                  oauth_consent: '#/components/schemas/OAuthConsentImage'
+                  org_sso_connection: '#/components/schemas/OrgSsoConnectionImage'
+                  organization: '#/components/schemas/OrganizationImage'
+                  participant: '#/components/schemas/ParticipantImage'
+                  pipeline: '#/components/schemas/PipelineImage'
+                  pipeline_secret: '#/components/schemas/PipelineSecretImage'
+                  team: '#/components/schemas/TeamImage'
+                  team_member: '#/components/schemas/TeamMemberImage'
+                  user: '#/components/schemas/UserImage'
+                  user_role: '#/components/schemas/UserRoleImage'
+                  user_ssh_public_key: '#/components/schemas/UserSshPublicKeyImage'
+                  workflow: '#/components/schemas/WorkflowImage'
+                  workspace: '#/components/schemas/WorkspaceImage'
+                propertyName: auditImageType
+              type: object
+          oneOf:
+            - $ref: '#/components/schemas/AccessTokenImage'
+            - $ref: '#/components/schemas/ActionImage'
+            - $ref: '#/components/schemas/ComputeEnvImage'
+            - $ref: '#/components/schemas/CredentialsImage'
+            - $ref: '#/components/schemas/CreditInfoImage'
+            - $ref: '#/components/schemas/CustomRoleImage'
+            - $ref: '#/components/schemas/DataLinkFileImage'
+            - $ref: '#/components/schemas/DataLinkImage'
+            - $ref: '#/components/schemas/DataLinkMetadataImage'
+            - $ref: '#/components/schemas/DatasetImage'
+            - $ref: '#/components/schemas/DatasetVersionImage'
+            - $ref: '#/components/schemas/DataStudioConnectionImage'
+            - $ref: '#/components/schemas/DataStudioImage'
+            - $ref: '#/components/schemas/IdpGroupImage'
+            - $ref: '#/components/schemas/LabelAssignmentImage'
+            - $ref: '#/components/schemas/LabelImage'
+            - $ref: '#/components/schemas/ManagedCredentialsImage'
+            - $ref: '#/components/schemas/ManagedIdentityImage'
+            - $ref: '#/components/schemas/MemberImage'
+            - $ref: '#/components/schemas/OAuthConsentImage'
+            - $ref: '#/components/schemas/OrganizationImage'
+            - $ref: '#/components/schemas/OrgSsoConnectionImage'
+            - $ref: '#/components/schemas/ParticipantImage'
+            - $ref: '#/components/schemas/PipelineImage'
+            - $ref: '#/components/schemas/PipelineSecretImage'
+            - $ref: '#/components/schemas/TeamImage'
+            - $ref: '#/components/schemas/TeamMemberImage'
+            - $ref: '#/components/schemas/UserImage'
+            - $ref: '#/components/schemas/UserRoleImage'
+            - $ref: '#/components/schemas/UserSshPublicKeyImage'
+            - $ref: '#/components/schemas/WorkflowImage'
+            - $ref: '#/components/schemas/WorkspaceImage'
+        previousState:
+          allOf:
+            - $ref: '#/components/schemas/AuditImage'
+            - discriminator:
+                mapping:
+                  access_token: '#/components/schemas/AccessTokenImage'
+                  action: '#/components/schemas/ActionImage'
+                  compute_env: '#/components/schemas/ComputeEnvImage'
+                  credentials: '#/components/schemas/CredentialsImage'
+                  credit_info: '#/components/schemas/CreditInfoImage'
+                  custom_role: '#/components/schemas/CustomRoleImage'
+                  data_link: '#/components/schemas/DataLinkImage'
+                  data_link_file: '#/components/schemas/DataLinkFileImage'
+                  data_link_metadata: '#/components/schemas/DataLinkMetadataImage'
+                  data_studio: '#/components/schemas/DataStudioImage'
+                  data_studio_connection: '#/components/schemas/DataStudioConnectionImage'
+                  dataset: '#/components/schemas/DatasetImage'
+                  dataset_version: '#/components/schemas/DatasetVersionImage'
+                  idp_group: '#/components/schemas/IdpGroupImage'
+                  label: '#/components/schemas/LabelImage'
+                  label_assignment: '#/components/schemas/LabelAssignmentImage'
+                  managed_credentials: '#/components/schemas/ManagedCredentialsImage'
+                  managed_identity: '#/components/schemas/ManagedIdentityImage'
+                  member: '#/components/schemas/MemberImage'
+                  oauth_consent: '#/components/schemas/OAuthConsentImage'
+                  org_sso_connection: '#/components/schemas/OrgSsoConnectionImage'
+                  organization: '#/components/schemas/OrganizationImage'
+                  participant: '#/components/schemas/ParticipantImage'
+                  pipeline: '#/components/schemas/PipelineImage'
+                  pipeline_secret: '#/components/schemas/PipelineSecretImage'
+                  team: '#/components/schemas/TeamImage'
+                  team_member: '#/components/schemas/TeamMemberImage'
+                  user: '#/components/schemas/UserImage'
+                  user_role: '#/components/schemas/UserRoleImage'
+                  user_ssh_public_key: '#/components/schemas/UserSshPublicKeyImage'
+                  workflow: '#/components/schemas/WorkflowImage'
+                  workspace: '#/components/schemas/WorkspaceImage'
+                propertyName: auditImageType
+              type: object
+          oneOf:
+            - $ref: '#/components/schemas/AccessTokenImage'
+            - $ref: '#/components/schemas/ActionImage'
+            - $ref: '#/components/schemas/ComputeEnvImage'
+            - $ref: '#/components/schemas/CredentialsImage'
+            - $ref: '#/components/schemas/CreditInfoImage'
+            - $ref: '#/components/schemas/CustomRoleImage'
+            - $ref: '#/components/schemas/DataLinkFileImage'
+            - $ref: '#/components/schemas/DataLinkImage'
+            - $ref: '#/components/schemas/DataLinkMetadataImage'
+            - $ref: '#/components/schemas/DatasetImage'
+            - $ref: '#/components/schemas/DatasetVersionImage'
+            - $ref: '#/components/schemas/DataStudioConnectionImage'
+            - $ref: '#/components/schemas/DataStudioImage'
+            - $ref: '#/components/schemas/IdpGroupImage'
+            - $ref: '#/components/schemas/LabelAssignmentImage'
+            - $ref: '#/components/schemas/LabelImage'
+            - $ref: '#/components/schemas/ManagedCredentialsImage'
+            - $ref: '#/components/schemas/ManagedIdentityImage'
+            - $ref: '#/components/schemas/MemberImage'
+            - $ref: '#/components/schemas/OAuthConsentImage'
+            - $ref: '#/components/schemas/OrganizationImage'
+            - $ref: '#/components/schemas/OrgSsoConnectionImage'
+            - $ref: '#/components/schemas/ParticipantImage'
+            - $ref: '#/components/schemas/PipelineImage'
+            - $ref: '#/components/schemas/PipelineSecretImage'
+            - $ref: '#/components/schemas/TeamImage'
+            - $ref: '#/components/schemas/TeamMemberImage'
+            - $ref: '#/components/schemas/UserImage'
+            - $ref: '#/components/schemas/UserRoleImage'
+            - $ref: '#/components/schemas/UserSshPublicKeyImage'
+            - $ref: '#/components/schemas/WorkflowImage'
+            - $ref: '#/components/schemas/WorkspaceImage'
+    AuditLogTargetStateMetadata:
+      type: object
+      properties:
+        contentRequested:
+          type: boolean
+        postStateStatus:
+          $ref: '#/components/schemas/AuditLogTargetStateMetadataStatus'
+        preStateStatus:
+          $ref: '#/components/schemas/AuditLogTargetStateMetadataStatus'
+    AuditLogTargetStateMetadataStatus:
+      type: string
+      enum:
+        - RECORDED
+        - UNRECORDED
+        - UNAPPLICABLE
+    AuditLogV2QueryAttribute:
+      type: string
+      enum:
+        - state
+      x-enum-varnames:
+        - state
+    AuditLogV2ResponseDto:
+      type: object
+      properties:
+        actor:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.Actor'
+        client:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.Client'
+        correlationId:
+          type: string
+        event:
+          $ref: '#/components/schemas/AuditEventType'
+        id:
+          type: string
+        target:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.Target'
+        timestamp:
+          type: string
+          format: date-time
+    AuditLogV2ResponseDto.Actor:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        isRoot:
+          type: boolean
+        lastName:
+          type: string
+        type:
+          $ref: '#/components/schemas/AuditActor.ActorType'
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+    AuditLogV2ResponseDto.Client:
+      type: object
+      properties:
+        accessTokenId:
+          type: integer
+          format: int64
+        ip:
+          type: string
+        userAgent:
+          type: string
+    AuditLogV2ResponseDto.ResourceOrganization:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    AuditLogV2ResponseDto.ResourceUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    AuditLogV2ResponseDto.ResourceWorkspace:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    AuditLogV2ResponseDto.Target:
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/EntityContext'
+        id:
+          type: string
+        name:
+          type: string
+        organization:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.ResourceOrganization'
+        state:
+          $ref: '#/components/schemas/AuditLogTargetState'
+        type:
+          type: string
+        user:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.ResourceUser'
+        workspace:
+          $ref: '#/components/schemas/AuditLogV2ResponseDto.ResourceWorkspace'
     Avatar:
       type: object
       properties:
@@ -14960,6 +16492,12 @@ components:
             When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
           example: 100
           x-speakeasy-param-force-new: true
+        ebsEncrypted:
+          description: When true, the boot EBS volume of provisioned instances is encrypted. Null/absent (the default) is treated as false — no encryption.
+          type: boolean
+        ebsKmsKeyId:
+          description: Optional KMS key ARN used to encrypt the boot EBS volume. Only applied when ebsEncrypted is true. When omitted, the account/region default EBS encryption key is used.
+          type: string
         ec2KeyPair:
           type: string
           description: |
@@ -15072,12 +16610,21 @@ components:
             schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
             valueType: basetypes.ListValue
         subnetId:
-          type: string
           description: |
             Subnet ID where compute instances will be launched.
             Must be in the same VPC and region as the compute environment.
+          type: string
+          deprecated: true
           example: "subnet-12345678"
           x-speakeasy-param-force-new: true
+        subnetIds:
+          description: Subnets to launch into. Basic uses the first; Intelligent Compute may use all.
+          type: array
+          items:
+            type: string
+        vpcId:
+          description: The VPC used to scope subnet and security-group selection.
+          type: string
         waveEnabled:
           type: boolean
           x-speakeasy-terraform-ignore: true
@@ -15800,6 +17347,36 @@ components:
           nullable: true
           description: Compute environment region
       nullable: true
+    ComputeEnvImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        config:
+          $ref: '#/components/schemas/ComputeConfig'
+        credentialsId:
+          type: string
+        description:
+          type: string
+        lastUsed:
+          type: string
+          format: date-time
+        managedIdentityId:
+          type: integer
+          format: int64
+        message:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+        primary:
+          type: boolean
+        status:
+          type: string
+      required:
+        - auditImageType
+      title: Compute environment audit image
     ComputeEnvQueryAttribute:
       type: string
       enum:
@@ -15822,6 +17399,9 @@ components:
         estimatedPrice:
           type: number
           format: float
+          nullable: true
+        gpuEnabled:
+          type: boolean
           nullable: true
         gpus:
           type: integer
@@ -16177,6 +17757,24 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-transform-from-api:
         jq: ". + { id: .actionId }"
+    CreateAgentRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        name:
+          type: string
+        systemPrompt:
+          type: string
+        templateId:
+          type: string
+          nullable: true
+    CreateAgentResponse:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/AgentDbDto'
     CreateAvatarResponse:
       type: object
       properties:
@@ -16259,6 +17857,11 @@ components:
       properties:
         dataset:
           $ref: '#/components/schemas/DatasetDto'
+    CreateIdpGroupRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
     CreateLabelRequest:
       type: object
       properties:
@@ -16467,6 +18070,15 @@ components:
           type: array
           items:
             type: string
+    CreateScimTokenResponse:
+      type: object
+      properties:
+        endpointUrl:
+          type: string
+        maskedToken:
+          type: string
+        token:
+          type: string
     CreateSshKeyRequest:
       type: object
       properties:
@@ -16493,6 +18105,10 @@ components:
         avatarId:
           type: string
           example: "avatar-123456"
+        idpGroupId:
+          type: integer
+          format: int64
+          nullable: true
         team:
           $ref: '#/components/schemas/Team'
     CreateTeamResponse:
@@ -16576,6 +18192,16 @@ components:
           description: Timestamp when the credential was last used
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        lastValidated:
+          description: Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
+          type: string
+          format: date-time
+          readOnly: true
+        message:
+          description: Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing ' (truncated)' suffix when the underlying provider message exceeds that limit.
+          type: string
+          maxLength: 4096
+          readOnly: true
         name:
           type: string
           maxLength: 100
@@ -16611,6 +18237,11 @@ components:
             - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
             - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
             - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+        status:
+          description: Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
+          allOf:
+            - $ref: '#/components/schemas/Credentials.Status'
+          readOnly: true
       required:
         - name
         - provider
@@ -16626,6 +18257,52 @@ components:
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
         and other external services within the Seqera Platform.
+    Credentials.Status:
+      type: string
+      enum:
+        - AVAILABLE
+        - INVALID
+    CredentialsImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        baseUrl:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        keys:
+          $ref: '#/components/schemas/SecurityKeys'
+        lastUsed:
+          type: string
+          format: date-time
+        message:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        status:
+          type: string
+      required:
+        - auditImageType
+      title: Credentials audit image
+    CreditInfoImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        contractId:
+          type: string
+        customerId:
+          type: string
+        hasCreditGrant:
+          type: boolean
+      required:
+        - auditImageType
+      title: Credit info audit image
     CronActionConfig:
       type: object
       properties:
@@ -16661,6 +18338,24 @@ components:
           type: string
         timezone:
           type: string
+    CustomRoleImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        contextType:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+      required:
+        - auditImageType
+      title: Custom role audit image
     DataLink.Status:
       type: string
       enum:
@@ -16826,6 +18521,18 @@ components:
         Represents a data link connection to external storage systems.
         Provides access to cloud storage, file systems, and data repositories
         for pipeline input/output operations.
+    DataLinkFileImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        provider:
+          type: string
+        uri:
+          type: string
+      required:
+        - auditImageType
+      title: Data-link file operation audit image
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -16839,6 +18546,36 @@ components:
           type: string
         withError:
           type: boolean
+    DataLinkImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        creationSource:
+          type: string
+        credentialsId:
+          type: string
+        description:
+          type: string
+        message:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        publicAccessible:
+          type: boolean
+        region:
+          type: string
+        resourceRef:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+      required:
+        - auditImageType
+      title: Data-link audit image
     DataLinkItem:
       type: object
       properties:
@@ -16867,6 +18604,16 @@ components:
         - FOLDER
         - FILE
         - FUSION_SYMLINK_FILE
+    DataLinkMetadataImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        hidden:
+          type: boolean
+      required:
+        - auditImageType
+      title: Data-link metadata audit image
     DataLinkMultiPartUploadRequest:
       type: object
       properties:
@@ -17054,6 +18801,22 @@ components:
         Note:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
+    DataStudioConnectionImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        connectionTag:
+          type: integer
+          format: int32
+        lastActive:
+          type: string
+          format: date-time
+        userId:
+          type: string
+      required:
+        - auditImageType
+      title: Data Studio connection audit image
     DataStudioCreateRequest:
       type: object
       properties:
@@ -17172,6 +18935,90 @@ components:
           type: string
           nullable: true
       nullable: true
+    DataStudioImage:
+      type: object
+      properties:
+        appliedLifespanHours:
+          type: integer
+          format: int32
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        baseImage:
+          type: string
+        computeEnvId:
+          type: string
+        condaEnvironment:
+          type: string
+        connectVersion:
+          type: string
+        description:
+          type: string
+        effectiveLifespanHours:
+          type: integer
+          format: int32
+        environment:
+          type: string
+        initialCheckpointId:
+          type: integer
+          format: int64
+        initialSessionId:
+          type: string
+        isPrivate:
+          type: boolean
+        lastHeartbeat:
+          type: string
+          format: date-time
+        lastStarted:
+          type: string
+          format: date-time
+        name:
+          type: string
+        remoteConfigCloneEnabled:
+          type: boolean
+        remoteConfigClonePath:
+          type: string
+        remoteConfigCommitHash:
+          type: string
+        remoteConfigRepository:
+          type: string
+        remoteConfigRevision:
+          type: string
+        requiredCpus:
+          type: integer
+          format: int64
+        requiredGpus:
+          type: integer
+          format: int64
+        requiredMemory:
+          type: integer
+          format: int64
+        runningOperationId:
+          type: string
+        sshEnabled:
+          type: boolean
+        status:
+          type: string
+        statusMessage:
+          type: string
+        stopReason:
+          type: string
+        templateIcon:
+          type: string
+        templatePort:
+          type: integer
+          format: int32
+        templateUrl:
+          type: string
+        tool:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        waveBuildId:
+          type: string
+      required:
+        - auditImageType
+      title: Data Studio audit image
     DataStudioListCheckpointsResponse:
       type: object
       properties:
@@ -17468,6 +19315,27 @@ components:
         Represents a dataset in the Seqera Platform.
         Contains dataset metadata, versioning information, and access
         controls for data management and sharing.
+    DatasetImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        hidden:
+          type: boolean
+        lastUpdatedById:
+          type: integer
+          format: int64
+        mediaType:
+          type: string
+        name:
+          type: string
+        sourceType:
+          type: string
+      required:
+        - auditImageType
+      title: Dataset audit image
     DatasetPreviewResponse:
       type: object
       properties:
@@ -17535,6 +19403,62 @@ components:
         workspaceId:
           type: integer
           format: int64
+    DatasetVersionImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        createdById:
+          type: integer
+          format: int64
+        data:
+          $ref: '#/components/schemas/DatasetVersionImage.BlobContentImage'
+        datasetId:
+          type: string
+        disabled:
+          type: boolean
+        hasHeader:
+          type: boolean
+        latest:
+          type: boolean
+        linkedSource:
+          $ref: '#/components/schemas/DatasetVersionImage.LinkedSourceImage'
+        version:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: Dataset version audit image
+    DatasetVersionImage.BlobContentImage:
+      type: object
+      properties:
+        fileName:
+          type: string
+        mediaType:
+          type: string
+        size:
+          type: integer
+          format: int64
+      title: Blob content snapshot
+    DatasetVersionImage.LinkedSourceImage:
+      type: object
+      properties:
+        checkedAt:
+          type: string
+          format: date-time
+        contentLength:
+          type: integer
+          format: int64
+        etag:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        mediaType:
+          type: string
+        url:
+          type: string
+      title: Linked source snapshot
     DefaultWorkflowEngineParameter:
       type: object
       properties:
@@ -17621,6 +19545,11 @@ components:
       properties:
         action:
           $ref: '#/components/schemas/ActionResponseDto'
+    DescribeAgentResponse:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/AgentDbDto'
     DescribeComputeEnvResponse:
       type: object
       properties:
@@ -17633,6 +19562,11 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/Credentials'
+        setupSnippet:
+          description: Server-rendered, read-only provider-side setup snippet (e.g. AWS IAM role trust policy) to paste at the cloud provider. Populated when a renderer is available for the credential type and the installation is configured for it; otherwise omitted.
+          type: string
+          nullable: true
+          readOnly: true
     DescribeDatasetResponse:
       type: object
       properties:
@@ -17678,6 +19612,29 @@ components:
       properties:
         role:
           $ref: '#/components/schemas/RoleDto'
+    DescribeScimConfigResponse:
+      type: object
+      properties:
+        endpointUrl:
+          type: string
+        groupCount:
+          type: integer
+          format: int32
+        hasActiveToken:
+          type: boolean
+        maskedToken:
+          type: string
+          nullable: true
+        ssoActive:
+          type: boolean
+        tokenCreatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        tokenLastUsed:
+          type: string
+          format: date-time
+          nullable: true
     DescribeSshKeyResponse:
       type: object
       properties:
@@ -17711,15 +19668,35 @@ components:
     DescribeWorkflowResponse:
       type: object
       properties:
+        cost:
+          type: number
+          nullable: true
+        costCurrency:
+          type: string
+          nullable: true
+        costIsEstimate:
+          type: boolean
+          nullable: true
+        instancesProvisioned:
+          type: integer
+          format: int32
+          nullable: true
         pipelineInfo:
           allOf:
             - $ref: "#/components/schemas/PipelineMinInfoResponse"
           x-speakeasy-param-suppress-computed-diff: true
+        schedConfig:
+          allOf:
+            - $ref: '#/components/schemas/SchedConfig'
+          nullable: true
         schedEnabled:
           type: boolean
           nullable: true
           x-speakeasy-name-override: intelligent_compute_enabled
           x-speakeasy-param-suppress-computed-diff: true
+        schedRunId:
+          type: string
+          nullable: true
         workflow:
           allOf:
             - $ref: "#/components/schemas/WorkflowMaxDbDto"
@@ -17845,6 +19822,18 @@ components:
     EmptyBodyRequest:
       type: object
       x-speakeasy-terraform-ignore: true
+    EntityContext:
+      type: string
+      enum:
+        - User
+        - Organization
+        - Workspace
+        - System
+      x-enum-varnames:
+        - User
+        - Organization
+        - Workspace
+        - System
     ErrorResponse:
       type: object
       properties:
@@ -19070,6 +21059,30 @@ components:
           description: property to select the platform metainfo type
           type: string
       title: Grid platform metainfo
+    IdpGroupEntry:
+      type: object
+      properties:
+        displayName:
+          type: string
+        id:
+          type: integer
+          format: int64
+        source:
+          $ref: '#/components/schemas/OrgIdpGroupSource'
+    IdpGroupImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        displayName:
+          type: string
+        scimExternalId:
+          type: string
+        source:
+          $ref: '#/components/schemas/OrgIdpGroupSource'
+      required:
+        - auditImageType
+      title: IdP group audit image
     Image:
       type: object
       properties:
@@ -19227,6 +21240,21 @@ components:
           writeOnly: true
           nullable: true
       title: Kubernetes credentials
+    LabelAssignmentImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        labelId:
+          type: integer
+          format: int64
+        resourceId:
+          type: string
+        resourceType:
+          type: string
+      required:
+        - auditImageType
+      title: Label assignment audit image
     LabelDbDto:
       type: object
       properties:
@@ -19256,6 +21284,24 @@ components:
         Represents a label for organizing and categorizing resources.
         Provides metadata tagging capabilities for pipelines, workflows,
         and other platform resources.
+    LabelImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        dynamic:
+          type: boolean
+        isDefault:
+          type: boolean
+        name:
+          type: string
+        resource:
+          type: boolean
+        value:
+          type: string
+      required:
+        - auditImageType
+      title: Label audit image
     LabelType:
       type: string
       enum:
@@ -19338,6 +21384,10 @@ components:
           description: Optimization targets
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
+        outputDir:
+          description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
+          type: string
+          nullable: true
         paramsText:
           type: string
           nullable: true
@@ -19426,6 +21476,84 @@ components:
           type: array
           items:
             type: string
+    LaunchImage:
+      type: object
+      properties:
+        commitId:
+          type: string
+        computeEnvId:
+          type: string
+        configProfiles:
+          type: array
+          items:
+            type: string
+        configText:
+          type: string
+        defaultTemplate:
+          type: boolean
+        entryName:
+          type: string
+        headJobCpus:
+          type: integer
+          format: int32
+        headJobMemoryMb:
+          type: integer
+          format: int32
+        id:
+          type: string
+        launchContainer:
+          type: string
+        mainScript:
+          type: string
+        optimizationId:
+          type: string
+        optimizationTargets:
+          type: string
+        paramsText:
+          type: string
+        pipeline:
+          type: string
+        pipelineSchemaId:
+          type: integer
+          format: int64
+        postRunScript:
+          type: string
+        preRunScript:
+          type: string
+        pullLatest:
+          type: boolean
+        resume:
+          type: boolean
+        revision:
+          type: string
+        schemaName:
+          type: string
+        sessionId:
+          type: string
+        sourceTemplateId:
+          type: string
+        stubRun:
+          type: boolean
+        towerConfig:
+          type: string
+        userSecrets:
+          type: string
+        versionName:
+          type: string
+        workDir:
+          type: string
+        workspaceSecrets:
+          type: string
+    LaunchValidationError:
+      type: object
+      properties:
+        code:
+          description: Stable machine-readable code identifying the failing check
+          type: string
+          example: COMPUTE_ENV_INVALID
+        message:
+          description: Human-readable explanation of this single blocker
+          type: string
     LinkVersionRequest:
       type: object
       properties:
@@ -19507,6 +21635,25 @@ components:
         usageCmd:
           type: string
           nullable: true
+    ListAgentsResponse:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentDbDto'
+        totalSize:
+          type: integer
+          format: int64
+    ListAuditLogV2Response:
+      type: object
+      properties:
+        auditLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogV2ResponseDto'
+        nextPageToken:
+          type: string
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -19521,6 +21668,9 @@ components:
           type: string
         description:
           type: string
+          nullable: true
+        fusion2Enabled:
+          type: boolean
           nullable: true
         id:
           type: string
@@ -19546,10 +21696,16 @@ components:
           allOf:
             - $ref: '#/components/schemas/ComputeEnvResources'
           nullable: true
+        schedEnabled:
+          type: boolean
+          nullable: true
         status:
           $ref: '#/components/schemas/ComputeEnv.Status'
         visibility:
           type: string
+        waveEnabled:
+          type: boolean
+          nullable: true
         workDir:
           type: string
         workspaceName:
@@ -19588,6 +21744,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EventType'
+    ListIdpGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdpGroupEntry'
     ListLabelsResponse:
       type: object
       properties: {}
@@ -20015,6 +22178,24 @@ components:
         id:
           type: integer
           format: int64
+    ManagedCredentialsImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        credentialsId:
+          type: string
+        managedIdentityId:
+          type: integer
+          format: int64
+        memberId:
+          type: integer
+          format: int64
+        metadata:
+          $ref: '#/components/schemas/ManagedCredentialsMetadata'
+      required:
+        - auditImageType
+      title: Managed credentials audit image
     ManagedCredentialsMetadata:
       type: object
       properties:
@@ -20039,6 +22220,20 @@ components:
             - moab-platform
             - slurm-platform
             - uge-platform
+    ManagedIdentityImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        config:
+          $ref: '#/components/schemas/ComputeConfig'
+        name:
+          type: string
+        platform:
+          type: string
+      required:
+        - auditImageType
+      title: Managed identity audit image
     Map.Entry_String.String_:
       type: object
       properties:
@@ -20067,6 +22262,22 @@ components:
           format: int64
         userName:
           type: string
+    MemberImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        organizationId:
+          type: integer
+          format: int64
+        role:
+          type: string
+        userId:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: Member audit image
     MoabComputeConfig:
       type: object
       properties:
@@ -20140,6 +22351,16 @@ components:
           type: string
         url:
           type: string
+    OAuthConsentImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        scopes:
+          type: string
+      required:
+        - auditImageType
+      title: OAuth consent audit image
     OrgAndWorkspaceDto:
       type: object
       properties:
@@ -20165,6 +22386,11 @@ components:
           format: int64
         workspaceName:
           type: string
+    OrgIdpGroupSource:
+      type: string
+      enum:
+        - SCIM
+        - MANUAL
     OrgRole:
       type: string
       enum:
@@ -20175,6 +22401,32 @@ components:
         - owner
         - member
         - collaborator
+    OrgSsoConnectionImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        auth0OrgId:
+          type: string
+        connectionId:
+          type: string
+        connectionName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdById:
+          type: integer
+          format: int64
+        domain:
+          type: string
+        status:
+          type: string
+        ticketUrl:
+          type: string
+      required:
+        - auditImageType
+      title: Org SSO connection audit image
     OrgType:
       type: string
       enum:
@@ -20314,6 +22566,28 @@ components:
         Represents an organization in the Seqera Platform.
         Contains organizational metadata, settings, and member management
         information for multi-tenant environments.
+    OrganizationImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        fullName:
+          type: string
+        location:
+          type: string
+        logoId:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/OrgType'
+        website:
+          type: string
+      required:
+        - auditImageType
+      title: Organization audit image
     OrganizationQuotas:
       type: object
       properties:
@@ -20359,6 +22633,31 @@ components:
         maxWorkspaces:
           type: integer
           format: int64
+    ParticipantImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        memberId:
+          type: integer
+          format: int64
+        role:
+          $ref: '#/components/schemas/WspRole'
+        teamId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        workspaceId:
+          type: integer
+          format: int64
+        wspCustomRoleId:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: Participant audit image
     ParticipantResponseDto:
       type: object
       properties:
@@ -20465,6 +22764,22 @@ components:
         for Nextflow workflows.
       x-speakeasy-transform-from-api:
         jq: ". + { id: .pipelineId }"
+    PipelineImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        icon:
+          type: string
+        launch:
+          $ref: '#/components/schemas/LaunchImage'
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Pipeline audit image
     PipelineInfo:
       type: object
       properties:
@@ -20604,6 +22919,21 @@ components:
         Represents a secure secret for pipeline execution.
         Contains encrypted sensitive data such as API keys, passwords,
         and configuration values used in workflows.
+    PipelineSecretImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        lastUsed:
+          type: string
+          format: date-time
+        name:
+          type: string
+        salt:
+          type: string
+      required:
+        - auditImageType
+      title: Pipeline secret audit image
     PipelineVersionFullInfoDto:
       type: object
       properties:
@@ -21025,6 +23355,17 @@ components:
     SchedConfig:
       type: object
       properties:
+        backendStrategy:
+          description: Backend used by Intelligent Compute to run tasks. 'ECS' (default) delegates task execution to AWS ECS; 'EC2' runs tasks directly on AWS EC2 instances.
+          type: string
+          enum:
+            - ECS
+            - EC2
+        diskAllocation:
+          type: string
+        fusionSnapshots:
+          description: Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can resume from a snapshot instead of restarting from scratch.
+          type: boolean
         machineTypes:
           description: |
             EC2 instance types eligible for Seqera Intelligent Compute nodes.
@@ -21042,6 +23383,16 @@ components:
               - github.com/hashicorp/terraform-plugin-framework/types/basetypes
             schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
             valueType: basetypes.ListValue
+        nvmeEnabled:
+          description: When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
+          type: boolean
+        pool:
+          description: Warm-pool configuration. When present and enabled, the scheduler maintains a pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+          allOf:
+            - $ref: '#/components/schemas/SchedConfig.Pool'
+        predictionModel:
+          description: "Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2'. Any other string is accepted."
+          type: string
         provisioningModel:
           type: string
           enum:
@@ -21062,6 +23413,20 @@ components:
           default: spotFirst
           example: "spotFirst"
           x-speakeasy-param-force-new: true
+    SchedConfig.Pool:
+      type: object
+      properties:
+        desiredWarm:
+          description: Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters.
+          type: integer
+          format: int32
+        enabled:
+          description: Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs.
+          type: boolean
+        scaleToZeroSecs:
+          description: Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero.
+          type: integer
+          format: int32
     SecurityGroup:
       type: object
       properties:
@@ -21219,6 +23584,9 @@ components:
           format: int32
         landingUrl:
           type: string
+        launchConfigTextMaxSize:
+          type: integer
+          format: int32
         launchParamsTextMaxSize:
           type: integer
           format: int32
@@ -21677,6 +24045,13 @@ components:
           type: string
           nullable: true
           description: Description of the team's purpose and responsibilities
+        idpGroupId:
+          type: integer
+          format: int64
+          nullable: true
+        idpGroupName:
+          type: string
+          nullable: true
         membersCount:
           type: integer
           format: int64
@@ -21703,6 +24078,37 @@ components:
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
+    TeamImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        avatarId:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Team audit image
+    TeamMemberImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        memberId:
+          type: integer
+          format: int64
+        teamId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: Team member audit image
     TeamType:
       type: string
       enum:
@@ -22034,6 +24440,24 @@ components:
           $ref: '#/components/schemas/ActionLaunchRequest'
         name:
           type: string
+    UpdateAgentRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        name:
+          type: string
+        systemPrompt:
+          type: string
+        templateId:
+          type: string
+          nullable: true
+    UpdateAgentResponse:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/AgentDbDto'
     UpdateComputeEnvRequest:
       type: object
       properties:
@@ -22191,8 +24615,18 @@ components:
           type: string
         description:
           type: string
+        idpGroupId:
+          type: integer
+          format: int64
+          nullable: true
         name:
           type: string
+    UpdateWorkflowRequest:
+      type: object
+      properties:
+        schedRunId:
+          type: string
+          nullable: true
     UpdateWorkspaceRequest:
       type: object
       properties:
@@ -22224,6 +24658,10 @@ components:
           type: string
         avatarId:
           type: string
+        defaultWorkspaceId:
+          type: integer
+          format: int64
+          nullable: true
         description:
           type: string
           maxLength: 1000
@@ -22248,6 +24686,48 @@ components:
       required:
         - email
         - userName
+    UserImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        auth0Id:
+          type: string
+        authTime:
+          type: string
+          format: date-time
+        avatarId:
+          type: string
+        avatarUrl:
+          type: string
+        description:
+          type: string
+        disabled:
+          type: boolean
+        email:
+          type: string
+        firstName:
+          type: string
+        lastAccess:
+          type: string
+          format: date-time
+        lastName:
+          type: string
+        marketingConsent:
+          type: boolean
+        notification:
+          type: boolean
+        organization:
+          type: string
+        termsOfUseConsent:
+          type: boolean
+        trusted:
+          type: boolean
+        userName:
+          type: string
+      required:
+        - auditImageType
+      title: User audit image
     UserInfo:
       type: object
       properties:
@@ -22300,6 +24780,33 @@ components:
           type: boolean
         userName:
           type: string
+    UserRoleImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        context:
+          type: string
+        customRoleId:
+          type: integer
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        role:
+          type: string
+        teamId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        workspaceId:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: User role audit image
     UserSshPublicKeyDto:
       type: object
       properties:
@@ -22316,6 +24823,19 @@ components:
           type: string
         publicKey:
           type: string
+    UserSshPublicKeyImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        keyHash:
+          type: string
+        lastUsed:
+          type: string
+          format: date-time
+      required:
+        - auditImageType
+      title: SSH key audit image
     UserWorkspacePermissionDto:
       type: object
       properties:
@@ -22355,6 +24875,20 @@ components:
           format: int64
         workspaceName:
           type: string
+    ValidateComputeEnvResponse:
+      type: object
+      properties:
+        message:
+          description: 'Human-readable explanation of the outcome: the failure reason when the compute environment is INVALID, the provider-unreachable reason on a transient outcome, or null when the compute environment is AVAILABLE.'
+          type: string
+          nullable: true
+        status:
+          description: 'The compute environment status after the run: AVAILABLE when every applicable check passed, INVALID when a check failed. On a transient outcome this is the unchanged prior status.'
+          allOf:
+            - $ref: '#/components/schemas/ComputeEnv.Status'
+        transientError:
+          description: True when a provider could not be reached (timeout / throttle / 5xx). The persisted status is left unchanged; retry later.
+          type: boolean
     ValidateUrlRequest:
       type: object
       properties:
@@ -22498,6 +25032,11 @@ components:
           type: string
           maxLength: 20
       nullable: true
+    WfSched:
+      type: object
+      properties:
+        enabled:
+          type: boolean
     WfStats:
       type: object
       properties:
@@ -22570,6 +25109,10 @@ components:
     Workflow:
       type: object
       properties:
+        attributes:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowExtAttributes'
+          readOnly: true
         commandLine:
           type: string
           maxLength: 8096
@@ -22684,6 +25227,8 @@ components:
         runName:
           type: string
           maxLength: 80
+        sched:
+          $ref: '#/components/schemas/WfSched'
         scriptFile:
           type: string
           nullable: true
@@ -22848,6 +25393,120 @@ components:
         Represents a workflow execution record.
         Contains execution status, metadata, and results from pipeline
         runs including logs and performance metrics.
+    WorkflowExtAttributes:
+      type: object
+      properties:
+        cost:
+          type: number
+        costCurrency:
+          type: string
+        costRetries:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+        instancesProvisioned:
+          type: integer
+          format: int32
+        schedRunId:
+          type: string
+    WorkflowImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        commandLine:
+          type: string
+        commitId:
+          type: string
+        complete:
+          type: string
+          format: date-time
+        configFiles:
+          type: array
+          items:
+            type: string
+        configText:
+          type: string
+        container:
+          type: string
+        containerEngine:
+          type: string
+        duration:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+        errorReport:
+          type: string
+        exitStatus:
+          type: integer
+          format: int32
+        fusion:
+          $ref: '#/components/schemas/WfFusionMeta'
+        homeDir:
+          type: string
+        launchDir:
+          type: string
+        launchId:
+          type: string
+        logFile:
+          type: string
+        manifest:
+          $ref: '#/components/schemas/WfManifest'
+        nextflow:
+          $ref: '#/components/schemas/WfNextflow'
+        operationId:
+          type: string
+        outFile:
+          type: string
+        params:
+          type: string
+        profile:
+          type: string
+        projectDir:
+          type: string
+        projectName:
+          type: string
+        repository:
+          type: string
+        requiresAttention:
+          type: boolean
+        resume:
+          type: boolean
+        revision:
+          type: string
+        runName:
+          type: string
+        scriptFile:
+          type: string
+        scriptId:
+          type: string
+        scriptName:
+          type: string
+        sessionId:
+          type: string
+        start:
+          type: string
+          format: date-time
+        stats:
+          $ref: '#/components/schemas/WfStats'
+        status:
+          type: string
+        submit:
+          type: string
+          format: date-time
+        success:
+          type: boolean
+        userName:
+          type: string
+        wave:
+          $ref: '#/components/schemas/WfWaveMeta'
+        workDir:
+          type: string
+      required:
+        - auditImageType
+      title: Workflow audit image
     WorkflowLaunchRequest:
       type: object
       properties:
@@ -22908,6 +25567,10 @@ components:
           description: Main script path
           x-speakeasy-param-computed: false
           example: "main.nf"
+        outputDir:
+          description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
+          type: string
+          nullable: true
         paramsText:
           type: string
           nullable: true
@@ -23040,6 +25703,10 @@ components:
           type: string
         optimizationTargets:
           type: string
+        outputDir:
+          description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
+          type: string
+          nullable: true
         paramsText:
           type: string
         pipeline:
@@ -23070,6 +25737,12 @@ components:
           type: string
         stubRun:
           type: boolean
+        syntaxParser:
+          type: string
+          enum:
+            - v1
+            - v2
+          nullable: true
         towerConfig:
           type: string
         userSecrets:
@@ -23082,6 +25755,20 @@ components:
           type: array
           items:
             type: string
+    WorkflowLaunchValidationErrorResponse:
+      type: object
+      properties:
+        errors:
+          description: Every blocker that prevented the launch, in evaluation order; absent on single-failure responses
+          type: array
+          items:
+            $ref: '#/components/schemas/LaunchValidationError'
+          nullable: true
+        message:
+          description: Composed prose listing every blocker — same field as ErrorResponse.message
+          type: string
+      required:
+        - message
     WorkflowLoad:
       type: object
       properties:
@@ -23229,6 +25916,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/WorkflowDbDto'
         - properties:
+            configProfiles:
+              type: array
+              items:
+                type: string
+              nullable: true
             fusion:
               $ref: '#/components/schemas/WfFusionMeta'
             logFile:
@@ -23244,6 +25936,9 @@ components:
               type: string
               nullable: true
             preRunScript:
+              type: string
+              nullable: true
+            syntaxParser:
               type: string
               nullable: true
             towerConfig:
@@ -23402,6 +26097,22 @@ components:
         Represents a workspace in the Seqera Platform.
         Contains workspace configuration, member permissions, and resource
         isolation settings for project organization.
+    WorkspaceImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        fullName:
+          type: string
+        name:
+          type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+      required:
+        - auditImageType
+      title: Workspace audit image
     WorkspaceParticipantResponseDto:
       type: object
       properties:
@@ -23422,6 +26133,22 @@ components:
           format: int64
         workspaceName:
           type: string
+    WspRole:
+      type: string
+      enum:
+        - owner
+        - admin
+        - maintain
+        - launch
+        - connect
+        - view
+      x-enum-varnames:
+        - owner
+        - admin
+        - maintain
+        - launch
+        - connect
+        - view
     WspRoleSourceType:
       type: string
       enum:

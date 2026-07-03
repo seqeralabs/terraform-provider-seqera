@@ -20,10 +20,11 @@ managing team members and access permissions as a whole.
 
 ```terraform
 resource "seqera_teams" "my_teams" {
-  avatar_id   = "avatar-123456"
-  description = "Team responsible for bioinformatics analysis and pipeline development"
-  name        = "bioinformatics-team"
-  org_id      = 1
+  avatar_id    = "avatar-123456"
+  description  = "Team responsible for bioinformatics analysis and pipeline development"
+  idp_group_id = 2
+  name         = "bioinformatics-team"
+  org_id       = 1
 }
 ```
 
@@ -39,11 +40,13 @@ resource "seqera_teams" "my_teams" {
 
 - `avatar_id` (String)
 - `description` (String) Team description
+- `idp_group_id` (Number)
 
 ### Read-Only
 
 - `avatar_url` (String) URL to the team's avatar or profile image
 - `id` (Number) Alias of `team_id` for Terraform convention.
+- `idp_group_name` (String)
 - `members_count` (Number) Total number of members in the team
 - `team_id` (Number) Team numeric identifier
 

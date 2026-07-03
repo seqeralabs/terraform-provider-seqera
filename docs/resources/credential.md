@@ -118,6 +118,10 @@ must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github"
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
+- `last_validated` (String) Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
+- `message` (String) Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing ' (truncated)' suffix when the underlying provider message exceeds that limit.
+- `setup_snippet` (String) Server-rendered, read-only provider-side setup snippet (e.g. AWS IAM role trust policy) to paste at the cloud provider. Populated when a renderer is available for the credential type and the installation is configured for it; otherwise omitted.
+- `status` (String) Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

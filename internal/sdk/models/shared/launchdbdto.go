@@ -368,6 +368,8 @@ type LaunchDbDto struct {
 	OptimizationID *string `json:"optimizationId,omitempty"`
 	// Optimization targets
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
+	// Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
+	OutputDir *string `json:"outputDir,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
 	Pipeline         *string `json:"pipeline,omitempty"`
@@ -474,6 +476,13 @@ func (l *LaunchDbDto) GetOptimizationTargets() *string {
 		return nil
 	}
 	return l.OptimizationTargets
+}
+
+func (l *LaunchDbDto) GetOutputDir() *string {
+	if l == nil {
+		return nil
+	}
+	return l.OutputDir
 }
 
 func (l *LaunchDbDto) GetParamsText() *string {

@@ -152,6 +152,11 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 						Description: `Optimization targets`,
 					},
+					"output_dir": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).`,
+					},
 					"params_text": schema.StringAttribute{
 						Optional:    true,
 						Description: `Pipeline parameters text`,

@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -16,6 +17,10 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Cost = types.Float64PointerValue(resp.Cost)
+		r.CostCurrency = types.StringPointerValue(resp.CostCurrency)
+		r.CostIsEstimate = types.BoolPointerValue(resp.CostIsEstimate)
+		r.InstancesProvisioned = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.InstancesProvisioned))
 		r.IntelligentComputeEnabled = types.BoolPointerValue(resp.IntelligentComputeEnabled)
 		if resp.PipelineInfo == nil {
 			r.PipelineInfo = nil
@@ -36,6 +41,39 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			}
 			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
 		}
+		if resp.SchedConfig == nil {
+			r.SchedConfig = nil
+		} else {
+			r.SchedConfig = &tfTypes.DescribeWorkflowResponseSchedConfig{}
+			if resp.SchedConfig.BackendStrategy != nil {
+				r.SchedConfig.BackendStrategy = types.StringValue(string(*resp.SchedConfig.BackendStrategy))
+			} else {
+				r.SchedConfig.BackendStrategy = types.StringNull()
+			}
+			r.SchedConfig.DiskAllocation = types.StringPointerValue(resp.SchedConfig.DiskAllocation)
+			r.SchedConfig.FusionSnapshots = types.BoolPointerValue(resp.SchedConfig.FusionSnapshots)
+			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.SchedConfig.MachineTypes)
+			diags.Append(machineTypesDiags...)
+			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+			diags.Append(machineTypesDiags...)
+			r.SchedConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.SchedConfig.NvmeEnabled = types.BoolPointerValue(resp.SchedConfig.NvmeEnabled)
+			if resp.SchedConfig.Pool == nil {
+				r.SchedConfig.Pool = nil
+			} else {
+				r.SchedConfig.Pool = &tfTypes.SchedConfigPool{}
+				r.SchedConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.SchedConfig.Pool.DesiredWarm))
+				r.SchedConfig.Pool.Enabled = types.BoolPointerValue(resp.SchedConfig.Pool.Enabled)
+				r.SchedConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.SchedConfig.Pool.ScaleToZeroSecs))
+			}
+			r.SchedConfig.PredictionModel = types.StringPointerValue(resp.SchedConfig.PredictionModel)
+			if resp.SchedConfig.ProvisioningModel != nil {
+				r.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.SchedConfig.ProvisioningModel))
+			} else {
+				r.SchedConfig.ProvisioningModel = types.StringNull()
+			}
+		}
+		r.SchedRunID = types.StringPointerValue(resp.SchedRunID)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -191,6 +229,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		mainScript = nil
 	}
+	outputDir := new(string)
+	if !r.OutputDir.IsUnknown() && !r.OutputDir.IsNull() {
+		*outputDir = r.OutputDir.ValueString()
+	} else {
+		outputDir = nil
+	}
 	paramsText := new(string)
 	if !r.ParamsText.IsUnknown() && !r.ParamsText.IsNull() {
 		*paramsText = r.ParamsText.ValueString()
@@ -283,6 +327,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
+		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,
 		PipelineSchemaID: pipelineSchemaID,
