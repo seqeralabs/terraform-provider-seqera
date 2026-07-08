@@ -210,6 +210,49 @@ func azureBatchState(deleteJobsOnCompletion string, enabled *bool) map[string]in
 
 func boolPtr(b bool) *bool { return &b }
 
+// TestAwsComputeEnvUpgrade_RenamesNvmeAndDropsFusion covers the confirmed-broken
+// legacy seqera_aws_compute_env migration. Real v0.25.x state carries
+// config.{nvnme_storage_enabled (misspelled), fusion_enabled, fusion2_enabled,
+// wave_enabled}. The current schema renamed the nvme flag and removed the three
+// fusion flags (replaced by enable_fusion/enable_wave). The upgrader must carry
+// the nvme value to the new name, drop the removed flags, and preserve the rest.
+func TestAwsComputeEnvUpgrade_RenamesNvmeAndDropsFusion(t *testing.T) {
+	ctx := context.Background()
+
+	state := runUpgraderAgainstSchema(t, NewAWSComputeEnvResource, stateupgraders.AwscomputeenvStateUpgraderV0, map[string]interface{}{
+		"id":             "ce-1",
+		"compute_env_id": "ce-1",
+		"name":           "legacy-aws-ce",
+		"platform":       "aws-batch",
+		"config": map[string]interface{}{
+			"region":                "eu-west-2", // preserved
+			"work_dir":              "s3://bucket/work",
+			"nvnme_storage_enabled": true, // misspelled v0 name -> renamed
+			"fusion_enabled":        true, // removed in current -> dropped
+			"fusion2_enabled":       true, // removed in current -> dropped
+			"wave_enabled":          true, // removed in current -> dropped
+		},
+	})
+
+	// Decoding succeeded, so the removed fusion flags were dropped. Confirm the
+	// nvme rename carried its value and a surviving attribute is intact.
+	var nvme types.Bool
+	if diags := state.GetAttribute(ctx, path.Root("config").AtName("nvme_storage_enabled"), &nvme); diags.HasError() {
+		t.Fatalf("reading nvme_storage_enabled: %v", diags)
+	}
+	if nvme.IsNull() || !nvme.ValueBool() {
+		t.Errorf("expected nvme_storage_enabled=true after rename, got %v", nvme)
+	}
+
+	var region types.String
+	if diags := state.GetAttribute(ctx, path.Root("config").AtName("region"), &region); diags.HasError() {
+		t.Fatalf("reading region: %v", diags)
+	}
+	if region.ValueString() != "eu-west-2" {
+		t.Errorf("expected region preserved as eu-west-2, got %q", region.ValueString())
+	}
+}
+
 // TestAwscredentialUpgrade_DropsRemovedAttributes covers the passthrough-style
 // upgrader on a non-compute-env resource. Real v0.25.x seqera_aws_credential
 // state carries attributes since removed from the schema (`deleted`, `keys`,
