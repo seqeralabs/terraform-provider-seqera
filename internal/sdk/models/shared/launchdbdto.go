@@ -122,21 +122,22 @@ type ComputeEnv struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config        ComputeConfig       `json:"config"`
-	CredentialsID string              `json:"credentialsId"`
-	DateCreated   *time.Time          `json:"dateCreated,omitempty"`
-	Deleted       *bool               `json:"deleted,omitempty"`
-	Description   *string             `json:"description,omitempty"`
-	ComputeEnvID  *string             `json:"id,omitempty"`
-	LastUpdated   *time.Time          `json:"lastUpdated,omitempty"`
-	LastUsed      *time.Time          `json:"lastUsed,omitempty"`
-	Message       *string             `json:"message,omitempty"`
-	Name          string              `json:"name"`
-	OrgID         *int64              `json:"orgId,omitempty"`
-	Platform      LaunchDbDtoPlatform `json:"platform"`
-	Primary       *bool               `json:"primary,omitempty"`
-	Status        *LaunchDbDtoStatus  `json:"status,omitempty"`
-	WorkspaceID   *int64              `json:"workspaceId,omitempty"`
+	Config                         ComputeConfig       `json:"config"`
+	CredentialsID                  string              `json:"credentialsId"`
+	DateCreated                    *time.Time          `json:"dateCreated,omitempty"`
+	Deleted                        *bool               `json:"deleted,omitempty"`
+	Description                    *string             `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool               `json:"fusionMetricsCollectionEnabled,omitempty"`
+	ComputeEnvID                   *string             `json:"id,omitempty"`
+	LastUpdated                    *time.Time          `json:"lastUpdated,omitempty"`
+	LastUsed                       *time.Time          `json:"lastUsed,omitempty"`
+	Message                        *string             `json:"message,omitempty"`
+	Name                           string              `json:"name"`
+	OrgID                          *int64              `json:"orgId,omitempty"`
+	Platform                       LaunchDbDtoPlatform `json:"platform"`
+	Primary                        *bool               `json:"primary,omitempty"`
+	Status                         *LaunchDbDtoStatus  `json:"status,omitempty"`
+	WorkspaceID                    *int64              `json:"workspaceId,omitempty"`
 }
 
 func (c ComputeEnv) MarshalJSON() ([]byte, error) {
@@ -251,6 +252,13 @@ func (c *ComputeEnv) GetDescription() *string {
 		return nil
 	}
 	return c.Description
+}
+
+func (c *ComputeEnv) GetFusionMetricsCollectionEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.FusionMetricsCollectionEnabled
 }
 
 func (c *ComputeEnv) GetComputeEnvID() *string {
@@ -368,6 +376,10 @@ type LaunchDbDto struct {
 	OptimizationID *string `json:"optimizationId,omitempty"`
 	// Optimization targets
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
+	// Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+	// Nextflow 24.10.0 or later and the workflow outputs syntax.
+	//
+	OutputDir *string `json:"outputDir,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
 	Pipeline         *string `json:"pipeline,omitempty"`
@@ -474,6 +486,13 @@ func (l *LaunchDbDto) GetOptimizationTargets() *string {
 		return nil
 	}
 	return l.OptimizationTargets
+}
+
+func (l *LaunchDbDto) GetOutputDir() *string {
+	if l == nil {
+		return nil
+	}
+	return l.OutputDir
 }
 
 func (l *LaunchDbDto) GetParamsText() *string {

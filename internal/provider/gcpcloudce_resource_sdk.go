@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -66,6 +67,38 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
+		if resp.Config.SchedConfig == nil {
+			r.Config.SchedConfig = nil
+		} else {
+			r.Config.SchedConfig = &tfTypes.SchedConfig{}
+			if resp.Config.SchedConfig.BackendStrategy != nil {
+				r.Config.SchedConfig.BackendStrategy = types.StringValue(string(*resp.Config.SchedConfig.BackendStrategy))
+			} else {
+				r.Config.SchedConfig.BackendStrategy = types.StringNull()
+			}
+			r.Config.SchedConfig.DiskAllocation = types.StringPointerValue(resp.Config.SchedConfig.DiskAllocation)
+			r.Config.SchedConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.SchedConfig.FusionSnapshots)
+			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.SchedConfig.MachineTypes)
+			diags.Append(machineTypesDiags...)
+			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+			diags.Append(machineTypesDiags...)
+			r.Config.SchedConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			if resp.Config.SchedConfig.Pool == nil {
+				r.Config.SchedConfig.Pool = nil
+			} else {
+				r.Config.SchedConfig.Pool = &tfTypes.SchedConfigPool{}
+				r.Config.SchedConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.SchedConfig.Pool.DesiredWarm))
+				r.Config.SchedConfig.Pool.Enabled = types.BoolPointerValue(resp.Config.SchedConfig.Pool.Enabled)
+				r.Config.SchedConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.SchedConfig.Pool.ScaleToZeroSecs))
+			}
+			r.Config.SchedConfig.PredictionModel = types.StringPointerValue(resp.Config.SchedConfig.PredictionModel)
+			if resp.Config.SchedConfig.ProvisioningModel != nil {
+				r.Config.SchedConfig.ProvisioningModel = types.StringValue(string(*resp.Config.SchedConfig.ProvisioningModel))
+			} else {
+				r.Config.SchedConfig.ProvisioningModel = types.StringNull()
+			}
+		}
+		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.Config.Zone = types.StringPointerValue(resp.Config.Zone)
@@ -348,6 +381,84 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		region = nil
 	}
+	var schedConfig *shared.SchedConfig
+	if r.Config.SchedConfig != nil {
+		backendStrategy := new(shared.SchedConfigBackendStrategy)
+		if !r.Config.SchedConfig.BackendStrategy.IsUnknown() && !r.Config.SchedConfig.BackendStrategy.IsNull() {
+			*backendStrategy = shared.SchedConfigBackendStrategy(r.Config.SchedConfig.BackendStrategy.ValueString())
+		} else {
+			backendStrategy = nil
+		}
+		diskAllocation := new(string)
+		if !r.Config.SchedConfig.DiskAllocation.IsUnknown() && !r.Config.SchedConfig.DiskAllocation.IsNull() {
+			*diskAllocation = r.Config.SchedConfig.DiskAllocation.ValueString()
+		} else {
+			diskAllocation = nil
+		}
+		fusionSnapshots := new(bool)
+		if !r.Config.SchedConfig.FusionSnapshots.IsUnknown() && !r.Config.SchedConfig.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Config.SchedConfig.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots = nil
+		}
+		var machineTypes []string
+		if !r.Config.SchedConfig.MachineTypes.IsUnknown() && !r.Config.SchedConfig.MachineTypes.IsNull() {
+			diags.Append(r.Config.SchedConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		}
+		var pool *shared.SchedConfigPool
+		if r.Config.SchedConfig.Pool != nil {
+			desiredWarm := new(int)
+			if !r.Config.SchedConfig.Pool.DesiredWarm.IsUnknown() && !r.Config.SchedConfig.Pool.DesiredWarm.IsNull() {
+				*desiredWarm = int(r.Config.SchedConfig.Pool.DesiredWarm.ValueInt32())
+			} else {
+				desiredWarm = nil
+			}
+			enabled := new(bool)
+			if !r.Config.SchedConfig.Pool.Enabled.IsUnknown() && !r.Config.SchedConfig.Pool.Enabled.IsNull() {
+				*enabled = r.Config.SchedConfig.Pool.Enabled.ValueBool()
+			} else {
+				enabled = nil
+			}
+			scaleToZeroSecs := new(int)
+			if !r.Config.SchedConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.Config.SchedConfig.Pool.ScaleToZeroSecs.IsNull() {
+				*scaleToZeroSecs = int(r.Config.SchedConfig.Pool.ScaleToZeroSecs.ValueInt32())
+			} else {
+				scaleToZeroSecs = nil
+			}
+			pool = &shared.SchedConfigPool{
+				DesiredWarm:     desiredWarm,
+				Enabled:         enabled,
+				ScaleToZeroSecs: scaleToZeroSecs,
+			}
+		}
+		predictionModel := new(string)
+		if !r.Config.SchedConfig.PredictionModel.IsUnknown() && !r.Config.SchedConfig.PredictionModel.IsNull() {
+			*predictionModel = r.Config.SchedConfig.PredictionModel.ValueString()
+		} else {
+			predictionModel = nil
+		}
+		provisioningModel := new(shared.SchedConfigProvisioningModel)
+		if !r.Config.SchedConfig.ProvisioningModel.IsUnknown() && !r.Config.SchedConfig.ProvisioningModel.IsNull() {
+			*provisioningModel = shared.SchedConfigProvisioningModel(r.Config.SchedConfig.ProvisioningModel.ValueString())
+		} else {
+			provisioningModel = nil
+		}
+		schedConfig = &shared.SchedConfig{
+			BackendStrategy:   backendStrategy,
+			DiskAllocation:    diskAllocation,
+			FusionSnapshots:   fusionSnapshots,
+			MachineTypes:      machineTypes,
+			Pool:              pool,
+			PredictionModel:   predictionModel,
+			ProvisioningModel: provisioningModel,
+		}
+	}
+	schedEnabled := new(bool)
+	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
+		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	} else {
+		schedEnabled = nil
+	}
 	serviceAccountEmail := new(string)
 	if !r.Config.ServiceAccountEmail.IsUnknown() && !r.Config.ServiceAccountEmail.IsNull() {
 		*serviceAccountEmail = r.Config.ServiceAccountEmail.ValueString()
@@ -378,6 +489,8 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		PreRunScript:        preRunScript,
 		ProjectID:           projectID,
 		Region:              region,
+		SchedConfig:         schedConfig,
+		SchedEnabled:        schedEnabled,
 		ServiceAccountEmail: serviceAccountEmail,
 		WorkDir:             workDir,
 		Zone:                zone,

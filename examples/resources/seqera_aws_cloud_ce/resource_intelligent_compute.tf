@@ -14,6 +14,17 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
+      backend_strategy   = "ECS"       # ECS (default) | EC2 | VM
+      fusion_snapshots   = true        # resume interrupted tasks from a snapshot
+      prediction_model   = "none"      # none | qr/v1 | qr/v2
+
+      # Warm pool: keep idle VMs ready for sub-5s task starts, scaling to zero
+      # after 5 minutes of inactivity.
+      pool = {
+        enabled            = true
+        desired_warm       = 1
+        scale_to_zero_secs = 300
+      }
     }
   }
 }

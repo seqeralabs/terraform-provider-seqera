@@ -147,6 +147,8 @@ Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
+- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--sched_config))
+- `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
@@ -169,6 +171,55 @@ Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--config--sched_config"></a>
+### Nested Schema for `config.sched_config`
+
+Optional:
+
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch.
+Requires replacement if changed.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--config--sched_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
+Requires replacement if changed.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--config--sched_config--pool"></a>
+### Nested Schema for `config.sched_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
 
 ## Import
 

@@ -18,6 +18,8 @@ type GoogleCloudConfig struct {
 	PreRunScript        types.String        `tfsdk:"pre_run_script"`
 	ProjectID           types.String        `tfsdk:"project_id"`
 	Region              types.String        `tfsdk:"region"`
+	SchedConfig         *SchedConfig        `tfsdk:"sched_config"`
+	SchedEnabled        types.Bool          `tfsdk:"sched_enabled"`
 	ServiceAccountEmail types.String        `tfsdk:"service_account_email"`
 	WorkDir             types.String        `tfsdk:"work_dir"`
 	Zone                types.String        `tfsdk:"zone"`

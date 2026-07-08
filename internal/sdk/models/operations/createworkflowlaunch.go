@@ -3,6 +3,9 @@
 package operations
 
 import (
+	"errors"
+	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
@@ -37,6 +40,96 @@ func (c *CreateWorkflowLaunchRequest) GetSubmitWorkflowLaunchRequest() shared.Su
 	return c.SubmitWorkflowLaunchRequest
 }
 
+type CreateWorkflowLaunchResponseBodyType string
+
+const (
+	CreateWorkflowLaunchResponseBodyTypeErrorResponse                         CreateWorkflowLaunchResponseBodyType = "ErrorResponse"
+	CreateWorkflowLaunchResponseBodyTypeWorkflowLaunchValidationErrorResponse CreateWorkflowLaunchResponseBodyType = "WorkflowLaunchValidationErrorResponse"
+)
+
+// CreateWorkflowLaunchResponseBody - Bad request — single-failure launches return `ErrorResponse`; multi-failure launches return `WorkflowLaunchValidationErrorResponse` with a per-blocker `errors[]` array
+type CreateWorkflowLaunchResponseBody struct {
+	ErrorResponse                         *shared.ErrorResponse                         `queryParam:"inline" union:"member"`
+	WorkflowLaunchValidationErrorResponse *shared.WorkflowLaunchValidationErrorResponse `queryParam:"inline" union:"member"`
+
+	Type CreateWorkflowLaunchResponseBodyType
+}
+
+func CreateCreateWorkflowLaunchResponseBodyErrorResponse(errorResponse shared.ErrorResponse) CreateWorkflowLaunchResponseBody {
+	typ := CreateWorkflowLaunchResponseBodyTypeErrorResponse
+
+	return CreateWorkflowLaunchResponseBody{
+		ErrorResponse: &errorResponse,
+		Type:          typ,
+	}
+}
+
+func CreateCreateWorkflowLaunchResponseBodyWorkflowLaunchValidationErrorResponse(workflowLaunchValidationErrorResponse shared.WorkflowLaunchValidationErrorResponse) CreateWorkflowLaunchResponseBody {
+	typ := CreateWorkflowLaunchResponseBodyTypeWorkflowLaunchValidationErrorResponse
+
+	return CreateWorkflowLaunchResponseBody{
+		WorkflowLaunchValidationErrorResponse: &workflowLaunchValidationErrorResponse,
+		Type:                                  typ,
+	}
+}
+
+func (u *CreateWorkflowLaunchResponseBody) UnmarshalJSON(data []byte) error {
+
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var errorResponse shared.ErrorResponse = shared.ErrorResponse{}
+	if err := utils.UnmarshalJSON(data, &errorResponse, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  CreateWorkflowLaunchResponseBodyTypeErrorResponse,
+			Value: &errorResponse,
+		})
+	}
+
+	var workflowLaunchValidationErrorResponse shared.WorkflowLaunchValidationErrorResponse = shared.WorkflowLaunchValidationErrorResponse{}
+	if err := utils.UnmarshalJSON(data, &workflowLaunchValidationErrorResponse, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  CreateWorkflowLaunchResponseBodyTypeWorkflowLaunchValidationErrorResponse,
+			Value: &workflowLaunchValidationErrorResponse,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for CreateWorkflowLaunchResponseBody", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for CreateWorkflowLaunchResponseBody", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(CreateWorkflowLaunchResponseBodyType)
+	switch best.Type {
+	case CreateWorkflowLaunchResponseBodyTypeErrorResponse:
+		u.ErrorResponse = best.Value.(*shared.ErrorResponse)
+		return nil
+	case CreateWorkflowLaunchResponseBodyTypeWorkflowLaunchValidationErrorResponse:
+		u.WorkflowLaunchValidationErrorResponse = best.Value.(*shared.WorkflowLaunchValidationErrorResponse)
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for CreateWorkflowLaunchResponseBody", string(data))
+}
+
+func (u CreateWorkflowLaunchResponseBody) MarshalJSON() ([]byte, error) {
+	if u.ErrorResponse != nil {
+		return utils.MarshalJSON(u.ErrorResponse, "", true)
+	}
+
+	if u.WorkflowLaunchValidationErrorResponse != nil {
+		return utils.MarshalJSON(u.WorkflowLaunchValidationErrorResponse, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type CreateWorkflowLaunchResponseBody: all fields are null")
+}
+
 type CreateWorkflowLaunchResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -46,8 +139,8 @@ type CreateWorkflowLaunchResponse struct {
 	RawResponse *http.Response
 	// OK
 	SubmitWorkflowLaunchResponse *shared.SubmitWorkflowLaunchResponse
-	// Bad request
-	ErrorResponse *shared.ErrorResponse
+	// Bad request — single-failure launches return `ErrorResponse`; multi-failure launches return `WorkflowLaunchValidationErrorResponse` with a per-blocker `errors[]` array
+	OneOf *CreateWorkflowLaunchResponseBody
 }
 
 func (c *CreateWorkflowLaunchResponse) GetContentType() string {
@@ -78,9 +171,9 @@ func (c *CreateWorkflowLaunchResponse) GetSubmitWorkflowLaunchResponse() *shared
 	return c.SubmitWorkflowLaunchResponse
 }
 
-func (c *CreateWorkflowLaunchResponse) GetErrorResponse() *shared.ErrorResponse {
+func (c *CreateWorkflowLaunchResponse) GetOneOf() *CreateWorkflowLaunchResponseBody {
 	if c == nil {
 		return nil
 	}
-	return c.ErrorResponse
+	return c.OneOf
 }

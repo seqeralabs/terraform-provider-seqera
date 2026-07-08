@@ -3,27 +3,59 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
 
+type UserResponseDtoWaveBuildNotification string
+
+const (
+	UserResponseDtoWaveBuildNotificationAlwaysOn  UserResponseDtoWaveBuildNotification = "ALWAYS_ON"
+	UserResponseDtoWaveBuildNotificationOnError   UserResponseDtoWaveBuildNotification = "ON_ERROR"
+	UserResponseDtoWaveBuildNotificationAlwaysOff UserResponseDtoWaveBuildNotification = "ALWAYS_OFF"
+)
+
+func (e UserResponseDtoWaveBuildNotification) ToPointer() *UserResponseDtoWaveBuildNotification {
+	return &e
+}
+func (e *UserResponseDtoWaveBuildNotification) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ALWAYS_ON":
+		fallthrough
+	case "ON_ERROR":
+		fallthrough
+	case "ALWAYS_OFF":
+		*e = UserResponseDtoWaveBuildNotification(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for UserResponseDtoWaveBuildNotification: %v", v)
+	}
+}
+
 type UserResponseDto struct {
-	Avatar            *string    `json:"avatar,omitempty"`
-	AvatarID          *string    `json:"avatarId,omitempty"`
-	DateCreated       *time.Time `json:"dateCreated,omitempty"`
-	Deleted           *bool      `json:"deleted,omitempty"`
-	Description       *string    `json:"description,omitempty"`
-	Email             *string    `json:"email,omitempty"`
-	FirstName         *string    `json:"firstName,omitempty"`
-	ID                *int64     `json:"id,omitempty"`
-	LastAccess        *time.Time `json:"lastAccess,omitempty"`
-	LastName          *string    `json:"lastName,omitempty"`
-	LastUpdated       *time.Time `json:"lastUpdated,omitempty"`
-	MarketingConsent  *bool      `json:"marketingConsent,omitempty"`
-	Notification      *bool      `json:"notification,omitempty"`
-	Organization      *string    `json:"organization,omitempty"`
-	TermsOfUseConsent *bool      `json:"termsOfUseConsent,omitempty"`
-	UserName          *string    `json:"userName,omitempty"`
+	Avatar                *string                               `json:"avatar,omitempty"`
+	AvatarID              *string                               `json:"avatarId,omitempty"`
+	DateCreated           *time.Time                            `json:"dateCreated,omitempty"`
+	Deleted               *bool                                 `json:"deleted,omitempty"`
+	Description           *string                               `json:"description,omitempty"`
+	Email                 *string                               `json:"email,omitempty"`
+	FirstName             *string                               `json:"firstName,omitempty"`
+	ID                    *int64                                `json:"id,omitempty"`
+	LastAccess            *time.Time                            `json:"lastAccess,omitempty"`
+	LastName              *string                               `json:"lastName,omitempty"`
+	LastUpdated           *time.Time                            `json:"lastUpdated,omitempty"`
+	MarketingConsent      *bool                                 `json:"marketingConsent,omitempty"`
+	Notification          *bool                                 `json:"notification,omitempty"`
+	Organization          *string                               `json:"organization,omitempty"`
+	TermsOfUseConsent     *bool                                 `json:"termsOfUseConsent,omitempty"`
+	UserName              *string                               `json:"userName,omitempty"`
+	WaveBuildNotification *UserResponseDtoWaveBuildNotification `json:"waveBuildNotification,omitempty"`
 }
 
 func (u UserResponseDto) MarshalJSON() ([]byte, error) {
@@ -147,4 +179,11 @@ func (u *UserResponseDto) GetUserName() *string {
 		return nil
 	}
 	return u.UserName
+}
+
+func (u *UserResponseDto) GetWaveBuildNotification() *UserResponseDtoWaveBuildNotification {
+	if u == nil {
+		return nil
+	}
+	return u.WaveBuildNotification
 }

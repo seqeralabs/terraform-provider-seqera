@@ -3,6 +3,8 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
@@ -32,6 +34,219 @@ func (d *DescribeWorkflowResponsePipelineInfo) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
+}
+
+// DescribeWorkflowResponseBackendStrategy - Backend used by Intelligent Compute to run tasks:
+// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
+// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+// - `VM` (provider-agnostic): run tasks on cloud VMs.
+type DescribeWorkflowResponseBackendStrategy string
+
+const (
+	DescribeWorkflowResponseBackendStrategyEcs DescribeWorkflowResponseBackendStrategy = "ECS"
+	DescribeWorkflowResponseBackendStrategyEc2 DescribeWorkflowResponseBackendStrategy = "EC2"
+	DescribeWorkflowResponseBackendStrategyVM  DescribeWorkflowResponseBackendStrategy = "VM"
+)
+
+func (e DescribeWorkflowResponseBackendStrategy) ToPointer() *DescribeWorkflowResponseBackendStrategy {
+	return &e
+}
+func (e *DescribeWorkflowResponseBackendStrategy) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ECS":
+		fallthrough
+	case "EC2":
+		fallthrough
+	case "VM":
+		*e = DescribeWorkflowResponseBackendStrategy(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for DescribeWorkflowResponseBackendStrategy: %v", v)
+	}
+}
+
+// DescribeWorkflowResponsePool - Warm-pool configuration. When present and enabled, the scheduler keeps a
+// pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+type DescribeWorkflowResponsePool struct {
+	// Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters.
+	DesiredWarm *int `json:"desiredWarm,omitempty"`
+	// Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs.
+	Enabled *bool `json:"enabled,omitempty"`
+	// Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero.
+	ScaleToZeroSecs *int `json:"scaleToZeroSecs,omitempty"`
+}
+
+func (d *DescribeWorkflowResponsePool) GetDesiredWarm() *int {
+	if d == nil {
+		return nil
+	}
+	return d.DesiredWarm
+}
+
+func (d *DescribeWorkflowResponsePool) GetEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Enabled
+}
+
+func (d *DescribeWorkflowResponsePool) GetScaleToZeroSecs() *int {
+	if d == nil {
+		return nil
+	}
+	return d.ScaleToZeroSecs
+}
+
+// DescribeWorkflowResponseProvisioningModel - EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+// Case-sensitive — must be one of:
+// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+// - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+// - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+//
+// Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+type DescribeWorkflowResponseProvisioningModel string
+
+const (
+	DescribeWorkflowResponseProvisioningModelSpot      DescribeWorkflowResponseProvisioningModel = "spot"
+	DescribeWorkflowResponseProvisioningModelSpotFirst DescribeWorkflowResponseProvisioningModel = "spotFirst"
+	DescribeWorkflowResponseProvisioningModelOndemand  DescribeWorkflowResponseProvisioningModel = "ondemand"
+)
+
+func (e DescribeWorkflowResponseProvisioningModel) ToPointer() *DescribeWorkflowResponseProvisioningModel {
+	return &e
+}
+func (e *DescribeWorkflowResponseProvisioningModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "spot":
+		fallthrough
+	case "spotFirst":
+		fallthrough
+	case "ondemand":
+		*e = DescribeWorkflowResponseProvisioningModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for DescribeWorkflowResponseProvisioningModel: %v", v)
+	}
+}
+
+type DescribeWorkflowResponseSchedConfig struct {
+	// Backend used by Intelligent Compute to run tasks:
+	// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
+	// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+	// - `VM` (provider-agnostic): run tasks on cloud VMs.
+	//
+	BackendStrategy *DescribeWorkflowResponseBackendStrategy `json:"backendStrategy,omitempty"`
+	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+	// restrict to instance types that provide local SSD (NVMe) storage. Leave
+	// unset for no local-storage requirement.
+	//
+	DiskAllocation *string `json:"diskAllocation,omitempty"`
+	// Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+	// resume from a snapshot instead of restarting from scratch.
+	//
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// EC2 instance types eligible for Seqera Intelligent Compute nodes.
+	// Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+	// types per task. When populated, the scheduler is restricted to this
+	// whitelist; types outside the platform's filtered catalog for the
+	// scheduler are accepted by the API but may produce warnings.
+	//
+	MachineTypes []string `json:"machineTypes,omitempty"`
+	// When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
+	NvmeEnabled *bool `json:"nvmeEnabled,omitempty"`
+	// Warm-pool configuration. When present and enabled, the scheduler keeps a
+	// pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+	//
+	Pool *DescribeWorkflowResponsePool `json:"pool,omitempty"`
+	// Resource-prediction model used by Intelligent Compute to size tasks.
+	// Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+	// is accepted.
+	//
+	PredictionModel *string `json:"predictionModel,omitempty"`
+	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+	// Case-sensitive — must be one of:
+	// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+	// - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+	// - `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+	//
+	// Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+	//
+	ProvisioningModel *DescribeWorkflowResponseProvisioningModel `default:"spotFirst" json:"provisioningModel"`
+}
+
+func (d DescribeWorkflowResponseSchedConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetBackendStrategy() *DescribeWorkflowResponseBackendStrategy {
+	if d == nil {
+		return nil
+	}
+	return d.BackendStrategy
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetDiskAllocation() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DiskAllocation
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetFusionSnapshots() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.FusionSnapshots
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetMachineTypes() []string {
+	if d == nil {
+		return nil
+	}
+	return d.MachineTypes
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetNvmeEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.NvmeEnabled
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetPool() *DescribeWorkflowResponsePool {
+	if d == nil {
+		return nil
+	}
+	return d.Pool
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetPredictionModel() *string {
+	if d == nil {
+		return nil
+	}
+	return d.PredictionModel
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetProvisioningModel() *DescribeWorkflowResponseProvisioningModel {
+	if d == nil {
+		return nil
+	}
+	return d.ProvisioningModel
 }
 
 // DescribeWorkflowResponseWorkflow - Represents a workflow execution record.
@@ -83,6 +298,7 @@ type DescribeWorkflowResponseWorkflow struct {
 	Submit *time.Time `json:"submit,omitempty"`
 	// Work directory
 	WorkDir        *string       `json:"workDir,omitempty"`
+	ConfigProfiles []string      `json:"configProfiles,omitempty"`
 	Fusion         *WfFusionMeta `json:"fusion,omitempty"`
 	LogFile        *string       `json:"logFile,omitempty"`
 	NextflowConfig *string       `json:"nextflowConfig,omitempty"`
@@ -90,6 +306,7 @@ type DescribeWorkflowResponseWorkflow struct {
 	OutFile        *string       `json:"outFile,omitempty"`
 	PostRunScript  *string       `json:"postRunScript,omitempty"`
 	PreRunScript   *string       `json:"preRunScript,omitempty"`
+	SyntaxParser   *string       `json:"syntaxParser,omitempty"`
 	TowerConfig    *string       `json:"towerConfig,omitempty"`
 	Wave           *WfWaveMeta   `json:"wave,omitempty"`
 }
@@ -273,6 +490,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetWorkDir() *string {
 	return d.WorkDir
 }
 
+func (d *DescribeWorkflowResponseWorkflow) GetConfigProfiles() []string {
+	if d == nil {
+		return nil
+	}
+	return d.ConfigProfiles
+}
+
 func (d *DescribeWorkflowResponseWorkflow) GetFusion() *WfFusionMeta {
 	if d == nil {
 		return nil
@@ -322,6 +546,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetPreRunScript() *string {
 	return d.PreRunScript
 }
 
+func (d *DescribeWorkflowResponseWorkflow) GetSyntaxParser() *string {
+	if d == nil {
+		return nil
+	}
+	return d.SyntaxParser
+}
+
 func (d *DescribeWorkflowResponseWorkflow) GetTowerConfig() *string {
 	if d == nil {
 		return nil
@@ -337,10 +568,44 @@ func (d *DescribeWorkflowResponseWorkflow) GetWave() *WfWaveMeta {
 }
 
 type DescribeWorkflowResponse struct {
+	Cost                      *float64                              `json:"cost,omitempty"`
+	CostCurrency              *string                               `json:"costCurrency,omitempty"`
+	CostIsEstimate            *bool                                 `json:"costIsEstimate,omitempty"`
+	InstancesProvisioned      *int                                  `json:"instancesProvisioned,omitempty"`
 	PipelineInfo              *DescribeWorkflowResponsePipelineInfo `json:"pipelineInfo,omitempty"`
+	SchedConfig               *DescribeWorkflowResponseSchedConfig  `json:"schedConfig,omitempty"`
 	IntelligentComputeEnabled *bool                                 `json:"schedEnabled,omitempty"`
+	SchedRunID                *string                               `json:"schedRunId,omitempty"`
 	Workflow                  *DescribeWorkflowResponseWorkflow     `json:"workflow,omitempty"`
 	WorkspaceID               *int64                                `json:"workspaceId,omitempty"`
+}
+
+func (d *DescribeWorkflowResponse) GetCost() *float64 {
+	if d == nil {
+		return nil
+	}
+	return d.Cost
+}
+
+func (d *DescribeWorkflowResponse) GetCostCurrency() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CostCurrency
+}
+
+func (d *DescribeWorkflowResponse) GetCostIsEstimate() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.CostIsEstimate
+}
+
+func (d *DescribeWorkflowResponse) GetInstancesProvisioned() *int {
+	if d == nil {
+		return nil
+	}
+	return d.InstancesProvisioned
 }
 
 func (d *DescribeWorkflowResponse) GetPipelineInfo() *DescribeWorkflowResponsePipelineInfo {
@@ -350,11 +615,25 @@ func (d *DescribeWorkflowResponse) GetPipelineInfo() *DescribeWorkflowResponsePi
 	return d.PipelineInfo
 }
 
+func (d *DescribeWorkflowResponse) GetSchedConfig() *DescribeWorkflowResponseSchedConfig {
+	if d == nil {
+		return nil
+	}
+	return d.SchedConfig
+}
+
 func (d *DescribeWorkflowResponse) GetIntelligentComputeEnabled() *bool {
 	if d == nil {
 		return nil
 	}
 	return d.IntelligentComputeEnabled
+}
+
+func (d *DescribeWorkflowResponse) GetSchedRunID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.SchedRunID
 }
 
 func (d *DescribeWorkflowResponse) GetWorkflow() *DescribeWorkflowResponseWorkflow {

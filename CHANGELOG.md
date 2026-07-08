@@ -1,3 +1,25 @@
+# v0.41.0
+
+FEATURES:
+
+- **EBS boot-disk encryption on `seqera_aws_cloud_ce`.** Two new fields on the AWS Cloud compute environment: `ebs_encrypted` encrypts the boot EBS volume of provisioned instances (defaults to `false`), and `ebs_kms_key_id` supplies a KMS key ARN for that encryption. When `ebs_kms_key_id` is omitted, the account/region default EBS encryption key is used. Setting `ebs_kms_key_id` without `ebs_encrypted = true` is rejected at plan time.
+
+- **VPC and multi-subnet placement on `seqera_aws_cloud_ce`.** New `vpc_id` scopes subnet and security-group selection, and `subnet_ids` (a list) replaces the single-value `subnet_id` — the first subnet is used for basic placement while Intelligent Compute may use all of them. `subnet_id` is now **deprecated** in favour of `subnet_ids`, and the two are mutually exclusive (setting both errors at plan time).
+
+- **Intelligent Compute (`sched_config`) configuration across cloud compute environments.** `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` (and the generic `seqera_compute_env`) now expose the Intelligent Compute scheduler config, including:
+
+  - `backend_strategy` — `ECS` (AWS, default), `EC2` (AWS), or `VM` (provider-agnostic).
+  - `prediction_model` — resource-prediction model used to size tasks (`none`, `qr/v1`, `qr/v2`).
+  - `fusion_snapshots` — resume interrupted (e.g. spot-reclaimed) tasks from a snapshot instead of restarting.
+  - `nvme_enabled` — restrict to instance types with local SSD (NVMe) storage.
+  - `pool` — warm-pool configuration (`enabled`, `desired_warm`, `scale_to_zero_secs`) to keep idle VMs ready for sub-5s task start latency.
+
+- **Per-run output directory on launches.** New `output_dir` on `seqera_pipeline`, `seqera_action`, and `seqera_workflows` launch config, passed as Nextflow `-output-dir` (requires Nextflow 24.10.0+ and workflow outputs syntax).
+
+DEPRECATIONS:
+
+- **`subnet_id` on `seqera_aws_cloud_ce` is deprecated** in favour of `subnet_ids`. Use `subnet_ids` for new compute environments. Existing compute environments configured with `subnet_id` continue to work — the field remains supported by the API and does not need to be changed. Do not swap `subnet_id` for `subnet_ids` on an existing CE: both fields force replacement, so the change would recreate the compute environment. The two fields are mutually exclusive.
+
 # v0.40.3
 
 FEATURES:

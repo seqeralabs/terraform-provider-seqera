@@ -47,6 +47,7 @@ func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, res
 		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.Int64PointerValue(resp.ID)
+		r.IdpGroupName = types.StringPointerValue(resp.IdpGroupName)
 		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.TeamID = types.Int64PointerValue(resp.TeamID)

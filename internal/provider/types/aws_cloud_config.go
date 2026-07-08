@@ -11,6 +11,8 @@ type AwsCloudConfig struct {
 	AllowBuckets              basetypes.ListValue `tfsdk:"allow_buckets"`
 	Arm64Enabled              types.Bool          `tfsdk:"arm64_enabled"`
 	EbsBootSize               types.Int32         `tfsdk:"ebs_boot_size"`
+	EbsEncrypted              types.Bool          `tfsdk:"ebs_encrypted"`
+	EbsKmsKeyID               types.String        `tfsdk:"ebs_kms_key_id"`
 	Ec2KeyPair                types.String        `tfsdk:"ec2_key_pair"`
 	Environment               []ConfigEnvVariable `tfsdk:"environment"`
 	GpuEnabled                types.Bool          `tfsdk:"gpu_enabled"`
@@ -26,5 +28,7 @@ type AwsCloudConfig struct {
 	Region                    types.String        `tfsdk:"region"`
 	SecurityGroups            basetypes.ListValue `tfsdk:"security_groups"`
 	SubnetID                  types.String        `tfsdk:"subnet_id"`
+	SubnetIds                 basetypes.ListValue `tfsdk:"subnet_ids"`
+	VpcID                     types.String        `tfsdk:"vpc_id"`
 	WorkDir                   types.String        `tfsdk:"work_dir"`
 }

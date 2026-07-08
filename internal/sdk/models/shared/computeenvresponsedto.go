@@ -84,6 +84,7 @@ type ComputeEnvResponseDtoResources struct {
 	Cpus           *int     `json:"cpus,omitempty"`
 	DiskSize       *int     `json:"diskSize,omitempty"`
 	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	GpuEnabled     *bool    `json:"gpuEnabled,omitempty"`
 	Gpus           *int     `json:"gpus,omitempty"`
 	InstanceType   *string  `json:"instanceType,omitempty"`
 	Memory         *int     `json:"memory,omitempty"`
@@ -108,6 +109,13 @@ func (c *ComputeEnvResponseDtoResources) GetEstimatedPrice() *float32 {
 		return nil
 	}
 	return c.EstimatedPrice
+}
+
+func (c *ComputeEnvResponseDtoResources) GetGpuEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.GpuEnabled
 }
 
 func (c *ComputeEnvResponseDtoResources) GetGpus() *int {
@@ -143,10 +151,11 @@ type ComputeEnvResponseDto struct {
 	// Whether compute environment is deleted (null means not deleted)
 	Deleted *bool `json:"deleted,omitempty"`
 	// Compute environment description
-	Description  *string      `json:"description,omitempty"`
-	ComputeEnvID *string      `json:"id,omitempty"`
-	Labels       []LabelDbDto `json:"labels,omitempty"`
-	LastUpdated  *time.Time   `json:"lastUpdated,omitempty"`
+	Description                    *string      `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool        `json:"fusionMetricsCollectionEnabled,omitempty"`
+	ComputeEnvID                   *string      `json:"id,omitempty"`
+	Labels                         []LabelDbDto `json:"labels,omitempty"`
+	LastUpdated                    *time.Time   `json:"lastUpdated,omitempty"`
 	// Last time this compute environment was used (null if never used)
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Associated managed identity ID (null if using credentials or none)
@@ -333,6 +342,13 @@ func (c *ComputeEnvResponseDto) GetDescription() *string {
 		return nil
 	}
 	return c.Description
+}
+
+func (c *ComputeEnvResponseDto) GetFusionMetricsCollectionEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.FusionMetricsCollectionEnabled
 }
 
 func (c *ComputeEnvResponseDto) GetComputeEnvID() *string {

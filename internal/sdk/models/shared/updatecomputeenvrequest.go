@@ -3,9 +3,10 @@
 package shared
 
 type UpdateComputeEnvRequest struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
-	Description   *string `json:"description,omitempty"`
-	Name          *string `json:"name,omitempty"`
+	CredentialsID                  *string `json:"credentialsId,omitempty"`
+	Description                    *string `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool   `json:"fusionMetricsCollectionEnabled,omitempty"`
+	Name                           *string `json:"name,omitempty"`
 }
 
 func (u *UpdateComputeEnvRequest) GetCredentialsID() *string {
@@ -20,6 +21,13 @@ func (u *UpdateComputeEnvRequest) GetDescription() *string {
 		return nil
 	}
 	return u.Description
+}
+
+func (u *UpdateComputeEnvRequest) GetFusionMetricsCollectionEnabled() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.FusionMetricsCollectionEnabled
 }
 
 func (u *UpdateComputeEnvRequest) GetName() *string {

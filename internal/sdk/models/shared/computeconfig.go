@@ -1722,7 +1722,10 @@ type AzureCloudConfiguration struct {
 	// ignores any user-supplied value, so this field is computed by the
 	// backend rather than configured.
 	//
-	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	ResourceGroup *string      `json:"resourceGroup,omitempty"`
+	SchedConfig   *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled  *bool        `json:"schedEnabled,omitempty"`
+	Subnets       []string     `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -1852,6 +1855,27 @@ func (a *AzureCloudConfiguration) GetResourceGroup() *string {
 		return nil
 	}
 	return a.ResourceGroup
+}
+
+func (a *AzureCloudConfiguration) GetSchedConfig() *SchedConfig {
+	if a == nil {
+		return nil
+	}
+	return a.SchedConfig
+}
+
+func (a *AzureCloudConfiguration) GetSchedEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.SchedEnabled
+}
+
+func (a *AzureCloudConfiguration) GetSubnets() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Subnets
 }
 
 func (a *AzureCloudConfiguration) GetSubscriptionID() *string {
@@ -2207,7 +2231,9 @@ type GoogleCloudConfiguration struct {
 	// Google Cloud region where the compute environment will be created.
 	// Examples: us-central1, europe-west1, asia-east1
 	//
-	Region *string `json:"region,omitempty"`
+	Region       *string      `json:"region,omitempty"`
+	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
@@ -2321,6 +2347,20 @@ func (g *GoogleCloudConfiguration) GetRegion() *string {
 		return nil
 	}
 	return g.Region
+}
+
+func (g *GoogleCloudConfiguration) GetSchedConfig() *SchedConfig {
+	if g == nil {
+		return nil
+	}
+	return g.SchedConfig
+}
+
+func (g *GoogleCloudConfiguration) GetSchedEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.SchedEnabled
 }
 
 func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
@@ -2814,6 +2854,15 @@ type AWSCloudConfiguration struct {
 	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 	//
 	EbsBootSize *int `json:"ebsBootSize,omitempty"`
+	// Encrypt the boot EBS volume of provisioned instances. Defaults to `false`
+	// (null/absent is treated as `false` — no encryption).
+	//
+	EbsEncrypted *bool `json:"ebsEncrypted,omitempty"`
+	// KMS key ARN used to encrypt the boot EBS volume. Only applied when
+	// `ebs_encrypted` is `true`; when omitted, the account/region default EBS
+	// encryption key is used.
+	//
+	EbsKmsKeyID *string `json:"ebsKmsKeyId,omitempty"`
 	// EC2 key pair name for SSH access to compute instances.
 	// Key pair must exist in the specified region.
 	//
@@ -2872,8 +2921,22 @@ type AWSCloudConfiguration struct {
 	SecurityGroups []string `json:"securityGroups,omitempty"`
 	// Subnet ID where compute instances will be launched.
 	// Must be in the same VPC and region as the compute environment.
+	// Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
 	//
-	SubnetID    *string `json:"subnetId,omitempty"`
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	SubnetID *string `json:"subnetId,omitempty"`
+	// Subnets to launch compute instances into. The first subnet is used for
+	// basic placement; Seqera Intelligent Compute may use all of them. Replaces
+	// the deprecated single-value `subnet_id`, and is mutually exclusive with it.
+	// All subnets must be in the VPC given by `vpc_id` (when set) and in the same
+	// region as the compute environment.
+	//
+	SubnetIds []string `json:"subnetIds,omitempty"`
+	// VPC used to scope subnet and security-group selection. Determines the
+	// network in which EC2 instances are launched.
+	//
+	VpcID       *string `json:"vpcId,omitempty"`
 	WaveEnabled *bool   `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
@@ -2916,6 +2979,20 @@ func (a *AWSCloudConfiguration) GetEbsBootSize() *int {
 		return nil
 	}
 	return a.EbsBootSize
+}
+
+func (a *AWSCloudConfiguration) GetEbsEncrypted() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.EbsEncrypted
+}
+
+func (a *AWSCloudConfiguration) GetEbsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EbsKmsKeyID
 }
 
 func (a *AWSCloudConfiguration) GetEc2KeyPair() *string {
@@ -3028,6 +3105,20 @@ func (a *AWSCloudConfiguration) GetSubnetID() *string {
 		return nil
 	}
 	return a.SubnetID
+}
+
+func (a *AWSCloudConfiguration) GetSubnetIds() []string {
+	if a == nil {
+		return nil
+	}
+	return a.SubnetIds
+}
+
+func (a *AWSCloudConfiguration) GetVpcID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.VpcID
 }
 
 func (a *AWSCloudConfiguration) GetWaveEnabled() *bool {

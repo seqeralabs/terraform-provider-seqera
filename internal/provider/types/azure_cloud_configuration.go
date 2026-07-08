@@ -21,6 +21,9 @@ type AzureCloudConfiguration struct {
 	PreRunScript            types.String        `tfsdk:"pre_run_script"`
 	Region                  types.String        `tfsdk:"region"`
 	ResourceGroup           types.String        `tfsdk:"resource_group"`
+	SchedConfig             *SchedConfig        `tfsdk:"sched_config"`
+	SchedEnabled            types.Bool          `tfsdk:"sched_enabled"`
+	Subnets                 []types.String      `tfsdk:"subnets"`
 	SubscriptionID          types.String        `tfsdk:"subscription_id"`
 	WorkDir                 types.String        `tfsdk:"work_dir"`
 }

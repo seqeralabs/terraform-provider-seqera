@@ -75,6 +75,19 @@ actions:
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
 
+  # Drop idp_group_id from the Terraform resource. It is not manageable via
+  # Terraform (set by the IdP group sync), so ignore it in the read-response
+  # shape and both request shapes to keep it out of the resource schema.
+  - target: $.components.schemas.TeamDbDto.properties.idpGroupId
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.CreateTeamRequest.properties.idpGroupId
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.UpdateTeamRequest.properties.idpGroupId
+    update:
+      x-speakeasy-terraform-ignore: true
+
   # Field descriptions for TeamDbDto
   - target: $.components.schemas.TeamDbDto.properties.teamId
     update:

@@ -42,7 +42,9 @@ type GoogleCloudConfig struct {
 	// Google Cloud region where the compute environment will be created.
 	// Examples: us-central1, europe-west1, asia-east1
 	//
-	Region *string `json:"region,omitempty"`
+	Region       *string      `json:"region,omitempty"`
+	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
@@ -148,6 +150,20 @@ func (g *GoogleCloudConfig) GetRegion() *string {
 		return nil
 	}
 	return g.Region
+}
+
+func (g *GoogleCloudConfig) GetSchedConfig() *SchedConfig {
+	if g == nil {
+		return nil
+	}
+	return g.SchedConfig
+}
+
+func (g *GoogleCloudConfig) GetSchedEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.SchedEnabled
 }
 
 func (g *GoogleCloudConfig) GetServiceAccountEmail() *string {

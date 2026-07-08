@@ -3,9 +3,37 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
+
+type WorkflowLaunchResponseSyntaxParser string
+
+const (
+	WorkflowLaunchResponseSyntaxParserV1 WorkflowLaunchResponseSyntaxParser = "v1"
+	WorkflowLaunchResponseSyntaxParserV2 WorkflowLaunchResponseSyntaxParser = "v2"
+)
+
+func (e WorkflowLaunchResponseSyntaxParser) ToPointer() *WorkflowLaunchResponseSyntaxParser {
+	return &e
+}
+func (e *WorkflowLaunchResponseSyntaxParser) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "v1":
+		fallthrough
+	case "v2":
+		*e = WorkflowLaunchResponseSyntaxParser(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for WorkflowLaunchResponseSyntaxParser: %v", v)
+	}
+}
 
 type WorkflowLaunchResponse struct {
 	CommitID            *string                  `json:"commitId,omitempty"`
@@ -20,24 +48,27 @@ type WorkflowLaunchResponse struct {
 	MainScript          *string                  `json:"mainScript,omitempty"`
 	OptimizationID      *string                  `json:"optimizationId,omitempty"`
 	OptimizationTargets *string                  `json:"optimizationTargets,omitempty"`
-	ParamsText          *string                  `json:"paramsText,omitempty"`
-	Pipeline            *string                  `json:"pipeline,omitempty"`
-	PipelineID          *int64                   `json:"pipelineId,omitempty"`
-	PipelineSchemaID    *int64                   `json:"pipelineSchemaId,omitempty"`
-	PostRunScript       *string                  `json:"postRunScript,omitempty"`
-	PreRunScript        *string                  `json:"preRunScript,omitempty"`
-	PullLatest          *bool                    `json:"pullLatest,omitempty"`
-	Resume              *bool                    `json:"resume,omitempty"`
-	ResumeCommitID      *string                  `json:"resumeCommitId,omitempty"`
-	ResumeDir           *string                  `json:"resumeDir,omitempty"`
-	Revision            *string                  `json:"revision,omitempty"`
-	SchemaName          *string                  `json:"schemaName,omitempty"`
-	SessionID           *string                  `json:"sessionId,omitempty"`
-	StubRun             *bool                    `json:"stubRun,omitempty"`
-	TowerConfig         *string                  `json:"towerConfig,omitempty"`
-	UserSecrets         []string                 `json:"userSecrets,omitempty"`
-	WorkDir             *string                  `json:"workDir,omitempty"`
-	WorkspaceSecrets    []string                 `json:"workspaceSecrets,omitempty"`
+	// Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
+	OutputDir        *string                             `json:"outputDir,omitempty"`
+	ParamsText       *string                             `json:"paramsText,omitempty"`
+	Pipeline         *string                             `json:"pipeline,omitempty"`
+	PipelineID       *int64                              `json:"pipelineId,omitempty"`
+	PipelineSchemaID *int64                              `json:"pipelineSchemaId,omitempty"`
+	PostRunScript    *string                             `json:"postRunScript,omitempty"`
+	PreRunScript     *string                             `json:"preRunScript,omitempty"`
+	PullLatest       *bool                               `json:"pullLatest,omitempty"`
+	Resume           *bool                               `json:"resume,omitempty"`
+	ResumeCommitID   *string                             `json:"resumeCommitId,omitempty"`
+	ResumeDir        *string                             `json:"resumeDir,omitempty"`
+	Revision         *string                             `json:"revision,omitempty"`
+	SchemaName       *string                             `json:"schemaName,omitempty"`
+	SessionID        *string                             `json:"sessionId,omitempty"`
+	StubRun          *bool                               `json:"stubRun,omitempty"`
+	SyntaxParser     *WorkflowLaunchResponseSyntaxParser `json:"syntaxParser,omitempty"`
+	TowerConfig      *string                             `json:"towerConfig,omitempty"`
+	UserSecrets      []string                            `json:"userSecrets,omitempty"`
+	WorkDir          *string                             `json:"workDir,omitempty"`
+	WorkspaceSecrets []string                            `json:"workspaceSecrets,omitempty"`
 }
 
 func (w WorkflowLaunchResponse) MarshalJSON() ([]byte, error) {
@@ -133,6 +164,13 @@ func (w *WorkflowLaunchResponse) GetOptimizationTargets() *string {
 		return nil
 	}
 	return w.OptimizationTargets
+}
+
+func (w *WorkflowLaunchResponse) GetOutputDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.OutputDir
 }
 
 func (w *WorkflowLaunchResponse) GetParamsText() *string {
@@ -231,6 +269,13 @@ func (w *WorkflowLaunchResponse) GetStubRun() *bool {
 		return nil
 	}
 	return w.StubRun
+}
+
+func (w *WorkflowLaunchResponse) GetSyntaxParser() *WorkflowLaunchResponseSyntaxParser {
+	if w == nil {
+		return nil
+	}
+	return w.SyntaxParser
 }
 
 func (w *WorkflowLaunchResponse) GetTowerConfig() *string {

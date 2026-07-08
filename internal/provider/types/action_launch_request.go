@@ -19,6 +19,7 @@ type ActionLaunchRequest struct {
 	MainScript          types.String   `tfsdk:"main_script"`
 	OptimizationID      types.String   `tfsdk:"optimization_id"`
 	OptimizationTargets types.String   `tfsdk:"optimization_targets"`
+	OutputDir           types.String   `tfsdk:"output_dir"`
 	ParamsText          types.String   `tfsdk:"params_text"`
 	Pipeline            types.String   `tfsdk:"pipeline"`
 	PipelineSchemaID    types.Int64    `tfsdk:"pipeline_schema_id"`

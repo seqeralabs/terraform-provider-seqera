@@ -25,11 +25,12 @@ resource "seqera_compute_env" "my_computeenv" {
         work_dir                   = "...my_work_dir..."
       }
     }
-    credentials_id = "...my_credentials_id..."
-    description    = "...my_description..."
-    message        = "...my_message..."
-    name           = "...my_name..."
-    platform       = "google-lifesciences"
+    credentials_id                    = "...my_credentials_id..."
+    description                       = "...my_description..."
+    fusion_metrics_collection_enabled = true
+    message                           = "...my_message..."
+    name                              = "...my_name..."
+    platform                          = "google-lifesciences"
   }
   force = true
   label_ids = [

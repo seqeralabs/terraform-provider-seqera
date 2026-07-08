@@ -231,6 +231,33 @@ func (c *CredentialsInput) GetProviderType() CredentialsProviderType {
 	return c.ProviderType
 }
 
+// CredentialsStatus1 - Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
+type CredentialsStatus1 string
+
+const (
+	CredentialsStatus1Available CredentialsStatus1 = "AVAILABLE"
+	CredentialsStatus1Invalid   CredentialsStatus1 = "INVALID"
+)
+
+func (e CredentialsStatus1) ToPointer() *CredentialsStatus1 {
+	return &e
+}
+func (e *CredentialsStatus1) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "AVAILABLE":
+		fallthrough
+	case "INVALID":
+		*e = CredentialsStatus1(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for CredentialsStatus1: %v", v)
+	}
+}
+
 // CredentialsOutput - Represents credentials used for authentication with various platforms and services.
 // Contains authentication information for accessing cloud providers, Git repositories,
 // and other external services within the Seqera Platform.
@@ -251,6 +278,10 @@ type CredentialsOutput struct {
 	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
 	// Timestamp when the credential was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
+	LastValidated *time.Time `json:"lastValidated,omitempty"`
+	// Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing " (truncated)" suffix when the underlying provider message exceeds that limit.
+	Message *string `json:"message,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud or service provider type. The value must match the corresponding `keys.*` block:
@@ -260,6 +291,8 @@ type CredentialsOutput struct {
 	// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
 	//
 	ProviderType CredentialsProviderType `json:"provider"`
+	// Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
+	Status *CredentialsStatus1 `json:"status,omitempty"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -412,6 +445,20 @@ func (c *CredentialsOutput) GetLastUsed() *time.Time {
 	return c.LastUsed
 }
 
+func (c *CredentialsOutput) GetLastValidated() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.LastValidated
+}
+
+func (c *CredentialsOutput) GetMessage() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Message
+}
+
 func (c *CredentialsOutput) GetName() string {
 	if c == nil {
 		return ""
@@ -424,4 +471,11 @@ func (c *CredentialsOutput) GetProviderType() CredentialsProviderType {
 		return CredentialsProviderType("")
 	}
 	return c.ProviderType
+}
+
+func (c *CredentialsOutput) GetStatus() *CredentialsStatus1 {
+	if c == nil {
+		return nil
+	}
+	return c.Status
 }

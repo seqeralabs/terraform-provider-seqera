@@ -658,8 +658,54 @@ actions:
       description: |
         Subnet ID where compute instances will be launched.
         Must be in the same VPC and region as the compute environment.
+        Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
       example: "subnet-12345678"
       x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators: SubnetConflictsValidator
+
+  - target: $.components.schemas.AwsCloudConfig.properties.subnetIds
+    update:
+      description: |
+        Subnets to launch compute instances into. The first subnet is used for
+        basic placement; Seqera Intelligent Compute may use all of them. Replaces
+        the deprecated single-value `subnet_id`, and is mutually exclusive with it.
+        All subnets must be in the VPC given by `vpc_id` (when set) and in the same
+        region as the compute environment.
+      example: ["subnet-12345678", "subnet-87654321"]
+      x-speakeasy-param-force-new: true
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework/types/basetypes
+        schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
+        valueType: basetypes.ListValue
+
+  - target: $.components.schemas.AwsCloudConfig.properties.vpcId
+    update:
+      description: |
+        VPC used to scope subnet and security-group selection. Determines the
+        network in which EC2 instances are launched.
+      example: "vpc-12345678"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.ebsEncrypted
+    update:
+      description: |
+        Encrypt the boot EBS volume of provisioned instances. Defaults to `false`
+        (null/absent is treated as `false` — no encryption).
+      example: true
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.ebsKmsKeyId
+    update:
+      description: |
+        KMS key ARN used to encrypt the boot EBS volume. Only applied when
+        `ebs_encrypted` is `true`; when omitted, the account/region default EBS
+        encryption key is used.
+      example: "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef"
+      x-speakeasy-param-force-new: true
+      x-speakeasy-plan-validators:
+        - EbsKmsKeyEncryptionValidator
+        - EbsKmsKeyArnValidator
 
   - target: $.components.schemas.AwsCloudConfig.properties.securityGroups
     update:

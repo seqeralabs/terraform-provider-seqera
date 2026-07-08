@@ -2,16 +2,52 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type UpsertUserRequestWaveBuildNotification string
+
+const (
+	UpsertUserRequestWaveBuildNotificationAlwaysOn  UpsertUserRequestWaveBuildNotification = "ALWAYS_ON"
+	UpsertUserRequestWaveBuildNotificationOnError   UpsertUserRequestWaveBuildNotification = "ON_ERROR"
+	UpsertUserRequestWaveBuildNotificationAlwaysOff UpsertUserRequestWaveBuildNotification = "ALWAYS_OFF"
+)
+
+func (e UpsertUserRequestWaveBuildNotification) ToPointer() *UpsertUserRequestWaveBuildNotification {
+	return &e
+}
+func (e *UpsertUserRequestWaveBuildNotification) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ALWAYS_ON":
+		fallthrough
+	case "ON_ERROR":
+		fallthrough
+	case "ALWAYS_OFF":
+		*e = UpsertUserRequestWaveBuildNotification(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for UpsertUserRequestWaveBuildNotification: %v", v)
+	}
+}
+
 type UpsertUserRequest struct {
-	Avatar       *string `json:"avatar,omitempty"`
-	AvatarID     *string `json:"avatarId,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	Email        string  `json:"email"`
-	FirstName    *string `json:"firstName,omitempty"`
-	LastName     *string `json:"lastName,omitempty"`
-	Notification *bool   `json:"notification,omitempty"`
-	Organization *string `json:"organization,omitempty"`
-	UserName     string  `json:"userName"`
+	Avatar                *string                                 `json:"avatar,omitempty"`
+	AvatarID              *string                                 `json:"avatarId,omitempty"`
+	DefaultWorkspaceID    *int64                                  `json:"defaultWorkspaceId,omitempty"`
+	Description           *string                                 `json:"description,omitempty"`
+	Email                 string                                  `json:"email"`
+	FirstName             *string                                 `json:"firstName,omitempty"`
+	LastName              *string                                 `json:"lastName,omitempty"`
+	Notification          *bool                                   `json:"notification,omitempty"`
+	Organization          *string                                 `json:"organization,omitempty"`
+	UserName              string                                  `json:"userName"`
+	WaveBuildNotification *UpsertUserRequestWaveBuildNotification `json:"waveBuildNotification,omitempty"`
 }
 
 func (u *UpsertUserRequest) GetAvatar() *string {
@@ -26,6 +62,13 @@ func (u *UpsertUserRequest) GetAvatarID() *string {
 		return nil
 	}
 	return u.AvatarID
+}
+
+func (u *UpsertUserRequest) GetDefaultWorkspaceID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.DefaultWorkspaceID
 }
 
 func (u *UpsertUserRequest) GetDescription() *string {
@@ -75,4 +118,11 @@ func (u *UpsertUserRequest) GetUserName() string {
 		return ""
 	}
 	return u.UserName
+}
+
+func (u *UpsertUserRequest) GetWaveBuildNotification() *UpsertUserRequestWaveBuildNotification {
+	if u == nil {
+		return nil
+	}
+	return u.WaveBuildNotification
 }

@@ -44,6 +44,7 @@ resource "seqera_teams" "my_teams" {
 
 - `avatar_url` (String) URL to the team's avatar or profile image
 - `id` (Number) Alias of `team_id` for Terraform convention.
+- `idp_group_name` (String)
 - `members_count` (Number) Total number of members in the team
 - `team_id` (Number) Team numeric identifier
 

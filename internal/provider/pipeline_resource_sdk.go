@@ -46,6 +46,7 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			r.Launch.MainScript = types.StringPointerValue(resp.Launch.MainScript)
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
 			r.Launch.OptimizationTargets = types.StringPointerValue(resp.Launch.OptimizationTargets)
+			r.Launch.OutputDir = types.StringPointerValue(resp.Launch.OutputDir)
 			r.Launch.ParamsText = types.StringPointerValue(resp.Launch.ParamsText)
 			r.Launch.Pipeline = types.StringPointerValue(resp.Launch.Pipeline)
 			r.Launch.PipelineSchemaID = types.Int64PointerValue(resp.Launch.PipelineSchemaID)
@@ -312,6 +313,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		mainScript = nil
 	}
+	outputDir := new(string)
+	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
+		*outputDir = r.Launch.OutputDir.ValueString()
+	} else {
+		outputDir = nil
+	}
 	paramsText := new(string)
 	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
 		*paramsText = r.Launch.ParamsText.ValueString()
@@ -404,6 +411,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
+		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,
 		PipelineSchemaID: pipelineSchemaID,
@@ -511,6 +519,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		mainScript = nil
 	}
+	outputDir := new(string)
+	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
+		*outputDir = r.Launch.OutputDir.ValueString()
+	} else {
+		outputDir = nil
+	}
 	paramsText := new(string)
 	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
 		*paramsText = r.Launch.ParamsText.ValueString()
@@ -603,6 +617,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
+		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,
 		PipelineSchemaID: pipelineSchemaID,

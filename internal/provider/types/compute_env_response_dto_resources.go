@@ -10,6 +10,7 @@ type ComputeEnvResponseDtoResources struct {
 	Cpus           types.Int32   `tfsdk:"cpus"`
 	DiskSize       types.Int32   `tfsdk:"disk_size"`
 	EstimatedPrice types.Float32 `tfsdk:"estimated_price"`
+	GpuEnabled     types.Bool    `tfsdk:"gpu_enabled"`
 	Gpus           types.Int32   `tfsdk:"gpus"`
 	InstanceType   types.String  `tfsdk:"instance_type"`
 	Memory         types.Int32   `tfsdk:"memory"`

@@ -81,12 +81,13 @@ type ComputeEnvComputeConfigInput struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config        ComputeConfig                   `json:"config"`
-	CredentialsID string                          `json:"credentialsId"`
-	Description   *string                         `json:"description,omitempty"`
-	Message       *string                         `json:"message,omitempty"`
-	Name          string                          `json:"name"`
-	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
+	Config                         ComputeConfig                   `json:"config"`
+	CredentialsID                  string                          `json:"credentialsId"`
+	Description                    *string                         `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool                           `json:"fusionMetricsCollectionEnabled,omitempty"`
+	Message                        *string                         `json:"message,omitempty"`
+	Name                           string                          `json:"name"`
+	Platform                       ComputeEnvComputeConfigPlatform `json:"platform"`
 }
 
 func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
@@ -178,6 +179,13 @@ func (c *ComputeEnvComputeConfigInput) GetDescription() *string {
 	return c.Description
 }
 
+func (c *ComputeEnvComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.FusionMetricsCollectionEnabled
+}
+
 func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
 	if c == nil {
 		return nil
@@ -244,21 +252,22 @@ type ComputeEnvComputeConfig struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config        ComputeConfig                   `json:"config"`
-	CredentialsID string                          `json:"credentialsId"`
-	DateCreated   *time.Time                      `json:"dateCreated,omitempty"`
-	Deleted       *bool                           `json:"deleted,omitempty"`
-	Description   *string                         `json:"description,omitempty"`
-	ComputeEnvID  *string                         `json:"id,omitempty"`
-	LastUpdated   *time.Time                      `json:"lastUpdated,omitempty"`
-	LastUsed      *time.Time                      `json:"lastUsed,omitempty"`
-	Message       *string                         `json:"message,omitempty"`
-	Name          string                          `json:"name"`
-	OrgID         *int64                          `json:"orgId,omitempty"`
-	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-	Primary       *bool                           `json:"primary,omitempty"`
-	Status        *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
-	WorkspaceID   *int64                          `json:"workspaceId,omitempty"`
+	Config                         ComputeConfig                   `json:"config"`
+	CredentialsID                  string                          `json:"credentialsId"`
+	DateCreated                    *time.Time                      `json:"dateCreated,omitempty"`
+	Deleted                        *bool                           `json:"deleted,omitempty"`
+	Description                    *string                         `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool                           `json:"fusionMetricsCollectionEnabled,omitempty"`
+	ComputeEnvID                   *string                         `json:"id,omitempty"`
+	LastUpdated                    *time.Time                      `json:"lastUpdated,omitempty"`
+	LastUsed                       *time.Time                      `json:"lastUsed,omitempty"`
+	Message                        *string                         `json:"message,omitempty"`
+	Name                           string                          `json:"name"`
+	OrgID                          *int64                          `json:"orgId,omitempty"`
+	Platform                       ComputeEnvComputeConfigPlatform `json:"platform"`
+	Primary                        *bool                           `json:"primary,omitempty"`
+	Status                         *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
+	WorkspaceID                    *int64                          `json:"workspaceId,omitempty"`
 }
 
 func (c ComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {
@@ -373,6 +382,13 @@ func (c *ComputeEnvComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return c.Description
+}
+
+func (c *ComputeEnvComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.FusionMetricsCollectionEnabled
 }
 
 func (c *ComputeEnvComputeConfig) GetComputeEnvID() *string {

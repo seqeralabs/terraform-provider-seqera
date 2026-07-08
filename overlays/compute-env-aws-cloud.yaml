@@ -488,6 +488,76 @@ actions:
         schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
         valueType: basetypes.ListValue
 
+  # Intelligent Compute (sched_config) advanced fields. Shared SchedConfig
+  # schema, so these descriptions/examples apply across AWS/Azure/GCP cloud CEs.
+  - target: $.components.schemas.SchedConfig.properties.backendStrategy
+    update:
+      description: |
+        Backend used by Intelligent Compute to run tasks:
+        - `ECS` (default, AWS only): delegate task execution to AWS ECS.
+        - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+        - `VM` (provider-agnostic): run tasks on cloud VMs.
+      example: "ECS"
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.properties.predictionModel
+    update:
+      description: |
+        Resource-prediction model used by Intelligent Compute to size tasks.
+        Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+        is accepted.
+      example: "none"
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.properties.fusionSnapshots
+    update:
+      description: |
+        Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+        resume from a snapshot instead of restarting from scratch.
+      example: false
+      x-speakeasy-param-force-new: true
+  # diskAllocation is the real persisted field. The backend also exposes
+  # nvmeEnabled as a synthetic boolean view over it (getNvmeEnabled() ==
+  # diskAllocation == 'nvme'), which carries no independent value — so keep
+  # disk_allocation and ignore the nvme_enabled helper below.
+  - target: $.components.schemas.SchedConfig.properties.diskAllocation
+    update:
+      description: |
+        Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+        restrict to instance types that provide local SSD (NVMe) storage. Leave
+        unset for no local-storage requirement.
+      example: "nvme"
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.properties.nvmeEnabled
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SchedConfig.properties.pool
+    update:
+      description: |
+        Warm-pool configuration. When present and enabled, the scheduler keeps a
+        pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.Pool.properties.enabled
+    update:
+      description: |
+        Whether the warm pool is active for this compute environment. When
+        `false`, the scheduler will not maintain idle VMs.
+      example: true
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.Pool.properties.desiredWarm
+    update:
+      description: |
+        Target number of idle VMs to keep warm. Bounds total warm-VM cost across
+        all of this compute environment's pool clusters.
+      example: 1
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.Pool.properties.scaleToZeroSecs
+    update:
+      description: |
+        Seconds of inactivity after which the warm pool scales to zero. Set to `0`
+        to never scale to zero.
+      example: 300
+      x-speakeasy-param-force-new: true
+
   # Plan-time soft-warn when pre/post-run scripts exceed Platform Cloud's
   # 1024-byte limit. Enterprise installs can raise the limit via platform
   # configuration, so this stays a Warning rather than an Error.

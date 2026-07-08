@@ -94,6 +94,9 @@ resource "seqera_workflows" "with_params" {
 - `head_job_memory_mb` (Number) Head job memory allocation in MB. Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
 - `main_script` (String) Main script path. Requires replacement if changed.
+- `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+Nextflow 24.10.0 or later and the workflow outputs syntax.
+Requires replacement if changed.
 - `params_text` (String) Pipeline parameters text. Requires replacement if changed.
 - `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
