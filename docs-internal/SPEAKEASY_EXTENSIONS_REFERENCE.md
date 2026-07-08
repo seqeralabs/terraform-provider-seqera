@@ -160,7 +160,11 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 #### x-speakeasy-entity-version
 - **Purpose**: Specify Terraform resource schema version for state migration
 - **Level**: Schema
-- **Note**: Use sparingly; adding/removing attributes doesn't require versioning
+- **Note**: Use sparingly; adding/removing attributes doesn't require versioning.
+  Only bump for a breaking type change or a rename. When you do bump it, the
+  matching state upgrader **must** follow the default pattern in
+  [STATE_UPGRADER_GUIDE.md](./STATE_UPGRADER_GUIDE.md), or prior state will fail
+  to upgrade with an "unsupported attribute" error.
 
 #### x-speakeasy-entity-description
 - **Purpose**: Provide description for the Terraform resource

@@ -41,6 +41,7 @@ resource "seqera_azure_batch_ce" "minimal" {
       vm_count            = 5
       auto_scale          = true
       dispose_on_deletion = true
+      boot_disk_size_gb   = 100
     }
   }
 }
@@ -64,14 +65,16 @@ resource "seqera_azure_batch_ce" "dual_pool" {
       dual_pool_config    = true
       dispose_on_deletion = true
       head_pool = {
-        vm_type    = "Standard_E8s_v3"
-        vm_count   = 1
-        auto_scale = false
+        vm_type           = "Standard_E8s_v3"
+        vm_count          = 1
+        auto_scale        = false
+        boot_disk_size_gb = 200
       }
       worker_pool = {
-        vm_type    = "Standard_D4s_v3"
-        vm_count   = 10
-        auto_scale = true
+        vm_type           = "Standard_D4s_v3"
+        vm_count          = 10
+        auto_scale        = true
+        boot_disk_size_gb = 100
       }
     }
   }

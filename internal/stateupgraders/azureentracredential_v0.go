@@ -6,6 +6,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
+// AzureentracredentialStateUpgraderV0 upgrades seqera_azure_entra_credential state to the current schema by re-decoding prior state
+// against it, dropping any attribute the schema no longer defines. See
+// docs-internal/STATE_UPGRADER_GUIDE.md.
 func AzureentracredentialStateUpgraderV0(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	// No-op
+	upgradeToCurrentSchema("seqera_azure_entra_credential", req, resp, nil)
 }
