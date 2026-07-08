@@ -20,9 +20,10 @@ description: |-
 - [`seqera_azure_cloud_ce`](azure_cloud_ce.md)
 - [`seqera_gcp_batch_ce`](gcp_batch_ce.md)
 - [`seqera_gcp_cloud_ce`](gcp_cloud_ce.md)
+- [`seqera_slurm_ce`](slurm_ce.md)
 - [`seqera_managed_compute_ce`](managed_compute_ce.md)
 
-State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, Slurm, LSF, and other on-premises schedulers.
+State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). Typed resources also import cleanly — importing an existing compute environment into `seqera_compute_env` panics because its polymorphic `compute_env` block is null on read ([issue #226](https://github.com/seqeralabs/terraform-provider-seqera/issues/226)); use the platform-specific resource for imports. `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, LSF, and other on-premises schedulers.
 
 This resource allows the management of Seqera compute environments.
 

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: c797d07e4e8c42002edba90b190e8c1e
+  docChecksum: e1a213dab64dd4cfb1064ceeacad47f3
   docVersion: 1.159.0
   speakeasyVersion: 1.789.0
   generationVersion: 2.916.2
-  releaseVersion: 0.40.2
-  configChecksum: be5287cb9bc8dbd12dec8d589bf94764
+  releaseVersion: 0.40.3
+  configChecksum: 99c739d6c31594a4596ff53638a66879
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -184,6 +184,8 @@ trackedFiles:
   examples/resources/seqera_pipeline_secret/import.sh:
     id: aba12e768acd
     pristine_git_object: 4d69188d92974da17d3f96e317dcd1fea7e8c561
+  examples/resources/seqera_slurm_ce/import-by-string-id.tf: {}
+  examples/resources/seqera_slurm_ce/import.sh: {}
   examples/resources/seqera_ssh_credential/import-by-string-id.tf:
     id: 5366e17fedde
     pristine_git_object: ee758781cdb46ddb1cab63a1de1d3af84e3784e1
@@ -521,6 +523,8 @@ trackedFiles:
   internal/provider/reflect/struct.go:
     id: 973d7dbf96c1
     pristine_git_object: c588f768bd7b39be33962188f97d81e1c4c25f4b
+  internal/provider/slurmce_resource.go: {}
+  internal/provider/slurmce_resource_sdk.go: {}
   internal/provider/sshcredential_resource.go:
     id: 7eb281c9649c
     pristine_git_object: 47f7c6e152f7cecdcbd982d27de12746f870a355
@@ -954,6 +958,7 @@ trackedFiles:
     id: dc4aa186bbf0
     pristine_git_object: 81824dc902542ca5df67fd3e8471d0cdcfbec4f0
   internal/sdk/models/operations/createrole.go: {}
+  internal/sdk/models/operations/createslurmce.go: {}
   internal/sdk/models/operations/createsshcredentials.go:
     id: bb07e307e98d
     pristine_git_object: 6c563cdf9cdb0bb367bd75af33519abd3df2322b
@@ -1084,6 +1089,7 @@ trackedFiles:
     id: 1d3d8285b502
     pristine_git_object: 8171786108b1cd0aae18b59bf45ba2f54b097f6c
   internal/sdk/models/operations/deleterole.go: {}
+  internal/sdk/models/operations/deleteslurmce.go: {}
   internal/sdk/models/operations/deletesshcredentials.go:
     id: 0e155693ad42
     pristine_git_object: 7204e26899e962331a230cdc9c8dcd4c2d383b21
@@ -1215,6 +1221,7 @@ trackedFiles:
     id: b9d79baea717
     pristine_git_object: aa8639c7f649618febf4911e27d6e88b47376523
   internal/sdk/models/operations/describerole.go: {}
+  internal/sdk/models/operations/describeslurmce.go: {}
   internal/sdk/models/operations/describesshcredentials.go:
     id: a85ddc2ebbb2
     pristine_git_object: 269951ab0f95723155436b936287eb6e117bd89b
@@ -1593,6 +1600,7 @@ trackedFiles:
     pristine_git_object: 91005128b148d00961beba2df4584c7aae183ea2
   internal/sdk/models/operations/updatepipelineversion.go: {}
   internal/sdk/models/operations/updaterole.go: {}
+  internal/sdk/models/operations/updateslurmce.go: {}
   internal/sdk/models/operations/updatesshcredentials.go:
     id: c3e32df7fc4c
     pristine_git_object: f4d49f6a36c2d3c57dd6c96c3d09559e95e0ff15
@@ -1981,6 +1989,8 @@ trackedFiles:
   internal/sdk/models/shared/createpipelineversionrequest.go: {}
   internal/sdk/models/shared/createrolerequest.go: {}
   internal/sdk/models/shared/createroleresponse.go: {}
+  internal/sdk/models/shared/createslurmcerequest.go: {}
+  internal/sdk/models/shared/createslurmceresponse.go: {}
   internal/sdk/models/shared/createsshcredentialsrequest.go:
     id: 102d56444714
     pristine_git_object: 03fd93884bf0447227de0de04345b77b76d9411b
@@ -2254,6 +2264,7 @@ trackedFiles:
     id: f42987bfff26
     pristine_git_object: 69c9e3a2125cfe44213fea0df88b62c456a7ea34
   internal/sdk/models/shared/describeroleresponse.go: {}
+  internal/sdk/models/shared/describeslurmceresponse.go: {}
   internal/sdk/models/shared/describesshcredentialsresponse.go:
     id: db6455452f9f
     pristine_git_object: 70db4cabf5ff71f84ca0511cb0eb28fcac723c8c
@@ -2622,6 +2633,7 @@ trackedFiles:
   internal/sdk/models/shared/serviceinforesponse.go:
     id: c3defb5867b6
     pristine_git_object: b5c4b72bb15e4d5db70f09634a5933e3abaa38ea
+  internal/sdk/models/shared/slurmcecomputeconfiginput.go: {}
   internal/sdk/models/shared/sourcetype.go: {}
   internal/sdk/models/shared/sshcredential.go:
     id: 1a87a201cd9a
@@ -6173,6 +6185,52 @@ examples:
           credentialsId: "<id>"
         query:
           workspaceId: 867972
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateSlurmCE:
+    speakeasy-default-create-slurm-CE:
+      parameters:
+        query:
+          workspaceId: 122875
+      requestBody:
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "slurm-platform", "work_dir": "/scratch/users/me/work"}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeSlurmCE:
+    speakeasy-default-describe-slurm-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 891484
+      responses:
+        "200":
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "slurm-platform", "work_dir": "/scratch/users/me/work"}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateSlurmCE:
+    speakeasy-default-update-slurm-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 505481
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteSlurmCE:
+    speakeasy-default-delete-slurm-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 659062
       responses:
         "400":
           application/json: {"message": "<value>"}

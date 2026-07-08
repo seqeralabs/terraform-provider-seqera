@@ -2,7 +2,7 @@
 page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
 {{- if or (eq .Name "seqera_aws_credential") (eq .Name "seqera_azure_credential") (eq .Name "seqera_azure_cloud_credential") (eq .Name "seqera_azure_entra_credential") (eq .Name "seqera_bitbucket_credential") (eq .Name "seqera_codecommit_credential") (eq .Name "seqera_container_registry_credential") (eq .Name "seqera_credential") (eq .Name "seqera_gitea_credential") (eq .Name "seqera_github_credential") (eq .Name "seqera_gitlab_credential") (eq .Name "seqera_google_credential") (eq .Name "seqera_kubernetes_credential") (eq .Name "seqera_ssh_credential") (eq .Name "seqera_tower_agent_credential") }}
 subcategory: "Credentials"
-{{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_cloud_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_azure_batch_ce") (eq .Name "seqera_azure_cloud_ce") (eq .Name "seqera_compute_env") (eq .Name "seqera_gcp_batch_ce") (eq .Name "seqera_gcp_cloud_ce") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_primary_compute_env") }}
+{{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_cloud_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_azure_batch_ce") (eq .Name "seqera_azure_cloud_ce") (eq .Name "seqera_compute_env") (eq .Name "seqera_gcp_batch_ce") (eq .Name "seqera_gcp_cloud_ce") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_slurm_ce") (eq .Name "seqera_primary_compute_env") }}
 subcategory: "Compute Environments"
 {{- else if or (eq .Name "seqera_action") (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") (eq .Name "seqera_workflows") }}
 subcategory: "Pipelines"
@@ -36,9 +36,10 @@ description: |-
 - [`seqera_azure_cloud_ce`](azure_cloud_ce.md)
 - [`seqera_gcp_batch_ce`](gcp_batch_ce.md)
 - [`seqera_gcp_cloud_ce`](gcp_cloud_ce.md)
+- [`seqera_slurm_ce`](slurm_ce.md)
 - [`seqera_managed_compute_ce`](managed_compute_ce.md)
 
-State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, Slurm, LSF, and other on-premises schedulers.
+State migrates via a [`moved {}`](https://developer.hashicorp.com/terraform/language/moved) block (see the upgrade guide). Typed resources also import cleanly — importing an existing compute environment into `seqera_compute_env` panics because its polymorphic `compute_env` block is null on read ([issue #226](https://github.com/seqeralabs/terraform-provider-seqera/issues/226)); use the platform-specific resource for imports. `seqera_compute_env` remains supported for platforms without a first-class resource: Kubernetes, EKS, GKE, LSF, and other on-premises schedulers.
 {{- else if eq .Name "seqera_credential" }}
 
 ~> **Prefer a typed credential resource.** New workspace-scoped configurations should use one of:

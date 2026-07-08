@@ -47,7 +47,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.40.2"
+      version = "0.40.3"
     }
   }
 }
@@ -113,6 +113,7 @@ Available configuration:
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
 * [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
 * [seqera_ssh_credential](docs/resources/ssh_credential.md)
+* [seqera_slurm_ce](docs/resources/slurm_ce.md)
 * [seqera_studios](docs/resources/studios.md)
 * [seqera_teams](docs/resources/teams.md)
 * [seqera_tokens](docs/resources/tokens.md)
