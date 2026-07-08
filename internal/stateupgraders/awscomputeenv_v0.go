@@ -2,86 +2,22 @@ package stateupgraders
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
-// AwscomputeenvStateUpgraderV0 migrates the state from version 0 to version 1
-// This handles the field rename from nvnme_storage_enabled to nvme_storage_enabled
+// AwscomputeenvStateUpgraderV0 migrates seqera_aws_compute_env state from schema
+// version 0 to the current schema: it renames the misspelled
+// `nvnme_storage_enabled` flag, then re-decodes against the current schema,
+// dropping any attribute the schema no longer defines. See
+// docs-internal/STATE_UPGRADER_GUIDE.md.
 func AwscomputeenvStateUpgraderV0(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	// Unmarshal the raw state (JSON format from Terraform state file)
-	var rawState map[string]interface{}
-	err := json.Unmarshal(req.RawState.JSON, &rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Unmarshal Prior State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Navigate to the config object and perform the migration
-	if config, ok := rawState["config"].(map[string]interface{}); ok {
-		if oldValue, exists := config["nvnme_storage_enabled"]; exists {
-			// Copy the value to the new field name
-			config["nvme_storage_enabled"] = oldValue
-			// Remove the old field name
-			delete(config, "nvnme_storage_enabled")
-		}
-	}
-
-	// Marshal the updated state back to JSON
-	upgradedStateJSON, err := json.Marshal(rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Marshal Upgraded State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Set the upgraded state as raw JSON
-	resp.DynamicValue = &tfprotov6.DynamicValue{
-		JSON: upgradedStateJSON,
-	}
+	upgradeToCurrentSchema("seqera_aws_compute_env", req, resp, renameNvmeStorageFlag)
 }
 
-// AwscomputeenvStateUpgraderV1 migrates the state from version 1 to version 2
-// This handles the field rename from compute_env_id to id
+// AwscomputeenvStateUpgraderV1 migrates seqera_aws_compute_env state by renaming
+// the root `compute_env_id` attribute to `id`, then re-decoding against the
+// current schema.
 func AwscomputeenvStateUpgraderV1(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	// Unmarshal the raw state (JSON format from Terraform state file)
-	var rawState map[string]interface{}
-	err := json.Unmarshal(req.RawState.JSON, &rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Unmarshal Prior State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Rename compute_env_id to id at the root level
-	if oldValue, exists := rawState["compute_env_id"]; exists {
-		// Copy the value to the new field name
-		rawState["id"] = oldValue
-		// Remove the old field name
-		delete(rawState, "compute_env_id")
-	}
-
-	// Marshal the updated state back to JSON
-	upgradedStateJSON, err := json.Marshal(rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Marshal Upgraded State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Set the upgraded state as raw JSON
-	resp.DynamicValue = &tfprotov6.DynamicValue{
-		JSON: upgradedStateJSON,
-	}
+	upgradeToCurrentSchema("seqera_aws_compute_env", req, resp, renameComputeEnvIDToID)
 }

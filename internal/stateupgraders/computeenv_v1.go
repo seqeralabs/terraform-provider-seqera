@@ -2,61 +2,66 @@ package stateupgraders
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
-// ComputeenvStateUpgraderV1 migrates the state from version 1 to version 2.
+// ComputeenvStateUpgraderV1 migrates seqera_compute_env state from schema
+// version 1 (e.g. provider v0.30.x) to the current schema (issue #228).
 //
-// Azure Batch breaking change: in v0.30.x, `config.azure_batch.delete_jobs_on_completion`
-// was a settable string field (e.g. "on_success", "on_failure"). In v0.40.0 the field
-// is read-only and is replaced by three new boolean fields:
-//   - delete_jobs_on_completion_enabled
-//   - delete_pools_on_completion
-//   - delete_tasks_on_completion
+// Two classes of change occur between v1 and the current schema:
 //
-// Without this upgrader, users carrying old state would see a spurious "null -> true"
-// diff on `delete_jobs_on_completion_enabled` after they update their config, which
-// would force a resource replacement. We translate any non-empty old string value
-// into delete_jobs_on_completion_enabled = true so the plan stays clean.
+//   - Attribute removals — the top-level `compute_env.deleted` bool, and various
+//     per-platform config fields (e.g. `config.aws_cloud.enable_fusion`,
+//     `enable_wave`). These are NOT handled explicitly; upgradeToCurrentSchema
+//     re-decodes against the current schema and drops every removed attribute at
+//     any nesting depth.
+//
+//   - Value transforms — the Azure Batch `delete_jobs_on_completion` string was
+//     superseded by the boolean `delete_jobs_on_completion_enabled`, which needs
+//     an explicit derivation (applyComputeEnvV2Migrations).
 func ComputeenvStateUpgraderV1(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	var rawState map[string]interface{}
-	err := json.Unmarshal(req.RawState.JSON, &rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Unmarshal Prior State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Navigate to config.azure_batch and migrate delete_jobs_on_completion.
-	if config, ok := rawState["config"].(map[string]interface{}); ok {
-		if azureBatch, ok := config["azure_batch"].(map[string]interface{}); ok {
-			if oldValue, exists := azureBatch["delete_jobs_on_completion"]; exists {
-				if s, ok := oldValue.(string); ok && s != "" {
-					// Only set the new flag if the user previously asked for cleanup.
-					// Don't overwrite an explicit false the user may have set.
-					if _, alreadySet := azureBatch["delete_jobs_on_completion_enabled"]; !alreadySet {
-						azureBatch["delete_jobs_on_completion_enabled"] = true
-					}
-				}
-			}
+	upgradeToCurrentSchema("seqera_compute_env", req, resp, func(rawState map[string]interface{}) {
+		if computeEnv, ok := rawState["compute_env"].(map[string]interface{}); ok {
+			applyComputeEnvV2Migrations(computeEnv)
 		}
-	}
+	})
+}
 
-	upgradedStateJSON, err := json.Marshal(rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Marshal Upgraded State",
-			err.Error(),
-		)
+// applyComputeEnvV2Migrations performs the *value* transforms needed to carry a
+// prior `compute_env` object forward to the current schema. Attribute *removals*
+// are intentionally not handled here — upgradeToCurrentSchema drops every
+// attribute absent from the current schema automatically. This function only
+// handles changes that derive a new value from an old one, and is shared by the
+// v0 and v1 upgraders (the framework does not chain upgraders, so each migrates
+// its version directly to the current schema).
+func applyComputeEnvV2Migrations(computeEnv map[string]interface{}) {
+	config, ok := computeEnv["config"].(map[string]interface{})
+	if !ok {
+		return
+	}
+	azureBatch, ok := config["azure_batch"].(map[string]interface{})
+	if !ok {
 		return
 	}
 
-	resp.DynamicValue = &tfprotov6.DynamicValue{
-		JSON: upgradedStateJSON,
+	// Azure Batch: the legacy settable string `delete_jobs_on_completion`
+	// ("on_success", "always", "never") was replaced by the boolean
+	// `delete_jobs_on_completion_enabled`. Derive the boolean from the old string
+	// so the plan stays clean, but never overwrite a value the user already set.
+	oldValue, exists := azureBatch["delete_jobs_on_completion"]
+	if !exists {
+		return
+	}
+	if _, alreadySet := azureBatch["delete_jobs_on_completion_enabled"]; alreadySet {
+		return
+	}
+	if s, ok := oldValue.(string); ok {
+		switch s {
+		case "always", "on_success":
+			azureBatch["delete_jobs_on_completion_enabled"] = true
+		case "never":
+			azureBatch["delete_jobs_on_completion_enabled"] = false
+		}
 	}
 }

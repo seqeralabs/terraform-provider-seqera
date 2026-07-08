@@ -19,6 +19,14 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 - Usage notes and common patterns
 - Important warnings about non-existent or deprecated extensions
 
+### [STATE_UPGRADER_GUIDE.md](./STATE_UPGRADER_GUIDE.md)
+The **default** pattern for writing state upgraders so prior state upgrades
+cleanly (no "unsupported attribute" errors when the schema drops fields). Covers:
+- When a schema version bump / upgrader is actually needed (rarely)
+- Why hand-stripping removed attributes is wrong, and the framework mechanism behind it
+- The inject-schema + lenient-re-decode pattern (since Speakeasy can't emit `PriorSchema`)
+- Testing against the real schema and end-to-end verification
+
 ## Audience
 
 These guides are for:

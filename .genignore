@@ -33,11 +33,39 @@ internal/validators/objectvalidators/sched_config_consistency_validator.go
 internal/validators/boolvalidators/graviton_validator.go
 internal/validators/stringvalidators/work_dir_format_validator.go
 
-# Custom state upgraders for field renames and migrations
-internal/stateupgraders/awsbatchce_v0.go
-internal/stateupgraders/awscomputeenv_v0.go
-internal/stateupgraders/computeenv_v0.go
+# Custom state upgraders — all follow the default lenient-decode pattern
+# (docs-internal/STATE_UPGRADER_GUIDE.md); hand-maintained, not regenerated.
+internal/stateupgraders/upgrade.go
 internal/stateupgraders/action_v0.go
+internal/stateupgraders/awsbatchce_v0.go
+internal/stateupgraders/awscloudce_v0.go
+internal/stateupgraders/awscomputeenv_v0.go
+internal/stateupgraders/awscredential_v0.go
+internal/stateupgraders/azurebatchce_v0.go
+internal/stateupgraders/azurecloudce_v0.go
+internal/stateupgraders/azurecloudcredential_v0.go
+internal/stateupgraders/azurecredential_v0.go
+internal/stateupgraders/azureentracredential_v0.go
+internal/stateupgraders/bitbucketcredential_v0.go
+internal/stateupgraders/codecommitcredential_v0.go
+internal/stateupgraders/computeenv_v0.go
+internal/stateupgraders/computeenv_v1.go
+internal/stateupgraders/containerregistrycredential_v0.go
+internal/stateupgraders/credential_v0.go
+internal/stateupgraders/customrole_v0.go
+internal/stateupgraders/gcpbatchce_v0.go
+internal/stateupgraders/gcpcloudce_v0.go
+internal/stateupgraders/giteacredential_v0.go
+internal/stateupgraders/githubappcredential_v0.go
+internal/stateupgraders/githubcredential_v0.go
+internal/stateupgraders/gitlabcredential_v0.go
+internal/stateupgraders/googlecredential_v0.go
+internal/stateupgraders/kubernetescredential_v0.go
+internal/stateupgraders/managedcomputece_v0.go
+internal/stateupgraders/sshcredential_v0.go
+internal/stateupgraders/toweragentcredential_v0.go
+internal/provider/stateupgrader_schemas.go
+internal/provider/computeenv_upgrade_decode_test.go
 
 # Custom examples that should be manually maintained
 examples/resources/seqera_pipeline/resource*.tf

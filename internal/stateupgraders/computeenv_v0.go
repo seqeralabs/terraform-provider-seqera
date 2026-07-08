@@ -2,48 +2,31 @@ package stateupgraders
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
-// ComputeenvStateUpgraderV0 migrates the state from version 0 to version 1
-// This handles the field rename from nvnme_storage_enabled to nvme_storage_enabled
+// ComputeenvStateUpgraderV0 migrates seqera_compute_env state from schema
+// version 0 (e.g. provider v0.25.x) directly to the current schema. The plugin
+// framework does not chain upgraders, so this applies every migration between v0
+// and the current schema:
+//
+//   - v0 -> v1: rename the misspelled `nvnme_storage_enabled` flag to
+//     `nvme_storage_enabled` (renameNvmeStorageFlag).
+//   - v1 -> current: derive the Azure Batch delete_jobs_on_completion boolean
+//     (applyComputeEnvV2Migrations).
+//
+// Attribute removals are not enumerated — upgradeToCurrentSchema drops every
+// attribute absent from the current schema.
 func ComputeenvStateUpgraderV0(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	// Unmarshal the raw state (JSON format from Terraform state file)
-	var rawState map[string]interface{}
-	err := json.Unmarshal(req.RawState.JSON, &rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Unmarshal Prior State",
-			err.Error(),
-		)
-		return
-	}
+	upgradeToCurrentSchema("seqera_compute_env", req, resp, func(rawState map[string]interface{}) {
+		// Rename the misspelled nvme flag before re-decoding; otherwise the
+		// misspelled key (absent from the current schema) would be dropped
+		// instead of carried to the new name.
+		renameNvmeStorageFlag(rawState)
 
-	// Navigate to the config object and perform the migration
-	if config, ok := rawState["config"].(map[string]interface{}); ok {
-		if oldValue, exists := config["nvnme_storage_enabled"]; exists {
-			// Copy the value to the new field name
-			config["nvme_storage_enabled"] = oldValue
-			// Remove the old field name
-			delete(config, "nvnme_storage_enabled")
+		if computeEnv, ok := rawState["compute_env"].(map[string]interface{}); ok {
+			applyComputeEnvV2Migrations(computeEnv)
 		}
-	}
-
-	// Marshal the updated state back to JSON
-	upgradedStateJSON, err := json.Marshal(rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Marshal Upgraded State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Set the upgraded state as raw JSON
-	resp.DynamicValue = &tfprotov6.DynamicValue{
-		JSON: upgradedStateJSON,
-	}
+	})
 }

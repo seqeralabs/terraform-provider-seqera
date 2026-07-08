@@ -2,52 +2,15 @@ package stateupgraders
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )
 
-// ActionStateUpgraderV0 migrates the state from version 0 to version 1
-// This handles the field rename from nvnme_storage_enabled to nvme_storage_enabled in compute_env config
+// ActionStateUpgraderV0 migrates seqera_action state from schema version 0 to the
+// current schema. It renames the misspelled `nvnme_storage_enabled` flag in the
+// embedded compute-env config, then re-decodes against the current schema,
+// dropping any attribute the schema no longer defines. See
+// docs-internal/STATE_UPGRADER_GUIDE.md.
 func ActionStateUpgraderV0(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	// Unmarshal the raw state (JSON format from Terraform state file)
-	var rawState map[string]interface{}
-	err := json.Unmarshal(req.RawState.JSON, &rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Unmarshal Prior State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Navigate to the launch -> compute_env -> config object and perform the migration
-	if launch, ok := rawState["launch"].(map[string]interface{}); ok {
-		if computeEnv, ok := launch["compute_env"].(map[string]interface{}); ok {
-			if config, ok := computeEnv["config"].(map[string]interface{}); ok {
-				if oldValue, exists := config["nvnme_storage_enabled"]; exists {
-					// Copy the value to the new field name
-					config["nvme_storage_enabled"] = oldValue
-					// Remove the old field name
-					delete(config, "nvnme_storage_enabled")
-				}
-			}
-		}
-	}
-
-	// Marshal the updated state back to JSON
-	upgradedStateJSON, err := json.Marshal(rawState)
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Marshal Upgraded State",
-			err.Error(),
-		)
-		return
-	}
-
-	// Set the upgraded state as raw JSON
-	resp.DynamicValue = &tfprotov6.DynamicValue{
-		JSON: upgradedStateJSON,
-	}
+	upgradeToCurrentSchema("seqera_action", req, resp, renameNvmeStorageFlag)
 }
