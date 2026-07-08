@@ -81,6 +81,7 @@ examples/resources/seqera_azure_batch_ce/resource*.tf
 examples/resources/seqera_azure_cloud_ce/resource*.tf
 examples/resources/seqera_gcp_batch_ce/resource*.tf
 examples/resources/seqera_gcp_cloud_ce/resource*.tf
+examples/resources/seqera_slurm_ce/resource*.tf
 examples/resources/seqera_managed_compute_ce/resource*.tf
 examples/resources/seqera_pipeline_secret/resource*.tf
 examples/resources/seqera_studios/resource*.tf

@@ -11557,6 +11557,216 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  "/compute-envs#slurm":
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SlurmCE#create
+      x-speakeasy-name-override: CreateSlurmCE
+      summary: Create Slurm compute environment
+      description: Creates a new Slurm compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
+      tags:
+        - compute-envs
+      operationId: CreateSlurmCE
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Slurm compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSlurmCERequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSlurmCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#slurm":
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SlurmCE#read
+      # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+      x-speakeasy-entity-missing-codes:
+        - 400
+        - 404
+      x-speakeasy-name-override: DescribeSlurmCE
+      summary: Describe Slurm compute environment
+      description: Retrieves the details of the Slurm compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeSlurmCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeSlurmCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SlurmCE#update
+      x-speakeasy-name-override: UpdateSlurmCE
+      summary: Update Slurm compute environment
+      description: Updates name, description, or credentials of the compute environment identified by the given `computeEnvId`. Other fields require resource replacement.
+      tags:
+        - compute-envs
+      operationId: UpdateSlurmCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Compute environment update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComputeEnvRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SlurmCE#delete
+      x-speakeasy-name-override: DeleteSlurmCE
+      summary: Delete Slurm compute environment
+      description: Deletes the Slurm compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteSlurmCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   /credentials#aws:
     post:
       x-speakeasy-entity-operation:
@@ -24513,6 +24723,211 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
+    # Slurm compute environment schema.
+    #
+    # Uses transform-based hoisting (see docs-internal/OVERLAY_GUIDE.md →
+    # Hoisting Nested API Structures), like seqera_managed_compute_ce. The
+    # platform wire format is `{ name, credentialsId, ..., config: { workDir,
+    # hostName, ... } }`. The jq transforms flatten `config.*` to the resource
+    # root on read and re-nest on write, so the Terraform schema exposes
+    # `work_dir`, `host_name`, `user_name`, etc. directly with no `config`
+    # block. The write transform also injects `discriminator: "slurm-platform"`
+    # — the API classifies the platform from that discriminator (the read-only
+    # top-level `platform` field is not sent on create).
+    SlurmCE_ComputeConfig:
+      x-speakeasy-entity: SlurmCE
+      x-speakeasy-entity-description: |
+        Manage Slurm compute environments in Seqera platform.
+
+        Slurm compute environments run Nextflow pipelines on an existing Slurm
+        HPC cluster. Seqera connects to the cluster's login/head node over SSH
+        (via the referenced `seqera_ssh_credential`) and submits the Nextflow
+        head job to Slurm, which in turn schedules the pipeline tasks.
+      x-speakeasy-transform-from-api:
+        jq: '. + { work_dir: .config.workDir, launch_dir: .config.launchDir, user_name: .config.userName, host_name: .config.hostName, port: .config.port, head_queue: .config.headQueue, compute_queue: .config.computeQueue, max_queue_size: .config.maxQueueSize, head_job_options: .config.headJobOptions, propagate_head_job_options: .config.propagateHeadJobOptions, pre_run_script: .config.preRunScript, post_run_script: .config.postRunScript, nextflow_config: .config.nextflowConfig, environment: .config.environment } | del(.config)'
+      x-speakeasy-transform-to-api:
+        jq: '. + { config: { discriminator: "slurm-platform", workDir: .work_dir, launchDir: .launch_dir, userName: .user_name, hostName: .host_name, port: .port, headQueue: .head_queue, computeQueue: .compute_queue, maxQueueSize: .max_queue_size, headJobOptions: .head_job_options, propagateHeadJobOptions: .propagate_head_job_options, preRunScript: .pre_run_script, postRunScript: .post_run_script, nextflowConfig: .nextflow_config, environment: .environment } } | del(.work_dir, .launch_dir, .user_name, .host_name, .port, .head_queue, .compute_queue, .max_queue_size, .head_job_options, .propagate_head_job_options, .pre_run_script, .post_run_script, .nextflow_config, .environment)'
+      required:
+        - name
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: SSH credentials identifier used to connect to the Slurm cluster.
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+        description:
+          type: string
+          description: Optional description of the compute environment
+        platform:
+          type: string
+          enum:
+            - slurm-platform
+          default: slurm-platform
+          description: Platform type. Always "slurm-platform" for this resource — set by the provider, not user-configurable.
+          x-speakeasy-param-readonly: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        # --- Slurm config fields, hoisted from `config` via the jq transforms above ---
+        work_dir:
+          type: string
+          description: Working directory on a filesystem shared across the cluster nodes.
+          example: "/scratch/users/me/work"
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
+        launch_dir:
+          type: string
+          description: Directory from which the Nextflow head job is launched. Defaults to the work directory if unset.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        user_name:
+          type: string
+          description: Username for the SSH connection to the Slurm login/head node.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        host_name:
+          type: string
+          description: Hostname of the Slurm login/head node to connect to over SSH.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        port:
+          type: integer
+          format: int32
+          description: SSH port of the Slurm login/head node. Defaults to 22 if unset.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        head_queue:
+          type: string
+          description: Slurm partition/queue used for the Nextflow head job.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        compute_queue:
+          type: string
+          description: Slurm partition/queue used for pipeline compute jobs.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        max_queue_size:
+          type: integer
+          format: int32
+          description: Maximum number of jobs Nextflow submits to the Slurm queue at once.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        head_job_options:
+          type: string
+          description: Additional options passed to the Slurm head job submission (sbatch), e.g. `-t 72:00:00 --cpus-per-task=2 --mem-per-cpu=8G`.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        propagate_head_job_options:
+          type: boolean
+          description: Whether to propagate the head job options to compute jobs.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        pre_run_script:
+          type: string
+          description: Script that executes in the nf-launch script prior to invoking Nextflow processes.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: RunScriptSizeValidator
+        post_run_script:
+          type: string
+          description: Script that executes after all Nextflow processes have completed.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: RunScriptSizeValidator
+        nextflow_config:
+          type: string
+          description: Global Nextflow configuration settings applied to workflows run on this compute environment.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
+          description: Environment variables for the head and/or compute nodes.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
+    # Slurm request/response schemas
+    CreateSlurmCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/SlurmCE_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateSlurmCEResponse:
+      type: object
+      x-speakeasy-transform-from-api:
+        jq: '. + { id: .computeEnvId }'
+      properties:
+        id:
+          type: string
+          description: Alias of `compute_env_id` for Terraform convention.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        computeEnvId:
+          type: string
+    UpdateSlurmCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/SlurmCE_ComputeConfig'
+    DescribeSlurmCEResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/SlurmCE_ComputeConfig'
+    ListSlurmCEsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlurmCE_ComputeConfig'
         totalSize:
           type: integer
           format: int64

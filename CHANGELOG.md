@@ -1,3 +1,13 @@
+# v0.40.3
+
+FEATURES:
+
+- **New typed `seqera_slurm_ce` compute environment resource** for managing Slurm HPC clusters, continuing the split of platform-specific compute environments out of the generic `seqera_compute_env`. Seqera connects to the cluster's login/head node over SSH (via a `seqera_ssh_credential`) and submits the Nextflow head job to Slurm. Config fields (`work_dir`, `host_name`, `user_name`, `launch_dir`, `head_job_options`, queues, `pre_run_script`, etc.) are set at the resource root — there is no nested `config` block.
+
+NOTES:
+
+- **Import existing Slurm compute environments with `seqera_slurm_ce`, not the generic `seqera_compute_env`.** Importing a compute environment into the generic resource panics, because its polymorphic `compute_env` block is null when Terraform first reads state ([#226](https://github.com/seqeralabs/terraform-provider-seqera/issues/226)). The typed resources have a flat schema that imports cleanly; the `seqera_compute_env` docs now direct users to them.
+
 # v0.40.2
 
 BREAKING CHANGES:
