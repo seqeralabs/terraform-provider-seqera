@@ -497,6 +497,8 @@ actions:
         - `ECS` (default, AWS only): delegate task execution to AWS ECS.
         - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
         - `VM` (provider-agnostic): run tasks on cloud VMs.
+
+        Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
       example: "ECS"
       x-speakeasy-param-force-new: true
   - target: $.components.schemas.SchedConfig.properties.predictionModel
@@ -511,7 +513,8 @@ actions:
     update:
       description: |
         Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
-        resume from a snapshot instead of restarting from scratch.
+        resume from a snapshot instead of restarting from scratch. Not supported
+        on Azure compute environments.
       example: false
       x-speakeasy-param-force-new: true
   # diskAllocation is the real persisted field. The backend also exposes

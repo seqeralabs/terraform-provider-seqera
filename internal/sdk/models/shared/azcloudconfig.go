@@ -53,10 +53,10 @@ type AzCloudConfig struct {
 	// ignores any user-supplied value, so this field is computed by the
 	// backend rather than configured.
 	//
-	ResourceGroup *string      `json:"resourceGroup,omitempty"`
-	SchedConfig   *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled  *bool        `json:"schedEnabled,omitempty"`
-	Subnets       []string     `json:"subnets,omitempty"`
+	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
+	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	Subnets                  []string     `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -179,11 +179,11 @@ func (a *AzCloudConfig) GetResourceGroup() *string {
 	return a.ResourceGroup
 }
 
-func (a *AzCloudConfig) GetSchedConfig() *SchedConfig {
+func (a *AzCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	if a == nil {
 		return nil
 	}
-	return a.SchedConfig
+	return a.IntelligentComputeConfig
 }
 
 func (a *AzCloudConfig) GetSchedEnabled() *bool {

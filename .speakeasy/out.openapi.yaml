@@ -17315,6 +17315,15 @@ components:
           x-speakeasy-param-computed: true
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
+          x-speakeasy-name-override: intelligent_compute_config
+          nullable: true
+          description: |
+            Optional scheduler configuration used when
+            `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode).
+            Leave null to accept the platform defaults.
+
+            Must be omitted (or null) when `intelligent_compute_enabled = false`.
+          x-speakeasy-param-force-new: true
         schedEnabled:
           type: boolean
         subnets:
@@ -17341,6 +17350,9 @@ components:
           x-speakeasy-param-optional: false
           x-speakeasy-param-force-new: true
       title: Azure Cloud configuration
+      x-speakeasy-plan-validators:
+        - BackendStrategyVmOnlyValidator
+        - FusionSnapshotsUnsupportedValidator
     AzCloudPlatformMetaInfo:
       type: object
       properties:
@@ -21105,6 +21117,15 @@ components:
           x-speakeasy-param-force-new: true
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
+          x-speakeasy-name-override: intelligent_compute_config
+          nullable: true
+          description: |
+            Optional scheduler configuration used when
+            `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode).
+            Leave null to accept the platform defaults.
+
+            Must be omitted (or null) when `intelligent_compute_enabled = false`.
+          x-speakeasy-param-force-new: true
         schedEnabled:
           type: boolean
         serviceAccountEmail:
@@ -21136,6 +21157,7 @@ components:
           example: "us-central1-a"
           x-speakeasy-param-force-new: true
       title: Google Cloud configuration
+      x-speakeasy-plan-validators: BackendStrategyVmOnlyValidator
     GoogleCloudPlatformMetaInfo:
       type: object
       properties:
@@ -23739,6 +23761,8 @@ components:
             - `ECS` (default, AWS only): delegate task execution to AWS ECS.
             - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
             - `VM` (provider-agnostic): run tasks on cloud VMs.
+
+            Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
           type: string
           enum:
             - ECS
@@ -23757,7 +23781,8 @@ components:
         fusionSnapshots:
           description: |
             Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
-            resume from a snapshot instead of restarting from scratch.
+            resume from a snapshot instead of restarting from scratch. Not supported
+            on Azure compute environments.
           type: boolean
           example: false
           x-speakeasy-param-force-new: true

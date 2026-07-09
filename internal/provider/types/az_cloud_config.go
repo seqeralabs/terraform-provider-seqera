@@ -7,23 +7,23 @@ import (
 )
 
 type AzCloudConfig struct {
-	DataCollectionEndpoint  types.String        `tfsdk:"data_collection_endpoint"`
-	DataCollectionRuleID    types.String        `tfsdk:"data_collection_rule_id"`
-	Environment             []ConfigEnvVariable `tfsdk:"environment"`
-	InstanceType            types.String        `tfsdk:"instance_type"`
-	LogTableName            types.String        `tfsdk:"log_table_name"`
-	LogWorkspaceID          types.String        `tfsdk:"log_workspace_id"`
-	ManagedIdentityClientID types.String        `tfsdk:"managed_identity_client_id"`
-	ManagedIdentityID       types.String        `tfsdk:"managed_identity_id"`
-	NetworkID               types.String        `tfsdk:"network_id"`
-	NextflowConfig          types.String        `tfsdk:"nextflow_config"`
-	PostRunScript           types.String        `tfsdk:"post_run_script"`
-	PreRunScript            types.String        `tfsdk:"pre_run_script"`
-	Region                  types.String        `tfsdk:"region"`
-	ResourceGroup           types.String        `tfsdk:"resource_group"`
-	SchedConfig             *SchedConfig        `tfsdk:"sched_config"`
-	SchedEnabled            types.Bool          `tfsdk:"sched_enabled"`
-	Subnets                 []types.String      `tfsdk:"subnets"`
-	SubscriptionID          types.String        `tfsdk:"subscription_id"`
-	WorkDir                 types.String        `tfsdk:"work_dir"`
+	DataCollectionEndpoint   types.String        `tfsdk:"data_collection_endpoint"`
+	DataCollectionRuleID     types.String        `tfsdk:"data_collection_rule_id"`
+	Environment              []ConfigEnvVariable `tfsdk:"environment"`
+	InstanceType             types.String        `tfsdk:"instance_type"`
+	IntelligentComputeConfig *SchedConfig        `tfsdk:"intelligent_compute_config"`
+	LogTableName             types.String        `tfsdk:"log_table_name"`
+	LogWorkspaceID           types.String        `tfsdk:"log_workspace_id"`
+	ManagedIdentityClientID  types.String        `tfsdk:"managed_identity_client_id"`
+	ManagedIdentityID        types.String        `tfsdk:"managed_identity_id"`
+	NetworkID                types.String        `tfsdk:"network_id"`
+	NextflowConfig           types.String        `tfsdk:"nextflow_config"`
+	PostRunScript            types.String        `tfsdk:"post_run_script"`
+	PreRunScript             types.String        `tfsdk:"pre_run_script"`
+	Region                   types.String        `tfsdk:"region"`
+	ResourceGroup            types.String        `tfsdk:"resource_group"`
+	SchedEnabled             types.Bool          `tfsdk:"sched_enabled"`
+	Subnets                  []types.String      `tfsdk:"subnets"`
+	SubscriptionID           types.String        `tfsdk:"subscription_id"`
+	WorkDir                  types.String        `tfsdk:"work_dir"`
 }

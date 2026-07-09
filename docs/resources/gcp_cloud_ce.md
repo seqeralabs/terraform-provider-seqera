@@ -141,13 +141,13 @@ Requires replacement if changed.
 If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
 Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
-- `sched_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--sched_config))
 - `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
@@ -173,8 +173,8 @@ Default: false; Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
 
-<a id="nestedatt--config--sched_config"></a>
-### Nested Schema for `config.sched_config`
+<a id="nestedatt--config--intelligent_compute_config"></a>
+### Nested Schema for `config.intelligent_compute_config`
 
 Optional:
 
@@ -182,13 +182,16 @@ Optional:
 - `ECS` (default, AWS only): delegate task execution to AWS ECS.
 - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
 - `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave
 unset for no local-storage requirement.
 Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
-resume from a snapshot instead of restarting from scratch.
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
@@ -198,7 +201,7 @@ scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
-Requires replacement if changed. (see [below for nested schema](#nestedatt--config--sched_config--pool))
+Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
 Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
 is accepted.
@@ -212,8 +215,8 @@ Case-sensitive — must be one of:
 Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
 
-<a id="nestedatt--config--sched_config--pool"></a>
-### Nested Schema for `config.sched_config.pool`
+<a id="nestedatt--config--intelligent_compute_config--pool"></a>
+### Nested Schema for `config.intelligent_compute_config.pool`
 
 Optional:
 

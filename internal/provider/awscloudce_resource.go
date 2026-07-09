@@ -290,6 +290,8 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
 									`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
 									`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+									`` + "\n" +
+									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -319,7 +321,8 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
-									`resume from a snapshot instead of restarting from scratch.` + "\n" +
+									`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+									`on Azure compute environments.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"machine_types": schema.ListAttribute{

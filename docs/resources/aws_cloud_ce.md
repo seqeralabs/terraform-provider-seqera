@@ -310,13 +310,16 @@ Optional:
 - `ECS` (default, AWS only): delegate task execution to AWS ECS.
 - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
 - `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave
 unset for no local-storage requirement.
 Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
-resume from a snapshot instead of restarting from scratch.
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal

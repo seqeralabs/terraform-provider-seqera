@@ -209,61 +209,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.`,
 					},
-					"nextflow_config": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Nextflow configuration settings that override repository defaults.` + "\n" +
-							`Applied globally to all pipelines launched in this compute environment.` + "\n" +
-							`Requires replacement if changed.`,
-					},
-					"post_run_script": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-						Validators: []validator.String{
-							custom_stringvalidators.RunScriptSizeValidator(),
-						},
-					},
-					"pre_run_script": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-						Validators: []validator.String{
-							custom_stringvalidators.RunScriptSizeValidator(),
-						},
-					},
-					"project_id": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
-					},
-					"region": schema.StringAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						MarkdownDescription: `Google Cloud region where the compute environment will be created.` + "\n" +
-							`Examples: us-central1, europe-west1, asia-east1` + "\n" +
-							`Requires replacement if changed.`,
-					},
-					"sched_config": schema.SingleNestedAttribute{
+					"intelligent_compute_config": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
@@ -282,6 +228,8 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
 									`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
 									`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+									`` + "\n" +
+									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -311,7 +259,8 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
-									`resume from a snapshot instead of restarting from scratch.` + "\n" +
+									`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+									`on Azure compute environments.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"machine_types": schema.ListAttribute{
@@ -409,6 +358,60 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Requires replacement if changed.`,
 					},
+					"nextflow_config": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Nextflow configuration settings that override repository defaults.` + "\n" +
+							`Applied globally to all pipelines launched in this compute environment.` + "\n" +
+							`Requires replacement if changed.`,
+					},
+					"post_run_script": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
+					},
+					"pre_run_script": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.RunScriptSizeValidator(),
+						},
+					},
+					"project_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
+					},
+					"region": schema.StringAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Google Cloud region where the compute environment will be created.` + "\n" +
+							`Examples: us-central1, europe-west1, asia-east1` + "\n" +
+							`Requires replacement if changed.`,
+					},
 					"sched_enabled": schema.BoolAttribute{
 						Computed: true,
 						Optional: true,
@@ -456,6 +459,9 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 				Description: `Requires replacement if changed.`,
+				Validators: []validator.Object{
+					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
+				},
 			},
 			"credentials_id": schema.StringAttribute{
 				Required:    true,

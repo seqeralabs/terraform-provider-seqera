@@ -12,6 +12,8 @@ import (
 // - `ECS` (default, AWS only): delegate task execution to AWS ECS.
 // - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
 // - `VM` (provider-agnostic): run tasks on cloud VMs.
+//
+// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 type SchedConfigBackendStrategy string
 
 const (
@@ -126,6 +128,8 @@ type SchedConfig struct {
 	// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
 	// - `VM` (provider-agnostic): run tasks on cloud VMs.
 	//
+	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+	//
 	BackendStrategy *SchedConfigBackendStrategy `json:"backendStrategy,omitempty"`
 	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 	// restrict to instance types that provide local SSD (NVMe) storage. Leave
@@ -133,7 +137,8 @@ type SchedConfig struct {
 	//
 	DiskAllocation *string `json:"diskAllocation,omitempty"`
 	// Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
-	// resume from a snapshot instead of restarting from scratch.
+	// resume from a snapshot instead of restarting from scratch. Not supported
+	// on Azure compute environments.
 	//
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// EC2 instance types eligible for Seqera Intelligent Compute nodes.

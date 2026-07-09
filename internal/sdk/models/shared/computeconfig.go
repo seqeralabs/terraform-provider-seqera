@@ -1722,10 +1722,10 @@ type AzureCloudConfiguration struct {
 	// ignores any user-supplied value, so this field is computed by the
 	// backend rather than configured.
 	//
-	ResourceGroup *string      `json:"resourceGroup,omitempty"`
-	SchedConfig   *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled  *bool        `json:"schedEnabled,omitempty"`
-	Subnets       []string     `json:"subnets,omitempty"`
+	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
+	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	Subnets                  []string     `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -1857,11 +1857,11 @@ func (a *AzureCloudConfiguration) GetResourceGroup() *string {
 	return a.ResourceGroup
 }
 
-func (a *AzureCloudConfiguration) GetSchedConfig() *SchedConfig {
+func (a *AzureCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	if a == nil {
 		return nil
 	}
-	return a.SchedConfig
+	return a.IntelligentComputeConfig
 }
 
 func (a *AzureCloudConfiguration) GetSchedEnabled() *bool {
@@ -2231,9 +2231,9 @@ type GoogleCloudConfiguration struct {
 	// Google Cloud region where the compute environment will be created.
 	// Examples: us-central1, europe-west1, asia-east1
 	//
-	Region       *string      `json:"region,omitempty"`
-	SchedConfig  *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled *bool        `json:"schedEnabled,omitempty"`
+	Region                   *string      `json:"region,omitempty"`
+	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
+	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
@@ -2349,11 +2349,11 @@ func (g *GoogleCloudConfiguration) GetRegion() *string {
 	return g.Region
 }
 
-func (g *GoogleCloudConfiguration) GetSchedConfig() *SchedConfig {
+func (g *GoogleCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	if g == nil {
 		return nil
 	}
-	return g.SchedConfig
+	return g.IntelligentComputeConfig
 }
 
 func (g *GoogleCloudConfiguration) GetSchedEnabled() *bool {
