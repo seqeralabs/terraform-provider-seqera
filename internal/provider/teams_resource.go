@@ -40,6 +40,7 @@ type TeamsResourceModel struct {
 	AvatarURL    types.String `tfsdk:"avatar_url"`
 	Description  types.String `tfsdk:"description"`
 	ID           types.Int64  `tfsdk:"id"`
+	IdpGroupName types.String `tfsdk:"idp_group_name"`
 	MembersCount types.Int64  `tfsdk:"members_count"`
 	Name         types.String `tfsdk:"name"`
 	OrgID        types.Int64  `tfsdk:"org_id"`
@@ -75,6 +76,9 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 				},
 				Description: `Alias of ` + "`" + `team_id` + "`" + ` for Terraform convention.`,
+			},
+			"idp_group_name": schema.StringAttribute{
+				Computed: true,
 			},
 			"members_count": schema.Int64Attribute{
 				Computed:    true,

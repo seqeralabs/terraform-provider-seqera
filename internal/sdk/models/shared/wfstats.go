@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type WfStats struct {
 	CachedCount     *int     `json:"cachedCount,omitempty"`
 	CachedCountFmt  *string  `json:"cachedCountFmt,omitempty"`
@@ -19,6 +23,17 @@ type WfStats struct {
 	SucceedCountFmt *string  `json:"succeedCountFmt,omitempty"`
 	SucceedDuration *int64   `json:"succeedDuration,omitempty"`
 	SucceedPct      *float32 `json:"succeedPct,omitempty"`
+}
+
+func (w WfStats) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(w, "", false)
+}
+
+func (w *WfStats) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (w *WfStats) GetCachedCount() *int {

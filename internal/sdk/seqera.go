@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.159.0 and generator version 2.916.2
+// Generated from OpenAPI doc version 1.181.0 and generator version 2.916.2
 
 import (
 	"context"
@@ -54,6 +54,8 @@ type Seqera struct {
 	Actions *Actions
 	// Labels and resource labels
 	Labels *Labels
+	Admin  *Admin
+	Agents *Agents
 	// Avatars
 	Avatars *Avatars
 	// Compute environments
@@ -173,9 +175,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.40.3",
+		SDKVersion: "0.41.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.40.3 2.916.2 1.159.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.41.0 2.916.2 1.181.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -198,6 +200,8 @@ func New(opts ...SDKOption) *Seqera {
 
 	sdk.Actions = newActions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Labels = newLabels(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Admin = newAdmin(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Agents = newAgents(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)

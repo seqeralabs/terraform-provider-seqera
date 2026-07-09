@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type WfManifest struct {
 	Author          *string `json:"author,omitempty"`
 	DefaultBranch   *string `json:"defaultBranch,omitempty"`
@@ -13,6 +17,17 @@ type WfManifest struct {
 	Name            *string `json:"name,omitempty"`
 	NextflowVersion *string `json:"nextflowVersion,omitempty"`
 	Version         *string `json:"version,omitempty"`
+}
+
+func (w WfManifest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(w, "", false)
+}
+
+func (w *WfManifest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (w *WfManifest) GetAuthor() *string {

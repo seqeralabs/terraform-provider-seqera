@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -61,11 +62,43 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
+		if resp.Config.IntelligentComputeConfig == nil {
+			r.Config.IntelligentComputeConfig = nil
+		} else {
+			r.Config.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+			if resp.Config.IntelligentComputeConfig.BackendStrategy != nil {
+				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.Config.IntelligentComputeConfig.BackendStrategy))
+			} else {
+				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+			}
+			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
+			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
+			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
+			diags.Append(machineTypesDiags...)
+			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
+			diags.Append(machineTypesDiags...)
+			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			if resp.Config.IntelligentComputeConfig.Pool == nil {
+				r.Config.IntelligentComputeConfig.Pool = nil
+			} else {
+				r.Config.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+				r.Config.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.Pool.DesiredWarm))
+				r.Config.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.Pool.Enabled)
+				r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+			}
+			r.Config.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.Config.IntelligentComputeConfig.PredictionModel)
+			if resp.Config.IntelligentComputeConfig.ProvisioningModel != nil {
+				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.Config.IntelligentComputeConfig.ProvisioningModel))
+			} else {
+				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
+			}
+		}
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
+		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.Config.Zone = types.StringPointerValue(resp.Config.Zone)
@@ -348,6 +381,84 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		region = nil
 	}
+	var intelligentComputeConfig *shared.SchedConfig
+	if r.Config.IntelligentComputeConfig != nil {
+		backendStrategy := new(shared.SchedConfigBackendStrategy)
+		if !r.Config.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.Config.IntelligentComputeConfig.BackendStrategy.IsNull() {
+			*backendStrategy = shared.SchedConfigBackendStrategy(r.Config.IntelligentComputeConfig.BackendStrategy.ValueString())
+		} else {
+			backendStrategy = nil
+		}
+		diskAllocation := new(string)
+		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
+			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
+		} else {
+			diskAllocation = nil
+		}
+		fusionSnapshots := new(bool)
+		if !r.Config.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.Config.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Config.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots = nil
+		}
+		var machineTypes []string
+		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
+			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		}
+		var pool *shared.SchedConfigPool
+		if r.Config.IntelligentComputeConfig.Pool != nil {
+			desiredWarm := new(int)
+			if !r.Config.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+				*desiredWarm = int(r.Config.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+			} else {
+				desiredWarm = nil
+			}
+			enabled := new(bool)
+			if !r.Config.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+				*enabled = r.Config.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+			} else {
+				enabled = nil
+			}
+			scaleToZeroSecs := new(int)
+			if !r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+				*scaleToZeroSecs = int(r.Config.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+			} else {
+				scaleToZeroSecs = nil
+			}
+			pool = &shared.SchedConfigPool{
+				DesiredWarm:     desiredWarm,
+				Enabled:         enabled,
+				ScaleToZeroSecs: scaleToZeroSecs,
+			}
+		}
+		predictionModel := new(string)
+		if !r.Config.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.Config.IntelligentComputeConfig.PredictionModel.IsNull() {
+			*predictionModel = r.Config.IntelligentComputeConfig.PredictionModel.ValueString()
+		} else {
+			predictionModel = nil
+		}
+		provisioningModel := new(shared.SchedConfigProvisioningModel)
+		if !r.Config.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.Config.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+			*provisioningModel = shared.SchedConfigProvisioningModel(r.Config.IntelligentComputeConfig.ProvisioningModel.ValueString())
+		} else {
+			provisioningModel = nil
+		}
+		intelligentComputeConfig = &shared.SchedConfig{
+			BackendStrategy:   backendStrategy,
+			DiskAllocation:    diskAllocation,
+			FusionSnapshots:   fusionSnapshots,
+			MachineTypes:      machineTypes,
+			Pool:              pool,
+			PredictionModel:   predictionModel,
+			ProvisioningModel: provisioningModel,
+		}
+	}
+	schedEnabled := new(bool)
+	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
+		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	} else {
+		schedEnabled = nil
+	}
 	serviceAccountEmail := new(string)
 	if !r.Config.ServiceAccountEmail.IsUnknown() && !r.Config.ServiceAccountEmail.IsNull() {
 		*serviceAccountEmail = r.Config.ServiceAccountEmail.ValueString()
@@ -367,20 +478,22 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		zone = nil
 	}
 	config := shared.GoogleCloudConfig{
-		Arm64Enabled:        arm64Enabled,
-		BootDiskSizeGb:      bootDiskSizeGb,
-		Environment:         environment,
-		GpuEnabled:          gpuEnabled,
-		ImageID:             imageID,
-		InstanceType:        instanceType,
-		NextflowConfig:      nextflowConfig,
-		PostRunScript:       postRunScript,
-		PreRunScript:        preRunScript,
-		ProjectID:           projectID,
-		Region:              region,
-		ServiceAccountEmail: serviceAccountEmail,
-		WorkDir:             workDir,
-		Zone:                zone,
+		Arm64Enabled:             arm64Enabled,
+		BootDiskSizeGb:           bootDiskSizeGb,
+		Environment:              environment,
+		GpuEnabled:               gpuEnabled,
+		ImageID:                  imageID,
+		InstanceType:             instanceType,
+		NextflowConfig:           nextflowConfig,
+		PostRunScript:            postRunScript,
+		PreRunScript:             preRunScript,
+		ProjectID:                projectID,
+		Region:                   region,
+		IntelligentComputeConfig: intelligentComputeConfig,
+		SchedEnabled:             schedEnabled,
+		ServiceAccountEmail:      serviceAccountEmail,
+		WorkDir:                  workDir,
+		Zone:                     zone,
 	}
 	out := shared.GCPCloudCEComputeConfigInput{
 		CredentialsID: credentialsID,

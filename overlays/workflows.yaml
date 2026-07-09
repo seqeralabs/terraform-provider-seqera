@@ -300,6 +300,36 @@ actions:
     update:
       x-speakeasy-name-override: intelligent_compute_enabled
 
+  # Per-run cost and provisioning telemetry, plus the resolved Intelligent
+  # Compute config for the run. These are runtime outputs that change outside
+  # Terraform's control; surfacing them in state produces perpetual diffs.
+  # terraform-ignore keeps them in the SDK models; only the Terraform schema
+  # drops them. (schedConfig is allOf-wrapped, so the extension is preserved.)
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.cost
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.costCurrency
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.costIsEstimate
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.instancesProvisioned
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.schedRunId
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.schedConfig
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+
   # Remove runtime data fields from DescribeWorkflowResponse
   # These fields contain execution state that shouldn't be managed by Terraform
   - target: $.components.schemas.DescribeWorkflowResponse.properties.progress

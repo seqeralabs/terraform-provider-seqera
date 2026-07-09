@@ -5,6 +5,7 @@ package shared
 type UpdateTeamRequest struct {
 	AvatarID    *string `json:"avatarId,omitempty"`
 	Description *string `json:"description,omitempty"`
+	IdpGroupID  *int64  `json:"idpGroupId,omitempty"`
 	Name        *string `json:"name,omitempty"`
 }
 
@@ -20,6 +21,13 @@ func (u *UpdateTeamRequest) GetDescription() *string {
 		return nil
 	}
 	return u.Description
+}
+
+func (u *UpdateTeamRequest) GetIdpGroupID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.IdpGroupID
 }
 
 func (u *UpdateTeamRequest) GetName() *string {

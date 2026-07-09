@@ -8,6 +8,8 @@ type DescribeCredentialsResponse struct {
 	// and other external services within the Seqera Platform.
 	//
 	Credentials *CredentialsOutput `json:"credentials,omitempty"`
+	// Server-rendered, read-only provider-side setup snippet (e.g. AWS IAM role trust policy) to paste at the cloud provider. Populated when a renderer is available for the credential type and the installation is configured for it; otherwise omitted.
+	SetupSnippet *string `json:"setupSnippet,omitempty"`
 }
 
 func (d *DescribeCredentialsResponse) GetCredentials() *CredentialsOutput {
@@ -15,4 +17,11 @@ func (d *DescribeCredentialsResponse) GetCredentials() *CredentialsOutput {
 		return nil
 	}
 	return d.Credentials
+}
+
+func (d *DescribeCredentialsResponse) GetSetupSnippet() *string {
+	if d == nil {
+		return nil
+	}
+	return d.SetupSnippet
 }

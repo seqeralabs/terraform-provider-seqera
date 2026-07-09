@@ -11,6 +11,7 @@ type ListComputeEnvsResponseEntryResources struct {
 	Cpus           *int     `json:"cpus,omitempty"`
 	DiskSize       *int     `json:"diskSize,omitempty"`
 	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	GpuEnabled     *bool    `json:"gpuEnabled,omitempty"`
 	Gpus           *int     `json:"gpus,omitempty"`
 	InstanceType   *string  `json:"instanceType,omitempty"`
 	Memory         *int     `json:"memory,omitempty"`
@@ -37,6 +38,13 @@ func (l *ListComputeEnvsResponseEntryResources) GetEstimatedPrice() *float32 {
 	return l.EstimatedPrice
 }
 
+func (l *ListComputeEnvsResponseEntryResources) GetGpuEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.GpuEnabled
+}
+
 func (l *ListComputeEnvsResponseEntryResources) GetGpus() *int {
 	if l == nil {
 		return nil
@@ -59,21 +67,24 @@ func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
 }
 
 type ListComputeEnvsResponseEntry struct {
-	CredentialsID *string                                `json:"credentialsId,omitempty"`
-	Description   *string                                `json:"description,omitempty"`
-	ID            *string                                `json:"id,omitempty"`
-	Labels        []LabelDbDto                           `json:"labels,omitempty"`
-	LastUsed      *time.Time                             `json:"lastUsed,omitempty"`
-	Message       *string                                `json:"message,omitempty"`
-	Name          *string                                `json:"name,omitempty"`
-	Platform      *string                                `json:"platform,omitempty"`
-	Primary       *bool                                  `json:"primary,omitempty"`
-	Region        *string                                `json:"region,omitempty"`
-	Resources     *ListComputeEnvsResponseEntryResources `json:"resources,omitempty"`
-	Status        *ComputeEnvStatus                      `json:"status,omitempty"`
-	Visibility    *string                                `json:"visibility,omitempty"`
-	WorkDir       *string                                `json:"workDir,omitempty"`
-	WorkspaceName *string                                `json:"workspaceName,omitempty"`
+	CredentialsID  *string                                `json:"credentialsId,omitempty"`
+	Description    *string                                `json:"description,omitempty"`
+	Fusion2Enabled *bool                                  `json:"fusion2Enabled,omitempty"`
+	ID             *string                                `json:"id,omitempty"`
+	Labels         []LabelDbDto                           `json:"labels,omitempty"`
+	LastUsed       *time.Time                             `json:"lastUsed,omitempty"`
+	Message        *string                                `json:"message,omitempty"`
+	Name           *string                                `json:"name,omitempty"`
+	Platform       *string                                `json:"platform,omitempty"`
+	Primary        *bool                                  `json:"primary,omitempty"`
+	Region         *string                                `json:"region,omitempty"`
+	Resources      *ListComputeEnvsResponseEntryResources `json:"resources,omitempty"`
+	SchedEnabled   *bool                                  `json:"schedEnabled,omitempty"`
+	Status         *ComputeEnvStatus                      `json:"status,omitempty"`
+	Visibility     *string                                `json:"visibility,omitempty"`
+	WaveEnabled    *bool                                  `json:"waveEnabled,omitempty"`
+	WorkDir        *string                                `json:"workDir,omitempty"`
+	WorkspaceName  *string                                `json:"workspaceName,omitempty"`
 }
 
 func (l ListComputeEnvsResponseEntry) MarshalJSON() ([]byte, error) {
@@ -99,6 +110,13 @@ func (l *ListComputeEnvsResponseEntry) GetDescription() *string {
 		return nil
 	}
 	return l.Description
+}
+
+func (l *ListComputeEnvsResponseEntry) GetFusion2Enabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Fusion2Enabled
 }
 
 func (l *ListComputeEnvsResponseEntry) GetID() *string {
@@ -164,6 +182,13 @@ func (l *ListComputeEnvsResponseEntry) GetResources() *ListComputeEnvsResponseEn
 	return l.Resources
 }
 
+func (l *ListComputeEnvsResponseEntry) GetSchedEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.SchedEnabled
+}
+
 func (l *ListComputeEnvsResponseEntry) GetStatus() *ComputeEnvStatus {
 	if l == nil {
 		return nil
@@ -176,6 +201,13 @@ func (l *ListComputeEnvsResponseEntry) GetVisibility() *string {
 		return nil
 	}
 	return l.Visibility
+}
+
+func (l *ListComputeEnvsResponseEntry) GetWaveEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.WaveEnabled
 }
 
 func (l *ListComputeEnvsResponseEntry) GetWorkDir() *string {

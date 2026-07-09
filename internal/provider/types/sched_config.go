@@ -8,6 +8,11 @@ import (
 )
 
 type SchedConfig struct {
+	BackendStrategy   types.String        `tfsdk:"backend_strategy"`
+	DiskAllocation    types.String        `tfsdk:"disk_allocation"`
+	FusionSnapshots   types.Bool          `tfsdk:"fusion_snapshots"`
 	MachineTypes      basetypes.ListValue `tfsdk:"machine_types"`
+	Pool              *SchedConfigPool    `tfsdk:"pool"`
+	PredictionModel   types.String        `tfsdk:"prediction_model"`
 	ProvisioningModel types.String        `tfsdk:"provisioning_model"`
 }

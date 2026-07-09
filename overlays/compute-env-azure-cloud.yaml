@@ -398,6 +398,31 @@ actions:
     update:
       x-speakeasy-param-force-new: true
 
+  # Rename schedConfig -> intelligent_compute_config for consistency with the
+  # AWS and Local compute environments within the provider (PR #231 review).
+  - target: $.components.schemas.AzCloudConfig.properties.schedConfig
+    update:
+      x-speakeasy-name-override: intelligent_compute_config
+      nullable: true
+      description: |
+        Optional scheduler configuration used when
+        `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode).
+        Leave null to accept the platform defaults.
+
+        Must be omitted (or null) when `intelligent_compute_enabled = false`.
+      x-speakeasy-param-force-new: true
+
+  # Azure only supports the VM backend for Intelligent Compute, and does not
+  # support Fusion snapshots. The backend ignores backend_strategy (hardcodes
+  # VM) and fusion_snapshots here. The shared SchedConfig can't drop those
+  # fields for one platform, so object validators reject unsupported values at
+  # plan time instead. PR #231 review.
+  - target: $.components.schemas.AzCloudConfig
+    update:
+      x-speakeasy-plan-validators:
+        - BackendStrategyVmOnlyValidator
+        - FusionSnapshotsUnsupportedValidator
+
   # Plan-time soft-warn when pre/post-run scripts exceed Platform Cloud's
   # 1024-byte limit. Enterprise installs can raise the limit via platform
   # configuration, so this stays a Warning rather than an Error.

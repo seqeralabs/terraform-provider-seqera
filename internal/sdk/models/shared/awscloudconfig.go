@@ -17,6 +17,15 @@ type AwsCloudConfig struct {
 	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 	//
 	EbsBootSize *int `json:"ebsBootSize,omitempty"`
+	// Encrypt the boot EBS volume of provisioned instances. Defaults to `false`
+	// (null/absent is treated as `false` — no encryption).
+	//
+	EbsEncrypted *bool `json:"ebsEncrypted,omitempty"`
+	// KMS key ARN used to encrypt the boot EBS volume. Only applied when
+	// `ebs_encrypted` is `true`; when omitted, the account/region default EBS
+	// encryption key is used.
+	//
+	EbsKmsKeyID *string `json:"ebsKmsKeyId,omitempty"`
 	// EC2 key pair name for SSH access to compute instances.
 	// Key pair must exist in the specified region.
 	//
@@ -73,8 +82,22 @@ type AwsCloudConfig struct {
 	SecurityGroups []string `json:"securityGroups,omitempty"`
 	// Subnet ID where compute instances will be launched.
 	// Must be in the same VPC and region as the compute environment.
+	// Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
 	//
-	SubnetID    *string `json:"subnetId,omitempty"`
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	SubnetID *string `json:"subnetId,omitempty"`
+	// Subnets to launch compute instances into. The first subnet is used for
+	// basic placement; Seqera Intelligent Compute may use all of them. Replaces
+	// the deprecated single-value `subnet_id`, and is mutually exclusive with it.
+	// All subnets must be in the VPC given by `vpc_id` (when set) and in the same
+	// region as the compute environment.
+	//
+	SubnetIds []string `json:"subnetIds,omitempty"`
+	// VPC used to scope subnet and security-group selection. Determines the
+	// network in which EC2 instances are launched.
+	//
+	VpcID       *string `json:"vpcId,omitempty"`
 	WaveEnabled *bool   `json:"waveEnabled,omitempty"`
 	// S3 working directory for workflow execution. Must be a `s3://` URI in
 	// the same region as the compute environment (e.g. `s3://my-bucket/work`).
@@ -109,6 +132,20 @@ func (a *AwsCloudConfig) GetEbsBootSize() *int {
 		return nil
 	}
 	return a.EbsBootSize
+}
+
+func (a *AwsCloudConfig) GetEbsEncrypted() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.EbsEncrypted
+}
+
+func (a *AwsCloudConfig) GetEbsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EbsKmsKeyID
 }
 
 func (a *AwsCloudConfig) GetEc2KeyPair() *string {
@@ -221,6 +258,20 @@ func (a *AwsCloudConfig) GetSubnetID() *string {
 		return nil
 	}
 	return a.SubnetID
+}
+
+func (a *AwsCloudConfig) GetSubnetIds() []string {
+	if a == nil {
+		return nil
+	}
+	return a.SubnetIds
+}
+
+func (a *AwsCloudConfig) GetVpcID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.VpcID
 }
 
 func (a *AwsCloudConfig) GetWaveEnabled() *bool {

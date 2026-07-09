@@ -137,6 +137,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.AllowBuckets, _ = allowBucketsValuable1.(basetypes.ListValue)
 					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
 					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
+					r.ComputeEnv.Config.AwsCloud.EbsEncrypted = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsEncrypted)
+					r.ComputeEnv.Config.AwsCloud.EbsKmsKeyID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsKmsKeyID)
 					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
 					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
@@ -158,11 +160,27 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
+						} else {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
 						machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.MachineTypes)
 						diags.Append(machineTypesDiags...)
 						machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 						diags.Append(machineTypesDiags...)
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.Pool == nil {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool = nil
+						} else {
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.Pool.DesiredWarm))
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.Pool.Enabled)
+							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+						}
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.PredictionModel)
 						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.ProvisioningModel))
 						} else {
@@ -181,6 +199,12 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					diags.Append(securityGroupsDiags1...)
 					r.ComputeEnv.Config.AwsCloud.SecurityGroups, _ = securityGroupsValuable1.(basetypes.ListValue)
 					r.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
+					subnetIdsValue, subnetIdsDiags := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetIds)
+					diags.Append(subnetIdsDiags...)
+					subnetIdsValuable, subnetIdsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, subnetIdsValue)
+					diags.Append(subnetIdsDiags...)
+					r.ComputeEnv.Config.AwsCloud.SubnetIds, _ = subnetIdsValuable.(basetypes.ListValue)
+					r.ComputeEnv.Config.AwsCloud.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.VpcID)
 					r.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
 				}
 				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
@@ -344,6 +368,37 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AzureCloud.Environment = append(r.ComputeEnv.Config.AzureCloud.Environment, environment5)
 					}
 					r.ComputeEnv.Config.AzureCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.InstanceType)
+					if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig == nil {
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig = nil
+					} else {
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+						if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
+						} else {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
+						machineTypesValue1, machineTypesDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.MachineTypes)
+						diags.Append(machineTypesDiags1...)
+						machineTypesValuable1, machineTypesDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue1)
+						diags.Append(machineTypesDiags1...)
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.Pool == nil {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool = nil
+						} else {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.Pool.DesiredWarm))
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.Pool.Enabled)
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+						}
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.PredictionModel)
+						if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.ProvisioningModel))
+						} else {
+							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
+						}
+					}
 					r.ComputeEnv.Config.AzureCloud.LogTableName = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogTableName)
 					r.ComputeEnv.Config.AzureCloud.LogWorkspaceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogWorkspaceID)
 					r.ComputeEnv.Config.AzureCloud.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityClientID)
@@ -354,6 +409,11 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AzureCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.Region)
 					r.ComputeEnv.Config.AzureCloud.ResourceGroup = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ResourceGroup)
+					r.ComputeEnv.Config.AzureCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.SchedEnabled)
+					r.ComputeEnv.Config.AzureCloud.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureCloudConfiguration.Subnets))
+					for _, v := range resp.ComputeEnv.Config.AzureCloudConfiguration.Subnets {
+						r.ComputeEnv.Config.AzureCloud.Subnets = append(r.ComputeEnv.Config.AzureCloud.Subnets, types.StringValue(v))
+					}
 					r.ComputeEnv.Config.AzureCloud.SubscriptionID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.SubscriptionID)
 					r.ComputeEnv.Config.AzureCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.WorkDir)
 				}
@@ -435,11 +495,43 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.GoogleCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.InstanceType)
+					if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig == nil {
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig = nil
+					} else {
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
+						if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
+						} else {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
+						machineTypesValue2, machineTypesDiags2 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.MachineTypes)
+						diags.Append(machineTypesDiags2...)
+						machineTypesValuable2, machineTypesDiags2 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue2)
+						diags.Append(machineTypesDiags2...)
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable2.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.Pool == nil {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool = nil
+						} else {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.Pool.DesiredWarm))
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.Pool.Enabled)
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+						}
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.PredictionModel)
+						if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.ProvisioningModel))
+						} else {
+							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
+						}
+					}
 					r.ComputeEnv.Config.GoogleCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.GoogleCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.GoogleCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.GoogleCloud.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ProjectID)
 					r.ComputeEnv.Config.GoogleCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Region)
+					r.ComputeEnv.Config.GoogleCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ServiceAccountEmail)
 					r.ComputeEnv.Config.GoogleCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.WorkDir)
 					r.ComputeEnv.Config.GoogleCloud.Zone = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Zone)
@@ -611,11 +703,27 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-						machineTypesValue1, machineTypesDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.MachineTypes)
-						diags.Append(machineTypesDiags1...)
-						machineTypesValuable1, machineTypesDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue1)
-						diags.Append(machineTypesDiags1...)
-						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.BackendStrategy))
+						} else {
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.DiskAllocation)
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.FusionSnapshots)
+						machineTypesValue3, machineTypesDiags3 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.MachineTypes)
+						diags.Append(machineTypesDiags3...)
+						machineTypesValuable3, machineTypesDiags3 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue3)
+						diags.Append(machineTypesDiags3...)
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable3.(basetypes.ListValue)
+						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.Pool == nil {
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool = nil
+						} else {
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool = &tfTypes.SchedConfigPool{}
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.DesiredWarm = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.Pool.DesiredWarm))
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.Pool.Enabled)
+							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.ScaleToZeroSecs = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.Pool.ScaleToZeroSecs))
+						}
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.PredictionModel = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.PredictionModel)
 						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.ProvisioningModel != nil {
 							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.ProvisioningModel))
 						} else {
@@ -744,6 +852,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 			r.ComputeEnv.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.DateCreated))
 			r.ComputeEnv.Deleted = types.BoolPointerValue(resp.ComputeEnv.Deleted)
 			r.ComputeEnv.Description = types.StringPointerValue(resp.ComputeEnv.Description)
+			r.ComputeEnv.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.ComputeEnv.FusionMetricsCollectionEnabled)
 			r.ComputeEnv.Labels = []tfTypes.LabelDbDto{}
 
 			for _, labelsItem := range resp.ComputeEnv.Labels {
@@ -777,6 +886,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 				r.ComputeEnv.Resources.Cpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Resources.Cpus))
 				r.ComputeEnv.Resources.DiskSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Resources.DiskSize))
 				r.ComputeEnv.Resources.EstimatedPrice = types.Float32PointerValue(resp.ComputeEnv.Resources.EstimatedPrice)
+				r.ComputeEnv.Resources.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Resources.GpuEnabled)
 				r.ComputeEnv.Resources.Gpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Resources.Gpus))
 				r.ComputeEnv.Resources.InstanceType = types.StringPointerValue(resp.ComputeEnv.Resources.InstanceType)
 				r.ComputeEnv.Resources.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Resources.Memory))
@@ -1298,6 +1408,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			ebsBootSize1 = nil
 		}
+		ebsEncrypted := new(bool)
+		if !r.ComputeEnv.Config.AwsCloud.EbsEncrypted.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EbsEncrypted.IsNull() {
+			*ebsEncrypted = r.ComputeEnv.Config.AwsCloud.EbsEncrypted.ValueBool()
+		} else {
+			ebsEncrypted = nil
+		}
+		ebsKmsKeyID := new(string)
+		if !r.ComputeEnv.Config.AwsCloud.EbsKmsKeyID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EbsKmsKeyID.IsNull() {
+			*ebsKmsKeyID = r.ComputeEnv.Config.AwsCloud.EbsKmsKeyID.ValueString()
+		} else {
+			ebsKmsKeyID = nil
+		}
 		ec2KeyPair1 := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsNull() {
 			*ec2KeyPair1 = r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.ValueString()
@@ -1390,18 +1512,73 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 		var intelligentComputeConfig *shared.SchedConfig
 		if r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig != nil {
+			backendStrategy := new(shared.SchedConfigBackendStrategy)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
+				*backendStrategy = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
+			} else {
+				backendStrategy = nil
+			}
+			diskAllocation := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.DiskAllocation.IsNull() {
+				*diskAllocation = r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.DiskAllocation.ValueString()
+			} else {
+				diskAllocation = nil
+			}
+			fusionSnapshots1 := new(bool)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+				*fusionSnapshots1 = r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+			} else {
+				fusionSnapshots1 = nil
+			}
 			var machineTypes []string
 			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
 				diags.Append(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 			}
-			provisioningModel := new(shared.ProvisioningModel)
+			var pool *shared.SchedConfigPool
+			if r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool != nil {
+				desiredWarm := new(int)
+				if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+					*desiredWarm = int(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+				} else {
+					desiredWarm = nil
+				}
+				enabled := new(bool)
+				if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+					*enabled = r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+				} else {
+					enabled = nil
+				}
+				scaleToZeroSecs := new(int)
+				if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+					*scaleToZeroSecs = int(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+				} else {
+					scaleToZeroSecs = nil
+				}
+				pool = &shared.SchedConfigPool{
+					DesiredWarm:     desiredWarm,
+					Enabled:         enabled,
+					ScaleToZeroSecs: scaleToZeroSecs,
+				}
+			}
+			predictionModel := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.PredictionModel.IsNull() {
+				*predictionModel = r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.PredictionModel.ValueString()
+			} else {
+				predictionModel = nil
+			}
+			provisioningModel := new(shared.SchedConfigProvisioningModel)
 			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.IsNull() {
-				*provisioningModel = shared.ProvisioningModel(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.ValueString())
+				*provisioningModel = shared.SchedConfigProvisioningModel(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.ProvisioningModel.ValueString())
 			} else {
 				provisioningModel = nil
 			}
 			intelligentComputeConfig = &shared.SchedConfig{
+				BackendStrategy:   backendStrategy,
+				DiskAllocation:    diskAllocation,
+				FusionSnapshots:   fusionSnapshots1,
 				MachineTypes:      machineTypes,
+				Pool:              pool,
+				PredictionModel:   predictionModel,
 				ProvisioningModel: provisioningModel,
 			}
 		}
@@ -1421,6 +1598,16 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			subnetID = nil
 		}
+		var subnetIds []string
+		if !r.ComputeEnv.Config.AwsCloud.SubnetIds.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SubnetIds.IsNull() {
+			diags.Append(r.ComputeEnv.Config.AwsCloud.SubnetIds.ElementsAs(ctx, &subnetIds, true)...)
+		}
+		vpcId1 := new(string)
+		if !r.ComputeEnv.Config.AwsCloud.VpcID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.VpcID.IsNull() {
+			*vpcId1 = r.ComputeEnv.Config.AwsCloud.VpcID.ValueString()
+		} else {
+			vpcId1 = nil
+		}
 		workDir1 := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WorkDir.IsNull() {
 			*workDir1 = r.ComputeEnv.Config.AwsCloud.WorkDir.ValueString()
@@ -1431,6 +1618,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			AllowBuckets:              allowBuckets1,
 			Arm64Enabled:              arm64Enabled1,
 			EbsBootSize:               ebsBootSize1,
+			EbsEncrypted:              ebsEncrypted,
+			EbsKmsKeyID:               ebsKmsKeyID,
 			Ec2KeyPair:                ec2KeyPair1,
 			Environment:               environment1,
 			GpuEnabled:                gpuEnabled1,
@@ -1446,6 +1635,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			IntelligentComputeEnabled: intelligentComputeEnabled,
 			SecurityGroups:            securityGroups1,
 			SubnetID:                  subnetID,
+			SubnetIds:                 subnetIds,
+			VpcID:                     vpcId1,
 			WorkDir:                   workDir1,
 		}
 	}
@@ -1625,11 +1816,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion1 = nil
 		}
-		fusionSnapshots1 := new(bool)
+		fusionSnapshots2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.IsNull() {
-			*fusionSnapshots1 = r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.ValueBool()
+			*fusionSnapshots2 = r.ComputeEnv.Config.GoogleBatch.FusionSnapshots.ValueBool()
 		} else {
-			fusionSnapshots1 = nil
+			fusionSnapshots2 = nil
 		}
 		headJobCpus1 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
@@ -1769,7 +1960,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DebugMode:                   debugMode,
 			Environment:                 environment3,
 			EnableFusion:                enableFusion1,
-			FusionSnapshots:             fusionSnapshots1,
+			FusionSnapshots:             fusionSnapshots2,
 			HeadJobCpus:                 headJobCpus1,
 			HeadJobInstanceTemplate:     headJobInstanceTemplate,
 			HeadJobMemoryMb:             headJobMemoryMb1,
@@ -1894,6 +2085,84 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			region3 = nil
 		}
+		var intelligentComputeConfig1 *shared.SchedConfig
+		if r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig != nil {
+			backendStrategy1 := new(shared.SchedConfigBackendStrategy)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
+				*backendStrategy1 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
+			} else {
+				backendStrategy1 = nil
+			}
+			diskAllocation1 := new(string)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.DiskAllocation.IsNull() {
+				*diskAllocation1 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.DiskAllocation.ValueString()
+			} else {
+				diskAllocation1 = nil
+			}
+			fusionSnapshots3 := new(bool)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+				*fusionSnapshots3 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+			} else {
+				fusionSnapshots3 = nil
+			}
+			var machineTypes1 []string
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
+			}
+			var pool1 *shared.SchedConfigPool
+			if r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool != nil {
+				desiredWarm1 := new(int)
+				if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+					*desiredWarm1 = int(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+				} else {
+					desiredWarm1 = nil
+				}
+				enabled1 := new(bool)
+				if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+					*enabled1 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+				} else {
+					enabled1 = nil
+				}
+				scaleToZeroSecs1 := new(int)
+				if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+					*scaleToZeroSecs1 = int(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+				} else {
+					scaleToZeroSecs1 = nil
+				}
+				pool1 = &shared.SchedConfigPool{
+					DesiredWarm:     desiredWarm1,
+					Enabled:         enabled1,
+					ScaleToZeroSecs: scaleToZeroSecs1,
+				}
+			}
+			predictionModel1 := new(string)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.PredictionModel.IsNull() {
+				*predictionModel1 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.PredictionModel.ValueString()
+			} else {
+				predictionModel1 = nil
+			}
+			provisioningModel1 := new(shared.SchedConfigProvisioningModel)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+				*provisioningModel1 = shared.SchedConfigProvisioningModel(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel.ValueString())
+			} else {
+				provisioningModel1 = nil
+			}
+			intelligentComputeConfig1 = &shared.SchedConfig{
+				BackendStrategy:   backendStrategy1,
+				DiskAllocation:    diskAllocation1,
+				FusionSnapshots:   fusionSnapshots3,
+				MachineTypes:      machineTypes1,
+				Pool:              pool1,
+				PredictionModel:   predictionModel1,
+				ProvisioningModel: provisioningModel1,
+			}
+		}
+		schedEnabled := new(bool)
+		if !r.ComputeEnv.Config.GoogleCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.SchedEnabled.IsNull() {
+			*schedEnabled = r.ComputeEnv.Config.GoogleCloud.SchedEnabled.ValueBool()
+		} else {
+			schedEnabled = nil
+		}
 		serviceAccountEmail := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.IsNull() {
 			*serviceAccountEmail = r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.ValueString()
@@ -1913,20 +2182,22 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			zone = nil
 		}
 		googleCloudConfiguration = &shared.GoogleCloudConfiguration{
-			Arm64Enabled:        arm64Enabled2,
-			BootDiskSizeGb:      bootDiskSizeGb1,
-			Environment:         environment4,
-			GpuEnabled:          gpuEnabled2,
-			ImageID:             imageId2,
-			InstanceType:        instanceType1,
-			NextflowConfig:      nextflowConfig4,
-			PostRunScript:       postRunScript4,
-			PreRunScript:        preRunScript4,
-			ProjectID:           projectId1,
-			Region:              region3,
-			ServiceAccountEmail: serviceAccountEmail,
-			WorkDir:             workDir4,
-			Zone:                zone,
+			Arm64Enabled:             arm64Enabled2,
+			BootDiskSizeGb:           bootDiskSizeGb1,
+			Environment:              environment4,
+			GpuEnabled:               gpuEnabled2,
+			ImageID:                  imageId2,
+			InstanceType:             instanceType1,
+			NextflowConfig:           nextflowConfig4,
+			PostRunScript:            postRunScript4,
+			PreRunScript:             preRunScript4,
+			ProjectID:                projectId1,
+			Region:                   region3,
+			IntelligentComputeConfig: intelligentComputeConfig1,
+			SchedEnabled:             schedEnabled,
+			ServiceAccountEmail:      serviceAccountEmail,
+			WorkDir:                  workDir4,
+			Zone:                     zone,
 		}
 	}
 	if googleCloudConfiguration != nil {
@@ -2374,6 +2645,88 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			resourceGroup = nil
 		}
+		var intelligentComputeConfig2 *shared.SchedConfig
+		if r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig != nil {
+			backendStrategy2 := new(shared.SchedConfigBackendStrategy)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
+				*backendStrategy2 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
+			} else {
+				backendStrategy2 = nil
+			}
+			diskAllocation2 := new(string)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.DiskAllocation.IsNull() {
+				*diskAllocation2 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.DiskAllocation.ValueString()
+			} else {
+				diskAllocation2 = nil
+			}
+			fusionSnapshots4 := new(bool)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+				*fusionSnapshots4 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+			} else {
+				fusionSnapshots4 = nil
+			}
+			var machineTypes2 []string
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes2, true)...)
+			}
+			var pool2 *shared.SchedConfigPool
+			if r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool != nil {
+				desiredWarm2 := new(int)
+				if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+					*desiredWarm2 = int(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+				} else {
+					desiredWarm2 = nil
+				}
+				enabled2 := new(bool)
+				if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+					*enabled2 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+				} else {
+					enabled2 = nil
+				}
+				scaleToZeroSecs2 := new(int)
+				if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+					*scaleToZeroSecs2 = int(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+				} else {
+					scaleToZeroSecs2 = nil
+				}
+				pool2 = &shared.SchedConfigPool{
+					DesiredWarm:     desiredWarm2,
+					Enabled:         enabled2,
+					ScaleToZeroSecs: scaleToZeroSecs2,
+				}
+			}
+			predictionModel2 := new(string)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.PredictionModel.IsNull() {
+				*predictionModel2 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.PredictionModel.ValueString()
+			} else {
+				predictionModel2 = nil
+			}
+			provisioningModel2 := new(shared.SchedConfigProvisioningModel)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+				*provisioningModel2 = shared.SchedConfigProvisioningModel(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel.ValueString())
+			} else {
+				provisioningModel2 = nil
+			}
+			intelligentComputeConfig2 = &shared.SchedConfig{
+				BackendStrategy:   backendStrategy2,
+				DiskAllocation:    diskAllocation2,
+				FusionSnapshots:   fusionSnapshots4,
+				MachineTypes:      machineTypes2,
+				Pool:              pool2,
+				PredictionModel:   predictionModel2,
+				ProvisioningModel: provisioningModel2,
+			}
+		}
+		schedEnabled1 := new(bool)
+		if !r.ComputeEnv.Config.AzureCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.SchedEnabled.IsNull() {
+			*schedEnabled1 = r.ComputeEnv.Config.AzureCloud.SchedEnabled.ValueBool()
+		} else {
+			schedEnabled1 = nil
+		}
+		subnets1 := make([]string, 0, len(r.ComputeEnv.Config.AzureCloud.Subnets))
+		for subnetsIndex := range r.ComputeEnv.Config.AzureCloud.Subnets {
+			subnets1 = append(subnets1, r.ComputeEnv.Config.AzureCloud.Subnets[subnetsIndex].ValueString())
+		}
 		subscriptionID := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.SubscriptionID.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.SubscriptionID.IsNull() {
 			*subscriptionID = r.ComputeEnv.Config.AzureCloud.SubscriptionID.ValueString()
@@ -2387,22 +2740,25 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir6 = nil
 		}
 		azureCloudConfiguration = &shared.AzureCloudConfiguration{
-			DataCollectionEndpoint:  dataCollectionEndpoint,
-			DataCollectionRuleID:    dataCollectionRuleID,
-			Environment:             environment6,
-			InstanceType:            instanceType2,
-			LogTableName:            logTableName,
-			LogWorkspaceID:          logWorkspaceID,
-			ManagedIdentityClientID: managedIdentityClientId1,
-			ManagedIdentityID:       managedIdentityID,
-			NetworkID:               networkID,
-			NextflowConfig:          nextflowConfig6,
-			PostRunScript:           postRunScript6,
-			PreRunScript:            preRunScript6,
-			Region:                  region5,
-			ResourceGroup:           resourceGroup,
-			SubscriptionID:          subscriptionID,
-			WorkDir:                 workDir6,
+			DataCollectionEndpoint:   dataCollectionEndpoint,
+			DataCollectionRuleID:     dataCollectionRuleID,
+			Environment:              environment6,
+			InstanceType:             instanceType2,
+			LogTableName:             logTableName,
+			LogWorkspaceID:           logWorkspaceID,
+			ManagedIdentityClientID:  managedIdentityClientId1,
+			ManagedIdentityID:        managedIdentityID,
+			NetworkID:                networkID,
+			NextflowConfig:           nextflowConfig6,
+			PostRunScript:            postRunScript6,
+			PreRunScript:             preRunScript6,
+			Region:                   region5,
+			ResourceGroup:            resourceGroup,
+			IntelligentComputeConfig: intelligentComputeConfig2,
+			SchedEnabled:             schedEnabled1,
+			Subnets:                  subnets1,
+			SubscriptionID:           subscriptionID,
+			WorkDir:                  workDir6,
 		}
 	}
 	if azureCloudConfiguration != nil {
@@ -3647,21 +4003,76 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			preRunScript15 = nil
 		}
-		var intelligentComputeConfig1 *shared.SchedConfig
+		var intelligentComputeConfig3 *shared.SchedConfig
 		if r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig != nil {
-			var machineTypes1 []string
-			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsNull() {
-				diags.Append(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
-			}
-			provisioningModel1 := new(shared.ProvisioningModel)
-			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsNull() {
-				*provisioningModel1 = shared.ProvisioningModel(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.ValueString())
+			backendStrategy3 := new(shared.SchedConfigBackendStrategy)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.IsNull() {
+				*backendStrategy3 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.ValueString())
 			} else {
-				provisioningModel1 = nil
+				backendStrategy3 = nil
 			}
-			intelligentComputeConfig1 = &shared.SchedConfig{
-				MachineTypes:      machineTypes1,
-				ProvisioningModel: provisioningModel1,
+			diskAllocation3 := new(string)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.DiskAllocation.IsNull() {
+				*diskAllocation3 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.DiskAllocation.ValueString()
+			} else {
+				diskAllocation3 = nil
+			}
+			fusionSnapshots5 := new(bool)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.FusionSnapshots.IsNull() {
+				*fusionSnapshots5 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.FusionSnapshots.ValueBool()
+			} else {
+				fusionSnapshots5 = nil
+			}
+			var machineTypes3 []string
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsNull() {
+				diags.Append(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes3, true)...)
+			}
+			var pool3 *shared.SchedConfigPool
+			if r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool != nil {
+				desiredWarm3 := new(int)
+				if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.DesiredWarm.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.DesiredWarm.IsNull() {
+					*desiredWarm3 = int(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.DesiredWarm.ValueInt32())
+				} else {
+					desiredWarm3 = nil
+				}
+				enabled3 := new(bool)
+				if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.Enabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.Enabled.IsNull() {
+					*enabled3 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.Enabled.ValueBool()
+				} else {
+					enabled3 = nil
+				}
+				scaleToZeroSecs3 := new(int)
+				if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.ScaleToZeroSecs.IsNull() {
+					*scaleToZeroSecs3 = int(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool.ScaleToZeroSecs.ValueInt32())
+				} else {
+					scaleToZeroSecs3 = nil
+				}
+				pool3 = &shared.SchedConfigPool{
+					DesiredWarm:     desiredWarm3,
+					Enabled:         enabled3,
+					ScaleToZeroSecs: scaleToZeroSecs3,
+				}
+			}
+			predictionModel3 := new(string)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.PredictionModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.PredictionModel.IsNull() {
+				*predictionModel3 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.PredictionModel.ValueString()
+			} else {
+				predictionModel3 = nil
+			}
+			provisioningModel3 := new(shared.SchedConfigProvisioningModel)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.IsNull() {
+				*provisioningModel3 = shared.SchedConfigProvisioningModel(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.ProvisioningModel.ValueString())
+			} else {
+				provisioningModel3 = nil
+			}
+			intelligentComputeConfig3 = &shared.SchedConfig{
+				BackendStrategy:   backendStrategy3,
+				DiskAllocation:    diskAllocation3,
+				FusionSnapshots:   fusionSnapshots5,
+				MachineTypes:      machineTypes3,
+				Pool:              pool3,
+				PredictionModel:   predictionModel3,
+				ProvisioningModel: provisioningModel3,
 			}
 		}
 		intelligentComputeEnabled1 := new(bool)
@@ -3685,7 +4096,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			NextflowConfig:            nextflowConfig15,
 			PostRunScript:             postRunScript15,
 			PreRunScript:              preRunScript15,
-			IntelligentComputeConfig:  intelligentComputeConfig1,
+			IntelligentComputeConfig:  intelligentComputeConfig3,
 			IntelligentComputeEnabled: intelligentComputeEnabled1,
 			WaveEnabled:               waveEnabled,
 			WorkDir:                   workDir15,
@@ -3888,6 +4299,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.ComputeEnv.FusionMetricsCollectionEnabled.IsUnknown() && !r.ComputeEnv.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.ComputeEnv.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	message := new(string)
 	if !r.ComputeEnv.Message.IsUnknown() && !r.ComputeEnv.Message.IsNull() {
 		*message = r.ComputeEnv.Message.ValueString()
@@ -3899,12 +4316,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 	platform := shared.ComputeEnvComputeConfigPlatform(r.ComputeEnv.Platform.ValueString())
 	computeEnv := shared.ComputeEnvComputeConfigInput{
-		Config:        config,
-		CredentialsID: credentialsID,
-		Description:   description,
-		Message:       message,
-		Name:          name17,
-		Platform:      platform,
+		Config:                         config,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Message:                        message,
+		Name:                           name17,
+		Platform:                       platform,
 	}
 	labelIds := make([]int64, 0, len(r.LabelIds))
 	for labelIdsIndex := range r.LabelIds {

@@ -396,6 +396,28 @@ actions:
     update:
       x-speakeasy-param-force-new: true
 
+  # Rename schedConfig -> intelligent_compute_config for consistency with the
+  # AWS and Local compute environments within the provider (PR #231 review).
+  - target: $.components.schemas.GoogleCloudConfig.properties.schedConfig
+    update:
+      x-speakeasy-name-override: intelligent_compute_config
+      nullable: true
+      description: |
+        Optional scheduler configuration used when
+        `intelligent_compute_enabled = true` (Seqera Intelligent Compute mode).
+        Leave null to accept the platform defaults.
+
+        Must be omitted (or null) when `intelligent_compute_enabled = false`.
+      x-speakeasy-param-force-new: true
+
+  # Google only supports the VM backend for Intelligent Compute; the backend
+  # ignores backend_strategy here and hardcodes VM. Reject other values at plan
+  # time (the shared SchedConfig can't drop the field for one platform, so this
+  # validator constrains it instead). PR #231 review.
+  - target: $.components.schemas.GoogleCloudConfig
+    update:
+      x-speakeasy-plan-validators: BackendStrategyVmOnlyValidator
+
   # Plan-time soft-warn when pre/post-run scripts exceed Platform Cloud's
   # 1024-byte limit. Enterprise installs can raise the limit via platform
   # configuration, so this stays a Warning rather than an Error.

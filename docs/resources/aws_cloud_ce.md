@@ -94,6 +94,28 @@ resource "seqera_aws_cloud_ce" "classic" {
     work_dir = "s3://my-bucket/work"
   }
 }
+
+# AWS Cloud compute environment with explicit networking and an encrypted
+# boot volume.
+resource "seqera_aws_cloud_ce" "networked" {
+  name           = "aws-cloud-networked"
+  workspace_id   = data.seqera_workspace.main.id
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region   = "us-west-1"
+    work_dir = "s3://my-bucket/work"
+
+    # Networking. Use subnet_ids (a list) rather than the deprecated subnet_id.
+    vpc_id     = "vpc-12345678"
+    subnet_ids = ["subnet-12345678", "subnet-87654321"]
+
+    # Encrypt the boot EBS volume. ebs_kms_key_id requires ebs_encrypted = true;
+    # omit it to use the account/region default EBS encryption key.
+    ebs_encrypted  = true
+    ebs_kms_key_id = "arn:aws:kms:us-west-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef"
+  }
+}
 ```
 
 ### Fusion Graviton
@@ -137,6 +159,17 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
+      backend_strategy   = "ECS"       # ECS (default) | EC2 | VM
+      fusion_snapshots   = true        # resume interrupted tasks from a snapshot
+      prediction_model   = "none"      # none | qr/v1 | qr/v2
+
+      # Warm pool: keep idle VMs ready for sub-5s task starts, scaling to zero
+      # after 5 minutes of inactivity.
+      pool = {
+        enabled            = true
+        desired_warm       = 1
+        scale_to_zero_secs = 300
+      }
     }
   }
 }
@@ -192,6 +225,13 @@ Requires replacement if changed.
 - `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
 When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 Requires replacement if changed.
+- `ebs_encrypted` (Boolean) Encrypt the boot EBS volume of provisioned instances. Defaults to `false`
+(null/absent is treated as `false` — no encryption).
+Requires replacement if changed.
+- `ebs_kms_key_id` (String) KMS key ARN used to encrypt the boot EBS volume. Only applied when
+`ebs_encrypted` is `true`; when omitted, the account/region default EBS
+encryption key is used.
+Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
@@ -230,8 +270,18 @@ Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
-- `subnet_id` (String) Subnet ID where compute instances will be launched.
+- `subnet_id` (String, Deprecated) Subnet ID where compute instances will be launched.
 Must be in the same VPC and region as the compute environment.
+Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
+Requires replacement if changed.
+- `subnet_ids` (List of String) Subnets to launch compute instances into. The first subnet is used for
+basic placement; Seqera Intelligent Compute may use all of them. Replaces
+the deprecated single-value `subnet_id`, and is mutually exclusive with it.
+All subnets must be in the VPC given by `vpc_id` (when set) and in the same
+region as the compute environment.
+Requires replacement if changed.
+- `vpc_id` (String) VPC used to scope subnet and security-group selection. Determines the
+network in which EC2 instances are launched.
 Requires replacement if changed.
 
 <a id="nestedatt--config--environment"></a>
@@ -256,11 +306,33 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
+Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -270,6 +342,15 @@ Case-sensitive — must be one of:
 
 Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--config--intelligent_compute_config--pool"></a>
+### Nested Schema for `config.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
 
 ## Import
 

@@ -2,8 +2,23 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type ManagedCredentialsMetadata struct {
 	Discriminator *string `json:"discriminator,omitempty"`
+}
+
+func (m ManagedCredentialsMetadata) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
+}
+
+func (m *ManagedCredentialsMetadata) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (m *ManagedCredentialsMetadata) GetDiscriminator() *string {

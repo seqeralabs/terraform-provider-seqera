@@ -1039,6 +1039,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.` + "\n" +
 											`Requires replacement if changed.`,
 									},
+									"ebs_encrypted": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Encrypt the boot EBS volume of provisioned instances. Defaults to ` + "`" + `false` + "`" + `` + "\n" +
+											`(null/absent is treated as ` + "`" + `false` + "`" + ` — no encryption).` + "\n" +
+											`Requires replacement if changed.`,
+									},
+									"ebs_kms_key_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `KMS key ARN used to encrypt the boot EBS volume. Only applied when` + "\n" +
+											`` + "`" + `ebs_encrypted` + "`" + ` is ` + "`" + `true` + "`" + `; when omitted, the account/region default EBS` + "\n" +
+											`encryption key is used.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.EbsKmsKeyEncryptionValidator(),
+											custom_stringvalidators.EbsKmsKeyArnValidator(),
+										},
+									},
 									"ec2_key_pair": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1153,6 +1178,49 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
+													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
+													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
+													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+													`` + "\n" +
+													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+														"VM",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Disk-allocation strategy for Intelligent Compute nodes. Set to ` + "`" + `nvme` + "`" + ` to` + "\n" +
+													`restrict to instance types that provide local SSD (NVMe) storage. Leave` + "\n" +
+													`unset for no local-storage requirement.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
+													`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+													`on Azure compute environments.` + "\n" +
+													`Requires replacement if changed.`,
+											},
 											"machine_types": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 												Computed:   true,
@@ -1166,6 +1234,53 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`types per task. When populated, the scheduler is restricted to this` + "\n" +
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												MarkdownDescription: `Warm-pool configuration. When present and enabled, the scheduler keeps a` + "\n" +
+													`pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
+													`is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -1286,8 +1401,38 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
+										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										MarkdownDescription: `Subnet ID where compute instances will be launched.` + "\n" +
 											`Must be in the same VPC and region as the compute environment.` + "\n" +
+											`Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.SubnetConflictsValidator(),
+										},
+									},
+									"subnet_ids": schema.ListAttribute{
+										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+										Computed:   true,
+										Optional:   true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										MarkdownDescription: `Subnets to launch compute instances into. The first subnet is used for` + "\n" +
+											`basic placement; Seqera Intelligent Compute may use all of them. Replaces` + "\n" +
+											`the deprecated single-value ` + "`" + `subnet_id` + "`" + `, and is mutually exclusive with it.` + "\n" +
+											`All subnets must be in the VPC given by ` + "`" + `vpc_id` + "`" + ` (when set) and in the same` + "\n" +
+											`region as the compute environment.` + "\n" +
+											`Requires replacement if changed.`,
+									},
+									"vpc_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `VPC used to scope subnet and security-group selection. Determines the` + "\n" +
+											`network in which EC2 instances are launched.` + "\n" +
 											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
@@ -1895,6 +2040,144 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.`,
 									},
+									"intelligent_compute_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
+													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
+													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
+													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+													`` + "\n" +
+													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+														"VM",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Disk-allocation strategy for Intelligent Compute nodes. Set to ` + "`" + `nvme` + "`" + ` to` + "\n" +
+													`restrict to instance types that provide local SSD (NVMe) storage. Leave` + "\n" +
+													`unset for no local-storage requirement.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
+													`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+													`on Azure compute environments.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"machine_types": schema.ListAttribute{
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+													`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
+													`types per task. When populated, the scheduler is restricted to this` + "\n" +
+													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
+													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												MarkdownDescription: `Warm-pool configuration. When present and enabled, the scheduler keeps a` + "\n" +
+													`pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
+													`is accepted.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`spotFirst`),
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+													`Case-sensitive — must be one of:` + "\n" +
+													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
+													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
+													`- ` + "`" + `ondemand` + "`" + `: on-demand instances only — maximum reliability at a higher cost.` + "\n" +
+													`` + "\n" +
+													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
+													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1988,6 +2271,23 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`ignores any user-supplied value, so this field is computed by the` + "\n" +
 											`backend rather than configured.`,
 									},
+									"sched_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"subnets": schema.ListAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										Description: `Requires replacement if changed.`,
+									},
 									"subscription_id": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -2028,6 +2328,8 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
+									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
 								},
 							},
 							"eks_platform": schema.SingleNestedAttribute{
@@ -3099,6 +3401,144 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.`,
 									},
+									"intelligent_compute_config": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											objectplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
+													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
+													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
+													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+													`` + "\n" +
+													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+														"VM",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Disk-allocation strategy for Intelligent Compute nodes. Set to ` + "`" + `nvme` + "`" + ` to` + "\n" +
+													`restrict to instance types that provide local SSD (NVMe) storage. Leave` + "\n" +
+													`unset for no local-storage requirement.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
+													`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+													`on Azure compute environments.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"machine_types": schema.ListAttribute{
+												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
+												Computed:   true,
+												Optional:   true,
+												PlanModifiers: []planmodifier.List{
+													listplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												ElementType: types.StringType,
+												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+													`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
+													`types per task. When populated, the scheduler is restricted to this` + "\n" +
+													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
+													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												MarkdownDescription: `Warm-pool configuration. When present and enabled, the scheduler keeps a` + "\n" +
+													`pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
+													`is accepted.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"provisioning_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`spotFirst`),
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+													`Case-sensitive — must be one of:` + "\n" +
+													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
+													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
+													`- ` + "`" + `ondemand` + "`" + `: on-demand instances only — maximum reliability at a higher cost.` + "\n" +
+													`` + "\n" +
+													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
+													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"spot",
+														"spotFirst",
+														"ondemand",
+													),
+												},
+											},
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -3149,6 +3589,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
+									},
+									"sched_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
 									},
 									"service_account_email": schema.StringAttribute{
 										Computed: true,
@@ -3202,6 +3650,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 								},
 							},
 							"google_lifesciences": schema.SingleNestedAttribute{
@@ -3804,6 +4253,49 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
+											"backend_strategy": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
+													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
+													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
+													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+													`` + "\n" +
+													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.OneOf(
+														"ECS",
+														"EC2",
+														"VM",
+													),
+												},
+											},
+											"disk_allocation": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Disk-allocation strategy for Intelligent Compute nodes. Set to ` + "`" + `nvme` + "`" + ` to` + "\n" +
+													`restrict to instance types that provide local SSD (NVMe) storage. Leave` + "\n" +
+													`unset for no local-storage requirement.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Bool{
+													boolplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can` + "\n" +
+													`resume from a snapshot instead of restarting from scratch. Not supported` + "\n" +
+													`on Azure compute environments.` + "\n" +
+													`Requires replacement if changed.`,
+											},
 											"machine_types": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 												Computed:   true,
@@ -3817,6 +4309,53 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`types per task. When populated, the scheduler is restricted to this` + "\n" +
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"pool": schema.SingleNestedAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													objectplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Attributes: map[string]schema.Attribute{
+													"desired_warm": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.`,
+													},
+													"enabled": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.`,
+													},
+													"scale_to_zero_secs": schema.Int32Attribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Int32{
+															int32planmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.`,
+													},
+												},
+												MarkdownDescription: `Warm-pool configuration. When present and enabled, the scheduler keeps a` + "\n" +
+													`pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.` + "\n" +
+													`Requires replacement if changed.`,
+											},
+											"prediction_model": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
+													`is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -4947,6 +5486,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringvalidator.UTF8LengthAtMost(2000),
 						},
 					},
+					"fusion_metrics_collection_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
 					"labels": schema.ListNestedAttribute{
 						Computed: true,
 						PlanModifiers: []planmodifier.List{
@@ -5109,6 +5657,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								PlanModifiers: []planmodifier.Float32{
 									speakeasy_float32planmodifier.SuppressDiff(speakeasy_float32planmodifier.ExplicitSuppress),
+								},
+							},
+							"gpu_enabled": schema.BoolAttribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
 							},
 							"gpus": schema.Int32Attribute{

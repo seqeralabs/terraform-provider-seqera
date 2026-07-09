@@ -247,6 +247,20 @@ actions:
   - target: $.components.schemas.LaunchDbDto.properties.mainScript
     update:
       x-speakeasy-param-computed: false
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.outputDir
+    update:
+      description: |
+        Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+        Nextflow 24.10.0 or later and the workflow outputs syntax.
+      example: "s3://my-bucket/results"
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LaunchDbDto.properties.outputDir
+    update:
+      description: |
+        Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+        Nextflow 24.10.0 or later and the workflow outputs syntax.
+      example: "s3://my-bucket/results"
+      x-speakeasy-param-computed: false
   - target: $.components.schemas.WorkflowLaunchRequest.properties.entryName
     update:
       x-speakeasy-param-computed: false

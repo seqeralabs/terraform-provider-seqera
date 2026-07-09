@@ -126,6 +126,8 @@ Optional:
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
 - `main_script` (String) Main script path
+- `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+Nextflow 24.10.0 or later and the workflow outputs syntax.
 - `params_text` (String) Pipeline parameters text
 - `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution

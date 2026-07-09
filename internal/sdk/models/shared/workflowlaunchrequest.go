@@ -50,6 +50,10 @@ type WorkflowLaunchRequest struct {
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
+	// Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+	// Nextflow 24.10.0 or later and the workflow outputs syntax.
+	//
+	OutputDir *string `json:"outputDir,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
 	Pipeline         string  `json:"pipeline"`
@@ -148,6 +152,13 @@ func (w *WorkflowLaunchRequest) GetMainScript() *string {
 		return nil
 	}
 	return w.MainScript
+}
+
+func (w *WorkflowLaunchRequest) GetOutputDir() *string {
+	if w == nil {
+		return nil
+	}
+	return w.OutputDir
 }
 
 func (w *WorkflowLaunchRequest) GetParamsText() *string {

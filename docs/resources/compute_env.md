@@ -64,11 +64,12 @@ resource "seqera_compute_env" "my_computeenv" {
         work_dir                   = "...my_work_dir..."
       }
     }
-    credentials_id = "...my_credentials_id..."
-    description    = "...my_description..."
-    message        = "...my_message..."
-    name           = "...my_name..."
-    platform       = "google-lifesciences"
+    credentials_id                    = "...my_credentials_id..."
+    description                       = "...my_description..."
+    fusion_metrics_collection_enabled = true
+    message                           = "...my_message..."
+    name                              = "...my_name..."
+    platform                          = "google-lifesciences"
   }
   force = true
   label_ids = [
@@ -111,6 +112,7 @@ Requires replacement if changed. (see [below for nested schema](#nestedatt--comp
 Optional:
 
 - `description` (String) Compute environment description. Requires replacement if changed.
+- `fusion_metrics_collection_enabled` (Boolean) Requires replacement if changed.
 - `message` (String) Status message (null if no message). Requires replacement if changed.
 
 Read-Only:
@@ -409,6 +411,13 @@ Requires replacement if changed.
 - `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
 When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
 Requires replacement if changed.
+- `ebs_encrypted` (Boolean) Encrypt the boot EBS volume of provisioned instances. Defaults to `false`
+(null/absent is treated as `false` — no encryption).
+Requires replacement if changed.
+- `ebs_kms_key_id` (String) KMS key ARN used to encrypt the boot EBS volume. Only applied when
+`ebs_encrypted` is `true`; when omitted, the account/region default EBS
+encryption key is used.
+Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
@@ -450,8 +459,18 @@ Not Null; Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
-- `subnet_id` (String) Subnet ID where compute instances will be launched.
+- `subnet_id` (String, Deprecated) Subnet ID where compute instances will be launched.
 Must be in the same VPC and region as the compute environment.
+Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
+Requires replacement if changed.
+- `subnet_ids` (List of String) Subnets to launch compute instances into. The first subnet is used for
+basic placement; Seqera Intelligent Compute may use all of them. Replaces
+the deprecated single-value `subnet_id`, and is mutually exclusive with it.
+All subnets must be in the VPC given by `vpc_id` (when set) and in the same
+region as the compute environment.
+Requires replacement if changed.
+- `vpc_id` (String) VPC used to scope subnet and security-group selection. Determines the
+network in which EC2 instances are launched.
 Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
@@ -477,11 +496,33 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
+Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -491,6 +532,16 @@ Case-sensitive — must be one of:
 
 Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--aws_cloud--intelligent_compute_config--pool"></a>
+### Nested Schema for `compute_env.config.aws_cloud.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
+
 
 
 
@@ -599,6 +650,7 @@ Optional:
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--intelligent_compute_config))
 - `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
@@ -612,6 +664,8 @@ Requires replacement if changed.
 - `region` (String) Azure region where the compute environment will be created.
 Examples: eastus, westus2, northeurope
 Not Null; Requires replacement if changed.
+- `sched_enabled` (Boolean) Requires replacement if changed.
+- `subnets` (List of String) Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
@@ -638,6 +692,59 @@ Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--compute_env--config--azure_cloud--intelligent_compute_config"></a>
+### Nested Schema for `compute_env.config.azure_cloud.intelligent_compute_config`
+
+Optional:
+
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
+Requires replacement if changed.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
+Requires replacement if changed.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--azure_cloud--intelligent_compute_config--pool"></a>
+### Nested Schema for `compute_env.config.azure_cloud.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
+
 
 
 
@@ -864,6 +971,7 @@ Requires replacement if changed.
 If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
+- `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--intelligent_compute_config))
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
@@ -871,6 +979,7 @@ Requires replacement if changed.
 - `region` (String) Google Cloud region where the compute environment will be created.
 Examples: us-central1, europe-west1, asia-east1
 Not Null; Requires replacement if changed.
+- `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
@@ -894,6 +1003,59 @@ Requires replacement if changed.
 Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--compute_env--config--google_cloud--intelligent_compute_config"></a>
+### Nested Schema for `compute_env.config.google_cloud.intelligent_compute_config`
+
+Optional:
+
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
+Requires replacement if changed.
+- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+Leave empty (`[]`) to let the scheduler pick the most cost-optimal
+types per task. When populated, the scheduler is restricted to this
+whitelist; types outside the platform's filtered catalog for the
+scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
+Requires replacement if changed.
+- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+Case-sensitive — must be one of:
+- `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
+- `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
+- `ondemand`: on-demand instances only — maximum reliability at a higher cost.
+
+Note: `"onDemand"` / `"on-demand"` are rejected by the API.
+Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--google_cloud--intelligent_compute_config--pool"></a>
+### Nested Schema for `compute_env.config.google_cloud.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
+
 
 
 
@@ -1038,11 +1200,33 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
+- `ECS` (default, AWS only): delegate task execution to AWS ECS.
+- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
+- `VM` (provider-agnostic): run tasks on cloud VMs.
+
+Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
+restrict to instance types that provide local SSD (NVMe) storage. Leave
+unset for no local-storage requirement.
+Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots so interrupted (e.g. spot-reclaimed) tasks can
+resume from a snapshot instead of restarting from scratch. Not supported
+on Azure compute environments.
+Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
+Requires replacement if changed.
+- `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
+pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--intelligent_compute_config--pool))
+- `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
+is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -1052,6 +1236,16 @@ Case-sensitive — must be one of:
 
 Note: `"onDemand"` / `"on-demand"` are rejected by the API.
 Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--local_platform--intelligent_compute_config--pool"></a>
+### Nested Schema for `compute_env.config.local_platform.intelligent_compute_config.pool`
+
+Optional:
+
+- `desired_warm` (Number) Target number of idle VMs to keep warm. Bounds total warm-VM cost across all of this CE's pool clusters. Requires replacement if changed.
+- `enabled` (Boolean) Whether the warm pool is active for this CE. When false, the scheduler will not maintain idle VMs. Requires replacement if changed.
+- `scale_to_zero_secs` (Number) Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero. Requires replacement if changed.
+
 
 
 
@@ -1264,6 +1458,7 @@ Read-Only:
 - `cpus` (Number)
 - `disk_size` (Number)
 - `estimated_price` (Number)
+- `gpu_enabled` (Boolean)
 - `gpus` (Number)
 - `instance_type` (String)
 - `memory` (Number)
