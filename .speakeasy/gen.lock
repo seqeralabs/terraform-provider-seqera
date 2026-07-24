@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: f54da790ac19596eb1749157c112efed
+  docChecksum: 5ac3b0ee51417a0548b2574d1a570c73
   docVersion: 1.187.0
   speakeasyVersion: 1.790.3
   generationVersion: 2.918.4
-  releaseVersion: 0.41.0
-  configChecksum: 561a824fb4acd4ad7db39d0272f08db4
+  releaseVersion: 0.42.0
+  configChecksum: d46f5e8aa34499dceb5298898535e967
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb

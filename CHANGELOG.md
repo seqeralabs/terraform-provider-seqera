@@ -1,3 +1,11 @@
+# v0.42.0
+
+FEATURES:
+
+- **Allow-list support on `seqera_studios` (Seqera Enterprise 26.2+ / Cloud).** New `allowed_user_ids` names the users, besides the creator, permitted to connect to and start a **private** Studio. Only valid when `is_private = true` (enforced at plan time), currently capped at one additional user, and the creator is always allowed (dropped from the list if included). Changing the list forces replacement. The resolved membership is exposed read-only via the new `allowed_users` attribute (`id`, `user_name`, `email`, `avatar`).
+
+- **Nextflow version selection on launches (Seqera Enterprise 26.2+ / Cloud).** New `nextflow_version` on `seqera_pipeline`, `seqera_action`, and `seqera_workflows` launch config pins the Nextflow release used for the run. The version must exist in the platform's system catalog and satisfy the minimum configured for the compute environment's type.
+
 # v0.41.0
 
 FEATURES:

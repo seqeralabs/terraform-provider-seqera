@@ -19264,7 +19264,7 @@ components:
             type: integer
           nullable: true
           description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
-          maxItems: 1
+          maxItems: 1 # mirrors the platform cap; bump if the platform limit increases
           x-speakeasy-plan-validators: StudioAllowlistRequiresPrivateValidator
         computeEnvId:
           type: string
