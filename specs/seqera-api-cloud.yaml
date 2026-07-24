@@ -13576,6 +13576,12 @@ components:
     DataStudioCreateRequest:
       type: object
       properties:
+        allowedUserIds:
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         computeEnvId:
           type: string
           minLength: 1
@@ -13841,6 +13847,12 @@ components:
     DataStudioStartRequest:
       type: object
       properties:
+        allowedUserIds:
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'

@@ -3,6 +3,8 @@
 package shared
 
 type DataStudioCreateRequest struct {
+	// IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
+	AllowedUserIds      []int64                 `json:"allowedUserIds,omitempty"`
 	ComputeEnvID        string                  `json:"computeEnvId"`
 	Configuration       DataStudioConfiguration `json:"configuration"`
 	DataStudioToolURL   string                  `json:"dataStudioToolUrl"`
@@ -14,6 +16,13 @@ type DataStudioCreateRequest struct {
 	Name     string  `json:"name"`
 	// Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
 	Spot *bool `json:"spot,omitempty"`
+}
+
+func (d *DataStudioCreateRequest) GetAllowedUserIds() []int64 {
+	if d == nil {
+		return nil
+	}
+	return d.AllowedUserIds
 }
 
 func (d *DataStudioCreateRequest) GetComputeEnvID() string {

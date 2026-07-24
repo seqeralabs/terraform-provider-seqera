@@ -99,11 +99,19 @@ func (d *DataStudioStartRequestConfiguration) GetSSHEnabled() *bool {
 }
 
 type DataStudioStartRequest struct {
-	Configuration *DataStudioStartRequestConfiguration `json:"configuration,omitempty"`
-	Description   *string                              `json:"description,omitempty"`
-	LabelIds      []int64                              `json:"labelIds,omitempty"`
-	Name          *string                              `json:"name,omitempty"`
-	Spot          *bool                                `json:"spot,omitempty"`
+	AllowedUserIds []int64                              `json:"allowedUserIds,omitempty"`
+	Configuration  *DataStudioStartRequestConfiguration `json:"configuration,omitempty"`
+	Description    *string                              `json:"description,omitempty"`
+	LabelIds       []int64                              `json:"labelIds,omitempty"`
+	Name           *string                              `json:"name,omitempty"`
+	Spot           *bool                                `json:"spot,omitempty"`
+}
+
+func (d *DataStudioStartRequest) GetAllowedUserIds() []int64 {
+	if d == nil {
+		return nil
+	}
+	return d.AllowedUserIds
 }
 
 func (d *DataStudioStartRequest) GetConfiguration() *DataStudioStartRequestConfiguration {

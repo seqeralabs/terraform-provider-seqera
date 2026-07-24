@@ -214,6 +214,9 @@ actions:
   - target: $.components.schemas.DataStudioCreateRequest.properties.labelIds
     update:
       description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+  - target: $.components.schemas.DataStudioCreateRequest.properties.allowedUserIds
+    update:
+      description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
   - target: $.components.schemas.DataStudioCreateRequest.properties.spot
     update:
       description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.

@@ -223,6 +223,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Optional
 
+- `allowed_user_ids` (List of Number) IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.

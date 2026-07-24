@@ -19188,6 +19188,13 @@ components:
     DataStudioCreateRequest:
       type: object
       properties:
+        allowedUserIds:
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
+          description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
         computeEnvId:
           type: string
           minLength: 1
@@ -19450,6 +19457,12 @@ components:
     DataStudioStartRequest:
       type: object
       properties:
+        allowedUserIds:
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'

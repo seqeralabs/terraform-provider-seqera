@@ -161,6 +161,13 @@ func (r *StudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context
 func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Context) (*shared.DataStudioCreateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	var allowedUserIds []int64
+	if r.AllowedUserIds != nil {
+		allowedUserIds = make([]int64, 0, len(r.AllowedUserIds))
+		for allowedUserIdsIndex := range r.AllowedUserIds {
+			allowedUserIds = append(allowedUserIds, r.AllowedUserIds[allowedUserIdsIndex].ValueInt64())
+		}
+	}
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
@@ -288,6 +295,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		spot = nil
 	}
 	out := shared.DataStudioCreateRequest{
+		AllowedUserIds:      allowedUserIds,
 		ComputeEnvID:        computeEnvID,
 		Configuration:       configuration,
 		DataStudioToolURL:   dataStudioToolURL,
