@@ -11,7 +11,7 @@ type DeleteManagedCredentialsRequest struct {
 	// Managed Identity numeric identifier
 	ManagedIdentityID int64 `pathParam:"style=simple,explode=false,name=managedIdentityId"`
 	// Managed Credentials numeric identifier
-	ManagedCredentialsID *int64 `pathParam:"style=simple,explode=false,name=managedCredentialsId"`
+	ManagedCredentialsID int64 `pathParam:"style=simple,explode=false,name=managedCredentialsId"`
 	// Organization numeric identifier
 	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// If Managed Credentials deletion will be blocked by running jobs that depend on them
@@ -25,9 +25,9 @@ func (d *DeleteManagedCredentialsRequest) GetManagedIdentityID() int64 {
 	return d.ManagedIdentityID
 }
 
-func (d *DeleteManagedCredentialsRequest) GetManagedCredentialsID() *int64 {
+func (d *DeleteManagedCredentialsRequest) GetManagedCredentialsID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.ManagedCredentialsID
 }

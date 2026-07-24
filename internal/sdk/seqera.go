@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.181.0 and generator version 2.916.2
+// Generated from OpenAPI doc version 1.187.0 and generator version 2.918.4
 
 import (
 	"context"
@@ -83,6 +83,8 @@ type Seqera struct {
 	// Pipelines
 	Pipelines        *Pipelines
 	PipelineVersions *PipelineVersions
+	// Nextflow version catalog and launch policy
+	Nextflow *Nextflow
 	// Computing platforms
 	Platforms *Platforms
 	Roles     *Roles
@@ -175,9 +177,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.41.0",
+		SDKVersion: "0.42.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.41.0 2.916.2 1.181.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.42.0 2.918.4 1.187.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -217,6 +219,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.PipelineSecrets = newPipelineSecrets(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PipelineVersions = newPipelineVersions(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Nextflow = newNextflow(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Platforms = newPlatforms(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Roles = newRoles(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ServiceInfo = newServiceInfo(sdk, sdk.sdkConfiguration, sdk.hooks)

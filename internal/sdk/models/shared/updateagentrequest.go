@@ -3,10 +3,24 @@
 package shared
 
 type UpdateAgentRequest struct {
-	Description  *string `json:"description,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	SystemPrompt *string `json:"systemPrompt,omitempty"`
-	TemplateID   *string `json:"templateId,omitempty"`
+	AgentInstructions           *string `json:"agentInstructions,omitempty"`
+	AgentInstructionsTemplateID *string `json:"agentInstructionsTemplateId,omitempty"`
+	Description                 *string `json:"description,omitempty"`
+	Name                        *string `json:"name,omitempty"`
+}
+
+func (u *UpdateAgentRequest) GetAgentInstructions() *string {
+	if u == nil {
+		return nil
+	}
+	return u.AgentInstructions
+}
+
+func (u *UpdateAgentRequest) GetAgentInstructionsTemplateID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.AgentInstructionsTemplateID
 }
 
 func (u *UpdateAgentRequest) GetDescription() *string {
@@ -21,18 +35,4 @@ func (u *UpdateAgentRequest) GetName() *string {
 		return nil
 	}
 	return u.Name
-}
-
-func (u *UpdateAgentRequest) GetSystemPrompt() *string {
-	if u == nil {
-		return nil
-	}
-	return u.SystemPrompt
-}
-
-func (u *UpdateAgentRequest) GetTemplateID() *string {
-	if u == nil {
-		return nil
-	}
-	return u.TemplateID
 }

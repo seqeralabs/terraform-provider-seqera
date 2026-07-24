@@ -56,6 +56,7 @@ type WorkflowsResourceModel struct {
 	IntelligentComputeEnabled types.Bool                                    `tfsdk:"intelligent_compute_enabled"`
 	LabelIds                  []types.Int64                                 `tfsdk:"label_ids"`
 	MainScript                types.String                                  `tfsdk:"main_script"`
+	NextflowVersion           types.String                                  `tfsdk:"nextflow_version"`
 	OutputDir                 types.String                                  `tfsdk:"output_dir"`
 	ParamsText                types.String                                  `tfsdk:"params_text"`
 	Pipeline                  types.String                                  `tfsdk:"pipeline"`
@@ -155,6 +156,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Main script path. Requires replacement if changed.`,
+			},
+			"nextflow_version": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type. Requires replacement if changed.`,
 			},
 			"output_dir": schema.StringAttribute{
 				Optional: true,

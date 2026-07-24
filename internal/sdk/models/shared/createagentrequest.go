@@ -3,10 +3,24 @@
 package shared
 
 type CreateAgentRequest struct {
-	Description  *string `json:"description,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	SystemPrompt *string `json:"systemPrompt,omitempty"`
-	TemplateID   *string `json:"templateId,omitempty"`
+	AgentInstructions           *string `json:"agentInstructions,omitempty"`
+	AgentInstructionsTemplateID *string `json:"agentInstructionsTemplateId,omitempty"`
+	Description                 *string `json:"description,omitempty"`
+	Name                        *string `json:"name,omitempty"`
+}
+
+func (c *CreateAgentRequest) GetAgentInstructions() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AgentInstructions
+}
+
+func (c *CreateAgentRequest) GetAgentInstructionsTemplateID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AgentInstructionsTemplateID
 }
 
 func (c *CreateAgentRequest) GetDescription() *string {
@@ -21,18 +35,4 @@ func (c *CreateAgentRequest) GetName() *string {
 		return nil
 	}
 	return c.Name
-}
-
-func (c *CreateAgentRequest) GetSystemPrompt() *string {
-	if c == nil {
-		return nil
-	}
-	return c.SystemPrompt
-}
-
-func (c *CreateAgentRequest) GetTemplateID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.TemplateID
 }

@@ -44,6 +44,7 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
 			r.Launch.MainScript = types.StringPointerValue(resp.Launch.MainScript)
+			r.Launch.NextflowVersion = types.StringPointerValue(resp.Launch.NextflowVersion)
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
 			r.Launch.OptimizationTargets = types.StringPointerValue(resp.Launch.OptimizationTargets)
 			r.Launch.OutputDir = types.StringPointerValue(resp.Launch.OutputDir)
@@ -313,6 +314,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		mainScript = nil
 	}
+	nextflowVersion := new(string)
+	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+	} else {
+		nextflowVersion = nil
+	}
 	outputDir := new(string)
 	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
 		*outputDir = r.Launch.OutputDir.ValueString()
@@ -411,6 +418,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
+		NextflowVersion:  nextflowVersion,
 		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,
@@ -519,6 +527,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		mainScript = nil
 	}
+	nextflowVersion := new(string)
+	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+	} else {
+		nextflowVersion = nil
+	}
 	outputDir := new(string)
 	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
 		*outputDir = r.Launch.OutputDir.ValueString()
@@ -617,6 +631,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,
 		MainScript:       mainScript,
+		NextflowVersion:  nextflowVersion,
 		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,

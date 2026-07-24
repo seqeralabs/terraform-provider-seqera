@@ -8,17 +8,17 @@ import (
 )
 
 type AgentDbDto struct {
-	CreatedBy    *int64       `json:"createdBy,omitempty"`
-	DateCreated  *time.Time   `json:"dateCreated,omitempty"`
-	Description  *string      `json:"description,omitempty"`
-	ID           *string      `json:"id,omitempty"`
-	LastUpdated  *time.Time   `json:"lastUpdated,omitempty"`
-	Name         *string      `json:"name,omitempty"`
-	Status       *AgentStatus `json:"status,omitempty"`
-	SystemPrompt *string      `json:"systemPrompt,omitempty"`
-	TemplateID   *string      `json:"templateId,omitempty"`
-	UpdatedBy    *int64       `json:"updatedBy,omitempty"`
-	WorkspaceID  *int64       `json:"workspaceId,omitempty"`
+	AgentInstructions           *string      `json:"agentInstructions,omitempty"`
+	AgentInstructionsTemplateID *string      `json:"agentInstructionsTemplateId,omitempty"`
+	CreatedBy                   *int64       `json:"createdBy,omitempty"`
+	DateCreated                 *time.Time   `json:"dateCreated,omitempty"`
+	Description                 *string      `json:"description,omitempty"`
+	ID                          *string      `json:"id,omitempty"`
+	LastUpdated                 *time.Time   `json:"lastUpdated,omitempty"`
+	Name                        *string      `json:"name,omitempty"`
+	Status                      *AgentStatus `json:"status,omitempty"`
+	UpdatedBy                   *int64       `json:"updatedBy,omitempty"`
+	WorkspaceID                 *int64       `json:"workspaceId,omitempty"`
 }
 
 func (a AgentDbDto) MarshalJSON() ([]byte, error) {
@@ -30,6 +30,20 @@ func (a *AgentDbDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AgentDbDto) GetAgentInstructions() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AgentInstructions
+}
+
+func (a *AgentDbDto) GetAgentInstructionsTemplateID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AgentInstructionsTemplateID
 }
 
 func (a *AgentDbDto) GetCreatedBy() *int64 {
@@ -79,20 +93,6 @@ func (a *AgentDbDto) GetStatus() *AgentStatus {
 		return nil
 	}
 	return a.Status
-}
-
-func (a *AgentDbDto) GetSystemPrompt() *string {
-	if a == nil {
-		return nil
-	}
-	return a.SystemPrompt
-}
-
-func (a *AgentDbDto) GetTemplateID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.TemplateID
 }
 
 func (a *AgentDbDto) GetUpdatedBy() *int64 {

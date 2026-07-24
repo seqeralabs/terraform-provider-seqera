@@ -10,6 +10,8 @@ type TeamImage struct {
 	AuditImageType AuditImageType `json:"auditImageType"`
 	AvatarID       *string        `json:"avatarId,omitempty"`
 	Description    *string        `json:"description,omitempty"`
+	IdpGroupID     *int64         `json:"idpGroupId,omitempty"`
+	IdpGroupName   *string        `json:"idpGroupName,omitempty"`
 	Name           *string        `json:"name,omitempty"`
 }
 
@@ -43,6 +45,20 @@ func (t *TeamImage) GetDescription() *string {
 		return nil
 	}
 	return t.Description
+}
+
+func (t *TeamImage) GetIdpGroupID() *int64 {
+	if t == nil {
+		return nil
+	}
+	return t.IdpGroupID
+}
+
+func (t *TeamImage) GetIdpGroupName() *string {
+	if t == nil {
+		return nil
+	}
+	return t.IdpGroupName
 }
 
 func (t *TeamImage) GetName() *string {

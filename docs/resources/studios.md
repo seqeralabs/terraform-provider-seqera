@@ -37,6 +37,50 @@ resource "seqera_studios" "basic_jupyter" {
 }
 ```
 
+### Allowed Users
+
+```terraform
+# Grant another user access to a private Studio.
+#
+# The Studio owner is always the identity running Terraform: the studio is
+# created under the account that owns the TOWER_ACCESS_TOKEN (or provider
+# `bearer_auth`) credential. That owner is always allowed to connect and start
+# the Studio and never needs to be listed in `allowed_user_ids` — if you include
+# the owner's ID, the platform silently drops it from the list.
+#
+# `allowed_user_ids` takes Seqera *user IDs*, and is only valid on a private
+# studio (is_private = true). Each allowed user must already be a member of the
+# Studio's workspace, otherwise the platform rejects the request. Currently the
+# allow list is capped at one additional user.
+
+# Look up the user's numeric user ID from their email. `seqera_organization_member`
+# exposes `user_id`, which is the value `allowed_user_ids` expects.
+# (The `seqera_workspace_participant` data source only returns member/participant
+# IDs, not the user ID, so it is not used here.)
+data "seqera_organization_member" "collaborator" {
+  org_id = seqera_workspace.main.org_id
+  email  = "collaborator@example.com"
+}
+
+resource "seqera_studios" "shared_private" {
+  name                 = "shared-private-studio"
+  compute_env_id       = seqera_compute_env.main.id
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+  workspace_id         = seqera_workspace.main.id
+  configuration        = {}
+
+  # Private studio: only the owner (the Terraform identity) and the users listed
+  # below can connect to and start it.
+  is_private       = true
+  allowed_user_ids = [data.seqera_organization_member.collaborator.user_id]
+}
+
+# The resolved membership is available read-only, including the owner:
+output "studio_allowed_users" {
+  value = seqera_studios.shared_private.allowed_users
+}
+```
+
 ### Conda Heredoc
 
 ```terraform
@@ -223,6 +267,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Optional
 
+- `allowed_user_ids` (List of Number) IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
@@ -232,6 +277,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Read-Only
 
+- `allowed_users` (Attributes List) (see [below for nested schema](#nestedatt--allowed_users))
 - `id` (String) Alias of `session_id` for Terraform convention.
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
@@ -259,6 +305,17 @@ Optional:
 - `data_link_id` (String) Requires replacement if changed.
 - `path` (String) Requires replacement if changed.
 
+
+
+<a id="nestedatt--allowed_users"></a>
+### Nested Schema for `allowed_users`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)
 
 
 <a id="nestedatt--ssh_details"></a>

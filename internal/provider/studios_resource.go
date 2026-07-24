@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -31,6 +32,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	custom_listvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/listvalidators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 )
@@ -51,6 +53,8 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
+	AllowedUserIds      []types.Int64                    `tfsdk:"allowed_user_ids"`
+	AllowedUsers        []tfTypes.UserInfo               `tfsdk:"allowed_users"`
 	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
 	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
@@ -75,6 +79,37 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 		Attributes: map[string]schema.Attribute{
+			"allowed_user_ids": schema.ListAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					listplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				ElementType: types.Int64Type,
+				Description: `IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.`,
+				Validators: []validator.List{
+					listvalidator.SizeAtMost(1),
+					custom_listvalidators.StudioAllowlistRequiresPrivateValidator(),
+				},
+			},
+			"allowed_users": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"avatar": schema.StringAttribute{
+							Computed: true,
+						},
+						"email": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.Int64Attribute{
+							Computed: true,
+						},
+						"user_name": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
 			"auto_start": schema.BoolAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
