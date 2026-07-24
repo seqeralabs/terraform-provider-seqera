@@ -50,6 +50,7 @@ func (s *SSHDetails) GetUser() string {
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
+	AllowedUsers  []*UserInfo              `json:"allowedUsers,omitempty"`
 	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
@@ -79,6 +80,13 @@ func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (d *DataStudioDto) GetAllowedUsers() []*UserInfo {
+	if d == nil {
+		return nil
+	}
+	return d.AllowedUsers
 }
 
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {

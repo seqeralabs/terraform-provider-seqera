@@ -31,6 +31,22 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.AllowedUsers != nil {
+			r.AllowedUsers = []tfTypes.UserInfo{}
+
+			for _, allowedUsersItem := range resp.AllowedUsers {
+				var allowedUsers tfTypes.UserInfo
+
+				allowedUsers.Avatar = types.StringPointerValue(allowedUsersItem.Avatar)
+				allowedUsers.Email = types.StringPointerValue(allowedUsersItem.Email)
+				allowedUsers.ID = types.Int64PointerValue(allowedUsersItem.ID)
+				allowedUsers.UserName = types.StringPointerValue(allowedUsersItem.UserName)
+
+				r.AllowedUsers = append(r.AllowedUsers, allowedUsers)
+			}
+		} else {
+			r.AllowedUsers = nil
+		}
 		if resp.Configuration != nil {
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))

@@ -126,6 +126,7 @@ Optional:
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
 - `main_script` (String) Main script path
+- `nextflow_version` (String) Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
 - `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 Nextflow 24.10.0 or later and the workflow outputs syntax.
 - `params_text` (String) Pipeline parameters text

@@ -247,6 +247,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringvalidator.UTF8LengthAtMost(200),
 						},
 					},
+					"nextflow_version": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.`,
+					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
 						PlanModifiers: []planmodifier.String{

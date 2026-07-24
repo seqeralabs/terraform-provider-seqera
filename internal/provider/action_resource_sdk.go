@@ -67,6 +67,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			r.Launch.ID = types.StringPointerValue(resp.Launch.ID)
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
 			r.Launch.MainScript = types.StringPointerValue(resp.Launch.MainScript)
+			r.Launch.NextflowVersion = types.StringPointerValue(resp.Launch.NextflowVersion)
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
 			r.Launch.OptimizationTargets = types.StringPointerValue(resp.Launch.OptimizationTargets)
 			r.Launch.OutputDir = types.StringPointerValue(resp.Launch.OutputDir)
@@ -352,6 +353,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		mainScript = nil
 	}
+	nextflowVersion := new(string)
+	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+	} else {
+		nextflowVersion = nil
+	}
 	outputDir := new(string)
 	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
 		*outputDir = r.Launch.OutputDir.ValueString()
@@ -451,6 +458,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		ID:               id,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
+		NextflowVersion:  nextflowVersion,
 		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,
@@ -606,6 +614,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		mainScript = nil
 	}
+	nextflowVersion := new(string)
+	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+	} else {
+		nextflowVersion = nil
+	}
 	outputDir := new(string)
 	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
 		*outputDir = r.Launch.OutputDir.ValueString()
@@ -705,6 +719,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		ID:               id,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
+		NextflowVersion:  nextflowVersion,
 		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,

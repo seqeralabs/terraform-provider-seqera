@@ -16,6 +16,7 @@ type WorkflowLaunchRequest struct {
 	LabelIds            []types.Int64  `tfsdk:"label_ids"`
 	LaunchContainer     types.String   `tfsdk:"launch_container"`
 	MainScript          types.String   `tfsdk:"main_script"`
+	NextflowVersion     types.String   `tfsdk:"nextflow_version"`
 	OptimizationID      types.String   `tfsdk:"optimization_id"`
 	OptimizationTargets types.String   `tfsdk:"optimization_targets"`
 	OutputDir           types.String   `tfsdk:"output_dir"`

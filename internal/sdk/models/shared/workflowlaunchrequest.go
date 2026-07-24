@@ -50,6 +50,8 @@ type WorkflowLaunchRequest struct {
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
+	// Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
+	NextflowVersion *string `json:"nextflowVersion,omitempty"`
 	// Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 	// Nextflow 24.10.0 or later and the workflow outputs syntax.
 	//
@@ -152,6 +154,13 @@ func (w *WorkflowLaunchRequest) GetMainScript() *string {
 		return nil
 	}
 	return w.MainScript
+}
+
+func (w *WorkflowLaunchRequest) GetNextflowVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.NextflowVersion
 }
 
 func (w *WorkflowLaunchRequest) GetOutputDir() *string {

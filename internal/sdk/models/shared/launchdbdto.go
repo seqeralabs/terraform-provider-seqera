@@ -372,6 +372,8 @@ type LaunchDbDto struct {
 	LaunchContainer *string `json:"launchContainer,omitempty"`
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
+	// Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
+	NextflowVersion *string `json:"nextflowVersion,omitempty"`
 	// Optimization profile ID
 	OptimizationID *string `json:"optimizationId,omitempty"`
 	// Optimization targets
@@ -472,6 +474,13 @@ func (l *LaunchDbDto) GetMainScript() *string {
 		return nil
 	}
 	return l.MainScript
+}
+
+func (l *LaunchDbDto) GetNextflowVersion() *string {
+	if l == nil {
+		return nil
+	}
+	return l.NextflowVersion
 }
 
 func (l *LaunchDbDto) GetOptimizationID() *string {

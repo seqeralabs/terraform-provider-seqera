@@ -37,6 +37,7 @@ const (
 	NewStateTypeParticipant          NewStateType = "participant"
 	NewStateTypePipeline             NewStateType = "pipeline"
 	NewStateTypePipelineSecret       NewStateType = "pipeline_secret"
+	NewStateTypeScimToken            NewStateType = "scim_token"
 	NewStateTypeTeam                 NewStateType = "team"
 	NewStateTypeTeamMember           NewStateType = "team_member"
 	NewStateTypeUser                 NewStateType = "user"
@@ -72,6 +73,7 @@ type NewState struct {
 	ParticipantImage          *ParticipantImage          `queryParam:"inline" union:"member"`
 	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
 	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
+	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
 	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
 	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
 	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
@@ -380,6 +382,18 @@ func CreateNewStatePipelineSecret(pipelineSecret PipelineSecretImage) NewState {
 	return NewState{
 		PipelineSecretImage: &pipelineSecret,
 		Type:                typ,
+	}
+}
+
+func CreateNewStateScimToken(scimToken ScimTokenImage) NewState {
+	typ := NewStateTypeScimToken
+
+	typStr := AuditImageType(typ)
+	scimToken.AuditImageType = typStr
+
+	return NewState{
+		ScimTokenImage: &scimToken,
+		Type:           typ,
 	}
 }
 
@@ -704,6 +718,15 @@ func (u *NewState) UnmarshalJSON(data []byte) error {
 		u.PipelineSecretImage = pipelineSecretImage
 		u.Type = NewStateTypePipelineSecret
 		return nil
+	case "scim_token":
+		scimTokenImage := new(ScimTokenImage)
+		if err := utils.UnmarshalJSON(data, &scimTokenImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type ScimTokenImage within NewState: %w", string(data), err)
+		}
+
+		u.ScimTokenImage = scimTokenImage
+		u.Type = NewStateTypeScimToken
+		return nil
 	case "team":
 		teamImage := new(TeamImage)
 		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
@@ -873,6 +896,10 @@ func (u NewState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.PipelineSecretImage, "", true)
 	}
 
+	if u.ScimTokenImage != nil {
+		return utils.MarshalJSON(u.ScimTokenImage, "", true)
+	}
+
 	if u.TeamImage != nil {
 		return utils.MarshalJSON(u.TeamImage, "", true)
 	}
@@ -932,6 +959,7 @@ const (
 	PreviousStateTypeParticipant          PreviousStateType = "participant"
 	PreviousStateTypePipeline             PreviousStateType = "pipeline"
 	PreviousStateTypePipelineSecret       PreviousStateType = "pipeline_secret"
+	PreviousStateTypeScimToken            PreviousStateType = "scim_token"
 	PreviousStateTypeTeam                 PreviousStateType = "team"
 	PreviousStateTypeTeamMember           PreviousStateType = "team_member"
 	PreviousStateTypeUser                 PreviousStateType = "user"
@@ -967,6 +995,7 @@ type PreviousState struct {
 	ParticipantImage          *ParticipantImage          `queryParam:"inline" union:"member"`
 	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
 	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
+	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
 	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
 	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
 	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
@@ -1275,6 +1304,18 @@ func CreatePreviousStatePipelineSecret(pipelineSecret PipelineSecretImage) Previ
 	return PreviousState{
 		PipelineSecretImage: &pipelineSecret,
 		Type:                typ,
+	}
+}
+
+func CreatePreviousStateScimToken(scimToken ScimTokenImage) PreviousState {
+	typ := PreviousStateTypeScimToken
+
+	typStr := AuditImageType(typ)
+	scimToken.AuditImageType = typStr
+
+	return PreviousState{
+		ScimTokenImage: &scimToken,
+		Type:           typ,
 	}
 }
 
@@ -1599,6 +1640,15 @@ func (u *PreviousState) UnmarshalJSON(data []byte) error {
 		u.PipelineSecretImage = pipelineSecretImage
 		u.Type = PreviousStateTypePipelineSecret
 		return nil
+	case "scim_token":
+		scimTokenImage := new(ScimTokenImage)
+		if err := utils.UnmarshalJSON(data, &scimTokenImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type ScimTokenImage within PreviousState: %w", string(data), err)
+		}
+
+		u.ScimTokenImage = scimTokenImage
+		u.Type = PreviousStateTypeScimToken
+		return nil
 	case "team":
 		teamImage := new(TeamImage)
 		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
@@ -1766,6 +1816,10 @@ func (u PreviousState) MarshalJSON() ([]byte, error) {
 
 	if u.PipelineSecretImage != nil {
 		return utils.MarshalJSON(u.PipelineSecretImage, "", true)
+	}
+
+	if u.ScimTokenImage != nil {
+		return utils.MarshalJSON(u.ScimTokenImage, "", true)
 	}
 
 	if u.TeamImage != nil {
@@ -1990,6 +2044,13 @@ func (a *AuditLogTargetState) GetNewStatePipeline() *PipelineImage {
 func (a *AuditLogTargetState) GetNewStatePipelineSecret() *PipelineSecretImage {
 	if v := a.GetNewState(); v != nil {
 		return v.PipelineSecretImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateScimToken() *ScimTokenImage {
+	if v := a.GetNewState(); v != nil {
+		return v.ScimTokenImage
 	}
 	return nil
 }
@@ -2221,6 +2282,13 @@ func (a *AuditLogTargetState) GetPreviousStatePipeline() *PipelineImage {
 func (a *AuditLogTargetState) GetPreviousStatePipelineSecret() *PipelineSecretImage {
 	if v := a.GetPreviousState(); v != nil {
 		return v.PipelineSecretImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateScimToken() *ScimTokenImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.ScimTokenImage
 	}
 	return nil
 }

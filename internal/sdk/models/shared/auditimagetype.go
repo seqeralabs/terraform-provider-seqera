@@ -43,6 +43,7 @@ const (
 	AuditImageTypeAccessToken          AuditImageType = "access_token"
 	AuditImageTypeUserSSHPublicKey     AuditImageType = "user_ssh_public_key"
 	AuditImageTypeIdpGroup             AuditImageType = "idp_group"
+	AuditImageTypeScimToken            AuditImageType = "scim_token"
 )
 
 func (e AuditImageType) ToPointer() *AuditImageType {
@@ -119,6 +120,8 @@ func (e *AuditImageType) UnmarshalJSON(data []byte) error {
 	case "user_ssh_public_key":
 		fallthrough
 	case "idp_group":
+		fallthrough
+	case "scim_token":
 		*e = AuditImageType(v)
 		return nil
 	default:

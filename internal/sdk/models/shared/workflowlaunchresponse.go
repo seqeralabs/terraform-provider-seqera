@@ -36,18 +36,20 @@ func (e *WorkflowLaunchResponseSyntaxParser) UnmarshalJSON(data []byte) error {
 }
 
 type WorkflowLaunchResponse struct {
-	CommitID            *string                  `json:"commitId,omitempty"`
-	ComputeEnv          *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
-	ConfigProfiles      []string                 `json:"configProfiles,omitempty"`
-	ConfigText          *string                  `json:"configText,omitempty"`
-	DateCreated         *time.Time               `json:"dateCreated,omitempty"`
-	EntryName           *string                  `json:"entryName,omitempty"`
-	HeadJobCpus         *int                     `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int                     `json:"headJobMemoryMb,omitempty"`
-	ID                  *string                  `json:"id,omitempty"`
-	MainScript          *string                  `json:"mainScript,omitempty"`
-	OptimizationID      *string                  `json:"optimizationId,omitempty"`
-	OptimizationTargets *string                  `json:"optimizationTargets,omitempty"`
+	CommitID        *string                  `json:"commitId,omitempty"`
+	ComputeEnv      *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
+	ConfigProfiles  []string                 `json:"configProfiles,omitempty"`
+	ConfigText      *string                  `json:"configText,omitempty"`
+	DateCreated     *time.Time               `json:"dateCreated,omitempty"`
+	EntryName       *string                  `json:"entryName,omitempty"`
+	HeadJobCpus     *int                     `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int                     `json:"headJobMemoryMb,omitempty"`
+	ID              *string                  `json:"id,omitempty"`
+	MainScript      *string                  `json:"mainScript,omitempty"`
+	// Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+	NextflowVersion     *string `json:"nextflowVersion,omitempty"`
+	OptimizationID      *string `json:"optimizationId,omitempty"`
+	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
 	// Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
 	OutputDir        *string                             `json:"outputDir,omitempty"`
 	ParamsText       *string                             `json:"paramsText,omitempty"`
@@ -150,6 +152,13 @@ func (w *WorkflowLaunchResponse) GetMainScript() *string {
 		return nil
 	}
 	return w.MainScript
+}
+
+func (w *WorkflowLaunchResponse) GetNextflowVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.NextflowVersion
 }
 
 func (w *WorkflowLaunchResponse) GetOptimizationID() *string {

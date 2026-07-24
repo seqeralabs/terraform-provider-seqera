@@ -191,6 +191,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		mainScript = nil
 	}
+	nextflowVersion := new(string)
+	if !r.NextflowVersion.IsUnknown() && !r.NextflowVersion.IsNull() {
+		*nextflowVersion = r.NextflowVersion.ValueString()
+	} else {
+		nextflowVersion = nil
+	}
 	outputDir := new(string)
 	if !r.OutputDir.IsUnknown() && !r.OutputDir.IsNull() {
 		*outputDir = r.OutputDir.ValueString()
@@ -289,6 +295,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds,
 		MainScript:       mainScript,
+		NextflowVersion:  nextflowVersion,
 		OutputDir:        outputDir,
 		ParamsText:       paramsText,
 		Pipeline:         pipeline,

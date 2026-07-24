@@ -302,18 +302,19 @@ type DescribeWorkflowResponseWorkflow struct {
 	// Timestamp when the workflow was submitted for execution
 	Submit *time.Time `json:"submit,omitempty"`
 	// Work directory
-	WorkDir        *string       `json:"workDir,omitempty"`
-	ConfigProfiles []string      `json:"configProfiles,omitempty"`
-	Fusion         *WfFusionMeta `json:"fusion,omitempty"`
-	LogFile        *string       `json:"logFile,omitempty"`
-	NextflowConfig *string       `json:"nextflowConfig,omitempty"`
-	OperationID    *string       `json:"operationId,omitempty"`
-	OutFile        *string       `json:"outFile,omitempty"`
-	PostRunScript  *string       `json:"postRunScript,omitempty"`
-	PreRunScript   *string       `json:"preRunScript,omitempty"`
-	SyntaxParser   *string       `json:"syntaxParser,omitempty"`
-	TowerConfig    *string       `json:"towerConfig,omitempty"`
-	Wave           *WfWaveMeta   `json:"wave,omitempty"`
+	WorkDir         *string       `json:"workDir,omitempty"`
+	ConfigProfiles  []string      `json:"configProfiles,omitempty"`
+	Fusion          *WfFusionMeta `json:"fusion,omitempty"`
+	LogFile         *string       `json:"logFile,omitempty"`
+	NextflowConfig  *string       `json:"nextflowConfig,omitempty"`
+	NextflowVersion *string       `json:"nextflowVersion,omitempty"`
+	OperationID     *string       `json:"operationId,omitempty"`
+	OutFile         *string       `json:"outFile,omitempty"`
+	PostRunScript   *string       `json:"postRunScript,omitempty"`
+	PreRunScript    *string       `json:"preRunScript,omitempty"`
+	SyntaxParser    *string       `json:"syntaxParser,omitempty"`
+	TowerConfig     *string       `json:"towerConfig,omitempty"`
+	Wave            *WfWaveMeta   `json:"wave,omitempty"`
 }
 
 func (d DescribeWorkflowResponseWorkflow) MarshalJSON() ([]byte, error) {
@@ -521,6 +522,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetNextflowConfig() *string {
 		return nil
 	}
 	return d.NextflowConfig
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetNextflowVersion() *string {
+	if d == nil {
+		return nil
+	}
+	return d.NextflowVersion
 }
 
 func (d *DescribeWorkflowResponseWorkflow) GetOperationID() *string {

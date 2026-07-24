@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.181.0
+  version: 1.187.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -25,6 +25,8 @@ tags:
     description: Labels and resource labels
   - name: launch
     description: Workflow launch events
+  - name: nextflow
+    description: Nextflow version catalog and launch policy
   - name: orgs
     description: Organizations
   - name: pipelines
@@ -735,6 +737,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/launch:
+    post:
+      operationId: LaunchAgent
+      summary: Launch agent
+      description: Launches a background AI agent run
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Agent launch request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaunchAgentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaunchAgentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
       security:
         - BearerAuth: []
       tags:
@@ -4116,7 +4156,6 @@ paths:
           schema:
             type: integer
             format: int64
-            nullable: true
         - name: orgId
           in: query
           description: Organization numeric identifier
@@ -7324,6 +7363,26 @@ paths:
         - BearerAuth: []
       tags:
         - pipeline-versions
+  /platform/versions:
+    get:
+      operationId: NextflowVersions
+      summary: Nextflow version catalog
+      description: Returns the system-wide catalog of selectable Nextflow versions and the per-run version-selection policy used by the launch form.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextflowVersionsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - nextflow
   /platforms:
     get:
       operationId: ListPlatforms
@@ -10738,6 +10797,11 @@ components:
     AgentDbDto:
       type: object
       properties:
+        agentInstructions:
+          type: string
+        agentInstructionsTemplateId:
+          type: string
+          nullable: true
         createdBy:
           type: integer
           format: int64
@@ -10756,11 +10820,6 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/Agent.Status'
-        systemPrompt:
-          type: string
-        templateId:
-          type: string
-          nullable: true
         updatedBy:
           type: integer
           format: int64
@@ -11005,6 +11064,8 @@ components:
         - idp_group_created
         - idp_group_updated
         - idp_group_deleted
+        - scim_token_created
+        - scim_token_updated
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -11191,6 +11252,8 @@ components:
         - idp_group_created
         - idp_group_updated
         - idp_group_deleted
+        - scim_token_created
+        - scim_token_updated
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -11270,6 +11333,7 @@ components:
         - access_token
         - user_ssh_public_key
         - idp_group
+        - scim_token
       x-enum-varnames:
         - user
         - pipeline
@@ -11304,6 +11368,7 @@ components:
         - access_token
         - user_ssh_public_key
         - idp_group
+        - scim_token
     AuditLogTargetState:
       type: object
       properties:
@@ -11339,6 +11404,7 @@ components:
                   participant: '#/components/schemas/ParticipantImage'
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
+                  scim_token: '#/components/schemas/ScimTokenImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -11374,6 +11440,7 @@ components:
             - $ref: '#/components/schemas/ParticipantImage'
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
+            - $ref: '#/components/schemas/ScimTokenImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -11411,6 +11478,7 @@ components:
                   participant: '#/components/schemas/ParticipantImage'
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
+                  scim_token: '#/components/schemas/ScimTokenImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -11446,6 +11514,7 @@ components:
             - $ref: '#/components/schemas/ParticipantImage'
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
+            - $ref: '#/components/schemas/ScimTokenImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -12732,16 +12801,16 @@ components:
     CreateAgentRequest:
       type: object
       properties:
+        agentInstructions:
+          type: string
+        agentInstructionsTemplateId:
+          type: string
+          nullable: true
         description:
           type: string
           nullable: true
         name:
           type: string
-        systemPrompt:
-          type: string
-        templateId:
-          type: string
-          nullable: true
     CreateAgentResponse:
       type: object
       properties:
@@ -13629,6 +13698,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ActiveConnection'
+        allowedUsers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInfo'
+          nullable: true
         baseImage:
           type: string
         computeEnv:
@@ -15500,6 +15574,26 @@ components:
       properties:
         workflowId:
           type: string
+    LaunchAgentRequest:
+      type: object
+      properties:
+        agentConfigId:
+          type: string
+          nullable: true
+        instructions:
+          type: string
+        triggerContext:
+          type: object
+          additionalProperties:
+            type: object
+          nullable: true
+    LaunchAgentResponse:
+      type: object
+      properties:
+        agentId:
+          type: string
+        status:
+          type: string
     LaunchDbDto:
       type: object
       properties:
@@ -15533,6 +15627,10 @@ components:
           type: string
         mainScript:
           type: string
+        nextflowVersion:
+          description: Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
+          type: string
+          nullable: true
         optimizationId:
           type: string
         optimizationTargets:
@@ -16431,6 +16529,41 @@ components:
           type: string
         url:
           type: string
+    NextflowVersion:
+      type: object
+      properties:
+        default:
+          type: boolean
+        image:
+          type: string
+        imageDind:
+          type: string
+        version:
+          type: string
+    NextflowVersionPolicy:
+      type: object
+      properties:
+        minVersion:
+          type: string
+        selectable:
+          type: boolean
+    NextflowVersionsResponse:
+      type: object
+      properties:
+        nextflowFeatureMinVersions:
+          type: object
+          additionalProperties:
+            type: string
+        nextflowVersionPolicyByComputeEnvType:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NextflowVersionPolicy'
+        nextflowVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/NextflowVersion'
+        nextflowVersionSelectionEnabled:
+          type: boolean
     OAuthConsentImage:
       type: object
       properties:
@@ -17386,6 +17519,25 @@ components:
           description: Seconds of inactivity after which the warm pool scales to zero. Set to 0 to never scale to zero.
           type: integer
           format: int32
+    ScimTokenImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        dateCreated:
+          type: string
+          format: date-time
+        lastUsed:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+        tokenPrefix:
+          type: string
+      required:
+        - auditImageType
+      title: SCIM token audit image
     SecurityGroup:
       type: object
       properties:
@@ -17984,6 +18136,11 @@ components:
           type: string
         description:
           type: string
+        idpGroupId:
+          type: integer
+          format: int64
+        idpGroupName:
+          type: string
         name:
           type: string
       required:
@@ -18336,16 +18493,16 @@ components:
     UpdateAgentRequest:
       type: object
       properties:
+        agentInstructions:
+          type: string
+        agentInstructionsTemplateId:
+          type: string
+          nullable: true
         description:
           type: string
           nullable: true
         name:
           type: string
-        systemPrompt:
-          type: string
-        templateId:
-          type: string
-          nullable: true
     UpdateAgentResponse:
       type: object
       properties:
@@ -19369,6 +19526,10 @@ components:
           type: string
         mainScript:
           type: string
+        nextflowVersion:
+          description: Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
+          type: string
+          nullable: true
         optimizationId:
           type: string
         optimizationTargets:
@@ -19448,6 +19609,10 @@ components:
           type: string
         mainScript:
           type: string
+        nextflowVersion:
+          description: Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          type: string
+          nullable: true
         optimizationId:
           type: string
         optimizationTargets:
@@ -19717,6 +19882,9 @@ components:
             logFile:
               type: string
             nextflowConfig:
+              type: string
+              nullable: true
+            nextflowVersion:
               type: string
               nullable: true
             operationId:

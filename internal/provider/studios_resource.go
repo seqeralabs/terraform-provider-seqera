@@ -52,6 +52,7 @@ type StudiosResource struct {
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
 	AllowedUserIds      []types.Int64                    `tfsdk:"allowed_user_ids"`
+	AllowedUsers        []tfTypes.UserInfo               `tfsdk:"allowed_users"`
 	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
 	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
@@ -83,6 +84,25 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 				ElementType: types.Int64Type,
 				Description: `IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.`,
+			},
+			"allowed_users": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"avatar": schema.StringAttribute{
+							Computed: true,
+						},
+						"email": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.Int64Attribute{
+							Computed: true,
+						},
+						"user_name": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
 			},
 			"auto_start": schema.BoolAttribute{
 				Optional: true,

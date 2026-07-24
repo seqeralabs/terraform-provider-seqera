@@ -233,6 +233,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Read-Only
 
+- `allowed_users` (Attributes List) (see [below for nested schema](#nestedatt--allowed_users))
 - `id` (String) Alias of `session_id` for Terraform convention.
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
@@ -260,6 +261,17 @@ Optional:
 - `data_link_id` (String) Requires replacement if changed.
 - `path` (String) Requires replacement if changed.
 
+
+
+<a id="nestedatt--allowed_users"></a>
+### Nested Schema for `allowed_users`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)
 
 
 <a id="nestedatt--ssh_details"></a>

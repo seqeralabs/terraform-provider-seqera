@@ -118,6 +118,8 @@ const (
 	AuditEventTypeIdpGroupCreated                   AuditEventType = "idp_group_created"
 	AuditEventTypeIdpGroupUpdated                   AuditEventType = "idp_group_updated"
 	AuditEventTypeIdpGroupDeleted                   AuditEventType = "idp_group_deleted"
+	AuditEventTypeScimTokenCreated                  AuditEventType = "scim_token_created"
+	AuditEventTypeScimTokenUpdated                  AuditEventType = "scim_token_updated"
 	AuditEventTypeComputeEnvironmentMadePrimary     AuditEventType = "compute_environment_made_primary"
 	AuditEventTypeComputeEnvironmentMadeNonPrimary  AuditEventType = "compute_environment_made_non_primary"
 	AuditEventTypeComputeProfileCreated             AuditEventType = "compute_profile_created"
@@ -382,6 +384,10 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "idp_group_updated":
 		fallthrough
 	case "idp_group_deleted":
+		fallthrough
+	case "scim_token_created":
+		fallthrough
+	case "scim_token_updated":
 		fallthrough
 	case "compute_environment_made_primary":
 		fallthrough

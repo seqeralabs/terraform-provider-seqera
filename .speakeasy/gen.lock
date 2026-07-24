@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 38bde8f1332786d520aea89f747a4d0c
-  docVersion: 1.181.0
+  docChecksum: 77104ba2fc13637031d5eee7ff0c40a4
+  docVersion: 1.187.0
   speakeasyVersion: 1.790.3
   generationVersion: 2.918.4
   releaseVersion: 0.41.0
@@ -729,6 +729,7 @@ trackedFiles:
   internal/provider/types/univa_grid_engine_configuration.go:
     id: 1bff7795c6ea
     pristine_git_object: 4103cca9f88b2e8e142ba6023efb0383d00b211a
+  internal/provider/types/user_info.go: {}
   internal/provider/types/workflow_launch_request.go:
     id: af36165a8643
     pristine_git_object: 11b31ac54b41f1ff6655e5775689da9baec929f7
@@ -1364,6 +1365,7 @@ trackedFiles:
   internal/sdk/models/operations/launchaction.go:
     id: 4cc69c1add55
     pristine_git_object: 62bd65a9985f8bc27fa2598b7e1fa1eb4930d2e3
+  internal/sdk/models/operations/launchagent.go: {}
   internal/sdk/models/operations/leaveorganization.go:
     id: cf34758d6c84
     pristine_git_object: 29376465bcd741800534b12e956e438422dfcd7d
@@ -1486,6 +1488,7 @@ trackedFiles:
     id: 9e7813d6986a
     pristine_git_object: f6f5b63c38d835976e6f785c0aade5a8eaf54001
   internal/sdk/models/operations/managepipelineversion.go: {}
+  internal/sdk/models/operations/nextflowversions.go: {}
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     pristine_git_object: d3a402f2e7c2c26a3ff02929a9aa228650364045
@@ -2452,6 +2455,8 @@ trackedFiles:
   internal/sdk/models/shared/launchactionresponse.go:
     id: 48f1ddcebd6a
     pristine_git_object: 0ac170c9ca4204d1d3cd7e2cdd67041692cd6449
+  internal/sdk/models/shared/launchagentrequest.go: {}
+  internal/sdk/models/shared/launchagentresponse.go: {}
   internal/sdk/models/shared/launchdbdto.go: {}
   internal/sdk/models/shared/launchimage.go: {}
   internal/sdk/models/shared/launchvalidationerror.go: {}
@@ -2596,6 +2601,9 @@ trackedFiles:
   internal/sdk/models/shared/navbarconfignavbarmenu.go:
     id: d2ca73000c3c
     pristine_git_object: 96fe8509792dfcfb76aabdfd947955fee6620a41
+  internal/sdk/models/shared/nextflowversion.go: {}
+  internal/sdk/models/shared/nextflowversionpolicy.go: {}
+  internal/sdk/models/shared/nextflowversionsresponse.go: {}
   internal/sdk/models/shared/oauthconsentimage.go: {}
   internal/sdk/models/shared/organdworkspacedto.go:
     id: f163e4764451
@@ -2696,6 +2704,7 @@ trackedFiles:
     id: e2f3cbb7ae20
     pristine_git_object: d4ae89cfca8f1a8d235ef8339bc449e64e31d3f3
   internal/sdk/models/shared/schedconfig.go: {}
+  internal/sdk/models/shared/scimtokenimage.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     pristine_git_object: 9ed88ed95ffd6ee743ce250b2c9f3528d60e7b88
@@ -2968,6 +2977,7 @@ trackedFiles:
     pristine_git_object: f36c85c944a8707c4e63584a6767cfdd9b539cb9
   internal/sdk/models/shared/wsprole.go: {}
   internal/sdk/models/shared/wsprolesourcetype.go: {}
+  internal/sdk/nextflow.go: {}
   internal/sdk/optionalnullable/optionalnullable.go:
     id: 4b83aa3f3df3
     pristine_git_object: c6739be0619b6726565e0f11855ffe44b0e5607e
@@ -6506,6 +6516,22 @@ examples:
       responses:
         "200":
           application/json: {"schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}}
+        "400":
+          application/json: {"message": "<value>"}
+  LaunchAgent:
+    speakeasy-default-launch-agent:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  NextflowVersions:
+    speakeasy-default-nextflow-versions:
+      responses:
+        "200":
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2
