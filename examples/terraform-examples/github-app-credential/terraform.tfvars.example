@@ -1,0 +1,6 @@
+workspace_id                = 123456789
+credential_name             = "github-app"
+github_app_id               = "123456"
+github_app_client_id        = "Iv1.example"
+github_app_private_key_path = "/absolute/path/to/github-app.private-key.pem"
+github_base_url = "https://github.com/my-organization"
