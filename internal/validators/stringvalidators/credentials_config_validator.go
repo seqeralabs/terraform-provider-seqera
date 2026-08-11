@@ -66,6 +66,7 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 		"azure-cloud":   {"AzureCloudSecurityKeys"},
 		"google":        {"GoogleSecurityKeys"},
 		"github":        {"GitHubSecurityKeys"},
+		"github_app":    {"GitHubAppSecurityKeys"},
 		"gitlab":        {"GitLabSecurityKeys"},
 		"bitbucket":     {"BitBucketSecurityKeys"},
 		"ssh":           {"SSHSecurityKeys"},
@@ -169,6 +170,8 @@ func schemaNameToKeysFieldName(schemaName string) string {
 		return "gitea"
 	case "GitHubSecurityKeys":
 		return "github"
+	case "GitHubAppSecurityKeys":
+		return "github_app"
 	case "GitLabSecurityKeys":
 		return "gitlab"
 	case "GoogleSecurityKeys":

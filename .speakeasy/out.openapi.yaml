@@ -10806,7 +10806,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: AWS compute environment create request
         content:
@@ -18651,6 +18650,7 @@ components:
             - azure-cloud
             - google
             - github
+            - github_app
             - gitlab
             - bitbucket
             - ssh
@@ -18672,6 +18672,7 @@ components:
             - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
             - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
             - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+            - `github_app`   → `keys.github_app`   (GitHub App authentication)
         status:
           description: Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
           allOf:
@@ -20661,16 +20662,22 @@ components:
           type: string
         clientSecret:
           type: string
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
           writeOnly: true
         discriminator:
           type: string
         privateKey:
           type: string
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
           writeOnly: true
         slug:
           type: string
         webhookSecret:
           type: string
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
           writeOnly: true
     GitHubSecurityKeys:
       type: object
