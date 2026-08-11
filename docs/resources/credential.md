@@ -21,7 +21,6 @@ description: |-
 - `seqera_container_registry_credential`
 - `seqera_gitea_credential`
 - `seqera_github_credential`
-- `seqera_github_app_credential`
 - `seqera_gitlab_credential`
 - `seqera_google_credential`
 - `seqera_kubernetes_credential`
