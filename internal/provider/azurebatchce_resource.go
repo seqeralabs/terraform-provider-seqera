@@ -63,6 +63,7 @@ type AzureBatchCEResourceModel struct {
 	DateCreated   types.String           `tfsdk:"date_created"`
 	Deleted       types.Bool             `tfsdk:"-"`
 	Description   types.String           `tfsdk:"description"`
+	Force         types.Bool             `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
 	ID            types.String           `tfsdk:"id"`
 	LabelIds      []types.Int64          `tfsdk:"label_ids"`
 	LastUpdated   types.String           `tfsdk:"last_updated"`
@@ -611,6 +612,12 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.UTF8LengthAtMost(2000),
 				},
 			},
+			"force": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: `Force-delete a stuck compute environment, bypassing active-job checks and forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or DELETING status.` + "\n" +
+					`Must be applied *before* ` + "`" + `terraform destroy` + "`" + `. Terraform passes prior state to the delete operation, so setting this in configuration alone has no effect — run ` + "`" + `terraform apply` + "`" + ` to persist it, then destroy. This is the same requirement as ` + "`" + `force_destroy` + "`" + ` on ` + "`" + `aws_s3_bucket` + "`" + `.` + "\n" +
+					`Because forge cleanup is skipped, cloud resources the environment created may be left behind and need removing by hand.`,
+			},
 			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
@@ -838,7 +845,7 @@ func (r *AzureBatchCEResource) Read(ctx context.Context, req resource.ReadReques
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 400 || res.StatusCode == 404 {
+	if res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -986,7 +993,7 @@ func (r *AzureBatchCEResource) Delete(ctx context.Context, req resource.DeleteRe
 		return
 	}
 	switch res.StatusCode {
-	case 204, 400, 404:
+	case 204, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))

@@ -12,6 +12,10 @@ type DeleteSlurmCERequest struct {
 	ComputeEnvID string `pathParam:"style=simple,explode=false,name=computeEnvId"`
 	// Workspace numeric identifier
 	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Force-delete a stuck compute environment, bypassing active-job checks and forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or DELETING status.
+	// Must be applied *before* `terraform destroy`. Terraform passes prior state to the delete operation, so setting this in configuration alone has no effect — run `terraform apply` to persist it, then destroy. This is the same requirement as `force_destroy` on `aws_s3_bucket`.
+	// Because forge cleanup is skipped, cloud resources the environment created may be left behind and need removing by hand.
+	Force *bool `queryParam:"style=form,explode=true,name=force"`
 }
 
 func (d *DeleteSlurmCERequest) GetComputeEnvID() string {
@@ -26,6 +30,13 @@ func (d *DeleteSlurmCERequest) GetWorkspaceID() int64 {
 		return 0
 	}
 	return d.WorkspaceID
+}
+
+func (d *DeleteSlurmCERequest) GetForce() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Force
 }
 
 type DeleteSlurmCEResponse struct {

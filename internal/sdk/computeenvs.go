@@ -2959,7 +2959,7 @@ func (s *ComputeEnvs) UpdateAWSComputeEnv(ctx context.Context, request operation
 }
 
 // DeleteAWSComputeEnv - Delete AWS compute environment
-// Deletes the AWS compute environment identified by the given `computeEnvId`.
+// Deletes the AWS compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operations.DeleteAWSComputeEnvRequest, opts ...operations.Option) (*operations.DeleteAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -3133,7 +3133,11 @@ func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operation
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -3154,8 +3158,6 @@ func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operation
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -3860,7 +3862,7 @@ func (s *ComputeEnvs) UpdateAWSBatchCE(ctx context.Context, request operations.U
 }
 
 // DeleteAWSBatchCE - Delete AWS compute environment
-// Deletes the AWS compute environment identified by the given `computeEnvId`.
+// Deletes the AWS compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteAWSBatchCE(ctx context.Context, request operations.DeleteAWSBatchCERequest, opts ...operations.Option) (*operations.DeleteAWSBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -4034,7 +4036,11 @@ func (s *ComputeEnvs) DeleteAWSBatchCE(ctx context.Context, request operations.D
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -4055,8 +4061,6 @@ func (s *ComputeEnvs) DeleteAWSBatchCE(ctx context.Context, request operations.D
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -4761,7 +4765,7 @@ func (s *ComputeEnvs) UpdateAwsCloudCE(ctx context.Context, request operations.U
 }
 
 // DeleteAwsCloudCE - Delete AWS Cloud compute environment
-// Deletes the AWS Cloud compute environment identified by the given `computeEnvId`.
+// Deletes the AWS Cloud compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteAwsCloudCE(ctx context.Context, request operations.DeleteAwsCloudCERequest, opts ...operations.Option) (*operations.DeleteAwsCloudCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -4935,7 +4939,11 @@ func (s *ComputeEnvs) DeleteAwsCloudCE(ctx context.Context, request operations.D
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -4956,8 +4964,6 @@ func (s *ComputeEnvs) DeleteAwsCloudCE(ctx context.Context, request operations.D
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -5662,7 +5668,7 @@ func (s *ComputeEnvs) UpdateAzureBatchCE(ctx context.Context, request operations
 }
 
 // DeleteAzureBatchCE - Delete Azure Batch compute environment
-// Deletes the Azure Batch compute environment identified by the given `computeEnvId`.
+// Deletes the Azure Batch compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteAzureBatchCE(ctx context.Context, request operations.DeleteAzureBatchCERequest, opts ...operations.Option) (*operations.DeleteAzureBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -5836,7 +5842,11 @@ func (s *ComputeEnvs) DeleteAzureBatchCE(ctx context.Context, request operations
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -5857,8 +5867,6 @@ func (s *ComputeEnvs) DeleteAzureBatchCE(ctx context.Context, request operations
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -6563,7 +6571,7 @@ func (s *ComputeEnvs) UpdateAzureCloudCE(ctx context.Context, request operations
 }
 
 // DeleteAzureCloudCE - Delete Azure Cloud compute environment
-// Deletes the Azure Cloud compute environment identified by the given `computeEnvId`.
+// Deletes the Azure Cloud compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteAzureCloudCE(ctx context.Context, request operations.DeleteAzureCloudCERequest, opts ...operations.Option) (*operations.DeleteAzureCloudCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -6737,7 +6745,11 @@ func (s *ComputeEnvs) DeleteAzureCloudCE(ctx context.Context, request operations
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -6758,8 +6770,6 @@ func (s *ComputeEnvs) DeleteAzureCloudCE(ctx context.Context, request operations
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -7464,7 +7474,7 @@ func (s *ComputeEnvs) UpdateGCPBatchCE(ctx context.Context, request operations.U
 }
 
 // DeleteGCPBatchCE - Delete GCP Batch compute environment
-// Deletes the Google Cloud Batch compute environment identified by the given `computeEnvId`.
+// Deletes the Google Cloud Batch compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteGCPBatchCE(ctx context.Context, request operations.DeleteGCPBatchCERequest, opts ...operations.Option) (*operations.DeleteGCPBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -7638,7 +7648,11 @@ func (s *ComputeEnvs) DeleteGCPBatchCE(ctx context.Context, request operations.D
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -7659,8 +7673,6 @@ func (s *ComputeEnvs) DeleteGCPBatchCE(ctx context.Context, request operations.D
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -8365,7 +8377,7 @@ func (s *ComputeEnvs) UpdateGCPCloudCE(ctx context.Context, request operations.U
 }
 
 // DeleteGCPCloudCE - Delete GCP Cloud compute environment
-// Deletes the Google Cloud compute environment identified by the given `computeEnvId`.
+// Deletes the Google Cloud compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteGCPCloudCE(ctx context.Context, request operations.DeleteGCPCloudCERequest, opts ...operations.Option) (*operations.DeleteGCPCloudCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -8539,7 +8551,11 @@ func (s *ComputeEnvs) DeleteGCPCloudCE(ctx context.Context, request operations.D
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -8560,8 +8576,6 @@ func (s *ComputeEnvs) DeleteGCPCloudCE(ctx context.Context, request operations.D
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -9269,7 +9283,7 @@ func (s *ComputeEnvs) UpdateManagedComputeCE(ctx context.Context, request operat
 }
 
 // DeleteManagedComputeCE - Delete Seqera Compute compute environment
-// Deletes the Seqera Compute compute environment identified by the given `computeEnvId`.
+// Deletes the Seqera Compute compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteManagedComputeCE(ctx context.Context, request operations.DeleteManagedComputeCERequest, opts ...operations.Option) (*operations.DeleteManagedComputeCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -9443,7 +9457,11 @@ func (s *ComputeEnvs) DeleteManagedComputeCE(ctx context.Context, request operat
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -9464,8 +9482,6 @@ func (s *ComputeEnvs) DeleteManagedComputeCE(ctx context.Context, request operat
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:
@@ -10170,7 +10186,7 @@ func (s *ComputeEnvs) UpdateSlurmCE(ctx context.Context, request operations.Upda
 }
 
 // DeleteSlurmCE - Delete Slurm compute environment
-// Deletes the Slurm compute environment identified by the given `computeEnvId`.
+// Deletes the Slurm compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
 func (s *ComputeEnvs) DeleteSlurmCE(ctx context.Context, request operations.DeleteSlurmCERequest, opts ...operations.Option) (*operations.DeleteSlurmCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -10344,7 +10360,11 @@ func (s *ComputeEnvs) DeleteSlurmCE(ctx context.Context, request operations.Dele
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -10365,8 +10385,6 @@ func (s *ComputeEnvs) DeleteSlurmCE(ctx context.Context, request operations.Dele
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 404:
 		utils.DrainBody(httpRes)
 	default:

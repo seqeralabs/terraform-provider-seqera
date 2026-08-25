@@ -14,6 +14,12 @@ func initHooks(h *Hooks) {
 	genericResourceErrorHook := &GenericResourceErrorHook{}
 	h.registerAfterSuccessHook(genericResourceErrorHook)
 
+	// Register compute environment missing hook to treat Platform's "unknown compute
+	// environment" 400 as a 404 on CE describe/delete. Lets entity-missing-codes stay
+	// [404], so a rejected delete is no longer silently reported as success (#240).
+	computeEnvMissingHook := &ComputeEnvMissingHook{}
+	h.registerAfterSuccessHook(computeEnvMissingHook)
+
 	// Register compute environment status polling hook to wait for AVAILABLE status
 	computeEnvStatusHook := &ComputeEnvStatusHook{}
 	h.registerAfterSuccessHook(computeEnvStatusHook)

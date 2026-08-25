@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 67e4f01c52ebdb98ebc992a37adb4d7e
+  docChecksum: df2a8f2c1e346f1b48df770bb02e1818
   docVersion: 1.198.0
   speakeasyVersion: 1.795.3
   generationVersion: 2.932.9
@@ -3360,6 +3360,8 @@ examples:
       parameters:
         path:
           computeEnvId: "<id>"
+        query:
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3420,6 +3422,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 743337
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3454,6 +3457,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 190762
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3488,6 +3492,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 934200
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5927,6 +5932,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 410342
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5961,6 +5967,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 955069
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5995,6 +6002,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 645526
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6029,6 +6037,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 583911
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6073,6 +6082,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 648527
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6357,6 +6367,7 @@ examples:
           computeEnvId: "<id>"
         query:
           workspaceId: 659062
+          force: false
       responses:
         "400":
           application/json: {"message": "<value>"}

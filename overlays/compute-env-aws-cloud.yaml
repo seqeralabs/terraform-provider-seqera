@@ -83,9 +83,12 @@ actions:
           x-speakeasy-entity-operation:
             terraform-datasource: null
             terraform-resource: AwsCloudCE#read
-          # 400/404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          # 404 = soft-deleted/missing CE; 403 stays a real error so auth issues remain visible.
+          # 400 is deliberately NOT listed: Speakeasy propagates this code set to the
+          # entity's #delete too, and a 400-tolerant delete reports a rejected destroy as
+          # success (#240). Platform's "unknown compute environment" 400 is normalised to
+          # a 404 by ComputeEnvMissingHook instead.
           x-speakeasy-entity-missing-codes:
-            - 400
             - 404
           x-speakeasy-name-override: DescribeAwsCloudCE
           summary: Describe AWS Cloud compute environment
@@ -194,7 +197,7 @@ actions:
             terraform-resource: AwsCloudCE#delete
           x-speakeasy-name-override: DeleteAwsCloudCE
           summary: Delete AWS Cloud compute environment
-          description: Deletes the AWS Cloud compute environment identified by the given `computeEnvId`.
+          description: Deletes the AWS Cloud compute environment identified by the given `computeEnvId`. When `force=true`, bypasses active-job checks and SCMS/forge cleanup; only allowed for environments in ERRORED, INVALID, or DELETING status.
           tags:
             - compute-envs
           operationId: DeleteAwsCloudCE
@@ -212,6 +215,23 @@ actions:
               schema:
                 type: integer
                 format: int64
+            - name: force
+              in: query
+              description: >-
+                Force-delete a stuck compute environment, bypassing active-job checks and
+                forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or
+                DELETING status.
+
+                Must be applied *before* `terraform destroy`. Terraform passes prior state
+                to the delete operation, so setting this in configuration alone has no
+                effect — run `terraform apply` to persist it, then destroy. This is the
+                same requirement as `force_destroy` on `aws_s3_bucket`.
+
+                Because forge cleanup is skipped, cloud resources the environment created
+                may be left behind and need removing by hand.
+              schema:
+                type: boolean
+                example: false
           responses:
             "204":
               description: OK - No content
@@ -223,6 +243,12 @@ actions:
                     $ref: "#/components/schemas/ErrorResponse"
             "403":
               description: Operation not allowed
+            "409":
+              description: Conflicting deletion
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
           security:
             - BearerAuth: []
 

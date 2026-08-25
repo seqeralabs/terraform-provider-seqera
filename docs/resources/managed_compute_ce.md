@@ -107,6 +107,9 @@ Requires replacement if changed.
 When enabled, intermediary files are automatically deleted after 28 days.
 Default: true; Requires replacement if changed.
 - `environment` (Attributes List) Environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--environment))
+- `force` (Boolean) Force-delete a stuck compute environment, bypassing active-job checks and forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or DELETING status.
+Must be applied *before* `terraform destroy`. Terraform passes prior state to the delete operation, so setting this in configuration alone has no effect — run `terraform apply` to persist it, then destroy. This is the same requirement as `force_destroy` on `aws_s3_bucket`.
+Because forge cleanup is skipped, cloud resources the environment created may be left behind and need removing by hand.
 - `instance_size` (String) Size of the compute instance.
 - SMALL: Lightweight workflows (default)
 - MEDIUM: Balanced compute resources

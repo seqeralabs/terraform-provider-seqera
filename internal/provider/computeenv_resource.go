@@ -5856,8 +5856,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Compute environment string identifier`,
 			},
 			"force": schema.BoolAttribute{
-				Optional:    true,
-				Description: `Force-delete a stuck compute environment, bypassing active-job checks. Only valid for environments in ERRORED, INVALID, or DELETING status.`,
+				Optional: true,
+				MarkdownDescription: `Force-delete a stuck compute environment, bypassing active-job checks and forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or DELETING status.` + "\n" +
+					`Must be applied *before* ` + "`" + `terraform destroy` + "`" + `. Terraform passes prior state to the delete operation, so setting this in configuration alone has no effect — run ` + "`" + `terraform apply` + "`" + ` to persist it, then destroy. This is the same requirement as ` + "`" + `force_destroy` + "`" + ` on ` + "`" + `aws_s3_bucket` + "`" + `.` + "\n" +
+					`Because forge cleanup is skipped, cloud resources the environment created may be left behind and need removing by hand.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,

@@ -86,6 +86,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
   }
   credentials_id = "...my_credentials_id..."
   description    = "...my_description..."
+  force          = false
   label_ids = [
     1
   ]

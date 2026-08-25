@@ -65,6 +65,9 @@ resource "seqera_slurm_ce" "hpc" {
 - `compute_queue` (String) Slurm partition/queue used for pipeline compute jobs. Requires replacement if changed.
 - `description` (String) Optional description of the compute environment
 - `environment` (Attributes List) Environment variables for the head and/or compute nodes. Requires replacement if changed. (see [below for nested schema](#nestedatt--environment))
+- `force` (Boolean) Force-delete a stuck compute environment, bypassing active-job checks and forge/SCMS cleanup. Only valid for environments in ERRORED, INVALID, or DELETING status.
+Must be applied *before* `terraform destroy`. Terraform passes prior state to the delete operation, so setting this in configuration alone has no effect — run `terraform apply` to persist it, then destroy. This is the same requirement as `force_destroy` on `aws_s3_bucket`.
+Because forge cleanup is skipped, cloud resources the environment created may be left behind and need removing by hand.
 - `head_job_options` (String) Additional options passed to the Slurm head job submission (sbatch), e.g. `-t 72:00:00 --cpus-per-task=2 --mem-per-cpu=8G`. Requires replacement if changed.
 - `head_queue` (String) Slurm partition/queue used for the Nextflow head job. Requires replacement if changed.
 - `host_name` (String) Hostname of the Slurm login/head node to connect to over SSH. Requires replacement if changed.

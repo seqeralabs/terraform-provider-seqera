@@ -170,9 +170,16 @@ func (r *AzureBatchCEResourceModel) ToOperationsDeleteAzureBatchCERequest(ctx co
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
+	force := new(bool)
+	if !r.Force.IsUnknown() && !r.Force.IsNull() {
+		*force = r.Force.ValueBool()
+	} else {
+		force = nil
+	}
 	out := operations.DeleteAzureBatchCERequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,
+		Force:        force,
 	}
 
 	return &out, diags

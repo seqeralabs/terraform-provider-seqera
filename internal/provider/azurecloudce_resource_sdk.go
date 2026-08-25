@@ -161,9 +161,16 @@ func (r *AzureCloudCEResourceModel) ToOperationsDeleteAzureCloudCERequest(ctx co
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
+	force := new(bool)
+	if !r.Force.IsUnknown() && !r.Force.IsNull() {
+		*force = r.Force.ValueBool()
+	} else {
+		force = nil
+	}
 	out := operations.DeleteAzureCloudCERequest{
 		ComputeEnvID: computeEnvID,
 		WorkspaceID:  workspaceID,
+		Force:        force,
 	}
 
 	return &out, diags

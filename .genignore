@@ -4,6 +4,9 @@
 # Custom SDK hooks for polling and error handling
 internal/sdk/internal/hooks/registration.go
 internal/sdk/internal/hooks/compute_env_status_hook.go
+internal/sdk/internal/hooks/compute_env_missing_hook.go
+internal/sdk/internal/hooks/compute_env_missing_hook_test.go
+internal/sdk/computeenv_missing_integration_test.go
 internal/sdk/internal/hooks/credential_error_hook.go
 internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
