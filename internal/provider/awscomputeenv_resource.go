@@ -790,6 +790,15 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
 							`Requires replacement if changed.`,
 					},
+					"secrets_kms_key_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.`,
+					},
 					"storage_type": schema.StringAttribute{
 						Computed: true,
 						Optional: true,

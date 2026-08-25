@@ -61,6 +61,8 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -82,6 +84,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
+		r.Config.SecretsKmsKeyID = types.StringPointerValue(resp.Config.SecretsKmsKeyID)
 		securityGroupsValue, securityGroupsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.SecurityGroups)
 		diags.Append(securityGroupsDiags...)
 		securityGroupsValuable, securityGroupsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue)
@@ -427,6 +430,18 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
+		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
 			desiredWarm := new(int)
@@ -470,6 +485,8 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 			DiskAllocation:    diskAllocation,
 			FusionSnapshots:   fusionSnapshots,
 			MachineTypes:      machineTypes,
+			MaxCpusPerUser:    maxCpusPerUser,
+			MaxSpotAttempts:   maxSpotAttempts,
 			Pool:              pool,
 			PredictionModel:   predictionModel,
 			ProvisioningModel: provisioningModel,
@@ -480,6 +497,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
 		intelligentComputeEnabled = nil
+	}
+	secretsKmsKeyID := new(string)
+	if !r.Config.SecretsKmsKeyID.IsUnknown() && !r.Config.SecretsKmsKeyID.IsNull() {
+		*secretsKmsKeyID = r.Config.SecretsKmsKeyID.ValueString()
+	} else {
+		secretsKmsKeyID = nil
 	}
 	var securityGroups []string
 	if !r.Config.SecurityGroups.IsUnknown() && !r.Config.SecurityGroups.IsNull() {
@@ -526,6 +549,7 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		Region:                    region,
 		IntelligentComputeConfig:  intelligentComputeConfig,
 		IntelligentComputeEnabled: intelligentComputeEnabled,
+		SecretsKmsKeyID:           secretsKmsKeyID,
 		SecurityGroups:            securityGroups,
 		SubnetID:                  subnetID,
 		SubnetIds:                 subnetIds,

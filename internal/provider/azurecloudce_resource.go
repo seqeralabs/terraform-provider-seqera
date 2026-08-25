@@ -32,6 +32,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -255,6 +256,33 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									`scheduler are accepted by the API but may produce warnings.` + "\n" +
 									`Requires replacement if changed.`,
 							},
+							"max_cpus_per_user": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+							},
+							"max_spot_attempts": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+									`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+									`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+									`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+									`` + "\n" +
+									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Int32{
+									custom_int32validators.MaxSpotAttemptsValidator(),
+								},
+							},
 							"pool": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
@@ -303,8 +331,8 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-									`is accepted.` + "\n" +
+									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+									`string is accepted.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"provisioning_model": schema.StringAttribute{

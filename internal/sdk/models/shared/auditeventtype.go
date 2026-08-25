@@ -107,6 +107,11 @@ const (
 	AuditEventTypeManagedCredentialsUpdated         AuditEventType = "managed_credentials_updated"
 	AuditEventTypeManagedCredentialsDeleted         AuditEventType = "managed_credentials_deleted"
 	AuditEventTypeCreditsModified                   AuditEventType = "credits_modified"
+	AuditEventTypeCreditPurchaseCreated             AuditEventType = "credit_purchase_created"
+	AuditEventTypeCreditPurchaseCompleted           AuditEventType = "credit_purchase_completed"
+	AuditEventTypeCreditPurchaseFailed              AuditEventType = "credit_purchase_failed"
+	AuditEventTypeCreditPurchaseCanceled            AuditEventType = "credit_purchase_canceled"
+	AuditEventTypeCreditPurchaseExpired             AuditEventType = "credit_purchase_expired"
 	AuditEventTypeUserRoleCreated                   AuditEventType = "user_role_created"
 	AuditEventTypeUserRoleUpdated                   AuditEventType = "user_role_updated"
 	AuditEventTypeUserRoleDeleted                   AuditEventType = "user_role_deleted"
@@ -362,6 +367,16 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "managed_credentials_deleted":
 		fallthrough
 	case "credits_modified":
+		fallthrough
+	case "credit_purchase_created":
+		fallthrough
+	case "credit_purchase_completed":
+		fallthrough
+	case "credit_purchase_failed":
+		fallthrough
+	case "credit_purchase_canceled":
+		fallthrough
+	case "credit_purchase_expired":
 		fallthrough
 	case "user_role_created":
 		fallthrough

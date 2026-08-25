@@ -29,6 +29,7 @@ type AwsBatchConfig struct {
 	PostRunScript      types.String        `tfsdk:"post_run_script"`
 	PreRunScript       types.String        `tfsdk:"pre_run_script"`
 	Region             types.String        `tfsdk:"region"`
+	SecretsKmsKeyID    types.String        `tfsdk:"secrets_kms_key_id"`
 	StorageType        types.String        `tfsdk:"storage_type"`
 	Volumes            []types.String      `tfsdk:"volumes"`
 	WorkDir            types.String        `tfsdk:"work_dir"`

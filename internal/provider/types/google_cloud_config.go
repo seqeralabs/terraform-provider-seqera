@@ -14,6 +14,8 @@ type GoogleCloudConfig struct {
 	ImageID                  types.String        `tfsdk:"image_id"`
 	InstanceType             types.String        `tfsdk:"instance_type"`
 	IntelligentComputeConfig *SchedConfig        `tfsdk:"intelligent_compute_config"`
+	Network                  types.String        `tfsdk:"network"`
+	NetworkTags              []types.String      `tfsdk:"network_tags"`
 	NextflowConfig           types.String        `tfsdk:"nextflow_config"`
 	PostRunScript            types.String        `tfsdk:"post_run_script"`
 	PreRunScript             types.String        `tfsdk:"pre_run_script"`
@@ -21,6 +23,8 @@ type GoogleCloudConfig struct {
 	Region                   types.String        `tfsdk:"region"`
 	SchedEnabled             types.Bool          `tfsdk:"sched_enabled"`
 	ServiceAccountEmail      types.String        `tfsdk:"service_account_email"`
+	Subnetworks              []types.String      `tfsdk:"subnetworks"`
+	UsePrivateAddress        types.Bool          `tfsdk:"use_private_address"`
 	WorkDir                  types.String        `tfsdk:"work_dir"`
 	Zone                     types.String        `tfsdk:"zone"`
 }

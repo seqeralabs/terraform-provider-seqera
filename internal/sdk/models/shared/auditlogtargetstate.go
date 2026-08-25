@@ -17,6 +17,7 @@ const (
 	NewStateTypeComputeEnv           NewStateType = "compute_env"
 	NewStateTypeCredentials          NewStateType = "credentials"
 	NewStateTypeCreditInfo           NewStateType = "credit_info"
+	NewStateTypeCreditPurchase       NewStateType = "credit_purchase"
 	NewStateTypeCustomRole           NewStateType = "custom_role"
 	NewStateTypeDataLink             NewStateType = "data_link"
 	NewStateTypeDataLinkFile         NewStateType = "data_link_file"
@@ -53,6 +54,7 @@ type NewState struct {
 	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
 	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
 	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
+	CreditPurchaseImage       *CreditPurchaseImage       `queryParam:"inline" union:"member"`
 	CustomRoleImage           *CustomRoleImage           `queryParam:"inline" union:"member"`
 	DataLinkFileImage         *DataLinkFileImage         `queryParam:"inline" union:"member"`
 	DataLinkImage             *DataLinkImage             `queryParam:"inline" union:"member"`
@@ -142,6 +144,18 @@ func CreateNewStateCreditInfo(creditInfo CreditInfoImage) NewState {
 	return NewState{
 		CreditInfoImage: &creditInfo,
 		Type:            typ,
+	}
+}
+
+func CreateNewStateCreditPurchase(creditPurchase CreditPurchaseImage) NewState {
+	typ := NewStateTypeCreditPurchase
+
+	typStr := AuditImageType(typ)
+	creditPurchase.AuditImageType = typStr
+
+	return NewState{
+		CreditPurchaseImage: &creditPurchase,
+		Type:                typ,
 	}
 }
 
@@ -538,6 +552,15 @@ func (u *NewState) UnmarshalJSON(data []byte) error {
 		u.CreditInfoImage = creditInfoImage
 		u.Type = NewStateTypeCreditInfo
 		return nil
+	case "credit_purchase":
+		creditPurchaseImage := new(CreditPurchaseImage)
+		if err := utils.UnmarshalJSON(data, &creditPurchaseImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type CreditPurchaseImage within NewState: %w", string(data), err)
+		}
+
+		u.CreditPurchaseImage = creditPurchaseImage
+		u.Type = NewStateTypeCreditPurchase
+		return nil
 	case "custom_role":
 		customRoleImage := new(CustomRoleImage)
 		if err := utils.UnmarshalJSON(data, &customRoleImage, "", true, nil); err != nil {
@@ -816,6 +839,10 @@ func (u NewState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.CreditInfoImage, "", true)
 	}
 
+	if u.CreditPurchaseImage != nil {
+		return utils.MarshalJSON(u.CreditPurchaseImage, "", true)
+	}
+
 	if u.CustomRoleImage != nil {
 		return utils.MarshalJSON(u.CustomRoleImage, "", true)
 	}
@@ -939,6 +966,7 @@ const (
 	PreviousStateTypeComputeEnv           PreviousStateType = "compute_env"
 	PreviousStateTypeCredentials          PreviousStateType = "credentials"
 	PreviousStateTypeCreditInfo           PreviousStateType = "credit_info"
+	PreviousStateTypeCreditPurchase       PreviousStateType = "credit_purchase"
 	PreviousStateTypeCustomRole           PreviousStateType = "custom_role"
 	PreviousStateTypeDataLink             PreviousStateType = "data_link"
 	PreviousStateTypeDataLinkFile         PreviousStateType = "data_link_file"
@@ -975,6 +1003,7 @@ type PreviousState struct {
 	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
 	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
 	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
+	CreditPurchaseImage       *CreditPurchaseImage       `queryParam:"inline" union:"member"`
 	CustomRoleImage           *CustomRoleImage           `queryParam:"inline" union:"member"`
 	DataLinkFileImage         *DataLinkFileImage         `queryParam:"inline" union:"member"`
 	DataLinkImage             *DataLinkImage             `queryParam:"inline" union:"member"`
@@ -1064,6 +1093,18 @@ func CreatePreviousStateCreditInfo(creditInfo CreditInfoImage) PreviousState {
 	return PreviousState{
 		CreditInfoImage: &creditInfo,
 		Type:            typ,
+	}
+}
+
+func CreatePreviousStateCreditPurchase(creditPurchase CreditPurchaseImage) PreviousState {
+	typ := PreviousStateTypeCreditPurchase
+
+	typStr := AuditImageType(typ)
+	creditPurchase.AuditImageType = typStr
+
+	return PreviousState{
+		CreditPurchaseImage: &creditPurchase,
+		Type:                typ,
 	}
 }
 
@@ -1460,6 +1501,15 @@ func (u *PreviousState) UnmarshalJSON(data []byte) error {
 		u.CreditInfoImage = creditInfoImage
 		u.Type = PreviousStateTypeCreditInfo
 		return nil
+	case "credit_purchase":
+		creditPurchaseImage := new(CreditPurchaseImage)
+		if err := utils.UnmarshalJSON(data, &creditPurchaseImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type CreditPurchaseImage within PreviousState: %w", string(data), err)
+		}
+
+		u.CreditPurchaseImage = creditPurchaseImage
+		u.Type = PreviousStateTypeCreditPurchase
+		return nil
 	case "custom_role":
 		customRoleImage := new(CustomRoleImage)
 		if err := utils.UnmarshalJSON(data, &customRoleImage, "", true, nil); err != nil {
@@ -1738,6 +1788,10 @@ func (u PreviousState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.CreditInfoImage, "", true)
 	}
 
+	if u.CreditPurchaseImage != nil {
+		return utils.MarshalJSON(u.CreditPurchaseImage, "", true)
+	}
+
 	if u.CustomRoleImage != nil {
 		return utils.MarshalJSON(u.CustomRoleImage, "", true)
 	}
@@ -1904,6 +1958,13 @@ func (a *AuditLogTargetState) GetNewStateCredentials() *CredentialsImage {
 func (a *AuditLogTargetState) GetNewStateCreditInfo() *CreditInfoImage {
 	if v := a.GetNewState(); v != nil {
 		return v.CreditInfoImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateCreditPurchase() *CreditPurchaseImage {
+	if v := a.GetNewState(); v != nil {
+		return v.CreditPurchaseImage
 	}
 	return nil
 }
@@ -2142,6 +2203,13 @@ func (a *AuditLogTargetState) GetPreviousStateCredentials() *CredentialsImage {
 func (a *AuditLogTargetState) GetPreviousStateCreditInfo() *CreditInfoImage {
 	if v := a.GetPreviousState(); v != nil {
 		return v.CreditInfoImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateCreditPurchase() *CreditPurchaseImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.CreditPurchaseImage
 	}
 	return nil
 }

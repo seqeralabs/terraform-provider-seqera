@@ -32,6 +32,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -279,6 +280,33 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`scheduler are accepted by the API but may produce warnings.` + "\n" +
 									`Requires replacement if changed.`,
 							},
+							"max_cpus_per_user": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+							},
+							"max_spot_attempts": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+									`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+									`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+									`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+									`` + "\n" +
+									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Int32{
+									custom_int32validators.MaxSpotAttemptsValidator(),
+								},
+							},
 							"pool": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
@@ -327,8 +355,8 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-									`is accepted.` + "\n" +
+									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+									`string is accepted.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"provisioning_model": schema.StringAttribute{
@@ -357,6 +385,25 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							},
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"network": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty. Requires replacement if changed.`,
+					},
+					"network_tags": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.`,
 					},
 					"nextflow_config": schema.StringAttribute{
 						Computed: true,
@@ -431,6 +478,25 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						MarkdownDescription: `Google Cloud service account email for compute instances.` + "\n" +
 							`If not specified, the default compute service account is used.` + "\n" +
 							`Requires replacement if changed.`,
+					},
+					"subnetworks": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+					},
+					"use_private_address": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,

@@ -3,15 +3,15 @@
 package shared
 
 type LaunchAgentResponse struct {
-	AgentID *string `json:"agentId,omitempty"`
-	Status  *string `json:"status,omitempty"`
+	AgentRunID *string `json:"agentRunId,omitempty"`
+	Status     *string `json:"status,omitempty"`
 }
 
-func (l *LaunchAgentResponse) GetAgentID() *string {
+func (l *LaunchAgentResponse) GetAgentRunID() *string {
 	if l == nil {
 		return nil
 	}
-	return l.AgentID
+	return l.AgentRunID
 }
 
 func (l *LaunchAgentResponse) GetStatus() *string {

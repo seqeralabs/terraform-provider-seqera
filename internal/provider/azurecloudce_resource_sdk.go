@@ -50,6 +50,8 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -407,6 +409,18 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
+		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
 			desiredWarm := new(int)
@@ -450,6 +464,8 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			DiskAllocation:    diskAllocation,
 			FusionSnapshots:   fusionSnapshots,
 			MachineTypes:      machineTypes,
+			MaxCpusPerUser:    maxCpusPerUser,
+			MaxSpotAttempts:   maxSpotAttempts,
 			Pool:              pool,
 			PredictionModel:   predictionModel,
 			ProvisioningModel: provisioningModel,

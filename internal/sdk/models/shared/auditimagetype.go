@@ -24,6 +24,7 @@ const (
 	AuditImageTypeCustomRole           AuditImageType = "custom_role"
 	AuditImageTypeOrgSsoConnection     AuditImageType = "org_sso_connection"
 	AuditImageTypeCreditInfo           AuditImageType = "credit_info"
+	AuditImageTypeCreditPurchase       AuditImageType = "credit_purchase"
 	AuditImageTypeDataStudio           AuditImageType = "data_studio"
 	AuditImageTypeDataStudioConnection AuditImageType = "data_studio_connection"
 	AuditImageTypeDataLink             AuditImageType = "data_link"
@@ -82,6 +83,8 @@ func (e *AuditImageType) UnmarshalJSON(data []byte) error {
 	case "org_sso_connection":
 		fallthrough
 	case "credit_info":
+		fallthrough
+	case "credit_purchase":
 		fallthrough
 	case "data_studio":
 		fallthrough

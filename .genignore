@@ -32,6 +32,7 @@ internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/objectvalidators/sched_config_consistency_validator.go
 internal/validators/boolvalidators/graviton_validator.go
 internal/validators/stringvalidators/work_dir_format_validator.go
+internal/validators/int32validators/max_spot_attempts_validator.go
 
 # Custom state upgraders — all follow the default lenient-decode pattern
 # (docs-internal/STATE_UPGRADER_GUIDE.md); hand-maintained, not regenerated.

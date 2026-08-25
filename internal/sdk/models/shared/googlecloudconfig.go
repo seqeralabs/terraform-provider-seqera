@@ -28,6 +28,10 @@ type GoogleCloudConfig struct {
 	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
+	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty.
+	Network *string `json:"network,omitempty"`
+	// Network tags applied to compute instances (VPC firewall-rule targets).
+	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings that override repository defaults.
 	// Applied globally to all pipelines launched in this compute environment.
 	//
@@ -49,7 +53,11 @@ type GoogleCloudConfig struct {
 	// If not specified, the default compute service account is used.
 	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	WaveEnabled         *bool   `json:"waveEnabled,omitempty"`
+	// Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+	Subnetworks []string `json:"subnetworks,omitempty"`
+	// Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork.
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	WaveEnabled       *bool `json:"waveEnabled,omitempty"`
 	// Google Cloud Storage bucket path for Nextflow work directory where intermediate
 	// files will be stored.
 	// Format: gs://bucket-name/path
@@ -117,6 +125,20 @@ func (g *GoogleCloudConfig) GetInstanceType() *string {
 	return g.InstanceType
 }
 
+func (g *GoogleCloudConfig) GetNetwork() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Network
+}
+
+func (g *GoogleCloudConfig) GetNetworkTags() []string {
+	if g == nil {
+		return nil
+	}
+	return g.NetworkTags
+}
+
 func (g *GoogleCloudConfig) GetNextflowConfig() *string {
 	if g == nil {
 		return nil
@@ -171,6 +193,20 @@ func (g *GoogleCloudConfig) GetServiceAccountEmail() *string {
 		return nil
 	}
 	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCloudConfig) GetSubnetworks() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Subnetworks
+}
+
+func (g *GoogleCloudConfig) GetUsePrivateAddress() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.UsePrivateAddress
 }
 
 func (g *GoogleCloudConfig) GetWaveEnabled() *bool {

@@ -12,6 +12,8 @@ type SchedConfig struct {
 	DiskAllocation    types.String        `tfsdk:"disk_allocation"`
 	FusionSnapshots   types.Bool          `tfsdk:"fusion_snapshots"`
 	MachineTypes      basetypes.ListValue `tfsdk:"machine_types"`
+	MaxCpusPerUser    types.Int32         `tfsdk:"max_cpus_per_user"`
+	MaxSpotAttempts   types.Int32         `tfsdk:"max_spot_attempts"`
 	Pool              *SchedConfigPool    `tfsdk:"pool"`
 	PredictionModel   types.String        `tfsdk:"prediction_model"`
 	ProvisioningModel types.String        `tfsdk:"provisioning_model"`

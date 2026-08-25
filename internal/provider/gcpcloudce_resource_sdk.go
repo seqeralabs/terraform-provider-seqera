@@ -78,6 +78,8 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -93,6 +95,15 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.Network = types.StringPointerValue(resp.Config.Network)
+		if resp.Config.NetworkTags != nil {
+			r.Config.NetworkTags = make([]types.String, 0, len(resp.Config.NetworkTags))
+			for _, v := range resp.Config.NetworkTags {
+				r.Config.NetworkTags = append(r.Config.NetworkTags, types.StringValue(v))
+			}
+		} else {
+			r.Config.NetworkTags = nil
+		}
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
@@ -100,6 +111,15 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
 		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
+		if resp.Config.Subnetworks != nil {
+			r.Config.Subnetworks = make([]types.String, 0, len(resp.Config.Subnetworks))
+			for _, v := range resp.Config.Subnetworks {
+				r.Config.Subnetworks = append(r.Config.Subnetworks, types.StringValue(v))
+			}
+		} else {
+			r.Config.Subnetworks = nil
+		}
+		r.Config.UsePrivateAddress = types.BoolPointerValue(resp.Config.UsePrivateAddress)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.Config.Zone = types.StringPointerValue(resp.Config.Zone)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
@@ -351,6 +371,19 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		instanceType = nil
 	}
+	network := new(string)
+	if !r.Config.Network.IsUnknown() && !r.Config.Network.IsNull() {
+		*network = r.Config.Network.ValueString()
+	} else {
+		network = nil
+	}
+	var networkTags []string
+	if r.Config.NetworkTags != nil {
+		networkTags = make([]string, 0, len(r.Config.NetworkTags))
+		for networkTagsIndex := range r.Config.NetworkTags {
+			networkTags = append(networkTags, r.Config.NetworkTags[networkTagsIndex].ValueString())
+		}
+	}
 	nextflowConfig := new(string)
 	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
 		*nextflowConfig = r.Config.NextflowConfig.ValueString()
@@ -405,6 +438,18 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
+		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
 			desiredWarm := new(int)
@@ -448,6 +493,8 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			DiskAllocation:    diskAllocation,
 			FusionSnapshots:   fusionSnapshots,
 			MachineTypes:      machineTypes,
+			MaxCpusPerUser:    maxCpusPerUser,
+			MaxSpotAttempts:   maxSpotAttempts,
 			Pool:              pool,
 			PredictionModel:   predictionModel,
 			ProvisioningModel: provisioningModel,
@@ -464,6 +511,19 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		*serviceAccountEmail = r.Config.ServiceAccountEmail.ValueString()
 	} else {
 		serviceAccountEmail = nil
+	}
+	var subnetworks []string
+	if r.Config.Subnetworks != nil {
+		subnetworks = make([]string, 0, len(r.Config.Subnetworks))
+		for subnetworksIndex := range r.Config.Subnetworks {
+			subnetworks = append(subnetworks, r.Config.Subnetworks[subnetworksIndex].ValueString())
+		}
+	}
+	usePrivateAddress := new(bool)
+	if !r.Config.UsePrivateAddress.IsUnknown() && !r.Config.UsePrivateAddress.IsNull() {
+		*usePrivateAddress = r.Config.UsePrivateAddress.ValueBool()
+	} else {
+		usePrivateAddress = nil
 	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
@@ -484,6 +544,8 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		GpuEnabled:               gpuEnabled,
 		ImageID:                  imageID,
 		InstanceType:             instanceType,
+		Network:                  network,
+		NetworkTags:              networkTags,
 		NextflowConfig:           nextflowConfig,
 		PostRunScript:            postRunScript,
 		PreRunScript:             preRunScript,
@@ -492,6 +554,8 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		IntelligentComputeConfig: intelligentComputeConfig,
 		SchedEnabled:             schedEnabled,
 		ServiceAccountEmail:      serviceAccountEmail,
+		Subnetworks:              subnetworks,
+		UsePrivateAddress:        usePrivateAddress,
 		WorkDir:                  workDir,
 		Zone:                     zone,
 	}

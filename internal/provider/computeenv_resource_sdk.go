@@ -121,6 +121,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Region)
+					r.ComputeEnv.Config.AwsBatch.SecretsKmsKeyID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.SecretsKmsKeyID)
 					r.ComputeEnv.Config.AwsBatch.StorageType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.StorageType)
 					r.ComputeEnv.Config.AwsBatch.Volumes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes))
 					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes {
@@ -172,6 +173,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 						diags.Append(machineTypesDiags...)
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.MaxCpusPerUser))
+						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.MaxSpotAttempts))
 						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.Pool == nil {
 							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool = nil
 						} else {
@@ -193,6 +196,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Region)
+					r.ComputeEnv.Config.AwsCloud.SecretsKmsKeyID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SecretsKmsKeyID)
 					securityGroupsValue1, securityGroupsDiags1 := types.ListValueFrom(ctx, types.StringType, resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups)
 					diags.Append(securityGroupsDiags1...)
 					securityGroupsValuable1, securityGroupsDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue1)
@@ -384,6 +388,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						machineTypesValuable1, machineTypesDiags1 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue1)
 						diags.Append(machineTypesDiags1...)
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable1.(basetypes.ListValue)
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.MaxCpusPerUser))
+						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.MaxSpotAttempts))
 						if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.Pool == nil {
 							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool = nil
 						} else {
@@ -511,6 +517,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						machineTypesValuable2, machineTypesDiags2 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue2)
 						diags.Append(machineTypesDiags2...)
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable2.(basetypes.ListValue)
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.MaxCpusPerUser))
+						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.MaxSpotAttempts))
 						if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.Pool == nil {
 							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool = nil
 						} else {
@@ -526,6 +534,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 						}
 					}
+					r.ComputeEnv.Config.GoogleCloud.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Network)
+					if resp.ComputeEnv.Config.GoogleCloudConfiguration.NetworkTags != nil {
+						r.ComputeEnv.Config.GoogleCloud.NetworkTags = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleCloudConfiguration.NetworkTags))
+						for _, v := range resp.ComputeEnv.Config.GoogleCloudConfiguration.NetworkTags {
+							r.ComputeEnv.Config.GoogleCloud.NetworkTags = append(r.ComputeEnv.Config.GoogleCloud.NetworkTags, types.StringValue(v))
+						}
+					} else {
+						r.ComputeEnv.Config.GoogleCloud.NetworkTags = nil
+					}
 					r.ComputeEnv.Config.GoogleCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.GoogleCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.GoogleCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PreRunScript)
@@ -533,6 +550,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Region)
 					r.ComputeEnv.Config.GoogleCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ServiceAccountEmail)
+					if resp.ComputeEnv.Config.GoogleCloudConfiguration.Subnetworks != nil {
+						r.ComputeEnv.Config.GoogleCloud.Subnetworks = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleCloudConfiguration.Subnetworks))
+						for _, v := range resp.ComputeEnv.Config.GoogleCloudConfiguration.Subnetworks {
+							r.ComputeEnv.Config.GoogleCloud.Subnetworks = append(r.ComputeEnv.Config.GoogleCloud.Subnetworks, types.StringValue(v))
+						}
+					} else {
+						r.ComputeEnv.Config.GoogleCloud.Subnetworks = nil
+					}
+					r.ComputeEnv.Config.GoogleCloud.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.UsePrivateAddress)
 					r.ComputeEnv.Config.GoogleCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.WorkDir)
 					r.ComputeEnv.Config.GoogleCloud.Zone = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Zone)
 				}
@@ -715,6 +741,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						machineTypesValuable3, machineTypesDiags3 := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue3)
 						diags.Append(machineTypesDiags3...)
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable3.(basetypes.ListValue)
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.MaxCpusPerUser))
+						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.MaxSpotAttempts))
 						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.Pool == nil {
 							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool = nil
 						} else {
@@ -1335,6 +1363,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var region string
 		region = r.ComputeEnv.Config.AwsBatch.Region.ValueString()
 
+		secretsKmsKeyID := new(string)
+		if !r.ComputeEnv.Config.AwsBatch.SecretsKmsKeyID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.SecretsKmsKeyID.IsNull() {
+			*secretsKmsKeyID = r.ComputeEnv.Config.AwsBatch.SecretsKmsKeyID.ValueString()
+		} else {
+			secretsKmsKeyID = nil
+		}
 		storageType := new(string)
 		if !r.ComputeEnv.Config.AwsBatch.StorageType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.StorageType.IsNull() {
 			*storageType = r.ComputeEnv.Config.AwsBatch.StorageType.ValueString()
@@ -1379,6 +1413,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PostRunScript:      postRunScript,
 			PreRunScript:       preRunScript,
 			Region:             region,
+			SecretsKmsKeyID:    secretsKmsKeyID,
 			StorageType:        storageType,
 			Volumes:            volumes,
 			EnableWave:         enableWave,
@@ -1534,6 +1569,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
 				diags.Append(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
 			}
+			maxCpusPerUser := new(int)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+				*maxCpusPerUser = int(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+			} else {
+				maxCpusPerUser = nil
+			}
+			maxSpotAttempts := new(int)
+			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+				*maxSpotAttempts = int(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+			} else {
+				maxSpotAttempts = nil
+			}
 			var pool *shared.SchedConfigPool
 			if r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.Pool != nil {
 				desiredWarm := new(int)
@@ -1577,6 +1624,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				DiskAllocation:    diskAllocation,
 				FusionSnapshots:   fusionSnapshots1,
 				MachineTypes:      machineTypes,
+				MaxCpusPerUser:    maxCpusPerUser,
+				MaxSpotAttempts:   maxSpotAttempts,
 				Pool:              pool,
 				PredictionModel:   predictionModel,
 				ProvisioningModel: provisioningModel,
@@ -1587,6 +1636,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*intelligentComputeEnabled = r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled.ValueBool()
 		} else {
 			intelligentComputeEnabled = nil
+		}
+		secretsKmsKeyId1 := new(string)
+		if !r.ComputeEnv.Config.AwsCloud.SecretsKmsKeyID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SecretsKmsKeyID.IsNull() {
+			*secretsKmsKeyId1 = r.ComputeEnv.Config.AwsCloud.SecretsKmsKeyID.ValueString()
+		} else {
+			secretsKmsKeyId1 = nil
 		}
 		var securityGroups1 []string
 		if !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SecurityGroups.IsNull() {
@@ -1633,6 +1688,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:                    region1,
 			IntelligentComputeConfig:  intelligentComputeConfig,
 			IntelligentComputeEnabled: intelligentComputeEnabled,
+			SecretsKmsKeyID:           secretsKmsKeyId1,
 			SecurityGroups:            securityGroups1,
 			SubnetID:                  subnetID,
 			SubnetIds:                 subnetIds,
@@ -2055,6 +2111,19 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			instanceType1 = nil
 		}
+		network1 := new(string)
+		if !r.ComputeEnv.Config.GoogleCloud.Network.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.Network.IsNull() {
+			*network1 = r.ComputeEnv.Config.GoogleCloud.Network.ValueString()
+		} else {
+			network1 = nil
+		}
+		var networkTags1 []string
+		if r.ComputeEnv.Config.GoogleCloud.NetworkTags != nil {
+			networkTags1 = make([]string, 0, len(r.ComputeEnv.Config.GoogleCloud.NetworkTags))
+			for networkTagsIndex := range r.ComputeEnv.Config.GoogleCloud.NetworkTags {
+				networkTags1 = append(networkTags1, r.ComputeEnv.Config.GoogleCloud.NetworkTags[networkTagsIndex].ValueString())
+			}
+		}
 		nextflowConfig4 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.NextflowConfig.IsNull() {
 			*nextflowConfig4 = r.ComputeEnv.Config.GoogleCloud.NextflowConfig.ValueString()
@@ -2109,6 +2178,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
 				diags.Append(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes1, true)...)
 			}
+			maxCpusPerUser1 := new(int)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+				*maxCpusPerUser1 = int(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+			} else {
+				maxCpusPerUser1 = nil
+			}
+			maxSpotAttempts1 := new(int)
+			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+				*maxSpotAttempts1 = int(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+			} else {
+				maxSpotAttempts1 = nil
+			}
 			var pool1 *shared.SchedConfigPool
 			if r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.Pool != nil {
 				desiredWarm1 := new(int)
@@ -2152,6 +2233,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				DiskAllocation:    diskAllocation1,
 				FusionSnapshots:   fusionSnapshots3,
 				MachineTypes:      machineTypes1,
+				MaxCpusPerUser:    maxCpusPerUser1,
+				MaxSpotAttempts:   maxSpotAttempts1,
 				Pool:              pool1,
 				PredictionModel:   predictionModel1,
 				ProvisioningModel: provisioningModel1,
@@ -2168,6 +2251,19 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*serviceAccountEmail = r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.ValueString()
 		} else {
 			serviceAccountEmail = nil
+		}
+		var subnetworks []string
+		if r.ComputeEnv.Config.GoogleCloud.Subnetworks != nil {
+			subnetworks = make([]string, 0, len(r.ComputeEnv.Config.GoogleCloud.Subnetworks))
+			for subnetworksIndex := range r.ComputeEnv.Config.GoogleCloud.Subnetworks {
+				subnetworks = append(subnetworks, r.ComputeEnv.Config.GoogleCloud.Subnetworks[subnetworksIndex].ValueString())
+			}
+		}
+		usePrivateAddress1 := new(bool)
+		if !r.ComputeEnv.Config.GoogleCloud.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.UsePrivateAddress.IsNull() {
+			*usePrivateAddress1 = r.ComputeEnv.Config.GoogleCloud.UsePrivateAddress.ValueBool()
+		} else {
+			usePrivateAddress1 = nil
 		}
 		workDir4 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.WorkDir.IsNull() {
@@ -2188,6 +2284,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			GpuEnabled:               gpuEnabled2,
 			ImageID:                  imageId2,
 			InstanceType:             instanceType1,
+			Network:                  network1,
+			NetworkTags:              networkTags1,
 			NextflowConfig:           nextflowConfig4,
 			PostRunScript:            postRunScript4,
 			PreRunScript:             preRunScript4,
@@ -2196,6 +2294,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			IntelligentComputeConfig: intelligentComputeConfig1,
 			SchedEnabled:             schedEnabled,
 			ServiceAccountEmail:      serviceAccountEmail,
+			Subnetworks:              subnetworks,
+			UsePrivateAddress:        usePrivateAddress1,
 			WorkDir:                  workDir4,
 			Zone:                     zone,
 		}
@@ -2669,6 +2769,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.IsNull() {
 				diags.Append(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes2, true)...)
 			}
+			maxCpusPerUser2 := new(int)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+				*maxCpusPerUser2 = int(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+			} else {
+				maxCpusPerUser2 = nil
+			}
+			maxSpotAttempts2 := new(int)
+			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+				*maxSpotAttempts2 = int(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+			} else {
+				maxSpotAttempts2 = nil
+			}
 			var pool2 *shared.SchedConfigPool
 			if r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.Pool != nil {
 				desiredWarm2 := new(int)
@@ -2712,6 +2824,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				DiskAllocation:    diskAllocation2,
 				FusionSnapshots:   fusionSnapshots4,
 				MachineTypes:      machineTypes2,
+				MaxCpusPerUser:    maxCpusPerUser2,
+				MaxSpotAttempts:   maxSpotAttempts2,
 				Pool:              pool2,
 				PredictionModel:   predictionModel2,
 				ProvisioningModel: provisioningModel2,
@@ -4027,6 +4141,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.IsNull() {
 				diags.Append(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes3, true)...)
 			}
+			maxCpusPerUser3 := new(int)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+				*maxCpusPerUser3 = int(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+			} else {
+				maxCpusPerUser3 = nil
+			}
+			maxSpotAttempts3 := new(int)
+			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+				*maxSpotAttempts3 = int(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+			} else {
+				maxSpotAttempts3 = nil
+			}
 			var pool3 *shared.SchedConfigPool
 			if r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.Pool != nil {
 				desiredWarm3 := new(int)
@@ -4070,6 +4196,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				DiskAllocation:    diskAllocation3,
 				FusionSnapshots:   fusionSnapshots5,
 				MachineTypes:      machineTypes3,
+				MaxCpusPerUser:    maxCpusPerUser3,
+				MaxSpotAttempts:   maxSpotAttempts3,
 				Pool:              pool3,
 				PredictionModel:   predictionModel3,
 				ProvisioningModel: provisioningModel3,
@@ -4245,11 +4373,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			sshImage1 = nil
 		}
-		usePrivateAddress1 := new(bool)
+		usePrivateAddress2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsNull() {
-			*usePrivateAddress1 = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
+			*usePrivateAddress2 = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
 		} else {
-			usePrivateAddress1 = nil
+			usePrivateAddress2 = nil
 		}
 		workDir16 := new(string)
 		if !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsNull() {
@@ -4280,7 +4408,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:            region8,
 			SSHDaemon:         sshDaemon1,
 			SSHImage:          sshImage1,
-			UsePrivateAddress: usePrivateAddress1,
+			UsePrivateAddress: usePrivateAddress2,
 			WorkDir:           workDir16,
 			Zones:             zones,
 		}
