@@ -78,6 +78,7 @@ speakeasy run --skip-versioning
 - `docs-internal/` - Internal development guides
   - `OVERLAY_GUIDE.md` - Best practices for overlays, validators, resource documentation, and nested-structure hoisting (transform-based + legacy patterns)
   - `SPEAKEASY_EXTENSIONS_REFERENCE.md` - Complete Speakeasy extensions reference
+  - `SPEC_UPDATE_RUNBOOK.md` - **Runbook for API spec bumps**; vendoring the spec, triaging what reaches the Terraform surface, and the traps ($ref siblings, enum vs. read tolerance)
   - `STATE_UPGRADER_GUIDE.md` - **Default pattern for state upgraders** (inject schema + lenient re-decode); consult before adding/editing any `*_resource` state upgrader or bumping `x-speakeasy-entity-version`
 
 ## Available Resources and Data Sources

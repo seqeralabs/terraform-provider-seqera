@@ -19,6 +19,14 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 - Usage notes and common patterns
 - Important warnings about non-existent or deprecated extensions
 
+### [SPEC_UPDATE_RUNBOOK.md](./SPEC_UPDATE_RUNBOOK.md)
+How to pull a new Seqera API OpenAPI spec into the provider and decide what each
+change should mean in Terraform. Covers:
+- Vendoring and re-sorting the spec so the diff stays reviewable
+- Triaging the generated `docs/` diff: keep / ignore / validate / constrain / sync
+- Verifying with an offline `dev_overrides` plan, including validator negative cases
+- Traps: `$ref` sibling keys, enum constraints vs. read tolerance, docs rendering
+
 ### [STATE_UPGRADER_GUIDE.md](./STATE_UPGRADER_GUIDE.md)
 The **default** pattern for writing state upgraders so prior state upgrades
 cleanly (no "unsupported attribute" errors when the schema drops fields). Covers:
