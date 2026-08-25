@@ -26,6 +26,7 @@ type AWSCloudConfiguration struct {
 	PostRunScript             types.String        `tfsdk:"post_run_script"`
 	PreRunScript              types.String        `tfsdk:"pre_run_script"`
 	Region                    types.String        `tfsdk:"region"`
+	SecretsKmsKeyID           types.String        `tfsdk:"secrets_kms_key_id"`
 	SecurityGroups            basetypes.ListValue `tfsdk:"security_groups"`
 	SubnetID                  types.String        `tfsdk:"subnet_id"`
 	SubnetIds                 basetypes.ListValue `tfsdk:"subnet_ids"`

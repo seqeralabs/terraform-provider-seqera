@@ -202,9 +202,9 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, 
 	} else {
 		assumeRoleArn = nil
 	}
-	mode := new(shared.AwsCredentialsMode)
+	mode := new(shared.Mode)
 	if !r.Mode.IsUnknown() && !r.Mode.IsNull() {
-		*mode = shared.AwsCredentialsMode(r.Mode.ValueString())
+		*mode = shared.Mode(r.Mode.ValueString())
 	} else {
 		mode = nil
 	}

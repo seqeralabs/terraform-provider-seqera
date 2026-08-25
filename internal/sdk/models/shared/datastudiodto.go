@@ -60,6 +60,7 @@ type DataStudioDto struct {
 	// Unique identifier for the Studio session
 	SessionID  *string     `json:"sessionId,omitempty"`
 	SSHDetails *SSHDetails `json:"sshDetails,omitempty"`
+	Starred    *bool       `json:"starred,omitempty"`
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Alias of `session_id` for Terraform convention.
@@ -129,6 +130,13 @@ func (d *DataStudioDto) GetSSHDetails() *SSHDetails {
 		return nil
 	}
 	return d.SSHDetails
+}
+
+func (d *DataStudioDto) GetStarred() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Starred
 }
 
 func (d *DataStudioDto) GetWorkspaceID() *int64 {

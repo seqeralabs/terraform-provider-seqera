@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.187.0 and generator version 2.932.9
+// Generated from OpenAPI doc version 1.198.0 and generator version 2.932.9
 
 import (
 	"context"
@@ -70,7 +70,8 @@ type Seqera struct {
 	Ga4gh      *Ga4gh
 	Identities *Identities
 	// Workflow launch events
-	Launch *Launch
+	Launch  *Launch
+	Lineage *Lineage
 	// Organizations
 	Orgs *Orgs
 	// Teams in an organization context
@@ -179,7 +180,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.42.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.42.0 2.932.9 1.187.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.42.0 2.932.9 1.198.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -212,6 +213,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Identities = newIdentities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Lineage = newLineage(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)

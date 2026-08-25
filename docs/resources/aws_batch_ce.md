@@ -199,6 +199,7 @@ Requires replacement if changed.
 - `pre_run_script` (String) Bash script to run before workflow execution begins.
 Use for environment setup, loading modules, downloading reference data, etc.
 Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) List of volume mount specifications for compute instances.
 Format follows Docker volume mount syntax.

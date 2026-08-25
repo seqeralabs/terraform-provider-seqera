@@ -76,6 +76,8 @@ type AwsCloudConfig struct {
 	// HTTP 403.
 	//
 	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
+	// Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+	SecretsKmsKeyID *string `json:"secretsKmsKeyId,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//
@@ -244,6 +246,13 @@ func (a *AwsCloudConfig) GetIntelligentComputeEnabled() *bool {
 		return nil
 	}
 	return a.IntelligentComputeEnabled
+}
+
+func (a *AwsCloudConfig) GetSecretsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SecretsKmsKeyID
 }
 
 func (a *AwsCloudConfig) GetSecurityGroups() []string {

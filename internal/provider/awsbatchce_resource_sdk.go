@@ -105,6 +105,7 @@ func (r *AWSBatchCEResourceModel) RefreshFromSharedAWSBatchCEComputeConfig(ctx c
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
+		r.Config.SecretsKmsKeyID = types.StringPointerValue(resp.Config.SecretsKmsKeyID)
 		r.Config.StorageType = types.StringPointerValue(resp.Config.StorageType)
 		r.Config.Volumes = make([]types.String, 0, len(resp.Config.Volumes))
 		for _, v := range resp.Config.Volumes {
@@ -634,6 +635,12 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 	var region string
 	region = r.Config.Region.ValueString()
 
+	secretsKmsKeyID := new(string)
+	if !r.Config.SecretsKmsKeyID.IsUnknown() && !r.Config.SecretsKmsKeyID.IsNull() {
+		*secretsKmsKeyID = r.Config.SecretsKmsKeyID.ValueString()
+	} else {
+		secretsKmsKeyID = nil
+	}
 	storageType := new(string)
 	if !r.Config.StorageType.IsUnknown() && !r.Config.StorageType.IsNull() {
 		*storageType = r.Config.StorageType.ValueString()
@@ -678,6 +685,7 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 		PostRunScript:      postRunScript,
 		PreRunScript:       preRunScript,
 		Region:             region,
+		SecretsKmsKeyID:    secretsKmsKeyID,
 		StorageType:        storageType,
 		Volumes:            volumes,
 		EnableWave:         enableWave,

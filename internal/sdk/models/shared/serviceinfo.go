@@ -7,6 +7,7 @@ type ServiceInfo struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	AllowLocalRepos              *bool         `json:"allowLocalRepos,omitempty"`
 	AllowNextflowCliLogs         *bool         `json:"allowNextflowCliLogs,omitempty"`
+	AllowSchedRoleCredentials    *bool         `json:"allowSchedRoleCredentials,omitempty"`
 	Analytics                    *Analytics    `json:"analytics,omitempty"`
 	APIVersion                   *string       `json:"apiVersion,omitempty"`
 	AuthTypes                    []string      `json:"authTypes,omitempty"`
@@ -14,6 +15,7 @@ type ServiceInfo struct {
 	ContactEmail                 *string       `json:"contactEmail,omitempty"`
 	ContentMaxFileSize           *int64        `json:"contentMaxFileSize,omitempty"`
 	ContentURL                   *string       `json:"contentUrl,omitempty"`
+	CreditPurchasesEnabled       *bool         `json:"creditPurchasesEnabled,omitempty"`
 	EvalWorkspaceIds             []int64       `json:"evalWorkspaceIds,omitempty"`
 	ForgePrefix                  *string       `json:"forgePrefix,omitempty"`
 	GroundswellAllowedWorkspaces []int64       `json:"groundswellAllowedWorkspaces,omitempty"`
@@ -55,6 +57,13 @@ func (s *ServiceInfo) GetAllowNextflowCliLogs() *bool {
 		return nil
 	}
 	return s.AllowNextflowCliLogs
+}
+
+func (s *ServiceInfo) GetAllowSchedRoleCredentials() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.AllowSchedRoleCredentials
 }
 
 func (s *ServiceInfo) GetAnalytics() *Analytics {
@@ -104,6 +113,13 @@ func (s *ServiceInfo) GetContentURL() *string {
 		return nil
 	}
 	return s.ContentURL
+}
+
+func (s *ServiceInfo) GetCreditPurchasesEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.CreditPurchasesEnabled
 }
 
 func (s *ServiceInfo) GetEvalWorkspaceIds() []int64 {

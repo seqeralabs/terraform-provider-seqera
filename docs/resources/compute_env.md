@@ -249,6 +249,7 @@ Requires replacement if changed.
 - `region` (String) AWS region where the Batch compute environment will be created.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) List of volume mount specifications for compute instances.
 Format follows Docker volume mount syntax.
@@ -456,6 +457,7 @@ Requires replacement if changed.
 - `region` (String) AWS region where the compute environment will be created.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -517,12 +519,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -720,12 +730,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -972,6 +990,8 @@ If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--intelligent_compute_config))
+- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty. Requires replacement if changed.
+- `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
@@ -983,6 +1003,8 @@ Not Null; Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
+- `subnetworks` (List of String) Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
+- `use_private_address` (Boolean) Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
 If not specified, the platform selects a zone automatically.
@@ -1031,12 +1053,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
@@ -1221,12 +1251,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:

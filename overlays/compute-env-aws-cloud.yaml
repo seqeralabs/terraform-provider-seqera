@@ -501,12 +501,24 @@ actions:
         Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
       example: "ECS"
       x-speakeasy-param-force-new: true
+  - target: $.components.schemas.SchedConfig.properties.maxSpotAttempts
+    update:
+      description: |
+        Maximum number of Spot provisioning attempts for a task, including the
+        first one, before giving up on Spot capacity. `1` means a single attempt
+        with no retry. Only used when `provisioning_model` is `spot` or
+        `spotFirst` (the default).
+
+        Must be a whole number between 1 and 10 (inclusive).
+      example: 5
+      x-speakeasy-plan-validators: MaxSpotAttemptsValidator
+      x-speakeasy-param-force-new: true
   - target: $.components.schemas.SchedConfig.properties.predictionModel
     update:
       description: |
         Resource-prediction model used by Intelligent Compute to size tasks.
-        Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-        is accepted.
+        Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+        string is accepted.
       example: "none"
       x-speakeasy-param-force-new: true
   - target: $.components.schemas.SchedConfig.properties.fusionSnapshots

@@ -2,11 +2,36 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
+)
+
 type DataLinkItem struct {
-	MimeType *string           `json:"mimeType,omitempty"`
-	Name     *string           `json:"name,omitempty"`
-	Size     *int64            `json:"size,omitempty"`
-	Type     *DataLinkItemType `json:"type,omitempty"`
+	// Last-modified timestamp of the object (ISO-8601, UTC). Null for folders.
+	LastModified *time.Time        `json:"lastModified,omitempty"`
+	MimeType     *string           `json:"mimeType,omitempty"`
+	Name         *string           `json:"name,omitempty"`
+	Size         *int64            `json:"size,omitempty"`
+	Type         *DataLinkItemType `json:"type,omitempty"`
+}
+
+func (d DataLinkItem) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DataLinkItem) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *DataLinkItem) GetLastModified() *time.Time {
+	if d == nil {
+		return nil
+	}
+	return d.LastModified
 }
 
 func (d *DataLinkItem) GetMimeType() *string {
