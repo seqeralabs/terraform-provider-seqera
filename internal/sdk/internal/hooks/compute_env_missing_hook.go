@@ -2,6 +2,8 @@ package hooks
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -62,9 +64,11 @@ func (h *ComputeEnvMissingHook) AfterSuccess(hookCtx AfterSuccessContext, res *h
 	// Buffer the body so it can be inspected and then handed back to the SDK intact.
 	buf, err := io.ReadAll(io.LimitReader(res.Body, maxErrorBodyBytes+1))
 	if err != nil {
-		// Leave the response untouched; the SDK will report the read failure itself.
-		res.Body = io.NopCloser(bytes.NewReader(buf))
-		return res, nil
+		// The body is now partially consumed and unrecoverable, so returning it would
+		// hand the SDK a truncated document and surface as a bogus JSON syntax error.
+		// Release the connection and report the transport failure as itself.
+		_ = res.Body.Close()
+		return nil, fmt.Errorf("reading %s response body: %w", hookCtx.OperationID, err)
 	}
 
 	if len(buf) > maxErrorBodyBytes {
@@ -105,11 +109,26 @@ func isComputeEnvLookupOperation(operationID string) bool {
 
 // isComputeEnvNotFoundBody reports whether the body is one of Platform's "missing
 // compute environment" messages.
+//
+// It decodes the ErrorResponse and tests only the `message` field, anchored at the start.
+// Substring-matching the whole raw body would be unsafe: any 400 that merely *contains*
+// one of these phrases — a user-supplied name echoed back, or a `cause`/`path` field added
+// to ErrorResponse by a later Platform version — would be rewritten to 404, and on a
+// delete a 404 reads as "Destruction complete" while the environment is still there. That
+// is exactly the #240 failure mode this hook exists to prevent.
+//
+// A body that is not valid JSON, or that carries no message, is left alone.
 func isComputeEnvNotFoundBody(body []byte) bool {
-	lower := strings.ToLower(string(body))
+	var parsed struct {
+		Message string `json:"message"`
+	}
+	if err := json.Unmarshal(body, &parsed); err != nil {
+		return false
+	}
+
+	message := strings.ToLower(strings.TrimSpace(parsed.Message))
 	for _, msg := range computeEnvNotFoundMessages {
-		// Match substrings because Platform's JSON error message includes the CE id after this text.
-		if strings.Contains(lower, msg) {
+		if strings.HasPrefix(message, msg) {
 			return true
 		}
 	}

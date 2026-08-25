@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -181,3 +182,98 @@ func TestBodyReusableAfterRewrite(t *testing.T) {
 		t.Errorf("got %q, want %q", buf.String(), body)
 	}
 }
+
+// Finding 4 regression guard: a 400 that merely *contains* a not-found phrase — echoed
+// back in a user-supplied field, or in a field a later Platform version adds — must not be
+// rewritten. On a delete, a wrongly-produced 404 reads as "Destruction complete" while the
+// environment is still there, which is the #240 failure mode itself.
+func TestNotFoundPhraseElsewhereInBodyIsIgnored(t *testing.T) {
+	bodies := []string{
+		// The phrase echoed inside a different field.
+		`{"message":"Compute environment 'abc' has active jobs","path":"/unknown computeenv"}`,
+		// A CE whose *name* happens to contain the phrase.
+		`{"message":"Compute environment 'unknown compute environment id' has active jobs"}`,
+		// The phrase present, but not as the message.
+		`{"message":"Bad request","cause":"Unknown compute environment id: xyz"}`,
+	}
+	for _, body := range bodies {
+		res := runHook(t, "DeleteSlurmCE", newResponse(400, body))
+		if res.StatusCode != 400 {
+			t.Errorf("body %q was wrongly rewritten to %d; want 400", body, res.StatusCode)
+		}
+	}
+}
+
+// Only the message field, anchored at the start, triggers the rewrite.
+func TestMessageMustBeAnchored(t *testing.T) {
+	// Prefixed with other text: not Platform's message, so leave it alone.
+	res := runHook(t, "DeleteSlurmCE", newResponse(400, `{"message":"Warning: Unknown computeEnv: x"}`))
+	if res.StatusCode != 400 {
+		t.Errorf("non-anchored message rewritten to %d; want 400", res.StatusCode)
+	}
+	// Anchored, with the id trailing as Platform sends it.
+	res = runHook(t, "DeleteSlurmCE", newResponse(400, `{"message":"Unknown computeEnv: x"}`))
+	if res.StatusCode != 404 {
+		t.Errorf("anchored message not rewritten; got %d, want 404", res.StatusCode)
+	}
+}
+
+// A body that is not JSON, or carries no message, must be passed through untouched.
+func TestNonJSONAndMessagelessBodiesIgnored(t *testing.T) {
+	for _, body := range []string{
+		`Unknown computeEnv: x`,             // plain text, not JSON
+		`{"error":"Unknown computeEnv: x"}`, // no message field
+		`{}`,
+		``,
+	} {
+		res := runHook(t, "DeleteSlurmCE", newResponse(400, body))
+		if res.StatusCode != 400 {
+			t.Errorf("body %q rewritten to %d; want 400", body, res.StatusCode)
+		}
+	}
+}
+
+// Finding 1 regression guard: when the body cannot be read, the hook must report the
+// transport failure rather than handing the SDK a silently truncated document (which
+// surfaces as a bogus JSON syntax error on a destroy).
+func TestBodyReadErrorIsReported(t *testing.T) {
+	closed := false
+	res := &http.Response{
+		StatusCode: 400,
+		Header:     http.Header{"Content-Type": []string{"application/json"}},
+		Body: readCloser{
+			reader: io.MultiReader(strings.NewReader(`{"message":"Unknown com`), errReader{}),
+			onClose: func() error {
+				closed = true
+				return nil
+			},
+		},
+	}
+
+	h := &ComputeEnvMissingHook{}
+	out, err := h.AfterSuccess(AfterSuccessContext{HookContext: HookContext{OperationID: "DeleteSlurmCE"}}, res)
+	if err == nil {
+		t.Fatal("expected the read failure to be reported, got nil error")
+	}
+	if !strings.Contains(err.Error(), "DeleteSlurmCE") {
+		t.Errorf("error should name the operation, got: %v", err)
+	}
+	if out != nil {
+		t.Errorf("expected nil response alongside the error, got %v", out)
+	}
+	if !closed {
+		t.Error("body was not closed; the connection would leak")
+	}
+}
+
+type errReader struct{}
+
+func (errReader) Read([]byte) (int, error) { return 0, errors.New("connection reset") }
+
+type readCloser struct {
+	reader  io.Reader
+	onClose func() error
+}
+
+func (r readCloser) Read(p []byte) (int, error) { return r.reader.Read(p) }
+func (r readCloser) Close() error               { return r.onClose() }

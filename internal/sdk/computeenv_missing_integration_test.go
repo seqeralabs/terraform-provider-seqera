@@ -62,9 +62,21 @@ const (
 	activeJobs       = `{"message":"Compute environment '3xampleId' has active jobs"}`
 )
 
-// Deleting a CE that Platform says does not exist must present as 404, which the
-// resource's `case 204, 404` tolerates — so an idempotent destroy still converges even if
-// refresh did not run first.
+// Deleting a CE that Platform reports as missing must present as 404, which the resource's
+// `case 204, 404` tolerates.
+//
+// Scope caveat: this is the defensive path, not the one live Platform takes. Probed
+// 2026-08-25, a DELETE for an unresolvable computeEnvId returns **403 with an empty body**
+// — ComputeEnvBelongsTo{Workspace,User}Checker rejects it before the controller's
+// BadRequestException("Unknown computeEnv: …") is reachable. So an out-of-band-deleted CE
+// converges on destroy because *refresh* drops it from state first (403 → 404 via
+// GenericResourceErrorHook, which only maps Describe*), not because of this branch.
+//
+// The 403 is deliberately NOT mapped to 404 on delete: the body is empty, so a genuine
+// "you lack delete permission" is indistinguishable from "already gone", and treating it
+// as success would silently drop a live resource from state — #240 all over again. The
+// residual cost is that `terraform destroy -refresh=false` against an already-deleted CE
+// errors with a 403 and needs `terraform state rm`.
 func TestDeleteMissingComputeEnvSurfacesAs404(t *testing.T) {
 	client := stubPlatform(t, 400, deleteNotFound)
 
