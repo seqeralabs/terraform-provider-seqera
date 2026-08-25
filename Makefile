@@ -27,7 +27,8 @@ test: ## Run tests
 	go test ./...
 
 fmt: ## Format Go sources
-	gofmt -l -w internal main.go
+	find internal -name '*.go' -type f -exec gofmt -w {} +
+	gofmt -w main.go
 
 vet: ## Run go vet
 	go vet ./...
@@ -46,30 +47,28 @@ clean: ## Clean build artifacts
 # API spec
 #
 # See docs-internal/SPEC_UPDATE_RUNBOOK.md. `update-spec-online` handles the
-# mechanical half of a bump; triaging what reached the Terraform surface is
-# still a human step.
+# fetch, formatting, and regeneration; reviewing what reached the Terraform
+# schema still requires a human decision.
 # ---------------------------------------------------------------------------
 
-# Extracts `version:` from the info block. Uses awk rather than `grep -m1`
-# because closing a curl pipe early makes curl exit 56 and print a spurious
-# write error.
+# Extracts `version:` from the `info` block in the YAML file.
 spec-version: ## Print the vendored spec version and the latest published one
-	@echo "vendored: $$(awk '/^info:/{f=1} f && /^  version:/{sub(/.*version: */,""); print; exit}' $(SPEC))"
+	@echo "vendored: $$(awk '/^info:/{f=1} f && /^[[:space:]]+version:/{sub(/.*version: */,""); print; exit}' $(SPEC))"
 	@tmp=$$(mktemp); \
 	if curl -fsSL -o "$$tmp" "$(SPEC_URL)"; then \
-		echo "upstream: $$(awk '/^info:/{f=1} f && /^  version:/{sub(/.*version: */,""); print; exit}' "$$tmp")"; \
+		echo "upstream: $$(awk '/^info:/{f=1} f && /^[[:space:]]+version:/{sub(/.*version: */,""); print; exit}' "$$tmp")"; \
 	else \
 		echo "upstream: (fetch failed)"; \
 	fi; \
 	rm -f "$$tmp"
 
 fetch-spec: ## Download the latest OpenAPI spec and sort it for a clean diff
-	@if grep -q 'x-speakeasy' $(SPEC); then \
+	@if grep -Eq '^[[:space:]]*x-speakeasy-' $(SPEC); then \
 		echo "ERROR: $(SPEC) contains x-speakeasy annotations."; \
 		echo "       Overwriting would lose them. Move them into overlays/ first."; \
 		exit 1; \
 	fi
-	@old=$$(awk '/^info:/{f=1} f && /^  version:/{sub(/.*version: */,""); print; exit}' $(SPEC)); \
+	@old=$$(awk '/^info:/{f=1} f && /^[[:space:]]+version:/{sub(/.*version: */,""); print; exit}' $(SPEC)); \
 	tmp=$$(mktemp); \
 	echo "Fetching $(SPEC_URL)"; \
 	if ! curl -fsSL -o "$$tmp" "$(SPEC_URL)"; then \
@@ -77,7 +76,7 @@ fetch-spec: ## Download the latest OpenAPI spec and sort it for a clean diff
 	fi; \
 	cp -f "$$tmp" $(SPEC); rm -f "$$tmp"; \
 	$(MAKE) --no-print-directory format-spec; \
-	new=$$(awk '/^info:/{f=1} f && /^  version:/{sub(/.*version: */,""); print; exit}' $(SPEC)); \
+	new=$$(awk '/^info:/{f=1} f && /^[[:space:]]+version:/{sub(/.*version: */,""); print; exit}' $(SPEC)); \
 	echo "Spec updated: $$old -> $$new"
 
 format-spec: ## Sort OpenAPI spec for clean diffs
@@ -94,7 +93,7 @@ update-spec-online: ## Fetch the latest spec, regenerate, build, and show what c
 	@echo ""
 	@$(MAKE) --no-print-directory docs-diff
 	@echo ""
-	@echo "Next: triage every added attribute (keep / ignore / validate / constrain /"
+	@echo "Next: review every added attribute (keep / ignore / validate / constrain /"
 	@echo "sync-description) per docs-internal/SPEC_UPDATE_RUNBOOK.md, then commit."
 	@echo "Nothing has been committed."
 

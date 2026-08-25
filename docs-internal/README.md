@@ -20,12 +20,14 @@ Complete reference of Speakeasy OpenAPI extensions for SDK and Terraform provide
 - Important warnings about non-existent or deprecated extensions
 
 ### [SPEC_UPDATE_RUNBOOK.md](./SPEC_UPDATE_RUNBOOK.md)
-How to pull a new Seqera API OpenAPI spec into the provider and decide what each
-change should mean in Terraform. Covers:
+How to update the provider's vendored Seqera API OpenAPI spec, review the
+generated changes, and decide what belongs in Terraform. Covers:
+
 - Vendoring and re-sorting the spec so the diff stays reviewable
 - Triaging the generated `docs/` diff: keep / ignore / validate / constrain / sync
-- Verifying with an offline `dev_overrides` plan, including validator negative cases
-- Traps: `$ref` sibling keys, enum constraints vs. read tolerance, docs rendering
+- Verifying with a local `dev_overrides` plan, including validator negative cases
+- Common generator limitations, including `$ref` sibling keys, enum constraints,
+  and Markdown rendering
 
 ### [STATE_UPGRADER_GUIDE.md](./STATE_UPGRADER_GUIDE.md)
 The **default** pattern for writing state upgraders so prior state upgrades

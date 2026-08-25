@@ -1,34 +1,35 @@
-# API Spec Update Runbook
+# Updating the API Specification
 
-How to pull a new Seqera API OpenAPI spec into the provider, decide what each
-change should mean in Terraform, and verify the result.
+This guide explains how to update the Seqera API OpenAPI specification used by
+the provider, review the generated changes, and verify the result.
 
-The mechanical part (fetch, regenerate) takes minutes. The part that needs
-judgement is **step 4** — deciding, for every attribute the bump adds, whether
-it belongs in the Terraform schema at all. Most of this guide is about that.
+Fetching and regenerating are mostly mechanical. The important review happens
+after generation: for each new attribute, decide whether it belongs in the
+Terraform schema and whether it needs validation or an overlay.
 
-## Table of Contents
+## Contents
+
 - [When to run this](#when-to-run-this)
 - [Fast path](#fast-path)
 - [1. Vendor the new spec](#1-vendor-the-new-spec)
 - [2. Review the spec diff](#2-review-the-spec-diff)
 - [3. Regenerate](#3-regenerate)
-- [4. Triage the docs diff](#4-triage-the-docs-diff)
+- [4. Review the generated schema](#4-review-the-generated-schema)
 - [5. Verify](#5-verify)
 - [6. Commit and PR](#6-commit-and-pr)
-- [Traps](#traps)
+- [Common issues](#common-issues)
 
 ## When to run this
 
-When the platform has shipped API changes you want to expose, or before a
-release so the provider isn't lagging. There is no automation — the spec is
-vendored deliberately so that a bump is always reviewed.
+Run this when the platform publishes API changes that should be available in
+the provider, or before a provider release. The specification is checked into
+the repository so every update can be reviewed.
 
-Prerequisites: `speakeasy` CLI, `npx`, Go toolchain, and a checkout of the
-platform backend at `~/Code/platform` (needed in step 4 to answer "what does
-this field actually do?").
+You will need the `speakeasy` CLI, `npx`, and the Go toolchain. If you have
+access to a checkout of the platform backend or frontend, those codebases can
+help when the OpenAPI description does not explain a field's behaviour.
 
-Check whether a bump is even needed:
+First check whether the vendored version is behind the published version:
 
 ```bash
 make spec-version      # vendored vs. latest published
@@ -36,42 +37,44 @@ make spec-version      # vendored vs. latest published
 
 ## Fast path
 
-`make update-spec-online` does steps 1-3 in one go: fetch, sort, regenerate,
-build, then print the generated-docs diff. It stops there on purpose and
-commits nothing, because step 4 is a judgement call.
+`make update-spec-online` automates fetching, formatting, regeneration, and the
+build, then prints the generated documentation diff. It changes your working
+tree but does not commit anything. It does not pause for the spec-diff review
+in step 2, and it stops before schema triage because the generated changes
+still need a human review.
 
 ```bash
 make update-spec-online
 ```
 
-Then go straight to [step 4](#4-triage-the-docs-diff).
+Then go straight to [step 4](#4-review-the-generated-schema).
 
-The rest of this guide is the same process broken out, for when something goes
-wrong or you want to inspect the spec diff before regenerating. Read step 2 at
-least once — reviewing the spec diff before generation is much easier than
-reverse-engineering the result afterwards.
+The sections below describe the same process in detail. Use them when you need
+to inspect the specification before regeneration or troubleshoot a failed
+update. Reviewing the spec diff first makes the generated changes easier to
+understand.
 
 ## 1. Vendor the new spec
 
-The provider builds from `specs/seqera-api-cloud.yaml`, declared as the source
-input in `.speakeasy/workflow.yaml`. Overwrite it wholesale — all our
-customisation lives in `overlays/`, and the vendored spec carries **no**
-`x-speakeasy-*` annotations of its own. Verify that before trusting a blind
-overwrite:
+The provider builds from `specs/seqera-api-cloud.yaml`, which is declared as
+the source input in `.speakeasy/workflow.yaml`. Replace this file with the
+published specification. Provider-specific customisation belongs in
+`overlays/`, so the vendored file should not contain `x-speakeasy-*`
+annotations. Check that before fetching:
 
 ```bash
-grep -c 'x-speakeasy' specs/seqera-api-cloud.yaml   # must be 0
+grep -Ec '^[[:space:]]*x-speakeasy-' specs/seqera-api-cloud.yaml   # must be 0
 ```
 
-Then fetch and format. `make fetch-spec` does both, refuses to run if the
-vendored spec has been hand-annotated, and leaves the spec untouched if the
-download fails:
+Then fetch and format the new file. `make fetch-spec` performs both checks for
+hand-added annotations and leaves the existing file untouched if the download
+fails:
 
 ```bash
 make fetch-spec
 ```
 
-Equivalent by hand:
+The equivalent manual steps are:
 
 ```bash
 curl -fsSL -o /tmp/latest.yml \
@@ -81,19 +84,19 @@ curl -fsSL -o /tmp/latest.yml \
 make format-spec
 ```
 
-`make format-spec` re-sorts the spec with `specs/.openapi-format-sort.yaml`.
-**Do not skip it.** Upstream serves keys in a different order (`components`
-first, alphabetical); without the sort you get a ~10k-line reordering diff
-instead of a reviewable one. If the `make` target is unavailable, run it
-directly:
+`make format-spec` re-sorts the spec using
+`specs/.openapi-format-sort.yaml`. This keeps the diff focused on actual API
+changes. Without it, the different ordering used by the upstream file can
+produce a large, mostly mechanical diff. If the `make` target is unavailable,
+run it directly:
 
 ```bash
 npx openapi-format specs/seqera-api-cloud.yaml -o specs/seqera-api-cloud.yaml \
   --sortComponentsProps -s specs/.openapi-format-sort.yaml --yamlQuoteStyle single
 ```
 
-Sanity check — the file should now start with `openapi: 3.0.1`, and the diff
-should be proportionate to the release:
+As a quick check, confirm that the file starts with `openapi: 3.0.1` and that
+the diff is roughly the size expected for the release:
 
 ```bash
 head -8 specs/seqera-api-cloud.yaml
@@ -102,8 +105,8 @@ git diff --stat specs/seqera-api-cloud.yaml
 
 ## 2. Review the spec diff
 
-Read the spec diff *before* regenerating, so you know what to expect from the
-generator rather than reverse-engineering it afterwards.
+Read the spec diff before regenerating. Look for new, removed, or renamed
+paths, schemas, and properties.
 
 New paths and schemas:
 
@@ -112,16 +115,17 @@ git diff -U0 specs/seqera-api-cloud.yaml \
   | grep -E '^\+ {4}[A-Za-z].*:$|^\+ {2}/'
 ```
 
-Removals and renames — the short list that matters most, since these are the
-only things that can break existing configs:
+Removals and renames deserve particular attention because they can affect
+existing configurations:
 
 ```bash
-git diff specs/seqera-api-cloud.yaml | grep -E '^-[^-]' | grep -v '^-\s'
+git diff specs/seqera-api-cloud.yaml \
+  | grep -E '^-[^-]' | grep -v '^-[[:space:]]'
 ```
 
 For anything renamed or removed, check whether an overlay references the old
-name. An overlay targeting a path that no longer exists **fails silently** —
-the action is skipped, not errored:
+name. An overlay targeting a path that no longer exists may be skipped without
+an error:
 
 ```bash
 grep -rn 'oldFieldName\|OldSchemaName' overlays/
@@ -134,52 +138,54 @@ speakeasy run --skip-versioning
 go build -o terraform-provider-seqera
 ```
 
-If generation fails with duplicate type declarations, you are probably hitting
-stale untracked files under `internal/` from a previous partial run. Check
-`git status` for untracked `internal/**` files, clean them, and retry.
+If generation fails with duplicate type declarations, check for stale
+untracked files under `internal/` from a previous partial run. Review
+`git status`, remove only the generated files that do not belong in the working
+tree, and retry.
 
-## 4. Triage the docs diff
+## 4. Review the generated schema
 
-`docs/resources/*.md` is the readable summary of what actually reached the
-Terraform surface. This diff *is* the review:
+`docs/resources/*.md` shows what reached the Terraform schema. Review this
+diff after every regeneration:
 
 ```bash
 make docs-diff         # changed files, plus the added attributes
 git diff -U5 -- docs/  # the full picture
 ```
 
-Every added attribute needs a decision. Before deciding, look up what the field
-means in the platform backend — the spec description is often thin, and
-occasionally the constraint that matters isn't expressed in the schema at all:
+For each added attribute, first check what it means in the platform backend.
+The OpenAPI description may be incomplete, and some important constraints are
+not represented in the schema. If the platform codebase is available, search
+it from the repository root:
 
 ```bash
-cd ~/Code/platform
 grep -rn 'fieldName' --include='*.groovy' --include='*.java' . | grep -v '/test/'
 ```
 
-Also check the frontend (`tower-web/src/app/data/entity/`) — if the UI doesn't
-offer a field, that's a strong signal the backend is ahead of the product and
-the field isn't ready to expose.
+If the frontend codebase is available, check whether it uses the field there as
+well. If neither codebase is available, use the API documentation and confirm
+uncertain behavior with the platform team before exposing the field in
+Terraform.
 
-There are five outcomes. Pick one per attribute.
+Choose one of the following outcomes for each attribute.
 
 ### Keep it
 
-Real, user-settable configuration. Nothing to do — the generator already did
-it. Confirm it landed as `Optional` (not `Required`) unless the API genuinely
-demands it, and that `ForceNew` matches whether the platform can update it
-in place.
+Keep the attribute when it represents user-configurable settings. The
+generator may already have added it. Confirm that it is `Optional` unless the
+API genuinely requires it, and that `ForceNew` matches whether the platform
+supports updating it in place.
 
 ### Ignore it
 
-The field is real but has no business in Terraform state. The clearest test:
-**would two different readers see different values?** Per-user state
-(who starred a studio), server-side timestamps, and runtime status all fail
-that test and generate perpetual diffs.
+Ignore the attribute when it is not stable Terraform configuration. A useful
+test is whether two users could see different values for the same resource.
+Per-user state, server timestamps, and runtime status can all create perpetual
+diffs and generally do not belong in Terraform state.
 
-Prefer `x-speakeasy-terraform-ignore` over `remove: true` — it keeps the field
-in the SDK model and drops it only from the Terraform schema, so reads still
-deserialize:
+Prefer `x-speakeasy-terraform-ignore` over `remove: true`. This keeps the field
+in the SDK model while removing it from the Terraform schema, so API responses
+can still be decoded:
 
 ```yaml
 - target: $.components.schemas.SomeDto.properties.starred
@@ -190,13 +196,13 @@ deserialize:
 
 ### Validate it
 
-The API documents a constraint it doesn't express in the schema. Add a plan-time
-validator — this provider errors at plan time rather than deferring to a
-permissive backend, because a silent no-op is worse than a failed plan.
+Add a validator when the API documents a constraint that is not enforced by the
+generated schema. Plan-time validation gives users feedback before apply.
 
-**`minimum`/`maximum` in the spec generate no validator** with the current
-Speakeasy version. Compare `bid_percentage` in `overlays/compute-env.yaml`,
-which has both and renders only plan modifiers. You need a real validator:
+With the current Speakeasy version, `minimum` and `maximum` in the spec do not
+generate validators. For example, `bid_percentage` in
+`overlays/compute-env.yaml` has both constraints but only gets plan modifiers.
+Add a validator explicitly:
 
 1. Write it in `internal/validators/<type>validators/<name>.go`, following the
    patterns in [OVERLAY_GUIDE.md](./OVERLAY_GUIDE.md#custom-validators).
@@ -205,27 +211,26 @@ which has both and renders only plan modifiers. You need a real validator:
    `Int32Attribute` validator must live in `int32validators`.
 3. **Add the file to `.genignore`**, or the next `speakeasy run` deletes it.
 
-Target the shared schema, not each resource — a validator on `SchedConfig`
-propagates to every CE that embeds it.
+Apply the validator to the shared schema where possible. For example, a
+validator on `SchedConfig` applies to every compute environment that embeds it.
 
-Cross-field rules belong here too. If a field is only honoured under some
-condition, say so: reading a sibling via
-`req.Path.ParentPath().AtName("other_field")` is the standard shape. Mind the
-defaults — a *null* sibling means the API default, which may well satisfy the
-condition, so only error on an explicit conflicting value.
+Cross-field rules belong here too. If a field is only valid under a particular
+condition, read the sibling with
+`req.Path.ParentPath().AtName("other_field")`. Treat a null sibling as the API
+default when appropriate, and report an error only for an explicit conflict.
 
 ### Constrain it
 
-The enum gained a value that isn't usable yet. Think hard before doing this,
-and prefer documenting over constraining — see
+Use this when an enum has gained a value that is not currently usable. Prefer a
+description over restricting the enum when possible; see
 [forward compatibility](#constraining-an-enum-breaks-forward-compatibility)
 below.
 
 ### Sync a description
 
-Several overlays hardcode descriptions that shadow the spec's own. When
-upstream revises the wording — a new suggested enum value, a corrected default —
-the overlay silently keeps the stale text. Search for the old phrasing:
+Use this when an overlay contains a description that is more specific than the
+specification. If upstream changes the field's meaning, update the overlay as
+well. Search for the existing wording:
 
 ```bash
 grep -rn 'old phrasing' overlays/
@@ -233,9 +238,9 @@ grep -rn 'old phrasing' overlays/
 
 ### Endpoints without resources
 
-New paths generate SDK clients but no resources or data sources unless an
-overlay opts them in. That's the correct default. Note them in the PR so
-reviewers know the omission was deliberate, not missed.
+New paths generate SDK clients, but they do not generate resources or data
+sources unless an overlay opts them in. That is expected. Mention intentionally
+unexposed endpoints in the PR so the decision is clear.
 
 ## 5. Verify
 
@@ -243,10 +248,9 @@ reviewers know the omission was deliberate, not missed.
 go build -o terraform-provider-seqera && go test ./internal/...
 ```
 
-Then exercise the schema for real. A throwaway directory with `dev_overrides`
-plans against the built binary without touching any live state — no backend, no
-credentials, and a create-only plan makes no API calls for the resources
-themselves:
+Then exercise the schema with a local `dev_overrides` plan. A create-only plan
+against the built binary does not touch live state or make resource API calls,
+so it can be run without credentials:
 
 ```bash
 mkdir -p /tmp/spec-check && cd /tmp/spec-check
@@ -264,31 +268,28 @@ TF_CLI_CONFIG_FILE=$PWD/.terraformrc terraform plan
 
 Cover three things:
 
-1. **Every new attribute set to a realistic value** — proves the schema accepts
-   it and the type is right.
-2. **Each validator's negative cases** — out of range, and any cross-field
-   conflict. Assert on the error text, not just that it failed.
-3. **A resource shaped like one that already exists in the wild**, with the new
-   optional fields *unset*. This is the regression case: a new validator that
-   misfires on an existing config is the most likely way to break users.
+1. **Every new attribute set to a realistic value** — confirms that the schema
+   accepts the value and uses the expected type.
+2. **Each validator's negative cases** — include out-of-range values and any
+   cross-field conflicts. Check the error text as well as the failure.
+3. **An existing resource shape with the new optional fields unset** — checks
+   that the new validation does not reject an existing configuration.
 
-Note what this can't reach: a create-only plan never refreshes, so it won't
-catch a field that produces a spurious diff on a resource already in state.
-Say so in the PR rather than implying full coverage.
+This does not catch refresh-time issues or spurious diffs on resources that are
+already in state. Call out that limitation in the PR.
 
 ## 6. Commit and PR
 
-One commit. The message should say what the bump added and, for every
-adjustment, *why* — the reasoning is the part nobody can reconstruct from the
-diff later. Same for the PR body, plus:
+Keep the update in one commit where practical. The commit message and PR body
+should explain what changed and why. Include:
 
 - new attributes and which resources they reached
 - endpoints that generate SDK clients but deliberately no resources
 - what was verified, and **what wasn't**
 
-## Traps
+## Common issues
 
-Each of these has cost real debugging time.
+These issues are easy to miss during a spec update.
 
 ### Sibling keys next to a `$ref` are ignored
 
@@ -298,13 +299,13 @@ mode:
   description: 'This never appears anywhere.'   # silently dropped
 ```
 
-The resolver discards siblings of a `$ref`. A description written this way
-never reaches the generated docs, and it fails quietly — the overlay applies,
-the text just evaporates. Either wrap in `allOf`, or inline the definition.
+The resolver discards siblings of a `$ref`. The overlay may apply, but the
+description will not appear in the generated output. Either wrap the reference
+in `allOf` or inline the definition.
 
 ### Constraining an enum breaks forward compatibility
 
-Removing a value from an enum doesn't just reject it as *input*. Speakeasy
+Removing a value from an enum does not just reject it as *input*. Speakeasy
 folds a single-consumer shared enum into a local type whose generated
 `UnmarshalJSON` **errors on any unlisted value**:
 
@@ -313,46 +314,45 @@ default:
     return fmt.Errorf("invalid value for Mode: %v", v)
 ```
 
-So a resource created elsewhere with the new value can no longer be *read* —
-the failure shows up as an unmarshal error on refresh, not a clean rejection.
+As a result, a resource created elsewhere with the new value can no longer be
+*read*. The failure appears as an unmarshal error during refresh.
 
-Default to keeping the value in the enum and documenting its limits in the
-description. Reserve constraining for a value that is genuinely unusable
-everywhere, and know you're trading read tolerance for plan-time strictness.
+Keep the value in the enum and document its current limitations when possible.
+Only restrict it when the value is unusable everywhere; doing so trades
+forward-compatible reads for stricter plan-time validation.
 
 ### Multi-line descriptions break the docs list
 
-`docs/resources/*.md` splices attribute descriptions into a Markdown list, so a
-multi-line description with sub-bullets renders as sibling *attributes*:
+`docs/resources/*.md` renders attribute descriptions inside a Markdown list.
+A multi-line description with sub-bullets can therefore look like additional
+*attributes*:
 
 ```markdown
 - `mode` (String) Authentication mode:
 - `keys` (default): static access key      <- looks like an attribute named keys
 ```
 
-Keep attribute descriptions to a single line. Multi-line is fine for
-schema-level (resource) descriptions. Always read the rendered `docs/` diff, not
-just the overlay.
+Keep attribute descriptions to a single line. Multi-line text is fine for
+resource-level descriptions. Always read the generated `docs/` diff, not just
+the overlay.
 
-### The generated docs are the only place the truth shows up
+### Check the generated docs
 
-An overlay can apply cleanly and still do nothing useful (see the `$ref` trap).
-`git diff -- docs/` after regenerating is the check that the overlay had the
-effect you intended.
+An overlay can apply cleanly without producing the output you intended. Check
+`git diff -- docs/` after regenerating to confirm its effect.
 
 ### Hand-written files need `.genignore`
 
-Anything you write under `internal/` — validators, state upgraders, SDK hooks —
-is deleted by the next `speakeasy run` unless listed in `.genignore`.
+Files under `internal/` that are not generated — such as validators, state
+upgraders, and SDK hooks — must be listed in `.genignore` or the next
+`speakeasy run` may delete them.
 
-### The spec is not the authority on semantics
+### The spec may not describe every backend rule
 
-Ranges, mutual exclusions, and feature gating are frequently absent from the
-spec but enforced in the backend. A field can be fully valid per the schema and
-still fail at apply time because it sits behind a feature flag or is rejected
-for a particular platform. `~/Code/platform` is the source of truth; when a
-constraint can't be checked at plan time, put it in the description so users
-aren't surprised.
+Ranges, mutual exclusions, and feature gates are sometimes enforced by the
+backend without appearing in the spec. A value can therefore be valid in the
+schema but fail at apply time. Query the platform codebase when it is available
+and document constraints that cannot be enforced during planning.
 
 ## See also
 
