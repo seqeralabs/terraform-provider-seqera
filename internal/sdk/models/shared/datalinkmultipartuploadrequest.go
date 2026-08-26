@@ -6,6 +6,8 @@ type DataLinkMultiPartUploadRequest struct {
 	ContentLength *int64  `json:"contentLength,omitempty"`
 	ContentType   *string `json:"contentType,omitempty"`
 	FileName      *string `json:"fileName,omitempty"`
+	PartNumbers   []int   `json:"partNumbers,omitempty"`
+	UploadID      *string `json:"uploadId,omitempty"`
 }
 
 func (d *DataLinkMultiPartUploadRequest) GetContentLength() *int64 {
@@ -27,4 +29,18 @@ func (d *DataLinkMultiPartUploadRequest) GetFileName() *string {
 		return nil
 	}
 	return d.FileName
+}
+
+func (d *DataLinkMultiPartUploadRequest) GetPartNumbers() []int {
+	if d == nil {
+		return nil
+	}
+	return d.PartNumbers
+}
+
+func (d *DataLinkMultiPartUploadRequest) GetUploadID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.UploadID
 }

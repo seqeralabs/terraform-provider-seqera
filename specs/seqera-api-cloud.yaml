@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.198.0
+  version: 1.206.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -1964,6 +1964,11 @@ paths:
           description: Filter results by visibility
           schema:
             type: string
+        - name: creationSource
+          in: query
+          description: 'Filter results by creation source: `user` for manually created data-links, `cloud` for data-links discovered from credentials'
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -3817,6 +3822,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/cancel:
@@ -3851,6 +3862,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/status:
@@ -3880,6 +3897,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/service-info:
@@ -6008,6 +6031,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Organization or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -11008,6 +11037,7 @@ components:
         basicAuth:
           type: string
           deprecated: true
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -11405,10 +11435,13 @@ components:
       properties:
         hubspotId:
           type: string
+          nullable: true
         posthogApiHost:
           type: string
+          nullable: true
         posthogApiKey:
           type: string
+          nullable: true
     AssociateActionLabelsRequest:
       type: object
       properties:
@@ -12458,12 +12491,15 @@ components:
       properties:
         accessKey:
           type: string
+          nullable: true
         assumeRoleArn:
           type: string
+          nullable: true
         discriminator:
           type: string
         externalId:
           type: string
+          nullable: true
         mode:
           $ref: '#/components/schemas/AwsCredentialsMode'
         secretKey:
@@ -12638,6 +12674,14 @@ components:
     AzCloudConfig:
       type: object
       properties:
+        bootDiskSizeGB:
+          description: OS disk size in GB for the head node instance. When omitted, Azure uses the default disk size for the VM image.
+          type: integer
+          format: int32
+          example: 100
+          maximum: 4095
+          minimum: 50
+          nullable: true
         dataCollectionEndpoint:
           type: string
         dataCollectionRuleId:
@@ -12850,8 +12894,6 @@ components:
           type: string
         dataLinkId:
           type: string
-        datasetId:
-          type: string
         discriminator:
           type: string
         events:
@@ -12889,8 +12931,6 @@ components:
       type: object
       properties:
         dataLinkId:
-          type: string
-        datasetId:
           type: string
         events:
           type: array
@@ -13268,6 +13308,17 @@ components:
           type: string
         value:
           type: string
+    ConflictingResource:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
     ContainerData:
       type: object
       properties:
@@ -13632,19 +13683,23 @@ components:
         baseUrl:
           type: string
           maxLength: 200
+          nullable: true
           pattern: ''
         category:
           type: string
           maxLength: 20
+          nullable: true
         dateCreated:
           type: string
           format: date-time
           readOnly: true
         deleted:
           type: boolean
+          nullable: true
           readOnly: true
         description:
           type: string
+          nullable: true
         id:
           type: string
           maxLength: 22
@@ -13657,16 +13712,19 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
           readOnly: true
         lastValidated:
           description: Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
           type: string
           format: date-time
+          nullable: true
           readOnly: true
         message:
           description: Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing " (truncated)" suffix when the underlying provider message exceeds that limit.
           type: string
           maxLength: 4096
+          nullable: true
           readOnly: true
         name:
           type: string
@@ -14046,6 +14104,13 @@ components:
         contentType:
           type: string
         fileName:
+          type: string
+        partNumbers:
+          type: array
+          items:
+            format: int32
+            type: integer
+        uploadId:
           type: string
     DataLinkMultiPartUploadResponse:
       type: object
@@ -14885,19 +14950,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         credentialsId:
-          type: string
-    DeleteCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteDatasetsRequest:
       type: object
@@ -14923,19 +14977,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteManagedCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         managedCredentialsId:
-          type: string
-    DeleteManagedCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteWorkflowsRequest:
       type: object
@@ -15065,6 +15108,7 @@ components:
         defaultWorkspaceId:
           type: integer
           format: int64
+          nullable: true
         needConsent:
           type: boolean
         user:
@@ -17090,12 +17134,15 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         lastName:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
@@ -17185,6 +17232,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NavbarConfig.NavbarMenu'
+          nullable: true
     NavbarConfig.NavbarMenu:
       type: object
       properties:
@@ -17357,19 +17405,26 @@ components:
       properties:
         description:
           type: string
+          nullable: true
         fullName:
           type: string
         location:
           type: string
+          nullable: true
         logoId:
           type: string
+          nullable: true
         logoUrl:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
+          nullable: true
         memberRole:
-          $ref: '#/components/schemas/OrgRole'
+          allOf:
+            - $ref: '#/components/schemas/OrgRole'
+          nullable: true
         name:
           type: string
         orgId:
@@ -17382,6 +17437,7 @@ components:
           $ref: '#/components/schemas/OrgType'
         website:
           type: string
+          nullable: true
     OrganizationImage:
       type: object
       properties:
@@ -17516,17 +17572,22 @@ components:
       type: object
       properties:
         computeEnv:
-          $ref: '#/components/schemas/ComputeEnvDbDto'
+          allOf:
+            - $ref: '#/components/schemas/ComputeEnvDbDto'
+          nullable: true
         deleted:
           type: boolean
         description:
           type: string
+          nullable: true
         icon:
           type: string
+          nullable: true
         labels:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -17534,15 +17595,21 @@ components:
           type: string
         optimizationId:
           type: string
+          nullable: true
         optimizationStatus:
-          $ref: '#/components/schemas/PipelineOptimizationStatus'
+          allOf:
+            - $ref: '#/components/schemas/PipelineOptimizationStatus'
+          nullable: true
         optimizationTargets:
           type: string
+          nullable: true
         orgId:
           type: integer
           format: int64
+          nullable: true
         orgName:
           type: string
+          nullable: true
         pipelineId:
           type: integer
           format: int64
@@ -17550,22 +17617,27 @@ components:
           type: string
         userFirstName:
           type: string
+          nullable: true
         userId:
           type: integer
           format: int64
         userLastName:
           type: string
+          nullable: true
         userName:
           type: string
         version:
           $ref: '#/components/schemas/PipelineVersionFullInfoDto'
         visibility:
           type: string
+          nullable: true
         workspaceId:
           type: integer
           format: int64
+          nullable: true
         workspaceName:
           type: string
+          nullable: true
     PipelineImage:
       type: object
       properties:
@@ -17723,6 +17795,7 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
           readOnly: true
         name:
           type: string
@@ -18374,12 +18447,15 @@ components:
       properties:
         accessKey:
           type: string
+          nullable: true
         assumeRoleArn:
           type: string
+          nullable: true
         discriminator:
           type: string
         externalId:
           type: string
+          nullable: true
         mode:
           $ref: '#/components/schemas/AwsCredentialsMode'
         secretKey:
@@ -18399,7 +18475,9 @@ components:
         allowSchedRoleCredentials:
           type: boolean
         analytics:
-          $ref: '#/components/schemas/Analytics'
+          allOf:
+            - $ref: '#/components/schemas/Analytics'
+          nullable: true
         apiVersion:
           type: string
         authTypes:
@@ -18422,6 +18500,7 @@ components:
           items:
             format: int64
             type: integer
+          nullable: true
         forgePrefix:
           type: string
         groundswellAllowedWorkspaces:
@@ -18429,6 +18508,7 @@ components:
           items:
             format: int64
             type: integer
+          nullable: true
         groundswellEnabled:
           type: boolean
         heartbeatInterval:
@@ -18436,6 +18516,7 @@ components:
           format: int32
         landingUrl:
           type: string
+          nullable: true
         launchConfigTextMaxSize:
           type: integer
           format: int32
@@ -18450,7 +18531,9 @@ components:
           type: string
           nullable: true
         navbar:
-          $ref: '#/components/schemas/NavbarConfig'
+          allOf:
+            - $ref: '#/components/schemas/NavbarConfig'
+          nullable: true
         seqeraAgentBackendUrl:
           type: string
           nullable: true
@@ -18794,6 +18877,7 @@ components:
       properties:
         avatarUrl:
           type: string
+          nullable: true
         description:
           type: string
         idpGroupId:
@@ -19468,8 +19552,10 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         avatarId:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -19477,10 +19563,12 @@ components:
           type: boolean
         description:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         id:
           type: integer
           format: int64
@@ -19489,17 +19577,22 @@ components:
           format: date-time
         lastName:
           type: string
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
         marketingConsent:
           type: boolean
+          nullable: true
         notification:
           type: boolean
+          nullable: true
         organization:
           type: string
+          nullable: true
         termsOfUseConsent:
           type: boolean
+          nullable: true
         userName:
           type: string
         waveBuildNotification:
@@ -20690,6 +20783,7 @@ components:
       properties:
         description:
           type: string
+          nullable: true
         fullName:
           type: string
         id:

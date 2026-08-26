@@ -3,6 +3,8 @@
 package shared
 
 type AzCloudConfig struct {
+	// OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
 	// Azure Monitor data collection endpoint URL for diagnostic telemetry.
 	//
 	DataCollectionEndpoint *string `json:"dataCollectionEndpoint,omitempty"`
@@ -65,6 +67,13 @@ type AzCloudConfig struct {
 	// Format: az://container-name/path
 	//
 	WorkDir *string `json:"workDir,omitempty"`
+}
+
+func (a *AzCloudConfig) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzCloudConfig) GetDataCollectionEndpoint() *string {

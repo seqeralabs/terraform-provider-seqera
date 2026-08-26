@@ -1999,6 +1999,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									objectplanmodifier.RequiresReplaceIfConfigured(),
 								},
 								Attributes: map[string]schema.Attribute{
+									"boot_disk_size_gb": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.Between(50, 4095),
+										},
+									},
 									"data_collection_endpoint": schema.StringAttribute{
 										Computed: true,
 										Optional: true,

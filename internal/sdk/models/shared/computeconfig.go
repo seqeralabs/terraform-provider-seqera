@@ -1676,6 +1676,8 @@ func (i *IBMLSFConfiguration) GetWorkDir() string {
 }
 
 type AzureCloudConfiguration struct {
+	// OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
 	// Azure Monitor data collection endpoint URL for diagnostic telemetry.
 	//
 	DataCollectionEndpoint *string `json:"dataCollectionEndpoint,omitempty"`
@@ -1743,6 +1745,13 @@ func (a *AzureCloudConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCloudConfiguration) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzureCloudConfiguration) GetDataCollectionEndpoint() *string {

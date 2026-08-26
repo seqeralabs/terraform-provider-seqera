@@ -3,11 +3,11 @@
 package shared
 
 type DeleteCredentialsConflictResponse struct {
-	Conflicts     []DeleteCredentialsConflictResponseConflict `json:"conflicts,omitempty"`
-	CredentialsID *string                                     `json:"credentialsId,omitempty"`
+	Conflicts     []ConflictingResource `json:"conflicts,omitempty"`
+	CredentialsID *string               `json:"credentialsId,omitempty"`
 }
 
-func (d *DeleteCredentialsConflictResponse) GetConflicts() []DeleteCredentialsConflictResponseConflict {
+func (d *DeleteCredentialsConflictResponse) GetConflicts() []ConflictingResource {
 	if d == nil {
 		return nil
 	}

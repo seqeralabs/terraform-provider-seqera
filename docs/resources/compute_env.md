@@ -656,6 +656,7 @@ Optional:
 
 Optional:
 
+- `boot_disk_size_gb` (Number) OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.
 - `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))

@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 67e4f01c52ebdb98ebc992a37adb4d7e
-  docVersion: 1.198.0
+  docChecksum: 9bb14ada19e5f5890d4dfc2c84b4e5ab
+  docVersion: 1.206.0
   speakeasyVersion: 1.795.3
   generationVersion: 2.932.9
   releaseVersion: 0.42.0
@@ -1766,9 +1766,6 @@ trackedFiles:
   internal/sdk/models/shared/agentrunstatus.go: {}
   internal/sdk/models/shared/agentrunstatusresponse.go: {}
   internal/sdk/models/shared/agentstatus.go: {}
-  internal/sdk/models/shared/analytics.go:
-    id: 7126032f3891
-    pristine_git_object: d41a6e9507a1b7470012dbf46e572a5dc7cc8cae
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -1874,6 +1871,7 @@ trackedFiles:
   internal/sdk/models/shared/configenvvariable.go:
     id: 733e7ad7e305
     pristine_git_object: 0e00106a83491f9bb55285e240c9a848463f8dcf
+  internal/sdk/models/shared/conflictingresource.go: {}
   internal/sdk/models/shared/containerdata.go:
     id: 2a08f584995d
     pristine_git_object: 4902f5c3d3419beeffcbfb00894fd70a90196353
@@ -2241,9 +2239,6 @@ trackedFiles:
   internal/sdk/models/shared/deletecredentialsconflictresponse.go:
     id: e8d764d9feab
     pristine_git_object: fac9418e55eb15c839e541d0e1413d3ef9c27160
-  internal/sdk/models/shared/deletecredentialsconflictresponseconflict.go:
-    id: 14730103fb9f
-    pristine_git_object: be92245c8237b2c175b67be1a2210b62e025d780
   internal/sdk/models/shared/deletedatasetsrequest.go:
     id: 20de98824f0b
     pristine_git_object: 13a6311cba2e23da748f62e77402cde9034dee9d
@@ -2253,9 +2248,6 @@ trackedFiles:
   internal/sdk/models/shared/deletemanagedcredentialsconflictresponse.go:
     id: 7f6ce0439a98
     pristine_git_object: 7c7351d1981cefa2cb9e863e4a20269d84522859
-  internal/sdk/models/shared/deletemanagedcredentialsconflictresponseconflict.go:
-    id: f27629845676
-    pristine_git_object: 09b71f53acc3420ab69cbc9d93498666c2fa4ade
   internal/sdk/models/shared/deleteworkflowsrequest.go:
     id: 4420dc02bbbb
     pristine_git_object: 1cb9e0a0a0e6d26bc989e270aa5ba1c310dbcfad
@@ -2616,9 +2608,6 @@ trackedFiles:
   internal/sdk/models/shared/multirequestfileschema.go:
     id: bb5e470b2566
     pristine_git_object: e48da9a12e6c46e353a24de39c5062f0dfe58fc8
-  internal/sdk/models/shared/navbarconfig.go:
-    id: 11092f5f6e30
-    pristine_git_object: 80b633099d7cb4becd9b09b5a2f155e2a4a96367
   internal/sdk/models/shared/navbarconfignavbarmenu.go:
     id: d2ca73000c3c
     pristine_git_object: 96fe8509792dfcfb76aabdfd947955fee6620a41
@@ -5936,7 +5925,7 @@ examples:
         query:
           workspaceId: 892944
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -5951,7 +5940,7 @@ examples:
           workspaceId: 366403
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureCloudCE:

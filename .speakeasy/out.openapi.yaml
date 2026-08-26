@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.198.0
+  version: 1.206.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -1998,6 +1998,11 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: creationSource
+          in: query
+          description: 'Filter results by creation source: `user` for manually created data-links, `cloud` for data-links discovered from credentials'
+          schema:
+            type: string
         - name: workspaceId
           in: query
           description: Workspace numeric identifier to filter data links
@@ -3889,6 +3894,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/cancel:
@@ -3923,6 +3934,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/status:
@@ -3952,6 +3969,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/service-info:
@@ -6119,6 +6142,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Organization or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -16325,10 +16354,13 @@ components:
       properties:
         hubspotId:
           type: string
+          nullable: true
         posthogApiHost:
           type: string
+          nullable: true
         posthogApiKey:
           type: string
+          nullable: true
     AssociateActionLabelsRequest:
       type: object
       properties:
@@ -17830,6 +17862,15 @@ components:
     AzCloudConfig:
       type: object
       properties:
+        bootDiskSizeGB:
+          description: OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+          type: integer
+          format: int32
+          example: 100
+          maximum: 4095
+          minimum: 50
+          nullable: true
+          x-speakeasy-param-force-new: true
         dataCollectionEndpoint:
           type: string
           description: |
@@ -18122,8 +18163,6 @@ components:
           type: string
         dataLinkId:
           type: string
-        datasetId:
-          type: string
         discriminator:
           type: string
         events:
@@ -18161,8 +18200,6 @@ components:
       type: object
       properties:
         dataLinkId:
-          type: string
-        datasetId:
           type: string
         events:
           type: array
@@ -18621,6 +18658,17 @@ components:
       description: |
         Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
         At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.
+    ConflictingResource:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
     ContainerData:
       type: object
       properties:
@@ -19110,8 +19158,8 @@ components:
         baseUrl:
           type: string
           maxLength: 200
-          pattern: ''
           nullable: true
+          pattern: ''
           description: Base URL for the credential provider
           x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
@@ -19131,8 +19179,8 @@ components:
           description: Timestamp when the credential was created
         deleted:
           type: boolean
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
           x-speakeasy-param-computed: true
@@ -19160,8 +19208,8 @@ components:
         lastUsed:
           type: string
           format: date-time
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Timestamp when the credential was last used
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -19169,6 +19217,7 @@ components:
           description: Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
           type: string
           format: date-time
+          nullable: true
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -19176,6 +19225,7 @@ components:
           description: Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing " (truncated)" suffix when the underlying provider message exceeds that limit.
           type: string
           maxLength: 4096
+          nullable: true
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -19625,6 +19675,13 @@ components:
         contentType:
           type: string
         fileName:
+          type: string
+        partNumbers:
+          type: array
+          items:
+            format: int32
+            type: integer
+        uploadId:
           type: string
     DataLinkMultiPartUploadResponse:
       type: object
@@ -20507,19 +20564,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         credentialsId:
-          type: string
-    DeleteCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteDatasetsRequest:
       type: object
@@ -20545,19 +20591,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteManagedCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         managedCredentialsId:
-          type: string
-    DeleteManagedCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteWorkflowsRequest:
       type: object
@@ -20691,6 +20726,7 @@ components:
         defaultWorkspaceId:
           type: integer
           format: int64
+          nullable: true
         needConsent:
           type: boolean
         user:
@@ -23423,12 +23459,15 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         lastName:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
@@ -23521,6 +23560,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NavbarConfig.NavbarMenu'
+          nullable: true
     NavbarConfig.NavbarMenu:
       type: object
       properties:
@@ -23747,8 +23787,10 @@ components:
           nullable: true
           description: Member ID (can be null for collaborators)
         memberRole:
-          type: string
+          allOf:
+            - $ref: '#/components/schemas/OrgRole'
           nullable: true
+          type: string
           enum:
             - owner
             - member
@@ -23953,6 +23995,7 @@ components:
         workspaceId:
           type: integer
           format: int64
+          nullable: true
         id:
           type: integer
           format: int64
@@ -24109,8 +24152,8 @@ components:
         lastUsed:
           type: string
           format: date-time
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Timestamp when the secret was last accessed by a workflow
           x-speakeasy-param-readonly: true
         name:
@@ -24807,8 +24850,10 @@ components:
       properties:
         accessKey:
           type: string
+          nullable: true
         assumeRoleArn:
           type: string
+          nullable: true
         discriminator:
           type: string
           x-speakeasy-terraform-ignore: true
@@ -24829,7 +24874,9 @@ components:
         allowSchedRoleCredentials:
           type: boolean
         analytics:
-          $ref: '#/components/schemas/Analytics'
+          allOf:
+            - $ref: '#/components/schemas/Analytics'
+          nullable: true
         apiVersion:
           type: string
         authTypes:
@@ -24852,6 +24899,7 @@ components:
           items:
             format: int64
             type: integer
+          nullable: true
         forgePrefix:
           type: string
         groundswellAllowedWorkspaces:
@@ -24859,6 +24907,7 @@ components:
           items:
             format: int64
             type: integer
+          nullable: true
         groundswellEnabled:
           type: boolean
         heartbeatInterval:
@@ -24866,6 +24915,7 @@ components:
           format: int32
         landingUrl:
           type: string
+          nullable: true
         launchConfigTextMaxSize:
           type: integer
           format: int32
@@ -24880,7 +24930,9 @@ components:
           type: string
           nullable: true
         navbar:
-          $ref: '#/components/schemas/NavbarConfig'
+          allOf:
+            - $ref: '#/components/schemas/NavbarConfig'
+          nullable: true
         seqeraAgentBackendUrl:
           type: string
           nullable: true
@@ -25325,6 +25377,7 @@ components:
       properties:
         avatarUrl:
           type: string
+          nullable: true
           description: URL to the team's avatar or profile image
         description:
           type: string
@@ -26044,8 +26097,10 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         avatarId:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -26053,10 +26108,12 @@ components:
           type: boolean
         description:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         id:
           type: integer
           format: int64
@@ -26065,17 +26122,22 @@ components:
           format: date-time
         lastName:
           type: string
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
         marketingConsent:
           type: boolean
+          nullable: true
         notification:
           type: boolean
+          nullable: true
         organization:
           type: string
+          nullable: true
         termsOfUseConsent:
           type: boolean
+          nullable: true
         userName:
           type: string
         waveBuildNotification:

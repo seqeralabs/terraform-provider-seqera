@@ -76,9 +76,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"data_link_id": schema.StringAttribute{
 						Optional: true,
 					},
-					"dataset_id": schema.StringAttribute{
-						Optional: true,
-					},
 					"events": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
@@ -101,9 +98,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 							},
 							"data_link_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"dataset_id": schema.StringAttribute{
 								Computed: true,
 							},
 							"discriminator": schema.StringAttribute{

@@ -357,6 +357,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 				}
 				if resp.ComputeEnv.Config.AzureCloudConfiguration != nil {
 					r.ComputeEnv.Config.AzureCloud = &tfTypes.AzureCloudConfiguration{}
+					r.ComputeEnv.Config.AzureCloud.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureCloudConfiguration.BootDiskSizeGB))
 					r.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionEndpoint)
 					r.ComputeEnv.Config.AzureCloud.DataCollectionRuleID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionRuleID)
 					r.ComputeEnv.Config.AzureCloud.Environment = []tfTypes.ConfigEnvVariable{}
@@ -2634,6 +2635,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	}
 	var azureCloudConfiguration *shared.AzureCloudConfiguration
 	if r.ComputeEnv.Config.AzureCloud != nil {
+		bootDiskSizeGb4 := new(int)
+		if !r.ComputeEnv.Config.AzureCloud.BootDiskSizeGB.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.BootDiskSizeGB.IsNull() {
+			*bootDiskSizeGb4 = int(r.ComputeEnv.Config.AzureCloud.BootDiskSizeGB.ValueInt32())
+		} else {
+			bootDiskSizeGb4 = nil
+		}
 		dataCollectionEndpoint := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint.IsNull() {
 			*dataCollectionEndpoint = r.ComputeEnv.Config.AzureCloud.DataCollectionEndpoint.ValueString()
@@ -2854,6 +2861,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir6 = nil
 		}
 		azureCloudConfiguration = &shared.AzureCloudConfiguration{
+			BootDiskSizeGB:           bootDiskSizeGb4,
 			DataCollectionEndpoint:   dataCollectionEndpoint,
 			DataCollectionRuleID:     dataCollectionRuleID,
 			Environment:              environment6,
@@ -4237,11 +4245,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	}
 	var googleLifeSciencesConfigurationRetired *shared.GoogleLifeSciencesConfigurationRetired
 	if r.ComputeEnv.Config.GoogleLifesciences != nil {
-		bootDiskSizeGb4 := new(int)
+		bootDiskSizeGb5 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsNull() {
-			*bootDiskSizeGb4 = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
+			*bootDiskSizeGb5 = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
 		} else {
-			bootDiskSizeGb4 = nil
+			bootDiskSizeGb5 = nil
 		}
 		copyImage1 := new(string)
 		if !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsNull() {
@@ -4390,7 +4398,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			zones = append(zones, r.ComputeEnv.Config.GoogleLifesciences.Zones[zonesIndex].ValueString())
 		}
 		googleLifeSciencesConfigurationRetired = &shared.GoogleLifeSciencesConfigurationRetired{
-			BootDiskSizeGb:    bootDiskSizeGb4,
+			BootDiskSizeGb:    bootDiskSizeGb5,
 			CopyImage:         copyImage1,
 			DebugMode:         debugMode1,
 			Environment:       environment16,
