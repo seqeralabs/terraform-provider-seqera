@@ -9,7 +9,6 @@ import (
 type BucketActionConfig struct {
 	BucketName      types.String   `tfsdk:"bucket_name"`
 	DataLinkID      types.String   `tfsdk:"data_link_id"`
-	DatasetID       types.String   `tfsdk:"dataset_id"`
 	Discriminator   types.String   `tfsdk:"discriminator"`
 	Events          []types.String `tfsdk:"events"`
 	Filter          types.String   `tfsdk:"filter"`

@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -92,6 +93,18 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"boot_disk_size_gb": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.Between(50, 4095),
+						},
+					},
 					"data_collection_endpoint": schema.StringAttribute{
 						Computed: true,
 						Optional: true,

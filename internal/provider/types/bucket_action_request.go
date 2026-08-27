@@ -8,7 +8,6 @@ import (
 
 type BucketActionRequest struct {
 	DataLinkID types.String   `tfsdk:"data_link_id"`
-	DatasetID  types.String   `tfsdk:"dataset_id"`
 	Events     []types.String `tfsdk:"events"`
 	Filter     types.String   `tfsdk:"filter"`
 	MarkerFile types.String   `tfsdk:"marker_file"`

@@ -1173,6 +1173,11 @@ actions:
         Azure managed identity client ID for compute instances.
       x-speakeasy-param-force-new: true
 
+  - target: $.components.schemas.AzCloudConfig.properties.bootDiskSizeGB
+    update:
+      description: OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+      x-speakeasy-param-force-new: true
+
   - target: $.components.schemas.AzCloudConfig.properties.dataCollectionEndpoint
     update:
       description: |

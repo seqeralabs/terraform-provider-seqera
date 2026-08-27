@@ -19,6 +19,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 
 	if resp != nil {
 		r.Config = &tfTypes.AzCloudConfig{}
+		r.Config.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGB))
 		r.Config.DataCollectionEndpoint = types.StringPointerValue(resp.Config.DataCollectionEndpoint)
 		r.Config.DataCollectionRuleID = types.StringPointerValue(resp.Config.DataCollectionRuleID)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
@@ -274,6 +275,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		deleted = nil
 	}
+	bootDiskSizeGB := new(int)
+	if !r.Config.BootDiskSizeGB.IsUnknown() && !r.Config.BootDiskSizeGB.IsNull() {
+		*bootDiskSizeGB = int(r.Config.BootDiskSizeGB.ValueInt32())
+	} else {
+		bootDiskSizeGB = nil
+	}
 	dataCollectionEndpoint := new(string)
 	if !r.Config.DataCollectionEndpoint.IsUnknown() && !r.Config.DataCollectionEndpoint.IsNull() {
 		*dataCollectionEndpoint = r.Config.DataCollectionEndpoint.ValueString()
@@ -494,6 +501,7 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		workDir = nil
 	}
 	config := shared.AzCloudConfig{
+		BootDiskSizeGB:           bootDiskSizeGB,
 		DataCollectionEndpoint:   dataCollectionEndpoint,
 		DataCollectionRuleID:     dataCollectionRuleID,
 		Environment:              environment,

@@ -199,10 +199,11 @@ can still be decoded:
 Add a validator when the API documents a constraint that is not enforced by the
 generated schema. Plan-time validation gives users feedback before apply.
 
-With the current Speakeasy version, `minimum` and `maximum` in the spec do not
-generate validators. For example, `bid_percentage` in
-`overlays/compute-env.yaml` has both constraints but only gets plan modifiers.
-Add a validator explicitly:
+Simple numeric bounds do not need a custom validator: `minimum` and `maximum`
+in the spec generate an `int32validator.Between(...)` (see `bid_percentage` in
+`overlays/compute-env.yaml`). Adding a custom range validator on top of them
+only produces a duplicate error. Write one for constraints the schema cannot
+express — cross-field rules, conditional requirements, format checks:
 
 1. Write it in `internal/validators/<type>validators/<name>.go`, following the
    patterns in [OVERLAY_GUIDE.md](./OVERLAY_GUIDE.md#custom-validators).

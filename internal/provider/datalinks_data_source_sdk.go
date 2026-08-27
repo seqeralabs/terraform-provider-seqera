@@ -43,8 +43,15 @@ func (r *DataLinksDataSourceModel) ToOperationsListDataLinksDataSourceRequest(ct
 	} else {
 		workspaceID = nil
 	}
+	creationSource := new(string)
+	if !r.CreationSource.IsUnknown() && !r.CreationSource.IsNull() {
+		*creationSource = r.CreationSource.ValueString()
+	} else {
+		creationSource = nil
+	}
 	out := operations.ListDataLinksDataSourceRequest{
-		WorkspaceID: workspaceID,
+		WorkspaceID:    workspaceID,
+		CreationSource: creationSource,
 	}
 
 	return &out, diags

@@ -30,7 +30,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Config.Bucket = &tfTypes.BucketActionConfig{}
 				r.Config.Bucket.BucketName = types.StringPointerValue(resp.Config.BucketActionConfig.BucketName)
 				r.Config.Bucket.DataLinkID = types.StringPointerValue(resp.Config.BucketActionConfig.DataLinkID)
-				r.Config.Bucket.DatasetID = types.StringPointerValue(resp.Config.BucketActionConfig.DatasetID)
 				r.Config.Bucket.Discriminator = types.StringPointerValue(resp.Config.BucketActionConfig.Discriminator)
 				r.Config.Bucket.Events = make([]types.String, 0, len(resp.Config.BucketActionConfig.Events))
 				for _, v := range resp.Config.BucketActionConfig.Events {
@@ -247,12 +246,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		} else {
 			dataLinkID = nil
 		}
-		datasetID := new(string)
-		if !r.Bucket.DatasetID.IsUnknown() && !r.Bucket.DatasetID.IsNull() {
-			*datasetID = r.Bucket.DatasetID.ValueString()
-		} else {
-			datasetID = nil
-		}
 		events := make([]string, 0, len(r.Bucket.Events))
 		for eventsIndex := range r.Bucket.Events {
 			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
@@ -271,7 +264,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		}
 		bucket = &shared.BucketActionRequest{
 			DataLinkID: dataLinkID,
-			DatasetID:  datasetID,
 			Events:     events,
 			Filter:     filter,
 			MarkerFile: markerFile,
@@ -507,12 +499,6 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		} else {
 			dataLinkID = nil
 		}
-		datasetID := new(string)
-		if !r.Bucket.DatasetID.IsUnknown() && !r.Bucket.DatasetID.IsNull() {
-			*datasetID = r.Bucket.DatasetID.ValueString()
-		} else {
-			datasetID = nil
-		}
 		events := make([]string, 0, len(r.Bucket.Events))
 		for eventsIndex := range r.Bucket.Events {
 			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
@@ -531,7 +517,6 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		}
 		bucket = &shared.BucketActionRequest{
 			DataLinkID: dataLinkID,
-			DatasetID:  datasetID,
 			Events:     events,
 			Filter:     filter,
 			MarkerFile: markerFile,

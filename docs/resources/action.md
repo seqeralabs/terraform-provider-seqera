@@ -195,7 +195,6 @@ Read-Only:
 Optional:
 
 - `data_link_id` (String)
-- `dataset_id` (String)
 - `events` (List of String)
 - `filter` (String)
 - `marker_file` (String)
@@ -228,7 +227,6 @@ Read-Only:
 
 - `bucket_name` (String)
 - `data_link_id` (String)
-- `dataset_id` (String)
 - `discriminator` (String)
 - `events` (List of String)
 - `filter` (String)

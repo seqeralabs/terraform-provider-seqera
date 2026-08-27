@@ -7,6 +7,7 @@ import (
 )
 
 type AzureCloudConfiguration struct {
+	BootDiskSizeGB           types.Int32         `tfsdk:"boot_disk_size_gb"`
 	DataCollectionEndpoint   types.String        `tfsdk:"data_collection_endpoint"`
 	DataCollectionRuleID     types.String        `tfsdk:"data_collection_rule_id"`
 	Environment              []ConfigEnvVariable `tfsdk:"environment"`
