@@ -45,20 +45,6 @@ func (a *ActionResponseDto) GetConfig() *ActionConfigType {
 	return a.Config
 }
 
-func (a *ActionResponseDto) GetConfigBucket() *BucketActionConfig {
-	if v := a.GetConfig(); v != nil {
-		return v.BucketActionConfig
-	}
-	return nil
-}
-
-func (a *ActionResponseDto) GetConfigCron() *CronActionConfig {
-	if v := a.GetConfig(); v != nil {
-		return v.CronActionConfig
-	}
-	return nil
-}
-
 func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
 	if v := a.GetConfig(); v != nil {
 		return v.GithubActionConfig

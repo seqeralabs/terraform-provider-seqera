@@ -427,3 +427,25 @@ actions:
   - target: $.components.schemas.GoogleCloudConfig.properties.postRunScript
     update:
       x-speakeasy-plan-validators: RunScriptSizeValidator
+
+  # `usePrivateAddress` requires an explicit `network`: instances launched without
+  # an external IP cannot fall back to the project's 'default' network, and the API
+  # rejects the combination at apply time.
+  #
+  # NOTE: the native `x-speakeasy-required-with: [../network]` directive is not
+  # usable here, for two reasons (both verified against speakeasy 1.797.0):
+  #
+  #  1. It is presence-based, not value-based. It generates `AlsoRequires`, which
+  #     fires whenever the attribute is configured — so `use_private_address = false`
+  #     would also demand `network`. We only want the constraint when it is true.
+  #  2. It emits an over-deep AtParent path:
+  #         path.MatchRelative().AtParent().AtParent().AtName("network")
+  #     From `config.use_private_address` that resolves to a root-level `network`
+  #     attribute, which does not exist. Same bug noted in
+  #     `overlays/aws-compute-env.yaml` and `overlays/compute-env-aws-batch.yaml`.
+  #
+  # Hence the custom validator
+  # (internal/validators/boolvalidators/private_address_requires_network_validator.go).
+  - target: $.components.schemas.GoogleCloudConfig.properties.usePrivateAddress
+    update:
+      x-speakeasy-plan-validators: PrivateAddressRequiresNetworkValidator

@@ -27,11 +27,11 @@ func (t *Trigger) GetType() *string {
 }
 
 type AgentRunDbDto struct {
-	ActorID          *int64          `json:"actorId,omitempty"`
 	AgentRunName     *string         `json:"agentRunName,omitempty"`
 	DateCreated      *time.Time      `json:"dateCreated,omitempty"`
 	ID               *string         `json:"id,omitempty"`
 	LastUpdated      *time.Time      `json:"lastUpdated,omitempty"`
+	ServiceAccountID *int64          `json:"serviceAccountId,omitempty"`
 	SessionID        *string         `json:"sessionId,omitempty"`
 	SourcePipelineID *string         `json:"sourcePipelineId,omitempty"`
 	Status           *AgentRunStatus `json:"status,omitempty"`
@@ -51,13 +51,6 @@ func (a *AgentRunDbDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (a *AgentRunDbDto) GetActorID() *int64 {
-	if a == nil {
-		return nil
-	}
-	return a.ActorID
 }
 
 func (a *AgentRunDbDto) GetAgentRunName() *string {
@@ -86,6 +79,13 @@ func (a *AgentRunDbDto) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return a.LastUpdated
+}
+
+func (a *AgentRunDbDto) GetServiceAccountID() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountID
 }
 
 func (a *AgentRunDbDto) GetSessionID() *string {

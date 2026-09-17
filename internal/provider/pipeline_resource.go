@@ -113,6 +113,11 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							stringvalidator.UTF8LengthAtMost(80),
 						},
 					},
+					"fusion_version": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.`,
+					},
 					"head_job_cpus": schema.Int32Attribute{
 						Optional:    true,
 						Description: `Head job CPU allocation`,

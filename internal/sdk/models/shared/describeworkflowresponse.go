@@ -329,6 +329,7 @@ type DescribeWorkflowResponseWorkflow struct {
 	WorkDir         *string       `json:"workDir,omitempty"`
 	ConfigProfiles  []string      `json:"configProfiles,omitempty"`
 	Fusion          *WfFusionMeta `json:"fusion,omitempty"`
+	FusionVersion   *string       `json:"fusionVersion,omitempty"`
 	LogFile         *string       `json:"logFile,omitempty"`
 	NextflowConfig  *string       `json:"nextflowConfig,omitempty"`
 	NextflowVersion *string       `json:"nextflowVersion,omitempty"`
@@ -532,6 +533,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetFusion() *WfFusionMeta {
 		return nil
 	}
 	return d.Fusion
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetFusionVersion() *string {
+	if d == nil {
+		return nil
+	}
+	return d.FusionVersion
 }
 
 func (d *DescribeWorkflowResponseWorkflow) GetLogFile() *string {

@@ -3,11 +3,27 @@
 package shared
 
 type DisplayData struct {
-	ProcessName *string `json:"processName,omitempty"`
-	RunName     *string `json:"runName,omitempty"`
-	TaskHash    *string `json:"taskHash,omitempty"`
-	WorkflowID  *string `json:"workflowId,omitempty"`
-	WorkspaceID *int64  `json:"workspaceId,omitempty"`
+	PipelineID   *int64  `json:"pipelineId,omitempty"`
+	PipelineName *string `json:"pipelineName,omitempty"`
+	ProcessName  *string `json:"processName,omitempty"`
+	RunName      *string `json:"runName,omitempty"`
+	TaskHash     *string `json:"taskHash,omitempty"`
+	WorkflowID   *string `json:"workflowId,omitempty"`
+	WorkspaceID  *int64  `json:"workspaceId,omitempty"`
+}
+
+func (d *DisplayData) GetPipelineID() *int64 {
+	if d == nil {
+		return nil
+	}
+	return d.PipelineID
+}
+
+func (d *DisplayData) GetPipelineName() *string {
+	if d == nil {
+		return nil
+	}
+	return d.PipelineName
 }
 
 func (d *DisplayData) GetProcessName() *string {

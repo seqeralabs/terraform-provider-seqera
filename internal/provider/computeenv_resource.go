@@ -3648,7 +3648,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty. Requires replacement if changed.`,
+										Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.`,
 									},
 									"network_tags": schema.ListAttribute{
 										Computed: true,
@@ -3743,7 +3743,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
+										Description: `Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.PrivateAddressRequiresNetworkValidator(),
+										},
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,

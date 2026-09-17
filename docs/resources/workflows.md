@@ -90,6 +90,7 @@ resource "seqera_workflows" "with_params" {
 - `config_text` (String) Nextflow configuration text. Requires replacement if changed.
 - `entry_name` (String) Entry workflow name. Requires replacement if changed.
 - `force` (Boolean) Force the deletion even if the workflow is active
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2. Requires replacement if changed.
 - `head_job_cpus` (Number) Head job CPU allocation. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Head job memory allocation in MB. Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.

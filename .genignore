@@ -31,6 +31,9 @@ internal/validators/boolvalidators/fusion_snapshots_validator.go
 internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/objectvalidators/sched_config_consistency_validator.go
 internal/validators/boolvalidators/graviton_validator.go
+internal/validators/boolvalidators/requires_sibling_string_set.go
+internal/validators/boolvalidators/private_address_requires_network_validator.go
+internal/validators/boolvalidators/private_address_requires_network_validator_test.go
 internal/validators/stringvalidators/work_dir_format_validator.go
 internal/validators/int32validators/max_spot_attempts_validator.go
 
