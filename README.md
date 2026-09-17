@@ -123,8 +123,10 @@ Available configuration:
 
 ### Data Sources
 
+* [seqera_aws_credentials_federation_setup](docs/data-sources/aws_credentials_federation_setup.md)
 * [seqera_credentials](docs/data-sources/credentials.md)
 * [seqera_data_links](docs/data-sources/data_links.md)
+* [seqera_gcp_credentials_federation_setup](docs/data-sources/gcp_credentials_federation_setup.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Examples [examples] -->
