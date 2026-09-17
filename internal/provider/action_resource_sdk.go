@@ -26,27 +26,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Config.Github = &tfTypes.GithubActionConfig{}
 				r.Config.Github.Discriminator = types.StringPointerValue(resp.Config.GithubActionConfig.Discriminator)
 			}
-			if resp.Config.BucketActionConfig != nil {
-				r.Config.Bucket = &tfTypes.BucketActionConfig{}
-				r.Config.Bucket.BucketName = types.StringPointerValue(resp.Config.BucketActionConfig.BucketName)
-				r.Config.Bucket.DataLinkID = types.StringPointerValue(resp.Config.BucketActionConfig.DataLinkID)
-				r.Config.Bucket.Discriminator = types.StringPointerValue(resp.Config.BucketActionConfig.Discriminator)
-				r.Config.Bucket.Events = make([]types.String, 0, len(resp.Config.BucketActionConfig.Events))
-				for _, v := range resp.Config.BucketActionConfig.Events {
-					r.Config.Bucket.Events = append(r.Config.Bucket.Events, types.StringValue(v))
-				}
-				r.Config.Bucket.Filter = types.StringPointerValue(resp.Config.BucketActionConfig.Filter)
-				r.Config.Bucket.MarkerFile = types.StringPointerValue(resp.Config.BucketActionConfig.MarkerFile)
-				r.Config.Bucket.SubscriptionArn = types.StringPointerValue(resp.Config.BucketActionConfig.SubscriptionArn)
-				r.Config.Bucket.TopicArn = types.StringPointerValue(resp.Config.BucketActionConfig.TopicArn)
-			}
-			if resp.Config.CronActionConfig != nil {
-				r.Config.Cron = &tfTypes.CronActionConfig{}
-				r.Config.Cron.Discriminator = types.StringPointerValue(resp.Config.CronActionConfig.Discriminator)
-				r.Config.Cron.Expression = types.StringPointerValue(resp.Config.CronActionConfig.Expression)
-				r.Config.Cron.Preset = types.StringPointerValue(resp.Config.CronActionConfig.Preset)
-				r.Config.Cron.Timezone = types.StringPointerValue(resp.Config.CronActionConfig.Timezone)
-			}
 		}
 		r.Error = types.StringPointerValue(resp.Error)
 		r.HookID = types.StringPointerValue(resp.HookID)
@@ -61,6 +40,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			}
 			r.Launch.ConfigText = types.StringPointerValue(resp.Launch.ConfigText)
 			r.Launch.EntryName = types.StringPointerValue(resp.Launch.EntryName)
+			r.Launch.FusionVersion = types.StringPointerValue(resp.Launch.FusionVersion)
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
 			r.Launch.ID = types.StringPointerValue(resp.Launch.ID)
@@ -238,63 +218,6 @@ func (r *ActionResourceModel) ToOperationsUpdateActionRequest(ctx context.Contex
 func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (*shared.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var bucket *shared.BucketActionRequest
-	if r.Bucket != nil {
-		dataLinkID := new(string)
-		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
-			*dataLinkID = r.Bucket.DataLinkID.ValueString()
-		} else {
-			dataLinkID = nil
-		}
-		events := make([]string, 0, len(r.Bucket.Events))
-		for eventsIndex := range r.Bucket.Events {
-			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
-		}
-		filter := new(string)
-		if !r.Bucket.Filter.IsUnknown() && !r.Bucket.Filter.IsNull() {
-			*filter = r.Bucket.Filter.ValueString()
-		} else {
-			filter = nil
-		}
-		markerFile := new(string)
-		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
-			*markerFile = r.Bucket.MarkerFile.ValueString()
-		} else {
-			markerFile = nil
-		}
-		bucket = &shared.BucketActionRequest{
-			DataLinkID: dataLinkID,
-			Events:     events,
-			Filter:     filter,
-			MarkerFile: markerFile,
-		}
-	}
-	var cron *shared.CronActionRequest
-	if r.Cron != nil {
-		expression := new(string)
-		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
-			*expression = r.Cron.Expression.ValueString()
-		} else {
-			expression = nil
-		}
-		preset := new(string)
-		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
-			*preset = r.Cron.Preset.ValueString()
-		} else {
-			preset = nil
-		}
-		timezone := new(string)
-		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
-			*timezone = r.Cron.Timezone.ValueString()
-		} else {
-			timezone = nil
-		}
-		cron = &shared.CronActionRequest{
-			Expression: expression,
-			Preset:     preset,
-			Timezone:   timezone,
-		}
-	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -316,6 +239,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		*entryName = r.Launch.EntryName.ValueString()
 	} else {
 		entryName = nil
+	}
+	fusionVersion := new(string)
+	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+		*fusionVersion = r.Launch.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
 	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
@@ -445,6 +374,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		ID:               id,
@@ -478,8 +408,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		source = nil
 	}
 	out := shared.CreateActionRequest{
-		Bucket: bucket,
-		Cron:   cron,
 		Launch: launch,
 		Name:   name,
 		Source: source,
@@ -491,63 +419,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (*shared.UpdateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var bucket *shared.BucketActionRequest
-	if r.Bucket != nil {
-		dataLinkID := new(string)
-		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
-			*dataLinkID = r.Bucket.DataLinkID.ValueString()
-		} else {
-			dataLinkID = nil
-		}
-		events := make([]string, 0, len(r.Bucket.Events))
-		for eventsIndex := range r.Bucket.Events {
-			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
-		}
-		filter := new(string)
-		if !r.Bucket.Filter.IsUnknown() && !r.Bucket.Filter.IsNull() {
-			*filter = r.Bucket.Filter.ValueString()
-		} else {
-			filter = nil
-		}
-		markerFile := new(string)
-		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
-			*markerFile = r.Bucket.MarkerFile.ValueString()
-		} else {
-			markerFile = nil
-		}
-		bucket = &shared.BucketActionRequest{
-			DataLinkID: dataLinkID,
-			Events:     events,
-			Filter:     filter,
-			MarkerFile: markerFile,
-		}
-	}
-	var cron *shared.CronActionRequest
-	if r.Cron != nil {
-		expression := new(string)
-		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
-			*expression = r.Cron.Expression.ValueString()
-		} else {
-			expression = nil
-		}
-		preset := new(string)
-		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
-			*preset = r.Cron.Preset.ValueString()
-		} else {
-			preset = nil
-		}
-		timezone := new(string)
-		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
-			*timezone = r.Cron.Timezone.ValueString()
-		} else {
-			timezone = nil
-		}
-		cron = &shared.CronActionRequest{
-			Expression: expression,
-			Preset:     preset,
-			Timezone:   timezone,
-		}
-	}
 	var launch *shared.ActionLaunchRequest
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
@@ -570,6 +441,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		*entryName = r.Launch.EntryName.ValueString()
 	} else {
 		entryName = nil
+	}
+	fusionVersion := new(string)
+	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+		*fusionVersion = r.Launch.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
 	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
@@ -699,6 +576,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		ID:               id,
@@ -729,8 +607,6 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		name = nil
 	}
 	out := shared.UpdateActionRequest{
-		Bucket: bucket,
-		Cron:   cron,
 		Launch: launch,
 		Name:   name,
 	}

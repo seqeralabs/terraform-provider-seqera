@@ -25,6 +25,7 @@ type ListActionsResponseActionInfo struct {
 	Source   *ActionSource `json:"source,omitempty"`
 	Status   *ActionStatus `json:"status,omitempty"`
 	UsageCmd *string       `json:"usageCmd,omitempty"`
+	User     *UserInfo     `json:"user,omitempty"`
 }
 
 func (l ListActionsResponseActionInfo) MarshalJSON() ([]byte, error) {
@@ -43,20 +44,6 @@ func (l *ListActionsResponseActionInfo) GetConfig() *ActionConfigType {
 		return nil
 	}
 	return l.Config
-}
-
-func (l *ListActionsResponseActionInfo) GetConfigBucket() *BucketActionConfig {
-	if v := l.GetConfig(); v != nil {
-		return v.BucketActionConfig
-	}
-	return nil
-}
-
-func (l *ListActionsResponseActionInfo) GetConfigCron() *CronActionConfig {
-	if v := l.GetConfig(); v != nil {
-		return v.CronActionConfig
-	}
-	return nil
 }
 
 func (l *ListActionsResponseActionInfo) GetConfigGithub() *GithubActionConfig {
@@ -99,20 +86,6 @@ func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
 		return nil
 	}
 	return l.Event
-}
-
-func (l *ListActionsResponseActionInfo) GetEventBucket() *BucketActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.BucketActionEvent
-	}
-	return nil
-}
-
-func (l *ListActionsResponseActionInfo) GetEventCron() *CronActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.CronActionEvent
-	}
-	return nil
 }
 
 func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
@@ -197,4 +170,11 @@ func (l *ListActionsResponseActionInfo) GetUsageCmd() *string {
 		return nil
 	}
 	return l.UsageCmd
+}
+
+func (l *ListActionsResponseActionInfo) GetUser() *UserInfo {
+	if l == nil {
+		return nil
+	}
+	return l.User
 }

@@ -42,9 +42,7 @@ type ActionResource struct {
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
 	ActionID      types.String                 `tfsdk:"action_id"`
-	Bucket        *tfTypes.BucketActionRequest `tfsdk:"bucket"`
 	Config        *tfTypes.ActionConfigType    `tfsdk:"config"`
-	Cron          *tfTypes.CronActionRequest   `tfsdk:"cron"`
 	Error         types.String                 `tfsdk:"error"`
 	HookID        types.String                 `tfsdk:"hook_id"`
 	HookURL       types.String                 `tfsdk:"hook_url"`
@@ -70,74 +68,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `Action string identifier`,
 			},
-			"bucket": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"data_link_id": schema.StringAttribute{
-						Optional: true,
-					},
-					"events": schema.ListAttribute{
-						Optional:    true,
-						ElementType: types.StringType,
-					},
-					"filter": schema.StringAttribute{
-						Optional: true,
-					},
-					"marker_file": schema.StringAttribute{
-						Optional: true,
-					},
-				},
-			},
 			"config": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"bucket": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"bucket_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"data_link_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"events": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"filter": schema.StringAttribute{
-								Computed: true,
-							},
-							"marker_file": schema.StringAttribute{
-								Computed: true,
-							},
-							"subscription_arn": schema.StringAttribute{
-								Computed: true,
-							},
-							"topic_arn": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"cron": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"expression": schema.StringAttribute{
-								Computed: true,
-							},
-							"preset": schema.StringAttribute{
-								Computed: true,
-							},
-							"timezone": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -153,20 +86,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 							},
 						},
-					},
-				},
-			},
-			"cron": schema.SingleNestedAttribute{
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"expression": schema.StringAttribute{
-						Optional: true,
-					},
-					"preset": schema.StringAttribute{
-						Optional: true,
-					},
-					"timezone": schema.StringAttribute{
-						Optional: true,
 					},
 				},
 			},
@@ -211,6 +130,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(80),
 						},
+					},
+					"fusion_version": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.`,
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Optional:    true,

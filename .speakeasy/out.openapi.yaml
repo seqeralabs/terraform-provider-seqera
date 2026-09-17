@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.206.0
+  version: 1.214.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -132,37 +132,6 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Action#create
-  /actions/cron/resolve:
-    post:
-      operationId: ResolveCronExpression
-      summary: Resolve a schedule description to a cron expression
-      parameters:
-        - name: workspaceId
-          in: query
-          schema:
-            type: integer
-            format: int64
-            nullable: true
-          explode: false
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties:
-                type: string
-      responses:
-        '200':
-          description: ResolveCronExpression 200 response
-          content:
-            application/json:
-              schema:
-                type: object
-      security:
-        - BearerAuth: []
-      tags:
-        - actions
   /actions/labels/add:
     post:
       operationId: AddLabelsToActions
@@ -789,6 +758,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '429':
+          description: Rate limit or credit budget exhausted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1170,6 +1145,46 @@ paths:
         - BearerAuth: []
       tags:
         - avatars
+  /catalog/components/{key}/versions:
+    get:
+      operationId: CatalogComponentVersions
+      summary: Catalog versions for a single component
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
+  /catalog/versions:
+    get:
+      operationId: CatalogVersions
+      summary: Component compatibility catalog versions
+      description: Returns the catalog versions from the local state document (unconstrained in PF-1), with servedFrom provenance. Optionally narrowed to a single component.
+      parameters:
+        - name: component
+          in: query
+          schema:
+            type: string
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
   /compute-envs:
     get:
       operationId: ListComputeEnvs
@@ -1721,6 +1736,43 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Credential#create
+  /credentials/federation-setup:
+    get:
+      operationId: DescribeCredentialsSetup
+      summary: Describe credential provider setup values
+      description: "Returns the labelled values an administrator copies into their cloud provider console to set up a credential of the given provider — for AWS OIDC workload identity: this installation's public address and the subject claims Platform mints. Scope-level rather than per-credential, because these values are needed before a credential can be created. Append `?workspaceId` for a workspace context."
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier, e.g. `aws`
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - credentials
   /credentials/validate:
     get:
       operationId: ValidateCredentialsName
@@ -3644,6 +3696,14 @@ paths:
               schema:
                 type: string
                 format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
         '307':
           description: Temporary redirect to linked source URL
         '400':
@@ -4684,7 +4744,7 @@ paths:
     get:
       operationId: ResolveLineage
       summary: Resolve a platform identifier to a lineage LID
-      description: Resolves a Nextflow session ID or file path to a lineage LID. Exactly one of sessionId or filePath must be provided.
+      description: "Resolves a Nextflow run or file path to a lineage LID. Exactly one of sessionId or filePath must be provided. A run is identified by sessionId *and* runName: a resumed run inherits the parent run's sessionId but produces its own lineage record."
       parameters:
         - name: workspaceId
           in: query
@@ -4695,7 +4755,12 @@ paths:
             format: int64
         - name: sessionId
           in: query
-          description: Nextflow session UUID
+          description: Nextflow session UUID — requires runName
+          schema:
+            type: string
+        - name: runName
+          in: query
+          description: Nextflow run name — required with sessionId
           schema:
             type: string
         - name: filePath
@@ -4711,7 +4776,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LineageResolveResponse'
         '400':
-          description: Bad request — exactly one of sessionId or filePath must be provided
+          description: Bad request — exactly one of sessionId or filePath must be provided, and sessionId requires runName
         '403':
           description: Operation not allowed
         '404':
@@ -4728,7 +4793,8 @@ paths:
         Cross-workspace lineage search. The `q` DSL uses a simple set of
                                     conventions: whitespace = AND, a comma inside a qualifier = OR, and
                                     repeating a qualifier = AND. Filter the lineage index by `type:`,
-                                    `workflow:`, `task:`, `label:`, and/or free-text tokens.
+                                    `workflow:`, `task:`, `pipeline:`, `pipelineId:`, `label:`, and/or
+                                    free-text tokens.
 
                                     Workspace scope is expressed inside the DSL: `workspace:org/name`
                                     or the numeric `workspaceId:` alias. Omit both to search every
@@ -15879,6 +15945,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -15892,15 +15959,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -15971,16 +16041,12 @@ components:
           type: string
       discriminator:
         mapping:
-          bucket: '#/components/schemas/BucketActionConfig'
-          cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/Action.TowerActionConfig'
         - $ref: '#/components/schemas/GithubActionConfig'
-        - $ref: '#/components/schemas/BucketActionConfig'
-        - $ref: '#/components/schemas/CronActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -15991,16 +16057,12 @@ components:
           format: date-time
       discriminator:
         mapping:
-          bucket: '#/components/schemas/BucketActionEvent'
-          cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/GithubActionEvent'
         - $ref: '#/components/schemas/Action.TowerActionEvent'
-        - $ref: '#/components/schemas/BucketActionEvent'
-        - $ref: '#/components/schemas/CronActionEvent'
     Action.Source:
       type: string
       enum:
@@ -16195,6 +16257,9 @@ components:
         createdBy:
           type: integer
           format: int64
+        createdByUserName:
+          type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -16238,10 +16303,6 @@ components:
     AgentRunDbDto:
       type: object
       properties:
-        actorId:
-          type: integer
-          format: int64
-          nullable: true
         agentRunName:
           type: string
           nullable: true
@@ -16253,6 +16314,10 @@ components:
         lastUpdated:
           type: string
           format: date-time
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
         sessionId:
           type: string
           nullable: true
@@ -16317,6 +16382,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -16330,15 +16396,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -16415,9 +16484,11 @@ components:
       enum:
         - user
         - system
+        - service_account
       x-enum-varnames:
         - user
         - system
+        - service_account
     AuditEventType:
       type: string
       enum:
@@ -16536,6 +16607,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -16729,6 +16803,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -16810,6 +16887,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
       x-enum-varnames:
         - user
         - pipeline
@@ -16846,6 +16924,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
     AuditLogTargetState:
       type: object
       properties:
@@ -16883,6 +16962,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -16920,6 +17000,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -16959,6 +17040,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -16996,6 +17078,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -17136,6 +17219,7 @@ components:
           x-speakeasy-param-force-new: true
         computeJobRole:
           type: string
+          nullable: true
           description: |
             IAM role ARN for compute jobs. Jobs assume this role during execution.
             Must have permissions for S3, CloudWatch, etc.
@@ -17152,12 +17236,14 @@ components:
           x-speakeasy-terraform-ignore: true
         dragenInstanceType:
           type: string
+          nullable: true
           description: |
             EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
             Only applicable when DRAGEN is enabled.
           x-speakeasy-param-force-new: true
         dragenQueue:
           type: string
+          nullable: true
           description: |
             Name of the AWS Batch queue for DRAGEN jobs.
             Only applicable when DRAGEN is enabled.
@@ -17166,6 +17252,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -17181,6 +17268,7 @@ components:
           $ref: '#/components/schemas/ForgeConfig'
         fusion2Enabled:
           type: boolean
+          nullable: true
           x-speakeasy-name-override: enable_fusion
           x-speakeasy-plan-validators: FusionEnabledValidator
           description: |
@@ -17190,6 +17278,7 @@ components:
             Requires `enable_wave = true`.
         fusionSnapshots:
           type: boolean
+          nullable: true
           description: |
             Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
             when it is interrupted by a spot reclamation.
@@ -17208,17 +17297,20 @@ components:
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
           description: "Number of CPUs allocated for the head job (default: 1)"
           example: 4
           x-speakeasy-param-force-new: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
           description: "Memory allocation for the head job in MB (default: 1024)"
           example: 8192
           x-speakeasy-param-force-new: true
         headJobRole:
           type: string
+          nullable: true
           description: |
             IAM role ARN for the head job.
             Format: arn:aws:iam::account-id:role/role-name
@@ -17230,6 +17322,7 @@ components:
           x-speakeasy-param-force-new: true
         logGroup:
           type: string
+          nullable: true
           description: |
             CloudWatch Log group name for pipeline execution logs.
             If specified, logs are sent to this existing log group instead of the default.
@@ -17240,12 +17333,14 @@ components:
           deprecated: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
           x-speakeasy-param-force-new: true
         nvnmeStorageEnabled:
           type: boolean
+          nullable: true
           x-speakeasy-name-override: nvme_storage_enabled
           x-speakeasy-plan-validators: NvmeStorageValidator
           description: |
@@ -17259,6 +17354,7 @@ components:
             Bash script to run after workflow execution completes.
             Use for cleanup, archiving results, sending notifications, etc.
           type: string
+          nullable: true
           x-speakeasy-param-force-new: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
@@ -17266,6 +17362,7 @@ components:
             Bash script to run before workflow execution begins.
             Use for environment setup, loading modules, downloading reference data, etc.
           type: string
+          nullable: true
           x-speakeasy-param-force-new: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
@@ -17292,6 +17389,7 @@ components:
           x-speakeasy-param-force-new: true
         waveEnabled:
           type: boolean
+          nullable: true
           title: "Wave Enabled"
           description: |
             Allow access to private container repositories and the provisioning of containers in your
@@ -17431,6 +17529,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-terraform-ignore: true
@@ -17470,13 +17569,16 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -17687,6 +17789,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forge:
           $ref: '#/components/schemas/AzBatchForgeConfig'
         fusion2Enabled:
@@ -17731,13 +17834,16 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -17889,6 +17995,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -17929,6 +18036,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
@@ -17936,10 +18044,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -18156,59 +18266,62 @@ components:
       properties:
         path:
           type: string
-    BucketActionConfig:
+    CatalogArtifact:
       type: object
       properties:
-        bucketName:
+        ref:
           type: string
-        dataLinkId:
+        selectors:
+          type: object
+          additionalProperties:
+            type: string
+    CatalogEdgeRef:
+      type: object
+      properties:
+        component:
           type: string
-        discriminator:
+        expr:
           type: string
-        events:
+    CatalogVersion:
+      type: object
+      properties:
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogArtifact'
+        compatibleWith:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogEdgeRef'
+        component:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+        origin:
+          type: string
+        variants:
           type: array
           items:
             type: string
-        filter:
+        version:
           type: string
-        markerFile:
-          type: string
-        subscriptionArn:
-          type: string
-        topicArn:
-          type: string
-      title: Bucket action config
-    BucketActionEvent:
+        yanked:
+          type: boolean
+    CatalogVersionsResponse:
       type: object
       properties:
-        bucketName:
+        defaultVersion:
           type: string
-        discriminator:
+        generatedAt:
           type: string
-        eventName:
-          type: string
-        provider:
-          type: string
-        recordCount:
-          type: integer
-          format: int32
-        timestamp:
-          type: string
-          format: date-time
-      title: Bucket action event
-    BucketActionRequest:
-      type: object
-      properties:
-        dataLinkId:
-          type: string
-        events:
+        servedFrom:
+          $ref: '#/components/schemas/ServedFrom'
+        versions:
           type: array
           items:
-            type: string
-        filter:
-          type: string
-        markerFile:
-          type: string
+            $ref: '#/components/schemas/CatalogVersion'
     ChangeDatasetVisibilityRequest:
       type: object
       properties:
@@ -18261,17 +18374,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: Array of environment variables for the compute environment
         nextflowConfig:
           type: string
+          nullable: true
           description: Nextflow configuration settings and parameters
         postRunScript:
           description: Shell script to execute after workflow completes
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Shell script to execute before workflow starts
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         workDir:
           description: Working directory path for workflow execution
@@ -18449,6 +18566,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -18745,10 +18863,6 @@ components:
     CreateActionRequest:
       type: object
       properties:
-        bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
-        cron:
-          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/ActionLaunchRequest'
         name:
@@ -19318,6 +19432,21 @@ components:
       required:
         - auditImageType
       title: Credentials audit image
+    CredentialsSetupValue:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    CredentialsSetupValuesResponse:
+      type: object
+      properties:
+        setupValues:
+          description: Labelled values to copy into the cloud provider console. Empty when the provider has nothing to surface.
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
     CreditInfoImage:
       type: object
       properties:
@@ -19350,41 +19479,6 @@ components:
       required:
         - auditImageType
       title: Credit purchase audit image
-    CronActionConfig:
-      type: object
-      properties:
-        discriminator:
-          type: string
-        expression:
-          type: string
-        preset:
-          type: string
-        timezone:
-          type: string
-      title: Cron action config
-    CronActionEvent:
-      type: object
-      properties:
-        discriminator:
-          type: string
-        scheduledTime:
-          type: string
-          format: date-time
-        timestamp:
-          type: string
-          format: date-time
-        workflowId:
-          type: string
-      title: Cron action event
-    CronActionRequest:
-      type: object
-      properties:
-        expression:
-          type: string
-        preset:
-          type: string
-        timezone:
-          type: string
     CustomRoleImage:
       type: object
       properties:
@@ -20237,7 +20331,9 @@ components:
         status:
           $ref: '#/components/schemas/DataStudioStatus'
         stopReason:
-          $ref: '#/components/schemas/DataStudioStopReason'
+          allOf:
+            - $ref: '#/components/schemas/DataStudioStopReason'
+          nullable: true
     DataStudioStopReason:
       type: string
       nullable: true
@@ -20637,6 +20733,12 @@ components:
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        setupValues:
+          description: Read-only labelled values the administrator copies into their cloud provider console to finish setting up the credential. Empty when nothing applies to the credential type.
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+          readOnly: true
     DescribeDatasetResponse:
       type: object
       properties:
@@ -20809,6 +20911,11 @@ components:
     DisplayData:
       type: object
       properties:
+        pipelineId:
+          type: integer
+          format: int64
+        pipelineName:
+          type: string
         processName:
           type: string
         runName:
@@ -20841,6 +20948,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -20864,14 +20972,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: AWS region
           type: string
@@ -21042,6 +21153,7 @@ components:
           x-speakeasy-param-force-new: true
         dragenAmiId:
           type: string
+          nullable: true
           description: |
             Custom AMI ID for DRAGEN-enabled instances.
             Only applicable when dragen_enabled is true.
@@ -21049,6 +21161,7 @@ components:
           # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         dragenEnabled:
           type: boolean
+          nullable: true
           description: |
             Enable Illumina DRAGEN support for the compute environment.
             When enabled, DRAGEN-specific instance types and AMIs will be used.
@@ -21056,6 +21169,7 @@ components:
           x-speakeasy-param-force-new: true
         dragenInstanceType:
           type: string
+          nullable: true
           description: |
             EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
             Only applicable when dragen_enabled is true.
@@ -21063,6 +21177,7 @@ components:
           # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         ebsAutoScale:
           type: boolean
+          nullable: true
           description: |
             Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
             are dynamically attached and mounted (typically at /scratch) as disk space runs low.
@@ -21074,6 +21189,7 @@ components:
         ebsBlockSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
             to run out of free space. Only applies when ebs_auto_scale is enabled.
@@ -21086,6 +21202,7 @@ components:
         ebsBootSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
             When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
@@ -21093,6 +21210,7 @@ components:
           x-speakeasy-param-force-new: true
         ec2KeyPair:
           type: string
+          nullable: true
           description: |
             EC2 key pair name for SSH access to compute instances.
             Key pair must exist in the specified region.
@@ -21100,18 +21218,21 @@ components:
           x-speakeasy-param-force-new: true
         ecsConfig:
           type: string
+          nullable: true
           description: |
             Custom ECS agent configuration parameters appended to the ECS config file
             on compute instances. Use for advanced ECS tuning.
           x-speakeasy-param-force-new: true
         efsCreate:
           type: boolean
+          nullable: true
           description: Automatically create an EFS file system
           example: false
           x-speakeasy-param-force-new: true
           # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
         efsId:
           type: string
+          nullable: true
           description: |
             EFS file system ID to mount.
             Format: fs- followed by hexadecimal characters.
@@ -21120,6 +21241,7 @@ components:
           x-speakeasy-param-force-new: true
         efsMount:
           type: string
+          nullable: true
           description: |
             Path where EFS will be mounted in the container.
           example: "/mnt/efs"
@@ -21136,12 +21258,14 @@ components:
           x-speakeasy-param-force-new: true
         fsxMount:
           type: string
+          nullable: true
           description: |
             Path where FSx will be mounted in the container.
           example: "/fsx"
           x-speakeasy-param-force-new: true
         fsxName:
           type: string
+          nullable: true
           description: |
             FSx for Lustre file system name.
           example: "my-fsx-filesystem"
@@ -21149,6 +21273,7 @@ components:
         fsxSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Size of FSx file system in GB.
           example: 1200
@@ -21162,6 +21287,7 @@ components:
           x-speakeasy-param-force-new: true
         imageId:
           type: string
+          nullable: true
           description: |
             Custom Amazon Machine Image (AMI) ID for compute instances.
             If not specified, AWS Batch selects the default ECS-optimized AMI.
@@ -21171,6 +21297,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
           description: |
             List of EC2 instance types to use.
             Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
@@ -21409,6 +21536,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -21453,6 +21581,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
           description: |
@@ -21462,9 +21591,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: The GKE cluster region - or - zone
           type: string
@@ -21584,6 +21715,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -21659,6 +21791,7 @@ components:
             valueType: basetypes.ListValue
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
           description: |
@@ -21674,10 +21807,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
@@ -21777,6 +21912,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -21803,7 +21939,7 @@ components:
           example: "n1-standard-4"
           x-speakeasy-param-force-new: true
         network:
-          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty.
+          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
           type: string
           nullable: true
         networkTags:
@@ -21814,6 +21950,7 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
@@ -21821,10 +21958,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
@@ -21867,9 +22006,10 @@ components:
             type: string
           nullable: true
         usePrivateAddress:
-          description: Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork.
+          description: Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
           type: boolean
           nullable: true
+          x-speakeasy-plan-validators: PrivateAddressRequiresNetworkValidator
         waveEnabled:
           type: boolean
           x-speakeasy-terraform-ignore: true
@@ -21983,6 +22123,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -22015,6 +22156,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
           description: |
@@ -22030,6 +22172,7 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preemptible:
           type: boolean
           description: |
@@ -22040,6 +22183,7 @@ components:
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         projectId:
           type: string
           description: |
@@ -22327,6 +22471,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -22341,14 +22486,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         server:
           type: string
         servicePodSpec:
@@ -22522,6 +22670,10 @@ components:
           nullable: true
           description: Entry workflow name
           x-speakeasy-param-computed: false
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -22838,6 +22990,8 @@ components:
         usageCmd:
           type: string
           nullable: true
+        user:
+          $ref: '#/components/schemas/UserInfo'
     ListAgentRunsResponse:
       type: object
       properties:
@@ -23238,16 +23392,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
           x-speakeasy-name-override: intelligent_compute_config
@@ -23347,6 +23505,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -23360,6 +23519,7 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         perJobMemLimit:
           type: boolean
         perTaskReserve:
@@ -23370,9 +23530,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         unitForLimits:
@@ -23478,6 +23640,8 @@ components:
           format: int64
         userName:
           type: string
+        userType:
+          $ref: '#/components/schemas/UserType'
     MemberImage:
       type: object
       properties:
@@ -23507,6 +23671,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -23520,15 +23685,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -23589,6 +23757,8 @@ components:
     NextflowVersionsResponse:
       type: object
       properties:
+        catalogEnabled:
+          type: boolean
         nextflowFeatureMinVersions:
           type: object
           additionalProperties:
@@ -23942,6 +24112,8 @@ components:
           type: string
         userName:
           type: string
+        userType:
+          $ref: '#/components/schemas/UserType'
         wspRole:
           type: string
     ParticipantType:
@@ -24824,18 +24996,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:
             - $ref: '#/components/schemas/SeqeraComputeCloudInstanceTypeSize'
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         workDir:
@@ -24861,6 +25037,29 @@ components:
           type: string
           writeOnly: true
       title: Seqera Compute credentials
+    ServedFrom:
+      type: string
+      enum:
+        - EMBEDDED
+        - STATIC
+        - LICMAN
+        - CACHE
+      x-type: String
+    ServiceAccountImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Service account audit image
     ServiceInfo:
       type: object
       properties:
@@ -24894,6 +25093,10 @@ components:
           type: string
         creditPurchasesEnabled:
           type: boolean
+        dataStudioApproachingExpirationThresholdMinutes:
+          description: Warning window in minutes before a Data Studio session auto-stops, during which the Extend Lifespan option is shown
+          type: integer
+          format: int32
         evalWorkspaceIds:
           type: array
           items:
@@ -24969,6 +25172,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -24982,15 +25186,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -25741,6 +25948,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -25754,15 +25962,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -25776,10 +25987,6 @@ components:
     UpdateActionRequest:
       type: object
       properties:
-        bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
-        cron:
-          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/ActionLaunchRequest'
         name:
@@ -26200,6 +26407,11 @@ components:
       required:
         - auditImageType
       title: SSH key audit image
+    UserType:
+      type: string
+      enum:
+        - HUMAN
+        - SERVICE_ACCOUNT
     UserWorkspacePermissionDto:
       type: object
       properties:
@@ -26920,6 +27132,10 @@ components:
           description: Entry workflow name
           x-speakeasy-param-computed: false
           example: "main.nf"
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -27081,6 +27297,10 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionVersion:
+          description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -27319,6 +27539,9 @@ components:
               nullable: true
             fusion:
               $ref: '#/components/schemas/WfFusionMeta'
+            fusionVersion:
+              type: string
+              nullable: true
             logFile:
               type: string
             nextflowConfig:
@@ -27541,6 +27764,7 @@ components:
         - launch
         - connect
         - view
+        - project
       x-enum-varnames:
         - owner
         - admin
@@ -27548,6 +27772,7 @@ components:
         - launch
         - connect
         - view
+        - project
     WspRoleSourceType:
       type: string
       enum:

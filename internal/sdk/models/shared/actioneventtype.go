@@ -12,8 +12,6 @@ import (
 type ActionEventTypeType string
 
 const (
-	ActionEventTypeTypeBucket ActionEventTypeType = "bucket"
-	ActionEventTypeTypeCron   ActionEventTypeType = "cron"
 	ActionEventTypeTypeGithub ActionEventTypeType = "github"
 	ActionEventTypeTypeTower  ActionEventTypeType = "tower"
 )
@@ -21,34 +19,8 @@ const (
 type ActionEventType struct {
 	GithubActionEvent      *GithubActionEvent      `queryParam:"inline" union:"member"`
 	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline" union:"member"`
-	BucketActionEvent      *BucketActionEvent      `queryParam:"inline" union:"member"`
-	CronActionEvent        *CronActionEvent        `queryParam:"inline" union:"member"`
 
 	Type ActionEventTypeType
-}
-
-func CreateActionEventTypeBucket(bucket BucketActionEvent) ActionEventType {
-	typ := ActionEventTypeTypeBucket
-
-	typStr := string(typ)
-	bucket.Discriminator = &typStr
-
-	return ActionEventType{
-		BucketActionEvent: &bucket,
-		Type:              typ,
-	}
-}
-
-func CreateActionEventTypeCron(cron CronActionEvent) ActionEventType {
-	typ := ActionEventTypeTypeCron
-
-	typStr := string(typ)
-	cron.Discriminator = &typStr
-
-	return ActionEventType{
-		CronActionEvent: &cron,
-		Type:            typ,
-	}
 }
 
 func CreateActionEventTypeGithub(github GithubActionEvent) ActionEventType {
@@ -75,7 +47,14 @@ func CreateActionEventTypeTower(tower ActionTowerActionEvent) ActionEventType {
 	}
 }
 
-func (u *ActionEventType) UnmarshalJSON(data []byte) error {
+func (u *ActionEventType) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = ActionEventType{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`
@@ -87,24 +66,6 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
-	case "bucket":
-		bucketActionEvent := new(BucketActionEvent)
-		if err := utils.UnmarshalJSON(data, &bucketActionEvent, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bucket) type BucketActionEvent within ActionEventType: %w", string(data), err)
-		}
-
-		u.BucketActionEvent = bucketActionEvent
-		u.Type = ActionEventTypeTypeBucket
-		return nil
-	case "cron":
-		cronActionEvent := new(CronActionEvent)
-		if err := utils.UnmarshalJSON(data, &cronActionEvent, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == cron) type CronActionEvent within ActionEventType: %w", string(data), err)
-		}
-
-		u.CronActionEvent = cronActionEvent
-		u.Type = ActionEventTypeTypeCron
-		return nil
 	case "github":
 		githubActionEvent := new(GithubActionEvent)
 		if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, nil); err != nil {
@@ -135,14 +96,6 @@ func (u ActionEventType) MarshalJSON() ([]byte, error) {
 
 	if u.ActionTowerActionEvent != nil {
 		return utils.MarshalJSON(u.ActionTowerActionEvent, "", true)
-	}
-
-	if u.BucketActionEvent != nil {
-		return utils.MarshalJSON(u.BucketActionEvent, "", true)
-	}
-
-	if u.CronActionEvent != nil {
-		return utils.MarshalJSON(u.CronActionEvent, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionEventType: all fields are null")

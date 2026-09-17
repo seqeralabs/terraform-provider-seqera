@@ -10,8 +10,9 @@ import (
 type AuditActorActorType string
 
 const (
-	AuditActorActorTypeUser   AuditActorActorType = "user"
-	AuditActorActorTypeSystem AuditActorActorType = "system"
+	AuditActorActorTypeUser           AuditActorActorType = "user"
+	AuditActorActorTypeSystem         AuditActorActorType = "system"
+	AuditActorActorTypeServiceAccount AuditActorActorType = "service_account"
 )
 
 func (e AuditActorActorType) ToPointer() *AuditActorActorType {
@@ -26,6 +27,8 @@ func (e *AuditActorActorType) UnmarshalJSON(data []byte) error {
 	case "user":
 		fallthrough
 	case "system":
+		fallthrough
+	case "service_account":
 		*e = AuditActorActorType(v)
 		return nil
 	default:

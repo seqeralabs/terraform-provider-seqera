@@ -39,6 +39,7 @@ const (
 	NewStateTypePipeline             NewStateType = "pipeline"
 	NewStateTypePipelineSecret       NewStateType = "pipeline_secret"
 	NewStateTypeScimToken            NewStateType = "scim_token"
+	NewStateTypeServiceAccount       NewStateType = "service_account"
 	NewStateTypeTeam                 NewStateType = "team"
 	NewStateTypeTeamMember           NewStateType = "team_member"
 	NewStateTypeUser                 NewStateType = "user"
@@ -76,6 +77,7 @@ type NewState struct {
 	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
 	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
 	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
+	ServiceAccountImage       *ServiceAccountImage       `queryParam:"inline" union:"member"`
 	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
 	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
 	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
@@ -411,6 +413,18 @@ func CreateNewStateScimToken(scimToken ScimTokenImage) NewState {
 	}
 }
 
+func CreateNewStateServiceAccount(serviceAccount ServiceAccountImage) NewState {
+	typ := NewStateTypeServiceAccount
+
+	typStr := AuditImageType(typ)
+	serviceAccount.AuditImageType = typStr
+
+	return NewState{
+		ServiceAccountImage: &serviceAccount,
+		Type:                typ,
+	}
+}
+
 func CreateNewStateTeam(team TeamImage) NewState {
 	typ := NewStateTypeTeam
 
@@ -495,7 +509,14 @@ func CreateNewStateWorkspace(workspace WorkspaceImage) NewState {
 	}
 }
 
-func (u *NewState) UnmarshalJSON(data []byte) error {
+func (u *NewState) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = NewState{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		AuditImageType string `json:"auditImageType"`
@@ -750,6 +771,15 @@ func (u *NewState) UnmarshalJSON(data []byte) error {
 		u.ScimTokenImage = scimTokenImage
 		u.Type = NewStateTypeScimToken
 		return nil
+	case "service_account":
+		serviceAccountImage := new(ServiceAccountImage)
+		if err := utils.UnmarshalJSON(data, &serviceAccountImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type ServiceAccountImage within NewState: %w", string(data), err)
+		}
+
+		u.ServiceAccountImage = serviceAccountImage
+		u.Type = NewStateTypeServiceAccount
+		return nil
 	case "team":
 		teamImage := new(TeamImage)
 		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
@@ -927,6 +957,10 @@ func (u NewState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.ScimTokenImage, "", true)
 	}
 
+	if u.ServiceAccountImage != nil {
+		return utils.MarshalJSON(u.ServiceAccountImage, "", true)
+	}
+
 	if u.TeamImage != nil {
 		return utils.MarshalJSON(u.TeamImage, "", true)
 	}
@@ -988,6 +1022,7 @@ const (
 	PreviousStateTypePipeline             PreviousStateType = "pipeline"
 	PreviousStateTypePipelineSecret       PreviousStateType = "pipeline_secret"
 	PreviousStateTypeScimToken            PreviousStateType = "scim_token"
+	PreviousStateTypeServiceAccount       PreviousStateType = "service_account"
 	PreviousStateTypeTeam                 PreviousStateType = "team"
 	PreviousStateTypeTeamMember           PreviousStateType = "team_member"
 	PreviousStateTypeUser                 PreviousStateType = "user"
@@ -1025,6 +1060,7 @@ type PreviousState struct {
 	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
 	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
 	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
+	ServiceAccountImage       *ServiceAccountImage       `queryParam:"inline" union:"member"`
 	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
 	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
 	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
@@ -1360,6 +1396,18 @@ func CreatePreviousStateScimToken(scimToken ScimTokenImage) PreviousState {
 	}
 }
 
+func CreatePreviousStateServiceAccount(serviceAccount ServiceAccountImage) PreviousState {
+	typ := PreviousStateTypeServiceAccount
+
+	typStr := AuditImageType(typ)
+	serviceAccount.AuditImageType = typStr
+
+	return PreviousState{
+		ServiceAccountImage: &serviceAccount,
+		Type:                typ,
+	}
+}
+
 func CreatePreviousStateTeam(team TeamImage) PreviousState {
 	typ := PreviousStateTypeTeam
 
@@ -1444,7 +1492,14 @@ func CreatePreviousStateWorkspace(workspace WorkspaceImage) PreviousState {
 	}
 }
 
-func (u *PreviousState) UnmarshalJSON(data []byte) error {
+func (u *PreviousState) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = PreviousState{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		AuditImageType string `json:"auditImageType"`
@@ -1699,6 +1754,15 @@ func (u *PreviousState) UnmarshalJSON(data []byte) error {
 		u.ScimTokenImage = scimTokenImage
 		u.Type = PreviousStateTypeScimToken
 		return nil
+	case "service_account":
+		serviceAccountImage := new(ServiceAccountImage)
+		if err := utils.UnmarshalJSON(data, &serviceAccountImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type ServiceAccountImage within PreviousState: %w", string(data), err)
+		}
+
+		u.ServiceAccountImage = serviceAccountImage
+		u.Type = PreviousStateTypeServiceAccount
+		return nil
 	case "team":
 		teamImage := new(TeamImage)
 		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
@@ -1874,6 +1938,10 @@ func (u PreviousState) MarshalJSON() ([]byte, error) {
 
 	if u.ScimTokenImage != nil {
 		return utils.MarshalJSON(u.ScimTokenImage, "", true)
+	}
+
+	if u.ServiceAccountImage != nil {
+		return utils.MarshalJSON(u.ServiceAccountImage, "", true)
 	}
 
 	if u.TeamImage != nil {
@@ -2112,6 +2180,13 @@ func (a *AuditLogTargetState) GetNewStatePipelineSecret() *PipelineSecretImage {
 func (a *AuditLogTargetState) GetNewStateScimToken() *ScimTokenImage {
 	if v := a.GetNewState(); v != nil {
 		return v.ScimTokenImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateServiceAccount() *ServiceAccountImage {
+	if v := a.GetNewState(); v != nil {
+		return v.ServiceAccountImage
 	}
 	return nil
 }
@@ -2357,6 +2432,13 @@ func (a *AuditLogTargetState) GetPreviousStatePipelineSecret() *PipelineSecretIm
 func (a *AuditLogTargetState) GetPreviousStateScimToken() *ScimTokenImage {
 	if v := a.GetPreviousState(); v != nil {
 		return v.ScimTokenImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateServiceAccount() *ServiceAccountImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.ServiceAccountImage
 	}
 	return nil
 }

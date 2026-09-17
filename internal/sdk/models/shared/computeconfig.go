@@ -2228,7 +2228,7 @@ type GoogleCloudConfiguration struct {
 	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
-	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty.
+	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
 	Network *string `json:"network,omitempty"`
 	// Network tags applied to compute instances (VPC firewall-rule targets).
 	NetworkTags []string `json:"networkTags,omitempty"`
@@ -2253,7 +2253,7 @@ type GoogleCloudConfiguration struct {
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
 	// Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
 	Subnetworks []string `json:"subnetworks,omitempty"`
-	// Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork.
+	// Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
 	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
 	WaveEnabled       *bool `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
@@ -3729,7 +3729,14 @@ func CreateComputeConfigUgePlatform(ugePlatform UnivaGridEngineConfiguration) Co
 	}
 }
 
-func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
+func (u *ComputeConfig) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = ComputeConfig{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`

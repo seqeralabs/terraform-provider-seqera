@@ -15,6 +15,7 @@ type ParticipantResponseDto struct {
 	Type          *ParticipantType `json:"type,omitempty"`
 	UserAvatarURL *string          `json:"userAvatarUrl,omitempty"`
 	UserName      *string          `json:"userName,omitempty"`
+	UserType      *UserType        `json:"userType,omitempty"`
 	WspRole       *string          `json:"wspRole,omitempty"`
 }
 
@@ -100,6 +101,13 @@ func (p *ParticipantResponseDto) GetUserName() *string {
 		return nil
 	}
 	return p.UserName
+}
+
+func (p *ParticipantResponseDto) GetUserType() *UserType {
+	if p == nil {
+		return nil
+	}
+	return p.UserType
 }
 
 func (p *ParticipantResponseDto) GetWspRole() *string {

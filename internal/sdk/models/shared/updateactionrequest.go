@@ -3,25 +3,9 @@
 package shared
 
 type UpdateActionRequest struct {
-	Bucket *BucketActionRequest `json:"bucket,omitempty"`
-	Cron   *CronActionRequest   `json:"cron,omitempty"`
 	// Launch payload for `seqera_action` Create / Update endpoints.
 	Launch *ActionLaunchRequest `json:"launch,omitempty"`
 	Name   *string              `json:"name,omitempty"`
-}
-
-func (u *UpdateActionRequest) GetBucket() *BucketActionRequest {
-	if u == nil {
-		return nil
-	}
-	return u.Bucket
-}
-
-func (u *UpdateActionRequest) GetCron() *CronActionRequest {
-	if u == nil {
-		return nil
-	}
-	return u.Cron
 }
 
 func (u *UpdateActionRequest) GetLaunch() *ActionLaunchRequest {
