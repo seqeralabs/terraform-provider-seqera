@@ -10,8 +10,6 @@ type DescribeCredentialsResponse struct {
 	Credentials *CredentialsOutput `json:"credentials,omitempty"`
 	// Server-rendered, read-only provider-side setup snippet (e.g. AWS IAM role trust policy) to paste at the cloud provider. Populated when a renderer is available for the credential type and the installation is configured for it; otherwise omitted.
 	SetupSnippet *string `json:"setupSnippet,omitempty"`
-	// Read-only labelled values the administrator copies into their cloud provider console to finish setting up the credential. Empty when nothing applies to the credential type.
-	SetupValues []CredentialsSetupValue `json:"setupValues,omitempty"`
 }
 
 func (d *DescribeCredentialsResponse) GetCredentials() *CredentialsOutput {
@@ -26,11 +24,4 @@ func (d *DescribeCredentialsResponse) GetSetupSnippet() *string {
 		return nil
 	}
 	return d.SetupSnippet
-}
-
-func (d *DescribeCredentialsResponse) GetSetupValues() []CredentialsSetupValue {
-	if d == nil {
-		return nil
-	}
-	return d.SetupValues
 }
