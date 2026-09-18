@@ -20838,12 +20838,6 @@ components:
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
-        setupValues:
-          description: Read-only labelled values the administrator copies into their cloud provider console to finish setting up the credential. Empty when nothing applies to the credential type.
-          type: array
-          items:
-            $ref: '#/components/schemas/CredentialsSetupValue'
-          readOnly: true
     DescribeDatasetResponse:
       type: object
       properties:
