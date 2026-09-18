@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: abc477f3ffb93b7fee62f38639c82a43
+  docChecksum: 0d20ceb43beffe4c72b491c4d0eb627e
   docVersion: 1.214.0
   speakeasyVersion: 1.797.0
   generationVersion: 2.937.18
@@ -338,6 +338,8 @@ trackedFiles:
   internal/provider/awscredential_resource_sdk.go:
     id: 6dd3171fbbcc
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
+  internal/provider/awscredentialsfederationsetup_data_source.go: {}
+  internal/provider/awscredentialsfederationsetup_data_source_sdk.go: {}
   internal/provider/azurebatchce_resource.go: {}
   internal/provider/azurebatchce_resource_sdk.go: {}
   internal/provider/azurecloudce_resource.go: {}
@@ -412,6 +414,8 @@ trackedFiles:
   internal/provider/gcpbatchce_resource_sdk.go: {}
   internal/provider/gcpcloudce_resource.go: {}
   internal/provider/gcpcloudce_resource_sdk.go: {}
+  internal/provider/gcpcredentialsfederationsetup_data_source.go: {}
+  internal/provider/gcpcredentialsfederationsetup_data_source_sdk.go: {}
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
     pristine_git_object: 511473aefa420f60b1e0fdd850d0d2360c7cd1aa
@@ -636,6 +640,7 @@ trackedFiles:
   internal/provider/types/credential.go:
     id: b7725d71bf9e
     pristine_git_object: 300f141b80661c8d502f9ed91c02826e0e72a0c5
+  internal/provider/types/credentials_setup_value.go: {}
   internal/provider/types/data_link.go:
     id: 2535727cf0f1
     pristine_git_object: 041d41bca83e819fb1c5d58c3c9f42c36c369348
@@ -1145,6 +1150,7 @@ trackedFiles:
   internal/sdk/models/operations/describeawscredentials.go:
     id: b6c81dbe2d53
     pristine_git_object: f875abef9cc844ab77a400da7fbd60143556368e
+  internal/sdk/models/operations/describeawscredentialsfederationsetup.go: {}
   internal/sdk/models/operations/describeazurebatchce.go: {}
   internal/sdk/models/operations/describeazurecloudce.go: {}
   internal/sdk/models/operations/describeazurecloudcredentials.go: {}
@@ -1182,6 +1188,7 @@ trackedFiles:
     pristine_git_object: 7f617c7d7f58db1ce100482e0c053a763d2328e5
   internal/sdk/models/operations/describegcpbatchce.go: {}
   internal/sdk/models/operations/describegcpcloudce.go: {}
+  internal/sdk/models/operations/describegcpcredentialsfederationsetup.go: {}
   internal/sdk/models/operations/describegiteacredentials.go:
     id: 37766e51b23b
     pristine_git_object: eed1e5430625595f6216e7f8ffc2e5f55516fc6f
@@ -1814,6 +1821,7 @@ trackedFiles:
   internal/sdk/models/shared/awscredential.go:
     id: 6a9e44208230
     pristine_git_object: 6937799095194b4fcab39215565cc6a37887fb8b
+  internal/sdk/models/shared/awscredentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/azbatchconfig.go: {}
   internal/sdk/models/shared/azbatchforgeconfig.go:
     id: d13b3a409e31
@@ -2416,6 +2424,7 @@ trackedFiles:
   internal/sdk/models/shared/googlecredential.go:
     id: a084779f2e36
     pristine_git_object: 8fa752a4783e5b119cbcdb50b6dc72cd4c5a29f5
+  internal/sdk/models/shared/googlecredentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/googleimage.go: {}
   internal/sdk/models/shared/googleinstancetype.go: {}
   internal/sdk/models/shared/googleplatformmetainfo.go:
@@ -6662,6 +6671,26 @@ examples:
       parameters:
         query:
           provider: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSCredentialsFederationSetup:
+    speakeasy-default-describe-AWS-credentials-federation-setup:
+      parameters:
+        query:
+          provider: "aws"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGCPCredentialsFederationSetup:
+    speakeasy-default-describe-GCP-credentials-federation-setup:
+      parameters:
+        query:
+          provider: "google"
       responses:
         "200":
           application/json: {}

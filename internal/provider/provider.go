@@ -192,8 +192,10 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 
 func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
+		NewAWSCredentialsFederationSetupDataSource,
 		NewCredentialsDataSource,
 		NewDataLinksDataSource,
+		NewGCPCredentialsFederationSetupDataSource,
 		custom_role_data.NewDataSource,
 		organization_data.NewDataSource,
 		organization_member_data.NewDataSource,

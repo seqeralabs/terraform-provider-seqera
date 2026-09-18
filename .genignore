@@ -112,6 +112,8 @@ examples/resources/seqera_kubernetes_credential/resource.tf
 examples/data-sources/seqera_credentials/data-source.tf
 examples/data-sources/seqera_data_links/data-source.tf
 examples/data-sources/seqera_orgs/data-source.tf
+examples/data-sources/seqera_aws_credentials_federation_setup/data-source.tf
+examples/data-sources/seqera_gcp_credentials_federation_setup/data-source.tf
 
 # Custom resources (manually maintained, outside of Speakeasy generation)
 internal/seqera/
