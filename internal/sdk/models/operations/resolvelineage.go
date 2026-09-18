@@ -10,8 +10,10 @@ import (
 type ResolveLineageRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Nextflow session UUID
+	// Nextflow session UUID — requires runName
 	SessionID *string `queryParam:"style=form,explode=true,name=sessionId"`
+	// Nextflow run name — required with sessionId
+	RunName *string `queryParam:"style=form,explode=true,name=runName"`
 	// Absolute file path
 	FilePath *string `queryParam:"style=form,explode=true,name=filePath"`
 }
@@ -28,6 +30,13 @@ func (r *ResolveLineageRequest) GetSessionID() *string {
 		return nil
 	}
 	return r.SessionID
+}
+
+func (r *ResolveLineageRequest) GetRunName() *string {
+	if r == nil {
+		return nil
+	}
+	return r.RunName
 }
 
 func (r *ResolveLineageRequest) GetFilePath() *string {

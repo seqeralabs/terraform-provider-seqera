@@ -169,6 +169,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		entryName = nil
 	}
+	fusionVersion := new(string)
+	if !r.FusionVersion.IsUnknown() && !r.FusionVersion.IsNull() {
+		*fusionVersion = r.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.HeadJobCpus.IsUnknown() && !r.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.HeadJobCpus.ValueInt32())
@@ -291,6 +297,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds,

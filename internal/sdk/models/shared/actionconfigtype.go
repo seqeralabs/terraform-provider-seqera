@@ -12,8 +12,6 @@ import (
 type ActionConfigTypeType string
 
 const (
-	ActionConfigTypeTypeBucket ActionConfigTypeType = "bucket"
-	ActionConfigTypeTypeCron   ActionConfigTypeType = "cron"
 	ActionConfigTypeTypeGithub ActionConfigTypeType = "github"
 	ActionConfigTypeTypeTower  ActionConfigTypeType = "tower"
 )
@@ -21,34 +19,8 @@ const (
 type ActionConfigType struct {
 	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline" union:"member"`
 	GithubActionConfig      *GithubActionConfig      `queryParam:"inline" union:"member"`
-	BucketActionConfig      *BucketActionConfig      `queryParam:"inline" union:"member"`
-	CronActionConfig        *CronActionConfig        `queryParam:"inline" union:"member"`
 
 	Type ActionConfigTypeType
-}
-
-func CreateActionConfigTypeBucket(bucket BucketActionConfig) ActionConfigType {
-	typ := ActionConfigTypeTypeBucket
-
-	typStr := string(typ)
-	bucket.Discriminator = &typStr
-
-	return ActionConfigType{
-		BucketActionConfig: &bucket,
-		Type:               typ,
-	}
-}
-
-func CreateActionConfigTypeCron(cron CronActionConfig) ActionConfigType {
-	typ := ActionConfigTypeTypeCron
-
-	typStr := string(typ)
-	cron.Discriminator = &typStr
-
-	return ActionConfigType{
-		CronActionConfig: &cron,
-		Type:             typ,
-	}
 }
 
 func CreateActionConfigTypeGithub(github GithubActionConfig) ActionConfigType {
@@ -75,7 +47,14 @@ func CreateActionConfigTypeTower(tower ActionTowerActionConfig) ActionConfigType
 	}
 }
 
-func (u *ActionConfigType) UnmarshalJSON(data []byte) error {
+func (u *ActionConfigType) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = ActionConfigType{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`
@@ -87,24 +66,6 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) error {
 	}
 
 	switch dis.Discriminator {
-	case "bucket":
-		bucketActionConfig := new(BucketActionConfig)
-		if err := utils.UnmarshalJSON(data, &bucketActionConfig, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bucket) type BucketActionConfig within ActionConfigType: %w", string(data), err)
-		}
-
-		u.BucketActionConfig = bucketActionConfig
-		u.Type = ActionConfigTypeTypeBucket
-		return nil
-	case "cron":
-		cronActionConfig := new(CronActionConfig)
-		if err := utils.UnmarshalJSON(data, &cronActionConfig, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == cron) type CronActionConfig within ActionConfigType: %w", string(data), err)
-		}
-
-		u.CronActionConfig = cronActionConfig
-		u.Type = ActionConfigTypeTypeCron
-		return nil
 	case "github":
 		githubActionConfig := new(GithubActionConfig)
 		if err := utils.UnmarshalJSON(data, &githubActionConfig, "", true, nil); err != nil {
@@ -135,14 +96,6 @@ func (u ActionConfigType) MarshalJSON() ([]byte, error) {
 
 	if u.GithubActionConfig != nil {
 		return utils.MarshalJSON(u.GithubActionConfig, "", true)
-	}
-
-	if u.BucketActionConfig != nil {
-		return utils.MarshalJSON(u.BucketActionConfig, "", true)
-	}
-
-	if u.CronActionConfig != nil {
-		return utils.MarshalJSON(u.CronActionConfig, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionConfigType: all fields are null")

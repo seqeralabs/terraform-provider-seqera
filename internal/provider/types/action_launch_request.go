@@ -11,6 +11,7 @@ type ActionLaunchRequest struct {
 	ConfigProfiles      []types.String `tfsdk:"config_profiles"`
 	ConfigText          types.String   `tfsdk:"config_text"`
 	EntryName           types.String   `tfsdk:"entry_name"`
+	FusionVersion       types.String   `tfsdk:"fusion_version"`
 	HeadJobCpus         types.Int32    `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32    `tfsdk:"head_job_memory_mb"`
 	ID                  types.String   `tfsdk:"id"`

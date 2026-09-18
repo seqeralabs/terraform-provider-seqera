@@ -128,8 +128,6 @@ resource "seqera_action" "tower_advanced" {
 
 ### Optional
 
-- `bucket` (Attributes) (see [below for nested schema](#nestedatt--bucket))
-- `cron` (Attributes) (see [below for nested schema](#nestedatt--cron))
 - `source` (String) must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.
 
 ### Read-Only
@@ -156,6 +154,7 @@ Optional:
 - `config_profiles` (List of String) Default: []
 - `config_text` (String) Nextflow configuration text
 - `entry_name` (String) Entry workflow name
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
 - `head_job_cpus` (Number) Head job CPU allocation
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
@@ -189,62 +188,13 @@ Read-Only:
 - `workspace_id` (Number)
 
 
-<a id="nestedatt--bucket"></a>
-### Nested Schema for `bucket`
-
-Optional:
-
-- `data_link_id` (String)
-- `events` (List of String)
-- `filter` (String)
-- `marker_file` (String)
-
-
-<a id="nestedatt--cron"></a>
-### Nested Schema for `cron`
-
-Optional:
-
-- `expression` (String)
-- `preset` (String)
-- `timezone` (String)
-
-
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Read-Only:
 
-- `bucket` (Attributes) (see [below for nested schema](#nestedatt--config--bucket))
-- `cron` (Attributes) (see [below for nested schema](#nestedatt--config--cron))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
 - `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
-
-<a id="nestedatt--config--bucket"></a>
-### Nested Schema for `config.bucket`
-
-Read-Only:
-
-- `bucket_name` (String)
-- `data_link_id` (String)
-- `discriminator` (String)
-- `events` (List of String)
-- `filter` (String)
-- `marker_file` (String)
-- `subscription_arn` (String)
-- `topic_arn` (String)
-
-
-<a id="nestedatt--config--cron"></a>
-### Nested Schema for `config.cron`
-
-Read-Only:
-
-- `discriminator` (String)
-- `expression` (String)
-- `preset` (String)
-- `timezone` (String)
-
 
 <a id="nestedatt--config--github"></a>
 ### Nested Schema for `config.github`

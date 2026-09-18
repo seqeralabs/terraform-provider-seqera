@@ -3,16 +3,47 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
 
+type StopReason string
+
+const (
+	StopReasonCreditsRunOut   StopReason = "CREDITS_RUN_OUT"
+	StopReasonLifespanExpired StopReason = "LIFESPAN_EXPIRED"
+	StopReasonSpotReclamation StopReason = "SPOT_RECLAMATION"
+)
+
+func (e StopReason) ToPointer() *StopReason {
+	return &e
+}
+func (e *StopReason) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CREDITS_RUN_OUT":
+		fallthrough
+	case "LIFESPAN_EXPIRED":
+		fallthrough
+	case "SPOT_RECLAMATION":
+		*e = StopReason(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for StopReason: %v", v)
+	}
+}
+
 type DataStudioStatusInfo struct {
-	CanForceStop *bool                 `json:"canForceStop,omitempty"`
-	LastUpdate   *time.Time            `json:"lastUpdate,omitempty"`
-	Message      *string               `json:"message,omitempty"`
-	Status       *DataStudioStatus     `json:"status,omitempty"`
-	StopReason   *DataStudioStopReason `json:"stopReason,omitempty"`
+	CanForceStop *bool             `json:"canForceStop,omitempty"`
+	LastUpdate   *time.Time        `json:"lastUpdate,omitempty"`
+	Message      *string           `json:"message,omitempty"`
+	Status       *DataStudioStatus `json:"status,omitempty"`
+	StopReason   *StopReason       `json:"stopReason,omitempty"`
 }
 
 func (d DataStudioStatusInfo) MarshalJSON() ([]byte, error) {
@@ -54,7 +85,7 @@ func (d *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
 	return d.Status
 }
 
-func (d *DataStudioStatusInfo) GetStopReason() *DataStudioStopReason {
+func (d *DataStudioStatusInfo) GetStopReason() *StopReason {
 	if d == nil {
 		return nil
 	}

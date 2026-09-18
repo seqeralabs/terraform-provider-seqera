@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 9bb14ada19e5f5890d4dfc2c84b4e5ab
-  docVersion: 1.206.0
-  speakeasyVersion: 1.795.3
-  generationVersion: 2.932.9
+  docChecksum: abc477f3ffb93b7fee62f38639c82a43
+  docVersion: 1.214.0
+  speakeasyVersion: 1.797.0
+  generationVersion: 2.937.18
   releaseVersion: 0.42.0
-  configChecksum: d46f5e8aa34499dceb5298898535e967
+  configChecksum: 555ad425600f05180697d8778c7d72dd
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.13
+    core: 3.47.16
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
@@ -26,7 +26,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
     nullables: 0.0.0
-    retries: 2.81.5
+    retries: 2.81.6
     transformJq: 0.0.1
     unions: 2.82.18
 trackedFiles:
@@ -619,8 +619,6 @@ trackedFiles:
   internal/provider/types/bit_bucket_credentials.go:
     id: c9a20017c822
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
-  internal/provider/types/bucket_action_config.go: {}
-  internal/provider/types/bucket_action_request.go: {}
   internal/provider/types/compute_config.go: {}
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
@@ -638,8 +636,6 @@ trackedFiles:
   internal/provider/types/credential.go:
     id: b7725d71bf9e
     pristine_git_object: 300f141b80661c8d502f9ed91c02826e0e72a0c5
-  internal/provider/types/cron_action_config.go: {}
-  internal/provider/types/cron_action_request.go: {}
   internal/provider/types/data_link.go:
     id: 2535727cf0f1
     pristine_git_object: 041d41bca83e819fb1c5d58c3c9f42c36c369348
@@ -759,6 +755,7 @@ trackedFiles:
   internal/sdk/avatars.go:
     id: 295feb914135
     pristine_git_object: eeb2138186ead7a043a4156ca999876ae1ef98ad
+  internal/sdk/compatibility.go: {}
   internal/sdk/computeenvs.go:
     id: 966f951685a1
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
@@ -863,6 +860,8 @@ trackedFiles:
   internal/sdk/models/operations/cancelworkflow.go:
     id: 3122cc8c6341
     pristine_git_object: 7fb7ee717a5f510ca30338e8858159e10ffecb3d
+  internal/sdk/models/operations/catalogcomponentversions.go: {}
+  internal/sdk/models/operations/catalogversions.go: {}
   internal/sdk/models/operations/createaction.go:
     id: 2870d06facbf
     pristine_git_object: 1540dad80f38e0ea55c7f11e454cfbc0903fefcd
@@ -1168,6 +1167,7 @@ trackedFiles:
   internal/sdk/models/operations/describecredentials.go:
     id: 48bfbf511a8b
     pristine_git_object: 4a5f3a19436a7e6495ce78f0e9917466d323f699
+  internal/sdk/models/operations/describecredentialssetup.go: {}
   internal/sdk/models/operations/describedatalink.go:
     id: 5624756d312b
     pristine_git_object: 74fa8d865241dcdb7d5c85b47f019ed2f4f12d2f
@@ -1522,7 +1522,6 @@ trackedFiles:
   internal/sdk/models/operations/removelabelsfromworkflows.go:
     id: 0881d3fbb54c
     pristine_git_object: 2821276f9c80af8b6de0127c78c1eefccab887d7
-  internal/sdk/models/operations/resolvecronexpression.go: {}
   internal/sdk/models/operations/resolvelineage.go: {}
   internal/sdk/models/operations/revokeorganizationscimtoken.go: {}
   internal/sdk/models/operations/rotateorganizationscimtoken.go: {}
@@ -1837,9 +1836,10 @@ trackedFiles:
   internal/sdk/models/shared/bucket.go:
     id: c799c619a5f3
     pristine_git_object: 440bbb7a8e98b8cd037100e2c5efb53adbb50cb3
-  internal/sdk/models/shared/bucketactionconfig.go: {}
-  internal/sdk/models/shared/bucketactionevent.go: {}
-  internal/sdk/models/shared/bucketactionrequest.go: {}
+  internal/sdk/models/shared/catalogartifact.go: {}
+  internal/sdk/models/shared/catalogedgeref.go: {}
+  internal/sdk/models/shared/catalogversion.go: {}
+  internal/sdk/models/shared/catalogversionsresponse.go: {}
   internal/sdk/models/shared/changedatasetvisibilityrequest.go:
     id: 32a641528840
     pristine_git_object: ae25e05275b2d663fd39d3ae8c4c5eea0a4ab9c3
@@ -2089,12 +2089,11 @@ trackedFiles:
   internal/sdk/models/shared/credentialsinput.go:
     id: a9735abcd6a9
     pristine_git_object: b8ae95231871f580a17018cea2c1bd0795eccf9c
+  internal/sdk/models/shared/credentialssetupvalue.go: {}
+  internal/sdk/models/shared/credentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/credentialsstatus.go: {}
   internal/sdk/models/shared/creditinfoimage.go: {}
   internal/sdk/models/shared/creditpurchaseimage.go: {}
-  internal/sdk/models/shared/cronactionconfig.go: {}
-  internal/sdk/models/shared/cronactionevent.go: {}
-  internal/sdk/models/shared/cronactionrequest.go: {}
   internal/sdk/models/shared/customroleimage.go: {}
   internal/sdk/models/shared/datalinkcontentresponse.go:
     id: 33df464c7812
@@ -2215,9 +2214,6 @@ trackedFiles:
   internal/sdk/models/shared/datastudiostatusinfo.go:
     id: 026e85d14925
     pristine_git_object: 3cfada19dde6016b9d18ddb2bd6ac55625a1141c
-  internal/sdk/models/shared/datastudiostopreason.go:
-    id: 9ccc5de4e821
-    pristine_git_object: 975d25fae2f55a3a1aa94d010444489d77c914bb
   internal/sdk/models/shared/datastudiostopresponse.go:
     id: 479eccdf6c23
     pristine_git_object: a1f288cd99b5142ec5671be21b90d9dc6518ecae
@@ -2726,6 +2722,8 @@ trackedFiles:
   internal/sdk/models/shared/seqeracomputecloudinstancetypesize.go:
     id: 74042e18e0e1
     pristine_git_object: dbc4620b157442c58c43439125bc2c7392e8c935
+  internal/sdk/models/shared/servedfrom.go: {}
+  internal/sdk/models/shared/serviceaccountimage.go: {}
   internal/sdk/models/shared/serviceinfo.go:
     id: 18e2052471c9
     pristine_git_object: 0008df58bab87596da85d9faec7d40db61fdb705
@@ -2919,6 +2917,7 @@ trackedFiles:
   internal/sdk/models/shared/userroleimage.go: {}
   internal/sdk/models/shared/usersshpublickeydto.go: {}
   internal/sdk/models/shared/usersshpublickeyimage.go: {}
+  internal/sdk/models/shared/usertype.go: {}
   internal/sdk/models/shared/userworkspacepermissiondto.go: {}
   internal/sdk/models/shared/userworkspaceroledto.go: {}
   internal/sdk/models/shared/userworkspacerolesdto.go: {}
@@ -4366,6 +4365,8 @@ examples:
         "200":
           application/json: "0xC91EdD673c"
           application/octet-stream: "0xC91EdD673c"
+          text/csv: "0xC91EdD673c"
+          text/tab-separated-values: "0xF94aCdbE55"
         "400":
           application/json: {"message": "<value>"}
   ListDatasetVersionsV2:
@@ -6642,5 +6643,28 @@ examples:
         "200":
           application/json: {}
         "404":
+          application/json: {"message": "<value>"}
+  CatalogComponentVersions:
+    speakeasy-default-catalog-component-versions:
+      parameters:
+        path:
+          key: "<key>"
+      responses:
+        "200":
+          application/json: {}
+  CatalogVersions:
+    speakeasy-default-catalog-versions:
+      responses:
+        "200":
+          application/json: {}
+  DescribeCredentialsSetup:
+    speakeasy-default-describe-credentials-setup:
+      parameters:
+        query:
+          provider: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

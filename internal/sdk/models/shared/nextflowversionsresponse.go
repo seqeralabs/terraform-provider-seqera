@@ -3,10 +3,18 @@
 package shared
 
 type NextflowVersionsResponse struct {
+	CatalogEnabled                        *bool                            `json:"catalogEnabled,omitempty"`
 	NextflowFeatureMinVersions            map[string]string                `json:"nextflowFeatureMinVersions,omitempty"`
 	NextflowVersionPolicyByComputeEnvType map[string]NextflowVersionPolicy `json:"nextflowVersionPolicyByComputeEnvType,omitempty"`
 	NextflowVersions                      []NextflowVersion                `json:"nextflowVersions,omitempty"`
 	NextflowVersionSelectionEnabled       *bool                            `json:"nextflowVersionSelectionEnabled,omitempty"`
+}
+
+func (n *NextflowVersionsResponse) GetCatalogEnabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.CatalogEnabled
 }
 
 func (n *NextflowVersionsResponse) GetNextflowFeatureMinVersions() map[string]string {
