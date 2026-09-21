@@ -57,7 +57,11 @@ type DownloadDatasetV2Response struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	Bytes []byte
+	TwoHundredApplicationOctetStreamBytes []byte
+	// OK
+	TwoHundredTextCsvBytes []byte
+	// OK
+	TwoHundredTextTabSeparatedValuesBytes []byte
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -83,11 +87,25 @@ func (d *DownloadDatasetV2Response) GetRawResponse() *http.Response {
 	return d.RawResponse
 }
 
-func (d *DownloadDatasetV2Response) GetBytes() []byte {
+func (d *DownloadDatasetV2Response) GetTwoHundredApplicationOctetStreamBytes() []byte {
 	if d == nil {
 		return nil
 	}
-	return d.Bytes
+	return d.TwoHundredApplicationOctetStreamBytes
+}
+
+func (d *DownloadDatasetV2Response) GetTwoHundredTextCsvBytes() []byte {
+	if d == nil {
+		return nil
+	}
+	return d.TwoHundredTextCsvBytes
+}
+
+func (d *DownloadDatasetV2Response) GetTwoHundredTextTabSeparatedValuesBytes() []byte {
+	if d == nil {
+		return nil
+	}
+	return d.TwoHundredTextTabSeparatedValuesBytes
 }
 
 func (d *DownloadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {

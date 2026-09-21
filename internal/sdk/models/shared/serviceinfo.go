@@ -43,37 +43,39 @@ func (n *Navbar) GetMenus() []NavbarConfigNavbarMenu {
 type ServiceInfo struct {
 	AllowInstanceCredentials *bool `json:"allowInstanceCredentials,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AllowLocalRepos              *bool      `json:"allowLocalRepos,omitempty"`
-	AllowNextflowCliLogs         *bool      `json:"allowNextflowCliLogs,omitempty"`
-	AllowSchedRoleCredentials    *bool      `json:"allowSchedRoleCredentials,omitempty"`
-	Analytics                    *Analytics `json:"analytics,omitempty"`
-	APIVersion                   *string    `json:"apiVersion,omitempty"`
-	AuthTypes                    []string   `json:"authTypes,omitempty"`
-	CommitID                     *string    `json:"commitId,omitempty"`
-	ContactEmail                 *string    `json:"contactEmail,omitempty"`
-	ContentMaxFileSize           *int64     `json:"contentMaxFileSize,omitempty"`
-	ContentURL                   *string    `json:"contentUrl,omitempty"`
-	CreditPurchasesEnabled       *bool      `json:"creditPurchasesEnabled,omitempty"`
-	EvalWorkspaceIds             []int64    `json:"evalWorkspaceIds,omitempty"`
-	ForgePrefix                  *string    `json:"forgePrefix,omitempty"`
-	GroundswellAllowedWorkspaces []int64    `json:"groundswellAllowedWorkspaces,omitempty"`
-	GroundswellEnabled           *bool      `json:"groundswellEnabled,omitempty"`
-	HeartbeatInterval            *int       `json:"heartbeatInterval,omitempty"`
-	LandingURL                   *string    `json:"landingUrl,omitempty"`
-	LaunchConfigTextMaxSize      *int       `json:"launchConfigTextMaxSize,omitempty"`
-	LaunchParamsTextMaxSize      *int       `json:"launchParamsTextMaxSize,omitempty"`
-	LlmEnabled                   *bool      `json:"llmEnabled,omitempty"`
-	LoginPath                    *string    `json:"loginPath,omitempty"`
-	LogoutURL                    *string    `json:"logoutUrl,omitempty"`
-	Navbar                       *Navbar    `json:"navbar,omitempty"`
-	SeqeraAgentBackendURL        *string    `json:"seqeraAgentBackendUrl,omitempty"`
-	SeqeraAiBaseURL              *string    `json:"seqeraAiBaseUrl,omitempty"`
-	SeqeraCloud                  *bool      `json:"seqeraCloud,omitempty"`
-	SeqeraComputeEnabled         *bool      `json:"seqeraComputeEnabled,omitempty"`
-	TermsOfUseURL                *string    `json:"termsOfUseUrl,omitempty"`
-	UserWorkspaceEnabled         *bool      `json:"userWorkspaceEnabled,omitempty"`
-	Version                      *string    `json:"version,omitempty"`
-	WaveEnabled                  *bool      `json:"waveEnabled,omitempty"`
+	AllowLocalRepos           *bool      `json:"allowLocalRepos,omitempty"`
+	AllowNextflowCliLogs      *bool      `json:"allowNextflowCliLogs,omitempty"`
+	AllowSchedRoleCredentials *bool      `json:"allowSchedRoleCredentials,omitempty"`
+	Analytics                 *Analytics `json:"analytics,omitempty"`
+	APIVersion                *string    `json:"apiVersion,omitempty"`
+	AuthTypes                 []string   `json:"authTypes,omitempty"`
+	CommitID                  *string    `json:"commitId,omitempty"`
+	ContactEmail              *string    `json:"contactEmail,omitempty"`
+	ContentMaxFileSize        *int64     `json:"contentMaxFileSize,omitempty"`
+	ContentURL                *string    `json:"contentUrl,omitempty"`
+	CreditPurchasesEnabled    *bool      `json:"creditPurchasesEnabled,omitempty"`
+	// Warning window in minutes before a Data Studio session auto-stops, during which the Extend Lifespan option is shown
+	DataStudioApproachingExpirationThresholdMinutes *int    `json:"dataStudioApproachingExpirationThresholdMinutes,omitempty"`
+	EvalWorkspaceIds                                []int64 `json:"evalWorkspaceIds,omitempty"`
+	ForgePrefix                                     *string `json:"forgePrefix,omitempty"`
+	GroundswellAllowedWorkspaces                    []int64 `json:"groundswellAllowedWorkspaces,omitempty"`
+	GroundswellEnabled                              *bool   `json:"groundswellEnabled,omitempty"`
+	HeartbeatInterval                               *int    `json:"heartbeatInterval,omitempty"`
+	LandingURL                                      *string `json:"landingUrl,omitempty"`
+	LaunchConfigTextMaxSize                         *int    `json:"launchConfigTextMaxSize,omitempty"`
+	LaunchParamsTextMaxSize                         *int    `json:"launchParamsTextMaxSize,omitempty"`
+	LlmEnabled                                      *bool   `json:"llmEnabled,omitempty"`
+	LoginPath                                       *string `json:"loginPath,omitempty"`
+	LogoutURL                                       *string `json:"logoutUrl,omitempty"`
+	Navbar                                          *Navbar `json:"navbar,omitempty"`
+	SeqeraAgentBackendURL                           *string `json:"seqeraAgentBackendUrl,omitempty"`
+	SeqeraAiBaseURL                                 *string `json:"seqeraAiBaseUrl,omitempty"`
+	SeqeraCloud                                     *bool   `json:"seqeraCloud,omitempty"`
+	SeqeraComputeEnabled                            *bool   `json:"seqeraComputeEnabled,omitempty"`
+	TermsOfUseURL                                   *string `json:"termsOfUseUrl,omitempty"`
+	UserWorkspaceEnabled                            *bool   `json:"userWorkspaceEnabled,omitempty"`
+	Version                                         *string `json:"version,omitempty"`
+	WaveEnabled                                     *bool   `json:"waveEnabled,omitempty"`
 }
 
 func (s *ServiceInfo) GetAllowInstanceCredentials() *bool {
@@ -158,6 +160,13 @@ func (s *ServiceInfo) GetCreditPurchasesEnabled() *bool {
 		return nil
 	}
 	return s.CreditPurchasesEnabled
+}
+
+func (s *ServiceInfo) GetDataStudioApproachingExpirationThresholdMinutes() *int {
+	if s == nil {
+		return nil
+	}
+	return s.DataStudioApproachingExpirationThresholdMinutes
 }
 
 func (s *ServiceInfo) GetEvalWorkspaceIds() []int64 {

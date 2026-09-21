@@ -118,6 +118,8 @@ must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github"
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
+- `label` (String)
+- `value` (String)
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

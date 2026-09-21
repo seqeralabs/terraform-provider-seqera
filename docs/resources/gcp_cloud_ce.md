@@ -142,7 +142,7 @@ If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
-- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty. Requires replacement if changed.
+- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
@@ -155,7 +155,7 @@ Requires replacement if changed.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
 - `subnetworks` (List of String) Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
-- `use_private_address` (Boolean) Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
+- `use_private_address` (Boolean) Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
 - `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
 If not specified, the platform selects a zone automatically.
 Requires replacement if changed.

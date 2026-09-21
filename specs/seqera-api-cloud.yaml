@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.206.0
+  version: 1.214.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -123,37 +123,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
-      security:
-        - BearerAuth: []
-      tags:
-        - actions
-  /actions/cron/resolve:
-    post:
-      operationId: ResolveCronExpression
-      summary: Resolve a schedule description to a cron expression
-      parameters:
-        - name: workspaceId
-          in: query
-          schema:
-            type: integer
-            format: int64
-            nullable: true
-          explode: false
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              additionalProperties:
-                type: string
-      responses:
-        '200':
-          description: ResolveCronExpression 200 response
-          content:
-            application/json:
-              schema:
-                type: object
       security:
         - BearerAuth: []
       tags:
@@ -775,6 +744,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '429':
+          description: Rate limit or credit budget exhausted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1156,6 +1131,46 @@ paths:
         - BearerAuth: []
       tags:
         - avatars
+  /catalog/components/{key}/versions:
+    get:
+      operationId: CatalogComponentVersions
+      summary: Catalog versions for a single component
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
+  /catalog/versions:
+    get:
+      operationId: CatalogVersions
+      summary: Component compatibility catalog versions
+      description: Returns the catalog versions from the local state document (unconstrained in PF-1), with servedFrom provenance. Optionally narrowed to a single component.
+      parameters:
+        - name: component
+          in: query
+          schema:
+            type: string
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
   /compute-envs:
     get:
       operationId: ListComputeEnvs
@@ -1653,6 +1668,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - credentials
+  /credentials/federation-setup:
+    get:
+      operationId: DescribeCredentialsSetup
+      summary: Describe credential provider setup values
+      description: "Returns the labelled values an administrator copies into their cloud provider console to set up a credential of the given provider — for AWS OIDC workload identity: this installation's public address and the subject claims Platform mints. Scope-level rather than per-credential, because these values are needed before a credential can be created. Append `?workspaceId` for a workspace context."
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier, e.g. `aws`
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsSetupValuesResponse'
         '400':
           description: Bad request
           content:
@@ -3572,6 +3624,14 @@ paths:
               schema:
                 type: string
                 format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
         '307':
           description: Temporary redirect to linked source URL
         '400':
@@ -4615,7 +4675,7 @@ paths:
     get:
       operationId: ResolveLineage
       summary: Resolve a platform identifier to a lineage LID
-      description: Resolves a Nextflow session ID or file path to a lineage LID. Exactly one of sessionId or filePath must be provided.
+      description: "Resolves a Nextflow run or file path to a lineage LID. Exactly one of sessionId or filePath must be provided. A run is identified by sessionId *and* runName: a resumed run inherits the parent run's sessionId but produces its own lineage record."
       parameters:
         - name: workspaceId
           in: query
@@ -4626,7 +4686,12 @@ paths:
             format: int64
         - name: sessionId
           in: query
-          description: Nextflow session UUID
+          description: Nextflow session UUID — requires runName
+          schema:
+            type: string
+        - name: runName
+          in: query
+          description: Nextflow run name — required with sessionId
           schema:
             type: string
         - name: filePath
@@ -4642,7 +4707,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LineageResolveResponse'
         '400':
-          description: Bad request — exactly one of sessionId or filePath must be provided
+          description: Bad request — exactly one of sessionId or filePath must be provided, and sessionId requires runName
         '403':
           description: Operation not allowed
         '404':
@@ -4659,7 +4724,8 @@ paths:
         Cross-workspace lineage search. The `q` DSL uses a simple set of
                                     conventions: whitespace = AND, a comma inside a qualifier = OR, and
                                     repeating a qualifier = AND. Filter the lineage index by `type:`,
-                                    `workflow:`, `task:`, `label:`, and/or free-text tokens.
+                                    `workflow:`, `task:`, `pipeline:`, `pipelineId:`, `label:`, and/or
+                                    free-text tokens.
 
                                     Workspace scope is expressed inside the DSL: `workspace:org/name`
                                     or the numeric `workspaceId:` alias. Omit both to search every
@@ -11002,6 +11068,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -11015,15 +11082,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -11073,16 +11143,12 @@ components:
           type: string
       discriminator:
         mapping:
-          bucket: '#/components/schemas/BucketActionConfig'
-          cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/Action.TowerActionConfig'
         - $ref: '#/components/schemas/GithubActionConfig'
-        - $ref: '#/components/schemas/BucketActionConfig'
-        - $ref: '#/components/schemas/CronActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -11093,16 +11159,12 @@ components:
           format: date-time
       discriminator:
         mapping:
-          bucket: '#/components/schemas/BucketActionEvent'
-          cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/GithubActionEvent'
         - $ref: '#/components/schemas/Action.TowerActionEvent'
-        - $ref: '#/components/schemas/BucketActionEvent'
-        - $ref: '#/components/schemas/CronActionEvent'
     Action.Source:
       type: string
       enum:
@@ -11274,6 +11336,9 @@ components:
         createdBy:
           type: integer
           format: int64
+        createdByUserName:
+          type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -11317,10 +11382,6 @@ components:
     AgentRunDbDto:
       type: object
       properties:
-        actorId:
-          type: integer
-          format: int64
-          nullable: true
         agentRunName:
           type: string
           nullable: true
@@ -11332,6 +11393,10 @@ components:
         lastUpdated:
           type: string
           format: date-time
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
         sessionId:
           type: string
           nullable: true
@@ -11400,6 +11465,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -11413,15 +11479,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -11496,9 +11565,11 @@ components:
       enum:
         - user
         - system
+        - service_account
       x-enum-varnames:
         - user
         - system
+        - service_account
     AuditEventType:
       type: string
       enum:
@@ -11617,6 +11688,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -11810,6 +11884,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -11891,6 +11968,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
       x-enum-varnames:
         - user
         - pipeline
@@ -11927,6 +12005,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
     AuditLogTargetState:
       type: object
       properties:
@@ -11964,6 +12043,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -12001,6 +12081,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -12040,6 +12121,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -12077,6 +12159,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -12213,13 +12296,14 @@ components:
           type: string
         computeJobRole:
           type: string
+          nullable: true
         computeQueue:
           type: string
         deletedResources:
           type: array
           items:
             additionalProperties:
-              type: object
+              type: string
             type: object
           readOnly: true
         discriminator:
@@ -12227,12 +12311,15 @@ components:
           type: string
         dragenInstanceType:
           type: string
+          nullable: true
         dragenQueue:
           type: string
+          nullable: true
         environment:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         executionRole:
           type: string
         forge:
@@ -12241,37 +12328,47 @@ components:
           type: array
           items:
             additionalProperties:
-              type: object
+              type: string
             type: object
         fusion2Enabled:
           type: boolean
+          nullable: true
         fusionSnapshots:
           type: boolean
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
         headJobRole:
           type: string
+          nullable: true
         headQueue:
           type: string
         logGroup:
           type: string
+          nullable: true
         lustreId:
           type: string
           deprecated: true
         nextflowConfig:
           type: string
+          nullable: true
         nvnmeStorageEnabled:
           type: boolean
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         secretsKmsKeyId:
@@ -12286,6 +12383,7 @@ components:
             type: string
         waveEnabled:
           type: boolean
+          nullable: true
         workDir:
           description: Compute environment working directory
           type: string
@@ -12379,6 +12477,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forgedResources:
           type: array
           items:
@@ -12399,12 +12498,15 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         schedConfig:
@@ -12532,6 +12634,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forge:
           $ref: '#/components/schemas/AzBatchForgeConfig'
         fusion2Enabled:
@@ -12569,12 +12672,15 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         subnetId:
@@ -12698,6 +12804,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forgedResources:
           type: array
           items:
@@ -12718,12 +12825,15 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         resourceGroup:
@@ -12887,59 +12997,62 @@ components:
       properties:
         path:
           type: string
-    BucketActionConfig:
+    CatalogArtifact:
       type: object
       properties:
-        bucketName:
+        ref:
           type: string
-        dataLinkId:
+        selectors:
+          type: object
+          additionalProperties:
+            type: string
+    CatalogEdgeRef:
+      type: object
+      properties:
+        component:
           type: string
-        discriminator:
+        expr:
           type: string
-        events:
+    CatalogVersion:
+      type: object
+      properties:
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogArtifact'
+        compatibleWith:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogEdgeRef'
+        component:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+        origin:
+          type: string
+        variants:
           type: array
           items:
             type: string
-        filter:
+        version:
           type: string
-        markerFile:
-          type: string
-        subscriptionArn:
-          type: string
-        topicArn:
-          type: string
-      title: Bucket action config
-    BucketActionEvent:
+        yanked:
+          type: boolean
+    CatalogVersionsResponse:
       type: object
       properties:
-        bucketName:
+        defaultVersion:
           type: string
-        discriminator:
+        generatedAt:
           type: string
-        eventName:
-          type: string
-        provider:
-          type: string
-        recordCount:
-          type: integer
-          format: int32
-        timestamp:
-          type: string
-          format: date-time
-      title: Bucket action event
-    BucketActionRequest:
-      type: object
-      properties:
-        dataLinkId:
-          type: string
-        events:
+        servedFrom:
+          $ref: '#/components/schemas/ServedFrom'
+        versions:
           type: array
           items:
-            type: string
-        filter:
-          type: string
-        markerFile:
-          type: string
+            $ref: '#/components/schemas/CatalogVersion'
     ChangeDatasetVisibilityRequest:
       type: object
       properties:
@@ -12985,14 +13098,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         workDir:
           description: Compute environment working directory
           type: string
@@ -13139,6 +13256,7 @@ components:
           format: date-time
         deleted:
           type: boolean
+          nullable: true
         description:
           type: string
         fusionMetricsCollectionEnabled:
@@ -13149,6 +13267,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -13157,8 +13276,10 @@ components:
           format: date-time
         managedIdentityId:
           type: string
+          nullable: true
         message:
           type: string
+          nullable: true
         name:
           type: string
         orgId:
@@ -13371,10 +13492,6 @@ components:
     CreateActionRequest:
       type: object
       properties:
-        bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
-        cron:
-          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -13791,6 +13908,21 @@ components:
       required:
         - auditImageType
       title: Credentials audit image
+    CredentialsSetupValue:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    CredentialsSetupValuesResponse:
+      type: object
+      properties:
+        setupValues:
+          description: Labelled values to copy into the cloud provider console. Empty when the provider has nothing to surface.
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
     CreditInfoImage:
       type: object
       properties:
@@ -13823,41 +13955,6 @@ components:
       required:
         - auditImageType
       title: Credit purchase audit image
-    CronActionConfig:
-      type: object
-      properties:
-        discriminator:
-          type: string
-        expression:
-          type: string
-        preset:
-          type: string
-        timezone:
-          type: string
-      title: Cron action config
-    CronActionEvent:
-      type: object
-      properties:
-        discriminator:
-          type: string
-        scheduledTime:
-          type: string
-          format: date-time
-        timestamp:
-          type: string
-          format: date-time
-        workflowId:
-          type: string
-      title: Cron action event
-    CronActionRequest:
-      type: object
-      properties:
-        expression:
-          type: string
-        preset:
-          type: string
-        timezone:
-          type: string
     CustomRoleImage:
       type: object
       properties:
@@ -14221,6 +14318,7 @@ components:
         condaEnvironment:
           type: string
           maxLength: 2048
+          nullable: true
         cpu:
           type: integer
           format: int32
@@ -14335,6 +14433,7 @@ components:
           nullable: true
         baseImage:
           type: string
+          nullable: true
         computeEnv:
           $ref: '#/components/schemas/DataStudioComputeEnvDto'
         configuration:
@@ -14359,6 +14458,7 @@ components:
         lastStarted:
           type: string
           format: date-time
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -14369,11 +14469,14 @@ components:
         name:
           type: string
         parentCheckpoint:
-          $ref: '#/components/schemas/DataStudioDto.ParentCheckpoint'
+          allOf:
+            - $ref: '#/components/schemas/DataStudioDto.ParentCheckpoint'
+          nullable: true
         progress:
           type: array
           items:
             $ref: '#/components/schemas/DataStudioProgressStep'
+          nullable: true
         remoteConfig:
           $ref: '#/components/schemas/StudioRemoteConfiguration'
         sessionId:
@@ -14394,6 +14497,7 @@ components:
           $ref: '#/components/schemas/UserInfo'
         waveBuildUrl:
           type: string
+          nullable: true
         workspaceId:
           type: integer
           format: int64
@@ -14629,7 +14733,9 @@ components:
         status:
           $ref: '#/components/schemas/DataStudioStatus'
         stopReason:
-          $ref: '#/components/schemas/DataStudioStopReason'
+          allOf:
+            - $ref: '#/components/schemas/DataStudioStopReason'
+          nullable: true
     DataStudioStopReason:
       type: string
       enum:
@@ -15019,6 +15125,12 @@ components:
           type: string
           nullable: true
           readOnly: true
+        setupValues:
+          description: Read-only labelled values the administrator copies into their cloud provider console to finish setting up the credential. Empty when nothing applies to the credential type.
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+          readOnly: true
     DescribeDatasetResponse:
       type: object
       properties:
@@ -15182,6 +15294,11 @@ components:
     DisplayData:
       type: object
       properties:
+        pipelineId:
+          type: integer
+          format: int64
+        pipelineName:
+          type: string
         processName:
           type: string
         runName:
@@ -15213,6 +15330,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         headJobCpus:
@@ -15229,14 +15347,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: AWS region
           type: string
@@ -15335,47 +15456,64 @@ components:
           type: boolean
         dragenAmiId:
           type: string
+          nullable: true
         dragenEnabled:
           type: boolean
+          nullable: true
         dragenInstanceType:
           type: string
+          nullable: true
         ebsAutoScale:
           type: boolean
+          nullable: true
         ebsBlockSize:
           type: integer
           format: int32
+          nullable: true
         ebsBootSize:
           type: integer
           format: int32
+          nullable: true
         ec2KeyPair:
           type: string
+          nullable: true
         ecsConfig:
           type: string
+          nullable: true
         efsCreate:
           type: boolean
+          nullable: true
         efsId:
           type: string
+          nullable: true
         efsMount:
           type: string
+          nullable: true
         fargateHeadEnabled:
           type: boolean
         fsxMount:
           type: string
+          nullable: true
         fsxName:
           type: string
+          nullable: true
         fsxSize:
           type: integer
           format: int32
+          nullable: true
         fusionEnabled:
           type: boolean
+          nullable: true
         gpuEnabled:
           type: boolean
         imageId:
           type: string
+          nullable: true
         instanceTypes:
           type: array
           items:
             type: string
+          nullable: true
         maxCpus:
           type: integer
           format: int32
@@ -15538,6 +15676,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         headJobCpus:
@@ -15554,14 +15693,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: The GKE cluster region - or - zone
           type: string
@@ -15624,6 +15766,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         fusionSnapshots:
@@ -15652,6 +15795,7 @@ components:
             type: string
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
         nfsTarget:
@@ -15659,9 +15803,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         projectId:
           type: string
         serviceAccount:
@@ -15709,6 +15855,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forgedResources:
           type: array
           items:
@@ -15724,7 +15871,7 @@ components:
         instanceType:
           type: string
         network:
-          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty.
+          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
           type: string
           nullable: true
         networkTags:
@@ -15735,12 +15882,15 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         projectId:
           type: string
         region:
@@ -15758,7 +15908,7 @@ components:
             type: string
           nullable: true
         usePrivateAddress:
-          description: Launch instances without an external IP. Requires Cloud NAT + Private Google Access on the subnetwork.
+          description: Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
           type: boolean
           nullable: true
         waveEnabled:
@@ -15847,6 +15997,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -15861,6 +16012,7 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
         nfsTarget:
@@ -15868,11 +16020,13 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preemptible:
           type: boolean
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         projectId:
           type: string
         region:
@@ -16118,6 +16272,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -16132,14 +16287,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         server:
           type: string
         servicePodSpec:
@@ -16289,6 +16447,10 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -16533,6 +16695,8 @@ components:
           $ref: '#/components/schemas/Action.Status'
         usageCmd:
           type: string
+        user:
+          $ref: '#/components/schemas/UserInfo'
     ListAgentRunsResponse:
       type: object
       properties:
@@ -16928,16 +17092,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
         schedEnabled:
@@ -17024,6 +17192,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -17037,6 +17206,7 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         perJobMemLimit:
           type: boolean
         perTaskReserve:
@@ -17047,9 +17217,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         unitForLimits:
@@ -17153,6 +17325,8 @@ components:
           format: int64
         userName:
           type: string
+        userType:
+          $ref: '#/components/schemas/UserType'
     MemberImage:
       type: object
       properties:
@@ -17181,6 +17355,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -17194,15 +17369,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -17261,6 +17439,8 @@ components:
     NextflowVersionsResponse:
       type: object
       properties:
+        catalogEnabled:
+          type: boolean
         nextflowFeatureMinVersions:
           type: object
           additionalProperties:
@@ -17560,6 +17740,8 @@ components:
           type: string
         userName:
           type: string
+        userType:
+          $ref: '#/components/schemas/UserType'
         wspRole:
           type: string
     ParticipantType:
@@ -18365,18 +18547,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:
             - $ref: '#/components/schemas/SeqeraComputeCloudInstanceTypeSize'
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         workDir:
@@ -18462,6 +18648,29 @@ components:
           type: string
           writeOnly: true
       title: Seqera Compute credentials
+    ServedFrom:
+      type: string
+      enum:
+        - EMBEDDED
+        - STATIC
+        - LICMAN
+        - CACHE
+      x-type: String
+    ServiceAccountImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Service account audit image
     ServiceInfo:
       type: object
       properties:
@@ -18495,6 +18704,10 @@ components:
           type: string
         creditPurchasesEnabled:
           type: boolean
+        dataStudioApproachingExpirationThresholdMinutes:
+          description: Warning window in minutes before a Data Studio session auto-stops, during which the Extend Lifespan option is shown
+          type: integer
+          format: int32
         evalWorkspaceIds:
           type: array
           items:
@@ -18569,6 +18782,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -18582,15 +18796,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -19217,6 +19434,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -19230,15 +19448,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -19250,10 +19471,6 @@ components:
     UpdateActionRequest:
       type: object
       properties:
-        bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
-        cron:
-          $ref: '#/components/schemas/CronActionRequest'
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
@@ -19655,6 +19872,11 @@ components:
       required:
         - auditImageType
       title: SSH key audit image
+    UserType:
+      type: string
+      enum:
+        - HUMAN
+        - SERVICE_ACCOUNT
     UserWorkspacePermissionDto:
       type: object
       properties:
@@ -20286,6 +20508,10 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -20376,6 +20602,10 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionVersion:
+          description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -20656,6 +20886,9 @@ components:
               nullable: true
             fusion:
               $ref: '#/components/schemas/WfFusionMeta'
+            fusionVersion:
+              type: string
+              nullable: true
             logFile:
               type: string
             nextflowConfig:
@@ -20838,6 +21071,7 @@ components:
         - launch
         - connect
         - view
+        - project
       x-enum-varnames:
         - owner
         - admin
@@ -20845,6 +21079,7 @@ components:
         - launch
         - connect
         - view
+        - project
     WspRoleSourceType:
       type: string
       enum:

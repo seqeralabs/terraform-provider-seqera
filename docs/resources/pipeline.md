@@ -122,6 +122,7 @@ Optional:
 - `config_profiles` (List of String) Default: []
 - `config_text` (String) Nextflow configuration text
 - `entry_name` (String) Entry workflow name
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
 - `head_job_cpus` (Number) Head job CPU allocation
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)

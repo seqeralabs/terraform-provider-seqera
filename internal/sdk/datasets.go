@@ -3063,7 +3063,7 @@ func (s *Datasets) DownloadDatasetV2(ctx context.Context, request operations.Dow
 	if o.AcceptHeaderOverride != nil {
 		req.Header.Set("Accept", string(*o.AcceptHeaderOverride))
 	} else {
-		req.Header.Set("Accept", "application/json;q=1, application/octet-stream;q=0")
+		req.Header.Set("Accept", "application/json;q=1, text/csv;q=0.8, application/octet-stream;q=0.5, text/tab-separated-values;q=0")
 	}
 
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
@@ -3195,7 +3195,21 @@ func (s *Datasets) DownloadDatasetV2(ctx context.Context, request operations.Dow
 				return nil, err
 			}
 
-			res.Bytes = rawBody
+			res.TwoHundredApplicationOctetStreamBytes = rawBody
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `text/csv`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			res.TwoHundredTextCsvBytes = rawBody
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `text/tab-separated-values`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			res.TwoHundredTextTabSeparatedValuesBytes = rawBody
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

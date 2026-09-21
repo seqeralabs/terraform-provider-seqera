@@ -3,14 +3,15 @@
 package shared
 
 type MemberDbDto struct {
-	Avatar    *string  `json:"avatar,omitempty"`
-	Email     *string  `json:"email,omitempty"`
-	FirstName *string  `json:"firstName,omitempty"`
-	LastName  *string  `json:"lastName,omitempty"`
-	MemberID  *int64   `json:"memberId,omitempty"`
-	Role      *OrgRole `json:"role,omitempty"`
-	UserID    *int64   `json:"userId,omitempty"`
-	UserName  *string  `json:"userName,omitempty"`
+	Avatar    *string   `json:"avatar,omitempty"`
+	Email     *string   `json:"email,omitempty"`
+	FirstName *string   `json:"firstName,omitempty"`
+	LastName  *string   `json:"lastName,omitempty"`
+	MemberID  *int64    `json:"memberId,omitempty"`
+	Role      *OrgRole  `json:"role,omitempty"`
+	UserID    *int64    `json:"userId,omitempty"`
+	UserName  *string   `json:"userName,omitempty"`
+	UserType  *UserType `json:"userType,omitempty"`
 }
 
 func (m *MemberDbDto) GetAvatar() *string {
@@ -67,4 +68,11 @@ func (m *MemberDbDto) GetUserName() *string {
 		return nil
 	}
 	return m.UserName
+}
+
+func (m *MemberDbDto) GetUserType() *UserType {
+	if m == nil {
+		return nil
+	}
+	return m.UserType
 }

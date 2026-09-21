@@ -32,7 +32,7 @@ func newLineage(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks
 }
 
 // ResolveLineage - Resolve a platform identifier to a lineage LID
-// Resolves a Nextflow session ID or file path to a lineage LID. Exactly one of sessionId or filePath must be provided.
+// Resolves a Nextflow run or file path to a lineage LID. Exactly one of sessionId or filePath must be provided. A run is identified by sessionId *and* runName: a resumed run inherits the parent run's sessionId but produces its own lineage record.
 func (s *Lineage) ResolveLineage(ctx context.Context, request operations.ResolveLineageRequest, opts ...operations.Option) (*operations.ResolveLineageResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -248,7 +248,8 @@ func (s *Lineage) ResolveLineage(ctx context.Context, request operations.Resolve
 //
 //	conventions: whitespace = AND, a comma inside a qualifier = OR, and
 //	repeating a qualifier = AND. Filter the lineage index by `type:`,
-//	`workflow:`, `task:`, `label:`, and/or free-text tokens.
+//	`workflow:`, `task:`, `pipeline:`, `pipelineId:`, `label:`, and/or
+//	free-text tokens.
 //
 //	Workspace scope is expressed inside the DSL: `workspace:org/name`
 //	or the numeric `workspaceId:` alias. Omit both to search every

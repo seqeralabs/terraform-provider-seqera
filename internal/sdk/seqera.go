@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.206.0 and generator version 2.932.9
+// Generated from OpenAPI doc version 1.214.0 and generator version 2.937.18
 
 import (
 	"context"
@@ -57,7 +57,8 @@ type Seqera struct {
 	Admin  *Admin
 	Agents *Agents
 	// Avatars
-	Avatars *Avatars
+	Avatars       *Avatars
+	Compatibility *Compatibility
 	// Compute environments
 	ComputeEnvs *ComputeEnvs
 	// Credentials
@@ -180,8 +181,11 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.42.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.42.0 2.932.9 1.206.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
-			ServerList: ServerList,
+			UserAgent:         "speakeasy-sdk/terraform 0.42.0 2.937.18 1.214.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			SDKVersion:        "0.42.0",
+			GenVersion:        "2.937.18",
+			OpenAPIDocVersion: "1.214.0",
+			ServerList:        ServerList,
 		},
 		hooks: hooks.New(),
 	}
@@ -206,6 +210,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Admin = newAdmin(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Agents = newAgents(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Compatibility = newCompatibility(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)

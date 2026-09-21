@@ -11,6 +11,7 @@ type AgentDbDto struct {
 	AgentInstructions           *string      `json:"agentInstructions,omitempty"`
 	AgentInstructionsTemplateID *string      `json:"agentInstructionsTemplateId,omitempty"`
 	CreatedBy                   *int64       `json:"createdBy,omitempty"`
+	CreatedByUserName           *string      `json:"createdByUserName,omitempty"`
 	DateCreated                 *time.Time   `json:"dateCreated,omitempty"`
 	Description                 *string      `json:"description,omitempty"`
 	ID                          *string      `json:"id,omitempty"`
@@ -51,6 +52,13 @@ func (a *AgentDbDto) GetCreatedBy() *int64 {
 		return nil
 	}
 	return a.CreatedBy
+}
+
+func (a *AgentDbDto) GetCreatedByUserName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.CreatedByUserName
 }
 
 func (a *AgentDbDto) GetDateCreated() *time.Time {
