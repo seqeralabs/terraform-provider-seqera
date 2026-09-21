@@ -15931,6 +15931,111 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  /credentials/federation-setup#aws:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: AWSCredentialsFederationSetup#read
+      x-speakeasy-name-override: DescribeAWSCredentialsFederationSetup
+      operationId: DescribeAWSCredentialsFederationSetup
+      summary: Describe AWS credential federation setup values
+      description: |
+        Returns the values an administrator copies into the AWS console to set up
+        an OIDC workload identity credential: this installation's public address,
+        the STS audience, and the subject claims Platform mints.
+
+        Scope-level rather than per-credential, because these values are needed
+        before a credential can be created. Use `workspace_id` to resolve the
+        subjects for a workspace context; omit it for the user context.
+      tags:
+        - credentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier. Omit to resolve values in the user context.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier. Always `aws` for this data source.
+          required: false
+          x-speakeasy-name-override: providerType
+          schema:
+            type: string
+            enum:
+              - aws
+            default: aws
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AWSCredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  /credentials/federation-setup#google:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: GCPCredentialsFederationSetup#read
+      x-speakeasy-name-override: DescribeGCPCredentialsFederationSetup
+      operationId: DescribeGCPCredentialsFederationSetup
+      summary: Describe GCP credential federation setup values
+      description: |
+        Returns the values an administrator copies into GCP to configure a Google
+        Workload Identity Federation credential: the OIDC issuer URL, the
+        `google.subject` attribute mapping, and the recommended attribute
+        condition pinning the provider to this tenant.
+
+        Scope-level rather than per-credential, because these values are needed
+        before a credential can be created. Use `workspace_id` to resolve the
+        attribute condition for a workspace context; omit it for the user context.
+      tags:
+        - credentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier. Omit to resolve values in the user context.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier. Always `google` for this data source.
+          required: false
+          x-speakeasy-name-override: providerType
+          schema:
+            type: string
+            enum:
+              - google
+            default: google
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleCredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
 components:
   schemas:
     AbstractGridConfig:
@@ -30918,6 +31023,94 @@ components:
       properties:
         credentials:
           $ref: "#/components/schemas/TowerAgentCredential"
+    AWSCredentialsSetupValuesResponse:
+      type: object
+      x-speakeasy-entity: AWSCredentialsFederationSetup
+      x-speakeasy-entity-description: |
+        Data source for the AWS OIDC workload identity setup values of a Seqera
+        scope.
+
+        Returns the values an administrator must configure on the AWS side before
+        an `seqera_aws_credential` using workload identity can be created: the
+        OIDC provider URL, the STS audience, the subject claims Platform mints for
+        each workload type, and the session tag keys written to CloudTrail.
+
+        All attributes are empty when the installation has no public endpoint
+        configured or the scope cannot be resolved.
+      x-speakeasy-transform-from-api:
+        jq: 'def v($l): (.setupValues // []) | map(select(.label == $l)) | first | .value; . + { platformPublicAddress: v("Platform public address"), audience: v("Audience"), subjectPlatformActions: v("Subject for platform actions"), subjectDataExplorer: v("Subject for Data Explorer"), subjectStudios: v("Subject for Studios"), subjectPipelineLaunches: v("Subject for pipeline launches"), cloudtrailSessionTagKeys: v("CloudTrail session tag keys") }'
+      properties:
+        setupValues:
+          description: The raw labelled values as returned by the API. Empty when nothing can be resolved for the scope.
+          type: array
+          x-speakeasy-param-readonly: true
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+        platformPublicAddress:
+          type: string
+          description: This installation's public address, used as the OIDC provider URL in the AWS IAM console.
+          x-speakeasy-param-readonly: true
+        audience:
+          type: string
+          description: The STS audience the IAM OIDC provider must accept (`aud` condition key).
+          x-speakeasy-param-readonly: true
+        subjectPlatformActions:
+          type: string
+          description: The `sub` claim minted for control-plane actions such as credential validation, describe and log retrieval.
+          x-speakeasy-param-readonly: true
+        subjectDataExplorer:
+          type: string
+          description: The `sub` claim minted for Data Explorer access.
+          x-speakeasy-param-readonly: true
+        subjectStudios:
+          type: string
+          description: The `sub` claim minted for Studio sessions.
+          x-speakeasy-param-readonly: true
+        subjectPipelineLaunches:
+          type: string
+          description: The `sub` claim minted for pipeline launches.
+          x-speakeasy-param-readonly: true
+        cloudtrailSessionTagKeys:
+          type: string
+          description: Comma-separated session tag keys Platform sets on the assumed role, as they appear in CloudTrail. The trust policy must allow `sts:TagSession`.
+          x-speakeasy-param-readonly: true
+    GoogleCredentialsSetupValuesResponse:
+      type: object
+      x-speakeasy-entity: GCPCredentialsFederationSetup
+      x-speakeasy-entity-description: |
+        Data source for the Google Workload Identity Federation setup values of a
+        Seqera scope.
+
+        Returns the values an administrator must configure on the GCP side before
+        an `seqera_google_credential` using workload identity can be created: the
+        OIDC issuer URL, the `google.subject` attribute mapping that traces
+        activity back to the acting Platform user in Cloud Audit Logs, and the
+        recommended attribute condition pinning the workload identity pool to this
+        tenant.
+
+        All attributes are empty when the installation has no public endpoint
+        configured or the scope cannot be resolved.
+      x-speakeasy-transform-from-api:
+        jq: 'def v($l): (.setupValues // []) | map(select(.label == $l)) | first | .value; . + { oidcIssuerUrl: v("OIDC issuer URL"), googleSubjectMapping: v("google.subject mapping"), recommendedAttributeCondition: v("Recommended attribute condition") }'
+      properties:
+        setupValues:
+          description: The raw labelled values as returned by the API. Empty when nothing can be resolved for the scope.
+          type: array
+          x-speakeasy-param-readonly: true
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+        oidcIssuerUrl:
+          type: string
+          description: This installation's public address, used as the issuer URI of the GCP workload identity pool provider.
+          x-speakeasy-param-readonly: true
+        googleSubjectMapping:
+          type: string
+          description: The `google.subject` attribute mapping to set on the provider. Appends the acting user to the tenant subject so Cloud Audit Logs name a specific user.
+          x-speakeasy-param-readonly: true
+        recommendedAttributeCondition:
+          type: string
+          description: The recommended provider attribute condition, pinning the pool to subjects owned by this tenant. Null when the scope cannot be encoded.
+          x-speakeasy-param-readonly: true
     ListCredentialsDataSourceResponse:
       type: object
       required:
