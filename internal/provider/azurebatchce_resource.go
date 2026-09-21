@@ -57,21 +57,22 @@ type AzureBatchCEResource struct {
 
 // AzureBatchCEResourceModel describes the resource data model.
 type AzureBatchCEResourceModel struct {
-	ComputeEnvID  types.String           `tfsdk:"compute_env_id"`
-	Config        *tfTypes.AzBatchConfig `tfsdk:"config"`
-	CredentialsID types.String           `tfsdk:"credentials_id"`
-	DateCreated   types.String           `tfsdk:"date_created"`
-	Deleted       types.Bool             `tfsdk:"-"`
-	Description   types.String           `tfsdk:"description"`
-	ID            types.String           `tfsdk:"id"`
-	LabelIds      []types.Int64          `tfsdk:"label_ids"`
-	LastUpdated   types.String           `tfsdk:"last_updated"`
-	LastUsed      types.String           `tfsdk:"last_used"`
-	Name          types.String           `tfsdk:"name"`
-	OrgID         types.Int64            `tfsdk:"org_id"`
-	Platform      types.String           `tfsdk:"platform"`
-	Status        types.String           `tfsdk:"status"`
-	WorkspaceID   types.Int64            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnvID                   types.String           `tfsdk:"compute_env_id"`
+	Config                         *tfTypes.AzBatchConfig `tfsdk:"config"`
+	CredentialsID                  types.String           `tfsdk:"credentials_id"`
+	DateCreated                    types.String           `tfsdk:"date_created"`
+	Deleted                        types.Bool             `tfsdk:"-"`
+	Description                    types.String           `tfsdk:"description"`
+	FusionMetricsCollectionEnabled types.Bool             `tfsdk:"fusion_metrics_collection_enabled"`
+	ID                             types.String           `tfsdk:"id"`
+	LabelIds                       []types.Int64          `tfsdk:"label_ids"`
+	LastUpdated                    types.String           `tfsdk:"last_updated"`
+	LastUsed                       types.String           `tfsdk:"last_used"`
+	Name                           types.String           `tfsdk:"name"`
+	OrgID                          types.Int64            `tfsdk:"org_id"`
+	Platform                       types.String           `tfsdk:"platform"`
+	Status                         types.String           `tfsdk:"status"`
+	WorkspaceID                    types.Int64            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AzureBatchCEResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -609,6 +610,17 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Optional description of the compute environment`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2000),
+				},
+			},
+			"fusion_metrics_collection_enabled": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				MarkdownDescription: `Enable Fusion metrics collection for this compute environment. Can be changed` + "\n" +
+					`in place without replacing the compute environment.` + "\n" +
+					`` + "\n" +
+					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
+				Validators: []validator.Bool{
+					custom_boolvalidators.FusionMetricsCollectionValidator(),
 				},
 			},
 			"id": schema.StringAttribute{

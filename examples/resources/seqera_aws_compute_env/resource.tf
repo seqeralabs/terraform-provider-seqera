@@ -84,8 +84,9 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     ]
     work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  credentials_id                    = "...my_credentials_id..."
+  description                       = "...my_description..."
+  fusion_metrics_collection_enabled = false
   label_ids = [
     1
   ]

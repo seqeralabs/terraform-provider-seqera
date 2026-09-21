@@ -121,8 +121,10 @@ resource "seqera_aws_cloud_ce" "networked" {
 ### Fusion Graviton
 
 ```terraform
-# AWS Cloud (Classic mode) with Fusion v2, Wave, and Graviton (ARM64).
-# Fusion v2 requires Wave; Graviton requires both.
+# AWS Cloud (Classic mode) with Fusion v2 and Graviton (ARM64).
+#
+# Fusion v2 and Wave are always on for Cloud compute environments — the
+# backend enables them and they are not user-settable
 resource "seqera_aws_cloud_ce" "fusion_graviton" {
   name           = "aws-cloud-fusion-graviton"
   workspace_id   = data.seqera_workspace.main.id
@@ -131,8 +133,6 @@ resource "seqera_aws_cloud_ce" "fusion_graviton" {
   config = {
     region        = "us-west-1"
     work_dir      = "s3://my-bucket/work"
-    enable_wave   = true
-    enable_fusion = true
     arm64_enabled = true
     instance_type = "m7g.large" # Graviton head node
     ebs_boot_size = 100
@@ -188,6 +188,8 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

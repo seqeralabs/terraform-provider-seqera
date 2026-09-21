@@ -56,6 +56,8 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_aws_credential.main.credentials_id
 
+  fusion_metrics_collection_enabled = true
+
   config = {
     region        = "us-east-1"
     work_dir      = "s3://my-bucket/work"
@@ -114,6 +116,10 @@ resource "seqera_aws_batch_ce" "manual" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

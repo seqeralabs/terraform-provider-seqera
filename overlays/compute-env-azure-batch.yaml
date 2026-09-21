@@ -292,6 +292,14 @@ actions:
           description:
             type: string
             description: Optional description of the compute environment
+          fusionMetricsCollectionEnabled:
+            type: boolean
+            x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+            description: |
+              Enable Fusion metrics collection for this compute environment. Can be changed
+              in place without replacing the compute environment.
+
+              Requires `enable_fusion = true`.
           platform:
             type: string
             enum:
@@ -377,7 +385,8 @@ actions:
   # ============================================================================
   # FORCE-REPLACEMENT ON TOP-LEVEL FIELDS
   # ============================================================================
-  # NOTE: name, description, credentialsId update in-place via
+  # NOTE: name, description, credentialsId, fusionMetricsCollectionEnabled update
+  # in-place via
   # PUT /compute-envs/{computeEnvId}. Updating credentials support varies by
   # Platform release and may not be possible without deleting the existing
   # credential first; Terraform's destroy-before-create dependency graph

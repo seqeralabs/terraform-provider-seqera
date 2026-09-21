@@ -116,8 +116,9 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     ]
     work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  credentials_id                    = "...my_credentials_id..."
+  description                       = "...my_description..."
+  fusion_metrics_collection_enabled = false
   label_ids = [
     1
   ]
@@ -141,6 +142,10 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

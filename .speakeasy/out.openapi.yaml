@@ -27937,6 +27937,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -28054,6 +28062,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -28201,6 +28217,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:
@@ -28322,6 +28343,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -28443,6 +28472,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:
@@ -28563,6 +28597,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -28684,6 +28726,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:

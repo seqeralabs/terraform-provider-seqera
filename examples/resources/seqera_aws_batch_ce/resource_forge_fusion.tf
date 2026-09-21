@@ -15,6 +15,8 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_aws_credential.main.credentials_id
 
+  fusion_metrics_collection_enabled = true
+
   config = {
     region        = "us-east-1"
     work_dir      = "s3://my-bucket/work"
