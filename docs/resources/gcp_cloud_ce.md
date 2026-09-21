@@ -99,6 +99,8 @@ resource "seqera_gcp_cloud_ce" "gpu" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

@@ -50,6 +50,10 @@ type AWSComputeEnvComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type
 	Platform AWSComputeEnvComputeConfigPlatform `json:"platform"`
 	// Compute environment status
@@ -109,6 +113,13 @@ func (a *AWSComputeEnvComputeConfigInput) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AWSComputeEnvComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AWSComputeEnvComputeConfigInput) GetPlatform() AWSComputeEnvComputeConfigPlatform {
@@ -178,6 +189,10 @@ type AWSComputeEnvComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type
 	Platform AWSComputeEnvComputeConfigPlatform `json:"platform"`
 	// Compute environment status
@@ -244,6 +259,13 @@ func (a *AWSComputeEnvComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AWSComputeEnvComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AWSComputeEnvComputeConfig) GetPlatform() AWSComputeEnvComputeConfigPlatform {

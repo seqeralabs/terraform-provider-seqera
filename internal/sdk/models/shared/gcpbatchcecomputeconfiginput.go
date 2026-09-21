@@ -44,6 +44,10 @@ type GCPBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
 	Platform *GCPBatchCEComputeConfigPlatform `default:"google-batch" json:"platform"`
 	// Compute environment status
@@ -103,6 +107,13 @@ func (g *GCPBatchCEComputeConfigInput) GetDescription() *string {
 		return nil
 	}
 	return g.Description
+}
+
+func (g *GCPBatchCEComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.FusionMetricsCollectionEnabled
 }
 
 func (g *GCPBatchCEComputeConfigInput) GetPlatform() *GCPBatchCEComputeConfigPlatform {
@@ -166,6 +177,10 @@ type GCPBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
 	Platform *GCPBatchCEComputeConfigPlatform `default:"google-batch" json:"platform"`
 	// Compute environment status
@@ -232,6 +247,13 @@ func (g *GCPBatchCEComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return g.Description
+}
+
+func (g *GCPBatchCEComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.FusionMetricsCollectionEnabled
 }
 
 func (g *GCPBatchCEComputeConfig) GetPlatform() *GCPBatchCEComputeConfigPlatform {

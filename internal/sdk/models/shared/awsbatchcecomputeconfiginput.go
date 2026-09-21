@@ -44,6 +44,10 @@ type AWSBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AWSBatchCEComputeConfigPlatform `default:"aws-batch" json:"platform"`
 	// Compute environment status
@@ -103,6 +107,13 @@ func (a *AWSBatchCEComputeConfigInput) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AWSBatchCEComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AWSBatchCEComputeConfigInput) GetPlatform() *AWSBatchCEComputeConfigPlatform {
@@ -166,6 +177,10 @@ type AWSBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AWSBatchCEComputeConfigPlatform `default:"aws-batch" json:"platform"`
 	// Compute environment status
@@ -232,6 +247,13 @@ func (a *AWSBatchCEComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AWSBatchCEComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AWSBatchCEComputeConfig) GetPlatform() *AWSBatchCEComputeConfigPlatform {

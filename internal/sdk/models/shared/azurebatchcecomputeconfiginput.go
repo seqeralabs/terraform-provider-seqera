@@ -44,6 +44,10 @@ type AzureBatchCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AzureBatchCEComputeConfigPlatform `default:"azure-batch" json:"platform"`
 	// Compute environment status
@@ -103,6 +107,13 @@ func (a *AzureBatchCEComputeConfigInput) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AzureBatchCEComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AzureBatchCEComputeConfigInput) GetPlatform() *AzureBatchCEComputeConfigPlatform {
@@ -166,6 +177,10 @@ type AzureBatchCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AzureBatchCEComputeConfigPlatform `default:"azure-batch" json:"platform"`
 	// Compute environment status
@@ -232,6 +247,13 @@ func (a *AzureBatchCEComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AzureBatchCEComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AzureBatchCEComputeConfig) GetPlatform() *AzureBatchCEComputeConfigPlatform {

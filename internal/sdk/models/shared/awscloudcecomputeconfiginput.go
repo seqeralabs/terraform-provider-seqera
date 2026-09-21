@@ -44,6 +44,10 @@ type AwsCloudCEComputeConfigInput struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable.
 	Platform *AwsCloudCEComputeConfigPlatform `default:"aws-cloud" json:"platform"`
 	// Compute environment status
@@ -103,6 +107,13 @@ func (a *AwsCloudCEComputeConfigInput) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AwsCloudCEComputeConfigInput) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AwsCloudCEComputeConfigInput) GetPlatform() *AwsCloudCEComputeConfigPlatform {
@@ -166,6 +177,10 @@ type AwsCloudCEComputeConfig struct {
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
+	// Enable Fusion metrics collection for this compute environment. Can be changed
+	// in place without replacing the compute environment.
+	//
+	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-cloud" for this resource — set by the provider, not user-configurable.
 	Platform *AwsCloudCEComputeConfigPlatform `default:"aws-cloud" json:"platform"`
 	// Compute environment status
@@ -232,6 +247,13 @@ func (a *AwsCloudCEComputeConfig) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AwsCloudCEComputeConfig) GetFusionMetricsCollectionEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.FusionMetricsCollectionEnabled
 }
 
 func (a *AwsCloudCEComputeConfig) GetPlatform() *AwsCloudCEComputeConfigPlatform {
