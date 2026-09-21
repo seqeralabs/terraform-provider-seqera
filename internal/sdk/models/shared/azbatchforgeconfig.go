@@ -10,7 +10,10 @@ type AzBatchForgeConfig struct {
 	AutoScale *bool `json:"autoScale,omitempty"`
 	// Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode.
 	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
-	// List of Azure Container Registry IDs whose images compute jobs may pull.
+	// List of Seqera Platform container registry credential IDs used by Azure Batch
+	// pools to authenticate when pulling private images. Reference the `id` or
+	// `credentials_id` attribute of a `seqera_container_registry_credential` resource.
+	// Credential IDs contain 1 to 22 alphanumeric characters. Configure at most one ID.
 	//
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
 	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`

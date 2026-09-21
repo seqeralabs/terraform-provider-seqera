@@ -18001,8 +18001,16 @@ components:
           type: array
           items:
             type: string
+            minLength: 1
+            maxLength: 22
+            pattern: ^[0-9A-Za-z]+$
           description: |
-            List of Azure Container Registry IDs whose images compute jobs may pull.
+            List of Seqera Platform container registry credential IDs used by Azure Batch
+            pools to authenticate when pulling private images. Reference the `id` or
+            `credentials_id` attribute of a `seqera_container_registry_credential` resource.
+            Credential IDs contain 1 to 22 alphanumeric characters. Configure at most one ID.
+          maxItems: 1
+          x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
           x-speakeasy-param-force-new: true
           x-speakeasy-terraform-custom-type:
             imports:
