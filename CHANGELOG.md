@@ -4,7 +4,7 @@ BREAKING CHANGES:
 
 - **`bucket` and `cron` removed from `seqera_action`.** Platform 1.214.0 dropped the bucket and cron action types from the API (`BucketActionConfig`/`CronActionConfig`, `BucketActionRequest`/`CronActionRequest` and `GET /actions/cron/resolve`), so the resource loses its `bucket` and `cron` argument blocks along with the read-only `config.bucket` and `config.cron` blocks. Configurations that set either block must remove it. The `source` enum still advertises `"bucket"` and `"cron"` — that is upstream's shape, left as-is.
 
-  `seqera_action` remains at schema version 1, so state holding either block is **not** covered by a state upgrader. Per [docs-internal/STATE_UPGRADER_GUIDE.md](docs-internal/STATE_UPGRADER_GUIDE.md) that wants a version bump plus a lenient re-decode; it has not been tested against real state.
+  No state migration is required. The bucket and cron action types never reached GA in the backend and were never enabled in production, so no real state holds either block; `seqera_action` stays at schema version 1 with no new upgrader.
 
 FEATURES:
 
