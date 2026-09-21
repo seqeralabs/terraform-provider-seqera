@@ -44,10 +44,8 @@ type CredentialResourceModel struct {
 	Description   types.String          `tfsdk:"description"`
 	ID            types.String          `tfsdk:"id"`
 	Keys          *tfTypes.SecurityKeys `tfsdk:"keys"`
-	Label         types.String          `tfsdk:"label"`
 	Name          types.String          `tfsdk:"name"`
 	ProviderType  types.String          `tfsdk:"provider_type"`
-	Value         types.String          `tfsdk:"value"`
 	WorkspaceID   types.Int64           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -852,9 +850,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
-			"label": schema.StringAttribute{
-				Computed: true,
-			},
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `Display name for the credential (max 100 characters)`,
@@ -891,9 +886,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					),
 					custom_stringvalidators.CredentialsConfigValidator(),
 				},
-			},
-			"value": schema.StringAttribute{
-				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
