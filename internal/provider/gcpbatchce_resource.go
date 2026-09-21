@@ -520,7 +520,12 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 				Optional: true,
 				MarkdownDescription: `Enable Fusion metrics collection for this compute environment. Can be changed` + "\n" +
-					`in place without replacing the compute environment.`,
+					`in place without replacing the compute environment.` + "\n" +
+					`` + "\n" +
+					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
+				Validators: []validator.Bool{
+					custom_boolvalidators.FusionMetricsCollectionValidator(),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed: true,

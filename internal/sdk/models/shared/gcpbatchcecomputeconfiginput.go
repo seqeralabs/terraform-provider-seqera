@@ -47,6 +47,8 @@ type GCPBatchCEComputeConfigInput struct {
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
 	//
+	// Requires `enable_fusion = true`.
+	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.
 	Platform *GCPBatchCEComputeConfigPlatform `default:"google-batch" json:"platform"`
@@ -179,6 +181,8 @@ type GCPBatchCEComputeConfig struct {
 	Description *string `json:"description,omitempty"`
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// GCP platform type. Always "google-batch" for this resource — set by the provider, not user-configurable.

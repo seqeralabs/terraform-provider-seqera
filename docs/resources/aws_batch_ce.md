@@ -116,6 +116,8 @@ resource "seqera_aws_batch_ce" "manual" {
 - `description` (String) Optional description of the compute environment
 - `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
 in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

@@ -53,6 +53,8 @@ type AWSComputeEnvComputeConfigInput struct {
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
 	//
+	// Requires `enable_fusion = true`.
+	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type
 	Platform AWSComputeEnvComputeConfigPlatform `json:"platform"`
@@ -191,6 +193,8 @@ type AWSComputeEnvComputeConfig struct {
 	Description *string `json:"description,omitempty"`
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type

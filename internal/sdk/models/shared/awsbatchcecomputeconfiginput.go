@@ -47,6 +47,8 @@ type AWSBatchCEComputeConfigInput struct {
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
 	//
+	// Requires `enable_fusion = true`.
+	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AWSBatchCEComputeConfigPlatform `default:"aws-batch" json:"platform"`
@@ -179,6 +181,8 @@ type AWSBatchCEComputeConfig struct {
 	Description *string `json:"description,omitempty"`
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// AWS platform type. Always "aws-batch" for this resource — set by the provider, not user-configurable.

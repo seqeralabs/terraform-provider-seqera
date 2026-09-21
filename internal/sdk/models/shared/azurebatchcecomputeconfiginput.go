@@ -47,6 +47,8 @@ type AzureBatchCEComputeConfigInput struct {
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
 	//
+	// Requires `enable_fusion = true`.
+	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
 	Platform *AzureBatchCEComputeConfigPlatform `default:"azure-batch" json:"platform"`
@@ -179,6 +181,8 @@ type AzureBatchCEComputeConfig struct {
 	Description *string `json:"description,omitempty"`
 	// Enable Fusion metrics collection for this compute environment. Can be changed
 	// in place without replacing the compute environment.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	FusionMetricsCollectionEnabled *bool `json:"fusionMetricsCollectionEnabled,omitempty"`
 	// Azure platform type. Always "azure-batch" for this resource — set by the provider, not user-configurable.
