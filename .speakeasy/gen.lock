@@ -3,8 +3,8 @@ id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
   docChecksum: b51d2a233ab185a94de68564baab812c
   docVersion: 1.214.0
-  speakeasyVersion: 1.797.0
-  generationVersion: 2.937.18
+  speakeasyVersion: 1.798.0
+  generationVersion: 2.938.0
   releaseVersion: 0.42.0
   configChecksum: 555ad425600f05180697d8778c7d72dd
 persistentEdits:

@@ -124,9 +124,7 @@ resource "seqera_aws_cloud_ce" "networked" {
 # AWS Cloud (Classic mode) with Fusion v2 and Graviton (ARM64).
 #
 # Fusion v2 and Wave are always on for Cloud compute environments — the
-# backend enables them and they are not user-settable, so there is nothing
-# to configure here. (Contrast seqera_aws_batch_ce, where both are explicit
-# opt-ins via config.enable_fusion / config.enable_wave.)
+# backend enables them and they are not user-settable
 resource "seqera_aws_cloud_ce" "fusion_graviton" {
   name           = "aws-cloud-fusion-graviton"
   workspace_id   = data.seqera_workspace.main.id
