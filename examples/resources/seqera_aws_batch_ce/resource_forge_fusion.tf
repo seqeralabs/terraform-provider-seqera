@@ -15,9 +15,6 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_aws_credential.main.credentials_id
 
-  # Fusion metrics collection requires Fusion to be enabled below.
-  # Unlike most compute environment settings, this updates in place —
-  # flipping it does not replace the CE.
   fusion_metrics_collection_enabled = true
 
   config = {

@@ -2,9 +2,7 @@
 # system, accelerating data-heavy workloads.
 #
 # Fusion v2 and Wave are always on for Cloud compute environments — the
-# backend enables them and they are not user-settable, so there is nothing
-# to configure here. (Contrast seqera_gcp_batch_ce, where both are explicit
-# opt-ins via config.enable_fusion / config.enable_wave.)
+# backend enables them and they are not user-settable
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
