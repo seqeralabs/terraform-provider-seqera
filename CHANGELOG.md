@@ -1,3 +1,37 @@
+# v0.43.0
+
+BREAKING CHANGES:
+
+- **`bucket` and `cron` removed from `seqera_action`.** Platform 1.214.0 dropped the bucket and cron action types from the API (`BucketActionConfig`/`CronActionConfig`, `BucketActionRequest`/`CronActionRequest` and `GET /actions/cron/resolve`), so the resource loses its `bucket` and `cron` argument blocks along with the read-only `config.bucket` and `config.cron` blocks. Configurations that set either block must remove it. The `source` enum still advertises `"bucket"` and `"cron"` — that is upstream's shape, left as-is.
+
+  `seqera_action` remains at schema version 1, so state holding either block is **not** covered by a state upgrader. Per [docs-internal/STATE_UPGRADER_GUIDE.md](docs-internal/STATE_UPGRADER_GUIDE.md) that wants a version bump plus a lenient re-decode; it has not been tested against real state.
+
+FEATURES:
+
+- **Fusion metrics collection on compute environments.** New top-level `fusion_metrics_collection_enabled` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and `seqera_aws_compute_env`. It updates in place — changing it does not replace the compute environment. On the Batch/Forge environments it requires `enable_fusion = true`, enforced at plan time rather than failing at apply. Not exposed on `seqera_slurm_ce` (no Fusion support in its config) or `seqera_managed_compute_ce` (backend-owned config).
+
+- **New `seqera_aws_credentials_federation_setup` and `seqera_gcp_credentials_federation_setup` data sources.** Surface `GET /credentials/federation-setup` — the values an administrator copies into their cloud provider console before a workload-identity credential can be created. Each data source flattens the API's untyped `[{label, value}]` list into typed attributes for its provider, and keeps the raw `setup_values` list alongside so nothing the API returns is unreachable. Only AWS and GCP are surfaced; the endpoint returns an empty list for every other provider.
+
+- **`workloadIdentity` mode on `seqera_aws_credential`.** The `mode` enum now accepts `workloadIdentity` — OIDC workload identity federation against `assume_role_arn`, with no stored long-lived key. Requires `access_key`, `secret_key` and `use_external_id` to be unset. It is gated behind the Identity Federation feature flag and rejected for Forge compute environments, neither of which is detectable at plan time, so it can still fail at apply.
+
+- **Customer-managed KMS key for pipeline-secret encryption on AWS.** New `config.secrets_kms_key_id` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_aws_compute_env` and the matching `seqera_compute_env` blocks. Accepts a key ARN or key id, and encrypts the temporary Secrets Manager secrets created for runs that use pipeline secrets. When omitted, the AWS-managed default Secrets Manager key is used.
+
+- **VPC support on Google Cloud compute environments.** New `config.network`, `config.network_tags`, `config.subnetworks` and `config.use_private_address` on `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. `use_private_address = true` launches instances without an external IP and requires `network` to be set (enforced at plan time), plus Cloud NAT and Private Google Access on the subnetwork.
+
+- **Intelligent Compute: per-user vCPU cap and Spot retry budget.** New `max_cpus_per_user` (null means unlimited) and `max_spot_attempts` on `intelligent_compute_config` across the cloud compute environments. `max_spot_attempts` counts the first attempt, must be between 1 and 10, and is only honoured for Spot provisioning — setting it alongside an explicit `provisioning_model = "ondemand"` is rejected at plan time. `prediction_model` gains `qr/v3` as a suggested value.
+
+- **Head-node OS disk size on Azure Cloud.** New `config.boot_disk_size_gb` on `seqera_azure_cloud_ce` and the `azure_cloud` block of `seqera_compute_env`, between 50 and 4095 GB. When omitted, Azure uses the default disk size for the VM image.
+
+- **`fusion_version` on launches.** New `fusion_version` on the `seqera_pipeline` and `seqera_action` launch config and on `seqera_workflows`. Pins the Fusion release used for the run; the version must exist in the platform's system catalog, and it applies only when the compute environment enables Fusion v2.
+
+- **`creation_source` filter on the `seqera_data_links` data source** — `user` for manually created data links, `cloud` for those discovered from credentials.
+
+NOTES:
+
+- **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
+
+- **Fusion examples corrected on the Cloud compute environments.** The `seqera_aws_cloud_ce` and `seqera_gcp_cloud_ce` examples set `enable_wave` and `enable_fusion`, which are not attributes of those resources — Fusion v2 and Wave are always on for Cloud compute environments and are not user-settable. The examples now omit them.
+
 # v0.42.0
 
 FEATURES:
