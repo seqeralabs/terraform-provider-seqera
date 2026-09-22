@@ -413,8 +413,14 @@ actions:
 
   - target: $.components.schemas.AzBatchForgeConfig.properties.containerRegIds
     update:
-      description: |
-        List of Azure Container Registry IDs whose images compute jobs may pull.
+      description: Seqera Platform container registry credential ID used by Azure Batch to pull private images. Only one ID is supported.
+      maxItems: 1
+      items:
+        type: string
+        minLength: 1
+        maxLength: 22
+        pattern: ^[0-9A-Za-z]+$
+      x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
         imports:
