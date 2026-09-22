@@ -266,11 +266,7 @@ Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode. Requires replacement if changed.
-- `container_reg_ids` (List of String) List of Seqera Platform container registry credential IDs used by Azure Batch
-pools to authenticate when pulling private images. Reference the `id` or
-`credentials_id` attribute of a `seqera_container_registry_credential` resource.
-Credential IDs contain 1 to 22 alphanumeric characters. Configure at most one ID.
-Requires replacement if changed.
+- `container_reg_ids` (List of String) Seqera Platform container registry credential ID used by Azure Batch to pull private images. Only one ID is supported. Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
 - `dual_pool_config` (Boolean) Requires replacement if changed.
 - `head_pool` (Attributes) Head pool configuration for dual pool mode. Requires replacement if changed. (see [below for nested schema](#nestedatt--config--forge--head_pool))

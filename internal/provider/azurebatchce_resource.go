@@ -288,11 +288,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								ElementType: types.StringType,
-								MarkdownDescription: `List of Seqera Platform container registry credential IDs used by Azure Batch` + "\n" +
-									`pools to authenticate when pulling private images. Reference the ` + "`" + `id` + "`" + ` or` + "\n" +
-									`` + "`" + `credentials_id` + "`" + ` attribute of a ` + "`" + `seqera_container_registry_credential` + "`" + ` resource.` + "\n" +
-									`Credential IDs contain 1 to 22 alphanumeric characters. Configure at most one ID.` + "\n" +
-									`Requires replacement if changed.`,
+								Description: `Seqera Platform container registry credential ID used by Azure Batch to pull private images. Only one ID is supported. Requires replacement if changed.`,
 								Validators: []validator.List{
 									listvalidator.SizeAtMost(1),
 									custom_listvalidators.ContainerRegistryCredentialIdsValidator(),
