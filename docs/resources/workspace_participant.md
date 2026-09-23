@@ -9,8 +9,11 @@ description: |-
   the workspace.
   Note: When using email, the lookup to member_id happens once during resource
   creation and the participant_id is stored in state for subsequent operations.
-  Available roles:
-  owner: Full control over the workspaceadmin: Administrative access, can manage participantsmaintain: Can modify pipelines and compute environmentslaunch: Can launch pipelinesview: Read-only access (default)
+  The role is assigned when the participant is created, and defaults to view.
+  Custom roles defined via seqera_custom_role in the same organization can be used
+  in place of a predefined role.
+  Available predefined roles:
+  owner: Full control over the workspaceadmin: Administrative access, can manage participantsmaintain: Can modify pipelines and compute environmentslaunch: Can launch pipelinesconnect: Can connect to Studiosview: Read-only access (default)
   Import formats:
   org_id/workspace_id/email (e.g., "12345/67890/user@example.com")org_id/workspace_id/team:team_id (e.g., "12345/67890/team:7405043533023")org_id/workspace_id/member:member_id (e.g., "12345/67890/member:98765")
 ---
@@ -27,11 +30,16 @@ the workspace.
 Note: When using email, the lookup to member_id happens once during resource
 creation and the participant_id is stored in state for subsequent operations.
 
-Available roles:
+The role is assigned when the participant is created, and defaults to view.
+Custom roles defined via seqera_custom_role in the same organization can be used
+in place of a predefined role.
+
+Available predefined roles:
 - owner: Full control over the workspace
 - admin: Administrative access, can manage participants
 - maintain: Can modify pipelines and compute environments
 - launch: Can launch pipelines
+- connect: Can connect to Studios
 - view: Read-only access (default)
 
 Import formats:

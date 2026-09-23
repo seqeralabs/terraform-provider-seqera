@@ -617,6 +617,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
+					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{

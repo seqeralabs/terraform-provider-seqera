@@ -534,6 +534,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Validators: []validator.Object{
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 					custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{

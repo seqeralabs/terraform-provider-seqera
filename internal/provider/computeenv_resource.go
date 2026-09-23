@@ -1518,6 +1518,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"azure_batch": schema.SingleNestedAttribute{
@@ -2424,6 +2425,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									}...),
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"eks_platform": schema.SingleNestedAttribute{
@@ -4659,6 +4661,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"lsf_platform": schema.SingleNestedAttribute{

@@ -17898,7 +17898,9 @@ components:
           x-speakeasy-param-optional: false
           x-speakeasy-plan-validators: WorkDirS3Validator
       title: AWS Cloud configuration
-      x-speakeasy-plan-validators: schedConfigConsistencyValidator
+      x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
+        - BillingExportTableGoogleOnlyValidator
       required:
         - region
     AwsCloudPlatformMetainfo:
@@ -18324,6 +18326,7 @@ components:
       x-speakeasy-plan-validators:
         - BackendStrategyVmOnlyValidator
         - FusionSnapshotsUnsupportedValidator
+        - BillingExportTableGoogleOnlyValidator
     AzCloudPlatformMetaInfo:
       type: object
       properties:
@@ -23662,6 +23665,7 @@ components:
           description: Compute environment working directory
           type: string
       title: Local execution configuration
+      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
       required:
         - workDir
     LocalPlatformMetainfo:
