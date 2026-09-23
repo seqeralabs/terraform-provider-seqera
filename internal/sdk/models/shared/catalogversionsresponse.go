@@ -3,10 +3,11 @@
 package shared
 
 type CatalogVersionsResponse struct {
-	DefaultVersion *string          `json:"defaultVersion,omitempty"`
-	GeneratedAt    *string          `json:"generatedAt,omitempty"`
-	ServedFrom     *ServedFrom      `json:"servedFrom,omitempty"`
-	Versions       []CatalogVersion `json:"versions,omitempty"`
+	DefaultVersion     *string           `json:"defaultVersion,omitempty"`
+	DeploymentVersions map[string]string `json:"deploymentVersions,omitempty"`
+	GeneratedAt        *string           `json:"generatedAt,omitempty"`
+	ServedFrom         *ServedFrom       `json:"servedFrom,omitempty"`
+	Versions           []CatalogVersion  `json:"versions,omitempty"`
 }
 
 func (c *CatalogVersionsResponse) GetDefaultVersion() *string {
@@ -14,6 +15,13 @@ func (c *CatalogVersionsResponse) GetDefaultVersion() *string {
 		return nil
 	}
 	return c.DefaultVersion
+}
+
+func (c *CatalogVersionsResponse) GetDeploymentVersions() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.DeploymentVersions
 }
 
 func (c *CatalogVersionsResponse) GetGeneratedAt() *string {

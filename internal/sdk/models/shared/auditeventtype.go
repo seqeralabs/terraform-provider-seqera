@@ -11,6 +11,7 @@ type AuditEventType string
 
 const (
 	AuditEventTypeWorkflowLaunched                  AuditEventType = "workflow_launched"
+	AuditEventTypeCatalogOverrideApplied            AuditEventType = "catalog_override_applied"
 	AuditEventTypeWorkflowCreated                   AuditEventType = "workflow_created"
 	AuditEventTypeWorkflowUpdated                   AuditEventType = "workflow_updated"
 	AuditEventTypeWorkflowCompleted                 AuditEventType = "workflow_completed"
@@ -178,6 +179,8 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "workflow_launched":
+		fallthrough
+	case "catalog_override_applied":
 		fallthrough
 	case "workflow_created":
 		fallthrough

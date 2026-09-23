@@ -58,6 +58,8 @@ type StudiosResourceModel struct {
 	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
 	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
+	CustomIcon          types.String                     `tfsdk:"custom_icon"`
+	CustomIconID        types.String                     `tfsdk:"custom_icon_id"`
 	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
 	Description         types.String                     `tfsdk:"description"`
 	ID                  types.String                     `tfsdk:"id"`
@@ -270,6 +272,22 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					},
 				},
 				Description: `Requires replacement if changed.`,
+			},
+			"custom_icon": schema.StringAttribute{
+				Computed:    true,
+				Description: `Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.`,
+			},
+			"custom_icon_id": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar. Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(22),
+				},
 			},
 			"data_studio_tool_url": schema.StringAttribute{
 				Required: true,

@@ -148,6 +148,8 @@ type DescribeWorkflowResponseSchedConfig struct {
 	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 	//
 	BackendStrategy *DescribeWorkflowResponseBackendStrategy `json:"backendStrategy,omitempty"`
+	// Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+	BillingExportTable *string `json:"billingExportTable,omitempty"`
 	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 	// restrict to instance types that provide local SSD (NVMe) storage. Leave
 	// unset for no local-storage requirement.
@@ -213,6 +215,13 @@ func (d *DescribeWorkflowResponseSchedConfig) GetBackendStrategy() *DescribeWork
 		return nil
 	}
 	return d.BackendStrategy
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetBillingExportTable() *string {
+	if d == nil {
+		return nil
+	}
+	return d.BillingExportTable
 }
 
 func (d *DescribeWorkflowResponseSchedConfig) GetDiskAllocation() *string {

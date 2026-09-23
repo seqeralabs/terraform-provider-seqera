@@ -128,7 +128,7 @@ resource "seqera_action" "tower_advanced" {
 
 ### Optional
 
-- `source` (String) must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.
+- `source` (String) must be one of ["github", "tower", "bucket", "cron", "pipeline_status"]; Requires replacement if changed.
 
 ### Read-Only
 

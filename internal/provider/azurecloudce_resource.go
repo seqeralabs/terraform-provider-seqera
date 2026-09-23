@@ -230,6 +230,15 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									),
 								},
 							},
+							"billing_export_table": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									stringplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+								Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+							},
 							"disk_allocation": schema.StringAttribute{
 								Computed: true,
 								Optional: true,

@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: b51d2a233ab185a94de68564baab812c
-  docVersion: 1.214.0
+  docChecksum: c9e8683c04810f381313f5eb345daef2
+  docVersion: 1.220.0
   speakeasyVersion: 1.798.0
   generationVersion: 2.938.0
   releaseVersion: 0.43.0-RC1
@@ -1542,6 +1542,7 @@ trackedFiles:
   internal/sdk/models/operations/stopdatastudio.go:
     id: 16ff4a88b1cb
     pristine_git_object: 1ee10611ece5d3b2f7b480819fcc993cba6c33ca
+  internal/sdk/models/operations/summarizeworkflowtasks.go: {}
   internal/sdk/models/operations/tokenlist.go:
     id: d24e9829641f
     pristine_git_object: 98bc4a9c648d7dc10828e2e8d947304e0a3dcccc
@@ -2554,6 +2555,7 @@ trackedFiles:
   internal/sdk/models/shared/listrolesresponse.go: {}
   internal/sdk/models/shared/listrolesresponseroleinfo.go: {}
   internal/sdk/models/shared/listsshkeysresponse.go: {}
+  internal/sdk/models/shared/listtaskprocesssummaryresponse.go: {}
   internal/sdk/models/shared/listtasksresponse.go:
     id: d898eef18570
     pristine_git_object: 714a4437d39a056f867a98020df4a204c6677828
@@ -2762,6 +2764,7 @@ trackedFiles:
   internal/sdk/models/shared/task.go:
     id: ebbf5622a904
     pristine_git_object: cc080e2454e015b6817959c0cbe8475372cbf7dd
+  internal/sdk/models/shared/taskprocesssummary.go: {}
   internal/sdk/models/shared/taskstatus.go:
     id: 2313fd64b531
     pristine_git_object: de71c53149bac56bdea039254d0bdaef80be7b2b
@@ -6691,6 +6694,18 @@ examples:
       parameters:
         query:
           provider: "google"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  SummarizeWorkflowTasks:
+    speakeasy-default-summarize-workflow-tasks:
+      parameters:
+        path:
+          workflowId: "<id>"
+        query:
+          search: "<value>"
       responses:
         "200":
           application/json: {}

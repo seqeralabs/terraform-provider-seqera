@@ -27,19 +27,20 @@ func (t *Trigger) GetType() *string {
 }
 
 type AgentRunDbDto struct {
-	AgentRunName     *string         `json:"agentRunName,omitempty"`
-	DateCreated      *time.Time      `json:"dateCreated,omitempty"`
-	ID               *string         `json:"id,omitempty"`
-	LastUpdated      *time.Time      `json:"lastUpdated,omitempty"`
-	ServiceAccountID *int64          `json:"serviceAccountId,omitempty"`
-	SessionID        *string         `json:"sessionId,omitempty"`
-	SourcePipelineID *string         `json:"sourcePipelineId,omitempty"`
-	Status           *AgentRunStatus `json:"status,omitempty"`
-	ThreadID         *string         `json:"threadId,omitempty"`
-	Title            *string         `json:"title,omitempty"`
-	Trigger          *Trigger        `json:"trigger,omitempty"`
-	WorkflowID       *string         `json:"workflowId,omitempty"`
-	WorkspaceID      *int64          `json:"workspaceId,omitempty"`
+	AgentRunName       *string         `json:"agentRunName,omitempty"`
+	DateCreated        *time.Time      `json:"dateCreated,omitempty"`
+	ID                 *string         `json:"id,omitempty"`
+	LastUpdated        *time.Time      `json:"lastUpdated,omitempty"`
+	ServiceAccountID   *int64          `json:"serviceAccountId,omitempty"`
+	ServiceAccountName *string         `json:"serviceAccountName,omitempty"`
+	SessionID          *string         `json:"sessionId,omitempty"`
+	SourcePipelineID   *string         `json:"sourcePipelineId,omitempty"`
+	Status             *AgentRunStatus `json:"status,omitempty"`
+	ThreadID           *string         `json:"threadId,omitempty"`
+	Title              *string         `json:"title,omitempty"`
+	Trigger            *Trigger        `json:"trigger,omitempty"`
+	WorkflowID         *string         `json:"workflowId,omitempty"`
+	WorkspaceID        *int64          `json:"workspaceId,omitempty"`
 }
 
 func (a AgentRunDbDto) MarshalJSON() ([]byte, error) {
@@ -86,6 +87,13 @@ func (a *AgentRunDbDto) GetServiceAccountID() *int64 {
 		return nil
 	}
 	return a.ServiceAccountID
+}
+
+func (a *AgentRunDbDto) GetServiceAccountName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountName
 }
 
 func (a *AgentRunDbDto) GetSessionID() *string {

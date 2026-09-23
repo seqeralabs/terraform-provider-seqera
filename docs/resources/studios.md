@@ -269,6 +269,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 - `allowed_user_ids` (List of Number) IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
+- `custom_icon_id` (String) Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
@@ -278,6 +279,7 @@ resource "seqera_studios" "rstudio_regional_data" {
 ### Read-Only
 
 - `allowed_users` (Attributes List) (see [below for nested schema](#nestedatt--allowed_users))
+- `custom_icon` (String) Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 - `id` (String) Alias of `session_id` for Terraform convention.
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))

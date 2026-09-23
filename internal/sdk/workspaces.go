@@ -1809,7 +1809,7 @@ func (s *Workspaces) ListWorkspaceParticipants(ctx context.Context, request oper
 }
 
 // CreateWorkspaceParticipant - Create workspace participant
-// Adds a new participant to the workspace identified by the given `workspaceId`.
+// Adds a new participant to the workspace identified by the given `workspaceId`. The participant is assigned the requested `role`, defaulting to `launch` when omitted (`view` for service accounts).
 func (s *Workspaces) CreateWorkspaceParticipant(ctx context.Context, request operations.CreateWorkspaceParticipantRequest, opts ...operations.Option) (*operations.CreateWorkspaceParticipantResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

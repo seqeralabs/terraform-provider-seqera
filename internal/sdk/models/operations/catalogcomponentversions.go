@@ -8,7 +8,47 @@ import (
 )
 
 type CatalogComponentVersionsRequest struct {
-	Key string `pathParam:"style=simple,explode=false,name=key"`
+	Platform *string `queryParam:"style=form,explode=true,name=platform"`
+	Nextflow *string `queryParam:"style=form,explode=true,name=nextflow"`
+	Fusion   *string `queryParam:"style=form,explode=true,name=fusion"`
+	Sched    *string `queryParam:"style=form,explode=true,name=sched"`
+	Wave     *string `queryParam:"style=form,explode=true,name=wave"`
+	Key      string  `pathParam:"style=simple,explode=false,name=key"`
+}
+
+func (c *CatalogComponentVersionsRequest) GetPlatform() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Platform
+}
+
+func (c *CatalogComponentVersionsRequest) GetNextflow() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Nextflow
+}
+
+func (c *CatalogComponentVersionsRequest) GetFusion() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Fusion
+}
+
+func (c *CatalogComponentVersionsRequest) GetSched() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Sched
+}
+
+func (c *CatalogComponentVersionsRequest) GetWave() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Wave
 }
 
 func (c *CatalogComponentVersionsRequest) GetKey() string {
