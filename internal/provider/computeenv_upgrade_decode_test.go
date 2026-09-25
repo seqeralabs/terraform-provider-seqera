@@ -13,7 +13,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 )
 
-// computeEnvUpgraders are the two registered seqera_compute_env upgraders. The
+// computeEnvUpgraders are the registered seqera_compute_env upgraders. The
 // framework does not chain upgraders, so both must migrate their version directly
 // to the current schema. These tests run against the real schema (registered by
 // this package's init() in stateupgrader_schemas.go), which is the only place the
@@ -21,6 +21,7 @@ import (
 var computeEnvUpgraders = map[string]func(context.Context, resource.UpgradeStateRequest, *resource.UpgradeStateResponse){
 	"v0": stateupgraders.ComputeenvStateUpgraderV0,
 	"v1": stateupgraders.ComputeenvStateUpgraderV1,
+	"v2": stateupgraders.ComputeenvStateUpgraderV2,
 }
 
 // runUpgraderAgainstSchema runs an upgrader over priorState and returns the

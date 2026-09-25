@@ -73,6 +73,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.LogTableName = types.StringPointerValue(resp.Config.LogTableName)
 		r.Config.LogWorkspaceID = types.StringPointerValue(resp.Config.LogWorkspaceID)
 		r.Config.ManagedIdentityClientID = types.StringPointerValue(resp.Config.ManagedIdentityClientID)
@@ -83,7 +84,6 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
 		r.Config.ResourceGroup = types.StringPointerValue(resp.Config.ResourceGroup)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.Subnets = make([]types.String, 0, len(resp.Config.Subnets))
 		for _, v := range resp.Config.Subnets {
 			r.Config.Subnets = append(r.Config.Subnets, types.StringValue(v))
@@ -500,11 +500,11 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	subnets := make([]string, 0, len(r.Config.Subnets))
 	for subnetsIndex := range r.Config.Subnets {
@@ -523,26 +523,26 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		workDir = nil
 	}
 	config := shared.AzCloudConfig{
-		BootDiskSizeGB:           bootDiskSizeGB,
-		DataCollectionEndpoint:   dataCollectionEndpoint,
-		DataCollectionRuleID:     dataCollectionRuleID,
-		Environment:              environment,
-		InstanceType:             instanceType,
-		LogTableName:             logTableName,
-		LogWorkspaceID:           logWorkspaceID,
-		ManagedIdentityClientID:  managedIdentityClientID,
-		ManagedIdentityID:        managedIdentityID,
-		NetworkID:                networkID,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		Region:                   region,
-		ResourceGroup:            resourceGroup,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		Subnets:                  subnets,
-		SubscriptionID:           subscriptionID,
-		WorkDir:                  workDir,
+		BootDiskSizeGB:            bootDiskSizeGB,
+		DataCollectionEndpoint:    dataCollectionEndpoint,
+		DataCollectionRuleID:      dataCollectionRuleID,
+		Environment:               environment,
+		InstanceType:              instanceType,
+		LogTableName:              logTableName,
+		LogWorkspaceID:            logWorkspaceID,
+		ManagedIdentityClientID:   managedIdentityClientID,
+		ManagedIdentityID:         managedIdentityID,
+		NetworkID:                 networkID,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		Region:                    region,
+		ResourceGroup:             resourceGroup,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		Subnets:                   subnets,
+		SubscriptionID:            subscriptionID,
+		WorkDir:                   workDir,
 	}
 	out := shared.AzureCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

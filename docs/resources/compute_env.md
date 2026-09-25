@@ -663,6 +663,15 @@ Optional:
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple Azure VMs with
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to override the scheduler settings.
+Requires replacement if changed.
 - `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
@@ -676,7 +685,6 @@ Requires replacement if changed.
 - `region` (String) Azure region where the compute environment will be created.
 Examples: eastus, westus2, northeurope
 Not Null; Requires replacement if changed.
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `subnets` (List of String) Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
@@ -993,6 +1001,15 @@ If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple Compute Engine VMs with
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to override the scheduler settings.
+Requires replacement if changed.
 - `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
@@ -1002,7 +1019,6 @@ Requires replacement if changed.
 - `region` (String) Google Cloud region where the compute environment will be created.
 Examples: us-central1, europe-west1, asia-east1
 Not Null; Requires replacement if changed.
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.

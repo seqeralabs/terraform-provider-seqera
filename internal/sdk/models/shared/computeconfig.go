@@ -1726,8 +1726,17 @@ type AzureCloudConfiguration struct {
 	//
 	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
-	Subnets                  []string     `json:"subnets,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Azure VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool    `json:"schedEnabled,omitempty"`
+	Subnets                   []string `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -1873,11 +1882,11 @@ func (a *AzureCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	return a.IntelligentComputeConfig
 }
 
-func (a *AzureCloudConfiguration) GetSchedEnabled() *bool {
+func (a *AzureCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AzureCloudConfiguration) GetSubnets() []string {
@@ -2246,7 +2255,16 @@ type GoogleCloudConfiguration struct {
 	//
 	Region                   *string      `json:"region,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Compute Engine VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
@@ -2387,11 +2405,11 @@ func (g *GoogleCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	return g.IntelligentComputeConfig
 }
 
-func (g *GoogleCloudConfiguration) GetSchedEnabled() *bool {
+func (g *GoogleCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.SchedEnabled
+	return g.IntelligentComputeEnabled
 }
 
 func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {

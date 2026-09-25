@@ -13,8 +13,10 @@ import (
 //
 //   - v0 -> v1: rename the misspelled `nvnme_storage_enabled` flag to
 //     `nvme_storage_enabled` (renameNvmeStorageFlag).
-//   - v1 -> current: derive the Azure Batch delete_jobs_on_completion boolean
+//   - v1 -> v2: derive the Azure Batch delete_jobs_on_completion boolean
 //     (applyComputeEnvV2Migrations).
+//   - v2 -> current: rename azure_cloud / google_cloud `sched_enabled` to
+//     `intelligent_compute_enabled` (applyComputeEnvV3Migrations).
 //
 // Attribute removals are not enumerated — upgradeToCurrentSchema drops every
 // attribute absent from the current schema.
@@ -27,6 +29,7 @@ func ComputeenvStateUpgraderV0(ctx context.Context, req resource.UpgradeStateReq
 
 		if computeEnv, ok := rawState["compute_env"].(map[string]interface{}); ok {
 			applyComputeEnvV2Migrations(computeEnv)
+			applyComputeEnvV3Migrations(computeEnv)
 		}
 	})
 }
