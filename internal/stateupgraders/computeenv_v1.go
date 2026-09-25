@@ -20,10 +20,14 @@ import (
 //   - Value transforms — the Azure Batch `delete_jobs_on_completion` string was
 //     superseded by the boolean `delete_jobs_on_completion_enabled`, which needs
 //     an explicit derivation (applyComputeEnvV2Migrations).
+//
+//   - Renames — azure_cloud / google_cloud `sched_enabled` became
+//     `intelligent_compute_enabled` (applyComputeEnvV3Migrations).
 func ComputeenvStateUpgraderV1(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
 	upgradeToCurrentSchema("seqera_compute_env", req, resp, func(rawState map[string]interface{}) {
 		if computeEnv, ok := rawState["compute_env"].(map[string]interface{}); ok {
 			applyComputeEnvV2Migrations(computeEnv)
+			applyComputeEnvV3Migrations(computeEnv)
 		}
 	})
 }

@@ -141,3 +141,27 @@ func renameComputeEnvIDToID(rawState map[string]interface{}) {
 		delete(rawState, "compute_env_id")
 	}
 }
+
+// renameSchedEnabledFlag renames `sched_enabled` to `intelligent_compute_enabled`
+// on a single cloud compute-env config object. Shared by the azure_cloud_ce /
+// gcp_cloud_ce upgraders and the compute_env upgraders (azure_cloud and
+// google_cloud blocks). A value already present under the new name wins.
+func renameSchedEnabledFlag(config map[string]interface{}) {
+	if config == nil {
+		return
+	}
+	if v, exists := config["sched_enabled"]; exists {
+		if _, taken := config["intelligent_compute_enabled"]; !taken {
+			config["intelligent_compute_enabled"] = v
+		}
+		delete(config, "sched_enabled")
+	}
+}
+
+// renameCloudCESchedEnabled applies renameSchedEnabledFlag to the root-level
+// `config` of a seqera_azure_cloud_ce / seqera_gcp_cloud_ce state.
+func renameCloudCESchedEnabled(rawState map[string]interface{}) {
+	if config, ok := rawState["config"].(map[string]interface{}); ok {
+		renameSchedEnabledFlag(config)
+	}
+}

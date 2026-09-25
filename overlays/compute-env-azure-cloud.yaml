@@ -257,7 +257,7 @@ actions:
       # Azure Cloud compute environment schema
       AzureCloudCE_ComputeConfig:
         x-speakeasy-entity: AzureCloudCE
-        x-speakeasy-entity-version: 1
+        x-speakeasy-entity-version: 2
         x-speakeasy-entity-description: |
           Manage Azure Cloud compute environments in Seqera platform.
 
@@ -404,6 +404,24 @@ actions:
     update:
       x-speakeasy-param-force-new: true
 
+  # Rename schedEnabled -> intelligent_compute_enabled for consistency with the
+  # AWS Cloud and Local compute environments. Released as `sched_enabled`, so
+  # the entity version is bumped and the state upgrader carries the value over.
+  - target: $.components.schemas.AzCloudConfig.properties.schedEnabled
+    update:
+      x-speakeasy-name-override: intelligent_compute_enabled
+      description: |
+        Enable Seqera Intelligent Compute (Preview).
+        When `true`, tasks are distributed across multiple Azure VMs with
+        optimized scheduling and resource allocation. When `false` (default),
+        all tasks run on a single instance (Classic mode).
+
+        `intelligent_compute_config` is optional in both modes: leave it null
+        to accept the platform defaults, or provide it (only when
+        `intelligent_compute_enabled = true`) to override the scheduler settings.
+      example: false
+      x-speakeasy-param-force-new: true
+
   # Rename schedConfig -> intelligent_compute_config for consistency with the
   # AWS and Local compute environments within the provider (PR #231 review).
   - target: $.components.schemas.AzCloudConfig.properties.schedConfig
@@ -425,9 +443,13 @@ actions:
   # here. The shared SchedConfig can't drop those fields for one platform, so
   # object validators reject unsupported values at plan time instead.
   # PR #231 review.
+  #
+  # schedConfigConsistencyValidator rejects intelligent_compute_config when
+  # intelligent_compute_enabled is false, matching AWS Cloud.
   - target: $.components.schemas.AzCloudConfig
     update:
       x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
         - BackendStrategyVmOnlyValidator
         - FusionSnapshotsUnsupportedValidator
         - BillingExportTableGoogleOnlyValidator

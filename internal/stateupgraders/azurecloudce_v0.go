@@ -6,9 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
-// AzurecloudceStateUpgraderV0 upgrades seqera_azure_cloud_ce state to the current schema by re-decoding prior state
-// against it, dropping any attribute the schema no longer defines. See
-// docs-internal/STATE_UPGRADER_GUIDE.md.
+// AzurecloudceStateUpgraderV0 migrates seqera_azure_cloud_ce state from schema version 0 directly to
+// the current schema. The framework does not chain upgraders, so this applies
+// the v1 -> v2 rename of `config.sched_enabled` to
+// `config.intelligent_compute_enabled` too. Removed attributes are dropped by
+// upgradeToCurrentSchema. See docs-internal/STATE_UPGRADER_GUIDE.md.
 func AzurecloudceStateUpgraderV0(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
-	upgradeToCurrentSchema("seqera_azure_cloud_ce", req, resp, nil)
+	upgradeToCurrentSchema("seqera_azure_cloud_ce", req, resp, renameCloudCESchedEnabled)
 }
