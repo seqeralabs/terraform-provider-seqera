@@ -3,10 +3,10 @@ id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
   docChecksum: a6eacf324dc2501ad0e4eb3c8991ab19
   docVersion: 1.220.0
-  speakeasyVersion: 1.798.0
-  generationVersion: 2.938.0
+  speakeasyVersion: 1.799.0
+  generationVersion: 2.941.0
   releaseVersion: 0.43.0-RC2
-  configChecksum: 95e89a9216c999dba6e5e2135642100f
+  configChecksum: 8803fdcb2952636a0b898c919ce65531
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.16
+    core: 3.48.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
@@ -838,6 +838,7 @@ trackedFiles:
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
+  internal/sdk/models/errors/responsevalidationerror.go: {}
   internal/sdk/models/operations/addlabelstoactions.go:
     id: 54ea176819e0
     pristine_git_object: 131334b27a31000604d836f6931aa1bb9a6dd7d7
