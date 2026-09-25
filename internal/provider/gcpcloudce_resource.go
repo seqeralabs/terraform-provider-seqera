@@ -81,7 +81,7 @@ func (r *GCPCloudCEResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Google Cloud compute environments in Seqera platform.\n\nGCP Cloud compute environments execute Nextflow pipelines directly on\nGoogle Compute Engine VMs managed by Seqera. Use this resource for\nlong-running or interactive workloads where Seqera provisions and manages\nthe underlying compute instances directly (rather than via Google Batch).\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Computed:    true,
@@ -397,6 +397,23 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Requires replacement if changed.`,
 					},
+					"intelligent_compute_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Compute Engine VMs with` + "\n" +
+							`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+							`all tasks run on a single instance (Classic mode).` + "\n" +
+							`` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+							`to accept the platform defaults, or provide it (only when` + "\n" +
+							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+							`Requires replacement if changed.`,
+					},
 					"network": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -470,15 +487,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Examples: us-central1, europe-west1, asia-east1` + "\n" +
 							`Requires replacement if changed.`,
 					},
-					"sched_enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
 					"service_account_email": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -540,6 +548,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					custom_objectvalidators.SchedConfigConsistencyValidator(),
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 				},
 			},
@@ -976,5 +985,6 @@ func (r *GCPCloudCEResource) ImportState(ctx context.Context, req resource.Impor
 func (r *GCPCloudCEResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.GcpcloudceStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.GcpcloudceStateUpgraderV1},
 	}
 }

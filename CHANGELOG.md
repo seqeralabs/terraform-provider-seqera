@@ -6,6 +6,12 @@ BREAKING CHANGES:
 
   No state migration is required. The bucket and cron action types never reached GA in the backend and were never enabled in production, so no real state holds either block; `seqera_action` stays at schema version 1 with no new upgrader.
 
+- **`sched_enabled` renamed to `intelligent_compute_enabled` on Azure and Google Cloud compute environments.** Applies to `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud` / `google_cloud` blocks of `seqera_compute_env`, matching `seqera_aws_cloud_ce` and the name of the companion `intelligent_compute_config` block. Configurations that set `sched_enabled` must switch to the new name. The value sent to the API is unchanged.
+
+  Existing state migrates automatically: `seqera_azure_cloud_ce` and `seqera_gcp_cloud_ce` move to schema version 2 and `seqera_compute_env` to schema version 3, and their state upgraders carry the value across, so there is no diff and no replacement.
+
+  As on AWS Cloud, setting `intelligent_compute_config` while `intelligent_compute_enabled` is false or unset is now rejected at plan time on these resources.
+
 FEATURES:
 
 - **Fusion metrics collection on compute environments.** New top-level `fusion_metrics_collection_enabled` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and `seqera_aws_compute_env`. It updates in place — changing it does not replace the compute environment. On the Batch/Forge environments it requires `enable_fusion = true`, enforced at plan time rather than failing at apply. Not exposed on `seqera_slurm_ce` (no Fusion support in its config) or `seqera_managed_compute_ce` (backend-owned config).

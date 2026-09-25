@@ -145,6 +145,15 @@ If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple Compute Engine VMs with
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to override the scheduler settings.
+Requires replacement if changed.
 - `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
@@ -153,7 +162,6 @@ Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.

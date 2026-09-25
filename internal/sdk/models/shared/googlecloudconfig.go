@@ -48,7 +48,16 @@ type GoogleCloudConfig struct {
 	//
 	Region                   *string      `json:"region,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Compute Engine VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
@@ -181,11 +190,11 @@ func (g *GoogleCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	return g.IntelligentComputeConfig
 }
 
-func (g *GoogleCloudConfig) GetSchedEnabled() *bool {
+func (g *GoogleCloudConfig) GetIntelligentComputeEnabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.SchedEnabled
+	return g.IntelligentComputeEnabled
 }
 
 func (g *GoogleCloudConfig) GetServiceAccountEmail() *string {

@@ -133,6 +133,15 @@ Each variable can target the head node, compute nodes, or both.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple Azure VMs with
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to override the scheduler settings.
+Requires replacement if changed.
 - `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
@@ -145,7 +154,6 @@ Applied globally to all pipelines launched in this compute environment.
 Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `subnets` (List of String) Requires replacement if changed.
 - `subscription_id` (String) Azure subscription ID where compute resources will be created. Requires replacement if changed.
 
