@@ -26,6 +26,14 @@ FEATURES:
 
 - **`creation_source` filter on the `seqera_data_links` data source** — `user` for manually created data links, `cloud` for those discovered from credentials.
 
+- **Billed-cost retrieval from a Cloud Billing export on Google Cloud.** New `billing_export_table` on `intelligent_compute_config` for `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. It names the BigQuery table holding the Cloud Billing export, as `project.dataset.table`, and lets the platform retrieve billed cost for runs on the compute environment. The export is not retroactive, so cost is unavailable for runs that predate it. Changing it forces replacement. The field also appears on the AWS Cloud and Azure Cloud compute environments because upstream shares the schema, but those platforms ignore it, so setting it on `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce` or the `aws_cloud` / `azure_cloud` blocks of `seqera_compute_env` is rejected at plan time.
+
+BUG FIXES:
+
+- **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
+
+  No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
+
 NOTES:
 
 - **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
