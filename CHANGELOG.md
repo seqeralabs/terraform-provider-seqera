@@ -28,6 +28,10 @@ FEATURES:
 
 - **Billed-cost retrieval from a Cloud Billing export on Google Cloud.** New `billing_export_table` on `intelligent_compute_config` for `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. It names the BigQuery table holding the Cloud Billing export, as `project.dataset.table`, and lets the platform retrieve billed cost for runs on the compute environment. The export is not retroactive, so cost is unavailable for runs that predate it. Changing it forces replacement. The field also appears on the AWS Cloud and Azure Cloud compute environments because upstream shares the schema, but those platforms ignore it, so setting it on `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce` or the `aws_cloud` / `azure_cloud` blocks of `seqera_compute_env` is rejected at plan time.
 
+- **Custom icons on `seqera_studios`.** New `custom_icon_id` sets the Studio's icon from an avatar id (from `POST /avatars`). When null the icon is inherited from the parent checkpoint, an empty string clears it explicitly, and any other value assigns that avatar. Changing it forces replacement. The resolved icon URL is exposed read-only as `custom_icon`, and is null when no icon is set.
+
+- **Launch warnings on `seqera_workflows`.** New read-only `warnings` holds the warnings the platform returns when it accepts a launch.
+
 BUG FIXES:
 
 - **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
