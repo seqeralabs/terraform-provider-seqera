@@ -3,7 +3,9 @@
 package shared
 
 type AddParticipantRequest struct {
-	MemberID        *int64  `json:"memberId,omitempty"`
+	MemberID *int64 `json:"memberId,omitempty"`
+	// Role to assign to the new participant: either a predefined workspace role ('owner', 'admin', 'maintain', 'launch', 'connect', 'view', case-insensitive) or the name of a custom role defined in the organization. Defaults to 'launch' when omitted ('view' for service accounts).
+	Role            *string `json:"role,omitempty"`
 	TeamID          *int64  `json:"teamId,omitempty"`
 	UserNameOrEmail *string `json:"userNameOrEmail,omitempty"`
 }
@@ -13,6 +15,13 @@ func (a *AddParticipantRequest) GetMemberID() *int64 {
 		return nil
 	}
 	return a.MemberID
+}
+
+func (a *AddParticipantRequest) GetRole() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Role
 }
 
 func (a *AddParticipantRequest) GetTeamID() *int64 {

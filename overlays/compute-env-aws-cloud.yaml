@@ -402,9 +402,17 @@ actions:
 
   # Enforce intelligent_compute_config required iff intelligent_compute_enabled=true
   # at plan time, before the API rejects apply.
+  #
+  # billing_export_table names a BigQuery Cloud Billing export and is consumed
+  # only by the Google backend. Like backend_strategy and fusion_snapshots it
+  # lives on the shared SchedConfig schema, which cannot drop a field for one
+  # platform, so it is rejected at plan time here instead of being silently
+  # ignored on apply.
   - target: $.components.schemas.AwsCloudConfig
     update:
-      x-speakeasy-plan-validators: schedConfigConsistencyValidator
+      x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
+        - BillingExportTableGoogleOnlyValidator
 
   - target: $.components.schemas.AwsCloudConfig.properties.schedEnabled
     update:

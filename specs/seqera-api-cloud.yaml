@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.214.0
+  version: 1.220.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -768,7 +768,7 @@ paths:
             format: int64
         - name: search
           in: query
-          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId` and `sourcePipelineId`. Free text is not supported.
+          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId` and `serviceAccountName`. Free text is not supported.
           schema:
             type: string
         - name: max
@@ -1135,7 +1135,33 @@ paths:
     get:
       operationId: CatalogComponentVersions
       summary: Catalog versions for a single component
+      description: As /versions but scoped to {key}; the same registered component compatibility-filter parameters apply (PF-2).
       parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: key
           in: path
           required: true
@@ -1154,8 +1180,33 @@ paths:
     get:
       operationId: CatalogVersions
       summary: Component compatibility catalog versions
-      description: Returns the catalog versions from the local state document (unconstrained in PF-1), with servedFrom provenance. Optionally narrowed to a single component.
+      description: Returns catalog versions with servedFrom provenance and observed deploymentVersions. Optionally narrowed to a single component and compatibility-constrained by registered component query parameters plus platform/nextflow/fusion/sched/wave deployment context, for example fusion=2.5 or connect=0.11.2 (comma-lists; AND across, OR within; edge-less params do not constrain). Unknown parameters and malformed expressions return 400; unknown selected components return 404.
       parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: component
           in: query
           schema:
@@ -6440,7 +6491,7 @@ paths:
     put:
       operationId: CreateWorkspaceParticipant
       summary: Create workspace participant
-      description: Adds a new participant to the workspace identified by the given `workspaceId`.
+      description: Adds a new participant to the workspace identified by the given `workspaceId`. The participant is assigned the requested `role`, defaulting to `launch` when omitted (`view` for service accounts).
       parameters:
         - name: orgId
           in: path
@@ -10694,6 +10745,11 @@ paths:
           description: Search tasks by name
           schema:
             type: string
+        - name: process
+          in: query
+          description: Exact process name filter
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -10703,6 +10759,49 @@ paths:
                 $ref: '#/components/schemas/ListTasksResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - workflows
+  /workflow/{workflowId}/tasks/summary:
+    get:
+      operationId: SummarizeWorkflowTasks
+      summary: Summarize the tasks of the given workflow per process, optionally filtered by search
+      description: Rolls up matching tasks per process so the run-timeline grouped view stays complete on large runs, where a capped/paged task list could hide processes whose matches fall past the page. Rejected with a 400 when the run's total task count exceeds 20,000, since the search term does not bound the cost of the underlying query -- only run size does.
+      parameters:
+        - name: workflowId
+          in: path
+          description: Workflow string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: search
+          in: query
+          description: Search tasks by name; required and must not be blank, since an unfiltered summary would run an unfiltered GROUP BY over every task in the run
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTaskProcessSummaryResponse'
+        '400':
+          description: Bad request. Missing/blank search parameter, or the run has more tasks than this endpoint allows
           content:
             application/json:
               schema:
@@ -11172,11 +11271,13 @@ components:
         - tower
         - bucket
         - cron
+        - pipeline_status
       x-enum-varnames:
         - github
         - tower
         - bucket
         - cron
+        - pipeline_status
     Action.Status:
       type: string
       enum:
@@ -11300,6 +11401,9 @@ components:
         memberId:
           type: integer
           format: int64
+        role:
+          description: "Role to assign to the new participant: either a predefined workspace role ('owner', 'admin', 'maintain', 'launch', 'connect', 'view', case-insensitive) or the name of a custom role defined in the organization. Defaults to 'launch' when omitted ('view' for service accounts)."
+          type: string
         teamId:
           type: integer
           format: int64
@@ -11396,6 +11500,9 @@ components:
         serviceAccountId:
           type: integer
           format: int64
+          nullable: true
+        serviceAccountName:
+          type: string
           nullable: true
         sessionId:
           type: string
@@ -11574,6 +11681,7 @@ components:
       type: string
       enum:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -11770,6 +11878,7 @@ components:
         - workflow_status_changed
       x-enum-varnames:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -13045,6 +13154,10 @@ components:
       properties:
         defaultVersion:
           type: string
+        deploymentVersions:
+          type: object
+          additionalProperties:
+            type: string
         generatedAt:
           type: string
         servedFrom:
@@ -14384,6 +14497,11 @@ components:
           minLength: 1
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.'
+          type: string
+          maxLength: 22
+          nullable: true
         dataStudioToolUrl:
           type: string
         description:
@@ -14438,6 +14556,14 @@ components:
           $ref: '#/components/schemas/DataStudioComputeEnvDto'
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIcon:
+          description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
+          type: string
+          nullable: true
+        customIconId:
+          description: Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
+          type: string
+          nullable: true
         customImage:
           type: boolean
         dateCreated:
@@ -14528,6 +14654,8 @@ components:
         condaEnvironment:
           type: string
         connectVersion:
+          type: string
+        customIconId:
           type: string
         description:
           type: string
@@ -14672,6 +14800,11 @@ components:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
           nullable: true
+        customIconId:
+          description: "Avatar id (from POST /avatars) for the Studio session icon. Semantics on start: null = leave the existing icon unchanged (so a no-arg start from the connect/loading dialog doesn't touch it); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one."
+          type: string
+          maxLength: 22
+          nullable: true
         description:
           type: string
           nullable: true
@@ -14790,6 +14923,11 @@ components:
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
+          nullable: true
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on update: null = leave the existing icon unchanged (partial-PATCH-safe); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one if any.'
+          type: string
+          maxLength: 22
           nullable: true
         description:
           type: string
@@ -16990,6 +17128,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserSshPublicKeyDto'
+    ListTaskProcessSummaryResponse:
+      type: object
+      properties:
+        processes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskProcessSummary'
     ListTasksResponse:
       type: object
       properties:
@@ -17848,6 +17993,9 @@ components:
           type: array
           items:
             type: string
+        diagramImage:
+          type: string
+          nullable: true
         manifest:
           $ref: '#/components/schemas/WfManifest'
         profiles:
@@ -18117,6 +18265,10 @@ components:
         failed:
           type: integer
           format: int64
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
         ignored:
           type: integer
           format: int64
@@ -18124,6 +18276,10 @@ components:
           type: integer
           format: int64
           deprecated: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -18397,6 +18553,10 @@ components:
             - ECS
             - EC2
             - VM
+        billingExportTable:
+          description: Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+          type: string
+          nullable: true
         diskAllocation:
           type: string
         fusionSnapshots:
@@ -18890,6 +19050,11 @@ components:
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
+        warnings:
+          type: array
+          items:
+            type: string
+          nullable: true
         workflowId:
           type: string
     Subnet:
@@ -19054,6 +19219,22 @@ components:
       required:
         - status
         - taskId
+    TaskProcessSummary:
+      type: object
+      properties:
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
+        process:
+          type: string
+        taskCount:
+          type: integer
+          format: int64
     TaskStatus:
       type: string
       enum:
@@ -20614,10 +20795,14 @@ components:
           format: int32
         id:
           type: string
+        launchContainer:
+          description: Custom launcher image that takes precedence over the selected Nextflow version.
+          type: string
+          nullable: true
         mainScript:
           type: string
         nextflowVersion:
-          description: Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          description: Saved Nextflow release selection, retained for relaunch/resume. A custom launcher image takes precedence over this selection.
           type: string
           nullable: true
         optimizationId:

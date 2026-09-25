@@ -101,9 +101,11 @@ func (d *DataStudioUpdateRequestConfiguration) GetSSHEnabled() *bool {
 type DataStudioUpdateRequest struct {
 	ComputeEnvID  *string                               `json:"computeEnvId,omitempty"`
 	Configuration *DataStudioUpdateRequestConfiguration `json:"configuration,omitempty"`
-	Description   *string                               `json:"description,omitempty"`
-	LabelIds      []int64                               `json:"labelIds,omitempty"`
-	Name          *string                               `json:"name,omitempty"`
+	// Avatar id (from POST /avatars) for the Studio session icon. Semantics on update: null = leave the existing icon unchanged (partial-PATCH-safe); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one if any.
+	CustomIconID *string `json:"customIconId,omitempty"`
+	Description  *string `json:"description,omitempty"`
+	LabelIds     []int64 `json:"labelIds,omitempty"`
+	Name         *string `json:"name,omitempty"`
 }
 
 func (d *DataStudioUpdateRequest) GetComputeEnvID() *string {
@@ -118,6 +120,13 @@ func (d *DataStudioUpdateRequest) GetConfiguration() *DataStudioUpdateRequestCon
 		return nil
 	}
 	return d.Configuration
+}
+
+func (d *DataStudioUpdateRequest) GetCustomIconID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CustomIconID
 }
 
 func (d *DataStudioUpdateRequest) GetDescription() *string {

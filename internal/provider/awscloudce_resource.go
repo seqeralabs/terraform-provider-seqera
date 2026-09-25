@@ -303,6 +303,15 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									),
 								},
 							},
+							"billing_export_table": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									stringplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+								Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+							},
 							"disk_allocation": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -608,6 +617,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
+					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{

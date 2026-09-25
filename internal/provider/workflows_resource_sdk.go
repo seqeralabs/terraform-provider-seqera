@@ -46,6 +46,14 @@ func (r *WorkflowsResourceModel) RefreshFromSharedSubmitWorkflowLaunchResponse(c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Warnings != nil {
+			r.Warnings = make([]types.String, 0, len(resp.Warnings))
+			for _, v := range resp.Warnings {
+				r.Warnings = append(r.Warnings, types.StringValue(v))
+			}
+		} else {
+			r.Warnings = nil
+		}
 		r.WorkflowID = types.StringPointerValue(resp.WorkflowID)
 	}
 

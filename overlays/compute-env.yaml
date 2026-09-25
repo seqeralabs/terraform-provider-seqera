@@ -542,6 +542,14 @@ actions:
     update:
       x-speakeasy-name-override: intelligent_compute_config
 
+  # billing_export_table names a BigQuery Cloud Billing export and is consumed
+  # only by the Google backend. Same family of exception as backend_strategy /
+  # fusion_snapshots: the shared SchedConfig can't drop a field for one
+  # platform, so reject it at plan time on Seqera Compute too.
+  - target: $.components.schemas.LocalComputeConfig
+    update:
+      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
+
   # ============================================================================
   # FIELD IGNORE - Cloud compute environments require fusion2 and wave to be
   # enabled, we can ignore these fields to reduce the configuration surface.

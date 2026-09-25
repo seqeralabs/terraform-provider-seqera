@@ -52,6 +52,10 @@ func (s *SSHDetails) GetUser() string {
 type DataStudioDto struct {
 	AllowedUsers  []*UserInfo              `json:"allowedUsers,omitempty"`
 	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
+	// Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
+	CustomIcon *string `json:"customIcon,omitempty"`
+	// Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
+	CustomIconID *string `json:"customIconId,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
 	IsPrivate   *bool   `json:"isPrivate,omitempty"`
@@ -95,6 +99,20 @@ func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
 		return nil
 	}
 	return d.Configuration
+}
+
+func (d *DataStudioDto) GetCustomIcon() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CustomIcon
+}
+
+func (d *DataStudioDto) GetCustomIconID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CustomIconID
 }
 
 func (d *DataStudioDto) GetDescription() *string {

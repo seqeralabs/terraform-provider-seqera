@@ -119,6 +119,7 @@ Requires replacement if changed.
 
 - `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
+- `warnings` (List of String)
 - `workflow_id` (String) Workflow string identifier
 
 <a id="nestedatt--pipeline_info"></a>

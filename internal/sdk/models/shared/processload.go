@@ -21,8 +21,10 @@ type ProcessLoad struct {
 	CPUTime     int64      `json:"cpuTime"`
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	Failed      int64      `json:"failed"`
+	FirstSubmit *time.Time `json:"firstSubmit,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	InvCtxSwitch int64      `json:"invCtxSwitch"`
+	LastComplete *time.Time `json:"lastComplete,omitempty"`
 	LastUpdated  *time.Time `json:"lastUpdated,omitempty"`
 	LoadCpus     int64      `json:"loadCpus"`
 	LoadMemory   int64      `json:"loadMemory"`
@@ -130,11 +132,25 @@ func (p *ProcessLoad) GetFailed() int64 {
 	return p.Failed
 }
 
+func (p *ProcessLoad) GetFirstSubmit() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.FirstSubmit
+}
+
 func (p *ProcessLoad) GetInvCtxSwitch() int64 {
 	if p == nil {
 		return 0
 	}
 	return p.InvCtxSwitch
+}
+
+func (p *ProcessLoad) GetLastComplete() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastComplete
 }
 
 func (p *ProcessLoad) GetLastUpdated() *time.Time {

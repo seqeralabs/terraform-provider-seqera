@@ -48,6 +48,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -414,6 +415,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -481,15 +488,16 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			MaxCpusPerUser:    maxCpusPerUser,
-			MaxSpotAttempts:   maxSpotAttempts,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
 	schedEnabled := new(bool)

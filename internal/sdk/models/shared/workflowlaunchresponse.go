@@ -47,8 +47,10 @@ type WorkflowLaunchResponse struct {
 	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
 	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
 	ID              *string `json:"id,omitempty"`
+	// Custom launcher image that takes precedence over the selected Nextflow version.
+	LaunchContainer *string `json:"launchContainer,omitempty"`
 	MainScript      *string `json:"mainScript,omitempty"`
-	// Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+	// Saved Nextflow release selection, retained for relaunch/resume. A custom launcher image takes precedence over this selection.
 	NextflowVersion     *string `json:"nextflowVersion,omitempty"`
 	OptimizationID      *string `json:"optimizationId,omitempty"`
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
@@ -154,6 +156,13 @@ func (w *WorkflowLaunchResponse) GetID() *string {
 		return nil
 	}
 	return w.ID
+}
+
+func (w *WorkflowLaunchResponse) GetLaunchContainer() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchContainer
 }
 
 func (w *WorkflowLaunchResponse) GetMainScript() *string {
