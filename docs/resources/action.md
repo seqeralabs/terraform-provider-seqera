@@ -38,6 +38,54 @@ resource "seqera_action" "tower_basic" {
 }
 ```
 
+### Agent Trigger
+
+```terraform
+# Runs an agent each time a run of the watched pipeline fails, instead of
+# launching a pipeline. An agent action sets response_type = "agent" and the
+# agent to run, and must not set launch or pipeline. The source must be
+# pipeline_status, cron or bucket.
+
+# The agent runs as a service account, which must be a workspace participant
+# with a role that allows launching agents.
+resource "seqera_service_account" "triage" {
+  org_id = seqera_workspace.main.org_id
+  name   = "run-triage"
+}
+
+resource "seqera_workspace_participant" "triage" {
+  org_id       = seqera_workspace.main.org_id
+  workspace_id = seqera_workspace.main.id
+  member_id    = seqera_service_account.triage.member_id
+  role         = "launch"
+}
+
+resource "seqera_agent" "triage" {
+  workspace_id       = seqera_workspace.main.id
+  name               = "failed-run-triage"
+  agent_instructions = "Read the logs of the failed run, summarise the root cause and suggest a fix."
+  service_account_id = seqera_service_account.triage.id
+
+  depends_on = [seqera_workspace_participant.triage]
+}
+
+resource "seqera_action" "triage_on_failure" {
+  workspace_id  = seqera_workspace.main.id
+  name          = "triage-failed-runs"
+  source        = "pipeline_status"
+  response_type = "agent"
+
+  pipeline_status = {
+    pipeline_id = seqera_pipeline.upstream.pipeline_id
+    run_status  = "FAILED"
+  }
+
+  agent = {
+    agent_config_id = seqera_agent.triage.id
+  }
+}
+```
+
 ### Bucket Trigger
 
 ```terraform
@@ -192,7 +240,6 @@ resource "seqera_action" "tower_advanced" {
 
 ### Required
 
-- `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. (see [below for nested schema](#nestedatt--launch))
 - `name` (String) Human-readable name for the action
 - `workspace_id` (Number) Workspace numeric identifier
 
@@ -202,6 +249,7 @@ resource "seqera_action" "tower_advanced" {
 - `bucket` (Attributes) Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources. (see [below for nested schema](#nestedatt--bucket))
 - `cron` (Attributes) Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources. (see [below for nested schema](#nestedatt--cron))
 - `label_ids` (List of Number) The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+- `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`. (see [below for nested schema](#nestedatt--launch))
 - `pipeline` (Attributes) Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. (see [below for nested schema](#nestedatt--pipeline))
 - `pipeline_status` (Attributes) Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here. (see [below for nested schema](#nestedatt--pipeline_status))
 - `response_type` (String) What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists. must be one of ["pipeline", "agent"]; Requires replacement if changed.
@@ -218,53 +266,6 @@ resource "seqera_action" "tower_advanced" {
 - `last_trigger` (Attributes) (see [below for nested schema](#nestedatt--last_trigger))
 - `next_execution` (String)
 - `status` (String)
-
-<a id="nestedatt--launch"></a>
-### Nested Schema for `launch`
-
-Required:
-
-- `pipeline` (String)
-
-Optional:
-
-- `compute_env_id` (String)
-- `config_profiles` (List of String) Default: []
-- `config_text` (String) Nextflow configuration text
-- `entry_name` (String) Entry workflow name
-- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
-- `head_job_cpus` (Number) Head job CPU allocation
-- `head_job_memory_mb` (Number) Head job memory allocation in MB
-- `label_ids` (List of Number)
-- `main_script` (String) Main script path
-- `nextflow_version` (String) Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
-- `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
-Nextflow 24.10.0 or later and the workflow outputs syntax.
-- `params_text` (String) Pipeline parameters text
-- `pipeline_schema_id` (Number)
-- `post_run_script` (String) Script to run after pipeline execution
-- `pre_run_script` (String) Script to run before pipeline execution
-- `pull_latest` (Boolean) Default: false
-- `revision` (String) Pipeline revision
-- `run_name` (String) Custom run name
-- `schema_name` (String) Pipeline schema name
-- `stub_run` (Boolean) Default: false
-- `syntax_parser` (String) must be one of ["v1", "v2"]
-- `tower_config` (String) Tower-specific configuration
-- `user_secrets` (List of String) Default: []
-- `work_dir` (String) Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
-- `workspace_secrets` (List of String) Default: []
-
-Read-Only:
-
-- `id` (String) Server-generated launch identifier; echoed back on Update.
-- `launch_container` (String)
-- `optimization_id` (String) Optimization profile ID
-- `optimization_targets` (String) Optimization targets
-- `resume_launch_id` (String) Launch ID to resume from
-- `session_id` (String) Session ID for resuming
-- `workspace_id` (Number)
-
 
 <a id="nestedatt--agent"></a>
 ### Nested Schema for `agent`
@@ -292,6 +293,50 @@ Optional:
 - `expression` (String)
 - `preset` (String)
 - `timezone` (String)
+
+
+<a id="nestedatt--launch"></a>
+### Nested Schema for `launch`
+
+Optional:
+
+- `compute_env_id` (String)
+- `config_profiles` (List of String) Default: []
+- `config_text` (String) Nextflow configuration text
+- `entry_name` (String) Entry workflow name
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+- `head_job_cpus` (Number) Head job CPU allocation
+- `head_job_memory_mb` (Number) Head job memory allocation in MB
+- `label_ids` (List of Number)
+- `main_script` (String) Main script path
+- `nextflow_version` (String) Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
+- `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
+Nextflow 24.10.0 or later and the workflow outputs syntax.
+- `params_text` (String) Pipeline parameters text
+- `pipeline` (String) Not Null
+- `pipeline_schema_id` (Number)
+- `post_run_script` (String) Script to run after pipeline execution
+- `pre_run_script` (String) Script to run before pipeline execution
+- `pull_latest` (Boolean) Default: false
+- `revision` (String) Pipeline revision
+- `run_name` (String) Custom run name
+- `schema_name` (String) Pipeline schema name
+- `stub_run` (Boolean) Default: false
+- `syntax_parser` (String) must be one of ["v1", "v2"]
+- `tower_config` (String) Tower-specific configuration
+- `user_secrets` (List of String) Default: []
+- `work_dir` (String) Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
+- `workspace_secrets` (List of String) Default: []
+
+Read-Only:
+
+- `id` (String) Server-generated launch identifier; echoed back on Update.
+- `launch_container` (String)
+- `optimization_id` (String) Optimization profile ID
+- `optimization_targets` (String) Optimization targets
+- `resume_launch_id` (String) Launch ID to resume from
+- `session_id` (String) Session ID for resuming
+- `workspace_id` (Number)
 
 
 <a id="nestedatt--pipeline"></a>

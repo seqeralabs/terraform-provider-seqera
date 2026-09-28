@@ -24,6 +24,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
@@ -274,9 +275,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"launch": schema.SingleNestedAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"compute_env_id": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
 					},
 					"config_profiles": schema.ListAttribute{
@@ -315,6 +318,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Server-generated launch identifier; echoed back on Update.`,
 					},
 					"label_ids": schema.ListAttribute{
+						Computed:    true,
 						Optional:    true,
 						ElementType: types.Int64Type,
 					},
@@ -360,7 +364,12 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline parameters text`,
 					},
 					"pipeline": schema.StringAttribute{
-						Required: true,
+						Computed:    true,
+						Optional:    true,
+						Description: `Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
 					},
 					"pipeline_schema_id": schema.Int64Attribute{
 						Optional: true,
@@ -466,7 +475,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Default: []`,
 					},
 				},
-				Description: `Launch payload for ` + "`" + `seqera_action` + "`" + ` Create / Update endpoints.`,
+				Description: `Launch payload for ` + "`" + `seqera_action` + "`" + ` Create / Update endpoints. Required when ` + "`" + `response_type` + "`" + ` is ` + "`" + `pipeline` + "`" + ` (the default); must not be set when ` + "`" + `response_type` + "`" + ` is ` + "`" + `agent` + "`" + `.`,
+				Validators: []validator.Object{
+					custom_objectvalidators.ActionOutcomeValidator(),
+				},
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

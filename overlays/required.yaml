@@ -23,7 +23,6 @@ actions:
       required:
         - name
         - source
-        - launch
 
   - target: $.components.schemas.SubmitWorkflowLaunchRequest
     update:

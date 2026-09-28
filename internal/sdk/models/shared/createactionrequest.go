@@ -11,9 +11,9 @@ type CreateActionRequest struct {
 	Cron *CronActionRequest `json:"cron,omitempty"`
 	// The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
 	LabelIds []int64 `json:"labelIds,omitempty"`
-	// Launch payload for `seqera_action` Create / Update endpoints.
-	Launch ActionLaunchRequest `json:"launch"`
-	Name   string              `json:"name"`
+	// Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
+	Launch *ActionLaunchRequest `json:"launch,omitempty"`
+	Name   string               `json:"name"`
 	// Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
 	Pipeline *PipelineActionRequest `json:"pipeline,omitempty"`
 	// Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here.
@@ -51,9 +51,9 @@ func (c *CreateActionRequest) GetLabelIds() []int64 {
 	return c.LabelIds
 }
 
-func (c *CreateActionRequest) GetLaunch() ActionLaunchRequest {
+func (c *CreateActionRequest) GetLaunch() *ActionLaunchRequest {
 	if c == nil {
-		return ActionLaunchRequest{}
+		return nil
 	}
 	return c.Launch
 }

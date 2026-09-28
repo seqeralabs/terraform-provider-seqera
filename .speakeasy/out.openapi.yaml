@@ -19823,7 +19823,6 @@ components:
           x-speakeasy-param-optional: true
       required:
         - name
-        - launch
     CreateActionResponse:
       type: object
       properties:
@@ -29200,7 +29199,9 @@ components:
         - team
     ActionLaunchRequest:
       type: object
-      description: Launch payload for `seqera_action` Create / Update endpoints.
+      description: >-
+        Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
+      x-speakeasy-plan-validators: ActionOutcomeValidator
       allOf:
         - $ref: "#/components/schemas/WorkflowLaunchRequest"
       properties:

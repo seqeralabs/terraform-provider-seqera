@@ -9,7 +9,7 @@ type UpdateActionRequest struct {
 	Cron *CronActionRequest `json:"cron,omitempty"`
 	// The labels of the action, as a whole set. Omit to leave them unchanged. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
 	LabelIds []int64 `json:"labelIds,omitempty"`
-	// Launch payload for `seqera_action` Create / Update endpoints.
+	// Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
 	Launch *ActionLaunchRequest `json:"launch,omitempty"`
 	Name   *string              `json:"name,omitempty"`
 	// Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
