@@ -52,6 +52,7 @@ sources:
             - location: overlays/speakeasy.yaml
             - location: overlays/studios.yaml
             - location: overlays/teams.yaml
+            - location: overlays/service-accounts.yaml
             - location: overlays/tokens.yaml
             - location: overlays/users.yaml
             - location: overlays/workflows.yaml

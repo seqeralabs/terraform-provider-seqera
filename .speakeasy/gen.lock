@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 3664e2674e65d9da37ff149adc441f2d
+  docChecksum: a1937e919b10518bb979cd4b287aa5ba
   docVersion: 1.226.2
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -184,6 +184,9 @@ trackedFiles:
   examples/resources/seqera_pipeline_secret/import.sh:
     id: aba12e768acd
     pristine_git_object: 4d69188d92974da17d3f96e317dcd1fea7e8c561
+  examples/resources/seqera_service_account/import-by-string-id.tf: {}
+  examples/resources/seqera_service_account/import.sh: {}
+  examples/resources/seqera_service_account/resource.tf: {}
   examples/resources/seqera_slurm_ce/import-by-string-id.tf: {}
   examples/resources/seqera_slurm_ce/import.sh: {}
   examples/resources/seqera_ssh_credential/import-by-string-id.tf:
@@ -527,6 +530,8 @@ trackedFiles:
   internal/provider/reflect/struct.go:
     id: 973d7dbf96c1
     pristine_git_object: c588f768bd7b39be33962188f97d81e1c4c25f4b
+  internal/provider/serviceaccount_resource.go: {}
+  internal/provider/serviceaccount_resource_sdk.go: {}
   internal/provider/slurmce_resource.go: {}
   internal/provider/slurmce_resource_sdk.go: {}
   internal/provider/sshcredential_resource.go:

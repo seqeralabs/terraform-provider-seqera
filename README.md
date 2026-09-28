@@ -113,6 +113,7 @@ Available configuration:
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
 * [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
 * [seqera_ssh_credential](docs/resources/ssh_credential.md)
+* [seqera_service_account](docs/resources/service_account.md)
 * [seqera_slurm_ce](docs/resources/slurm_ce.md)
 * [seqera_studios](docs/resources/studios.md)
 * [seqera_teams](docs/resources/teams.md)

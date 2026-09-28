@@ -3,8 +3,10 @@
 package shared
 
 type UpdateServiceAccountRequest struct {
+	// Description of the service account, up to 1000 characters.
 	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	// Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+	Name *string `json:"name,omitempty"`
 }
 
 func (u *UpdateServiceAccountRequest) GetDescription() *string {

@@ -5979,6 +5979,8 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
       requestBody:
         required: true
         content:
@@ -6010,6 +6012,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#create
   /orgs/{orgId}/service-accounts/{saId}:
     delete:
       operationId: DeleteServiceAccount
@@ -6021,12 +6026,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       responses:
         '204':
           description: No content
@@ -6042,6 +6050,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#delete
     get:
       operationId: DescribeServiceAccount
       summary: Describe a service account
@@ -6052,12 +6063,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       responses:
         '200':
           description: OK
@@ -6077,6 +6091,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#read
     patch:
       operationId: UpdateServiceAccount
       summary: Update a service account
@@ -6087,12 +6104,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       requestBody:
         required: true
         content:
@@ -6124,6 +6144,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#update
   /orgs/{orgId}/teams:
     get:
       operationId: ListOrganizationTeams
@@ -20118,10 +20141,13 @@ components:
         description:
           type: string
           maxLength: 1000
+          description: Description of the service account, up to 1000 characters.
         name:
           type: string
           maxLength: 40
           minLength: 1
+          description: >-
+            Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
       required:
         - name
     CreateServiceAccountResponse:
@@ -26187,19 +26213,39 @@ components:
         createdAt:
           type: string
           format: date-time
+          description: Creation timestamp.
         description:
           type: string
           nullable: true
         id:
           type: integer
           format: int64
+          description: >-
+            Service account numeric identifier (the account's user id). Use it as `seqera_agent.service_account_id`.
         memberId:
-          description: Organization membership ID of this service account
+          description: Organization membership identifier of the service account. Use it as `seqera_workspace_participant.member_id` to add the account to a workspace.
           type: integer
           format: int64
           nullable: true
         name:
           type: string
+      x-speakeasy-entity: ServiceAccount
+      x-speakeasy-terraform-resource-name: service_account
+      x-speakeasy-entity-description: |
+        Manage a service account in a Seqera organization. A service account
+        is a non-human identity that agents run as.
+
+        To use it, add it to a workspace with `seqera_workspace_participant`
+        (`member_id = seqera_service_account.x.member_id`) using a role that
+        allows launching agents, then bind it to an agent with
+        `seqera_agent.service_account_id = seqera_service_account.x.id`.
+
+        Deleting a service account removes it from every workspace. The
+        platform then disables every agent bound to it and pauses every action
+        that targets those agents. Terraform does not show these side effects
+        in a plan.
+
+        Requires service accounts to be enabled on the Platform instance.
     ServiceAccountImage:
       type: object
       properties:
@@ -27378,9 +27424,13 @@ components:
         description:
           type: string
           maxLength: 1000
+          description: Description of the service account, up to 1000 characters.
         name:
           type: string
           maxLength: 40
+          minLength: 1
+          description: >-
+            Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
     UpdateTeamRequest:
       type: object
       properties:

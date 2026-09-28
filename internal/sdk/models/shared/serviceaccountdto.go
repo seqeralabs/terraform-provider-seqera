@@ -8,10 +8,12 @@ import (
 )
 
 type ServiceAccountDto struct {
+	// Creation timestamp.
 	CreatedAt   *time.Time `json:"createdAt,omitempty"`
 	Description *string    `json:"description,omitempty"`
-	ID          *int64     `json:"id,omitempty"`
-	// Organization membership ID of this service account
+	// Service account numeric identifier (the account's user id). Use it as `seqera_agent.service_account_id`.
+	ID *int64 `json:"id,omitempty"`
+	// Organization membership identifier of the service account. Use it as `seqera_workspace_participant.member_id` to add the account to a workspace.
 	MemberID *int64  `json:"memberId,omitempty"`
 	Name     *string `json:"name,omitempty"`
 }
