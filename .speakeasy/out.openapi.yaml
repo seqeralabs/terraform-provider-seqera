@@ -20198,7 +20198,9 @@ components:
         description:
           type: string
           maxLength: 1000
-          description: Description of the service account, up to 1000 characters.
+          default: ""
+          description: >-
+            Description of the service account, up to 1000 characters. Removing it from the configuration clears it.
         name:
           type: string
           maxLength: 39
@@ -26280,7 +26282,7 @@ components:
         description:
           type: string
           nullable: true
-          x-speakeasy-param-suppress-computed-diff: true
+          default: ""
         id:
           type: integer
           format: int64
@@ -27511,7 +27513,9 @@ components:
         description:
           type: string
           maxLength: 1000
-          description: Description of the service account, up to 1000 characters.
+          default: ""
+          description: >-
+            Description of the service account, up to 1000 characters. Removing it from the configuration clears it.
         name:
           type: string
           maxLength: 39

@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/defaults"
+
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -164,7 +166,7 @@ func TestServiceAccountStableComputedAttributesKeepStateOnUpdate(t *testing.T) {
 	config := map[string]tftypes.Value{"org_id": num(7), "name": str("ci-agent")}
 	plan := map[string]tftypes.Value{
 		"org_id": num(7), "name": str("ci-agent"),
-		"id": unknownNumber, "member_id": unknownNumber, "description": unknownString, "created_at": unknownString,
+		"id": unknownNumber, "member_id": unknownNumber, "description": str(""), "created_at": unknownString,
 	}
 	f := newPlanFixture(t, s, state, plan, config)
 
@@ -173,9 +175,28 @@ func TestServiceAccountStableComputedAttributesKeepStateOnUpdate(t *testing.T) {
 			t.Errorf("%s planned as %v, want %d from state", attr, got, v)
 		}
 	}
-	for attr, v := range map[string]string{"created_at": "2026-09-01T10:00:00Z", "description": "CI identity"} {
+	for attr, v := range map[string]string{"created_at": "2026-09-01T10:00:00Z"} {
 		if got := plannedString(t, s, f, attr); got.IsUnknown() || got.ValueString() != v {
 			t.Errorf("%s planned as %v, want %q from state", attr, got, v)
 		}
+	}
+}
+
+// Removing description from the configuration must clear it. The update is
+// a PATCH that ignores a missing value but writes an empty string, so an
+// unset description plans (and sends) "".
+func TestServiceAccountDescriptionDefaultsToEmpty(t *testing.T) {
+	s := resourceSchema(t, NewServiceAccountResource())
+	a, ok := s.Attributes["description"].(schema.StringAttribute)
+	if !ok {
+		t.Fatal("description is not a string attribute")
+	}
+	if !a.Optional || !a.Computed || a.Default == nil {
+		t.Fatalf("description: optional=%v computed=%v default=%v, want optional, computed and a default", a.Optional, a.Computed, a.Default)
+	}
+	var resp defaults.StringResponse
+	a.Default.DefaultString(context.Background(), defaults.StringRequest{}, &resp)
+	if resp.PlanValue.IsNull() || resp.PlanValue.IsUnknown() || resp.PlanValue.ValueString() != "" {
+		t.Errorf("description default = %v, want empty string", resp.PlanValue)
 	}
 }

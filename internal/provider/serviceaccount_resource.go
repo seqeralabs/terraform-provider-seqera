@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -62,12 +63,10 @@ func (r *ServiceAccountResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Creation timestamp.`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Description of the service account, up to 1000 characters.`,
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(``),
+				Description: `Description of the service account, up to 1000 characters. Removing it from the configuration clears it. Default: ""`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1000),
 				},

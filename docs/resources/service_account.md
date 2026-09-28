@@ -63,7 +63,7 @@ resource "seqera_workspace_participant" "ci" {
 
 ### Optional
 
-- `description` (String) Description of the service account, up to 1000 characters.
+- `description` (String) Description of the service account, up to 1000 characters. Removing it from the configuration clears it. Default: ""
 
 ### Read-Only
 

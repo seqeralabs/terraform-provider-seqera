@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 8772a249f5b3a2743528a04250279488
+  docChecksum: 7139ad98b3b134fd1006958315f6a686
   docVersion: 1.226.2
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -6813,7 +6813,7 @@ examples:
         path:
           orgId: 652028
       requestBody:
-        application/json: {"name": "<value>"}
+        application/json: {"description": "", "name": "<value>"}
       responses:
         "201":
           application/json: {}
@@ -6846,7 +6846,7 @@ examples:
           orgId: 372477
           saId: 775996
       requestBody:
-        application/json: {}
+        application/json: {"description": ""}
       responses:
         "200":
           application/json: {}
