@@ -82,6 +82,8 @@ type AwsBatchConfig struct {
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
 	Region string `json:"region"`
+	// Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+	SecretsKmsKeyID *string `json:"secretsKmsKeyId,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// List of volume mount specifications for compute instances.
@@ -252,6 +254,13 @@ func (a *AwsBatchConfig) GetRegion() string {
 		return ""
 	}
 	return a.Region
+}
+
+func (a *AwsBatchConfig) GetSecretsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SecretsKmsKeyID
 }
 
 func (a *AwsBatchConfig) GetStorageType() *string {

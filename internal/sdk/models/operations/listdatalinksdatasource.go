@@ -10,6 +10,8 @@ import (
 type ListDataLinksDataSourceRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Filter results by creation source: `user` for manually created data-links, `cloud` for data-links discovered from credentials
+	CreationSource *string `queryParam:"style=form,explode=true,name=creationSource"`
 }
 
 func (l *ListDataLinksDataSourceRequest) GetWorkspaceID() *int64 {
@@ -17,6 +19,13 @@ func (l *ListDataLinksDataSourceRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return l.WorkspaceID
+}
+
+func (l *ListDataLinksDataSourceRequest) GetCreationSource() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CreationSource
 }
 
 type ListDataLinksDataSourceResponse struct {

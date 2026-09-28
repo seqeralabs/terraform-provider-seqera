@@ -78,6 +78,7 @@ resource "seqera_pipeline" "example" {
 
 ### Optional
 
+- `creation_source` (String) Filter results by creation source: `user` for manually created data-links, `cloud` for data-links discovered from credentials
 - `workspace_id` (Number) Workspace ID used for filtering
 
 ### Read-Only

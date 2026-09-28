@@ -4,9 +4,7 @@ package shared
 
 type BucketActionRequest struct {
 	DataLinkID *string  `json:"dataLinkId,omitempty"`
-	DatasetID  *string  `json:"datasetId,omitempty"`
 	Events     []string `json:"events,omitempty"`
-	Filter     *string  `json:"filter,omitempty"`
 	MarkerFile *string  `json:"markerFile,omitempty"`
 }
 
@@ -17,25 +15,11 @@ func (b *BucketActionRequest) GetDataLinkID() *string {
 	return b.DataLinkID
 }
 
-func (b *BucketActionRequest) GetDatasetID() *string {
-	if b == nil {
-		return nil
-	}
-	return b.DatasetID
-}
-
 func (b *BucketActionRequest) GetEvents() []string {
 	if b == nil {
 		return nil
 	}
 	return b.Events
-}
-
-func (b *BucketActionRequest) GetFilter() *string {
-	if b == nil {
-		return nil
-	}
-	return b.Filter
 }
 
 func (b *BucketActionRequest) GetMarkerFile() *string {

@@ -4,7 +4,6 @@ package stringplanmodifier
 
 import (
 	"context"
-
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/utils"

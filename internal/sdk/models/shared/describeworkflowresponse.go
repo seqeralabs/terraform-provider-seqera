@@ -148,6 +148,8 @@ type DescribeWorkflowResponseSchedConfig struct {
 	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 	//
 	BackendStrategy *DescribeWorkflowResponseBackendStrategy `json:"backendStrategy,omitempty"`
+	// Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+	BillingExportTable *string `json:"billingExportTable,omitempty"`
 	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 	// restrict to instance types that provide local SSD (NVMe) storage. Leave
 	// unset for no local-storage requirement.
@@ -165,6 +167,16 @@ type DescribeWorkflowResponseSchedConfig struct {
 	// scheduler are accepted by the API but may produce warnings.
 	//
 	MachineTypes []string `json:"machineTypes,omitempty"`
+	// Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited.
+	MaxCpusPerUser *int `json:"maxCpusPerUser,omitempty"`
+	// Maximum number of Spot provisioning attempts for a task, including the
+	// first one, before giving up on Spot capacity. `1` means a single attempt
+	// with no retry. Only used when `provisioning_model` is `spot` or
+	// `spotFirst` (the default).
+	//
+	// Must be a whole number between 1 and 10 (inclusive).
+	//
+	MaxSpotAttempts *int `json:"maxSpotAttempts,omitempty"`
 	// When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
 	NvmeEnabled *bool `json:"nvmeEnabled,omitempty"`
 	// Warm-pool configuration. When present and enabled, the scheduler keeps a
@@ -172,8 +184,8 @@ type DescribeWorkflowResponseSchedConfig struct {
 	//
 	Pool *DescribeWorkflowResponsePool `json:"pool,omitempty"`
 	// Resource-prediction model used by Intelligent Compute to size tasks.
-	// Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-	// is accepted.
+	// Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+	// string is accepted.
 	//
 	PredictionModel *string `json:"predictionModel,omitempty"`
 	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
@@ -205,6 +217,13 @@ func (d *DescribeWorkflowResponseSchedConfig) GetBackendStrategy() *DescribeWork
 	return d.BackendStrategy
 }
 
+func (d *DescribeWorkflowResponseSchedConfig) GetBillingExportTable() *string {
+	if d == nil {
+		return nil
+	}
+	return d.BillingExportTable
+}
+
 func (d *DescribeWorkflowResponseSchedConfig) GetDiskAllocation() *string {
 	if d == nil {
 		return nil
@@ -224,6 +243,20 @@ func (d *DescribeWorkflowResponseSchedConfig) GetMachineTypes() []string {
 		return nil
 	}
 	return d.MachineTypes
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetMaxCpusPerUser() *int {
+	if d == nil {
+		return nil
+	}
+	return d.MaxCpusPerUser
+}
+
+func (d *DescribeWorkflowResponseSchedConfig) GetMaxSpotAttempts() *int {
+	if d == nil {
+		return nil
+	}
+	return d.MaxSpotAttempts
 }
 
 func (d *DescribeWorkflowResponseSchedConfig) GetNvmeEnabled() *bool {
@@ -252,6 +285,36 @@ func (d *DescribeWorkflowResponseSchedConfig) GetProvisioningModel() *DescribeWo
 		return nil
 	}
 	return d.ProvisioningModel
+}
+
+type Fusion struct {
+	Enabled *bool   `json:"enabled,omitempty"`
+	Version *string `json:"version,omitempty"`
+}
+
+func (f *Fusion) GetEnabled() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.Enabled
+}
+
+func (f *Fusion) GetVersion() *string {
+	if f == nil {
+		return nil
+	}
+	return f.Version
+}
+
+type Wave struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+func (w *Wave) GetEnabled() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Enabled
 }
 
 // DescribeWorkflowResponseWorkflow - Represents a workflow execution record.
@@ -302,19 +365,20 @@ type DescribeWorkflowResponseWorkflow struct {
 	// Timestamp when the workflow was submitted for execution
 	Submit *time.Time `json:"submit,omitempty"`
 	// Work directory
-	WorkDir         *string       `json:"workDir,omitempty"`
-	ConfigProfiles  []string      `json:"configProfiles,omitempty"`
-	Fusion          *WfFusionMeta `json:"fusion,omitempty"`
-	LogFile         *string       `json:"logFile,omitempty"`
-	NextflowConfig  *string       `json:"nextflowConfig,omitempty"`
-	NextflowVersion *string       `json:"nextflowVersion,omitempty"`
-	OperationID     *string       `json:"operationId,omitempty"`
-	OutFile         *string       `json:"outFile,omitempty"`
-	PostRunScript   *string       `json:"postRunScript,omitempty"`
-	PreRunScript    *string       `json:"preRunScript,omitempty"`
-	SyntaxParser    *string       `json:"syntaxParser,omitempty"`
-	TowerConfig     *string       `json:"towerConfig,omitempty"`
-	Wave            *WfWaveMeta   `json:"wave,omitempty"`
+	WorkDir         *string  `json:"workDir,omitempty"`
+	ConfigProfiles  []string `json:"configProfiles,omitempty"`
+	Fusion          *Fusion  `json:"fusion,omitempty"`
+	FusionVersion   *string  `json:"fusionVersion,omitempty"`
+	LogFile         *string  `json:"logFile,omitempty"`
+	NextflowConfig  *string  `json:"nextflowConfig,omitempty"`
+	NextflowVersion *string  `json:"nextflowVersion,omitempty"`
+	OperationID     *string  `json:"operationId,omitempty"`
+	OutFile         *string  `json:"outFile,omitempty"`
+	PostRunScript   *string  `json:"postRunScript,omitempty"`
+	PreRunScript    *string  `json:"preRunScript,omitempty"`
+	SyntaxParser    *string  `json:"syntaxParser,omitempty"`
+	TowerConfig     *string  `json:"towerConfig,omitempty"`
+	Wave            *Wave    `json:"wave,omitempty"`
 }
 
 func (d DescribeWorkflowResponseWorkflow) MarshalJSON() ([]byte, error) {
@@ -503,11 +567,18 @@ func (d *DescribeWorkflowResponseWorkflow) GetConfigProfiles() []string {
 	return d.ConfigProfiles
 }
 
-func (d *DescribeWorkflowResponseWorkflow) GetFusion() *WfFusionMeta {
+func (d *DescribeWorkflowResponseWorkflow) GetFusion() *Fusion {
 	if d == nil {
 		return nil
 	}
 	return d.Fusion
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetFusionVersion() *string {
+	if d == nil {
+		return nil
+	}
+	return d.FusionVersion
 }
 
 func (d *DescribeWorkflowResponseWorkflow) GetLogFile() *string {
@@ -573,7 +644,7 @@ func (d *DescribeWorkflowResponseWorkflow) GetTowerConfig() *string {
 	return d.TowerConfig
 }
 
-func (d *DescribeWorkflowResponseWorkflow) GetWave() *WfWaveMeta {
+func (d *DescribeWorkflowResponseWorkflow) GetWave() *Wave {
 	if d == nil {
 		return nil
 	}

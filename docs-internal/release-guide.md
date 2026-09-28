@@ -12,8 +12,11 @@ Before creating a release, ensure the following items are completed:
 
 ### ✅ Version Management
 - [ ] Version number updated in `.speakeasy/gen.yaml` (terraform.version field) and matches the provider version being released.
+- [ ] `speakeasy run --skip-versioning` has been run, so the bump has reached the generated files: `.speakeasy/gen.lock` (`releaseVersion`), `examples/provider/provider.tf` and `internal/sdk/seqera.go` (`SDKVersion` and `UserAgent`).
+- [ ] **`README.md` installation snippet bumped by hand.** The snippet sits between `<!-- Start Installation -->` markers and looks generated, but `README.md` is not in `gen.lock`'s `trackedFiles`, so Speakeasy does not rewrite it. This step has been missed before — v0.40.1 and v0.40.0-RC8 both shipped with the README advertising the previous version.
 - [ ] Provider source name is correct in `gen.yaml` (author field)
 - [ ] Ensure the Github release version is matching the Platform version being targeted.
+- [ ] `CHANGELOG.md` has a section for the release, covering everything merged since the previous tag.
 
 ## Release Process ( Master branch)
 

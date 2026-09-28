@@ -73,7 +73,14 @@ func CreateCreateWorkflowLaunchResponseBodyWorkflowLaunchValidationErrorResponse
 	}
 }
 
-func (u *CreateWorkflowLaunchResponseBody) UnmarshalJSON(data []byte) error {
+func (u *CreateWorkflowLaunchResponseBody) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = CreateWorkflowLaunchResponseBody{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	var candidates []utils.UnionCandidate
 

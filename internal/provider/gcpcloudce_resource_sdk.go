@@ -47,17 +47,21 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config = &tfTypes.GoogleCloudConfig{}
 		r.Config.Arm64Enabled = types.BoolPointerValue(resp.Config.Arm64Enabled)
 		r.Config.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGb))
-		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
+		if resp.Config.Environment != nil {
+			r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
-		for _, environmentItem := range resp.Config.Environment {
-			var environment tfTypes.ConfigEnvVariable
+			for _, environmentItem := range resp.Config.Environment {
+				var environment tfTypes.ConfigEnvVariable
 
-			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-			environment.Head = types.BoolPointerValue(environmentItem.Head)
-			environment.Name = types.StringPointerValue(environmentItem.Name)
-			environment.Value = types.StringPointerValue(environmentItem.Value)
+				environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+				environment.Head = types.BoolPointerValue(environmentItem.Head)
+				environment.Name = types.StringPointerValue(environmentItem.Name)
+				environment.Value = types.StringPointerValue(environmentItem.Value)
 
-			r.Config.Environment = append(r.Config.Environment, environment)
+				r.Config.Environment = append(r.Config.Environment, environment)
+			}
+		} else {
+			r.Config.Environment = nil
 		}
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
@@ -71,6 +75,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -78,6 +83,8 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -93,19 +100,38 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
+		r.Config.Network = types.StringPointerValue(resp.Config.Network)
+		if resp.Config.NetworkTags != nil {
+			r.Config.NetworkTags = make([]types.String, 0, len(resp.Config.NetworkTags))
+			for _, v := range resp.Config.NetworkTags {
+				r.Config.NetworkTags = append(r.Config.NetworkTags, types.StringValue(v))
+			}
+		} else {
+			r.Config.NetworkTags = nil
+		}
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
+		if resp.Config.Subnetworks != nil {
+			r.Config.Subnetworks = make([]types.String, 0, len(resp.Config.Subnetworks))
+			for _, v := range resp.Config.Subnetworks {
+				r.Config.Subnetworks = append(r.Config.Subnetworks, types.StringValue(v))
+			}
+		} else {
+			r.Config.Subnetworks = nil
+		}
+		r.Config.UsePrivateAddress = types.BoolPointerValue(resp.Config.UsePrivateAddress)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.Config.Zone = types.StringPointerValue(resp.Config.Zone)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.FusionMetricsCollectionEnabled)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
@@ -252,6 +278,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	platform := new(shared.GCPCloudCEComputeConfigPlatform)
 	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
 		*platform = shared.GCPCloudCEComputeConfigPlatform(r.Platform.ValueString())
@@ -300,38 +332,41 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		bootDiskSizeGb = nil
 	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
+	var environment []shared.ConfigEnvVariable
+	if r.Config.Environment != nil {
+		environment = make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+		for environmentIndex := range r.Config.Environment {
+			compute := new(bool)
+			if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+				*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+			} else {
+				compute = nil
+			}
+			head := new(bool)
+			if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+				*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+			} else {
+				head = nil
+			}
+			name1 := new(string)
+			if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+				*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			value := new(string)
+			if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+				*value = r.Config.Environment[environmentIndex].Value.ValueString()
+			} else {
+				value = nil
+			}
+			environment = append(environment, shared.ConfigEnvVariable{
+				Compute: compute,
+				Head:    head,
+				Name:    name1,
+				Value:   value,
+			})
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name1,
-			Value:   value,
-		})
 	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
@@ -350,6 +385,19 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		*instanceType = r.Config.InstanceType.ValueString()
 	} else {
 		instanceType = nil
+	}
+	network := new(string)
+	if !r.Config.Network.IsUnknown() && !r.Config.Network.IsNull() {
+		*network = r.Config.Network.ValueString()
+	} else {
+		network = nil
+	}
+	var networkTags []string
+	if r.Config.NetworkTags != nil {
+		networkTags = make([]string, 0, len(r.Config.NetworkTags))
+		for networkTagsIndex := range r.Config.NetworkTags {
+			networkTags = append(networkTags, r.Config.NetworkTags[networkTagsIndex].ValueString())
+		}
 	}
 	nextflowConfig := new(string)
 	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
@@ -389,6 +437,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -404,6 +458,18 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		var machineTypes []string
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
 		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
@@ -444,26 +510,42 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	serviceAccountEmail := new(string)
 	if !r.Config.ServiceAccountEmail.IsUnknown() && !r.Config.ServiceAccountEmail.IsNull() {
 		*serviceAccountEmail = r.Config.ServiceAccountEmail.ValueString()
 	} else {
 		serviceAccountEmail = nil
+	}
+	var subnetworks []string
+	if r.Config.Subnetworks != nil {
+		subnetworks = make([]string, 0, len(r.Config.Subnetworks))
+		for subnetworksIndex := range r.Config.Subnetworks {
+			subnetworks = append(subnetworks, r.Config.Subnetworks[subnetworksIndex].ValueString())
+		}
+	}
+	usePrivateAddress := new(bool)
+	if !r.Config.UsePrivateAddress.IsUnknown() && !r.Config.UsePrivateAddress.IsNull() {
+		*usePrivateAddress = r.Config.UsePrivateAddress.ValueBool()
+	} else {
+		usePrivateAddress = nil
 	}
 	workDir := new(string)
 	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
@@ -478,36 +560,41 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		zone = nil
 	}
 	config := shared.GoogleCloudConfig{
-		Arm64Enabled:             arm64Enabled,
-		BootDiskSizeGb:           bootDiskSizeGb,
-		Environment:              environment,
-		GpuEnabled:               gpuEnabled,
-		ImageID:                  imageID,
-		InstanceType:             instanceType,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		ProjectID:                projectID,
-		Region:                   region,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		ServiceAccountEmail:      serviceAccountEmail,
-		WorkDir:                  workDir,
-		Zone:                     zone,
+		Arm64Enabled:              arm64Enabled,
+		BootDiskSizeGb:            bootDiskSizeGb,
+		Environment:               environment,
+		GpuEnabled:                gpuEnabled,
+		ImageID:                   imageID,
+		InstanceType:              instanceType,
+		Network:                   network,
+		NetworkTags:               networkTags,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		ProjectID:                 projectID,
+		Region:                    region,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		ServiceAccountEmail:       serviceAccountEmail,
+		Subnetworks:               subnetworks,
+		UsePrivateAddress:         usePrivateAddress,
+		WorkDir:                   workDir,
+		Zone:                      zone,
 	}
 	out := shared.GCPCloudCEComputeConfigInput{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-		ID:            id,
-		Name:          name,
-		Description:   description,
-		Platform:      platform,
-		Status:        status,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		LastUsed:      lastUsed,
-		Deleted:       deleted,
-		Config:        config,
+		CredentialsID:                  credentialsID,
+		WorkspaceID:                    workspaceID,
+		ID:                             id,
+		Name:                           name,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Platform:                       platform,
+		Status:                         status,
+		DateCreated:                    dateCreated,
+		LastUpdated:                    lastUpdated,
+		LastUsed:                       lastUsed,
+		Deleted:                        deleted,
+		Config:                         config,
 	}
 
 	return &out, diags
@@ -528,6 +615,12 @@ func (r *GCPCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -535,9 +628,10 @@ func (r *GCPCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 		name = nil
 	}
 	out := shared.UpdateComputeEnvRequest{
-		CredentialsID: credentialsID,
-		Description:   description,
-		Name:          name,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Name:                           name,
 	}
 
 	return &out, diags

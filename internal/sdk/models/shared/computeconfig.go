@@ -1676,6 +1676,8 @@ func (i *IBMLSFConfiguration) GetWorkDir() string {
 }
 
 type AzureCloudConfiguration struct {
+	// OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
 	// Azure Monitor data collection endpoint URL for diagnostic telemetry.
 	//
 	DataCollectionEndpoint *string `json:"dataCollectionEndpoint,omitempty"`
@@ -1724,8 +1726,17 @@ type AzureCloudConfiguration struct {
 	//
 	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
-	Subnets                  []string     `json:"subnets,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Azure VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool    `json:"schedEnabled,omitempty"`
+	Subnets                   []string `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -1743,6 +1754,13 @@ func (a *AzureCloudConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AzureCloudConfiguration) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzureCloudConfiguration) GetDataCollectionEndpoint() *string {
@@ -1864,11 +1882,11 @@ func (a *AzureCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	return a.IntelligentComputeConfig
 }
 
-func (a *AzureCloudConfiguration) GetSchedEnabled() *bool {
+func (a *AzureCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AzureCloudConfiguration) GetSubnets() []string {
@@ -2219,6 +2237,10 @@ type GoogleCloudConfiguration struct {
 	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
+	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
+	Network *string `json:"network,omitempty"`
+	// Network tags applied to compute instances (VPC firewall-rule targets).
+	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Shell script to execute after workflow completes
@@ -2233,12 +2255,25 @@ type GoogleCloudConfiguration struct {
 	//
 	Region                   *string      `json:"region,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Compute Engine VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	WaveEnabled         *bool   `json:"waveEnabled,omitempty"`
+	// Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+	Subnetworks []string `json:"subnetworks,omitempty"`
+	// Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	WaveEnabled       *bool `json:"waveEnabled,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Google Cloud zone within the configured region (e.g., us-central1-a).
@@ -2314,6 +2349,20 @@ func (g *GoogleCloudConfiguration) GetInstanceType() *string {
 	return g.InstanceType
 }
 
+func (g *GoogleCloudConfiguration) GetNetwork() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Network
+}
+
+func (g *GoogleCloudConfiguration) GetNetworkTags() []string {
+	if g == nil {
+		return nil
+	}
+	return g.NetworkTags
+}
+
 func (g *GoogleCloudConfiguration) GetNextflowConfig() *string {
 	if g == nil {
 		return nil
@@ -2356,11 +2405,11 @@ func (g *GoogleCloudConfiguration) GetIntelligentComputeConfig() *SchedConfig {
 	return g.IntelligentComputeConfig
 }
 
-func (g *GoogleCloudConfiguration) GetSchedEnabled() *bool {
+func (g *GoogleCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.SchedEnabled
+	return g.IntelligentComputeEnabled
 }
 
 func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
@@ -2368,6 +2417,20 @@ func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
 		return nil
 	}
 	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCloudConfiguration) GetSubnetworks() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Subnetworks
+}
+
+func (g *GoogleCloudConfiguration) GetUsePrivateAddress() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.UsePrivateAddress
 }
 
 func (g *GoogleCloudConfiguration) GetWaveEnabled() *bool {
@@ -2915,6 +2978,8 @@ type AWSCloudConfiguration struct {
 	// HTTP 403.
 	//
 	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
+	// Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+	SecretsKmsKeyID *string `json:"secretsKmsKeyId,omitempty"`
 	// List of security group IDs to attach to compute instances.
 	// Security groups must allow necessary network access.
 	//
@@ -3093,6 +3158,13 @@ func (a *AWSCloudConfiguration) GetIntelligentComputeEnabled() *bool {
 	return a.IntelligentComputeEnabled
 }
 
+func (a *AWSCloudConfiguration) GetSecretsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SecretsKmsKeyID
+}
+
 func (a *AWSCloudConfiguration) GetSecurityGroups() []string {
 	if a == nil {
 		return nil
@@ -3207,6 +3279,8 @@ type AWSBatchConfiguration struct {
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
 	Region string `json:"region"`
+	// Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+	SecretsKmsKeyID *string `json:"secretsKmsKeyId,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// List of volume mount specifications for compute instances.
@@ -3386,6 +3460,13 @@ func (a *AWSBatchConfiguration) GetRegion() string {
 		return ""
 	}
 	return a.Region
+}
+
+func (a *AWSBatchConfiguration) GetSecretsKmsKeyID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SecretsKmsKeyID
 }
 
 func (a *AWSBatchConfiguration) GetStorageType() *string {
@@ -3666,7 +3747,14 @@ func CreateComputeConfigUgePlatform(ugePlatform UnivaGridEngineConfiguration) Co
 	}
 }
 
-func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
+func (u *ComputeConfig) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = ComputeConfig{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`

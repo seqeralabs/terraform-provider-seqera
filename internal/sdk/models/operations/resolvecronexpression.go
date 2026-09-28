@@ -3,12 +3,14 @@
 package operations
 
 import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
 
 type ResolveCronExpressionRequest struct {
-	WorkspaceID *int64            `queryParam:"style=form,explode=false,name=workspaceId"`
-	RequestBody map[string]string `request:"mediaType=application/json"`
+	// Workspace numeric identifier
+	WorkspaceID                  *int64                              `queryParam:"style=form,explode=true,name=workspaceId"`
+	ResolveCronExpressionRequest shared.ResolveCronExpressionRequest `request:"mediaType=application/json"`
 }
 
 func (r *ResolveCronExpressionRequest) GetWorkspaceID() *int64 {
@@ -18,15 +20,11 @@ func (r *ResolveCronExpressionRequest) GetWorkspaceID() *int64 {
 	return r.WorkspaceID
 }
 
-func (r *ResolveCronExpressionRequest) GetRequestBody() map[string]string {
+func (r *ResolveCronExpressionRequest) GetResolveCronExpressionRequest() shared.ResolveCronExpressionRequest {
 	if r == nil {
-		return map[string]string{}
+		return shared.ResolveCronExpressionRequest{}
 	}
-	return r.RequestBody
-}
-
-// ResolveCronExpressionResponseBody - ResolveCronExpression 200 response
-type ResolveCronExpressionResponseBody struct {
+	return r.ResolveCronExpressionRequest
 }
 
 type ResolveCronExpressionResponse struct {
@@ -36,8 +34,10 @@ type ResolveCronExpressionResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// ResolveCronExpression 200 response
-	Object *ResolveCronExpressionResponseBody
+	// OK
+	ResolveCronExpressionResponse *shared.ResolveCronExpressionResponse
+	// Bad request
+	ErrorResponse *shared.ErrorResponse
 }
 
 func (r *ResolveCronExpressionResponse) GetContentType() string {
@@ -61,9 +61,16 @@ func (r *ResolveCronExpressionResponse) GetRawResponse() *http.Response {
 	return r.RawResponse
 }
 
-func (r *ResolveCronExpressionResponse) GetObject() *ResolveCronExpressionResponseBody {
+func (r *ResolveCronExpressionResponse) GetResolveCronExpressionResponse() *shared.ResolveCronExpressionResponse {
 	if r == nil {
 		return nil
 	}
-	return r.Object
+	return r.ResolveCronExpressionResponse
+}
+
+func (r *ResolveCronExpressionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if r == nil {
+		return nil
+	}
+	return r.ErrorResponse
 }

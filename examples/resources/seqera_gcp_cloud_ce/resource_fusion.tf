@@ -1,5 +1,8 @@
-# GCP Cloud with Fusion v2 and Wave — mounts GCS buckets as a distributed
-# file system, accelerating data-heavy workloads. Fusion v2 requires Wave.
+# GCP Cloud with Fusion v2 — mounts GCS buckets as a distributed file
+# system, accelerating data-heavy workloads.
+#
+# Fusion v2 and Wave are always on for Cloud compute environments — the
+# backend enables them and they are not user-settable
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
@@ -12,8 +15,6 @@ resource "seqera_gcp_cloud_ce" "fusion" {
     work_dir              = "gs://my-bucket/work"
     instance_type         = "n2-standard-4"
     service_account_email = "seqera-runner@my-gcp-project.iam.gserviceaccount.com"
-    enable_wave           = true
-    enable_fusion         = true
     boot_disk_size_gb     = 100
   }
 }

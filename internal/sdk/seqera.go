@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.187.0 and generator version 2.928.0
+// Generated from OpenAPI doc version 1.226.2 and generator version 2.941.0
 
 import (
 	"context"
@@ -57,7 +57,8 @@ type Seqera struct {
 	Admin  *Admin
 	Agents *Agents
 	// Avatars
-	Avatars *Avatars
+	Avatars       *Avatars
+	Compatibility *Compatibility
 	// Compute environments
 	ComputeEnvs *ComputeEnvs
 	// Credentials
@@ -70,9 +71,12 @@ type Seqera struct {
 	Ga4gh      *Ga4gh
 	Identities *Identities
 	// Workflow launch events
-	Launch *Launch
+	Launch  *Launch
+	Lineage *Lineage
 	// Organizations
 	Orgs *Orgs
+	// Service accounts in an organization context
+	ServiceAccounts *ServiceAccounts
 	// Teams in an organization context
 	Teams *Teams
 	// Workspaces in an organization context
@@ -177,10 +181,13 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.42.0",
+		SDKVersion: "0.43.0-RC2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.42.0 2.928.0 1.187.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
-			ServerList: ServerList,
+			UserAgent:         "speakeasy-sdk/terraform 0.43.0-RC2 2.941.0 1.226.2 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			SDKVersion:        "0.43.0-RC2",
+			GenVersion:        "2.941.0",
+			OpenAPIDocVersion: "1.226.2",
+			ServerList:        ServerList,
 		},
 		hooks: hooks.New(),
 	}
@@ -205,6 +212,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Admin = newAdmin(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Agents = newAgents(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Compatibility = newCompatibility(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -212,7 +220,9 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Identities = newIdentities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Lineage = newLineage(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ServiceAccounts = newServiceAccounts(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PipelineSchemas = newPipelineSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)

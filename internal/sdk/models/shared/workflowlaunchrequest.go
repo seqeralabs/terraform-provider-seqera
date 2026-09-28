@@ -41,6 +41,8 @@ type WorkflowLaunchRequest struct {
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
+	// Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
@@ -119,6 +121,13 @@ func (w *WorkflowLaunchRequest) GetEntryName() *string {
 		return nil
 	}
 	return w.EntryName
+}
+
+func (w *WorkflowLaunchRequest) GetFusionVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.FusionVersion
 }
 
 func (w *WorkflowLaunchRequest) GetHeadJobCpus() *int {

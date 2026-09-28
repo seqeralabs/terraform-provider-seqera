@@ -43,6 +43,8 @@ resource "seqera_gcp_batch_ce" "fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_google_credential.main.credentials_id
 
+  fusion_metrics_collection_enabled = true
+
   config = {
     location        = "us-central1"
     work_dir        = "gs://my-bucket/work"
@@ -91,6 +93,10 @@ resource "seqera_gcp_batch_ce" "private_network" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only

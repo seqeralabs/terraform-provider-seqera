@@ -121,8 +121,10 @@ resource "seqera_aws_cloud_ce" "networked" {
 ### Fusion Graviton
 
 ```terraform
-# AWS Cloud (Classic mode) with Fusion v2, Wave, and Graviton (ARM64).
-# Fusion v2 requires Wave; Graviton requires both.
+# AWS Cloud (Classic mode) with Fusion v2 and Graviton (ARM64).
+#
+# Fusion v2 and Wave are always on for Cloud compute environments — the
+# backend enables them and they are not user-settable
 resource "seqera_aws_cloud_ce" "fusion_graviton" {
   name           = "aws-cloud-fusion-graviton"
   workspace_id   = data.seqera_workspace.main.id
@@ -131,8 +133,6 @@ resource "seqera_aws_cloud_ce" "fusion_graviton" {
   config = {
     region        = "us-west-1"
     work_dir      = "s3://my-bucket/work"
-    enable_wave   = true
-    enable_fusion = true
     arm64_enabled = true
     instance_type = "m7g.large" # Graviton head node
     ebs_boot_size = 100
@@ -188,6 +188,8 @@ resource "seqera_aws_cloud_ce" "intelligent" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -267,6 +269,7 @@ Requires replacement if changed.
 - `nextflow_config` (String) Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -313,6 +316,7 @@ Optional:
 
 Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave
 unset for no local-storage requirement.
@@ -327,12 +331,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:

@@ -12,17 +12,19 @@ import (
 type ActionEventTypeType string
 
 const (
-	ActionEventTypeTypeBucket ActionEventTypeType = "bucket"
-	ActionEventTypeTypeCron   ActionEventTypeType = "cron"
-	ActionEventTypeTypeGithub ActionEventTypeType = "github"
-	ActionEventTypeTypeTower  ActionEventTypeType = "tower"
+	ActionEventTypeTypeBucket         ActionEventTypeType = "bucket"
+	ActionEventTypeTypeCron           ActionEventTypeType = "cron"
+	ActionEventTypeTypeGithub         ActionEventTypeType = "github"
+	ActionEventTypeTypePipelineStatus ActionEventTypeType = "pipeline_status"
+	ActionEventTypeTypeTower          ActionEventTypeType = "tower"
 )
 
 type ActionEventType struct {
-	GithubActionEvent      *GithubActionEvent      `queryParam:"inline" union:"member"`
-	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline" union:"member"`
-	BucketActionEvent      *BucketActionEvent      `queryParam:"inline" union:"member"`
-	CronActionEvent        *CronActionEvent        `queryParam:"inline" union:"member"`
+	GithubActionEvent         *GithubActionEvent         `queryParam:"inline" union:"member"`
+	ActionTowerActionEvent    *ActionTowerActionEvent    `queryParam:"inline" union:"member"`
+	BucketActionEvent         *BucketActionEvent         `queryParam:"inline" union:"member"`
+	CronActionEvent           *CronActionEvent           `queryParam:"inline" union:"member"`
+	PipelineStatusActionEvent *PipelineStatusActionEvent `queryParam:"inline" union:"member"`
 
 	Type ActionEventTypeType
 }
@@ -63,6 +65,18 @@ func CreateActionEventTypeGithub(github GithubActionEvent) ActionEventType {
 	}
 }
 
+func CreateActionEventTypePipelineStatus(pipelineStatus PipelineStatusActionEvent) ActionEventType {
+	typ := ActionEventTypeTypePipelineStatus
+
+	typStr := string(typ)
+	pipelineStatus.Discriminator = &typStr
+
+	return ActionEventType{
+		PipelineStatusActionEvent: &pipelineStatus,
+		Type:                      typ,
+	}
+}
+
 func CreateActionEventTypeTower(tower ActionTowerActionEvent) ActionEventType {
 	typ := ActionEventTypeTypeTower
 
@@ -75,7 +89,14 @@ func CreateActionEventTypeTower(tower ActionTowerActionEvent) ActionEventType {
 	}
 }
 
-func (u *ActionEventType) UnmarshalJSON(data []byte) error {
+func (u *ActionEventType) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = ActionEventType{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`
@@ -114,6 +135,15 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 		u.GithubActionEvent = githubActionEvent
 		u.Type = ActionEventTypeTypeGithub
 		return nil
+	case "pipeline_status":
+		pipelineStatusActionEvent := new(PipelineStatusActionEvent)
+		if err := utils.UnmarshalJSON(data, &pipelineStatusActionEvent, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == pipeline_status) type PipelineStatusActionEvent within ActionEventType: %w", string(data), err)
+		}
+
+		u.PipelineStatusActionEvent = pipelineStatusActionEvent
+		u.Type = ActionEventTypeTypePipelineStatus
+		return nil
 	case "tower":
 		actionTowerActionEvent := new(ActionTowerActionEvent)
 		if err := utils.UnmarshalJSON(data, &actionTowerActionEvent, "", true, nil); err != nil {
@@ -143,6 +173,10 @@ func (u ActionEventType) MarshalJSON() ([]byte, error) {
 
 	if u.CronActionEvent != nil {
 		return utils.MarshalJSON(u.CronActionEvent, "", true)
+	}
+
+	if u.PipelineStatusActionEvent != nil {
+		return utils.MarshalJSON(u.PipelineStatusActionEvent, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionEventType: all fields are null")

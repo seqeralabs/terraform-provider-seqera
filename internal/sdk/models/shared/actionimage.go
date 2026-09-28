@@ -67,6 +67,13 @@ func (a *ActionImage) GetConfigGithub() *GithubActionConfig {
 	return nil
 }
 
+func (a *ActionImage) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
+	}
+	return nil
+}
+
 func (a *ActionImage) GetConfigTower() *ActionTowerActionConfig {
 	if v := a.GetConfig(); v != nil {
 		return v.ActionTowerActionConfig
@@ -105,6 +112,13 @@ func (a *ActionImage) GetEventCron() *CronActionEvent {
 func (a *ActionImage) GetEventGithub() *GithubActionEvent {
 	if v := a.GetEvent(); v != nil {
 		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (a *ActionImage) GetEventPipelineStatus() *PipelineStatusActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.PipelineStatusActionEvent
 	}
 	return nil
 }

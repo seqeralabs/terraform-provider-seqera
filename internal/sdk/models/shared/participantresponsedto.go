@@ -2,20 +2,92 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type ParticipantResponseDtoOrgRole string
+
+const (
+	ParticipantResponseDtoOrgRoleOwner          ParticipantResponseDtoOrgRole = "owner"
+	ParticipantResponseDtoOrgRoleMember         ParticipantResponseDtoOrgRole = "member"
+	ParticipantResponseDtoOrgRoleCollaborator   ParticipantResponseDtoOrgRole = "collaborator"
+	ParticipantResponseDtoOrgRoleServiceAccount ParticipantResponseDtoOrgRole = "service_account"
+)
+
+func (e ParticipantResponseDtoOrgRole) ToPointer() *ParticipantResponseDtoOrgRole {
+	return &e
+}
+func (e *ParticipantResponseDtoOrgRole) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "owner":
+		fallthrough
+	case "member":
+		fallthrough
+	case "collaborator":
+		fallthrough
+	case "service_account":
+		*e = ParticipantResponseDtoOrgRole(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ParticipantResponseDtoOrgRole: %v", v)
+	}
+}
+
+type ParticipantResponseDtoUserType string
+
+const (
+	ParticipantResponseDtoUserTypeHuman          ParticipantResponseDtoUserType = "HUMAN"
+	ParticipantResponseDtoUserTypeServiceAccount ParticipantResponseDtoUserType = "SERVICE_ACCOUNT"
+)
+
+func (e ParticipantResponseDtoUserType) ToPointer() *ParticipantResponseDtoUserType {
+	return &e
+}
+func (e *ParticipantResponseDtoUserType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "HUMAN":
+		fallthrough
+	case "SERVICE_ACCOUNT":
+		*e = ParticipantResponseDtoUserType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ParticipantResponseDtoUserType: %v", v)
+	}
+}
+
 type ParticipantResponseDto struct {
-	Email         *string          `json:"email,omitempty"`
-	FirstName     *string          `json:"firstName,omitempty"`
-	LastName      *string          `json:"lastName,omitempty"`
-	MemberID      *int64           `json:"memberId,omitempty"`
-	OrgRole       *OrgRole         `json:"orgRole,omitempty"`
-	ParticipantID *int64           `json:"participantId,omitempty"`
-	TeamAvatarURL *string          `json:"teamAvatarUrl,omitempty"`
-	TeamID        *int64           `json:"teamId,omitempty"`
-	TeamName      *string          `json:"teamName,omitempty"`
-	Type          *ParticipantType `json:"type,omitempty"`
-	UserAvatarURL *string          `json:"userAvatarUrl,omitempty"`
-	UserName      *string          `json:"userName,omitempty"`
-	WspRole       *string          `json:"wspRole,omitempty"`
+	DisplayName   *string                         `json:"displayName,omitempty"`
+	Email         *string                         `json:"email,omitempty"`
+	FirstName     *string                         `json:"firstName,omitempty"`
+	LastName      *string                         `json:"lastName,omitempty"`
+	MemberID      *int64                          `json:"memberId,omitempty"`
+	OrgRole       *ParticipantResponseDtoOrgRole  `json:"orgRole,omitempty"`
+	ParticipantID *int64                          `json:"participantId,omitempty"`
+	TeamAvatarURL *string                         `json:"teamAvatarUrl,omitempty"`
+	TeamID        *int64                          `json:"teamId,omitempty"`
+	TeamName      *string                         `json:"teamName,omitempty"`
+	Type          *ParticipantType                `json:"type,omitempty"`
+	UserAvatarURL *string                         `json:"userAvatarUrl,omitempty"`
+	UserName      *string                         `json:"userName,omitempty"`
+	UserType      *ParticipantResponseDtoUserType `json:"userType,omitempty"`
+	WspRole       *string                         `json:"wspRole,omitempty"`
+}
+
+func (p *ParticipantResponseDto) GetDisplayName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DisplayName
 }
 
 func (p *ParticipantResponseDto) GetEmail() *string {
@@ -46,7 +118,7 @@ func (p *ParticipantResponseDto) GetMemberID() *int64 {
 	return p.MemberID
 }
 
-func (p *ParticipantResponseDto) GetOrgRole() *OrgRole {
+func (p *ParticipantResponseDto) GetOrgRole() *ParticipantResponseDtoOrgRole {
 	if p == nil {
 		return nil
 	}
@@ -100,6 +172,13 @@ func (p *ParticipantResponseDto) GetUserName() *string {
 		return nil
 	}
 	return p.UserName
+}
+
+func (p *ParticipantResponseDto) GetUserType() *ParticipantResponseDtoUserType {
+	if p == nil {
+		return nil
+	}
+	return p.UserType
 }
 
 func (p *ParticipantResponseDto) GetWspRole() *string {

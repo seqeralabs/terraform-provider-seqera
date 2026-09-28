@@ -32,6 +32,8 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
+	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -54,21 +56,22 @@ type GCPCloudCEResource struct {
 
 // GCPCloudCEResourceModel describes the resource data model.
 type GCPCloudCEResourceModel struct {
-	ComputeEnvID  types.String               `tfsdk:"compute_env_id"`
-	Config        *tfTypes.GoogleCloudConfig `tfsdk:"config"`
-	CredentialsID types.String               `tfsdk:"credentials_id"`
-	DateCreated   types.String               `tfsdk:"date_created"`
-	Deleted       types.Bool                 `tfsdk:"-"`
-	Description   types.String               `tfsdk:"description"`
-	ID            types.String               `tfsdk:"id"`
-	LabelIds      []types.Int64              `tfsdk:"label_ids"`
-	LastUpdated   types.String               `tfsdk:"last_updated"`
-	LastUsed      types.String               `tfsdk:"last_used"`
-	Name          types.String               `tfsdk:"name"`
-	OrgID         types.Int64                `tfsdk:"org_id"`
-	Platform      types.String               `tfsdk:"platform"`
-	Status        types.String               `tfsdk:"status"`
-	WorkspaceID   types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnvID                   types.String               `tfsdk:"compute_env_id"`
+	Config                         *tfTypes.GoogleCloudConfig `tfsdk:"config"`
+	CredentialsID                  types.String               `tfsdk:"credentials_id"`
+	DateCreated                    types.String               `tfsdk:"date_created"`
+	Deleted                        types.Bool                 `tfsdk:"-"`
+	Description                    types.String               `tfsdk:"description"`
+	FusionMetricsCollectionEnabled types.Bool                 `tfsdk:"fusion_metrics_collection_enabled"`
+	ID                             types.String               `tfsdk:"id"`
+	LabelIds                       []types.Int64              `tfsdk:"label_ids"`
+	LastUpdated                    types.String               `tfsdk:"last_updated"`
+	LastUsed                       types.String               `tfsdk:"last_used"`
+	Name                           types.String               `tfsdk:"name"`
+	OrgID                          types.Int64                `tfsdk:"org_id"`
+	Platform                       types.String               `tfsdk:"platform"`
+	Status                         types.String               `tfsdk:"status"`
+	WorkspaceID                    types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GCPCloudCEResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,7 +81,7 @@ func (r *GCPCloudCEResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Google Cloud compute environments in Seqera platform.\n\nGCP Cloud compute environments execute Nextflow pipelines directly on\nGoogle Compute Engine VMs managed by Seqera. Use this resource for\nlong-running or interactive workloads where Seqera provisions and manages\nthe underlying compute instances directly (rather than via Google Batch).\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Computed:    true,
@@ -239,6 +242,15 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									),
 								},
 							},
+							"billing_export_table": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									stringplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+								Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+							},
 							"disk_allocation": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -278,6 +290,33 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 									`scheduler are accepted by the API but may produce warnings.` + "\n" +
 									`Requires replacement if changed.`,
+							},
+							"max_cpus_per_user": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+							},
+							"max_spot_attempts": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+									`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+									`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+									`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+									`` + "\n" +
+									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Int32{
+									custom_int32validators.MaxSpotAttemptsValidator(),
+								},
 							},
 							"pool": schema.SingleNestedAttribute{
 								Computed: true,
@@ -327,8 +366,8 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-									`is accepted.` + "\n" +
+									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+									`string is accepted.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"provisioning_model": schema.StringAttribute{
@@ -357,6 +396,42 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							},
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"intelligent_compute_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Compute Engine VMs with` + "\n" +
+							`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+							`all tasks run on a single instance (Classic mode).` + "\n" +
+							`` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+							`to accept the platform defaults, or provide it (only when` + "\n" +
+							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+							`Requires replacement if changed.`,
+					},
+					"network": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.`,
+					},
+					"network_tags": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.`,
 					},
 					"nextflow_config": schema.StringAttribute{
 						Computed: true,
@@ -412,15 +487,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Examples: us-central1, europe-west1, asia-east1` + "\n" +
 							`Requires replacement if changed.`,
 					},
-					"sched_enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
 					"service_account_email": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -431,6 +497,28 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						MarkdownDescription: `Google Cloud service account email for compute instances.` + "\n" +
 							`If not specified, the default compute service account is used.` + "\n" +
 							`Requires replacement if changed.`,
+					},
+					"subnetworks": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+					},
+					"use_private_address": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.PrivateAddressRequiresNetworkValidator(),
+						},
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,
@@ -460,6 +548,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					custom_objectvalidators.SchedConfigConsistencyValidator(),
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 				},
 			},
@@ -481,6 +570,12 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2000),
 				},
+			},
+			"fusion_metrics_collection_enabled": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				MarkdownDescription: `Enable Fusion metrics collection for this compute environment. Can be changed` + "\n" +
+					`in place without replacing the compute environment.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -890,5 +985,6 @@ func (r *GCPCloudCEResource) ImportState(ctx context.Context, req resource.Impor
 func (r *GCPCloudCEResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.GcpcloudceStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.GcpcloudceStateUpgraderV1},
 	}
 }

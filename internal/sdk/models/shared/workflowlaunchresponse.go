@@ -36,17 +36,21 @@ func (e *WorkflowLaunchResponseSyntaxParser) UnmarshalJSON(data []byte) error {
 }
 
 type WorkflowLaunchResponse struct {
-	CommitID        *string                  `json:"commitId,omitempty"`
-	ComputeEnv      *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
-	ConfigProfiles  []string                 `json:"configProfiles,omitempty"`
-	ConfigText      *string                  `json:"configText,omitempty"`
-	DateCreated     *time.Time               `json:"dateCreated,omitempty"`
-	EntryName       *string                  `json:"entryName,omitempty"`
-	HeadJobCpus     *int                     `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int                     `json:"headJobMemoryMb,omitempty"`
-	ID              *string                  `json:"id,omitempty"`
-	MainScript      *string                  `json:"mainScript,omitempty"`
-	// Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+	CommitID       *string                  `json:"commitId,omitempty"`
+	ComputeEnv     *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
+	ConfigProfiles []string                 `json:"configProfiles,omitempty"`
+	ConfigText     *string                  `json:"configText,omitempty"`
+	DateCreated    *time.Time               `json:"dateCreated,omitempty"`
+	EntryName      *string                  `json:"entryName,omitempty"`
+	// Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+	FusionVersion   *string `json:"fusionVersion,omitempty"`
+	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	ID              *string `json:"id,omitempty"`
+	// Custom launcher image that takes precedence over the selected Nextflow version.
+	LaunchContainer *string `json:"launchContainer,omitempty"`
+	MainScript      *string `json:"mainScript,omitempty"`
+	// Saved Nextflow release selection, retained for relaunch/resume. A custom launcher image takes precedence over this selection.
 	NextflowVersion     *string `json:"nextflowVersion,omitempty"`
 	OptimizationID      *string `json:"optimizationId,omitempty"`
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
@@ -126,6 +130,13 @@ func (w *WorkflowLaunchResponse) GetEntryName() *string {
 	return w.EntryName
 }
 
+func (w *WorkflowLaunchResponse) GetFusionVersion() *string {
+	if w == nil {
+		return nil
+	}
+	return w.FusionVersion
+}
+
 func (w *WorkflowLaunchResponse) GetHeadJobCpus() *int {
 	if w == nil {
 		return nil
@@ -145,6 +156,13 @@ func (w *WorkflowLaunchResponse) GetID() *string {
 		return nil
 	}
 	return w.ID
+}
+
+func (w *WorkflowLaunchResponse) GetLaunchContainer() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LaunchContainer
 }
 
 func (w *WorkflowLaunchResponse) GetMainScript() *string {

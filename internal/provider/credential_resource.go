@@ -519,10 +519,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"client_secret": schema.StringAttribute{
 								Optional:  true,
 								Sensitive: true,
+								WriteOnly: true,
 							},
 							"private_key": schema.StringAttribute{
 								Optional:  true,
 								Sensitive: true,
+								WriteOnly: true,
 							},
 							"slug": schema.StringAttribute{
 								Computed: true,
@@ -531,6 +533,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"webhook_secret": schema.StringAttribute{
 								Optional:  true,
 								Sensitive: true,
+								WriteOnly: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -921,8 +924,21 @@ func (r *CredentialResource) Configure(ctx context.Context, req resource.Configu
 }
 
 func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *CredentialResourceModel
-	var plan types.Object
+	var (
+		configData CredentialResourceModel
+		data       CredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -938,7 +954,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -975,7 +991,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1035,7 +1051,7 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1076,8 +1092,29 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 }
 
 func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *CredentialResourceModel
-	var plan types.Object
+	var (
+		configData CredentialResourceModel
+		data       CredentialResourceModel
+		plan       types.Object
+		stateData  CredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -1089,7 +1126,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1117,7 +1154,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1177,7 +1214,7 @@ func (r *CredentialResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

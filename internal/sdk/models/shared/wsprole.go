@@ -16,6 +16,7 @@ const (
 	WspRoleLaunch   WspRole = "launch"
 	WspRoleConnect  WspRole = "connect"
 	WspRoleView     WspRole = "view"
+	WspRoleProject  WspRole = "project"
 )
 
 func (e WspRole) ToPointer() *WspRole {
@@ -38,6 +39,8 @@ func (e *WspRole) UnmarshalJSON(data []byte) error {
 	case "connect":
 		fallthrough
 	case "view":
+		fallthrough
+	case "project":
 		*e = WspRole(v)
 		return nil
 	default:

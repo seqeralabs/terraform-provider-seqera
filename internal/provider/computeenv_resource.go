@@ -36,6 +36,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
+	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -75,7 +76,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
-		Version:             2,
+		Version:             3,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -946,6 +947,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
+									"secrets_kms_key_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.`,
+									},
 									"storage_type": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1199,6 +1208,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -1235,6 +1252,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"max_cpus_per_user": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+											},
+											"max_spot_attempts": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+													`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+													`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+													`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													custom_int32validators.MaxSpotAttemptsValidator(),
+												},
 											},
 											"pool": schema.SingleNestedAttribute{
 												Computed: true,
@@ -1279,8 +1321,8 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-													`is accepted.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+													`string is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -1383,6 +1425,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
+									"secrets_kms_key_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.`,
+									},
 									"security_groups": schema.ListAttribute{
 										CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
 										Computed:   true,
@@ -1468,6 +1518,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"azure_batch": schema.SingleNestedAttribute{
@@ -1957,6 +2008,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									objectplanmodifier.RequiresReplaceIfConfigured(),
 								},
 								Attributes: map[string]schema.Attribute{
+									"boot_disk_size_gb": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.Between(50, 4095),
+										},
+									},
 									"data_collection_endpoint": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -2068,6 +2130,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -2104,6 +2174,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"max_cpus_per_user": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+											},
+											"max_spot_attempts": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+													`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+													`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+													`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													custom_int32validators.MaxSpotAttemptsValidator(),
+												},
 											},
 											"pool": schema.SingleNestedAttribute{
 												Computed: true,
@@ -2148,8 +2243,8 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-													`is accepted.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+													`string is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -2177,6 +2272,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Azure VMs with` + "\n" +
+											`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+											`all tasks run on a single instance (Classic mode).` + "\n" +
+											`` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+											`to accept the platform defaults, or provide it (only when` + "\n" +
+											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,
@@ -2271,14 +2382,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`ignores any user-supplied value, so this field is computed by the` + "\n" +
 											`backend rather than configured.`,
 									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"subnets": schema.ListAttribute{
 										Computed: true,
 										Optional: true,
@@ -2328,8 +2431,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.SchedConfigConsistencyValidator(),
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"eks_platform": schema.SingleNestedAttribute{
@@ -3429,6 +3534,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -3465,6 +3578,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"max_cpus_per_user": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+											},
+											"max_spot_attempts": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+													`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+													`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+													`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													custom_int32validators.MaxSpotAttemptsValidator(),
+												},
 											},
 											"pool": schema.SingleNestedAttribute{
 												Computed: true,
@@ -3509,8 +3647,8 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-													`is accepted.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+													`string is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -3538,6 +3676,39 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Compute Engine VMs with` + "\n" +
+											`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+											`all tasks run on a single instance (Classic mode).` + "\n" +
+											`` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+											`to accept the platform defaults, or provide it (only when` + "\n" +
+											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+											`Requires replacement if changed.`,
+									},
+									"network": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.`,
+									},
+									"network_tags": schema.ListAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										Description: `Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -3590,14 +3761,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"service_account_email": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -3607,6 +3770,26 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										MarkdownDescription: `Google Cloud service account email for compute instances.` + "\n" +
 											`If not specified, the default compute service account is used.` + "\n" +
 											`Requires replacement if changed.`,
+									},
+									"subnetworks": schema.ListAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										Description: `Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+									},
+									"use_private_address": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.PrivateAddressRequiresNetworkValidator(),
+										},
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -3650,6 +3833,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.SchedConfigConsistencyValidator(),
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 								},
 							},
@@ -4274,6 +4458,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4310,6 +4502,31 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 													`scheduler are accepted by the API but may produce warnings.` + "\n" +
 													`Requires replacement if changed.`,
+											},
+											"max_cpus_per_user": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+											},
+											"max_spot_attempts": schema.Int32Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int32{
+													int32planmodifier.RequiresReplaceIfConfigured(),
+												},
+												MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+													`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+													`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+													`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													custom_int32validators.MaxSpotAttemptsValidator(),
+												},
 											},
 											"pool": schema.SingleNestedAttribute{
 												Computed: true,
@@ -4354,8 +4571,8 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-													`is accepted.` + "\n" +
+													`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+													`string is accepted.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"provisioning_model": schema.StringAttribute{
@@ -4462,6 +4679,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"lsf_platform": schema.SingleNestedAttribute{
@@ -6061,5 +6279,6 @@ func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resourc
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
 		1: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV1},
+		2: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV2},
 	}
 }

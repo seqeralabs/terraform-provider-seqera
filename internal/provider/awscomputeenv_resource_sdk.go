@@ -26,17 +26,21 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.Config.DragenQueue = types.StringPointerValue(resp.Config.DragenQueue)
 		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
 		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
-		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
+		if resp.Config.Environment != nil {
+			r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
-		for _, environmentItem := range resp.Config.Environment {
-			var environment tfTypes.ConfigEnvVariable
+			for _, environmentItem := range resp.Config.Environment {
+				var environment tfTypes.ConfigEnvVariable
 
-			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-			environment.Head = types.BoolPointerValue(environmentItem.Head)
-			environment.Name = types.StringPointerValue(environmentItem.Name)
-			environment.Value = types.StringPointerValue(environmentItem.Value)
+				environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+				environment.Head = types.BoolPointerValue(environmentItem.Head)
+				environment.Name = types.StringPointerValue(environmentItem.Name)
+				environment.Value = types.StringPointerValue(environmentItem.Value)
 
-			r.Config.Environment = append(r.Config.Environment, environment)
+				r.Config.Environment = append(r.Config.Environment, environment)
+			}
+		} else {
+			r.Config.Environment = nil
 		}
 		r.Config.ExecutionRole = types.StringPointerValue(resp.Config.ExecutionRole)
 		if resp.Config.Forge == nil {
@@ -105,6 +109,7 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
+		r.Config.SecretsKmsKeyID = types.StringPointerValue(resp.Config.SecretsKmsKeyID)
 		r.Config.StorageType = types.StringPointerValue(resp.Config.StorageType)
 		r.Config.Volumes = make([]types.String, 0, len(resp.Config.Volumes))
 		for _, v := range resp.Config.Volumes {
@@ -115,6 +120,7 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.FusionMetricsCollectionEnabled)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
@@ -261,6 +267,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	platform := shared.AWSComputeEnvComputeConfigPlatform(r.Platform.ValueString())
 	status := new(string)
 	if !r.Status.IsUnknown() && !r.Status.IsNull() {
@@ -322,38 +334,41 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		dragenQueue = nil
 	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
+	var environment []shared.ConfigEnvVariable
+	if r.Config.Environment != nil {
+		environment = make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+		for environmentIndex := range r.Config.Environment {
+			compute := new(bool)
+			if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+				*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+			} else {
+				compute = nil
+			}
+			head := new(bool)
+			if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+				*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+			} else {
+				head = nil
+			}
+			name1 := new(string)
+			if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+				*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			value := new(string)
+			if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+				*value = r.Config.Environment[environmentIndex].Value.ValueString()
+			} else {
+				value = nil
+			}
+			environment = append(environment, shared.ConfigEnvVariable{
+				Compute: compute,
+				Head:    head,
+				Name:    name1,
+				Value:   value,
+			})
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name1,
-			Value:   value,
-		})
 	}
 	executionRole := new(string)
 	if !r.Config.ExecutionRole.IsUnknown() && !r.Config.ExecutionRole.IsNull() {
@@ -625,6 +640,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	var region string
 	region = r.Config.Region.ValueString()
 
+	secretsKmsKeyID := new(string)
+	if !r.Config.SecretsKmsKeyID.IsUnknown() && !r.Config.SecretsKmsKeyID.IsNull() {
+		*secretsKmsKeyID = r.Config.SecretsKmsKeyID.ValueString()
+	} else {
+		secretsKmsKeyID = nil
+	}
 	storageType := new(string)
 	if !r.Config.StorageType.IsUnknown() && !r.Config.StorageType.IsNull() {
 		*storageType = r.Config.StorageType.ValueString()
@@ -669,24 +690,26 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		PostRunScript:      postRunScript,
 		PreRunScript:       preRunScript,
 		Region:             region,
+		SecretsKmsKeyID:    secretsKmsKeyID,
 		StorageType:        storageType,
 		Volumes:            volumes,
 		EnableWave:         enableWave,
 		WorkDir:            workDir,
 	}
 	out := shared.AWSComputeEnvComputeConfigInput{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-		ID:            id,
-		Name:          name,
-		Description:   description,
-		Platform:      platform,
-		Status:        status,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		LastUsed:      lastUsed,
-		Deleted:       deleted,
-		Config:        config,
+		CredentialsID:                  credentialsID,
+		WorkspaceID:                    workspaceID,
+		ID:                             id,
+		Name:                           name,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Platform:                       platform,
+		Status:                         status,
+		DateCreated:                    dateCreated,
+		LastUpdated:                    lastUpdated,
+		LastUsed:                       lastUsed,
+		Deleted:                        deleted,
+		Config:                         config,
 	}
 
 	return &out, diags
@@ -729,6 +752,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedUpdateComputeEnvRequest(ctx context
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -736,9 +765,10 @@ func (r *AWSComputeEnvResourceModel) ToSharedUpdateComputeEnvRequest(ctx context
 		name = nil
 	}
 	out := shared.UpdateComputeEnvRequest{
-		CredentialsID: credentialsID,
-		Description:   description,
-		Name:          name,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Name:                           name,
 	}
 
 	return &out, diags

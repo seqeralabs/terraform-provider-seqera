@@ -3,11 +3,19 @@
 package shared
 
 type UpdateActionRequest struct {
+	// Bucket trigger updates. Changes the marker file and the events. The data link cannot change. Allowed only on a `bucket` action. On other actions, the request returns 400.
 	Bucket *BucketActionRequest `json:"bucket,omitempty"`
-	Cron   *CronActionRequest   `json:"cron,omitempty"`
+	// Cron trigger updates. Changes the schedule and its timezone. An omitted field keeps its stored value, but an `expression` clears a stored `preset`. Allowed only on a `cron` action. On other actions, the request returns 400.
+	Cron *CronActionRequest `json:"cron,omitempty"`
+	// The labels of the action, as a whole set. Omit to leave them unchanged. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+	LabelIds []int64 `json:"labelIds,omitempty"`
 	// Launch payload for `seqera_action` Create / Update endpoints.
 	Launch *ActionLaunchRequest `json:"launch,omitempty"`
 	Name   *string              `json:"name,omitempty"`
+	// Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+	Pipeline *PipelineActionRequest `json:"pipeline,omitempty"`
+	// Pipeline-status trigger updates. Changes the pipeline to watch and the run state that fires the action. Allowed only on a `pipeline_status` action. On other actions, the request returns 400. The run that the action starts is set in `launch`, not here.
+	PipelineStatus *PipelineStatusActionRequest `json:"pipelineStatus,omitempty"`
 }
 
 func (u *UpdateActionRequest) GetBucket() *BucketActionRequest {
@@ -24,6 +32,13 @@ func (u *UpdateActionRequest) GetCron() *CronActionRequest {
 	return u.Cron
 }
 
+func (u *UpdateActionRequest) GetLabelIds() []int64 {
+	if u == nil {
+		return nil
+	}
+	return u.LabelIds
+}
+
 func (u *UpdateActionRequest) GetLaunch() *ActionLaunchRequest {
 	if u == nil {
 		return nil
@@ -36,4 +51,18 @@ func (u *UpdateActionRequest) GetName() *string {
 		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdateActionRequest) GetPipeline() *PipelineActionRequest {
+	if u == nil {
+		return nil
+	}
+	return u.Pipeline
+}
+
+func (u *UpdateActionRequest) GetPipelineStatus() *PipelineStatusActionRequest {
+	if u == nil {
+		return nil
+	}
+	return u.PipelineStatus
 }

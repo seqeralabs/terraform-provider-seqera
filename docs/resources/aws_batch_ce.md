@@ -56,6 +56,8 @@ resource "seqera_aws_batch_ce" "forge_fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_aws_credential.main.credentials_id
 
+  fusion_metrics_collection_enabled = true
+
   config = {
     region        = "us-east-1"
     work_dir      = "s3://my-bucket/work"
@@ -114,6 +116,10 @@ resource "seqera_aws_batch_ce" "manual" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -199,6 +205,7 @@ Requires replacement if changed.
 - `pre_run_script` (String) Bash script to run before workflow execution begins.
 Use for environment setup, loading modules, downloading reference data, etc.
 Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) List of volume mount specifications for compute instances.
 Format follows Docker volume mount syntax.

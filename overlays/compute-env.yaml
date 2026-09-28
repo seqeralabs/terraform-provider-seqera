@@ -201,7 +201,7 @@ actions:
   - target: $.components.schemas.ComputeEnvResponseDto
     update:
       x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity-version: 2
+      x-speakeasy-entity-version: 3
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -541,6 +541,14 @@ actions:
   - target: $.components.schemas.LocalComputeConfig.properties.schedConfig
     update:
       x-speakeasy-name-override: intelligent_compute_config
+
+  # billing_export_table names a BigQuery Cloud Billing export and is consumed
+  # only by the Google backend. Same family of exception as backend_strategy /
+  # fusion_snapshots: the shared SchedConfig can't drop a field for one
+  # platform, so reject it at plan time on Seqera Compute too.
+  - target: $.components.schemas.LocalComputeConfig
+    update:
+      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
 
   # ============================================================================
   # FIELD IGNORE - Cloud compute environments require fusion2 and wave to be
@@ -1171,6 +1179,11 @@ actions:
     update:
       description: |
         Azure managed identity client ID for compute instances.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AzCloudConfig.properties.bootDiskSizeGB
+    update:
+      description: OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
       x-speakeasy-param-force-new: true
 
   - target: $.components.schemas.AzCloudConfig.properties.dataCollectionEndpoint

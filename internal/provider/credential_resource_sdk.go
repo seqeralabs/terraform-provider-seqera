@@ -11,6 +11,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// CredentialResourceModelOptions enables patch sdk method construction.
+type CredentialResourceModelOptions struct {
+	Config *CredentialResourceModel
+	State  *CredentialResourceModel
+}
+
 func (r *CredentialResourceModel) RefreshFromSharedCreateCredentialsResponse(ctx context.Context, resp *shared.CreateCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -289,13 +295,13 @@ func (r *CredentialResourceModel) RefreshFromSharedDescribeCredentialsResponse(c
 	return diags
 }
 
-func (r *CredentialResourceModel) ToOperationsCreateCredentialsRequest(ctx context.Context) (*operations.CreateCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToOperationsCreateCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*operations.CreateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
-	createCredentialsRequest, createCredentialsRequestDiags := r.ToSharedCreateCredentialsRequest(ctx)
+	createCredentialsRequest, createCredentialsRequestDiags := r.ToSharedCreateCredentialsRequest(ctx, opts)
 	diags.Append(createCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -310,7 +316,7 @@ func (r *CredentialResourceModel) ToOperationsCreateCredentialsRequest(ctx conte
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToOperationsDeleteCredentialsRequest(ctx context.Context) (*operations.DeleteCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToOperationsDeleteCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*operations.DeleteCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -337,7 +343,7 @@ func (r *CredentialResourceModel) ToOperationsDeleteCredentialsRequest(ctx conte
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToOperationsDescribeCredentialsRequest(ctx context.Context) (*operations.DescribeCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToOperationsDescribeCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*operations.DescribeCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -357,7 +363,7 @@ func (r *CredentialResourceModel) ToOperationsDescribeCredentialsRequest(ctx con
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToOperationsUpdateCredentialsRequest(ctx context.Context) (*operations.UpdateCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToOperationsUpdateCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*operations.UpdateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -369,7 +375,7 @@ func (r *CredentialResourceModel) ToOperationsUpdateCredentialsRequest(ctx conte
 	} else {
 		workspaceID = nil
 	}
-	updateCredentialsRequest, updateCredentialsRequestDiags := r.ToSharedUpdateCredentialsRequest(ctx)
+	updateCredentialsRequest, updateCredentialsRequestDiags := r.ToSharedUpdateCredentialsRequest(ctx, opts)
 	diags.Append(updateCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -385,10 +391,10 @@ func (r *CredentialResourceModel) ToOperationsUpdateCredentialsRequest(ctx conte
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToSharedCreateCredentialsRequest(ctx context.Context) (*shared.CreateCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToSharedCreateCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*shared.CreateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx)
+	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -402,7 +408,7 @@ func (r *CredentialResourceModel) ToSharedCreateCredentialsRequest(ctx context.C
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) (*shared.CredentialsInput, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context, opts *CredentialResourceModelOptions) (*shared.CredentialsInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	baseURL := new(string)
@@ -545,14 +551,14 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			clientID = nil
 		}
 		clientSecret := new(string)
-		if !r.Keys.GithubApp.ClientSecret.IsUnknown() && !r.Keys.GithubApp.ClientSecret.IsNull() {
-			*clientSecret = r.Keys.GithubApp.ClientSecret.ValueString()
+		if !opts.Config.Keys.GithubApp.ClientSecret.IsUnknown() && !opts.Config.Keys.GithubApp.ClientSecret.IsNull() {
+			*clientSecret = opts.Config.Keys.GithubApp.ClientSecret.ValueString()
 		} else {
 			clientSecret = nil
 		}
 		privateKey := new(string)
-		if !r.Keys.GithubApp.PrivateKey.IsUnknown() && !r.Keys.GithubApp.PrivateKey.IsNull() {
-			*privateKey = r.Keys.GithubApp.PrivateKey.ValueString()
+		if !opts.Config.Keys.GithubApp.PrivateKey.IsUnknown() && !opts.Config.Keys.GithubApp.PrivateKey.IsNull() {
+			*privateKey = opts.Config.Keys.GithubApp.PrivateKey.ValueString()
 		} else {
 			privateKey = nil
 		}
@@ -563,8 +569,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			slug = nil
 		}
 		webhookSecret := new(string)
-		if !r.Keys.GithubApp.WebhookSecret.IsUnknown() && !r.Keys.GithubApp.WebhookSecret.IsNull() {
-			*webhookSecret = r.Keys.GithubApp.WebhookSecret.ValueString()
+		if !opts.Config.Keys.GithubApp.WebhookSecret.IsUnknown() && !opts.Config.Keys.GithubApp.WebhookSecret.IsNull() {
+			*webhookSecret = opts.Config.Keys.GithubApp.WebhookSecret.ValueString()
 		} else {
 			webhookSecret = nil
 		}
@@ -1113,10 +1119,10 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	return &out, diags
 }
 
-func (r *CredentialResourceModel) ToSharedUpdateCredentialsRequest(ctx context.Context) (*shared.UpdateCredentialsRequest, diag.Diagnostics) {
+func (r *CredentialResourceModel) ToSharedUpdateCredentialsRequest(ctx context.Context, opts *CredentialResourceModelOptions) (*shared.UpdateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx)
+	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

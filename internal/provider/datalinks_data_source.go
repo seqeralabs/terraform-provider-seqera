@@ -29,8 +29,9 @@ type DataLinksDataSource struct {
 
 // DataLinksDataSourceModel describes the data model.
 type DataLinksDataSourceModel struct {
-	DataLinks   []tfTypes.DataLink `tfsdk:"data_links"`
-	WorkspaceID types.Int64        `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CreationSource types.String       `queryParam:"style=form,explode=true,name=creationSource" tfsdk:"creation_source"`
+	DataLinks      []tfTypes.DataLink `tfsdk:"data_links"`
+	WorkspaceID    types.Int64        `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -44,6 +45,10 @@ func (r *DataLinksDataSource) Schema(ctx context.Context, req datasource.SchemaR
 		MarkdownDescription: "Data source for listing data links in Seqera platform.\n\nThis data source returns all data links accessible to the authenticated user,\nwith optional filtering by workspace. Use Terraform locals with for expressions\nto filter by provider type or name.\n",
 
 		Attributes: map[string]schema.Attribute{
+			"creation_source": schema.StringAttribute{
+				Optional:    true,
+				Description: `Filter results by creation source: ` + "`" + `user` + "`" + ` for manually created data-links, ` + "`" + `cloud` + "`" + ` for data-links discovered from credentials`,
+			},
 			"data_links": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{

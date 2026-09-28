@@ -364,6 +364,8 @@ type LaunchDbDto struct {
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
+	// Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
@@ -439,6 +441,13 @@ func (l *LaunchDbDto) GetEntryName() *string {
 		return nil
 	}
 	return l.EntryName
+}
+
+func (l *LaunchDbDto) GetFusionVersion() *string {
+	if l == nil {
+		return nil
+	}
+	return l.FusionVersion
 }
 
 func (l *LaunchDbDto) GetHeadJobCpus() *int {

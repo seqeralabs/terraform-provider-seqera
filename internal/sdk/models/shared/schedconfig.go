@@ -131,6 +131,8 @@ type SchedConfig struct {
 	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 	//
 	BackendStrategy *SchedConfigBackendStrategy `json:"backendStrategy,omitempty"`
+	// Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+	BillingExportTable *string `json:"billingExportTable,omitempty"`
 	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 	// restrict to instance types that provide local SSD (NVMe) storage. Leave
 	// unset for no local-storage requirement.
@@ -148,6 +150,16 @@ type SchedConfig struct {
 	// scheduler are accepted by the API but may produce warnings.
 	//
 	MachineTypes []string `json:"machineTypes,omitempty"`
+	// Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited.
+	MaxCpusPerUser *int `json:"maxCpusPerUser,omitempty"`
+	// Maximum number of Spot provisioning attempts for a task, including the
+	// first one, before giving up on Spot capacity. `1` means a single attempt
+	// with no retry. Only used when `provisioning_model` is `spot` or
+	// `spotFirst` (the default).
+	//
+	// Must be a whole number between 1 and 10 (inclusive).
+	//
+	MaxSpotAttempts *int `json:"maxSpotAttempts,omitempty"`
 	// When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
 	NvmeEnabled *bool `json:"nvmeEnabled,omitempty"`
 	// Warm-pool configuration. When present and enabled, the scheduler keeps a
@@ -155,8 +167,8 @@ type SchedConfig struct {
 	//
 	Pool *SchedConfigPool `json:"pool,omitempty"`
 	// Resource-prediction model used by Intelligent Compute to size tasks.
-	// Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-	// is accepted.
+	// Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+	// string is accepted.
 	//
 	PredictionModel *string `json:"predictionModel,omitempty"`
 	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
@@ -188,6 +200,13 @@ func (s *SchedConfig) GetBackendStrategy() *SchedConfigBackendStrategy {
 	return s.BackendStrategy
 }
 
+func (s *SchedConfig) GetBillingExportTable() *string {
+	if s == nil {
+		return nil
+	}
+	return s.BillingExportTable
+}
+
 func (s *SchedConfig) GetDiskAllocation() *string {
 	if s == nil {
 		return nil
@@ -207,6 +226,20 @@ func (s *SchedConfig) GetMachineTypes() []string {
 		return nil
 	}
 	return s.MachineTypes
+}
+
+func (s *SchedConfig) GetMaxCpusPerUser() *int {
+	if s == nil {
+		return nil
+	}
+	return s.MaxCpusPerUser
+}
+
+func (s *SchedConfig) GetMaxSpotAttempts() *int {
+	if s == nil {
+		return nil
+	}
+	return s.MaxSpotAttempts
 }
 
 func (s *SchedConfig) GetNvmeEnabled() *bool {

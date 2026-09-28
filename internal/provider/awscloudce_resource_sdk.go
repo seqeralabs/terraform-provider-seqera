@@ -29,17 +29,21 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.EbsEncrypted = types.BoolPointerValue(resp.Config.EbsEncrypted)
 		r.Config.EbsKmsKeyID = types.StringPointerValue(resp.Config.EbsKmsKeyID)
 		r.Config.Ec2KeyPair = types.StringPointerValue(resp.Config.Ec2KeyPair)
-		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
+		if resp.Config.Environment != nil {
+			r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
-		for _, environmentItem := range resp.Config.Environment {
-			var environment tfTypes.ConfigEnvVariable
+			for _, environmentItem := range resp.Config.Environment {
+				var environment tfTypes.ConfigEnvVariable
 
-			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-			environment.Head = types.BoolPointerValue(environmentItem.Head)
-			environment.Name = types.StringPointerValue(environmentItem.Name)
-			environment.Value = types.StringPointerValue(environmentItem.Value)
+				environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+				environment.Head = types.BoolPointerValue(environmentItem.Head)
+				environment.Name = types.StringPointerValue(environmentItem.Name)
+				environment.Value = types.StringPointerValue(environmentItem.Value)
 
-			r.Config.Environment = append(r.Config.Environment, environment)
+				r.Config.Environment = append(r.Config.Environment, environment)
+			}
+		} else {
+			r.Config.Environment = nil
 		}
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
@@ -54,6 +58,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -61,6 +66,8 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -82,6 +89,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
+		r.Config.SecretsKmsKeyID = types.StringPointerValue(resp.Config.SecretsKmsKeyID)
 		securityGroupsValue, securityGroupsDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.SecurityGroups)
 		diags.Append(securityGroupsDiags...)
 		securityGroupsValuable, securityGroupsDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, securityGroupsValue)
@@ -99,6 +107,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.FusionMetricsCollectionEnabled)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
@@ -249,6 +258,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	platform := new(shared.AwsCloudCEComputeConfigPlatform)
 	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
 		*platform = shared.AwsCloudCEComputeConfigPlatform(r.Platform.ValueString())
@@ -319,38 +334,41 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		ec2KeyPair = nil
 	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
+	var environment []shared.ConfigEnvVariable
+	if r.Config.Environment != nil {
+		environment = make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+		for environmentIndex := range r.Config.Environment {
+			compute := new(bool)
+			if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+				*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+			} else {
+				compute = nil
+			}
+			head := new(bool)
+			if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+				*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+			} else {
+				head = nil
+			}
+			name1 := new(string)
+			if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+				*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			value := new(string)
+			if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+				*value = r.Config.Environment[environmentIndex].Value.ValueString()
+			} else {
+				value = nil
+			}
+			environment = append(environment, shared.ConfigEnvVariable{
+				Compute: compute,
+				Head:    head,
+				Name:    name1,
+				Value:   value,
+			})
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name1,
-			Value:   value,
-		})
 	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
@@ -411,6 +429,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -426,6 +450,18 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		var machineTypes []string
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
 		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
@@ -466,13 +502,16 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
 	intelligentComputeEnabled := new(bool)
@@ -480,6 +519,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
 		intelligentComputeEnabled = nil
+	}
+	secretsKmsKeyID := new(string)
+	if !r.Config.SecretsKmsKeyID.IsUnknown() && !r.Config.SecretsKmsKeyID.IsNull() {
+		*secretsKmsKeyID = r.Config.SecretsKmsKeyID.ValueString()
+	} else {
+		secretsKmsKeyID = nil
 	}
 	var securityGroups []string
 	if !r.Config.SecurityGroups.IsUnknown() && !r.Config.SecurityGroups.IsNull() {
@@ -526,6 +571,7 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		Region:                    region,
 		IntelligentComputeConfig:  intelligentComputeConfig,
 		IntelligentComputeEnabled: intelligentComputeEnabled,
+		SecretsKmsKeyID:           secretsKmsKeyID,
 		SecurityGroups:            securityGroups,
 		SubnetID:                  subnetID,
 		SubnetIds:                 subnetIds,
@@ -533,18 +579,19 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		WorkDir:                   workDir,
 	}
 	out := shared.AwsCloudCEComputeConfigInput{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-		ID:            id,
-		Name:          name,
-		Description:   description,
-		Platform:      platform,
-		Status:        status,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		LastUsed:      lastUsed,
-		Deleted:       deleted,
-		Config:        config,
+		CredentialsID:                  credentialsID,
+		WorkspaceID:                    workspaceID,
+		ID:                             id,
+		Name:                           name,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Platform:                       platform,
+		Status:                         status,
+		DateCreated:                    dateCreated,
+		LastUpdated:                    lastUpdated,
+		LastUsed:                       lastUsed,
+		Deleted:                        deleted,
+		Config:                         config,
 	}
 
 	return &out, diags
@@ -587,6 +634,12 @@ func (r *AwsCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -594,9 +647,10 @@ func (r *AwsCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 		name = nil
 	}
 	out := shared.UpdateComputeEnvRequest{
-		CredentialsID: credentialsID,
-		Description:   description,
-		Name:          name,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Name:                           name,
 	}
 
 	return &out, diags

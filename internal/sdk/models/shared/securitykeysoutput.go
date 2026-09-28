@@ -986,7 +986,14 @@ func CreateSecurityKeysOutputTwAgent(twAgent TowerAgentCredentials) SecurityKeys
 	}
 }
 
-func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
+func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = SecurityKeysOutput{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`
@@ -2449,7 +2456,14 @@ func CreateSecurityKeysTwAgent(twAgent TowerAgentCredentials) SecurityKeys {
 	}
 }
 
-func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
+func (u *SecurityKeys) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = SecurityKeys{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Discriminator string `json:"discriminator"`

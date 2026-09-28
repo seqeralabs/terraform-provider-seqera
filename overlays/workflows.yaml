@@ -446,14 +446,10 @@ actions:
   # state value into the plan instead of unknown. (On replacement Terraform
   # re-plans the create with null prior state, so these still show as
   # unknown there — that's core Terraform behavior for computed attributes.)
-  # pipelineInfo is a $ref property; extensions as $ref siblings are
-  # dropped, so unwrap into allOf to carry the extension.
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["pipelineInfo"]["$ref"]
-    remove: true
+  # pipelineInfo is already wrapped in allOf upstream, so the extension
+  # can be set directly on the property.
   - target: $.components.schemas.DescribeWorkflowResponse.properties.pipelineInfo
     update:
-      allOf:
-        - $ref: "#/components/schemas/PipelineMinInfoResponse"
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.DescribeWorkflowResponse.properties.schedEnabled
     update:

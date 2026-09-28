@@ -12,17 +12,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
+	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -41,20 +44,26 @@ type ActionResource struct {
 
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
-	ActionID      types.String                 `tfsdk:"action_id"`
-	Bucket        *tfTypes.BucketActionRequest `tfsdk:"bucket"`
-	Config        *tfTypes.ActionConfigType    `tfsdk:"config"`
-	Cron          *tfTypes.CronActionRequest   `tfsdk:"cron"`
-	Error         types.String                 `tfsdk:"error"`
-	HookID        types.String                 `tfsdk:"hook_id"`
-	HookURL       types.String                 `tfsdk:"hook_url"`
-	ID            types.String                 `tfsdk:"id"`
-	Launch        *tfTypes.ActionLaunchRequest `tfsdk:"launch"`
-	Name          types.String                 `tfsdk:"name"`
-	NextExecution types.String                 `tfsdk:"next_execution"`
-	Source        types.String                 `tfsdk:"source"`
-	Status        types.String                 `tfsdk:"status"`
-	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActionID       types.String                          `tfsdk:"action_id"`
+	Agent          *tfTypes.AgentActionRequest           `tfsdk:"agent"`
+	Bucket         *tfTypes.BucketActionRequest          `tfsdk:"bucket"`
+	Config         *tfTypes.ActionConfigType             `tfsdk:"config"`
+	Cron           *tfTypes.CronActionRequest            `tfsdk:"cron"`
+	Error          types.String                          `tfsdk:"error"`
+	HookID         types.String                          `tfsdk:"hook_id"`
+	HookURL        types.String                          `tfsdk:"hook_url"`
+	ID             types.String                          `tfsdk:"id"`
+	LabelIds       []types.Int64                         `tfsdk:"label_ids"`
+	LastTrigger    *tfTypes.ActionResponseDtoLastTrigger `tfsdk:"last_trigger"`
+	Launch         *tfTypes.ActionLaunchRequest          `tfsdk:"launch"`
+	Name           types.String                          `tfsdk:"name"`
+	NextExecution  types.String                          `tfsdk:"next_execution"`
+	Pipeline       *tfTypes.PipelineActionRequest        `tfsdk:"pipeline"`
+	PipelineStatus *tfTypes.PipelineStatusActionRequest  `tfsdk:"pipeline_status"`
+	ResponseType   types.String                          `tfsdk:"response_type"`
+	Source         types.String                          `tfsdk:"source"`
+	Status         types.String                          `tfsdk:"status"`
+	WorkspaceID    types.Int64                           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,26 +79,44 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed:    true,
 				Description: `Action string identifier`,
 			},
+			"agent": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"agent_config_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `ID of an existing workspace agent to run. Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Description: `Agent outcome configuration. Required when ` + "`" + `responseType` + "`" + ` is ` + "`" + `agent` + "`" + `, which in turn requires ` + "`" + `source` + "`" + ` to be ` + "`" + `bucket` + "`" + `, ` + "`" + `cron` + "`" + ` or ` + "`" + `pipeline_status` + "`" + `. Requires replacement if changed.`,
+			},
 			"bucket": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"data_link_id": schema.StringAttribute{
 						Optional: true,
 					},
-					"dataset_id": schema.StringAttribute{
-						Optional: true,
-					},
 					"events": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
-					},
-					"filter": schema.StringAttribute{
-						Optional: true,
 					},
 					"marker_file": schema.StringAttribute{
 						Optional: true,
 					},
 				},
+				Description: `Bucket trigger configuration. Names the data link and the marker file to watch. Required when ` + "`" + `source` + "`" + ` is ` + "`" + `bucket` + "`" + `. Ignored for other sources.`,
 			},
 			"config": schema.SingleNestedAttribute{
 				Computed: true,
@@ -103,18 +130,12 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"data_link_id": schema.StringAttribute{
 								Computed: true,
 							},
-							"dataset_id": schema.StringAttribute{
-								Computed: true,
-							},
 							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
 							"events": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-							},
-							"filter": schema.StringAttribute{
-								Computed: true,
 							},
 							"marker_file": schema.StringAttribute{
 								Computed: true,
@@ -152,6 +173,20 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 						},
 					},
+					"pipeline_status": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"pipeline_id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"run_status": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
 					"tower": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -175,6 +210,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 					},
 				},
+				Description: `Cron trigger configuration. Sets the schedule and its timezone. Required when ` + "`" + `source` + "`" + ` is ` + "`" + `cron` + "`" + `. Ignored for other sources.`,
 			},
 			"error": schema.StringAttribute{
 				Computed: true,
@@ -193,6 +229,49 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Unique identifier for the action`,
+			},
+			"label_ids": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.Int64Type,
+				Description: `The labels to attach to the action. Send it only when the action has no launch. A request that also sends ` + "`" + `launch.labelIds` + "`" + ` is refused.`,
+			},
+			"last_trigger": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"action_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"actor_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"agent_run_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"caused_by_trigger_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"event_summary": schema.StringAttribute{
+						Computed: true,
+					},
+					"fired_at": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"outcome": schema.StringAttribute{
+						Computed: true,
+					},
+					"outcome_detail": schema.StringAttribute{
+						Computed: true,
+					},
+					"source": schema.StringAttribute{
+						Computed: true,
+					},
+					"workflow_id": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"launch": schema.SingleNestedAttribute{
 				Required: true,
@@ -217,6 +296,11 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(80),
 						},
+					},
+					"fusion_version": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.`,
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Optional:    true,
@@ -391,6 +475,59 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"next_execution": schema.StringAttribute{
 				Computed: true,
 			},
+			"pipeline": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"target_pipeline_id": schema.Int64Attribute{
+						Computed: true,
+						Optional: true,
+					},
+					"target_pipeline_version_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+				},
+				Description: `Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in ` + "`" + `launch` + "`" + `, and each run is recorded as a run of the linked pipeline. Allowed when ` + "`" + `responseType` + "`" + ` is ` + "`" + `pipeline` + "`" + `, for any ` + "`" + `source` + "`" + `. On a ` + "`" + `pipeline_status` + "`" + ` action, set the pipeline to watch in ` + "`" + `pipelineStatus` + "`" + `.`,
+			},
+			"pipeline_status": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"pipeline_id": schema.Int64Attribute{
+						Optional: true,
+					},
+					"run_status": schema.StringAttribute{
+						Optional:    true,
+						Description: `must be one of ["SUBMITTED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED", "UNKNOWN"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"SUBMITTED",
+								"RUNNING",
+								"SUCCEEDED",
+								"FAILED",
+								"CANCELLED",
+								"UNKNOWN",
+							),
+						},
+					},
+				},
+				Description: `Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when ` + "`" + `source` + "`" + ` is ` + "`" + `pipeline_status` + "`" + `. Ignored for other sources. The run that the action starts is set in ` + "`" + `launch` + "`" + `, not here.`,
+			},
+			"response_type": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `What the action does when it triggers. Defaults to ` + "`" + `pipeline` + "`" + ` when omitted. Immutable once the action exists. must be one of ["pipeline", "agent"]; Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"pipeline",
+						"agent",
+					),
+				},
+			},
 			"source": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -398,13 +535,14 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.`,
+				Description: `must be one of ["github", "tower", "bucket", "cron", "pipeline_status"]; Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"github",
 						"tower",
 						"bucket",
 						"cron",
+						"pipeline_status",
 					),
 				},
 			},

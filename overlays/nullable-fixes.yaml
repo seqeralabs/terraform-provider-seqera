@@ -1397,12 +1397,6 @@ actions:
       format: date-time
       nullable: true
 
-  - target: $.components.schemas.DataStudioDto.properties.effectiveLifespanHours
-    update:
-      type: integer
-      format: int32
-      nullable: true
-
   - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
     update:
       type: string
@@ -1465,12 +1459,6 @@ actions:
       minimum: 0
       nullable: true
 
-  - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
-    update:
-      type: integer
-      format: int32
-      nullable: true
-
   # DataStudioStatusInfo optional fields - make enum nullable
   - target: $.components.schemas.DataStudioStopReason.enum
     remove: true
@@ -1482,12 +1470,6 @@ actions:
         - CREDITS_RUN_OUT
         - LIFESPAN_EXPIRED
         - SPOT_RECLAMATION
-
-  # DataLinkDto optional fields
-  - target: $.components.schemas.DataLinkDto.properties.message
-    update:
-      type: string
-      nullable: true
 
   # ListWorkflowsResponseListWorkflowsElement optional fields
   - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.optimized"
@@ -1618,12 +1600,6 @@ actions:
   # Make WfNextflow nullable (can be null when not set)
   - target: $.components.schemas.WfNextflow
     update:
-      nullable: true
-
-  - target: $.components.schemas.WfStats.properties.failedPct
-    update:
-      type: number
-      format: float
       nullable: true
 
   - target: $.components.schemas.WfStats.properties.cachedPct
@@ -1854,22 +1830,6 @@ actions:
       description: Resource reference (bucket path, etc.)
 
   # JobInfoDto optional fields
-  - target: $.components.schemas.JobInfoDto.properties.exitCode
-    update:
-      type: integer
-      format: int32
-      nullable: true
-
-  - target: $.components.schemas.JobInfoDto.properties.message
-    update:
-      type: string
-      nullable: true
-
-  - target: $.components.schemas.JobInfoDto.properties.operationId
-    update:
-      type: string
-      nullable: true
-
   - target: $.components.schemas.JobInfoDto.properties.status
     update:
       type: string
@@ -1881,11 +1841,6 @@ actions:
       nullable: true
 
   # DescribeWorkflowResponse optional fields
-  - target: $.components.schemas.DescribeWorkflowResponse.properties.optimized
-    update:
-      type: boolean
-      nullable: true
-
   - target: $.components.schemas.DescribeWorkflowResponse.properties.orgId
     update:
       type: integer
@@ -1907,20 +1862,6 @@ actions:
     update:
       type: string
       nullable: true
-
-  - target: $.components.schemas.DescribeWorkflowResponse.properties.labels
-    update:
-      type: array
-      nullable: true
-      items:
-        $ref: "#/components/schemas/LabelDbDto"
-
-  - target: $.components.schemas.DescribeWorkflowResponse.properties.messages
-    update:
-      type: array
-      nullable: true
-      items:
-        type: string
 
   - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.labels"
     update:
@@ -1949,15 +1890,7 @@ actions:
     update:
       nullable: true
 
-  # =============================================================================
-  # LogPage.entries - should be array of strings, not object
-  # The Iterator_String_ type is incorrectly defined as object
-  # First remove the $ref, then set the correct type
-  # =============================================================================
-
-  - target: $.components.schemas.LogPage.properties.entries.$ref
-    remove: true
-
+  # LogPage.entries can be null (upstream types it as a non-nullable array)
   - target: $.components.schemas.LogPage.properties.entries
     update:
       type: array
@@ -1993,19 +1926,6 @@ actions:
     update:
       type: string
       nullable: true
-
-  # =============================================================================
-  # Fix Iterator_String_ type definition - should be array, not object
-  # Although we removed the only reference, fix the definition for consistency
-  # =============================================================================
-
-  - target: $.components.schemas.Iterator_String_
-    update:
-      type: array
-      nullable: true
-      items:
-        type: string
-      description: Iterator of strings (can be null)
 
   # =============================================================================
   # Status enums that may be null in certain states
@@ -2092,21 +2012,6 @@ actions:
       format: int64
       nullable: true
       description: Member ID (can be null for collaborators)
-
-  # OrganizationDbDto.memberRole can be null (collaborators don't have a role)
-  # First remove the $ref, then add nullable string type
-  - target: $.components.schemas.OrganizationDbDto.properties.memberRole.$ref
-    remove: true
-
-  - target: $.components.schemas.OrganizationDbDto.properties.memberRole
-    update:
-      type: string
-      nullable: true
-      enum:
-        - owner
-        - member
-        - collaborator
-      description: Member role (can be null for collaborators)
 
   # DataStudioProgressStep.warnings can be null
   - target: $.components.schemas.DataStudioProgressStep.properties.warnings

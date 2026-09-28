@@ -40,6 +40,7 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			}
 			r.Launch.ConfigText = types.StringPointerValue(resp.Launch.ConfigText)
 			r.Launch.EntryName = types.StringPointerValue(resp.Launch.EntryName)
+			r.Launch.FusionVersion = types.StringPointerValue(resp.Launch.FusionVersion)
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
@@ -292,6 +293,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		entryName = nil
 	}
+	fusionVersion := new(string)
+	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+		*fusionVersion = r.Launch.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
@@ -414,6 +421,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,
@@ -504,6 +512,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		*entryName = r.Launch.EntryName.ValueString()
 	} else {
 		entryName = nil
+	}
+	fusionVersion := new(string)
+	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+		*fusionVersion = r.Launch.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
 	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
@@ -627,6 +641,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds1,

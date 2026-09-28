@@ -9,10 +9,8 @@ import (
 type BucketActionConfig struct {
 	BucketName      *string  `json:"bucketName,omitempty"`
 	DataLinkID      *string  `json:"dataLinkId,omitempty"`
-	DatasetID       *string  `json:"datasetId,omitempty"`
 	Discriminator   *string  `json:"discriminator,omitempty"`
 	Events          []string `json:"events,omitempty"`
-	Filter          *string  `json:"filter,omitempty"`
 	MarkerFile      *string  `json:"markerFile,omitempty"`
 	SubscriptionArn *string  `json:"subscriptionArn,omitempty"`
 	TopicArn        *string  `json:"topicArn,omitempty"`
@@ -43,13 +41,6 @@ func (b *BucketActionConfig) GetDataLinkID() *string {
 	return b.DataLinkID
 }
 
-func (b *BucketActionConfig) GetDatasetID() *string {
-	if b == nil {
-		return nil
-	}
-	return b.DatasetID
-}
-
 func (b *BucketActionConfig) GetDiscriminator() *string {
 	if b == nil {
 		return nil
@@ -62,13 +53,6 @@ func (b *BucketActionConfig) GetEvents() []string {
 		return nil
 	}
 	return b.Events
-}
-
-func (b *BucketActionConfig) GetFilter() *string {
-	if b == nil {
-		return nil
-	}
-	return b.Filter
 }
 
 func (b *BucketActionConfig) GetMarkerFile() *string {

@@ -339,3 +339,13 @@ actions:
     remove: true
   - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
     remove: true
+
+  # `starred` is per-user UI state (whether the *calling* user has starred this
+  # Studio), not a property of the Studio itself. Its value depends on which
+  # token performs the read, so surfacing it in Terraform state invites
+  # spurious diffs. terraform-ignore keeps it in the SDK model and drops it
+  # only from the Terraform schema.
+  - target: $.components.schemas.DataStudioDto.properties.starred
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true

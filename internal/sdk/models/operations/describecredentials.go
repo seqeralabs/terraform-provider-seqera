@@ -10,7 +10,7 @@ import (
 type DescribeCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
-	// Workspace numeric identifier
+	// Workspace numeric identifier; required for workspace credentials and omitted for user-owned credentials
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 

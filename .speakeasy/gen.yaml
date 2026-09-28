@@ -32,7 +32,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.42.0
+  version: 0.43.0-RC2
   additionalActions: []
   additionalDataSources:
     - datasource: custom_role_data.NewDataSource
@@ -107,6 +107,8 @@ terraform:
     - env: TOWER_ACCESS_TOKEN
       providerAttribute: bearer_auth
   excludeEmptyObjectSchemas: false
+  fixFlags:
+    encodePathParams: false
   forwardCompatibleEnumsByDefault: false
   generateValidationHelpers: true
   includeEmptyObjects: false
@@ -116,6 +118,7 @@ terraform:
   providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
+  serverVariableProviderAttributes: {}
   unionStrategy: populated-fields
   validation:
     enabled: true

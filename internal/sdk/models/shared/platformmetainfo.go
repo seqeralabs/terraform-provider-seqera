@@ -117,7 +117,14 @@ func CreatePlatformMetainfoLocalPlatformMetainfo(localPlatformMetainfo LocalPlat
 	}
 }
 
-func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
+func (u *PlatformMetainfo) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = PlatformMetainfo{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	var candidates []utils.UnionCandidate
 

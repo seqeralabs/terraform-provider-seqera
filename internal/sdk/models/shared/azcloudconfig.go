@@ -3,6 +3,8 @@
 package shared
 
 type AzCloudConfig struct {
+	// OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
 	// Azure Monitor data collection endpoint URL for diagnostic telemetry.
 	//
 	DataCollectionEndpoint *string `json:"dataCollectionEndpoint,omitempty"`
@@ -55,8 +57,17 @@ type AzCloudConfig struct {
 	//
 	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
-	Subnets                  []string     `json:"subnets,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Azure VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool    `json:"schedEnabled,omitempty"`
+	Subnets                   []string `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -65,6 +76,13 @@ type AzCloudConfig struct {
 	// Format: az://container-name/path
 	//
 	WorkDir *string `json:"workDir,omitempty"`
+}
+
+func (a *AzCloudConfig) GetBootDiskSizeGB() *int {
+	if a == nil {
+		return nil
+	}
+	return a.BootDiskSizeGB
 }
 
 func (a *AzCloudConfig) GetDataCollectionEndpoint() *string {
@@ -186,11 +204,11 @@ func (a *AzCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	return a.IntelligentComputeConfig
 }
 
-func (a *AzCloudConfig) GetSchedEnabled() *bool {
+func (a *AzCloudConfig) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AzCloudConfig) GetSubnets() []string {

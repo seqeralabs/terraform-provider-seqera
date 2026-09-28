@@ -42,8 +42,11 @@ resource "seqera_gcp_cloud_ce" "minimal" {
 ### Fusion
 
 ```terraform
-# GCP Cloud with Fusion v2 and Wave — mounts GCS buckets as a distributed
-# file system, accelerating data-heavy workloads. Fusion v2 requires Wave.
+# GCP Cloud with Fusion v2 — mounts GCS buckets as a distributed file
+# system, accelerating data-heavy workloads.
+#
+# Fusion v2 and Wave are always on for Cloud compute environments — the
+# backend enables them and they are not user-settable
 resource "seqera_gcp_cloud_ce" "fusion" {
   name           = "gcp-cloud-fusion"
   workspace_id   = data.seqera_workspace.main.id
@@ -56,8 +59,6 @@ resource "seqera_gcp_cloud_ce" "fusion" {
     work_dir              = "gs://my-bucket/work"
     instance_type         = "n2-standard-4"
     service_account_email = "seqera-runner@my-gcp-project.iam.gserviceaccount.com"
-    enable_wave           = true
-    enable_fusion         = true
     boot_disk_size_gb     = 100
   }
 }
@@ -99,6 +100,8 @@ resource "seqera_gcp_cloud_ce" "gpu" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -142,16 +145,28 @@ If not specified, the default Seqera-managed image is used.
 Requires replacement if changed.
 - `instance_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
+- `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
+When `true`, tasks are distributed across multiple Compute Engine VMs with
+optimized scheduling and resource allocation. When `false` (default),
+all tasks run on a single instance (Classic mode).
+
+`intelligent_compute_config` is optional in both modes: leave it null
+to accept the platform defaults, or provide it (only when
+`intelligent_compute_enabled = true`) to override the scheduler settings.
+Requires replacement if changed.
+- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
+- `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
 Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
-- `sched_enabled` (Boolean) Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
+- `subnetworks` (List of String) Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
+- `use_private_address` (Boolean) Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
 - `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
 If not specified, the platform selects a zone automatically.
 Requires replacement if changed.
@@ -185,6 +200,7 @@ Optional:
 
 Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave
 unset for no local-storage requirement.
@@ -199,12 +215,20 @@ types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
 scheduler are accepted by the API but may produce warnings.
 Requires replacement if changed.
+- `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
+- `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
+first one, before giving up on Spot capacity. `1` means a single attempt
+with no retry. Only used when `provisioning_model` is `spot` or
+`spotFirst` (the default).
+
+Must be a whole number between 1 and 10 (inclusive).
+Requires replacement if changed.
 - `pool` (Attributes) Warm-pool configuration. When present and enabled, the scheduler keeps a
 pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config--pool))
 - `prediction_model` (String) Resource-prediction model used by Intelligent Compute to size tasks.
-Suggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string
-is accepted.
+Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
+string is accepted.
 Requires replacement if changed.
 - `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:

@@ -37,5 +37,6 @@ func TestCredentialResourceSchemaGitHubApp(t *testing.T) {
 		attribute, ok := githubApp.Attributes[field].(schema.StringAttribute)
 		require.True(t, ok, "keys.github_app.%s should be a string attribute", field)
 		require.True(t, attribute.Sensitive, "keys.github_app.%s should be sensitive", field)
+		require.True(t, attribute.WriteOnly, "keys.github_app.%s should be write-only", field)
 	}
 }

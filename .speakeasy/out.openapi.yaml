@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.187.0
+  version: 1.226.2
 tags:
   - name: actions
     description: Pipeline actions
@@ -36,6 +36,8 @@ tags:
     description: Pipeline secrets in a user or workspace context
   - name: platforms
     description: Computing platforms
+  - name: service-accounts
+    description: Service accounts in an organization context
   - name: service-info
     description: Seqera Platform API service information
   - name: studios
@@ -67,7 +69,7 @@ paths:
             format: int64
         - name: attributes
           in: query
-          description: 'Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
+          description: Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
           schema:
             type: array
             items:
@@ -94,7 +96,7 @@ paths:
     post:
       operationId: CreateAction
       summary: Create action
-      description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
+      description: 'Creates a new action. Append `?workspaceId` to associate the action with the given workspace. Send the trigger block that matches the `source`: `bucket`, `cron`, or `pipelineStatus`.'
       parameters:
         - name: workspaceId
           in: query
@@ -136,29 +138,35 @@ paths:
     post:
       operationId: ResolveCronExpression
       summary: Resolve a schedule description to a cron expression
+      description: Resolves a free-text schedule description, such as `Every 10 minutes`, to a standard 5-field cron expression. A valid cron expression is returned unchanged. Append `?workspaceId` to resolve in a workspace context.
       parameters:
         - name: workspaceId
           in: query
+          description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
-            nullable: true
-          explode: false
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties:
-                type: string
+              $ref: '#/components/schemas/ResolveCronExpressionRequest'
       responses:
         '200':
-          description: ResolveCronExpression 200 response
+          description: OK
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ResolveCronExpressionResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
       security:
         - BearerAuth: []
       tags:
@@ -371,7 +379,7 @@ paths:
             format: int64
         - name: attributes
           in: query
-          description: 'Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
+          description: Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
           schema:
             type: array
             items:
@@ -401,7 +409,7 @@ paths:
     put:
       operationId: UpdateAction
       summary: Update action
-      description: Updates the details of the action identified by the given `actionId`. The `source` of an existing action cannot be changed.
+      description: Updates the details of the action identified by the given `actionId`. The `source`, `responseType` and `launch.id` of an existing action cannot change. A pipeline action requires the whole `launch` on every update, because the update overwrites every stored launch setting.
       parameters:
         - name: actionId
           in: path
@@ -433,6 +441,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Duplicate element, or another write changed the action after this request read it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -518,6 +532,129 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Another request changed the action status first
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/{actionId}/triggers:
+    get:
+      operationId: ListActionTriggers
+      summary: List action triggers
+      description: Lists the trigger history of the action identified by the given `actionId`, newest first. Append `?workspaceId` to read a workspace action.
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: max
+          in: query
+          description: Pagination max results
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
+        - name: outcome
+          in: query
+          description: Return only the triggers that ended one of these ways
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ActionTriggerResult'
+        - name: firedAfterOrEqual
+          in: query
+          description: Return only the triggers at or after this moment
+          schema:
+            type: string
+            format: date-time
+        - name: firedBeforeOrEqual
+          in: query
+          description: Return only the triggers at or before this moment
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListActionTriggersResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/{actionId}/triggers/{triggerId}:
+    get:
+      operationId: DescribeActionTrigger
+      summary: Describe action trigger
+      description: 'Retrieves one trigger of the action identified by the given `actionId`, including the event that caused it. The event payload is untrusted input: escape it before displaying it. Append `?workspaceId` to read a workspace action.'
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+        - name: triggerId
+          in: path
+          description: Action trigger string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeActionTriggerResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Action trigger not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -746,7 +883,7 @@ paths:
         '403':
           description: Operation not allowed
         '409':
-          description: Duplicate element
+          description: Duplicate agent name or bound service account cannot be validated
           content:
             application/json:
               schema:
@@ -789,6 +926,115 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Bound service account cannot be validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit or credit budget exhausted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/runs:
+    get:
+      operationId: ListAgentRuns
+      summary: List agent runs
+      description: Lists background agent runs in a workspace, newest first.
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: search
+          in: query
+          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId` and `serviceAccountName`. Free text is not supported.
+          schema:
+            type: string
+        - name: max
+          in: query
+          description: Pagination max results
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAgentRunsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - agents
+  /agents/runs/{agentRunId}/status:
+    get:
+      operationId: GetAgentRunStatus
+      summary: Get agent run status
+      description: Retrieves the current status and chat identifiers for a background agent run in a workspace.
+      parameters:
+        - name: agentRunId
+          in: path
+          description: Agent run string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunStatusResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -914,7 +1160,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Duplicate element
+          description: Duplicate agent name or bound service account cannot be validated
           content:
             application/json:
               schema:
@@ -1079,6 +1325,97 @@ paths:
         - BearerAuth: []
       tags:
         - avatars
+  /catalog/components/{key}/versions:
+    get:
+      operationId: CatalogComponentVersions
+      summary: Catalog versions for a single component
+      description: As /versions but scoped to {key}; the same registered component compatibility-filter parameters apply (PF-2).
+      parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
+  /catalog/versions:
+    get:
+      operationId: CatalogVersions
+      summary: Component compatibility catalog versions
+      description: Returns catalog versions with servedFrom provenance and observed deploymentVersions. Optionally narrowed to a single component and compatibility-constrained by registered component query parameters plus platform/nextflow/fusion/sched/wave deployment context, for example fusion=2.5 or connect=0.11.2 (comma-lists; AND across, OR within; edge-less params do not constrain). Unknown parameters and malformed expressions return 400; unknown selected components return 404.
+      parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: component
+          in: query
+          schema:
+            type: string
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogVersionsResponse'
+      tags:
+        - compatibility
   /compute-envs:
     get:
       operationId: ListComputeEnvs
@@ -1630,6 +1967,43 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Credential#create
+  /credentials/federation-setup:
+    get:
+      operationId: DescribeCredentialsSetup
+      summary: Describe credential provider setup values
+      description: "Returns the labelled values an administrator copies into their cloud provider console to set up a credential of the given provider — for AWS OIDC workload identity: this installation's public address and the subject claims Platform mints. Scope-level rather than per-credential, because these values are needed before a credential can be created. Append `?workspaceId` for a workspace context."
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier, e.g. `aws`
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - credentials
   /credentials/validate:
     get:
       operationId: ValidateCredentialsName
@@ -1718,7 +2092,7 @@ paths:
     get:
       operationId: DescribeCredentials
       summary: Describe credentials
-      description: Retrieves the details of the credentials identified by the given `credentialsId`.
+      description: Retrieves the details of the credentials identified by the given `credentialsId`. Include `workspaceId` when accessing workspace credentials; omit it for user-owned credentials.
       parameters:
         - name: credentialsId
           in: path
@@ -1728,7 +2102,7 @@ paths:
             type: string
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier; required for workspace credentials and omitted for user-owned credentials
           schema:
             type: integer
             format: int64
@@ -1907,6 +2281,11 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: creationSource
+          in: query
+          description: 'Filter results by creation source: `user` for manually created data-links, `cloud` for data-links discovered from credentials'
+          schema:
+            type: string
         - name: workspaceId
           in: query
           description: Workspace numeric identifier to filter data links
@@ -3548,6 +3927,14 @@ paths:
               schema:
                 type: string
                 format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
         '307':
           description: Temporary redirect to linked source URL
         '400':
@@ -3798,6 +4185,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/cancel:
@@ -3832,6 +4225,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/status:
@@ -3861,6 +4260,12 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Run not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WesErrorResponse'
       tags:
         - ga4gh
   /ga4gh/wes/v1/service-info:
@@ -4566,6 +4971,237 @@ paths:
         - BearerAuth: []
       tags:
         - datasets
+  /lineage/resolve:
+    get:
+      operationId: ResolveLineage
+      summary: Resolve a platform identifier to a lineage LID
+      description: "Resolves a Nextflow run or file path to a lineage LID. Exactly one of sessionId or filePath must be provided. A run is identified by sessionId *and* runName: a resumed run inherits the parent run's sessionId but produces its own lineage record."
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: sessionId
+          in: query
+          description: Nextflow session UUID — requires runName
+          schema:
+            type: string
+        - name: runName
+          in: query
+          description: Nextflow run name — required with sessionId
+          schema:
+            type: string
+        - name: filePath
+          in: query
+          description: Absolute file path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineageResolveResponse'
+        '400':
+          description: Bad request — exactly one of sessionId or filePath must be provided, and sessionId requires runName
+        '403':
+          description: Operation not allowed
+        '404':
+          description: No lineage found for this identifier
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
+  /lineage/search:
+    get:
+      operationId: SearchLineage
+      summary: Search lineage records across a selectable set of accessible workspaces
+      description: |-
+        Cross-workspace lineage search. The `q` DSL uses a simple set of
+                                    conventions: whitespace = AND, a comma inside a qualifier = OR, and
+                                    repeating a qualifier = AND. Filter the lineage index by `type:`,
+                                    `workflow:`, `task:`, `pipeline:`, `pipelineId:`, `label:`, and/or
+                                    free-text tokens.
+
+                                    Workspace scope is expressed inside the DSL: `workspace:org/name`
+                                    or the numeric `workspaceId:` alias. Omit both to search every
+                                    accessible workspace.
+      parameters:
+        - name: q
+          in: query
+          description: Tagged-query DSL string. Scope with `workspace:org/name` (comma = OR, e.g. `workspace:acme/dev,acme/prod`) or the numeric `workspaceId:` alias; omit to search every accessible workspace.
+          schema:
+            type: string
+        - name: pageToken
+          in: query
+          description: Opaque cursor for the page to return. Omit for the first page; otherwise pass the `nextPageToken` from a previous response for the same query. An invalid token is rejected with 400.
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: Page size (capped server-side)
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid query
+        '403':
+          description: The caller does not participate in one of the requested workspaces
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
+  /lineage/{lid}:
+    get:
+      operationId: GetLineageRecord
+      summary: Get the full Nextflow lineage record from the object store
+      description: Always reads the record from the lineage object store (golden source). For the slim denormalized projection, use `/lineage/{lid}/summary` instead.
+      parameters:
+        - name: lid
+          in: path
+          description: Lineage LID (URL-encoded)
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineageRecordResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Record not found
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
+  /lineage/{lid}/downstream:
+    get:
+      operationId: NavigateLineageDownstream
+      summary: Data-flow navigation one hop downstream from a lineage record
+      description: Returns records produced / consumed by `{lid}`. Supports optional `type` filter. WorkflowRun is not a node in data-flow navigation — use /search?q=workflow:{lid} instead.
+      parameters:
+        - name: lid
+          in: path
+          description: Starting lineage LID (URL-encoded)
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: type
+          in: query
+          description: Filter by record type (FileOutput | TaskRun)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Unsupported combination of starting LID type and `type` filter
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
+  /lineage/{lid}/summary:
+    get:
+      operationId: GetLineageSummary
+      summary: Get the slim index projection for a lineage record
+      description: Returns a thin projection ({name, path|sessionId|workflowRun, labels}) served directly from the index — no object-store read. 404 when no index row exists for the LID.
+      parameters:
+        - name: lid
+          in: path
+          description: Lineage LID (URL-encoded)
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineageRecordResponse'
+        '404':
+          description: No index row exists for this LID
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
+  /lineage/{lid}/upstream:
+    get:
+      operationId: NavigateLineageUpstream
+      summary: Data-flow navigation one hop upstream from a lineage record
+      description: Returns records that produce / feed into `{lid}`. Supports optional `type` filter. WorkflowRun is not a node in data-flow navigation — use /search?q=workflow:{lid} instead.
+      parameters:
+        - name: lid
+          in: path
+          description: Starting lineage LID (URL-encoded)
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: type
+          in: query
+          description: Filter by record type (FileOutput | TaskRun)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Unsupported combination of starting LID type and `type` filter
+      security:
+        - BearerAuth: []
+      tags:
+        - lineage
   /orgs:
     get:
       operationId: ListOrganizations
@@ -5287,6 +5923,207 @@ paths:
         - BearerAuth: []
       tags:
         - orgs
+  /orgs/{orgId}/service-accounts:
+    get:
+      operationId: ListServiceAccounts
+      summary: List service accounts
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            nullable: true
+          explode: false
+        - name: max
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 20
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListServiceAccountsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    post:
+      operationId: CreateServiceAccount
+      summary: Create a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceAccountRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Duplicate service account name, name must be unique across all platform users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+  /orgs/{orgId}/service-accounts/{saId}:
+    delete:
+      operationId: DeleteServiceAccount
+      summary: Delete a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    get:
+      operationId: DescribeServiceAccount
+      summary: Describe a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    patch:
+      operationId: UpdateServiceAccount
+      summary: Update a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceAccountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Duplicate service account name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/teams:
     get:
       operationId: ListOrganizationTeams
@@ -5803,6 +6640,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Organization or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -6166,7 +7009,7 @@ paths:
     put:
       operationId: CreateWorkspaceParticipant
       summary: Create workspace participant
-      description: Adds a new participant to the workspace identified by the given `workspaceId`.
+      description: Adds a new participant to the workspace identified by the given `workspaceId`. The participant is assigned the requested `role`, defaulting to `launch` when omitted (`view` for service accounts).
       parameters:
         - name: orgId
           in: path
@@ -6308,6 +7151,56 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+  /orgs/{orgId}/workspaces/{workspaceId}/service-accounts:
+    get:
+      operationId: ListWorkspaceServiceAccounts
+      summary: List workspace service accounts
+      description: Lists the service accounts assigned to the workspace identified by the given `workspaceId`.
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: pageToken
+          in: query
+          schema:
+            type: string
+            nullable: true
+          explode: false
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWorkspaceServiceAccountsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       operationId: FindDataStudiosWorkspaceSettings
@@ -8830,6 +9723,129 @@ paths:
         - BearerAuth: []
       tags:
         - studios
+  /studios/{sessionId}/log:
+    get:
+      operationId: GetDataStudioLog
+      summary: Get Studio logs
+      description: Retrieves the process log of the latest session of the given Studio, read from the compute environment's log stream (e.g. CloudWatch). Availability depends on the compute provider and its log retention.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session numeric identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: next
+          in: query
+          description: Pagination cursor pointing at the next log page
+          schema:
+            type: string
+        - name: maxLength
+          in: query
+          description: Maximum number of characters to return
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStudioLogResponse'
+        '403':
+          description: Operation not allowed.
+        '404':
+          description: NotFound, when the Studio is not found or when the API is disabled for the workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+  /studios/{sessionId}/star:
+    delete:
+      operationId: DeleteDataStudioStar
+      summary: Unstar studio
+      description: Removes the studio identified by the given `sessionId` from your list of starred studios.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+    post:
+      operationId: CreateDataStudioStar
+      summary: Star studio
+      description: Adds the studio identified by the given `sessionId` to your list of starred studios.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDataStudioStarResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicated element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
   /studios/{sessionId}/start:
     put:
       operationId: StartDataStudio
@@ -10414,6 +11430,11 @@ paths:
           description: Search tasks by name
           schema:
             type: string
+        - name: process
+          in: query
+          description: Exact process name filter
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -10423,6 +11444,49 @@ paths:
                 $ref: '#/components/schemas/ListTasksResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - workflows
+  /workflow/{workflowId}/tasks/summary:
+    get:
+      operationId: SummarizeWorkflowTasks
+      summary: Summarize the tasks of the given workflow per process, optionally filtered by search
+      description: Rolls up matching tasks per process so the run-timeline grouped view stays complete on large runs, where a capped/paged task list could hide processes whose matches fall past the page. Rejected with a 400 when the run's total task count exceeds 20,000, since the search term does not bound the cost of the underlying query -- only run size does.
+      parameters:
+        - name: workflowId
+          in: path
+          description: Workflow string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: search
+          in: query
+          description: Search tasks by name; required and must not be blank, since an unfiltered summary would run an unfiltered GROUP BY over every task in the run
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTaskProcessSummaryResponse'
+        '400':
+          description: Bad request. Missing/blank search parameter, or the run has more tasks than this endpoint allows
           content:
             application/json:
               schema:
@@ -10806,6 +11870,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: AWS compute environment create request
         content:
@@ -15396,6 +16461,111 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  /credentials/federation-setup#aws:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: AWSCredentialsFederationSetup#read
+      x-speakeasy-name-override: DescribeAWSCredentialsFederationSetup
+      operationId: DescribeAWSCredentialsFederationSetup
+      summary: Describe AWS credential federation setup values
+      description: |
+        Returns the values an administrator copies into the AWS console to set up
+        an OIDC workload identity credential: this installation's public address,
+        the STS audience, and the subject claims Platform mints.
+
+        Scope-level rather than per-credential, because these values are needed
+        before a credential can be created. Use `workspace_id` to resolve the
+        subjects for a workspace context; omit it for the user context.
+      tags:
+        - credentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier. Omit to resolve values in the user context.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier. Always `aws` for this data source.
+          required: false
+          x-speakeasy-name-override: providerType
+          schema:
+            type: string
+            enum:
+              - aws
+            default: aws
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AWSCredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  /credentials/federation-setup#google:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: GCPCredentialsFederationSetup#read
+      x-speakeasy-name-override: DescribeGCPCredentialsFederationSetup
+      operationId: DescribeGCPCredentialsFederationSetup
+      summary: Describe GCP credential federation setup values
+      description: |
+        Returns the values an administrator copies into GCP to configure a Google
+        Workload Identity Federation credential: the OIDC issuer URL, the
+        `google.subject` attribute mapping, and the recommended attribute
+        condition pinning the provider to this tenant.
+
+        Scope-level rather than per-credential, because these values are needed
+        before a credential can be created. Use `workspace_id` to resolve the
+        attribute condition for a workspace context; omit it for the user context.
+      tags:
+        - credentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier. Omit to resolve values in the user context.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: provider
+          in: query
+          description: Credentials provider identifier. Always `google` for this data source.
+          required: false
+          x-speakeasy-name-override: providerType
+          schema:
+            type: string
+            enum:
+              - google
+            default: google
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleCredentialsSetupValuesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
 components:
   schemas:
     AbstractGridConfig:
@@ -15410,6 +16580,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -15423,15 +16594,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -15505,6 +16679,7 @@ components:
           bucket: '#/components/schemas/BucketActionConfig'
           cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
+          pipeline_status: '#/components/schemas/PipelineStatusActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
       oneOf:
@@ -15512,6 +16687,7 @@ components:
         - $ref: '#/components/schemas/GithubActionConfig'
         - $ref: '#/components/schemas/BucketActionConfig'
         - $ref: '#/components/schemas/CronActionConfig'
+        - $ref: '#/components/schemas/PipelineStatusActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -15525,6 +16701,7 @@ components:
           bucket: '#/components/schemas/BucketActionEvent'
           cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
+          pipeline_status: '#/components/schemas/PipelineStatusActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
       oneOf:
@@ -15532,6 +16709,15 @@ components:
         - $ref: '#/components/schemas/Action.TowerActionEvent'
         - $ref: '#/components/schemas/BucketActionEvent'
         - $ref: '#/components/schemas/CronActionEvent'
+        - $ref: '#/components/schemas/PipelineStatusActionEvent'
+    Action.ResponseType:
+      type: string
+      enum:
+        - pipeline
+        - agent
+      x-enum-varnames:
+        - pipeline
+        - agent
     Action.Source:
       type: string
       enum:
@@ -15539,11 +16725,13 @@ components:
         - tower
         - bucket
         - cron
+        - pipeline_status
       x-enum-varnames:
         - github
         - tower
         - bucket
         - cron
+        - pipeline_status
     Action.Status:
       type: string
       enum:
@@ -15601,11 +16789,17 @@ components:
       type: string
       enum:
         - labels
+        - lastTrigger
       x-enum-varnames:
         - labels
+        - lastTrigger
     ActionResponseDto:
       type: object
       properties:
+        agent:
+          allOf:
+            - $ref: '#/components/schemas/AgentActionResponse'
+          nullable: true
         config:
           $ref: '#/components/schemas/Action.ConfigType'
           description: Configuration type and settings for the action trigger
@@ -15629,6 +16823,10 @@ components:
           description: Unique identifier for the action
           x-speakeasy-param-ordering: 1
           x-speakeasy-param-readonly: true
+        lastTrigger:
+          allOf:
+            - $ref: '#/components/schemas/ActionTriggerDto'
+          nullable: true
         launch:
           $ref: '#/components/schemas/LaunchDbDto'
           description: Launch configuration and parameters for the pipeline execution
@@ -15641,6 +16839,12 @@ components:
         nextExecution:
           type: string
           format: date-time
+        pipeline:
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionResponse'
+          nullable: true
+        responseType:
+          $ref: '#/components/schemas/Action.ResponseType'
         source:
           $ref: '#/components/schemas/Action.Source'
           description: "Event source that triggers this action. Defaults to 'tower' (programmatic webhook). Use 'github' for GitHub webhook events (requires linked GitHub account)."
@@ -15665,6 +16869,85 @@ components:
         Represents a pipeline action in the Seqera Platform.
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
+    ActionTriggerDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+        actorId:
+          type: integer
+          format: int64
+        agentRunId:
+          type: string
+          nullable: true
+        causedByTriggerId:
+          type: string
+          nullable: true
+        eventSummary:
+          type: string
+          nullable: true
+        firedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+        outcome:
+          $ref: '#/components/schemas/ActionTriggerResult'
+        outcomeDetail:
+          type: string
+          nullable: true
+        source:
+          allOf:
+            - $ref: '#/components/schemas/Action.Source'
+          nullable: true
+        workflowId:
+          type: string
+          nullable: true
+    ActionTriggerResponseDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+        actorId:
+          type: integer
+          format: int64
+        agentRunId:
+          type: string
+          nullable: true
+        causedByTriggerId:
+          type: string
+          nullable: true
+        eventPayload:
+          type: string
+          nullable: true
+        eventSummary:
+          type: string
+          nullable: true
+        firedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+        outcome:
+          $ref: '#/components/schemas/ActionTriggerResult'
+        outcomeDetail:
+          type: string
+          nullable: true
+        source:
+          allOf:
+            - $ref: '#/components/schemas/Action.Source'
+          nullable: true
+        workflowId:
+          type: string
+          nullable: true
+    ActionTriggerResult:
+      type: string
+      enum:
+        - PENDING
+        - LAUNCHED
+        - LAUNCH_FAILED
+        - SUPPRESSED_CYCLE
+        - SUPPRESSED_RATE
     ActiveConnection:
       type: object
       allOf:
@@ -15690,6 +16973,9 @@ components:
         memberId:
           type: integer
           format: int64
+        role:
+          description: "Role to assign to the new participant: either a predefined workspace role ('owner', 'admin', 'maintain', 'launch', 'connect', 'view', case-insensitive) or the name of a custom role defined in the organization. Defaults to 'launch' when omitted ('view' for service accounts)."
+          type: string
         teamId:
           type: integer
           format: int64
@@ -15715,6 +17001,21 @@ components:
         - active
         - inactive
         - deleted
+    AgentActionRequest:
+      type: object
+      properties:
+        agentConfigId:
+          description: ID of an existing workspace agent to run.
+          type: string
+      required:
+        - agentConfigId
+      title: Agent action request
+    AgentActionResponse:
+      type: object
+      properties:
+        agentConfigId:
+          type: string
+      title: Agent action response
     AgentDbDto:
       type: object
       properties:
@@ -15726,10 +17027,16 @@ components:
         createdBy:
           type: integer
           format: int64
+        createdByUserName:
+          type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
         description:
+          type: string
+          nullable: true
+        githubAppCredentialId:
           type: string
           nullable: true
         id:
@@ -15739,6 +17046,13 @@ components:
           format: date-time
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
+        serviceAccountName:
+          type: string
+          nullable: true
         status:
           $ref: '#/components/schemas/Agent.Status'
         updatedBy:
@@ -15747,6 +17061,83 @@ components:
         workspaceId:
           type: integer
           format: int64
+    AgentRun.Status:
+      type: string
+      enum:
+        - pending
+        - running
+        - completed
+        - failed
+      x-enum-varnames:
+        - pending
+        - running
+        - completed
+        - failed
+    AgentRun.Trigger:
+      type: object
+      properties:
+        entityId:
+          type: string
+        type:
+          type: string
+    AgentRunDbDto:
+      type: object
+      properties:
+        agentRunName:
+          type: string
+          nullable: true
+        dateCreated:
+          type: string
+          format: date-time
+        id:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
+        serviceAccountName:
+          type: string
+          nullable: true
+        sessionId:
+          type: string
+          nullable: true
+        sourcePipelineId:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/AgentRun.Status'
+        threadId:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        trigger:
+          allOf:
+            - $ref: '#/components/schemas/AgentRun.Trigger'
+          nullable: true
+        workflowId:
+          type: string
+          nullable: true
+        workspaceId:
+          type: integer
+          format: int64
+    AgentRunStatusResponse:
+      type: object
+      properties:
+        agentRunId:
+          type: string
+        sessionId:
+          type: string
+          nullable: true
+        status:
+          type: string
+        threadId:
+          type: string
+          nullable: true
     AgentSecurityKeys:
       type: object
       properties:
@@ -15774,6 +17165,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -15787,15 +17179,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -15811,10 +17206,13 @@ components:
       properties:
         hubspotId:
           type: string
+          nullable: true
         posthogApiHost:
           type: string
+          nullable: true
         posthogApiKey:
           type: string
+          nullable: true
     AssociateActionLabelsRequest:
       type: object
       properties:
@@ -15869,13 +17267,16 @@ components:
       enum:
         - user
         - system
+        - service_account
       x-enum-varnames:
         - user
         - system
+        - service_account
     AuditEventType:
       type: string
       enum:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -15899,6 +17300,7 @@ components:
         - action_created
         - action_updated
         - action_deleted
+        - action_triggered
         - agent_created
         - agent_updated
         - agent_enabled
@@ -15972,6 +17374,11 @@ components:
         - managed_credentials_updated
         - managed_credentials_deleted
         - credits_modified
+        - credit_purchase_created
+        - credit_purchase_completed
+        - credit_purchase_failed
+        - credit_purchase_canceled
+        - credit_purchase_expired
         - user_role_created
         - user_role_updated
         - user_role_deleted
@@ -15985,6 +17392,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -16064,6 +17474,7 @@ components:
         - workflow_status_changed
       x-enum-varnames:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -16087,6 +17498,7 @@ components:
         - action_created
         - action_updated
         - action_deleted
+        - action_triggered
         - agent_created
         - agent_updated
         - agent_enabled
@@ -16160,6 +17572,11 @@ components:
         - managed_credentials_updated
         - managed_credentials_deleted
         - credits_modified
+        - credit_purchase_created
+        - credit_purchase_completed
+        - credit_purchase_failed
+        - credit_purchase_canceled
+        - credit_purchase_expired
         - user_role_created
         - user_role_updated
         - user_role_deleted
@@ -16173,6 +17590,9 @@ components:
         - idp_group_deleted
         - scim_token_created
         - scim_token_updated
+        - service_account_created
+        - service_account_updated
+        - service_account_deleted
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -16233,6 +17653,7 @@ components:
         - custom_role
         - org_sso_connection
         - credit_info
+        - credit_purchase
         - data_studio
         - data_studio_connection
         - data_link
@@ -16253,6 +17674,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
       x-enum-varnames:
         - user
         - pipeline
@@ -16268,6 +17690,7 @@ components:
         - custom_role
         - org_sso_connection
         - credit_info
+        - credit_purchase
         - data_studio
         - data_studio_connection
         - data_link
@@ -16288,6 +17711,7 @@ components:
         - user_ssh_public_key
         - idp_group
         - scim_token
+        - service_account
     AuditLogTargetState:
       type: object
       properties:
@@ -16303,6 +17727,7 @@ components:
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
+                  credit_purchase: '#/components/schemas/CreditPurchaseImage'
                   custom_role: '#/components/schemas/CustomRoleImage'
                   data_link: '#/components/schemas/DataLinkImage'
                   data_link_file: '#/components/schemas/DataLinkFileImage'
@@ -16324,6 +17749,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -16339,6 +17765,7 @@ components:
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
+            - $ref: '#/components/schemas/CreditPurchaseImage'
             - $ref: '#/components/schemas/CustomRoleImage'
             - $ref: '#/components/schemas/DataLinkFileImage'
             - $ref: '#/components/schemas/DataLinkImage'
@@ -16360,6 +17787,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -16377,6 +17805,7 @@ components:
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
+                  credit_purchase: '#/components/schemas/CreditPurchaseImage'
                   custom_role: '#/components/schemas/CustomRoleImage'
                   data_link: '#/components/schemas/DataLinkImage'
                   data_link_file: '#/components/schemas/DataLinkFileImage'
@@ -16398,6 +17827,7 @@ components:
                   pipeline: '#/components/schemas/PipelineImage'
                   pipeline_secret: '#/components/schemas/PipelineSecretImage'
                   scim_token: '#/components/schemas/ScimTokenImage'
+                  service_account: '#/components/schemas/ServiceAccountImage'
                   team: '#/components/schemas/TeamImage'
                   team_member: '#/components/schemas/TeamMemberImage'
                   user: '#/components/schemas/UserImage'
@@ -16413,6 +17843,7 @@ components:
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
+            - $ref: '#/components/schemas/CreditPurchaseImage'
             - $ref: '#/components/schemas/CustomRoleImage'
             - $ref: '#/components/schemas/DataLinkFileImage'
             - $ref: '#/components/schemas/DataLinkImage'
@@ -16434,6 +17865,7 @@ components:
             - $ref: '#/components/schemas/PipelineImage'
             - $ref: '#/components/schemas/PipelineSecretImage'
             - $ref: '#/components/schemas/ScimTokenImage'
+            - $ref: '#/components/schemas/ServiceAccountImage'
             - $ref: '#/components/schemas/TeamImage'
             - $ref: '#/components/schemas/TeamMemberImage'
             - $ref: '#/components/schemas/UserImage'
@@ -16483,6 +17915,9 @@ components:
     AuditLogV2ResponseDto.Actor:
       type: object
       properties:
+        agentId:
+          type: string
+          nullable: true
         email:
           type: string
         firstName:
@@ -16574,6 +18009,7 @@ components:
           x-speakeasy-param-force-new: true
         computeJobRole:
           type: string
+          nullable: true
           description: |
             IAM role ARN for compute jobs. Jobs assume this role during execution.
             Must have permissions for S3, CloudWatch, etc.
@@ -16590,12 +18026,14 @@ components:
           x-speakeasy-terraform-ignore: true
         dragenInstanceType:
           type: string
+          nullable: true
           description: |
             EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
             Only applicable when DRAGEN is enabled.
           x-speakeasy-param-force-new: true
         dragenQueue:
           type: string
+          nullable: true
           description: |
             Name of the AWS Batch queue for DRAGEN jobs.
             Only applicable when DRAGEN is enabled.
@@ -16604,6 +18042,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -16619,6 +18058,7 @@ components:
           $ref: '#/components/schemas/ForgeConfig'
         fusion2Enabled:
           type: boolean
+          nullable: true
           x-speakeasy-name-override: enable_fusion
           x-speakeasy-plan-validators: FusionEnabledValidator
           description: |
@@ -16628,6 +18068,7 @@ components:
             Requires `enable_wave = true`.
         fusionSnapshots:
           type: boolean
+          nullable: true
           description: |
             Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
             when it is interrupted by a spot reclamation.
@@ -16646,17 +18087,20 @@ components:
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
           description: "Number of CPUs allocated for the head job (default: 1)"
           example: 4
           x-speakeasy-param-force-new: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
           description: "Memory allocation for the head job in MB (default: 1024)"
           example: 8192
           x-speakeasy-param-force-new: true
         headJobRole:
           type: string
+          nullable: true
           description: |
             IAM role ARN for the head job.
             Format: arn:aws:iam::account-id:role/role-name
@@ -16668,6 +18112,7 @@ components:
           x-speakeasy-param-force-new: true
         logGroup:
           type: string
+          nullable: true
           description: |
             CloudWatch Log group name for pipeline execution logs.
             If specified, logs are sent to this existing log group instead of the default.
@@ -16678,12 +18123,14 @@ components:
           deprecated: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
           x-speakeasy-param-force-new: true
         nvnmeStorageEnabled:
           type: boolean
+          nullable: true
           x-speakeasy-name-override: nvme_storage_enabled
           x-speakeasy-plan-validators: NvmeStorageValidator
           description: |
@@ -16697,6 +18144,7 @@ components:
             Bash script to run after workflow execution completes.
             Use for cleanup, archiving results, sending notifications, etc.
           type: string
+          nullable: true
           x-speakeasy-param-force-new: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
@@ -16704,6 +18152,7 @@ components:
             Bash script to run before workflow execution begins.
             Use for environment setup, loading modules, downloading reference data, etc.
           type: string
+          nullable: true
           x-speakeasy-param-force-new: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
@@ -16714,6 +18163,9 @@ components:
           example: "us-east-1"
           x-speakeasy-param-force-new: true
           x-speakeasy-param-optional: false
+        secretsKmsKeyId:
+          description: Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+          type: string
         storageType:
           type: string
           deprecated: true
@@ -16727,6 +18179,7 @@ components:
           x-speakeasy-param-force-new: true
         waveEnabled:
           type: boolean
+          nullable: true
           title: "Wave Enabled"
           description: |
             Allow access to private container repositories and the provisioning of containers in your
@@ -16866,6 +18319,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-terraform-ignore: true
@@ -16905,13 +18359,16 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -16952,6 +18409,9 @@ components:
             HTTP 403.
           example: false
           x-speakeasy-param-force-new: true
+        secretsKmsKeyId:
+          description: Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
+          type: string
         securityGroups:
           type: array
           items:
@@ -17014,7 +18474,9 @@ components:
           x-speakeasy-param-optional: false
           x-speakeasy-plan-validators: WorkDirS3Validator
       title: AWS Cloud configuration
-      x-speakeasy-plan-validators: schedConfigConsistencyValidator
+      x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
+        - BillingExportTableGoogleOnlyValidator
       required:
         - region
     AwsCloudPlatformMetainfo:
@@ -17061,9 +18523,11 @@ components:
       enum:
         - keys
         - role
+        - workloadIdentity
       x-enum-varnames:
         - keys
         - role
+        - workloadIdentity
       x-type: String
     AwsSecurityKeys:
       type: object
@@ -17117,6 +18581,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         forge:
           $ref: '#/components/schemas/AzBatchForgeConfig'
         fusion2Enabled:
@@ -17161,13 +18626,16 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -17292,6 +18760,15 @@ components:
     AzCloudConfig:
       type: object
       properties:
+        bootDiskSizeGB:
+          description: OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image.
+          type: integer
+          format: int32
+          example: 100
+          maximum: 4095
+          minimum: 50
+          nullable: true
+          x-speakeasy-param-force-new: true
         dataCollectionEndpoint:
           type: string
           description: |
@@ -17310,6 +18787,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -17350,6 +18828,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
@@ -17357,10 +18836,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         region:
           type: string
@@ -17394,6 +18875,18 @@ components:
           x-speakeasy-param-force-new: true
         schedEnabled:
           type: boolean
+          x-speakeasy-name-override: intelligent_compute_enabled
+          description: |
+            Enable Seqera Intelligent Compute (Preview).
+            When `true`, tasks are distributed across multiple Azure VMs with
+            optimized scheduling and resource allocation. When `false` (default),
+            all tasks run on a single instance (Classic mode).
+
+            `intelligent_compute_config` is optional in both modes: leave it null
+            to accept the platform defaults, or provide it (only when
+            `intelligent_compute_enabled = true`) to override the scheduler settings.
+          example: false
+          x-speakeasy-param-force-new: true
         subnets:
           type: array
           items:
@@ -17419,8 +18912,10 @@ components:
           x-speakeasy-param-force-new: true
       title: Azure Cloud configuration
       x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
         - BackendStrategyVmOnlyValidator
         - FusionSnapshotsUnsupportedValidator
+        - BillingExportTableGoogleOnlyValidator
     AzCloudPlatformMetaInfo:
       type: object
       properties:
@@ -17584,16 +19079,12 @@ components:
           type: string
         dataLinkId:
           type: string
-        datasetId:
-          type: string
         discriminator:
           type: string
         events:
           type: array
           items:
             type: string
-        filter:
-          type: string
         markerFile:
           type: string
         subscriptionArn:
@@ -17624,16 +19115,73 @@ components:
       properties:
         dataLinkId:
           type: string
-        datasetId:
-          type: string
         events:
           type: array
           items:
             type: string
-        filter:
-          type: string
         markerFile:
           type: string
+          nullable: true
+    CatalogArtifact:
+      type: object
+      properties:
+        ref:
+          type: string
+        selectors:
+          type: object
+          additionalProperties:
+            type: string
+    CatalogEdgeRef:
+      type: object
+      properties:
+        component:
+          type: string
+        expr:
+          type: string
+    CatalogVersion:
+      type: object
+      properties:
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogArtifact'
+        compatibleWith:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogEdgeRef'
+        component:
+          type: string
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+        origin:
+          type: string
+        variants:
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+        yanked:
+          type: boolean
+    CatalogVersionsResponse:
+      type: object
+      properties:
+        defaultVersion:
+          type: string
+        deploymentVersions:
+          type: object
+          additionalProperties:
+            type: string
+        generatedAt:
+          type: string
+        servedFrom:
+          $ref: '#/components/schemas/ServedFrom'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogVersion'
     ChangeDatasetVisibilityRequest:
       type: object
       properties:
@@ -17686,17 +19234,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: Array of environment variables for the compute environment
         nextflowConfig:
           type: string
+          nullable: true
           description: Nextflow configuration settings and parameters
         postRunScript:
           description: Shell script to execute after workflow completes
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Shell script to execute before workflow starts
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         workDir:
           description: Working directory path for workflow execution
@@ -17874,6 +19426,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -17931,7 +19484,7 @@ components:
           type: integer
           format: int64
       x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity-version: 2
+      x-speakeasy-entity-version: 3
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -18083,6 +19636,17 @@ components:
       description: |
         Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
         At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.
+    ConflictingResource:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
     ContainerData:
       type: object
       properties:
@@ -18159,14 +19723,41 @@ components:
     CreateActionRequest:
       type: object
       properties:
+        agent:
+          description: Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`.
+          allOf:
+            - $ref: '#/components/schemas/AgentActionRequest'
         bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
+          description: Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources.
+          allOf:
+            - $ref: '#/components/schemas/BucketActionRequest'
         cron:
-          $ref: '#/components/schemas/CronActionRequest'
+          description: Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources.
+          allOf:
+            - $ref: '#/components/schemas/CronActionRequest'
+        labelIds:
+          description: The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         launch:
           $ref: '#/components/schemas/ActionLaunchRequest'
         name:
           type: string
+        pipeline:
+          description: Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionRequest'
+        pipelineStatus:
+          description: Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here.
+          allOf:
+            - $ref: '#/components/schemas/PipelineStatusActionRequest'
+        responseType:
+          description: What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists.
+          allOf:
+            - $ref: '#/components/schemas/Action.ResponseType'
         source:
           $ref: '#/components/schemas/Action.Source'
           default: "tower"
@@ -18197,8 +19788,15 @@ components:
         description:
           type: string
           nullable: true
+        githubAppCredentialId:
+          type: string
+          nullable: true
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
     CreateAgentResponse:
       type: object
       properties:
@@ -18267,6 +19865,11 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-transform-from-api:
         jq: '. + { id: .credentialsId }'
+    CreateDataStudioStarResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
     CreateDatasetRequest:
       type: object
       properties:
@@ -18336,6 +19939,7 @@ components:
           type: boolean
         value:
           type: string
+          nullable: true
         label_id:
           type: integer
           format: int64
@@ -18508,6 +20112,23 @@ components:
           type: string
         token:
           type: string
+    CreateServiceAccountRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        name:
+          type: string
+          maxLength: 40
+          minLength: 1
+      required:
+        - name
+    CreateServiceAccountResponse:
+      type: object
+      properties:
+        serviceAccount:
+          $ref: '#/components/schemas/ServiceAccountDto'
     CreateSshKeyRequest:
       type: object
       properties:
@@ -18567,8 +20188,8 @@ components:
         baseUrl:
           type: string
           maxLength: 200
-          pattern: ''
           nullable: true
+          pattern: ''
           description: Base URL for the credential provider
           x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
@@ -18588,8 +20209,8 @@ components:
           description: Timestamp when the credential was created
         deleted:
           type: boolean
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
           x-speakeasy-param-computed: true
@@ -18617,8 +20238,8 @@ components:
         lastUsed:
           type: string
           format: date-time
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Timestamp when the credential was last used
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -18626,6 +20247,7 @@ components:
           description: Timestamp of the most recent completed validation probe (success or authoritative fail). Null until first probe. NOT advanced on transient probe outcomes.
           type: string
           format: date-time
+          nullable: true
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -18633,6 +20255,7 @@ components:
           description: Provider-supplied error detail captured when status transitions to INVALID. Cleared (null) whenever status returns to AVAILABLE. Truncated to 4096 characters with a trailing " (truncated)" suffix when the underlying provider message exceeds that limit.
           type: string
           maxLength: 4096
+          nullable: true
           readOnly: true
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
@@ -18727,6 +20350,21 @@ components:
       required:
         - auditImageType
       title: Credentials audit image
+    CredentialsSetupValue:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    CredentialsSetupValuesResponse:
+      type: object
+      properties:
+        setupValues:
+          description: Labelled values to copy into the cloud provider console. Empty when the provider has nothing to surface.
+          type: array
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
     CreditInfoImage:
       type: object
       properties:
@@ -18741,6 +20379,24 @@ components:
       required:
         - auditImageType
       title: Credit info audit image
+    CreditPurchaseImage:
+      type: object
+      properties:
+        amount:
+          type: number
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        createdByUserId:
+          type: integer
+          format: int64
+        organizationId:
+          type: integer
+          format: int64
+        status:
+          type: string
+      required:
+        - auditImageType
+      title: Credit purchase audit image
     CronActionConfig:
       type: object
       properties:
@@ -19017,6 +20673,11 @@ components:
     DataLinkItem:
       type: object
       properties:
+        lastModified:
+          description: Last-modified timestamp of the object (ISO-8601, UTC). Null for folders.
+          type: string
+          format: date-time
+          nullable: true
         mimeType:
           type: string
         name:
@@ -19061,6 +20722,13 @@ components:
         contentType:
           type: string
         fileName:
+          type: string
+        partNumbers:
+          type: array
+          items:
+            format: int32
+            type: integer
+        uploadId:
           type: string
     DataLinkMultiPartUploadResponse:
       type: object
@@ -19273,6 +20941,11 @@ components:
           example: "compute-env-id"
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.'
+          type: string
+          maxLength: 22
+          nullable: true
         dataStudioToolUrl:
           type: string
           example: "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
@@ -19332,6 +21005,14 @@ components:
           nullable: true
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIcon:
+          description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
+          type: string
+          nullable: true
+        customIconId:
+          description: Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
+          type: string
+          nullable: true
         description:
           type: string
           nullable: true
@@ -19352,6 +21033,10 @@ components:
           allOf:
             - $ref: '#/components/schemas/StudioSshDetailsDto'
           nullable: true
+        starred:
+          type: boolean
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         workspaceId:
           type: integer
           format: int64
@@ -19402,6 +21087,8 @@ components:
         condaEnvironment:
           type: string
         connectVersion:
+          type: string
+        customIconId:
           type: string
         description:
           type: string
@@ -19497,6 +21184,11 @@ components:
       required:
         - studios
         - totalSize
+    DataStudioLogResponse:
+      type: object
+      properties:
+        log:
+          $ref: '#/components/schemas/LogPage'
     DataStudioMountedLinksResponse:
       type: object
       properties:
@@ -19543,6 +21235,11 @@ components:
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
+          nullable: true
+        customIconId:
+          description: "Avatar id (from POST /avatars) for the Studio session icon. Semantics on start: null = leave the existing icon unchanged (so a no-arg start from the connect/loading dialog doesn't touch it); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one."
+          type: string
+          maxLength: 22
           nullable: true
         description:
           type: string
@@ -19596,6 +21293,8 @@ components:
     DataStudioStatusInfo:
       type: object
       properties:
+        canForceStop:
+          type: boolean
         lastUpdate:
           type: string
           format: date-time
@@ -19605,7 +21304,9 @@ components:
         status:
           $ref: '#/components/schemas/DataStudioStatus'
         stopReason:
-          $ref: '#/components/schemas/DataStudioStopReason'
+          allOf:
+            - $ref: '#/components/schemas/DataStudioStopReason'
+          nullable: true
     DataStudioStopReason:
       type: string
       nullable: true
@@ -19661,6 +21362,11 @@ components:
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
+          nullable: true
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on update: null = leave the existing icon unchanged (partial-PATCH-safe); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one if any.'
+          type: string
+          maxLength: 22
           nullable: true
         description:
           type: string
@@ -19850,7 +21556,9 @@ components:
           type: string
           format: date-time
         linkedSource:
-          $ref: '#/components/schemas/LinkedSourceDto'
+          allOf:
+            - $ref: '#/components/schemas/LinkedSourceDto'
+          nullable: true
         mediaType:
           type: string
         url:
@@ -19932,19 +21640,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         credentialsId:
-          type: string
-    DeleteCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteDatasetsRequest:
       type: object
@@ -19970,19 +21667,8 @@ components:
         conflicts:
           type: array
           items:
-            $ref: '#/components/schemas/DeleteManagedCredentialsConflictResponse.Conflict'
+            $ref: '#/components/schemas/ConflictingResource'
         managedCredentialsId:
-          type: string
-    DeleteManagedCredentialsConflictResponse.Conflict:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        url:
           type: string
     DeleteWorkflowsRequest:
       type: object
@@ -20003,6 +21689,11 @@ components:
       properties:
         action:
           $ref: '#/components/schemas/ActionResponseDto'
+    DescribeActionTriggerResponse:
+      type: object
+      properties:
+        trigger:
+          $ref: '#/components/schemas/ActionTriggerResponseDto'
     DescribeAgentResponse:
       type: object
       properties:
@@ -20095,6 +21786,11 @@ components:
           type: string
           format: date-time
           nullable: true
+    DescribeServiceAccountResponse:
+      type: object
+      properties:
+        serviceAccount:
+          $ref: '#/components/schemas/ServiceAccountDto'
     DescribeSshKeyResponse:
       type: object
       properties:
@@ -20116,6 +21812,7 @@ components:
         defaultWorkspaceId:
           type: integer
           format: int64
+          nullable: true
         needConsent:
           type: boolean
         user:
@@ -20151,7 +21848,8 @@ components:
           x-speakeasy-terraform-ignore: true
         pipelineInfo:
           allOf:
-            - $ref: "#/components/schemas/PipelineMinInfoResponse"
+            - $ref: '#/components/schemas/PipelineMinInfoResponse'
+          nullable: true
           x-speakeasy-param-suppress-computed-diff: true
         schedConfig:
           allOf:
@@ -20195,6 +21893,25 @@ components:
       properties:
         workspace:
           $ref: '#/components/schemas/Workspace'
+    DisplayData:
+      type: object
+      properties:
+        pipelineId:
+          type: integer
+          format: int64
+        pipelineName:
+          type: string
+        processName:
+          type: string
+        runName:
+          type: string
+        taskHash:
+          type: string
+        workflowId:
+          type: string
+        workspaceId:
+          type: integer
+          format: int64
     EfsFileSystem:
       type: object
       properties:
@@ -20216,6 +21933,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -20239,14 +21957,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: AWS region
           type: string
@@ -20417,6 +22138,7 @@ components:
           x-speakeasy-param-force-new: true
         dragenAmiId:
           type: string
+          nullable: true
           description: |
             Custom AMI ID for DRAGEN-enabled instances.
             Only applicable when dragen_enabled is true.
@@ -20424,6 +22146,7 @@ components:
           # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         dragenEnabled:
           type: boolean
+          nullable: true
           description: |
             Enable Illumina DRAGEN support for the compute environment.
             When enabled, DRAGEN-specific instance types and AMIs will be used.
@@ -20431,6 +22154,7 @@ components:
           x-speakeasy-param-force-new: true
         dragenInstanceType:
           type: string
+          nullable: true
           description: |
             EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
             Only applicable when dragen_enabled is true.
@@ -20438,6 +22162,7 @@ components:
           # NOTE: dragen_enabled dependency is enforced by `awsForgeValidator`.
         ebsAutoScale:
           type: boolean
+          nullable: true
           description: |
             Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
             are dynamically attached and mounted (typically at /scratch) as disk space runs low.
@@ -20449,6 +22174,7 @@ components:
         ebsBlockSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
             to run out of free space. Only applies when ebs_auto_scale is enabled.
@@ -20461,6 +22187,7 @@ components:
         ebsBootSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
             When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
@@ -20468,6 +22195,7 @@ components:
           x-speakeasy-param-force-new: true
         ec2KeyPair:
           type: string
+          nullable: true
           description: |
             EC2 key pair name for SSH access to compute instances.
             Key pair must exist in the specified region.
@@ -20475,18 +22203,21 @@ components:
           x-speakeasy-param-force-new: true
         ecsConfig:
           type: string
+          nullable: true
           description: |
             Custom ECS agent configuration parameters appended to the ECS config file
             on compute instances. Use for advanced ECS tuning.
           x-speakeasy-param-force-new: true
         efsCreate:
           type: boolean
+          nullable: true
           description: Automatically create an EFS file system
           example: false
           x-speakeasy-param-force-new: true
           # NOTE: mutual exclusion with efs_id is enforced by `awsForgeValidator`.
         efsId:
           type: string
+          nullable: true
           description: |
             EFS file system ID to mount.
             Format: fs- followed by hexadecimal characters.
@@ -20495,6 +22226,7 @@ components:
           x-speakeasy-param-force-new: true
         efsMount:
           type: string
+          nullable: true
           description: |
             Path where EFS will be mounted in the container.
           example: "/mnt/efs"
@@ -20511,12 +22243,14 @@ components:
           x-speakeasy-param-force-new: true
         fsxMount:
           type: string
+          nullable: true
           description: |
             Path where FSx will be mounted in the container.
           example: "/fsx"
           x-speakeasy-param-force-new: true
         fsxName:
           type: string
+          nullable: true
           description: |
             FSx for Lustre file system name.
           example: "my-fsx-filesystem"
@@ -20524,6 +22258,7 @@ components:
         fsxSize:
           type: integer
           format: int32
+          nullable: true
           description: |
             Size of FSx file system in GB.
           example: 1200
@@ -20537,6 +22272,7 @@ components:
           x-speakeasy-param-force-new: true
         imageId:
           type: string
+          nullable: true
           description: |
             Custom Amazon Machine Image (AMI) ID for compute instances.
             If not specified, AWS Batch selects the default ECS-optimized AMI.
@@ -20546,6 +22282,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
           description: |
             List of EC2 instance types to use.
             Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
@@ -20662,23 +22399,23 @@ components:
           type: string
         clientSecret:
           type: string
+          writeOnly: true
           x-speakeasy-param-sensitive: true
           x-speakeasy-terraform-write-only: true
-          writeOnly: true
         discriminator:
           type: string
         privateKey:
           type: string
+          writeOnly: true
           x-speakeasy-param-sensitive: true
           x-speakeasy-terraform-write-only: true
-          writeOnly: true
         slug:
           type: string
         webhookSecret:
           type: string
+          writeOnly: true
           x-speakeasy-param-sensitive: true
           x-speakeasy-terraform-write-only: true
-          writeOnly: true
     GitHubSecurityKeys:
       type: object
       properties:
@@ -20790,6 +22527,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -20834,6 +22572,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
           description: |
@@ -20843,9 +22582,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           description: The GKE cluster region - or - zone
           type: string
@@ -20965,6 +22706,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
@@ -21040,6 +22782,7 @@ components:
             valueType: basetypes.ListValue
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
           description: |
@@ -21055,10 +22798,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
@@ -21158,6 +22903,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
           description: |
             Array of environment variables for the compute environment.
             Each variable can target the head node, compute nodes, or both.
@@ -21183,8 +22929,19 @@ components:
             Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
           example: "n1-standard-4"
           x-speakeasy-param-force-new: true
+        network:
+          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
+          type: string
+          nullable: true
+        networkTags:
+          description: Network tags applied to compute instances (VPC firewall-rule targets).
+          type: array
+          items:
+            type: string
+          nullable: true
         nextflowConfig:
           type: string
+          nullable: true
           description: |
             Nextflow configuration settings that override repository defaults.
             Applied globally to all pipelines launched in this compute environment.
@@ -21192,10 +22949,12 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
           x-speakeasy-plan-validators: RunScriptSizeValidator
         projectId:
           type: string
@@ -21224,6 +22983,18 @@ components:
           x-speakeasy-param-force-new: true
         schedEnabled:
           type: boolean
+          x-speakeasy-name-override: intelligent_compute_enabled
+          description: |
+            Enable Seqera Intelligent Compute (Preview).
+            When `true`, tasks are distributed across multiple Compute Engine VMs with
+            optimized scheduling and resource allocation. When `false` (default),
+            all tasks run on a single instance (Classic mode).
+
+            `intelligent_compute_config` is optional in both modes: leave it null
+            to accept the platform defaults, or provide it (only when
+            `intelligent_compute_enabled = true`) to override the scheduler settings.
+          example: false
+          x-speakeasy-param-force-new: true
         serviceAccountEmail:
           type: string
           description: |
@@ -21231,6 +23002,17 @@ components:
             If not specified, the default compute service account is used.
           example: "my-sa@my-project.iam.gserviceaccount.com"
           x-speakeasy-param-force-new: true
+        subnetworks:
+          description: Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+          type: array
+          items:
+            type: string
+          nullable: true
+        usePrivateAddress:
+          description: Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
+          type: boolean
+          nullable: true
+          x-speakeasy-plan-validators: PrivateAddressRequiresNetworkValidator
         waveEnabled:
           type: boolean
           x-speakeasy-terraform-ignore: true
@@ -21253,7 +23035,9 @@ components:
           example: "us-central1-a"
           x-speakeasy-param-force-new: true
       title: Google Cloud configuration
-      x-speakeasy-plan-validators: BackendStrategyVmOnlyValidator
+      x-speakeasy-plan-validators:
+        - schedConfigConsistencyValidator
+        - BackendStrategyVmOnlyValidator
     GoogleCloudPlatformMetaInfo:
       type: object
       properties:
@@ -21272,6 +23056,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GoogleInstanceType'
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoogleNetwork'
+        subnetworks:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoogleSubnetwork'
         warnings:
           type: array
           items:
@@ -21336,6 +23128,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -21368,6 +23161,7 @@ components:
           x-speakeasy-param-force-new: true
         nextflowConfig:
           type: string
+          nullable: true
         nfsMount:
           type: string
           description: |
@@ -21383,6 +23177,7 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preemptible:
           type: boolean
           description: |
@@ -21393,6 +23188,7 @@ components:
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         projectId:
           type: string
           description: |
@@ -21438,6 +23234,13 @@ components:
           example: ["us-central1-a", "us-central1-b"]
           x-speakeasy-param-force-new: true
       title: Google Life Sciences configuration (retired)
+    GoogleNetwork:
+      type: object
+      properties:
+        name:
+          type: string
+        selfLink:
+          type: string
     GooglePlatformMetainfo:
       type: object
       properties:
@@ -21507,6 +23310,15 @@ components:
           type: string
       title: Google credentials
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
+    GoogleSubnetwork:
+      type: object
+      properties:
+        name:
+          type: string
+        network:
+          type: string
+        region:
+          type: string
     GpuMetrics:
       type: object
       properties:
@@ -21605,12 +23417,6 @@ components:
           type: string
       required:
         - arch
-    Iterator_String_:
-      type: array
-      nullable: true
-      items:
-        type: string
-      description: Iterator of strings (can be null)
     JobCleanupPolicy:
       type: string
       enum:
@@ -21664,6 +23470,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -21678,14 +23485,17 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         server:
           type: string
         servicePodSpec:
@@ -21832,7 +23642,7 @@ components:
     LaunchAgentResponse:
       type: object
       properties:
-        agentId:
+        agentRunId:
           type: string
         status:
           type: string
@@ -21859,6 +23669,10 @@ components:
           nullable: true
           description: Entry workflow name
           x-speakeasy-param-computed: false
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -22074,6 +23888,26 @@ components:
         message:
           description: Human-readable explanation of this single blocker
           type: string
+    LineageRecordResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        displayData:
+          $ref: '#/components/schemas/DisplayData'
+        lid:
+          type: string
+        recordUri:
+          type: string
+        type:
+          type: string
+    LineageResolveResponse:
+      type: object
+      properties:
+        lid:
+          type: string
     LinkVersionRequest:
       type: object
       properties:
@@ -22100,6 +23934,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccessToken'
+    ListActionTriggersResponse:
+      type: object
+      properties:
+        totalSize:
+          type: integer
+          format: int64
+        triggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionTriggerDto'
     ListActionsResponse:
       type: object
       properties:
@@ -22136,6 +23980,10 @@ components:
           format: date-time
           nullable: true
           description: Last seen timestamp (null if never seen)
+        lastTrigger:
+          allOf:
+            - $ref: '#/components/schemas/ActionTriggerDto'
+          nullable: true
         name:
           type: string
           nullable: true
@@ -22155,6 +24003,18 @@ components:
         usageCmd:
           type: string
           nullable: true
+        user:
+          $ref: '#/components/schemas/UserInfo'
+    ListAgentRunsResponse:
+      type: object
+      properties:
+        agentRuns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentRunDbDto'
+        totalSize:
+          type: integer
+          format: int64
     ListAgentsResponse:
       type: object
       properties:
@@ -22424,6 +24284,16 @@ components:
           type: boolean
         name:
           type: string
+    ListServiceAccountsResponse:
+      type: object
+      properties:
+        serviceAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceAccountDto'
+        totalSize:
+          type: integer
+          format: int64
     ListSshKeysResponse:
       type: object
       properties:
@@ -22431,6 +24301,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserSshPublicKeyDto'
+    ListTaskProcessSummaryResponse:
+      type: object
+      properties:
+        processes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskProcessSummary'
     ListTasksResponse:
       type: object
       properties:
@@ -22479,6 +24356,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         optimized:
           type: boolean
           nullable: true
@@ -22493,9 +24371,13 @@ components:
           nullable: true
           description: Organization name
         pipelineInfo:
-          $ref: '#/components/schemas/PipelineMinInfoResponse'
+          allOf:
+            - $ref: '#/components/schemas/PipelineMinInfoResponse'
+          nullable: true
         progress:
-          $ref: '#/components/schemas/ProgressData'
+          allOf:
+            - $ref: '#/components/schemas/ProgressData'
+          nullable: true
         starred:
           type: boolean
           nullable: true
@@ -22511,6 +24393,16 @@ components:
           type: string
           nullable: true
           description: Workspace name
+    ListWorkspaceServiceAccountsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceServiceAccountDto'
+        nextPageToken:
+          type: string
+          nullable: true
     ListWorkspacesAndOrgResponse:
       type: object
       properties:
@@ -22545,16 +24437,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         fusion2Enabled:
           type: boolean
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
           x-speakeasy-name-override: intelligent_compute_config
@@ -22567,6 +24463,7 @@ components:
           description: Compute environment working directory
           type: string
       title: Local execution configuration
+      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
       required:
         - workDir
     LocalPlatformMetainfo:
@@ -22614,9 +24511,9 @@ components:
             $ref: '#/components/schemas/LogPage.Download'
         entries:
           type: array
-          nullable: true
           items:
             type: string
+          nullable: true
           description: Log entries (can be null)
         forwardToken:
           type: string
@@ -22654,6 +24551,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -22667,6 +24565,7 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         perJobMemLimit:
           type: boolean
         perTaskReserve:
@@ -22677,9 +24576,11 @@ components:
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         unitForLimits:
@@ -22766,12 +24667,15 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         lastName:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
@@ -22782,6 +24686,8 @@ components:
           format: int64
         userName:
           type: string
+        userType:
+          $ref: '#/components/schemas/UserType'
     MemberImage:
       type: object
       properties:
@@ -22811,6 +24717,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -22824,15 +24731,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -22864,6 +24774,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NavbarConfig.NavbarMenu'
+          nullable: true
     NavbarConfig.NavbarMenu:
       type: object
       properties:
@@ -22892,6 +24803,8 @@ components:
     NextflowVersionsResponse:
       type: object
       properties:
+        catalogEnabled:
+          type: boolean
         nextflowFeatureMinVersions:
           type: object
           additionalProperties:
@@ -22952,10 +24865,12 @@ components:
         - owner
         - member
         - collaborator
+        - service_account
       x-enum-varnames:
         - owner
         - member
         - collaborator
+        - service_account
     OrgSsoConnectionImage:
       type: object
       properties:
@@ -23090,13 +25005,9 @@ components:
           nullable: true
           description: Member ID (can be null for collaborators)
         memberRole:
-          type: string
+          allOf:
+            - $ref: '#/components/schemas/OrgRole'
           nullable: true
-          enum:
-            - owner
-            - member
-            - collaborator
-          description: Member role (can be null for collaborators)
         name:
           type: string
           description: Short name or handle for the organization (used in URLs and paths)
@@ -23216,33 +25127,51 @@ components:
     ParticipantResponseDto:
       type: object
       properties:
+        displayName:
+          type: string
+          nullable: true
         email:
           type: string
+          nullable: true
         firstName:
           type: string
+          nullable: true
         lastName:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
+          nullable: true
         orgRole:
-          $ref: '#/components/schemas/OrgRole'
+          allOf:
+            - $ref: '#/components/schemas/OrgRole'
+          nullable: true
         participantId:
           type: integer
           format: int64
         teamAvatarUrl:
           type: string
+          nullable: true
         teamId:
           type: integer
           format: int64
+          nullable: true
         teamName:
           type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/ParticipantType'
         userAvatarUrl:
           type: string
+          nullable: true
         userName:
           type: string
+          nullable: true
+        userType:
+          allOf:
+            - $ref: '#/components/schemas/UserType'
+          nullable: true
         wspRole:
           type: string
     ParticipantType:
@@ -23251,6 +25180,25 @@ components:
         - MEMBER
         - TEAM
         - COLLABORATOR
+    PipelineActionRequest:
+      type: object
+      properties:
+        targetPipelineId:
+          type: integer
+          format: int64
+          nullable: true
+        targetPipelineVersionId:
+          type: string
+          nullable: true
+    PipelineActionResponse:
+      type: object
+      properties:
+        targetPipelineId:
+          type: integer
+          format: int64
+        targetPipelineVersionId:
+          type: string
+      title: Pipeline action response
     PipelineDbDto:
       type: object
       properties:
@@ -23296,6 +25244,7 @@ components:
         workspaceId:
           type: integer
           format: int64
+          nullable: true
         id:
           type: integer
           format: int64
@@ -23339,6 +25288,9 @@ components:
       type: object
       properties:
         commitId:
+          type: string
+          nullable: true
+        diagramImage:
           type: string
           nullable: true
         provider:
@@ -23452,8 +25404,8 @@ components:
         lastUsed:
           type: string
           format: date-time
-          readOnly: true
           nullable: true
+          readOnly: true
           description: Timestamp when the secret was last accessed by a workflow
           x-speakeasy-param-readonly: true
         name:
@@ -23489,20 +25441,59 @@ components:
       required:
         - auditImageType
       title: Pipeline secret audit image
+    PipelineStatusActionConfig:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        pipelineId:
+          type: integer
+          format: int64
+        runStatus:
+          $ref: '#/components/schemas/WorkflowStatus'
+      title: Pipeline status action config
+    PipelineStatusActionEvent:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        runStatus:
+          $ref: '#/components/schemas/WorkflowStatus'
+        timestamp:
+          type: string
+          format: date-time
+        watchedWorkflowId:
+          type: string
+      title: Pipeline status action event
+    PipelineStatusActionRequest:
+      type: object
+      properties:
+        pipelineId:
+          type: integer
+          format: int64
+          nullable: true
+        runStatus:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowStatus'
+          nullable: true
     PipelineVersionFullInfoDto:
       type: object
       properties:
         creatorAvatarUrl:
           type: string
+          nullable: true
         creatorFirstName:
           type: string
+          nullable: true
         creatorLastName:
           type: string
+          nullable: true
         creatorUserId:
           type: integer
           format: int64
         creatorUserName:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -23517,6 +25508,7 @@ components:
           format: date-time
         name:
           type: string
+          nullable: true
     PipelineVersionManageRequest:
       type: object
       properties:
@@ -23601,10 +25593,18 @@ components:
         failed:
           type: integer
           format: int64
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
         invCtxSwitch:
           type: integer
           format: int64
           deprecated: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -23705,6 +25705,18 @@ components:
       type: object
       properties:
         name:
+          type: string
+    ResolveCronExpressionRequest:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+        - text
+    ResolveCronExpressionResponse:
+      type: object
+      properties:
+        expression:
           type: string
     ResourceAllocation:
       type: object
@@ -23925,6 +25937,10 @@ components:
             - VM
           example: "ECS"
           x-speakeasy-param-force-new: true
+        billingExportTable:
+          description: Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+          type: string
+          nullable: true
         diskAllocation:
           type: string
           description: |
@@ -23958,6 +25974,17 @@ components:
               - github.com/hashicorp/terraform-plugin-framework/types/basetypes
             schemaType: "basetypes.ListType{ElemType: basetypes.StringType{}}"
             valueType: basetypes.ListValue
+        maxCpusPerUser:
+          description: Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited.
+          type: integer
+          format: int32
+        maxSpotAttempts:
+          description: "Maximum number of Spot provisioning attempts for a task, including the\nfirst one, before giving up on Spot capacity. `1` means a single attempt\nwith no retry. Only used when `provisioning_model` is `spot` or\n`spotFirst` (the default).\n\nMust be a whole number between 1 and 10 (inclusive).\n"
+          type: integer
+          format: int32
+          example: 5
+          x-speakeasy-plan-validators: MaxSpotAttemptsValidator
+          x-speakeasy-param-force-new: true
         nvmeEnabled:
           description: When true, only use instance types providing local SSD (NVMe) storage. Maps to diskAllocation='nvme'.
           type: boolean
@@ -23971,7 +25998,7 @@ components:
             - $ref: '#/components/schemas/SchedConfig.Pool'
           x-speakeasy-param-force-new: true
         predictionModel:
-          description: "Resource-prediction model used by Intelligent Compute to size tasks.\nSuggested values: `none` (default), `qr/v1`, `qr/v2`. Any other string\nis accepted.\n"
+          description: "Resource-prediction model used by Intelligent Compute to size tasks.\nSuggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other\nstring is accepted.\n"
           type: string
           example: "none"
           x-speakeasy-param-force-new: true
@@ -24028,6 +26055,15 @@ components:
       required:
         - auditImageType
       title: SCIM token audit image
+    SearchResult:
+      type: object
+      properties:
+        nextPageToken:
+          type: string
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineageRecordResponse'
     SecurityGroup:
       type: object
       properties:
@@ -24104,18 +26140,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:
             - $ref: '#/components/schemas/SeqeraComputeCloudInstanceTypeSize'
         nextflowConfig:
           type: string
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         region:
           type: string
         workDir:
@@ -24130,8 +26170,10 @@ components:
       properties:
         accessKey:
           type: string
+          nullable: true
         assumeRoleArn:
           type: string
+          nullable: true
         discriminator:
           type: string
           x-speakeasy-terraform-ignore: true
@@ -24139,6 +26181,48 @@ components:
           type: string
           writeOnly: true
       title: Seqera Compute credentials
+    ServedFrom:
+      type: string
+      enum:
+        - EMBEDDED
+        - STATIC
+        - LICMAN
+        - CACHE
+      x-type: String
+    ServiceAccountDto:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        memberId:
+          description: Organization membership ID of this service account
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+    ServiceAccountImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      required:
+        - auditImageType
+      title: Service account audit image
     ServiceInfo:
       type: object
       properties:
@@ -24149,8 +26233,12 @@ components:
           deprecated: true
         allowNextflowCliLogs:
           type: boolean
+        allowSchedRoleCredentials:
+          type: boolean
         analytics:
-          $ref: '#/components/schemas/Analytics'
+          allOf:
+            - $ref: '#/components/schemas/Analytics'
+          nullable: true
         apiVersion:
           type: string
         authTypes:
@@ -24166,11 +26254,18 @@ components:
           format: int64
         contentUrl:
           type: string
+        creditPurchasesEnabled:
+          type: boolean
+        dataStudioApproachingExpirationThresholdMinutes:
+          description: Warning window in minutes before a Data Studio session auto-stops, during which the Extend Lifespan option is shown
+          type: integer
+          format: int32
         evalWorkspaceIds:
           type: array
           items:
             format: int64
             type: integer
+          nullable: true
         forgePrefix:
           type: string
         groundswellAllowedWorkspaces:
@@ -24178,6 +26273,7 @@ components:
           items:
             format: int64
             type: integer
+          nullable: true
         groundswellEnabled:
           type: boolean
         heartbeatInterval:
@@ -24185,6 +26281,7 @@ components:
           format: int32
         landingUrl:
           type: string
+          nullable: true
         launchConfigTextMaxSize:
           type: integer
           format: int32
@@ -24199,7 +26296,9 @@ components:
           type: string
           nullable: true
         navbar:
-          $ref: '#/components/schemas/NavbarConfig'
+          allOf:
+            - $ref: '#/components/schemas/NavbarConfig'
+          nullable: true
         seqeraAgentBackendUrl:
           type: string
           nullable: true
@@ -24236,6 +26335,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -24249,15 +26349,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -24346,6 +26449,11 @@ components:
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
+        warnings:
+          type: array
+          items:
+            type: string
+          nullable: true
         workflowId:
           type: string
           x-speakeasy-param-suppress-computed-diff: true
@@ -24448,6 +26556,7 @@ components:
           nullable: true
         logStreamId:
           type: string
+          nullable: true
         machineType:
           type: string
           nullable: true
@@ -24470,6 +26579,7 @@ components:
         numSpotInterruptions:
           type: integer
           format: int32
+          nullable: true
         pcpu:
           type: number
           format: double
@@ -24516,7 +26626,9 @@ components:
           nullable: true
           description: Real execution time in milliseconds
         resourceAllocation:
-          $ref: '#/components/schemas/ResourceAllocation'
+          allOf:
+            - $ref: '#/components/schemas/ResourceAllocation'
+          nullable: true
         rss:
           type: integer
           format: int64
@@ -24591,6 +26703,22 @@ components:
       required:
         - status
         - taskId
+    TaskProcessSummary:
+      type: object
+      properties:
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
+        process:
+          type: string
+        taskCount:
+          type: integer
+          format: int64
     TaskStatus:
       type: string
       enum:
@@ -24644,6 +26772,7 @@ components:
       properties:
         avatarUrl:
           type: string
+          nullable: true
           description: URL to the team's avatar or profile image
         description:
           type: string
@@ -25007,6 +27136,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
+          nullable: true
         headJobOptions:
           type: string
         headQueue:
@@ -25020,15 +27150,18 @@ components:
           format: int32
         nextflowConfig:
           type: string
+          nullable: true
         port:
           type: integer
           format: int32
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         preRunScript:
           description: Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
+          nullable: true
         propagateHeadJobOptions:
           type: boolean
         userName:
@@ -25043,13 +27176,32 @@ components:
       type: object
       properties:
         bucket:
-          $ref: '#/components/schemas/BucketActionRequest'
+          description: Bucket trigger updates. Changes the marker file and the events. The data link cannot change. Allowed only on a `bucket` action. On other actions, the request returns 400.
+          allOf:
+            - $ref: '#/components/schemas/BucketActionRequest'
         cron:
-          $ref: '#/components/schemas/CronActionRequest'
+          description: Cron trigger updates. Changes the schedule and its timezone. An omitted field keeps its stored value, but an `expression` clears a stored `preset`. Allowed only on a `cron` action. On other actions, the request returns 400.
+          allOf:
+            - $ref: '#/components/schemas/CronActionRequest'
+        labelIds:
+          description: The labels of the action, as a whole set. Omit to leave them unchanged. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         launch:
           $ref: '#/components/schemas/ActionLaunchRequest'
         name:
           type: string
+        pipeline:
+          description: Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionRequest'
+        pipelineStatus:
+          description: Pipeline-status trigger updates. Changes the pipeline to watch and the run state that fires the action. Allowed only on a `pipeline_status` action. On other actions, the request returns 400. The run that the action starts is set in `launch`, not here.
+          allOf:
+            - $ref: '#/components/schemas/PipelineStatusActionRequest'
     UpdateAgentRequest:
       type: object
       properties:
@@ -25061,8 +27213,15 @@ components:
         description:
           type: string
           nullable: true
+        githubAppCredentialId:
+          type: string
+          nullable: true
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
     UpdateAgentResponse:
       type: object
       properties:
@@ -25123,6 +27282,7 @@ components:
           type: string
         value:
           type: string
+          nullable: true
     UpdateManagedCredentialsRequest:
       type: object
       properties:
@@ -25220,6 +27380,15 @@ components:
             type: string
       required:
         - description
+    UpdateServiceAccountRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        name:
+          type: string
+          maxLength: 40
     UpdateTeamRequest:
       type: object
       properties:
@@ -25350,6 +27519,7 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         email:
           type: string
         id:
@@ -25363,8 +27533,10 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         avatarId:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -25372,10 +27544,12 @@ components:
           type: boolean
         description:
           type: string
+          nullable: true
         email:
           type: string
         firstName:
           type: string
+          nullable: true
         id:
           type: integer
           format: int64
@@ -25384,17 +27558,22 @@ components:
           format: date-time
         lastName:
           type: string
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
         marketingConsent:
           type: boolean
+          nullable: true
         notification:
           type: boolean
+          nullable: true
         organization:
           type: string
+          nullable: true
         termsOfUseConsent:
           type: boolean
+          nullable: true
         userName:
           type: string
         waveBuildNotification:
@@ -25457,6 +27636,11 @@ components:
       required:
         - auditImageType
       title: SSH key audit image
+    UserType:
+      type: string
+      enum:
+        - HUMAN
+        - SERVICE_ACCOUNT
     UserWorkspacePermissionDto:
       type: object
       properties:
@@ -25483,6 +27667,9 @@ components:
     UserWorkspaceRolesDto:
       type: object
       properties:
+        participantId:
+          type: integer
+          format: int64
         permissions:
           type: array
           items:
@@ -26177,6 +28364,10 @@ components:
           description: Entry workflow name
           x-speakeasy-param-computed: false
           example: "main.nf"
+        fusionVersion:
+          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -26325,55 +28516,77 @@ components:
       properties:
         commitId:
           type: string
+          nullable: true
         computeEnv:
           $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
         configProfiles:
           type: array
           items:
             type: string
+          nullable: true
         configText:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
         entryName:
           type: string
+          nullable: true
+        fusionVersion:
+          description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
         id:
           type: string
+        launchContainer:
+          description: Custom launcher image that takes precedence over the selected Nextflow version.
+          type: string
+          nullable: true
         mainScript:
           type: string
+          nullable: true
         nextflowVersion:
-          description: Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          description: Saved Nextflow release selection, retained for relaunch/resume. A custom launcher image takes precedence over this selection.
           type: string
           nullable: true
         optimizationId:
           type: string
+          nullable: true
         optimizationTargets:
           type: string
+          nullable: true
         outputDir:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
           nullable: true
         paramsText:
           type: string
+          nullable: true
         pipeline:
           type: string
         pipelineId:
           type: integer
           format: int64
+          nullable: true
         pipelineSchemaId:
           type: integer
           format: int64
+          nullable: true
         postRunScript:
           type: string
+          nullable: true
         preRunScript:
           type: string
+          nullable: true
         pullLatest:
           type: boolean
         resume:
@@ -26386,8 +28599,10 @@ components:
           type: string
         schemaName:
           type: string
+          nullable: true
         sessionId:
           type: string
+          nullable: true
         stubRun:
           type: boolean
         syntaxParser:
@@ -26398,16 +28613,19 @@ components:
           nullable: true
         towerConfig:
           type: string
+          nullable: true
         userSecrets:
           type: array
           items:
             type: string
+          nullable: true
         workDir:
           type: string
         workspaceSecrets:
           type: array
           items:
             type: string
+          nullable: true
     WorkflowLaunchValidationErrorResponse:
       type: object
       properties:
@@ -26433,6 +28651,7 @@ components:
           format: int64
         cost:
           type: number
+          nullable: true
         cpuEfficiency:
           type: number
           format: float
@@ -26460,6 +28679,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
         failed:
           type: integer
           format: int64
@@ -26498,6 +28718,7 @@ components:
         numSpotInterruptions:
           type: integer
           format: int32
+          nullable: true
         peakCpus:
           type: integer
           format: int64
@@ -26575,9 +28796,15 @@ components:
                 type: string
               nullable: true
             fusion:
-              $ref: '#/components/schemas/WfFusionMeta'
+              allOf:
+                - $ref: '#/components/schemas/WfFusionMeta'
+              nullable: true
+            fusionVersion:
+              type: string
+              nullable: true
             logFile:
               type: string
+              nullable: true
             nextflowConfig:
               type: string
               nullable: true
@@ -26586,8 +28813,10 @@ components:
               nullable: true
             operationId:
               type: string
+              nullable: true
             outFile:
               type: string
+              nullable: true
             postRunScript:
               type: string
               nullable: true
@@ -26601,7 +28830,9 @@ components:
               type: string
               nullable: true
             wave:
-              $ref: '#/components/schemas/WfWaveMeta'
+              allOf:
+                - $ref: '#/components/schemas/WfWaveMeta'
+              nullable: true
           type: object
     WorkflowMetrics:
       type: object
@@ -26789,6 +29020,20 @@ components:
           format: int64
         workspaceName:
           type: string
+    WorkspaceServiceAccountDto:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
     WspRole:
       type: string
       enum:
@@ -26798,6 +29043,7 @@ components:
         - launch
         - connect
         - view
+        - project
       x-enum-varnames:
         - owner
         - admin
@@ -26805,6 +29051,7 @@ components:
         - launch
         - connect
         - view
+        - project
     WspRoleSourceType:
       type: string
       enum:
@@ -26870,6 +29117,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -26987,6 +29242,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -27134,6 +29397,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:
@@ -27255,6 +29523,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -27337,7 +29613,7 @@ components:
     # Azure Cloud compute environment schema
     AzureCloudCE_ComputeConfig:
       x-speakeasy-entity: AzureCloudCE
-      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-version: 2
       x-speakeasy-entity-description: |
         Manage Azure Cloud compute environments in Seqera platform.
 
@@ -27376,6 +29652,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:
@@ -27496,6 +29777,14 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          x-speakeasy-plan-validators: FusionMetricsCollectionValidator
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
+
+            Requires `enable_fusion = true`.
         platform:
           type: string
           enum:
@@ -27578,7 +29867,7 @@ components:
     # GCP Cloud compute environment schema
     GCPCloudCE_ComputeConfig:
       x-speakeasy-entity: GCPCloudCE
-      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-version: 2
       x-speakeasy-entity-description: |
         Manage Google Cloud compute environments in Seqera platform.
 
@@ -27617,6 +29906,11 @@ components:
         description:
           type: string
           description: Optional description of the compute environment
+        fusionMetricsCollectionEnabled:
+          type: boolean
+          description: |
+            Enable Fusion metrics collection for this compute environment. Can be changed
+            in place without replacing the compute environment.
         platform:
           type: string
           enum:
@@ -28200,9 +30494,24 @@ components:
           x-speakeasy-param-optional: true
           x-speakeasy-plan-validators: AWSCredentialKeysValidator
           writeOnly: true
+        # The enum is inlined rather than $ref'd because sibling keys next to a
+        # $ref are ignored, which is why the description below never reached
+        # the generated docs while the $ref was in place.
+        #
+        # `workloadIdentity` is accepted for forward compatibility: the backend
+        # already supports it, and listing it here keeps the generated SDK able
+        # to deserialize such a credential instead of erroring on an unknown
+        # enum value. It is not usable everywhere yet — see the description.
         mode:
-          $ref: '#/components/schemas/AwsCredentialsMode'
-          description: 'Authentication mode: "keys" for access key/secret key, "role" for IAM role assumption.'
+          type: string
+          enum:
+            - keys
+            - role
+            - workloadIdentity
+          # Kept to a single line: multi-line markdown here is spliced into the
+          # docs' attribute list, so sub-bullets render as sibling attributes.
+          description: 'Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key, and requires `access_key`, `secret_key` and `use_external_id` to be unset. Note that `workloadIdentity` is gated behind the Identity Federation feature flag and is rejected for Forge compute environments, so it can fail at apply time even when the configuration is valid.'
+          example: role
           x-speakeasy-param-optional: true
         external_id:
           type: string
@@ -29935,6 +32244,94 @@ components:
       properties:
         credentials:
           $ref: "#/components/schemas/TowerAgentCredential"
+    AWSCredentialsSetupValuesResponse:
+      type: object
+      x-speakeasy-entity: AWSCredentialsFederationSetup
+      x-speakeasy-entity-description: |
+        Data source for the AWS OIDC workload identity setup values of a Seqera
+        scope.
+
+        Returns the values an administrator must configure on the AWS side before
+        an `seqera_aws_credential` using workload identity can be created: the
+        OIDC provider URL, the STS audience, the subject claims Platform mints for
+        each workload type, and the session tag keys written to CloudTrail.
+
+        All attributes are empty when the installation has no public endpoint
+        configured or the scope cannot be resolved.
+      x-speakeasy-transform-from-api:
+        jq: 'def v($l): (.setupValues // []) | map(select(.label == $l)) | first | .value; . + { platformPublicAddress: v("Platform public address"), audience: v("Audience"), subjectPlatformActions: v("Subject for platform actions"), subjectDataExplorer: v("Subject for Data Explorer"), subjectStudios: v("Subject for Studios"), subjectPipelineLaunches: v("Subject for pipeline launches"), cloudtrailSessionTagKeys: v("CloudTrail session tag keys") }'
+      properties:
+        setupValues:
+          description: The raw labelled values as returned by the API. Empty when nothing can be resolved for the scope.
+          type: array
+          x-speakeasy-param-readonly: true
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+        platformPublicAddress:
+          type: string
+          description: This installation's public address, used as the OIDC provider URL in the AWS IAM console.
+          x-speakeasy-param-readonly: true
+        audience:
+          type: string
+          description: The STS audience the IAM OIDC provider must accept (`aud` condition key).
+          x-speakeasy-param-readonly: true
+        subjectPlatformActions:
+          type: string
+          description: The `sub` claim minted for control-plane actions such as credential validation, describe and log retrieval.
+          x-speakeasy-param-readonly: true
+        subjectDataExplorer:
+          type: string
+          description: The `sub` claim minted for Data Explorer access.
+          x-speakeasy-param-readonly: true
+        subjectStudios:
+          type: string
+          description: The `sub` claim minted for Studio sessions.
+          x-speakeasy-param-readonly: true
+        subjectPipelineLaunches:
+          type: string
+          description: The `sub` claim minted for pipeline launches.
+          x-speakeasy-param-readonly: true
+        cloudtrailSessionTagKeys:
+          type: string
+          description: Comma-separated session tag keys Platform sets on the assumed role, as they appear in CloudTrail. The trust policy must allow `sts:TagSession`.
+          x-speakeasy-param-readonly: true
+    GoogleCredentialsSetupValuesResponse:
+      type: object
+      x-speakeasy-entity: GCPCredentialsFederationSetup
+      x-speakeasy-entity-description: |
+        Data source for the Google Workload Identity Federation setup values of a
+        Seqera scope.
+
+        Returns the values an administrator must configure on the GCP side before
+        an `seqera_google_credential` using workload identity can be created: the
+        OIDC issuer URL, the `google.subject` attribute mapping that traces
+        activity back to the acting Platform user in Cloud Audit Logs, and the
+        recommended attribute condition pinning the workload identity pool to this
+        tenant.
+
+        All attributes are empty when the installation has no public endpoint
+        configured or the scope cannot be resolved.
+      x-speakeasy-transform-from-api:
+        jq: 'def v($l): (.setupValues // []) | map(select(.label == $l)) | first | .value; . + { oidcIssuerUrl: v("OIDC issuer URL"), googleSubjectMapping: v("google.subject mapping"), recommendedAttributeCondition: v("Recommended attribute condition") }'
+      properties:
+        setupValues:
+          description: The raw labelled values as returned by the API. Empty when nothing can be resolved for the scope.
+          type: array
+          x-speakeasy-param-readonly: true
+          items:
+            $ref: '#/components/schemas/CredentialsSetupValue'
+        oidcIssuerUrl:
+          type: string
+          description: This installation's public address, used as the issuer URI of the GCP workload identity pool provider.
+          x-speakeasy-param-readonly: true
+        googleSubjectMapping:
+          type: string
+          description: The `google.subject` attribute mapping to set on the provider. Appends the acting user to the tenant subject so Cloud Audit Logs name a specific user.
+          x-speakeasy-param-readonly: true
+        recommendedAttributeCondition:
+          type: string
+          description: The recommended provider attribute condition, pinning the pool to subjects owned by this tenant. Null when the scope cannot be encoded.
+          x-speakeasy-param-readonly: true
     ListCredentialsDataSourceResponse:
       type: object
       required:

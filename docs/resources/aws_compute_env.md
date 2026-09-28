@@ -109,14 +109,16 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     post_run_script      = "...my_post_run_script..."
     pre_run_script       = "...my_pre_run_script..."
     region               = "us-east-1"
+    secrets_kms_key_id   = "...my_secrets_kms_key_id..."
     storage_type         = "...my_storage_type..."
     volumes = [
       "..."
     ]
     work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  credentials_id                    = "...my_credentials_id..."
+  description                       = "...my_description..."
+  fusion_metrics_collection_enabled = false
   label_ids = [
     1
   ]
@@ -140,6 +142,10 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 ### Optional
 
 - `description` (String) Optional description of the compute environment
+- `fusion_metrics_collection_enabled` (Boolean) Enable Fusion metrics collection for this compute environment. Can be changed
+in place without replacing the compute environment.
+
+Requires `enable_fusion = true`.
 - `label_ids` (List of Number) Requires replacement if changed.
 
 ### Read-Only
@@ -225,6 +231,7 @@ Requires replacement if changed.
 - `pre_run_script` (String) Bash script to run before workflow execution begins.
 Use for environment setup, loading modules, downloading reference data, etc.
 Requires replacement if changed.
+- `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) List of volume mount specifications for compute instances.
 Format follows Docker volume mount syntax.

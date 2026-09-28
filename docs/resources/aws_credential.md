@@ -136,7 +136,7 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 
 - `access_key` (String) AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
 - `assume_role_arn` (String) IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.
-- `mode` (String) must be one of ["keys", "role"]
+- `mode` (String) Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key, and requires `access_key`, `secret_key` and `use_external_id` to be unset. Note that `workloadIdentity` is gated behind the Identity Federation feature flag and is rejected for Forge compute environments, so it can fail at apply time even when the configuration is valid. must be one of ["keys", "role", "workloadIdentity"]
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `use_external_id` (Boolean) Generate External ID for AWS credentials (requires IAM Role ARN)
 

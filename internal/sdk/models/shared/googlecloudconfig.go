@@ -28,6 +28,10 @@ type GoogleCloudConfig struct {
 	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
+	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
+	Network *string `json:"network,omitempty"`
+	// Network tags applied to compute instances (VPC firewall-rule targets).
+	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings that override repository defaults.
 	// Applied globally to all pipelines launched in this compute environment.
 	//
@@ -44,12 +48,25 @@ type GoogleCloudConfig struct {
 	//
 	Region                   *string      `json:"region,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Compute Engine VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool `json:"schedEnabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
 	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	WaveEnabled         *bool   `json:"waveEnabled,omitempty"`
+	// Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+	Subnetworks []string `json:"subnetworks,omitempty"`
+	// Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	WaveEnabled       *bool `json:"waveEnabled,omitempty"`
 	// Google Cloud Storage bucket path for Nextflow work directory where intermediate
 	// files will be stored.
 	// Format: gs://bucket-name/path
@@ -117,6 +134,20 @@ func (g *GoogleCloudConfig) GetInstanceType() *string {
 	return g.InstanceType
 }
 
+func (g *GoogleCloudConfig) GetNetwork() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Network
+}
+
+func (g *GoogleCloudConfig) GetNetworkTags() []string {
+	if g == nil {
+		return nil
+	}
+	return g.NetworkTags
+}
+
 func (g *GoogleCloudConfig) GetNextflowConfig() *string {
 	if g == nil {
 		return nil
@@ -159,11 +190,11 @@ func (g *GoogleCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	return g.IntelligentComputeConfig
 }
 
-func (g *GoogleCloudConfig) GetSchedEnabled() *bool {
+func (g *GoogleCloudConfig) GetIntelligentComputeEnabled() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.SchedEnabled
+	return g.IntelligentComputeEnabled
 }
 
 func (g *GoogleCloudConfig) GetServiceAccountEmail() *string {
@@ -171,6 +202,20 @@ func (g *GoogleCloudConfig) GetServiceAccountEmail() *string {
 		return nil
 	}
 	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCloudConfig) GetSubnetworks() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Subnetworks
+}
+
+func (g *GoogleCloudConfig) GetUsePrivateAddress() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.UsePrivateAddress
 }
 
 func (g *GoogleCloudConfig) GetWaveEnabled() *bool {

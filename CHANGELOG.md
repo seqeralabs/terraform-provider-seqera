@@ -1,3 +1,55 @@
+# v0.43.0
+
+BREAKING CHANGES:
+
+- **`sched_enabled` renamed to `intelligent_compute_enabled` on Azure and Google Cloud compute environments.** Applies to `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud` / `google_cloud` blocks of `seqera_compute_env`, matching `seqera_aws_cloud_ce` and the name of the companion `intelligent_compute_config` block. Configurations that set `sched_enabled` must switch to the new name. The value sent to the API is unchanged.
+
+  Existing state migrates automatically: `seqera_azure_cloud_ce` and `seqera_gcp_cloud_ce` move to schema version 2 and `seqera_compute_env` to schema version 3, and their state upgraders carry the value across, so there is no diff and no replacement.
+
+  As on AWS Cloud, setting `intelligent_compute_config` while `intelligent_compute_enabled` is false or unset is now rejected at plan time on these resources.
+
+FEATURES:
+
+- **Pipeline-status triggers and agent outcomes on `seqera_action`.** A new `pipeline_status` source, configured through a `pipeline_status` block, fires the action when a watched pipeline's run reaches a given state (`run_status`). A new `response_type` chooses what the action does when it fires: `pipeline` (the default) launches a run, and `agent` runs the workspace agent named in the new `agent` block. `agent` is only allowed for `bucket`, `cron` and `pipeline_status` sources. Changing `response_type` or `agent.agent_config_id` forces replacement. A new optional `pipeline` block links a `pipeline` action to an existing Launchpad pipeline and version, so each run is recorded against it. A new `label_ids` attaches labels to actions that have no launch. The most recent firing is exposed read-only as `last_trigger`, and the pipeline-status trigger as `config.pipeline_status`.
+
+- **Fusion metrics collection on compute environments.** New top-level `fusion_metrics_collection_enabled` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and `seqera_aws_compute_env`. It updates in place — changing it does not replace the compute environment. On the Batch/Forge environments it requires `enable_fusion = true`, enforced at plan time rather than failing at apply. Not exposed on `seqera_slurm_ce` (no Fusion support in its config) or `seqera_managed_compute_ce` (backend-owned config).
+
+- **New `seqera_aws_credentials_federation_setup` and `seqera_gcp_credentials_federation_setup` data sources.** Surface `GET /credentials/federation-setup` — the values an administrator copies into their cloud provider console before a workload-identity credential can be created. Each data source flattens the API's untyped `[{label, value}]` list into typed attributes for its provider, and keeps the raw `setup_values` list alongside so nothing the API returns is unreachable. Only AWS and GCP are surfaced; the endpoint returns an empty list for every other provider.
+
+- **`workloadIdentity` mode on `seqera_aws_credential`.** The `mode` enum now accepts `workloadIdentity` — OIDC workload identity federation against `assume_role_arn`, with no stored long-lived key. Requires `access_key`, `secret_key` and `use_external_id` to be unset. It is gated behind the Identity Federation feature flag and rejected for Forge compute environments, neither of which is detectable at plan time, so it can still fail at apply.
+
+- **Customer-managed KMS key for pipeline-secret encryption on AWS.** New `config.secrets_kms_key_id` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_aws_compute_env` and the matching `seqera_compute_env` blocks. Accepts a key ARN or key id, and encrypts the temporary Secrets Manager secrets created for runs that use pipeline secrets. When omitted, the AWS-managed default Secrets Manager key is used.
+
+- **VPC support on Google Cloud compute environments.** New `config.network`, `config.network_tags`, `config.subnetworks` and `config.use_private_address` on `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. `use_private_address = true` launches instances without an external IP and requires `network` to be set (enforced at plan time), plus Cloud NAT and Private Google Access on the subnetwork.
+
+- **Intelligent Compute: per-user vCPU cap and Spot retry budget.** New `max_cpus_per_user` (null means unlimited) and `max_spot_attempts` on `intelligent_compute_config` across the cloud compute environments. `max_spot_attempts` counts the first attempt, must be between 1 and 10, and is only honoured for Spot provisioning — setting it alongside an explicit `provisioning_model = "ondemand"` is rejected at plan time. `prediction_model` gains `qr/v3` as a suggested value.
+
+- **Head-node OS disk size on Azure Cloud.** New `config.boot_disk_size_gb` on `seqera_azure_cloud_ce` and the `azure_cloud` block of `seqera_compute_env`, between 50 and 4095 GB. When omitted, Azure uses the default disk size for the VM image.
+
+- **`fusion_version` on launches.** New `fusion_version` on the `seqera_pipeline` and `seqera_action` launch config and on `seqera_workflows`. Pins the Fusion release used for the run; the version must exist in the platform's system catalog, and it applies only when the compute environment enables Fusion v2.
+
+- **`creation_source` filter on the `seqera_data_links` data source** — `user` for manually created data links, `cloud` for those discovered from credentials.
+
+- **Billed-cost retrieval from a Cloud Billing export on Google Cloud.** New `billing_export_table` on `intelligent_compute_config` for `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. It names the BigQuery table holding the Cloud Billing export, as `project.dataset.table`, and lets the platform retrieve billed cost for runs on the compute environment. The export is not retroactive, so cost is unavailable for runs that predate it. Changing it forces replacement. The field also appears on the AWS Cloud and Azure Cloud compute environments because upstream shares the schema, but those platforms ignore it, so setting it on `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce` or the `aws_cloud` / `azure_cloud` blocks of `seqera_compute_env` is rejected at plan time.
+
+- **Custom icons on `seqera_studios`.** New `custom_icon_id` sets the Studio's icon from an avatar id (from `POST /avatars`). When null the icon is inherited from the parent checkpoint, an empty string clears it explicitly, and any other value assigns that avatar. Changing it forces replacement. The resolved icon URL is exposed read-only as `custom_icon`, and is null when no icon is set.
+
+- **Launch warnings on `seqera_workflows`.** New read-only `warnings` holds the warnings the platform returns when it accepts a launch.
+
+BUG FIXES:
+
+- **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
+
+  No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
+
+NOTES:
+
+- **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
+
+- **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
+
+- **Fusion examples corrected on the Cloud compute environments.** The `seqera_aws_cloud_ce` and `seqera_gcp_cloud_ce` examples set `enable_wave` and `enable_fusion`, which are not attributes of those resources — Fusion v2 and Wave are always on for Cloud compute environments and are not user-settable. The examples now omit them.
+
 # v0.42.0
 
 FEATURES:

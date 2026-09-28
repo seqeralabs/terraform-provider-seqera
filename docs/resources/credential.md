@@ -262,10 +262,10 @@ Optional:
 
 - `app_id` (String)
 - `client_id` (String)
-- `client_secret` (String)
-- `private_key` (String)
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
+- `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
 - `slug` (String)
-- `webhook_secret` (String)
+- `webhook_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
 
 
 <a id="nestedatt--keys--gitlab"></a>

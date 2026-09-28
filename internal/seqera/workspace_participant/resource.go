@@ -67,11 +67,16 @@ the workspace.
 Note: When using email, the lookup to member_id happens once during resource
 creation and the participant_id is stored in state for subsequent operations.
 
-Available roles:
+The role is assigned when the participant is created, and defaults to view.
+Custom roles defined via seqera_custom_role in the same organization can be used
+in place of a predefined role.
+
+Available predefined roles:
 - owner: Full control over the workspace
 - admin: Administrative access, can manage participants
 - maintain: Can modify pipelines and compute environments
 - launch: Can launch pipelines
+- connect: Can connect to Studios
 - view: Read-only access (default)
 
 Import formats:
@@ -210,6 +215,13 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 
 	// Build request - either member_id, team_id, or email must be specified
 	addReq := shared.AddParticipantRequest{}
+	// The create endpoint assigns the role directly. Always send it: the API
+	// default is `launch` (`view` for service accounts), not the `view` this
+	// resource defaults to, so omitting it would silently over-grant.
+	desiredRole := data.Role.ValueString()
+	if desiredRole != "" {
+		addReq.Role = &desiredRole
+	}
 	if !data.MemberID.IsNull() && !data.MemberID.IsUnknown() {
 		memberID := data.MemberID.ValueInt64()
 		addReq.MemberID = &memberID
@@ -296,9 +308,14 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		data.Email = types.StringPointerValue(participant.Email)
 	}
 
-	// Update role if not default
-	desiredRole := data.Role.ValueString()
-	if desiredRole != "" && desiredRole != "view" {
+	// Platform releases that predate `role` on the create request ignore it and
+	// fall back to the API default, so reconcile with an explicit role update
+	// when the returned role is not the one that was asked for.
+	createdRole := ""
+	if participant.WspRole != nil {
+		createdRole = *participant.WspRole
+	}
+	if desiredRole != "" && !strings.EqualFold(createdRole, desiredRole) {
 		role := desiredRole
 		updateRes, err := r.client.Workspaces.UpdateWorkspaceParticipantRole(ctx, operations.UpdateWorkspaceParticipantRoleRequest{
 			OrgID:                        data.OrgID.ValueInt64(),
@@ -327,8 +344,10 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		}
 		if p != nil {
 			r.refreshFromParticipant(&data, p)
-			// Restore the role we set, since the API may not have propagated the change yet
-			if desiredRole != "" && desiredRole != "view" {
+			// Restore the configured role: it is Optional+Computed with a known
+			// planned value, so state has to match it exactly. The API echoes
+			// roles lower-cased and may not have propagated a role update yet.
+			if desiredRole != "" {
 				data.Role = types.StringValue(desiredRole)
 			}
 		}

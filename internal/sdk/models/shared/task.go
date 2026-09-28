@@ -106,6 +106,57 @@ func (g *GpuMetrics) GetPeakMemUsed() *int64 {
 	return g.PeakMemUsed
 }
 
+type ResourceAllocation struct {
+	AcceleratorCount *int    `json:"acceleratorCount,omitempty"`
+	AcceleratorName  *string `json:"acceleratorName,omitempty"`
+	AcceleratorType  *string `json:"acceleratorType,omitempty"`
+	CPUShares        *int    `json:"cpuShares,omitempty"`
+	MemoryMiB        *int    `json:"memoryMiB,omitempty"`
+	Time             *string `json:"time,omitempty"`
+}
+
+func (r *ResourceAllocation) GetAcceleratorCount() *int {
+	if r == nil {
+		return nil
+	}
+	return r.AcceleratorCount
+}
+
+func (r *ResourceAllocation) GetAcceleratorName() *string {
+	if r == nil {
+		return nil
+	}
+	return r.AcceleratorName
+}
+
+func (r *ResourceAllocation) GetAcceleratorType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.AcceleratorType
+}
+
+func (r *ResourceAllocation) GetCPUShares() *int {
+	if r == nil {
+		return nil
+	}
+	return r.CPUShares
+}
+
+func (r *ResourceAllocation) GetMemoryMiB() *int {
+	if r == nil {
+		return nil
+	}
+	return r.MemoryMiB
+}
+
+func (r *ResourceAllocation) GetTime() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Time
+}
+
 type Task struct {
 	// Attempt number
 	Attempt *int `json:"attempt,omitempty"`

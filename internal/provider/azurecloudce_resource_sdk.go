@@ -19,19 +19,24 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 
 	if resp != nil {
 		r.Config = &tfTypes.AzCloudConfig{}
+		r.Config.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.BootDiskSizeGB))
 		r.Config.DataCollectionEndpoint = types.StringPointerValue(resp.Config.DataCollectionEndpoint)
 		r.Config.DataCollectionRuleID = types.StringPointerValue(resp.Config.DataCollectionRuleID)
-		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
+		if resp.Config.Environment != nil {
+			r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
-		for _, environmentItem := range resp.Config.Environment {
-			var environment tfTypes.ConfigEnvVariable
+			for _, environmentItem := range resp.Config.Environment {
+				var environment tfTypes.ConfigEnvVariable
 
-			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-			environment.Head = types.BoolPointerValue(environmentItem.Head)
-			environment.Name = types.StringPointerValue(environmentItem.Name)
-			environment.Value = types.StringPointerValue(environmentItem.Value)
+				environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+				environment.Head = types.BoolPointerValue(environmentItem.Head)
+				environment.Name = types.StringPointerValue(environmentItem.Name)
+				environment.Value = types.StringPointerValue(environmentItem.Value)
 
-			r.Config.Environment = append(r.Config.Environment, environment)
+				r.Config.Environment = append(r.Config.Environment, environment)
+			}
+		} else {
+			r.Config.Environment = nil
 		}
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
 		if resp.Config.IntelligentComputeConfig == nil {
@@ -43,6 +48,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -50,6 +56,8 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			machineTypesValuable, machineTypesDiags := basetypes.ListType{ElemType: basetypes.StringType{}}.ValueFromList(ctx, machineTypesValue)
 			diags.Append(machineTypesDiags...)
 			r.Config.IntelligentComputeConfig.MachineTypes, _ = machineTypesValuable.(basetypes.ListValue)
+			r.Config.IntelligentComputeConfig.MaxCpusPerUser = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxCpusPerUser))
+			r.Config.IntelligentComputeConfig.MaxSpotAttempts = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.IntelligentComputeConfig.MaxSpotAttempts))
 			if resp.Config.IntelligentComputeConfig.Pool == nil {
 				r.Config.IntelligentComputeConfig.Pool = nil
 			} else {
@@ -65,6 +73,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.LogTableName = types.StringPointerValue(resp.Config.LogTableName)
 		r.Config.LogWorkspaceID = types.StringPointerValue(resp.Config.LogWorkspaceID)
 		r.Config.ManagedIdentityClientID = types.StringPointerValue(resp.Config.ManagedIdentityClientID)
@@ -75,7 +84,6 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
 		r.Config.ResourceGroup = types.StringPointerValue(resp.Config.ResourceGroup)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.Subnets = make([]types.String, 0, len(resp.Config.Subnets))
 		for _, v := range resp.Config.Subnets {
 			r.Config.Subnets = append(r.Config.Subnets, types.StringValue(v))
@@ -86,6 +94,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.FusionMetricsCollectionEnabled)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
@@ -236,6 +245,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	platform := new(shared.AzureCloudCEComputeConfigPlatform)
 	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
 		*platform = shared.AzureCloudCEComputeConfigPlatform(r.Platform.ValueString())
@@ -272,6 +287,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		deleted = nil
 	}
+	bootDiskSizeGB := new(int)
+	if !r.Config.BootDiskSizeGB.IsUnknown() && !r.Config.BootDiskSizeGB.IsNull() {
+		*bootDiskSizeGB = int(r.Config.BootDiskSizeGB.ValueInt32())
+	} else {
+		bootDiskSizeGB = nil
+	}
 	dataCollectionEndpoint := new(string)
 	if !r.Config.DataCollectionEndpoint.IsUnknown() && !r.Config.DataCollectionEndpoint.IsNull() {
 		*dataCollectionEndpoint = r.Config.DataCollectionEndpoint.ValueString()
@@ -284,38 +305,41 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		dataCollectionRuleID = nil
 	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
+	var environment []shared.ConfigEnvVariable
+	if r.Config.Environment != nil {
+		environment = make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+		for environmentIndex := range r.Config.Environment {
+			compute := new(bool)
+			if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+				*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+			} else {
+				compute = nil
+			}
+			head := new(bool)
+			if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+				*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+			} else {
+				head = nil
+			}
+			name1 := new(string)
+			if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+				*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			value := new(string)
+			if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+				*value = r.Config.Environment[environmentIndex].Value.ValueString()
+			} else {
+				value = nil
+			}
+			environment = append(environment, shared.ConfigEnvVariable{
+				Compute: compute,
+				Head:    head,
+				Name:    name1,
+				Value:   value,
+			})
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name1,
-			Value:   value,
-		})
 	}
 	instanceType := new(string)
 	if !r.Config.InstanceType.IsUnknown() && !r.Config.InstanceType.IsNull() {
@@ -391,6 +415,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -406,6 +436,18 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		var machineTypes []string
 		if !r.Config.IntelligentComputeConfig.MachineTypes.IsUnknown() && !r.Config.IntelligentComputeConfig.MachineTypes.IsNull() {
 			diags.Append(r.Config.IntelligentComputeConfig.MachineTypes.ElementsAs(ctx, &machineTypes, true)...)
+		}
+		maxCpusPerUser := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxCpusPerUser.IsNull() {
+			*maxCpusPerUser = int(r.Config.IntelligentComputeConfig.MaxCpusPerUser.ValueInt32())
+		} else {
+			maxCpusPerUser = nil
+		}
+		maxSpotAttempts := new(int)
+		if !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsUnknown() && !r.Config.IntelligentComputeConfig.MaxSpotAttempts.IsNull() {
+			*maxSpotAttempts = int(r.Config.IntelligentComputeConfig.MaxSpotAttempts.ValueInt32())
+		} else {
+			maxSpotAttempts = nil
 		}
 		var pool *shared.SchedConfigPool
 		if r.Config.IntelligentComputeConfig.Pool != nil {
@@ -446,20 +488,23 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	subnets := make([]string, 0, len(r.Config.Subnets))
 	for subnetsIndex := range r.Config.Subnets {
@@ -478,39 +523,41 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		workDir = nil
 	}
 	config := shared.AzCloudConfig{
-		DataCollectionEndpoint:   dataCollectionEndpoint,
-		DataCollectionRuleID:     dataCollectionRuleID,
-		Environment:              environment,
-		InstanceType:             instanceType,
-		LogTableName:             logTableName,
-		LogWorkspaceID:           logWorkspaceID,
-		ManagedIdentityClientID:  managedIdentityClientID,
-		ManagedIdentityID:        managedIdentityID,
-		NetworkID:                networkID,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		Region:                   region,
-		ResourceGroup:            resourceGroup,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		Subnets:                  subnets,
-		SubscriptionID:           subscriptionID,
-		WorkDir:                  workDir,
+		BootDiskSizeGB:            bootDiskSizeGB,
+		DataCollectionEndpoint:    dataCollectionEndpoint,
+		DataCollectionRuleID:      dataCollectionRuleID,
+		Environment:               environment,
+		InstanceType:              instanceType,
+		LogTableName:              logTableName,
+		LogWorkspaceID:            logWorkspaceID,
+		ManagedIdentityClientID:   managedIdentityClientID,
+		ManagedIdentityID:         managedIdentityID,
+		NetworkID:                 networkID,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		Region:                    region,
+		ResourceGroup:             resourceGroup,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		Subnets:                   subnets,
+		SubscriptionID:            subscriptionID,
+		WorkDir:                   workDir,
 	}
 	out := shared.AzureCloudCEComputeConfigInput{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-		ID:            id,
-		Name:          name,
-		Description:   description,
-		Platform:      platform,
-		Status:        status,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		LastUsed:      lastUsed,
-		Deleted:       deleted,
-		Config:        config,
+		CredentialsID:                  credentialsID,
+		WorkspaceID:                    workspaceID,
+		ID:                             id,
+		Name:                           name,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Platform:                       platform,
+		Status:                         status,
+		DateCreated:                    dateCreated,
+		LastUpdated:                    lastUpdated,
+		LastUsed:                       lastUsed,
+		Deleted:                        deleted,
+		Config:                         config,
 	}
 
 	return &out, diags
@@ -553,6 +600,12 @@ func (r *AzureCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -560,9 +613,10 @@ func (r *AzureCloudCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.
 		name = nil
 	}
 	out := shared.UpdateComputeEnvRequest{
-		CredentialsID: credentialsID,
-		Description:   description,
-		Name:          name,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Name:                           name,
 	}
 
 	return &out, diags

@@ -46,6 +46,14 @@ func (r *WorkflowsResourceModel) RefreshFromSharedSubmitWorkflowLaunchResponse(c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Warnings != nil {
+			r.Warnings = make([]types.String, 0, len(resp.Warnings))
+			for _, v := range resp.Warnings {
+				r.Warnings = append(r.Warnings, types.StringValue(v))
+			}
+		} else {
+			r.Warnings = nil
+		}
 		r.WorkflowID = types.StringPointerValue(resp.WorkflowID)
 	}
 
@@ -169,6 +177,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		entryName = nil
 	}
+	fusionVersion := new(string)
+	if !r.FusionVersion.IsUnknown() && !r.FusionVersion.IsNull() {
+		*fusionVersion = r.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.HeadJobCpus.IsUnknown() && !r.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.HeadJobCpus.ValueInt32())
@@ -291,6 +305,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		ConfigProfiles:   configProfiles,
 		ConfigText:       configText,
 		EntryName:        entryName,
+		FusionVersion:    fusionVersion,
 		HeadJobCpus:      headJobCpus,
 		HeadJobMemoryMb:  headJobMemoryMb,
 		LabelIds:         labelIds,

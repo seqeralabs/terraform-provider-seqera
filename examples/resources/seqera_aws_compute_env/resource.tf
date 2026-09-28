@@ -77,14 +77,16 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     post_run_script      = "...my_post_run_script..."
     pre_run_script       = "...my_pre_run_script..."
     region               = "us-east-1"
+    secrets_kms_key_id   = "...my_secrets_kms_key_id..."
     storage_type         = "...my_storage_type..."
     volumes = [
       "..."
     ]
     work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  credentials_id                    = "...my_credentials_id..."
+  description                       = "...my_description..."
+  fusion_metrics_collection_enabled = false
   label_ids = [
     1
   ]

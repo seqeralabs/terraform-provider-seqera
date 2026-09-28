@@ -1,18 +1,18 @@
-speakeasyVersion: 1.793.0
+speakeasyVersion: 1.799.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:fff325b76ad46f2057888b807f4be9da53391b05d4e9e4c2bbce4e4518de91ca
-        sourceBlobDigest: sha256:029f0d33d92163bcc5b7f76482f8758e81a1d7012d5106fcdfd3b4760b718a02
+        sourceRevisionDigest: sha256:8037b431430486a64110e3b6182189a9628cb377ca87961172664db6e6f0a084
+        sourceBlobDigest: sha256:566395a7dbf39e2877d5408e2fcad70c87325153ac25e22b843b37b8e0e05831
         tags:
             - latest
-            - 1.187.0
+            - 1.226.2
 targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:fff325b76ad46f2057888b807f4be9da53391b05d4e9e4c2bbce4e4518de91ca
-        sourceBlobDigest: sha256:029f0d33d92163bcc5b7f76482f8758e81a1d7012d5106fcdfd3b4760b718a02
+        sourceRevisionDigest: sha256:8037b431430486a64110e3b6182189a9628cb377ca87961172664db6e6f0a084
+        sourceBlobDigest: sha256:566395a7dbf39e2877d5408e2fcad70c87325153ac25e22b843b37b8e0e05831
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -51,6 +51,7 @@ workflow:
                 - location: overlays/credentials-ssh.yaml
                 - location: overlays/credentials-tower-agent.yaml
                 - location: overlays/credentials.yaml
+                - location: overlays/credentials-federation-setup.yaml
                 - location: overlays/custom-roles.yaml
                 - location: overlays/datalinks.yaml
                 - location: overlays/datasets.yaml

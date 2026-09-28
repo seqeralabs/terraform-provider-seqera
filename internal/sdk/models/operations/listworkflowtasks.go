@@ -22,6 +22,8 @@ type ListWorkflowTasksRequest struct {
 	SortDir *string `queryParam:"style=form,explode=true,name=sortDir"`
 	// Search tasks by name
 	Search *string `queryParam:"style=form,explode=true,name=search"`
+	// Exact process name filter
+	Process *string `queryParam:"style=form,explode=true,name=process"`
 }
 
 func (l *ListWorkflowTasksRequest) GetWorkflowID() string {
@@ -71,6 +73,13 @@ func (l *ListWorkflowTasksRequest) GetSearch() *string {
 		return nil
 	}
 	return l.Search
+}
+
+func (l *ListWorkflowTasksRequest) GetProcess() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Process
 }
 
 type ListWorkflowTasksResponse struct {

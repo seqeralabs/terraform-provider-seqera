@@ -58,21 +58,22 @@ type AWSBatchCEResource struct {
 
 // AWSBatchCEResourceModel describes the resource data model.
 type AWSBatchCEResourceModel struct {
-	ComputeEnvID  types.String            `tfsdk:"compute_env_id"`
-	Config        *tfTypes.AwsBatchConfig `tfsdk:"config"`
-	CredentialsID types.String            `tfsdk:"credentials_id"`
-	DateCreated   types.String            `tfsdk:"date_created"`
-	Deleted       types.Bool              `tfsdk:"-"`
-	Description   types.String            `tfsdk:"description"`
-	ID            types.String            `tfsdk:"id"`
-	LabelIds      []types.Int64           `tfsdk:"label_ids"`
-	LastUpdated   types.String            `tfsdk:"last_updated"`
-	LastUsed      types.String            `tfsdk:"last_used"`
-	Name          types.String            `tfsdk:"name"`
-	OrgID         types.Int64             `tfsdk:"org_id"`
-	Platform      types.String            `tfsdk:"platform"`
-	Status        types.String            `tfsdk:"status"`
-	WorkspaceID   types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnvID                   types.String            `tfsdk:"compute_env_id"`
+	Config                         *tfTypes.AwsBatchConfig `tfsdk:"config"`
+	CredentialsID                  types.String            `tfsdk:"credentials_id"`
+	DateCreated                    types.String            `tfsdk:"date_created"`
+	Deleted                        types.Bool              `tfsdk:"-"`
+	Description                    types.String            `tfsdk:"description"`
+	FusionMetricsCollectionEnabled types.Bool              `tfsdk:"fusion_metrics_collection_enabled"`
+	ID                             types.String            `tfsdk:"id"`
+	LabelIds                       []types.Int64           `tfsdk:"label_ids"`
+	LastUpdated                    types.String            `tfsdk:"last_updated"`
+	LastUsed                       types.String            `tfsdk:"last_used"`
+	Name                           types.String            `tfsdk:"name"`
+	OrgID                          types.Int64             `tfsdk:"org_id"`
+	Platform                       types.String            `tfsdk:"platform"`
+	Status                         types.String            `tfsdk:"status"`
+	WorkspaceID                    types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AWSBatchCEResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -791,6 +792,15 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
 							`Requires replacement if changed.`,
 					},
+					"secrets_kms_key_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.`,
+					},
 					"storage_type": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -849,6 +859,17 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Optional description of the compute environment`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2000),
+				},
+			},
+			"fusion_metrics_collection_enabled": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				MarkdownDescription: `Enable Fusion metrics collection for this compute environment. Can be changed` + "\n" +
+					`in place without replacing the compute environment.` + "\n" +
+					`` + "\n" +
+					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
+				Validators: []validator.Bool{
+					custom_boolvalidators.FusionMetricsCollectionValidator(),
 				},
 			},
 			"id": schema.StringAttribute{

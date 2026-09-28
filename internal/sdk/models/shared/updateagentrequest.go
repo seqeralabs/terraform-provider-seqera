@@ -6,7 +6,9 @@ type UpdateAgentRequest struct {
 	AgentInstructions           *string `json:"agentInstructions,omitempty"`
 	AgentInstructionsTemplateID *string `json:"agentInstructionsTemplateId,omitempty"`
 	Description                 *string `json:"description,omitempty"`
+	GithubAppCredentialID       *string `json:"githubAppCredentialId,omitempty"`
 	Name                        *string `json:"name,omitempty"`
+	ServiceAccountID            *int64  `json:"serviceAccountId,omitempty"`
 }
 
 func (u *UpdateAgentRequest) GetAgentInstructions() *string {
@@ -30,9 +32,23 @@ func (u *UpdateAgentRequest) GetDescription() *string {
 	return u.Description
 }
 
+func (u *UpdateAgentRequest) GetGithubAppCredentialID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.GithubAppCredentialID
+}
+
 func (u *UpdateAgentRequest) GetName() *string {
 	if u == nil {
 		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdateAgentRequest) GetServiceAccountID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.ServiceAccountID
 }

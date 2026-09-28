@@ -28,10 +28,19 @@ internal/validators/boolvalidators/requires_sibling_true.go
 internal/validators/boolvalidators/nvme_storage_validator.go
 internal/validators/boolvalidators/fusion_enabled_validator.go
 internal/validators/boolvalidators/fusion_snapshots_validator.go
+internal/validators/boolvalidators/fusion_metrics_collection_validator.go
+internal/validators/boolvalidators/fusion_metrics_collection_validator_test.go
+internal/validators/boolvalidators/requires_bool_true_at.go
 internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/objectvalidators/sched_config_consistency_validator.go
+internal/validators/objectvalidators/billing_export_table_google_only_validator.go
+internal/validators/objectvalidators/billing_export_table_google_only_validator_test.go
 internal/validators/boolvalidators/graviton_validator.go
+internal/validators/boolvalidators/requires_sibling_string_set.go
+internal/validators/boolvalidators/private_address_requires_network_validator.go
+internal/validators/boolvalidators/private_address_requires_network_validator_test.go
 internal/validators/stringvalidators/work_dir_format_validator.go
+internal/validators/int32validators/max_spot_attempts_validator.go
 
 # Custom state upgraders — all follow the default lenient-decode pattern
 # (docs-internal/STATE_UPGRADER_GUIDE.md); hand-maintained, not regenerated.
@@ -43,6 +52,7 @@ internal/stateupgraders/awscomputeenv_v0.go
 internal/stateupgraders/awscredential_v0.go
 internal/stateupgraders/azurebatchce_v0.go
 internal/stateupgraders/azurecloudce_v0.go
+internal/stateupgraders/azurecloudce_v1.go
 internal/stateupgraders/azurecloudcredential_v0.go
 internal/stateupgraders/azurecredential_v0.go
 internal/stateupgraders/azureentracredential_v0.go
@@ -50,11 +60,13 @@ internal/stateupgraders/bitbucketcredential_v0.go
 internal/stateupgraders/codecommitcredential_v0.go
 internal/stateupgraders/computeenv_v0.go
 internal/stateupgraders/computeenv_v1.go
+internal/stateupgraders/computeenv_v2.go
 internal/stateupgraders/containerregistrycredential_v0.go
 internal/stateupgraders/credential_v0.go
 internal/stateupgraders/customrole_v0.go
 internal/stateupgraders/gcpbatchce_v0.go
 internal/stateupgraders/gcpcloudce_v0.go
+internal/stateupgraders/gcpcloudce_v1.go
 internal/stateupgraders/giteacredential_v0.go
 internal/stateupgraders/githubappcredential_v0.go
 internal/stateupgraders/githubcredential_v0.go
@@ -67,6 +79,7 @@ internal/stateupgraders/toweragentcredential_v0.go
 internal/provider/stateupgrader_schemas.go
 internal/provider/computeenv_upgrade_decode_test.go
 internal/provider/stateupgrader_all_test.go
+internal/provider/cloudce_sched_enabled_upgrade_test.go
 
 # Custom examples that should be manually maintained
 examples/resources/seqera_pipeline/resource*.tf
@@ -108,6 +121,8 @@ examples/resources/seqera_kubernetes_credential/resource.tf
 examples/data-sources/seqera_credentials/data-source.tf
 examples/data-sources/seqera_data_links/data-source.tf
 examples/data-sources/seqera_orgs/data-source.tf
+examples/data-sources/seqera_aws_credentials_federation_setup/data-source.tf
+examples/data-sources/seqera_gcp_credentials_federation_setup/data-source.tf
 
 # Custom resources (manually maintained, outside of Speakeasy generation)
 internal/seqera/

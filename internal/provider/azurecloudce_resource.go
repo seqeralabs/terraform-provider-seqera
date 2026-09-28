@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -32,6 +33,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -54,21 +56,22 @@ type AzureCloudCEResource struct {
 
 // AzureCloudCEResourceModel describes the resource data model.
 type AzureCloudCEResourceModel struct {
-	ComputeEnvID  types.String           `tfsdk:"compute_env_id"`
-	Config        *tfTypes.AzCloudConfig `tfsdk:"config"`
-	CredentialsID types.String           `tfsdk:"credentials_id"`
-	DateCreated   types.String           `tfsdk:"date_created"`
-	Deleted       types.Bool             `tfsdk:"-"`
-	Description   types.String           `tfsdk:"description"`
-	ID            types.String           `tfsdk:"id"`
-	LabelIds      []types.Int64          `tfsdk:"label_ids"`
-	LastUpdated   types.String           `tfsdk:"last_updated"`
-	LastUsed      types.String           `tfsdk:"last_used"`
-	Name          types.String           `tfsdk:"name"`
-	OrgID         types.Int64            `tfsdk:"org_id"`
-	Platform      types.String           `tfsdk:"platform"`
-	Status        types.String           `tfsdk:"status"`
-	WorkspaceID   types.Int64            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnvID                   types.String           `tfsdk:"compute_env_id"`
+	Config                         *tfTypes.AzCloudConfig `tfsdk:"config"`
+	CredentialsID                  types.String           `tfsdk:"credentials_id"`
+	DateCreated                    types.String           `tfsdk:"date_created"`
+	Deleted                        types.Bool             `tfsdk:"-"`
+	Description                    types.String           `tfsdk:"description"`
+	FusionMetricsCollectionEnabled types.Bool             `tfsdk:"fusion_metrics_collection_enabled"`
+	ID                             types.String           `tfsdk:"id"`
+	LabelIds                       []types.Int64          `tfsdk:"label_ids"`
+	LastUpdated                    types.String           `tfsdk:"last_updated"`
+	LastUsed                       types.String           `tfsdk:"last_used"`
+	Name                           types.String           `tfsdk:"name"`
+	OrgID                          types.Int64            `tfsdk:"org_id"`
+	Platform                       types.String           `tfsdk:"platform"`
+	Status                         types.String           `tfsdk:"status"`
+	WorkspaceID                    types.Int64            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AzureCloudCEResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,7 +81,7 @@ func (r *AzureCloudCEResource) Metadata(ctx context.Context, req resource.Metada
 func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Azure Cloud compute environments in Seqera platform.\n\nAzure Cloud compute environments execute Nextflow pipelines directly on\nAzure VMs managed by Seqera. Use this resource for long-running or\ninteractive workloads where Seqera provisions and manages the underlying\ncompute instances directly (rather than via Azure Batch).\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Computed:    true,
@@ -91,6 +94,18 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"boot_disk_size_gb": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.Between(50, 4095),
+						},
+					},
 					"data_collection_endpoint": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -215,6 +230,15 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									),
 								},
 							},
+							"billing_export_table": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									stringplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+								Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+							},
 							"disk_allocation": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -254,6 +278,33 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									`whitelist; types outside the platform's filtered catalog for the` + "\n" +
 									`scheduler are accepted by the API but may produce warnings.` + "\n" +
 									`Requires replacement if changed.`,
+							},
+							"max_cpus_per_user": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								Description: `Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.`,
+							},
+							"max_spot_attempts": schema.Int32Attribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Int32{
+									int32planmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+								MarkdownDescription: `Maximum number of Spot provisioning attempts for a task, including the` + "\n" +
+									`first one, before giving up on Spot capacity. ` + "`" + `1` + "`" + ` means a single attempt` + "\n" +
+									`with no retry. Only used when ` + "`" + `provisioning_model` + "`" + ` is ` + "`" + `spot` + "`" + ` or` + "\n" +
+									`` + "`" + `spotFirst` + "`" + ` (the default).` + "\n" +
+									`` + "\n" +
+									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Int32{
+									custom_int32validators.MaxSpotAttemptsValidator(),
+								},
 							},
 							"pool": schema.SingleNestedAttribute{
 								Computed: true,
@@ -303,8 +354,8 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								MarkdownDescription: `Resource-prediction model used by Intelligent Compute to size tasks.` + "\n" +
-									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `. Any other string` + "\n" +
-									`is accepted.` + "\n" +
+									`Suggested values: ` + "`" + `none` + "`" + ` (default), ` + "`" + `qr/v1` + "`" + `, ` + "`" + `qr/v2` + "`" + `, ` + "`" + `qr/v3` + "`" + `. Any other` + "\n" +
+									`string is accepted.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"provisioning_model": schema.StringAttribute{
@@ -333,6 +384,23 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							},
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"intelligent_compute_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Azure VMs with` + "\n" +
+							`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+							`all tasks run on a single instance (Classic mode).` + "\n" +
+							`` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+							`to accept the platform defaults, or provide it (only when` + "\n" +
+							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"log_table_name": schema.StringAttribute{
 						Computed: true,
@@ -437,15 +505,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`ignores any user-supplied value, so this field is computed by the` + "\n" +
 							`backend rather than configured.`,
 					},
-					"sched_enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
 					"subnets": schema.ListAttribute{
 						Computed: true,
 						Optional: true,
@@ -481,8 +540,10 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					custom_objectvalidators.SchedConfigConsistencyValidator(),
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 					custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{
@@ -503,6 +564,12 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2000),
 				},
+			},
+			"fusion_metrics_collection_enabled": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				MarkdownDescription: `Enable Fusion metrics collection for this compute environment. Can be changed` + "\n" +
+					`in place without replacing the compute environment.`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -912,5 +979,6 @@ func (r *AzureCloudCEResource) ImportState(ctx context.Context, req resource.Imp
 func (r *AzureCloudCEResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.AzurecloudceStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.AzurecloudceStateUpgraderV1},
 	}
 }

@@ -11,6 +11,7 @@ type AuditEventType string
 
 const (
 	AuditEventTypeWorkflowLaunched                  AuditEventType = "workflow_launched"
+	AuditEventTypeCatalogOverrideApplied            AuditEventType = "catalog_override_applied"
 	AuditEventTypeWorkflowCreated                   AuditEventType = "workflow_created"
 	AuditEventTypeWorkflowUpdated                   AuditEventType = "workflow_updated"
 	AuditEventTypeWorkflowCompleted                 AuditEventType = "workflow_completed"
@@ -34,6 +35,7 @@ const (
 	AuditEventTypeActionCreated                     AuditEventType = "action_created"
 	AuditEventTypeActionUpdated                     AuditEventType = "action_updated"
 	AuditEventTypeActionDeleted                     AuditEventType = "action_deleted"
+	AuditEventTypeActionTriggered                   AuditEventType = "action_triggered"
 	AuditEventTypeAgentCreated                      AuditEventType = "agent_created"
 	AuditEventTypeAgentUpdated                      AuditEventType = "agent_updated"
 	AuditEventTypeAgentEnabled                      AuditEventType = "agent_enabled"
@@ -107,6 +109,11 @@ const (
 	AuditEventTypeManagedCredentialsUpdated         AuditEventType = "managed_credentials_updated"
 	AuditEventTypeManagedCredentialsDeleted         AuditEventType = "managed_credentials_deleted"
 	AuditEventTypeCreditsModified                   AuditEventType = "credits_modified"
+	AuditEventTypeCreditPurchaseCreated             AuditEventType = "credit_purchase_created"
+	AuditEventTypeCreditPurchaseCompleted           AuditEventType = "credit_purchase_completed"
+	AuditEventTypeCreditPurchaseFailed              AuditEventType = "credit_purchase_failed"
+	AuditEventTypeCreditPurchaseCanceled            AuditEventType = "credit_purchase_canceled"
+	AuditEventTypeCreditPurchaseExpired             AuditEventType = "credit_purchase_expired"
 	AuditEventTypeUserRoleCreated                   AuditEventType = "user_role_created"
 	AuditEventTypeUserRoleUpdated                   AuditEventType = "user_role_updated"
 	AuditEventTypeUserRoleDeleted                   AuditEventType = "user_role_deleted"
@@ -120,6 +127,9 @@ const (
 	AuditEventTypeIdpGroupDeleted                   AuditEventType = "idp_group_deleted"
 	AuditEventTypeScimTokenCreated                  AuditEventType = "scim_token_created"
 	AuditEventTypeScimTokenUpdated                  AuditEventType = "scim_token_updated"
+	AuditEventTypeServiceAccountCreated             AuditEventType = "service_account_created"
+	AuditEventTypeServiceAccountUpdated             AuditEventType = "service_account_updated"
+	AuditEventTypeServiceAccountDeleted             AuditEventType = "service_account_deleted"
 	AuditEventTypeComputeEnvironmentMadePrimary     AuditEventType = "compute_environment_made_primary"
 	AuditEventTypeComputeEnvironmentMadeNonPrimary  AuditEventType = "compute_environment_made_non_primary"
 	AuditEventTypeComputeProfileCreated             AuditEventType = "compute_profile_created"
@@ -171,6 +181,8 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "workflow_launched":
 		fallthrough
+	case "catalog_override_applied":
+		fallthrough
 	case "workflow_created":
 		fallthrough
 	case "workflow_updated":
@@ -216,6 +228,8 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "action_updated":
 		fallthrough
 	case "action_deleted":
+		fallthrough
+	case "action_triggered":
 		fallthrough
 	case "agent_created":
 		fallthrough
@@ -363,6 +377,16 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "credits_modified":
 		fallthrough
+	case "credit_purchase_created":
+		fallthrough
+	case "credit_purchase_completed":
+		fallthrough
+	case "credit_purchase_failed":
+		fallthrough
+	case "credit_purchase_canceled":
+		fallthrough
+	case "credit_purchase_expired":
+		fallthrough
 	case "user_role_created":
 		fallthrough
 	case "user_role_updated":
@@ -388,6 +412,12 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "scim_token_created":
 		fallthrough
 	case "scim_token_updated":
+		fallthrough
+	case "service_account_created":
+		fallthrough
+	case "service_account_updated":
+		fallthrough
+	case "service_account_deleted":
 		fallthrough
 	case "compute_environment_made_primary":
 		fallthrough

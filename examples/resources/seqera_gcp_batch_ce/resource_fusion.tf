@@ -5,6 +5,8 @@ resource "seqera_gcp_batch_ce" "fusion" {
   workspace_id   = data.seqera_workspace.main.id
   credentials_id = seqera_google_credential.main.credentials_id
 
+  fusion_metrics_collection_enabled = true
+
   config = {
     location        = "us-central1"
     work_dir        = "gs://my-bucket/work"

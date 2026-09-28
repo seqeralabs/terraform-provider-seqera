@@ -58,17 +58,21 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		r.Config.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.DebugMode))
 		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
 		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
-		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
+		if resp.Config.Environment != nil {
+			r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
-		for _, environmentItem := range resp.Config.Environment {
-			var environment tfTypes.ConfigEnvVariable
+			for _, environmentItem := range resp.Config.Environment {
+				var environment tfTypes.ConfigEnvVariable
 
-			environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-			environment.Head = types.BoolPointerValue(environmentItem.Head)
-			environment.Name = types.StringPointerValue(environmentItem.Name)
-			environment.Value = types.StringPointerValue(environmentItem.Value)
+				environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+				environment.Head = types.BoolPointerValue(environmentItem.Head)
+				environment.Name = types.StringPointerValue(environmentItem.Name)
+				environment.Value = types.StringPointerValue(environmentItem.Value)
 
-			r.Config.Environment = append(r.Config.Environment, environment)
+				r.Config.Environment = append(r.Config.Environment, environment)
+			}
+		} else {
+			r.Config.Environment = nil
 		}
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
@@ -105,6 +109,7 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.FusionMetricsCollectionEnabled = types.BoolPointerValue(resp.FusionMetricsCollectionEnabled)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
@@ -251,6 +256,12 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	platform := new(shared.GCPBatchCEComputeConfigPlatform)
 	if !r.Platform.IsUnknown() && !r.Platform.IsNull() {
 		*platform = shared.GCPBatchCEComputeConfigPlatform(r.Platform.ValueString())
@@ -327,38 +338,41 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		debugMode = nil
 	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
+	var environment []shared.ConfigEnvVariable
+	if r.Config.Environment != nil {
+		environment = make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+		for environmentIndex := range r.Config.Environment {
+			compute := new(bool)
+			if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+				*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+			} else {
+				compute = nil
+			}
+			head := new(bool)
+			if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+				*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+			} else {
+				head = nil
+			}
+			name1 := new(string)
+			if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+				*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+			} else {
+				name1 = nil
+			}
+			value := new(string)
+			if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+				*value = r.Config.Environment[environmentIndex].Value.ValueString()
+			} else {
+				value = nil
+			}
+			environment = append(environment, shared.ConfigEnvVariable{
+				Compute: compute,
+				Head:    head,
+				Name:    name1,
+				Value:   value,
+			})
 		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Compute: compute,
-			Head:    head,
-			Name:    name1,
-			Value:   value,
-		})
 	}
 	enableFusion := new(bool)
 	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
@@ -535,18 +549,19 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 		WorkDir:                     workDir,
 	}
 	out := shared.GCPBatchCEComputeConfigInput{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-		ID:            id,
-		Name:          name,
-		Description:   description,
-		Platform:      platform,
-		Status:        status,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		LastUsed:      lastUsed,
-		Deleted:       deleted,
-		Config:        config,
+		CredentialsID:                  credentialsID,
+		WorkspaceID:                    workspaceID,
+		ID:                             id,
+		Name:                           name,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Platform:                       platform,
+		Status:                         status,
+		DateCreated:                    dateCreated,
+		LastUpdated:                    lastUpdated,
+		LastUsed:                       lastUsed,
+		Deleted:                        deleted,
+		Config:                         config,
 	}
 
 	return &out, diags
@@ -567,6 +582,12 @@ func (r *GCPBatchCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 	} else {
 		description = nil
 	}
+	fusionMetricsCollectionEnabled := new(bool)
+	if !r.FusionMetricsCollectionEnabled.IsUnknown() && !r.FusionMetricsCollectionEnabled.IsNull() {
+		*fusionMetricsCollectionEnabled = r.FusionMetricsCollectionEnabled.ValueBool()
+	} else {
+		fusionMetricsCollectionEnabled = nil
+	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
 		*name = r.Name.ValueString()
@@ -574,9 +595,10 @@ func (r *GCPBatchCEResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Co
 		name = nil
 	}
 	out := shared.UpdateComputeEnvRequest{
-		CredentialsID: credentialsID,
-		Description:   description,
-		Name:          name,
+		CredentialsID:                  credentialsID,
+		Description:                    description,
+		FusionMetricsCollectionEnabled: fusionMetricsCollectionEnabled,
+		Name:                           name,
 	}
 
 	return &out, diags

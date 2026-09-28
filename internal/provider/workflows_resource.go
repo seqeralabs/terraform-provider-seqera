@@ -51,6 +51,7 @@ type WorkflowsResourceModel struct {
 	ConfigText                types.String                                  `tfsdk:"config_text"`
 	EntryName                 types.String                                  `tfsdk:"entry_name"`
 	Force                     types.Bool                                    `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	FusionVersion             types.String                                  `tfsdk:"fusion_version"`
 	HeadJobCpus               types.Int32                                   `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb           types.Int32                                   `tfsdk:"head_job_memory_mb"`
 	IntelligentComputeEnabled types.Bool                                    `tfsdk:"intelligent_compute_enabled"`
@@ -73,6 +74,7 @@ type WorkflowsResourceModel struct {
 	SyntaxParser              types.String                                  `tfsdk:"syntax_parser"`
 	TowerConfig               types.String                                  `tfsdk:"tower_config"`
 	UserSecrets               []types.String                                `tfsdk:"user_secrets"`
+	Warnings                  []types.String                                `tfsdk:"warnings"`
 	WorkDir                   types.String                                  `tfsdk:"work_dir"`
 	WorkflowID                types.String                                  `tfsdk:"workflow_id"`
 	WorkspaceID               types.Int64                                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
@@ -121,6 +123,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 			"force": schema.BoolAttribute{
 				Optional:    true,
 				Description: `Force the deletion even if the workflow is active`,
+			},
+			"fusion_version": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2. Requires replacement if changed.`,
 			},
 			"head_job_cpus": schema.Int32Attribute{
 				Optional: true,
@@ -356,6 +365,10 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				ElementType: types.StringType,
 				Description: `Default: []; Requires replacement if changed.`,
+			},
+			"warnings": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
 			},
 			"work_dir": schema.StringAttribute{
 				Optional: true,

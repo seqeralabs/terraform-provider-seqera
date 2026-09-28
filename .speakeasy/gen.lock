@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: f5aa67cadec84eba456ef1988927f06c
-  docVersion: 1.187.0
-  speakeasyVersion: 1.793.0
-  generationVersion: 2.928.0
-  releaseVersion: 0.42.0
-  configChecksum: d46f5e8aa34499dceb5298898535e967
+  docChecksum: e5c45b62244e47c727f2036625255061
+  docVersion: 1.226.2
+  speakeasyVersion: 1.799.0
+  generationVersion: 2.941.0
+  releaseVersion: 0.43.0-RC2
+  configChecksum: 8803fdcb2952636a0b898c919ce65531
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.11
+    core: 3.48.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
@@ -26,9 +26,9 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
     nullables: 0.0.0
-    retries: 2.81.5
+    retries: 2.81.6
     transformJq: 0.0.1
-    unions: 2.82.16
+    unions: 2.82.18
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -338,6 +338,8 @@ trackedFiles:
   internal/provider/awscredential_resource_sdk.go:
     id: 6dd3171fbbcc
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
+  internal/provider/awscredentialsfederationsetup_data_source.go: {}
+  internal/provider/awscredentialsfederationsetup_data_source_sdk.go: {}
   internal/provider/azurebatchce_resource.go: {}
   internal/provider/azurebatchce_resource_sdk.go: {}
   internal/provider/azurecloudce_resource.go: {}
@@ -412,6 +414,8 @@ trackedFiles:
   internal/provider/gcpbatchce_resource_sdk.go: {}
   internal/provider/gcpcloudce_resource.go: {}
   internal/provider/gcpcloudce_resource_sdk.go: {}
+  internal/provider/gcpcredentialsfederationsetup_data_source.go: {}
+  internal/provider/gcpcredentialsfederationsetup_data_source_sdk.go: {}
   internal/provider/giteacredential_resource.go:
     id: 2aeb5fb04152
     pristine_git_object: 511473aefa420f60b1e0fdd850d0d2360c7cd1aa
@@ -567,9 +571,11 @@ trackedFiles:
     id: c403b8e4a1d7
     pristine_git_object: 34466719915d7901b6891482d43ebdf8a82252b5
   internal/provider/types/action_launch_request.go: {}
+  internal/provider/types/action_response_dto_last_trigger.go: {}
   internal/provider/types/action_tower_action_config.go:
     id: 0636d437cb70
     pristine_git_object: d18c50fb459a6e8d700bd9345eb4a96584eb0a89
+  internal/provider/types/agent_action_request.go: {}
   internal/provider/types/altair_pbs_configuration.go:
     id: 18ab08d57a44
     pristine_git_object: 623a5ee4c19452cb4a167a68975847f273281e71
@@ -638,6 +644,7 @@ trackedFiles:
   internal/provider/types/credential.go:
     id: b7725d71bf9e
     pristine_git_object: 300f141b80661c8d502f9ed91c02826e0e72a0c5
+  internal/provider/types/credentials_setup_value.go: {}
   internal/provider/types/cron_action_config.go: {}
   internal/provider/types/cron_action_request.go: {}
   internal/provider/types/data_link.go:
@@ -701,7 +708,10 @@ trackedFiles:
     id: 339ce0dd7aca
     pristine_git_object: eb84f2d23ae2970348690f068e599fb67cc3f359
   internal/provider/types/mount_data.go: {}
+  internal/provider/types/pipeline_action_request.go: {}
   internal/provider/types/pipeline_min_info_response_pipeline_version_min_info_response.go: {}
+  internal/provider/types/pipeline_status_action_config.go: {}
+  internal/provider/types/pipeline_status_action_request.go: {}
   internal/provider/types/s3_compatible_credentials.go:
     id: 94157ae642fe
     pristine_git_object: f79e0fa2b63cf39d5acad38ff304d48fbbfb3474
@@ -759,6 +769,7 @@ trackedFiles:
   internal/sdk/avatars.go:
     id: 295feb914135
     pristine_git_object: eeb2138186ead7a043a4156ca999876ae1ef98ad
+  internal/sdk/compatibility.go: {}
   internal/sdk/computeenvs.go:
     id: 966f951685a1
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
@@ -832,9 +843,11 @@ trackedFiles:
   internal/sdk/launch.go:
     id: 8999bce1dfb3
     pristine_git_object: e9528a4551a305698e1510eab30ffd9d25a0d2a3
+  internal/sdk/lineage.go: {}
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     pristine_git_object: d7a75360fe11b02f7de84c07135dfa4004a82b44
+  internal/sdk/models/errors/responsevalidationerror.go: {}
   internal/sdk/models/operations/addlabelstoactions.go:
     id: 54ea176819e0
     pristine_git_object: 131334b27a31000604d836f6931aa1bb9a6dd7d7
@@ -862,6 +875,8 @@ trackedFiles:
   internal/sdk/models/operations/cancelworkflow.go:
     id: 3122cc8c6341
     pristine_git_object: 7fb7ee717a5f510ca30338e8858159e10ffecb3d
+  internal/sdk/models/operations/catalogcomponentversions.go: {}
+  internal/sdk/models/operations/catalogversions.go: {}
   internal/sdk/models/operations/createaction.go:
     id: 2870d06facbf
     pristine_git_object: 1540dad80f38e0ea55c7f11e454cfbc0903fefcd
@@ -913,6 +928,7 @@ trackedFiles:
   internal/sdk/models/operations/createdatastudio.go:
     id: 5bfda9b411cf
     pristine_git_object: 11a74d7bd66a5a4b6c02447518d4c0a93b68a610
+  internal/sdk/models/operations/createdatastudiostar.go: {}
   internal/sdk/models/operations/creategcpbatchce.go: {}
   internal/sdk/models/operations/creategcpcloudce.go: {}
   internal/sdk/models/operations/creategiteacredentials.go:
@@ -965,6 +981,7 @@ trackedFiles:
     id: dc4aa186bbf0
     pristine_git_object: 81824dc902542ca5df67fd3e8471d0cdcfbec4f0
   internal/sdk/models/operations/createrole.go: {}
+  internal/sdk/models/operations/createserviceaccount.go: {}
   internal/sdk/models/operations/createslurmce.go: {}
   internal/sdk/models/operations/createsshcredentials.go:
     id: bb07e307e98d
@@ -1048,6 +1065,7 @@ trackedFiles:
   internal/sdk/models/operations/deletedatastudio.go:
     id: 3670f403a62d
     pristine_git_object: 30fb257520f564ba8e31216ed5800c840d759d0e
+  internal/sdk/models/operations/deletedatastudiostar.go: {}
   internal/sdk/models/operations/deletegcpbatchce.go: {}
   internal/sdk/models/operations/deletegcpcloudce.go: {}
   internal/sdk/models/operations/deletegiteacredentials.go:
@@ -1098,6 +1116,7 @@ trackedFiles:
     id: 1d3d8285b502
     pristine_git_object: 8171786108b1cd0aae18b59bf45ba2f54b097f6c
   internal/sdk/models/operations/deleterole.go: {}
+  internal/sdk/models/operations/deleteserviceaccount.go: {}
   internal/sdk/models/operations/deleteslurmce.go: {}
   internal/sdk/models/operations/deletesshcredentials.go:
     id: 0e155693ad42
@@ -1131,6 +1150,7 @@ trackedFiles:
   internal/sdk/models/operations/describeaction.go:
     id: "966976712e46"
     pristine_git_object: 4bbac8dfa1e6d46989a94a26416fce1c6e020583
+  internal/sdk/models/operations/describeactiontrigger.go: {}
   internal/sdk/models/operations/describeagent.go: {}
   internal/sdk/models/operations/describeauditlogv2.go: {}
   internal/sdk/models/operations/describeawsbatchce.go:
@@ -1143,6 +1163,7 @@ trackedFiles:
   internal/sdk/models/operations/describeawscredentials.go:
     id: b6c81dbe2d53
     pristine_git_object: f875abef9cc844ab77a400da7fbd60143556368e
+  internal/sdk/models/operations/describeawscredentialsfederationsetup.go: {}
   internal/sdk/models/operations/describeazurebatchce.go: {}
   internal/sdk/models/operations/describeazurecloudce.go: {}
   internal/sdk/models/operations/describeazurecloudcredentials.go: {}
@@ -1165,6 +1186,7 @@ trackedFiles:
   internal/sdk/models/operations/describecredentials.go:
     id: 48bfbf511a8b
     pristine_git_object: 4a5f3a19436a7e6495ce78f0e9917466d323f699
+  internal/sdk/models/operations/describecredentialssetup.go: {}
   internal/sdk/models/operations/describedatalink.go:
     id: 5624756d312b
     pristine_git_object: 74fa8d865241dcdb7d5c85b47f019ed2f4f12d2f
@@ -1179,6 +1201,7 @@ trackedFiles:
     pristine_git_object: 7f617c7d7f58db1ce100482e0c053a763d2328e5
   internal/sdk/models/operations/describegcpbatchce.go: {}
   internal/sdk/models/operations/describegcpcloudce.go: {}
+  internal/sdk/models/operations/describegcpcredentialsfederationsetup.go: {}
   internal/sdk/models/operations/describegiteacredentials.go:
     id: 37766e51b23b
     pristine_git_object: eed1e5430625595f6216e7f8ffc2e5f55516fc6f
@@ -1233,6 +1256,7 @@ trackedFiles:
     id: b9d79baea717
     pristine_git_object: aa8639c7f649618febf4911e27d6e88b47376523
   internal/sdk/models/operations/describerole.go: {}
+  internal/sdk/models/operations/describeserviceaccount.go: {}
   internal/sdk/models/operations/describeslurmce.go: {}
   internal/sdk/models/operations/describesshcredentials.go:
     id: a85ddc2ebbb2
@@ -1346,10 +1370,14 @@ trackedFiles:
   internal/sdk/models/operations/generaterandomworkflowname.go:
     id: 77ece758efa9
     pristine_git_object: b0bbe02ce8332022412255119d83604c2ba77122
+  internal/sdk/models/operations/getagentrunstatus.go: {}
   internal/sdk/models/operations/getdatastudiocheckpoint.go:
     id: 8d308399adb7
     pristine_git_object: f40e51b30bd25fd566cc33a1297cc7acac6b66ef
+  internal/sdk/models/operations/getdatastudiolog.go: {}
   internal/sdk/models/operations/getencryptedcredentials.go: {}
+  internal/sdk/models/operations/getlineagerecord.go: {}
+  internal/sdk/models/operations/getlineagesummary.go: {}
   internal/sdk/models/operations/getworkflowlog.go:
     id: a2007af19121
     pristine_git_object: 54d18db66664a3080ee174a63a62e5ada5ba682a
@@ -1376,9 +1404,11 @@ trackedFiles:
   internal/sdk/models/operations/listactions.go:
     id: 13c7253f41df
     pristine_git_object: f4a08d7ae481739f7be85a04ba74d350a74c8fd3
+  internal/sdk/models/operations/listactiontriggers.go: {}
   internal/sdk/models/operations/listactiontypes.go:
     id: 60aadb6c866f
     pristine_git_object: 4335756b42ed9e719d60da8a7439fde6b12e8327
+  internal/sdk/models/operations/listagentruns.go: {}
   internal/sdk/models/operations/listagents.go: {}
   internal/sdk/models/operations/listauditlogsv2.go: {}
   internal/sdk/models/operations/listcomputeenvs.go:
@@ -1464,6 +1494,7 @@ trackedFiles:
     pristine_git_object: 57a00e8fcd754a368e7c0f7b7bf2104387af584e
   internal/sdk/models/operations/listrolepermissions.go: {}
   internal/sdk/models/operations/listroles.go: {}
+  internal/sdk/models/operations/listserviceaccounts.go: {}
   internal/sdk/models/operations/listsshkeys.go: {}
   internal/sdk/models/operations/listuserrolesinorganization.go: {}
   internal/sdk/models/operations/listworkflows.go:
@@ -1484,10 +1515,13 @@ trackedFiles:
   internal/sdk/models/operations/listworkspacesbyteam.go:
     id: bd0a95813906
     pristine_git_object: d62219613df18d4e11a33fa32150cffbae015f88
+  internal/sdk/models/operations/listworkspaceserviceaccounts.go: {}
   internal/sdk/models/operations/listworkspacesuser.go:
     id: 9e7813d6986a
     pristine_git_object: f6f5b63c38d835976e6f785c0aade5a8eaf54001
   internal/sdk/models/operations/managepipelineversion.go: {}
+  internal/sdk/models/operations/navigatelineagedownstream.go: {}
+  internal/sdk/models/operations/navigatelineageupstream.go: {}
   internal/sdk/models/operations/nextflowversions.go: {}
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
@@ -1513,8 +1547,10 @@ trackedFiles:
     id: 0881d3fbb54c
     pristine_git_object: 2821276f9c80af8b6de0127c78c1eefccab887d7
   internal/sdk/models/operations/resolvecronexpression.go: {}
+  internal/sdk/models/operations/resolvelineage.go: {}
   internal/sdk/models/operations/revokeorganizationscimtoken.go: {}
   internal/sdk/models/operations/rotateorganizationscimtoken.go: {}
+  internal/sdk/models/operations/searchlineage.go: {}
   internal/sdk/models/operations/showdatasets.go:
     id: ee0c46e5ae8b
     pristine_git_object: 7f0c5c16f3609c34266b53bf57d7b3be34d3d245
@@ -1524,6 +1560,7 @@ trackedFiles:
   internal/sdk/models/operations/stopdatastudio.go:
     id: 16ff4a88b1cb
     pristine_git_object: 1ee10611ece5d3b2f7b480819fcc993cba6c33ca
+  internal/sdk/models/operations/summarizeworkflowtasks.go: {}
   internal/sdk/models/operations/tokenlist.go:
     id: d24e9829641f
     pristine_git_object: 98bc4a9c648d7dc10828e2e8d947304e0a3dcccc
@@ -1623,6 +1660,7 @@ trackedFiles:
     pristine_git_object: 91005128b148d00961beba2df4584c7aae183ea2
   internal/sdk/models/operations/updatepipelineversion.go: {}
   internal/sdk/models/operations/updaterole.go: {}
+  internal/sdk/models/operations/updateserviceaccount.go: {}
   internal/sdk/models/operations/updateslurmce.go: {}
   internal/sdk/models/operations/updatesshcredentials.go:
     id: c3e32df7fc4c
@@ -1722,6 +1760,7 @@ trackedFiles:
   internal/sdk/models/shared/actionresponsedto.go:
     id: 1bea6ad56102
     pristine_git_object: e64d6142e13521b48f5618cfee6337872d23c0d5
+  internal/sdk/models/shared/actionresponsetype.go: {}
   internal/sdk/models/shared/actionsource.go:
     id: 780ed5da5aef
     pristine_git_object: 4d93a514e884e23c5bf045c87dd20536a5b34fb1
@@ -1734,6 +1773,9 @@ trackedFiles:
   internal/sdk/models/shared/actiontoweractionevent.go:
     id: 9d0d831ad947
     pristine_git_object: a00c79c0512cfd7a956d9f357c0e20934ca264d7
+  internal/sdk/models/shared/actiontriggerdto.go: {}
+  internal/sdk/models/shared/actiontriggerresponsedto.go: {}
+  internal/sdk/models/shared/actiontriggerresult.go: {}
   internal/sdk/models/shared/addmemberrequest.go:
     id: 07c2c3745c4e
     pristine_git_object: b659e4941c72ce4772fccf2ca96a771bfe0832d6
@@ -1749,11 +1791,12 @@ trackedFiles:
   internal/sdk/models/shared/addteammemberresponse.go:
     id: 4e05e43e1280
     pristine_git_object: d9d170e849d73dce8ac9bd090d16f2e2bd48f423
+  internal/sdk/models/shared/agentactionrequest.go: {}
   internal/sdk/models/shared/agentdbdto.go: {}
+  internal/sdk/models/shared/agentrundbdto.go: {}
+  internal/sdk/models/shared/agentrunstatus.go: {}
+  internal/sdk/models/shared/agentrunstatusresponse.go: {}
   internal/sdk/models/shared/agentstatus.go: {}
-  internal/sdk/models/shared/analytics.go:
-    id: 7126032f3891
-    pristine_git_object: d41a6e9507a1b7470012dbf46e572a5dc7cc8cae
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -1803,7 +1846,7 @@ trackedFiles:
   internal/sdk/models/shared/awscredential.go:
     id: 6a9e44208230
     pristine_git_object: 6937799095194b4fcab39215565cc6a37887fb8b
-  internal/sdk/models/shared/awscredentialsmode.go: {}
+  internal/sdk/models/shared/awscredentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/azbatchconfig.go: {}
   internal/sdk/models/shared/azbatchforgeconfig.go:
     id: d13b3a409e31
@@ -1829,6 +1872,10 @@ trackedFiles:
   internal/sdk/models/shared/bucketactionconfig.go: {}
   internal/sdk/models/shared/bucketactionevent.go: {}
   internal/sdk/models/shared/bucketactionrequest.go: {}
+  internal/sdk/models/shared/catalogartifact.go: {}
+  internal/sdk/models/shared/catalogedgeref.go: {}
+  internal/sdk/models/shared/catalogversion.go: {}
+  internal/sdk/models/shared/catalogversionsresponse.go: {}
   internal/sdk/models/shared/changedatasetvisibilityrequest.go:
     id: 32a641528840
     pristine_git_object: ae25e05275b2d663fd39d3ae8c4c5eea0a4ab9c3
@@ -1860,6 +1907,7 @@ trackedFiles:
   internal/sdk/models/shared/configenvvariable.go:
     id: 733e7ad7e305
     pristine_git_object: 0e00106a83491f9bb55285e240c9a848463f8dcf
+  internal/sdk/models/shared/conflictingresource.go: {}
   internal/sdk/models/shared/containerdata.go:
     id: 2a08f584995d
     pristine_git_object: 4902f5c3d3419beeffcbfb00894fd70a90196353
@@ -1953,6 +2001,7 @@ trackedFiles:
   internal/sdk/models/shared/createdatasetresponse.go:
     id: 5caa6b80d585
     pristine_git_object: 2e8245ed0e28650fd2fd961e82f06b5fa0fb8f5d
+  internal/sdk/models/shared/createdatastudiostarresponse.go: {}
   internal/sdk/models/shared/creategcpbatchcerequest.go: {}
   internal/sdk/models/shared/creategcpbatchceresponse.go: {}
   internal/sdk/models/shared/creategcpcloudcerequest.go: {}
@@ -2038,6 +2087,8 @@ trackedFiles:
   internal/sdk/models/shared/createrolerequest.go: {}
   internal/sdk/models/shared/createroleresponse.go: {}
   internal/sdk/models/shared/createscimtokenresponse.go: {}
+  internal/sdk/models/shared/createserviceaccountrequest.go: {}
+  internal/sdk/models/shared/createserviceaccountresponse.go: {}
   internal/sdk/models/shared/createslurmcerequest.go: {}
   internal/sdk/models/shared/createslurmceresponse.go: {}
   internal/sdk/models/shared/createsshcredentialsrequest.go:
@@ -2076,8 +2127,11 @@ trackedFiles:
   internal/sdk/models/shared/credentialsinput.go:
     id: a9735abcd6a9
     pristine_git_object: b8ae95231871f580a17018cea2c1bd0795eccf9c
+  internal/sdk/models/shared/credentialssetupvalue.go: {}
+  internal/sdk/models/shared/credentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/credentialsstatus.go: {}
   internal/sdk/models/shared/creditinfoimage.go: {}
+  internal/sdk/models/shared/creditpurchaseimage.go: {}
   internal/sdk/models/shared/cronactionconfig.go: {}
   internal/sdk/models/shared/cronactionevent.go: {}
   internal/sdk/models/shared/cronactionrequest.go: {}
@@ -2182,6 +2236,7 @@ trackedFiles:
   internal/sdk/models/shared/datastudiolistresponse.go:
     id: b92abaffc65c
     pristine_git_object: 5d5992d84b3fe1b8cb06bec38b88fc32531a73b9
+  internal/sdk/models/shared/datastudiologresponse.go: {}
   internal/sdk/models/shared/datastudiomountedlinksresponse.go:
     id: ff90555e64b3
     pristine_git_object: b46041a54199a0af8a5cfae971358bf95fd8e867
@@ -2200,9 +2255,6 @@ trackedFiles:
   internal/sdk/models/shared/datastudiostatusinfo.go:
     id: 026e85d14925
     pristine_git_object: 3cfada19dde6016b9d18ddb2bd6ac55625a1141c
-  internal/sdk/models/shared/datastudiostopreason.go:
-    id: 9ccc5de4e821
-    pristine_git_object: 975d25fae2f55a3a1aa94d010444489d77c914bb
   internal/sdk/models/shared/datastudiostopresponse.go:
     id: 479eccdf6c23
     pristine_git_object: a1f288cd99b5142ec5671be21b90d9dc6518ecae
@@ -2224,9 +2276,6 @@ trackedFiles:
   internal/sdk/models/shared/deletecredentialsconflictresponse.go:
     id: e8d764d9feab
     pristine_git_object: fac9418e55eb15c839e541d0e1413d3ef9c27160
-  internal/sdk/models/shared/deletecredentialsconflictresponseconflict.go:
-    id: 14730103fb9f
-    pristine_git_object: be92245c8237b2c175b67be1a2210b62e025d780
   internal/sdk/models/shared/deletedatasetsrequest.go:
     id: 20de98824f0b
     pristine_git_object: 13a6311cba2e23da748f62e77402cde9034dee9d
@@ -2236,9 +2285,6 @@ trackedFiles:
   internal/sdk/models/shared/deletemanagedcredentialsconflictresponse.go:
     id: 7f6ce0439a98
     pristine_git_object: 7c7351d1981cefa2cb9e863e4a20269d84522859
-  internal/sdk/models/shared/deletemanagedcredentialsconflictresponseconflict.go:
-    id: f27629845676
-    pristine_git_object: 09b71f53acc3420ab69cbc9d93498666c2fa4ade
   internal/sdk/models/shared/deleteworkflowsrequest.go:
     id: 4420dc02bbbb
     pristine_git_object: 1cb9e0a0a0e6d26bc989e270aa5ba1c310dbcfad
@@ -2248,6 +2294,7 @@ trackedFiles:
   internal/sdk/models/shared/describeactionresponse.go:
     id: ab359c7b82f7
     pristine_git_object: 71a5bbd72e862967e067266938c69364b8235e98
+  internal/sdk/models/shared/describeactiontriggerresponse.go: {}
   internal/sdk/models/shared/describeagentresponse.go: {}
   internal/sdk/models/shared/describeawsbatchceresponse.go:
     id: b47c6385fa7e
@@ -2328,6 +2375,7 @@ trackedFiles:
     pristine_git_object: 69c9e3a2125cfe44213fea0df88b62c456a7ea34
   internal/sdk/models/shared/describeroleresponse.go: {}
   internal/sdk/models/shared/describescimconfigresponse.go: {}
+  internal/sdk/models/shared/describeserviceaccountresponse.go: {}
   internal/sdk/models/shared/describeslurmceresponse.go: {}
   internal/sdk/models/shared/describesshcredentialsresponse.go:
     id: db6455452f9f
@@ -2354,6 +2402,7 @@ trackedFiles:
   internal/sdk/models/shared/describeworkspaceresponse.go:
     id: 5b7149929e4d
     pristine_git_object: ed703a8366da72ab5a001328c5d4bf7a9e86a498
+  internal/sdk/models/shared/displaydata.go: {}
   internal/sdk/models/shared/efsfilesystem.go:
     id: 136655f68e55
     pristine_git_object: e467ff62c0a3ed189227b3d3850cc4775cf78946
@@ -2410,6 +2459,7 @@ trackedFiles:
   internal/sdk/models/shared/googlecredential.go:
     id: a084779f2e36
     pristine_git_object: 8fa752a4783e5b119cbcdb50b6dc72cd4c5a29f5
+  internal/sdk/models/shared/googlecredentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/googleimage.go: {}
   internal/sdk/models/shared/googleinstancetype.go: {}
   internal/sdk/models/shared/googleplatformmetainfo.go:
@@ -2460,7 +2510,8 @@ trackedFiles:
   internal/sdk/models/shared/launchdbdto.go: {}
   internal/sdk/models/shared/launchimage.go: {}
   internal/sdk/models/shared/launchvalidationerror.go: {}
-  internal/sdk/models/shared/linkedsourcedto.go: {}
+  internal/sdk/models/shared/lineagerecordresponse.go: {}
+  internal/sdk/models/shared/lineageresolveresponse.go: {}
   internal/sdk/models/shared/linkversionrequest.go: {}
   internal/sdk/models/shared/listaccesstokensresponse.go:
     id: e9e6ce9fec76
@@ -2471,6 +2522,8 @@ trackedFiles:
   internal/sdk/models/shared/listactionsresponseactioninfo.go:
     id: 3c6a2b607f2a
     pristine_git_object: 46248fe0283e2c4fbff0ca9647108f091c8caf2c
+  internal/sdk/models/shared/listactiontriggersresponse.go: {}
+  internal/sdk/models/shared/listagentrunsresponse.go: {}
   internal/sdk/models/shared/listagentsresponse.go: {}
   internal/sdk/models/shared/listauditlogv2response.go: {}
   internal/sdk/models/shared/listcomputeenvsresponse.go:
@@ -2535,7 +2588,9 @@ trackedFiles:
   internal/sdk/models/shared/listrolepermissionsresponse.go: {}
   internal/sdk/models/shared/listrolesresponse.go: {}
   internal/sdk/models/shared/listrolesresponseroleinfo.go: {}
+  internal/sdk/models/shared/listserviceaccountsresponse.go: {}
   internal/sdk/models/shared/listsshkeysresponse.go: {}
+  internal/sdk/models/shared/listtaskprocesssummaryresponse.go: {}
   internal/sdk/models/shared/listtasksresponse.go:
     id: d898eef18570
     pristine_git_object: 714a4437d39a056f867a98020df4a204c6677828
@@ -2555,6 +2610,7 @@ trackedFiles:
   internal/sdk/models/shared/listworkspacesbyteamresponse.go:
     id: 23e9de36d41a
     pristine_git_object: 09b34166edf51779a150e3b53cfcaf661d98325d
+  internal/sdk/models/shared/listworkspaceserviceaccountsresponse.go: {}
   internal/sdk/models/shared/listworkspacesresponse.go:
     id: f9de274aae98
     pristine_git_object: 1eb32c161a810efa542b49b594ecb9382ef3f308
@@ -2595,9 +2651,6 @@ trackedFiles:
   internal/sdk/models/shared/multirequestfileschema.go:
     id: bb5e470b2566
     pristine_git_object: e48da9a12e6c46e353a24de39c5062f0dfe58fc8
-  internal/sdk/models/shared/navbarconfig.go:
-    id: 11092f5f6e30
-    pristine_git_object: 80b633099d7cb4becd9b09b5a2f155e2a4a96367
   internal/sdk/models/shared/navbarconfignavbarmenu.go:
     id: d2ca73000c3c
     pristine_git_object: 96fe8509792dfcfb76aabdfd947955fee6620a41
@@ -2633,6 +2686,7 @@ trackedFiles:
   internal/sdk/models/shared/participanttype.go:
     id: 4b24861c8c3d
     pristine_git_object: 37ce998cf58b840e48da44d7bb0cb29e5143108f
+  internal/sdk/models/shared/pipelineactionrequest.go: {}
   internal/sdk/models/shared/pipelinedbdto.go:
     id: ab8ad3b3fa8a
     pristine_git_object: 4e92c835cc6c6b1bf6fff9027a42ca0ea78dabf7
@@ -2646,7 +2700,6 @@ trackedFiles:
   internal/sdk/models/shared/pipelinelistparamssortdir.go:
     id: 837befa2c548
     pristine_git_object: 626e4afe7ec0bb32293d24647057fc61b6bb4a6b
-  internal/sdk/models/shared/pipelinemininforesponse.go: {}
   internal/sdk/models/shared/pipelinemininforesponsepipelineversionmininforesponse.go: {}
   internal/sdk/models/shared/pipelinequeryattribute.go:
     id: 5b59269d409b
@@ -2662,6 +2715,9 @@ trackedFiles:
     id: 7a4e83a4b916
     pristine_git_object: d44a6507099d85a8c4d8d8c4911795888ae623cf
   internal/sdk/models/shared/pipelinesecretimage.go: {}
+  internal/sdk/models/shared/pipelinestatusactionconfig.go: {}
+  internal/sdk/models/shared/pipelinestatusactionevent.go: {}
+  internal/sdk/models/shared/pipelinestatusactionrequest.go: {}
   internal/sdk/models/shared/pipelineversionfullinfodto.go: {}
   internal/sdk/models/shared/pipelineversionmanagerequest.go: {}
   internal/sdk/models/shared/platformmetainfo.go:
@@ -2682,7 +2738,8 @@ trackedFiles:
   internal/sdk/models/shared/randomworkflownameresponse.go:
     id: ad51c7db1e49
     pristine_git_object: a039dd2bbe0e72b25a8c8592121da4e81992a7bd
-  internal/sdk/models/shared/resourceallocation.go: {}
+  internal/sdk/models/shared/resolvecronexpressionrequest.go: {}
+  internal/sdk/models/shared/resolvecronexpressionresponse.go: {}
   internal/sdk/models/shared/resourcedata.go:
     id: c390aa593bc1
     pristine_git_object: 0f1a811a5e550def410f370cd8546ecead0b9ae3
@@ -2705,6 +2762,7 @@ trackedFiles:
     pristine_git_object: d4ae89cfca8f1a8d235ef8339bc449e64e31d3f3
   internal/sdk/models/shared/schedconfig.go: {}
   internal/sdk/models/shared/scimtokenimage.go: {}
+  internal/sdk/models/shared/searchresult.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
     pristine_git_object: 9ed88ed95ffd6ee743ce250b2c9f3528d60e7b88
@@ -2715,6 +2773,9 @@ trackedFiles:
   internal/sdk/models/shared/seqeracomputecloudinstancetypesize.go:
     id: 74042e18e0e1
     pristine_git_object: dbc4620b157442c58c43439125bc2c7392e8c935
+  internal/sdk/models/shared/servedfrom.go: {}
+  internal/sdk/models/shared/serviceaccountdto.go: {}
+  internal/sdk/models/shared/serviceaccountimage.go: {}
   internal/sdk/models/shared/serviceinfo.go:
     id: 18e2052471c9
     pristine_git_object: 0008df58bab87596da85d9faec7d40db61fdb705
@@ -2744,6 +2805,7 @@ trackedFiles:
   internal/sdk/models/shared/task.go:
     id: ebbf5622a904
     pristine_git_object: cc080e2454e015b6817959c0cbe8475372cbf7dd
+  internal/sdk/models/shared/taskprocesssummary.go: {}
   internal/sdk/models/shared/taskstatus.go:
     id: 2313fd64b531
     pristine_git_object: de71c53149bac56bdea039254d0bdaef80be7b2b
@@ -2876,6 +2938,7 @@ trackedFiles:
     id: 196b618004af
     pristine_git_object: b83731b94c8d61871174b7633f465ecc3fb4fdd0
   internal/sdk/models/shared/updaterolerequest.go: {}
+  internal/sdk/models/shared/updateserviceaccountrequest.go: {}
   internal/sdk/models/shared/updatesshcredentialsrequest.go:
     id: bf4577c6b87f
     pristine_git_object: 11ee591651b73664cb6b52e8b7b1039cfd01bbcd
@@ -2908,6 +2971,7 @@ trackedFiles:
   internal/sdk/models/shared/userroleimage.go: {}
   internal/sdk/models/shared/usersshpublickeydto.go: {}
   internal/sdk/models/shared/usersshpublickeyimage.go: {}
+  internal/sdk/models/shared/usertype.go: {}
   internal/sdk/models/shared/userworkspacepermissiondto.go: {}
   internal/sdk/models/shared/userworkspaceroledto.go: {}
   internal/sdk/models/shared/userworkspacerolesdto.go: {}
@@ -2975,6 +3039,7 @@ trackedFiles:
   internal/sdk/models/shared/workspaceparticipantresponsedto.go:
     id: b31a7a242ffd
     pristine_git_object: f36c85c944a8707c4e63584a6767cfdd9b539cb9
+  internal/sdk/models/shared/workspaceserviceaccountdto.go: {}
   internal/sdk/models/shared/wsprole.go: {}
   internal/sdk/models/shared/wsprolesourcetype.go: {}
   internal/sdk/nextflow.go: {}
@@ -3005,6 +3070,7 @@ trackedFiles:
   internal/sdk/seqera.go:
     id: b1c23bc5193c
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
+  internal/sdk/serviceaccounts.go: {}
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
     pristine_git_object: 4ecf30e85a2643beb02282ca8b755fb6227540be
@@ -3529,7 +3595,7 @@ examples:
         query:
           workspaceId: 77862
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole"}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole", "mode": "role"}}
       responses:
         "200":
           application/json: {}
@@ -3544,7 +3610,7 @@ examples:
           workspaceId: 359184
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE"}}
+          application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "mode": "role"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSCredentials:
@@ -3555,7 +3621,7 @@ examples:
         query:
           workspaceId: 636030
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole"}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "access_key": "AKIAIOSFODNN7EXAMPLE", "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assume_role_arn": "arn:aws:iam::123456789012:role/SeqeraRole", "mode": "role"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4355,6 +4421,8 @@ examples:
         "200":
           application/json: "0xC91EdD673c"
           application/octet-stream: "0xC91EdD673c"
+          text/csv: "0xC91EdD673c"
+          text/tab-separated-values: "0xF94aCdbE55"
         "400":
           application/json: {"message": "<value>"}
   ListDatasetVersionsV2:
@@ -5870,10 +5938,12 @@ examples:
   ResolveCronExpression:
     speakeasy-default-resolve-cron-expression:
       requestBody:
-        application/json: {}
+        application/json: {"text": "<value>"}
       responses:
         "200":
           application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
   CreateAzureBatchCE:
     speakeasy-default-create-azure-batch-CE:
       parameters:
@@ -5914,7 +5984,7 @@ examples:
         query:
           workspaceId: 892944
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -5929,7 +5999,7 @@ examples:
           workspaceId: 366403
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureCloudCE:
@@ -5982,7 +6052,7 @@ examples:
         query:
           workspaceId: 341971
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
       responses:
         "200":
           application/json: {}
@@ -5997,7 +6067,7 @@ examples:
           workspaceId: 19060
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteGCPCloudCE:
@@ -6026,7 +6096,7 @@ examples:
         query:
           workspaceId: 442912
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6041,7 +6111,7 @@ examples:
           workspaceId: 562518
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAwsCloudCE:
@@ -6515,7 +6585,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "predictionModel": "none", "provisioningModel": "spotFirst"}}
+          application/json: {"schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}}
         "400":
           application/json: {"message": "<value>"}
   LaunchAgent:
@@ -6529,6 +6599,249 @@ examples:
           application/json: {"message": "<value>"}
   NextflowVersions:
     speakeasy-default-nextflow-versions:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListAgentRuns:
+    speakeasy-default-list-agent-runs:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GetAgentRunStatus:
+    speakeasy-default-get-agent-run-status:
+      parameters:
+        path:
+          agentRunId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ResolveLineage:
+    speakeasy-default-resolve-lineage:
+      parameters:
+        query:
+          workspaceId: 588236
+      responses:
+        "200":
+          application/json: {}
+  SearchLineage:
+    speakeasy-default-search-lineage:
+      responses:
+        "200":
+          application/json: {}
+  GetLineageRecord:
+    speakeasy-default-get-lineage-record:
+      parameters:
+        path:
+          lid: "<id>"
+        query:
+          workspaceId: 397564
+      responses:
+        "200":
+          application/json: {}
+  NavigateLineageDownstream:
+    speakeasy-default-navigate-lineage-downstream:
+      parameters:
+        path:
+          lid: "<id>"
+        query:
+          workspaceId: 17512
+      responses:
+        "200":
+          application/json: {}
+  GetLineageSummary:
+    speakeasy-default-get-lineage-summary:
+      parameters:
+        path:
+          lid: "<id>"
+        query:
+          workspaceId: 20620
+      responses:
+        "200":
+          application/json: {}
+  NavigateLineageUpstream:
+    speakeasy-default-navigate-lineage-upstream:
+      parameters:
+        path:
+          lid: "<id>"
+        query:
+          workspaceId: 130576
+      responses:
+        "200":
+          application/json: {}
+  GetDataStudioLog:
+    speakeasy-default-get-data-studio-log:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  DeleteDataStudioStar:
+    speakeasy-default-delete-data-studio-star:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "404":
+          application/json: {"message": "<value>"}
+  CreateDataStudioStar:
+    speakeasy-default-create-data-studio-star:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  CatalogComponentVersions:
+    speakeasy-default-catalog-component-versions:
+      parameters:
+        path:
+          key: "<key>"
+      responses:
+        "200":
+          application/json: {}
+  CatalogVersions:
+    speakeasy-default-catalog-versions:
+      responses:
+        "200":
+          application/json: {}
+  DescribeCredentialsSetup:
+    speakeasy-default-describe-credentials-setup:
+      parameters:
+        query:
+          provider: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSCredentialsFederationSetup:
+    speakeasy-default-describe-AWS-credentials-federation-setup:
+      parameters:
+        query:
+          provider: "aws"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGCPCredentialsFederationSetup:
+    speakeasy-default-describe-GCP-credentials-federation-setup:
+      parameters:
+        query:
+          provider: "google"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  SummarizeWorkflowTasks:
+    speakeasy-default-summarize-workflow-tasks:
+      parameters:
+        path:
+          workflowId: "<id>"
+        query:
+          search: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListActionTriggers:
+    speakeasy-default-list-action-triggers:
+      parameters:
+        path:
+          actionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeActionTrigger:
+    speakeasy-default-describe-action-trigger:
+      parameters:
+        path:
+          actionId: "<id>"
+          triggerId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListServiceAccounts:
+    speakeasy-default-list-service-accounts:
+      parameters:
+        path:
+          orgId: 364906
+        query:
+          offset: 0
+          max: 20
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateServiceAccount:
+    speakeasy-default-create-service-account:
+      parameters:
+        path:
+          orgId: 652028
+      requestBody:
+        application/json: {"name": "<value>"}
+      responses:
+        "201":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteServiceAccount:
+    speakeasy-default-delete-service-account:
+      parameters:
+        path:
+          orgId: 126911
+          saId: 494449
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeServiceAccount:
+    speakeasy-default-describe-service-account:
+      parameters:
+        path:
+          orgId: 226320
+          saId: 236300
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateServiceAccount:
+    speakeasy-default-update-service-account:
+      parameters:
+        path:
+          orgId: 372477
+          saId: 775996
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspaceServiceAccounts:
+    speakeasy-default-list-workspace-service-accounts:
+      parameters:
+        path:
+          orgId: 294401
+          workspaceId: 741636
       responses:
         "200":
           application/json: {}
