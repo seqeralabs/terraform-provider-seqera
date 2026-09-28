@@ -94,8 +94,10 @@ func plannedInt64(t *testing.T, s schema.Schema, f planFixture, attr string) typ
 	return resp.PlanValue
 }
 
-var unknownString = tftypes.NewValue(tftypes.String, tftypes.UnknownValue)
-var unknownNumber = tftypes.NewValue(tftypes.Number, tftypes.UnknownValue)
+var (
+	unknownString = tftypes.NewValue(tftypes.String, tftypes.UnknownValue)
+	unknownNumber = tftypes.NewValue(tftypes.Number, tftypes.UnknownValue)
+)
 
 func str(v string) tftypes.Value { return tftypes.NewValue(tftypes.String, v) }
 func num(v int64) tftypes.Value  { return tftypes.NewValue(tftypes.Number, v) }
