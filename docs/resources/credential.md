@@ -6,6 +6,8 @@ description: |-
   Credentials store authentication information for accessing cloud providers,
   Git repositories, container registries, and other external services
   within the Seqera Platform workflows.
+  To rotate GitHub App secrets, change a managed field such as description in the same apply.
+  Changes to write-only secret values alone do not trigger an update.
 ---
 
 # seqera_credential (Resource)
@@ -34,6 +36,9 @@ Manage workspace credentials in Seqera platform using this resource.
 Credentials store authentication information for accessing cloud providers,
 Git repositories, container registries, and other external services
 within the Seqera Platform workflows.
+
+To rotate GitHub App secrets, change a managed field such as `description` in the same apply.
+Changes to write-only secret values alone do not trigger an update.
 
 ## Example Usage
 
