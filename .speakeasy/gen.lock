@@ -47,7 +47,6 @@ trackedFiles:
     pristine_git_object: 8c64813c1c33e262ff021894a61e0a6354df681f
   examples/resources/seqera_agent/import-by-string-id.tf: {}
   examples/resources/seqera_agent/import.sh: {}
-  examples/resources/seqera_agent/resource.tf: {}
   examples/resources/seqera_aws_batch_ce/import-by-string-id.tf:
     id: 4811e134260a
     pristine_git_object: 4a52cca3c72f31414cf7695b70392a7b8e4f3649
@@ -189,7 +188,6 @@ trackedFiles:
     pristine_git_object: 4d69188d92974da17d3f96e317dcd1fea7e8c561
   examples/resources/seqera_service_account/import-by-string-id.tf: {}
   examples/resources/seqera_service_account/import.sh: {}
-  examples/resources/seqera_service_account/resource.tf: {}
   examples/resources/seqera_slurm_ce/import-by-string-id.tf: {}
   examples/resources/seqera_slurm_ce/import.sh: {}
   examples/resources/seqera_ssh_credential/import-by-string-id.tf:
