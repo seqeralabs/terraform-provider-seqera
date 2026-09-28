@@ -65,6 +65,12 @@ terraform:
     - datasource: pipeline_versions_data.NewDataSource
       importAlias: pipeline_versions_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data
+    - datasource: service_account_data.NewDataSource
+      importAlias: service_account_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_data
+    - datasource: agent_data.NewDataSource
+      importAlias: agent_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/agent_data
   additionalDependencies: {}
   additionalEphemeralResources: []
   additionalFunctions: []
