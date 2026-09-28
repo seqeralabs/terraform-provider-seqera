@@ -17071,6 +17071,7 @@ components:
           type: string
           format: date-time
           description: Creation timestamp.
+          x-speakeasy-param-suppress-computed-diff: true
         description:
           type: string
           nullable: true
@@ -17083,6 +17084,7 @@ components:
           type: string
           description: >-
             Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
+          x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
@@ -17096,7 +17098,8 @@ components:
         serviceAccountName:
           type: string
           nullable: true
-          description: Name of the bound service account, if any.
+          description: Name of the bound service account.
+          x-speakeasy-plan-modifiers: ServiceAccountNameFollowsID
         status:
           allOf:
             - $ref: "#/components/schemas/Agent.Status"
@@ -26273,19 +26276,23 @@ components:
           type: string
           format: date-time
           description: Creation timestamp.
+          x-speakeasy-param-suppress-computed-diff: true
         description:
           type: string
           nullable: true
+          x-speakeasy-param-suppress-computed-diff: true
         id:
           type: integer
           format: int64
           description: >-
             Service account numeric identifier (the account's user id). Use it as `seqera_agent.service_account_id`.
+          x-speakeasy-param-suppress-computed-diff: true
         memberId:
           description: Organization membership identifier of the service account. Use it as `seqera_workspace_participant.member_id` to add the account to a workspace.
           type: integer
           format: int64
           nullable: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           type: string
       x-speakeasy-entity: ServiceAccount

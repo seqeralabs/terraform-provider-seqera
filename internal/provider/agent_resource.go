@@ -17,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	custom_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
@@ -67,7 +68,10 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"date_created": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Creation timestamp.`,
 			},
 			"description": schema.StringAttribute{
@@ -86,7 +90,10 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Agent identifier. Use it as ` + "`" + `agent.agent_config_id` + "`" + ` on ` + "`" + `seqera_action` + "`" + `.`,
 			},
 			"last_updated": schema.StringAttribute{
@@ -106,8 +113,11 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Service account the agent runs as (` + "`" + `seqera_service_account.x.id` + "`" + `). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the ` + "`" + `seqera_workspace_participant` + "`" + ` first, by reference or with ` + "`" + `depends_on` + "`" + `), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.`,
 			},
 			"service_account_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `Name of the bound service account, if any.`,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.ServiceAccountNameFollowsID(),
+				},
+				Description: `Name of the bound service account.`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

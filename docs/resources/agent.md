@@ -75,7 +75,7 @@ resource "seqera_agent" "triage" {
 - `date_created` (String) Creation timestamp.
 - `id` (String) Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
 - `last_updated` (String) Last update timestamp.
-- `service_account_name` (String) Name of the bound service account, if any.
+- `service_account_name` (String) Name of the bound service account.
 - `status` (String) Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
 
 ## Import

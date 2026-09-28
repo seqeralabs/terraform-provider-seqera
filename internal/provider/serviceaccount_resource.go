@@ -16,6 +16,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -53,23 +55,35 @@ func (r *ServiceAccountResource) Schema(ctx context.Context, req resource.Schema
 		MarkdownDescription: "Manage a service account in a Seqera organization. A service account\nis a non-human identity that agents run as.\n\nTo use it, add it to a workspace with `seqera_workspace_participant`\n(`member_id = seqera_service_account.x.member_id`) using a role that\nallows launching agents, then bind it to an agent with\n`seqera_agent.service_account_id = seqera_service_account.x.id`.\n\nDeleting a service account removes it from every workspace. The\nplatform then disables every agent bound to it and pauses every action\nthat targets those agents. Terraform does not show these side effects\nin a plan.\n\nRequires service accounts to be enabled on the Platform instance.\n",
 		Attributes: map[string]schema.Attribute{
 			"created_at": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Creation timestamp.`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Description of the service account, up to 1000 characters.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1000),
 				},
 			},
 			"id": schema.Int64Attribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
 				Description: `Service account numeric identifier (the account's user id). Use it as ` + "`" + `seqera_agent.service_account_id` + "`" + `.`,
 			},
 			"member_id": schema.Int64Attribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
 				Description: `Organization membership identifier of the service account. Use it as ` + "`" + `seqera_workspace_participant.member_id` + "`" + ` to add the account to a workspace.`,
 			},
 			"name": schema.StringAttribute{

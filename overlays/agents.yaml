@@ -119,17 +119,24 @@ actions:
         created active; enabling and disabling is not managed by this
         resource, and `status` reports the current state.
 
+  # id and dateCreated never change after creation: keep the state value in
+  # the plan instead of "(known after apply)" when another field is edited.
   - target: $.components.schemas.AgentDbDto.properties.id
     update:
       description: >-
         Agent identifier. Use it as `agent.agent_config_id` on
         `seqera_action`.
+      x-speakeasy-param-suppress-computed-diff: true
+  # serviceAccountName only changes when serviceAccountId does, so a custom
+  # plan modifier keeps the state value unless the binding changes.
   - target: $.components.schemas.AgentDbDto.properties.serviceAccountName
     update:
-      description: Name of the bound service account, if any.
+      description: Name of the bound service account.
+      x-speakeasy-plan-modifiers: ServiceAccountNameFollowsID
   - target: $.components.schemas.AgentDbDto.properties.dateCreated
     update:
       description: Creation timestamp.
+      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.AgentDbDto.properties.lastUpdated
     update:
       description: Last update timestamp.

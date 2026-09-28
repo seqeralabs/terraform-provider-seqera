@@ -51,7 +51,7 @@ type AgentDbDto struct {
 	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
 	Name             *string    `json:"name,omitempty"`
 	ServiceAccountID *int64     `json:"serviceAccountId,omitempty"`
-	// Name of the bound service account, if any.
+	// Name of the bound service account.
 	ServiceAccountName *string `json:"serviceAccountName,omitempty"`
 	// Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
 	Status      *AgentDbDtoStatus `json:"status,omitempty"`
