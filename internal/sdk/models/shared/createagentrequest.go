@@ -6,7 +6,9 @@ type CreateAgentRequest struct {
 	AgentInstructions           *string `json:"agentInstructions,omitempty"`
 	AgentInstructionsTemplateID *string `json:"agentInstructionsTemplateId,omitempty"`
 	Description                 *string `json:"description,omitempty"`
+	GithubAppCredentialID       *string `json:"githubAppCredentialId,omitempty"`
 	Name                        *string `json:"name,omitempty"`
+	ServiceAccountID            *int64  `json:"serviceAccountId,omitempty"`
 }
 
 func (c *CreateAgentRequest) GetAgentInstructions() *string {
@@ -30,9 +32,23 @@ func (c *CreateAgentRequest) GetDescription() *string {
 	return c.Description
 }
 
+func (c *CreateAgentRequest) GetGithubAppCredentialID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.GithubAppCredentialID
+}
+
 func (c *CreateAgentRequest) GetName() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Name
+}
+
+func (c *CreateAgentRequest) GetServiceAccountID() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceAccountID
 }

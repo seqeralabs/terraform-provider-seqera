@@ -128,6 +128,13 @@ resource "seqera_action" "tower_advanced" {
 
 ### Optional
 
+- `agent` (Attributes) Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Requires replacement if changed. (see [below for nested schema](#nestedatt--agent))
+- `bucket` (Attributes) Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources. (see [below for nested schema](#nestedatt--bucket))
+- `cron` (Attributes) Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources. (see [below for nested schema](#nestedatt--cron))
+- `label_ids` (List of Number) The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+- `pipeline` (Attributes) Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. (see [below for nested schema](#nestedatt--pipeline))
+- `pipeline_status` (Attributes) Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here. (see [below for nested schema](#nestedatt--pipeline_status))
+- `response_type` (String) What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists. must be one of ["pipeline", "agent"]; Requires replacement if changed.
 - `source` (String) must be one of ["github", "tower", "bucket", "cron", "pipeline_status"]; Requires replacement if changed.
 
 ### Read-Only
@@ -138,6 +145,7 @@ resource "seqera_action" "tower_advanced" {
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
+- `last_trigger` (Attributes) (see [below for nested schema](#nestedatt--last_trigger))
 - `next_execution` (String)
 - `status` (String)
 
@@ -188,13 +196,87 @@ Read-Only:
 - `workspace_id` (Number)
 
 
+<a id="nestedatt--agent"></a>
+### Nested Schema for `agent`
+
+Optional:
+
+- `agent_config_id` (String) ID of an existing workspace agent to run. Not Null; Requires replacement if changed.
+
+
+<a id="nestedatt--bucket"></a>
+### Nested Schema for `bucket`
+
+Optional:
+
+- `data_link_id` (String)
+- `events` (List of String)
+- `marker_file` (String)
+
+
+<a id="nestedatt--cron"></a>
+### Nested Schema for `cron`
+
+Optional:
+
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
+
+
+<a id="nestedatt--pipeline"></a>
+### Nested Schema for `pipeline`
+
+Optional:
+
+- `target_pipeline_id` (Number)
+- `target_pipeline_version_id` (String)
+
+
+<a id="nestedatt--pipeline_status"></a>
+### Nested Schema for `pipeline_status`
+
+Optional:
+
+- `pipeline_id` (Number)
+- `run_status` (String) must be one of ["SUBMITTED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED", "UNKNOWN"]
+
+
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Read-Only:
 
+- `bucket` (Attributes) (see [below for nested schema](#nestedatt--config--bucket))
+- `cron` (Attributes) (see [below for nested schema](#nestedatt--config--cron))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
+- `pipeline_status` (Attributes) (see [below for nested schema](#nestedatt--config--pipeline_status))
 - `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
+
+<a id="nestedatt--config--bucket"></a>
+### Nested Schema for `config.bucket`
+
+Read-Only:
+
+- `bucket_name` (String)
+- `data_link_id` (String)
+- `discriminator` (String)
+- `events` (List of String)
+- `marker_file` (String)
+- `subscription_arn` (String)
+- `topic_arn` (String)
+
+
+<a id="nestedatt--config--cron"></a>
+### Nested Schema for `config.cron`
+
+Read-Only:
+
+- `discriminator` (String)
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
+
 
 <a id="nestedatt--config--github"></a>
 ### Nested Schema for `config.github`
@@ -204,12 +286,41 @@ Read-Only:
 - `discriminator` (String)
 
 
+<a id="nestedatt--config--pipeline_status"></a>
+### Nested Schema for `config.pipeline_status`
+
+Read-Only:
+
+- `discriminator` (String)
+- `pipeline_id` (Number)
+- `run_status` (String)
+
+
 <a id="nestedatt--config--tower"></a>
 ### Nested Schema for `config.tower`
 
 Read-Only:
 
 - `discriminator` (String)
+
+
+
+<a id="nestedatt--last_trigger"></a>
+### Nested Schema for `last_trigger`
+
+Read-Only:
+
+- `action_id` (String)
+- `actor_id` (Number)
+- `agent_run_id` (String)
+- `caused_by_trigger_id` (String)
+- `event_summary` (String)
+- `fired_at` (String)
+- `id` (String)
+- `outcome` (String)
+- `outcome_detail` (String)
+- `source` (String)
+- `workflow_id` (String)
 
 ## Import
 

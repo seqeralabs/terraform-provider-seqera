@@ -3,10 +3,18 @@
 package shared
 
 type UserWorkspaceRolesDto struct {
+	ParticipantID *int64                       `json:"participantId,omitempty"`
 	Permissions   []UserWorkspacePermissionDto `json:"permissions,omitempty"`
 	Roles         []UserWorkspaceRoleDto       `json:"roles,omitempty"`
 	WorkspaceID   *int64                       `json:"workspaceId,omitempty"`
 	WorkspaceName *string                      `json:"workspaceName,omitempty"`
+}
+
+func (u *UserWorkspaceRolesDto) GetParticipantID() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.ParticipantID
 }
 
 func (u *UserWorkspaceRolesDto) GetPermissions() []UserWorkspacePermissionDto {

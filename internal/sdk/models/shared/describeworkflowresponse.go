@@ -287,6 +287,36 @@ func (d *DescribeWorkflowResponseSchedConfig) GetProvisioningModel() *DescribeWo
 	return d.ProvisioningModel
 }
 
+type Fusion struct {
+	Enabled *bool   `json:"enabled,omitempty"`
+	Version *string `json:"version,omitempty"`
+}
+
+func (f *Fusion) GetEnabled() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.Enabled
+}
+
+func (f *Fusion) GetVersion() *string {
+	if f == nil {
+		return nil
+	}
+	return f.Version
+}
+
+type Wave struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+func (w *Wave) GetEnabled() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.Enabled
+}
+
 // DescribeWorkflowResponseWorkflow - Represents a workflow execution record.
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
@@ -335,20 +365,20 @@ type DescribeWorkflowResponseWorkflow struct {
 	// Timestamp when the workflow was submitted for execution
 	Submit *time.Time `json:"submit,omitempty"`
 	// Work directory
-	WorkDir         *string       `json:"workDir,omitempty"`
-	ConfigProfiles  []string      `json:"configProfiles,omitempty"`
-	Fusion          *WfFusionMeta `json:"fusion,omitempty"`
-	FusionVersion   *string       `json:"fusionVersion,omitempty"`
-	LogFile         *string       `json:"logFile,omitempty"`
-	NextflowConfig  *string       `json:"nextflowConfig,omitempty"`
-	NextflowVersion *string       `json:"nextflowVersion,omitempty"`
-	OperationID     *string       `json:"operationId,omitempty"`
-	OutFile         *string       `json:"outFile,omitempty"`
-	PostRunScript   *string       `json:"postRunScript,omitempty"`
-	PreRunScript    *string       `json:"preRunScript,omitempty"`
-	SyntaxParser    *string       `json:"syntaxParser,omitempty"`
-	TowerConfig     *string       `json:"towerConfig,omitempty"`
-	Wave            *WfWaveMeta   `json:"wave,omitempty"`
+	WorkDir         *string  `json:"workDir,omitempty"`
+	ConfigProfiles  []string `json:"configProfiles,omitempty"`
+	Fusion          *Fusion  `json:"fusion,omitempty"`
+	FusionVersion   *string  `json:"fusionVersion,omitempty"`
+	LogFile         *string  `json:"logFile,omitempty"`
+	NextflowConfig  *string  `json:"nextflowConfig,omitempty"`
+	NextflowVersion *string  `json:"nextflowVersion,omitempty"`
+	OperationID     *string  `json:"operationId,omitempty"`
+	OutFile         *string  `json:"outFile,omitempty"`
+	PostRunScript   *string  `json:"postRunScript,omitempty"`
+	PreRunScript    *string  `json:"preRunScript,omitempty"`
+	SyntaxParser    *string  `json:"syntaxParser,omitempty"`
+	TowerConfig     *string  `json:"towerConfig,omitempty"`
+	Wave            *Wave    `json:"wave,omitempty"`
 }
 
 func (d DescribeWorkflowResponseWorkflow) MarshalJSON() ([]byte, error) {
@@ -537,7 +567,7 @@ func (d *DescribeWorkflowResponseWorkflow) GetConfigProfiles() []string {
 	return d.ConfigProfiles
 }
 
-func (d *DescribeWorkflowResponseWorkflow) GetFusion() *WfFusionMeta {
+func (d *DescribeWorkflowResponseWorkflow) GetFusion() *Fusion {
 	if d == nil {
 		return nil
 	}
@@ -614,7 +644,7 @@ func (d *DescribeWorkflowResponseWorkflow) GetTowerConfig() *string {
 	return d.TowerConfig
 }
 
-func (d *DescribeWorkflowResponseWorkflow) GetWave() *WfWaveMeta {
+func (d *DescribeWorkflowResponseWorkflow) GetWave() *Wave {
 	if d == nil {
 		return nil
 	}

@@ -3,6 +3,7 @@
 package shared
 
 type AuditLogV2ResponseDtoActor struct {
+	AgentID   *string              `json:"agentId,omitempty"`
 	Email     *string              `json:"email,omitempty"`
 	FirstName *string              `json:"firstName,omitempty"`
 	IsRoot    *bool                `json:"isRoot,omitempty"`
@@ -10,6 +11,13 @@ type AuditLogV2ResponseDtoActor struct {
 	Type      *AuditActorActorType `json:"type,omitempty"`
 	UserID    *int64               `json:"userId,omitempty"`
 	UserName  *string              `json:"userName,omitempty"`
+}
+
+func (a *AuditLogV2ResponseDtoActor) GetAgentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AgentID
 }
 
 func (a *AuditLogV2ResponseDtoActor) GetEmail() *string {

@@ -3,10 +3,52 @@
 package shared
 
 type CreateActionRequest struct {
+	// Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`.
+	Agent *AgentActionRequest `json:"agent,omitempty"`
+	// Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources.
+	Bucket *BucketActionRequest `json:"bucket,omitempty"`
+	// Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources.
+	Cron *CronActionRequest `json:"cron,omitempty"`
+	// The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+	LabelIds []int64 `json:"labelIds,omitempty"`
 	// Launch payload for `seqera_action` Create / Update endpoints.
 	Launch ActionLaunchRequest `json:"launch"`
 	Name   string              `json:"name"`
-	Source *ActionSource       `json:"source,omitempty"`
+	// Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+	Pipeline *PipelineActionRequest `json:"pipeline,omitempty"`
+	// Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here.
+	PipelineStatus *PipelineStatusActionRequest `json:"pipelineStatus,omitempty"`
+	// What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists.
+	ResponseType *ActionResponseType `json:"responseType,omitempty"`
+	Source       *ActionSource       `json:"source,omitempty"`
+}
+
+func (c *CreateActionRequest) GetAgent() *AgentActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Agent
+}
+
+func (c *CreateActionRequest) GetBucket() *BucketActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Bucket
+}
+
+func (c *CreateActionRequest) GetCron() *CronActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Cron
+}
+
+func (c *CreateActionRequest) GetLabelIds() []int64 {
+	if c == nil {
+		return nil
+	}
+	return c.LabelIds
 }
 
 func (c *CreateActionRequest) GetLaunch() ActionLaunchRequest {
@@ -21,6 +63,27 @@ func (c *CreateActionRequest) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateActionRequest) GetPipeline() *PipelineActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Pipeline
+}
+
+func (c *CreateActionRequest) GetPipelineStatus() *PipelineStatusActionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.PipelineStatus
+}
+
+func (c *CreateActionRequest) GetResponseType() *ActionResponseType {
+	if c == nil {
+		return nil
+	}
+	return c.ResponseType
 }
 
 func (c *CreateActionRequest) GetSource() *ActionSource {

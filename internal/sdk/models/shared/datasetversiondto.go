@@ -7,22 +7,68 @@ import (
 	"time"
 )
 
+type LinkedSource struct {
+	ChangeStatus        *ChangeStatus `json:"changeStatus,omitempty"`
+	CheckedAt           *time.Time    `json:"checkedAt,omitempty"`
+	HasChangeIndicators *bool         `json:"hasChangeIndicators,omitempty"`
+	URL                 *string       `json:"url,omitempty"`
+}
+
+func (l LinkedSource) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LinkedSource) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *LinkedSource) GetChangeStatus() *ChangeStatus {
+	if l == nil {
+		return nil
+	}
+	return l.ChangeStatus
+}
+
+func (l *LinkedSource) GetCheckedAt() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.CheckedAt
+}
+
+func (l *LinkedSource) GetHasChangeIndicators() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.HasChangeIndicators
+}
+
+func (l *LinkedSource) GetURL() *string {
+	if l == nil {
+		return nil
+	}
+	return l.URL
+}
+
 type DatasetVersionDto struct {
-	CreatedBy          *UserInfo        `json:"createdBy,omitempty"`
-	DatasetDescription *string          `json:"datasetDescription,omitempty"`
-	DatasetID          *string          `json:"datasetId,omitempty"`
-	DatasetName        *string          `json:"datasetName,omitempty"`
-	DateCreated        *time.Time       `json:"dateCreated,omitempty"`
-	Disabled           *bool            `json:"disabled,omitempty"`
-	FileName           *string          `json:"fileName,omitempty"`
-	FileSize           *int64           `json:"fileSize,omitempty"`
-	HasHeader          *bool            `json:"hasHeader,omitempty"`
-	LastUpdated        *time.Time       `json:"lastUpdated,omitempty"`
-	LinkedSource       *LinkedSourceDto `json:"linkedSource,omitempty"`
-	MediaType          *string          `json:"mediaType,omitempty"`
-	URL                *string          `json:"url,omitempty"`
-	Version            *int64           `json:"version,omitempty"`
-	WorkspaceID        *int64           `json:"workspaceId,omitempty"`
+	CreatedBy          *UserInfo     `json:"createdBy,omitempty"`
+	DatasetDescription *string       `json:"datasetDescription,omitempty"`
+	DatasetID          *string       `json:"datasetId,omitempty"`
+	DatasetName        *string       `json:"datasetName,omitempty"`
+	DateCreated        *time.Time    `json:"dateCreated,omitempty"`
+	Disabled           *bool         `json:"disabled,omitempty"`
+	FileName           *string       `json:"fileName,omitempty"`
+	FileSize           *int64        `json:"fileSize,omitempty"`
+	HasHeader          *bool         `json:"hasHeader,omitempty"`
+	LastUpdated        *time.Time    `json:"lastUpdated,omitempty"`
+	LinkedSource       *LinkedSource `json:"linkedSource,omitempty"`
+	MediaType          *string       `json:"mediaType,omitempty"`
+	URL                *string       `json:"url,omitempty"`
+	Version            *int64        `json:"version,omitempty"`
+	WorkspaceID        *int64        `json:"workspaceId,omitempty"`
 }
 
 func (d DatasetVersionDto) MarshalJSON() ([]byte, error) {
@@ -106,7 +152,7 @@ func (d *DatasetVersionDto) GetLastUpdated() *time.Time {
 	return d.LastUpdated
 }
 
-func (d *DatasetVersionDto) GetLinkedSource() *LinkedSourceDto {
+func (d *DatasetVersionDto) GetLinkedSource() *LinkedSource {
 	if d == nil {
 		return nil
 	}

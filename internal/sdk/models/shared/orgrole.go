@@ -10,9 +10,10 @@ import (
 type OrgRole string
 
 const (
-	OrgRoleOwner        OrgRole = "owner"
-	OrgRoleMember       OrgRole = "member"
-	OrgRoleCollaborator OrgRole = "collaborator"
+	OrgRoleOwner          OrgRole = "owner"
+	OrgRoleMember         OrgRole = "member"
+	OrgRoleCollaborator   OrgRole = "collaborator"
+	OrgRoleServiceAccount OrgRole = "service_account"
 )
 
 func (e OrgRole) ToPointer() *OrgRole {
@@ -29,6 +30,8 @@ func (e *OrgRole) UnmarshalJSON(data []byte) error {
 	case "member":
 		fallthrough
 	case "collaborator":
+		fallthrough
+	case "service_account":
 		*e = OrgRole(v)
 		return nil
 	default:

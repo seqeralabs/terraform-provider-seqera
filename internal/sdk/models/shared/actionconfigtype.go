@@ -12,15 +12,45 @@ import (
 type ActionConfigTypeType string
 
 const (
-	ActionConfigTypeTypeGithub ActionConfigTypeType = "github"
-	ActionConfigTypeTypeTower  ActionConfigTypeType = "tower"
+	ActionConfigTypeTypeBucket         ActionConfigTypeType = "bucket"
+	ActionConfigTypeTypeCron           ActionConfigTypeType = "cron"
+	ActionConfigTypeTypeGithub         ActionConfigTypeType = "github"
+	ActionConfigTypeTypePipelineStatus ActionConfigTypeType = "pipeline_status"
+	ActionConfigTypeTypeTower          ActionConfigTypeType = "tower"
 )
 
 type ActionConfigType struct {
-	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline" union:"member"`
-	GithubActionConfig      *GithubActionConfig      `queryParam:"inline" union:"member"`
+	ActionTowerActionConfig    *ActionTowerActionConfig    `queryParam:"inline" union:"member"`
+	GithubActionConfig         *GithubActionConfig         `queryParam:"inline" union:"member"`
+	BucketActionConfig         *BucketActionConfig         `queryParam:"inline" union:"member"`
+	CronActionConfig           *CronActionConfig           `queryParam:"inline" union:"member"`
+	PipelineStatusActionConfig *PipelineStatusActionConfig `queryParam:"inline" union:"member"`
 
 	Type ActionConfigTypeType
+}
+
+func CreateActionConfigTypeBucket(bucket BucketActionConfig) ActionConfigType {
+	typ := ActionConfigTypeTypeBucket
+
+	typStr := string(typ)
+	bucket.Discriminator = &typStr
+
+	return ActionConfigType{
+		BucketActionConfig: &bucket,
+		Type:               typ,
+	}
+}
+
+func CreateActionConfigTypeCron(cron CronActionConfig) ActionConfigType {
+	typ := ActionConfigTypeTypeCron
+
+	typStr := string(typ)
+	cron.Discriminator = &typStr
+
+	return ActionConfigType{
+		CronActionConfig: &cron,
+		Type:             typ,
+	}
 }
 
 func CreateActionConfigTypeGithub(github GithubActionConfig) ActionConfigType {
@@ -32,6 +62,18 @@ func CreateActionConfigTypeGithub(github GithubActionConfig) ActionConfigType {
 	return ActionConfigType{
 		GithubActionConfig: &github,
 		Type:               typ,
+	}
+}
+
+func CreateActionConfigTypePipelineStatus(pipelineStatus PipelineStatusActionConfig) ActionConfigType {
+	typ := ActionConfigTypeTypePipelineStatus
+
+	typStr := string(typ)
+	pipelineStatus.Discriminator = &typStr
+
+	return ActionConfigType{
+		PipelineStatusActionConfig: &pipelineStatus,
+		Type:                       typ,
 	}
 }
 
@@ -66,6 +108,24 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	switch dis.Discriminator {
+	case "bucket":
+		bucketActionConfig := new(BucketActionConfig)
+		if err := utils.UnmarshalJSON(data, &bucketActionConfig, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bucket) type BucketActionConfig within ActionConfigType: %w", string(data), err)
+		}
+
+		u.BucketActionConfig = bucketActionConfig
+		u.Type = ActionConfigTypeTypeBucket
+		return nil
+	case "cron":
+		cronActionConfig := new(CronActionConfig)
+		if err := utils.UnmarshalJSON(data, &cronActionConfig, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == cron) type CronActionConfig within ActionConfigType: %w", string(data), err)
+		}
+
+		u.CronActionConfig = cronActionConfig
+		u.Type = ActionConfigTypeTypeCron
+		return nil
 	case "github":
 		githubActionConfig := new(GithubActionConfig)
 		if err := utils.UnmarshalJSON(data, &githubActionConfig, "", true, nil); err != nil {
@@ -74,6 +134,15 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) (err error) {
 
 		u.GithubActionConfig = githubActionConfig
 		u.Type = ActionConfigTypeTypeGithub
+		return nil
+	case "pipeline_status":
+		pipelineStatusActionConfig := new(PipelineStatusActionConfig)
+		if err := utils.UnmarshalJSON(data, &pipelineStatusActionConfig, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == pipeline_status) type PipelineStatusActionConfig within ActionConfigType: %w", string(data), err)
+		}
+
+		u.PipelineStatusActionConfig = pipelineStatusActionConfig
+		u.Type = ActionConfigTypeTypePipelineStatus
 		return nil
 	case "tower":
 		actionTowerActionConfig := new(ActionTowerActionConfig)
@@ -96,6 +165,18 @@ func (u ActionConfigType) MarshalJSON() ([]byte, error) {
 
 	if u.GithubActionConfig != nil {
 		return utils.MarshalJSON(u.GithubActionConfig, "", true)
+	}
+
+	if u.BucketActionConfig != nil {
+		return utils.MarshalJSON(u.BucketActionConfig, "", true)
+	}
+
+	if u.CronActionConfig != nil {
+		return utils.MarshalJSON(u.CronActionConfig, "", true)
+	}
+
+	if u.PipelineStatusActionConfig != nil {
+		return utils.MarshalJSON(u.PipelineStatusActionConfig, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ActionConfigType: all fields are null")

@@ -3,28 +3,201 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
+
+type AgentActionResponse struct {
+	AgentConfigID *string `json:"agentConfigId,omitempty"`
+}
+
+func (a *AgentActionResponse) GetAgentConfigID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AgentConfigID
+}
+
+type ActionResponseDtoSource string
+
+const (
+	ActionResponseDtoSourceGithub         ActionResponseDtoSource = "github"
+	ActionResponseDtoSourceTower          ActionResponseDtoSource = "tower"
+	ActionResponseDtoSourceBucket         ActionResponseDtoSource = "bucket"
+	ActionResponseDtoSourceCron           ActionResponseDtoSource = "cron"
+	ActionResponseDtoSourcePipelineStatus ActionResponseDtoSource = "pipeline_status"
+)
+
+func (e ActionResponseDtoSource) ToPointer() *ActionResponseDtoSource {
+	return &e
+}
+func (e *ActionResponseDtoSource) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "github":
+		fallthrough
+	case "tower":
+		fallthrough
+	case "bucket":
+		fallthrough
+	case "cron":
+		fallthrough
+	case "pipeline_status":
+		*e = ActionResponseDtoSource(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ActionResponseDtoSource: %v", v)
+	}
+}
+
+type ActionResponseDtoLastTrigger struct {
+	ActionID          *string                  `json:"actionId,omitempty"`
+	ActorID           *int64                   `json:"actorId,omitempty"`
+	AgentRunID        *string                  `json:"agentRunId,omitempty"`
+	CausedByTriggerID *string                  `json:"causedByTriggerId,omitempty"`
+	EventSummary      *string                  `json:"eventSummary,omitempty"`
+	FiredAt           *time.Time               `json:"firedAt,omitempty"`
+	ID                *string                  `json:"id,omitempty"`
+	Outcome           *ActionTriggerResult     `json:"outcome,omitempty"`
+	OutcomeDetail     *string                  `json:"outcomeDetail,omitempty"`
+	Source            *ActionResponseDtoSource `json:"source,omitempty"`
+	WorkflowID        *string                  `json:"workflowId,omitempty"`
+}
+
+func (a ActionResponseDtoLastTrigger) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *ActionResponseDtoLastTrigger) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *ActionResponseDtoLastTrigger) GetActionID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ActionID
+}
+
+func (a *ActionResponseDtoLastTrigger) GetActorID() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.ActorID
+}
+
+func (a *ActionResponseDtoLastTrigger) GetAgentRunID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AgentRunID
+}
+
+func (a *ActionResponseDtoLastTrigger) GetCausedByTriggerID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.CausedByTriggerID
+}
+
+func (a *ActionResponseDtoLastTrigger) GetEventSummary() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EventSummary
+}
+
+func (a *ActionResponseDtoLastTrigger) GetFiredAt() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.FiredAt
+}
+
+func (a *ActionResponseDtoLastTrigger) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
+}
+
+func (a *ActionResponseDtoLastTrigger) GetOutcome() *ActionTriggerResult {
+	if a == nil {
+		return nil
+	}
+	return a.Outcome
+}
+
+func (a *ActionResponseDtoLastTrigger) GetOutcomeDetail() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OutcomeDetail
+}
+
+func (a *ActionResponseDtoLastTrigger) GetSource() *ActionResponseDtoSource {
+	if a == nil {
+		return nil
+	}
+	return a.Source
+}
+
+func (a *ActionResponseDtoLastTrigger) GetWorkflowID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkflowID
+}
+
+type PipelineActionResponse struct {
+	TargetPipelineID        *int64  `json:"targetPipelineId,omitempty"`
+	TargetPipelineVersionID *string `json:"targetPipelineVersionId,omitempty"`
+}
+
+func (p *PipelineActionResponse) GetTargetPipelineID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.TargetPipelineID
+}
+
+func (p *PipelineActionResponse) GetTargetPipelineVersionID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TargetPipelineVersionID
+}
 
 // ActionResponseDto - Represents a pipeline action in the Seqera Platform.
 // Contains action configuration, triggers, and execution settings
 // for automated pipeline workflows.
 type ActionResponseDto struct {
-	Config *ActionConfigType `json:"config,omitempty"`
-	Error  *string           `json:"error,omitempty"`
+	Agent  *AgentActionResponse `json:"agent,omitempty"`
+	Config *ActionConfigType    `json:"config,omitempty"`
+	Error  *string              `json:"error,omitempty"`
 	// Identifier for the webhook associated with this action
 	HookID *string `json:"hookId,omitempty"`
 	// URL endpoint for the webhook that triggers this action
 	HookURL *string `json:"hookUrl,omitempty"`
 	// Unique identifier for the action
-	ID     *string      `json:"id,omitempty"`
-	Launch *LaunchDbDto `json:"launch,omitempty"`
+	ID          *string                       `json:"id,omitempty"`
+	LastTrigger *ActionResponseDtoLastTrigger `json:"lastTrigger,omitempty"`
+	Launch      *LaunchDbDto                  `json:"launch,omitempty"`
 	// Human-readable name for the action
-	Name          *string       `json:"name,omitempty"`
-	NextExecution *time.Time    `json:"nextExecution,omitempty"`
-	Source        *ActionSource `json:"source,omitempty"`
-	Status        *ActionStatus `json:"status,omitempty"`
+	Name          *string                 `json:"name,omitempty"`
+	NextExecution *time.Time              `json:"nextExecution,omitempty"`
+	Pipeline      *PipelineActionResponse `json:"pipeline,omitempty"`
+	ResponseType  *ActionResponseType     `json:"responseType,omitempty"`
+	Source        *ActionSource           `json:"source,omitempty"`
+	Status        *ActionStatus           `json:"status,omitempty"`
 }
 
 func (a ActionResponseDto) MarshalJSON() ([]byte, error) {
@@ -38,6 +211,13 @@ func (a *ActionResponseDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (a *ActionResponseDto) GetAgent() *AgentActionResponse {
+	if a == nil {
+		return nil
+	}
+	return a.Agent
+}
+
 func (a *ActionResponseDto) GetConfig() *ActionConfigType {
 	if a == nil {
 		return nil
@@ -45,9 +225,30 @@ func (a *ActionResponseDto) GetConfig() *ActionConfigType {
 	return a.Config
 }
 
+func (a *ActionResponseDto) GetConfigBucket() *BucketActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetConfigCron() *CronActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
 func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
 	if v := a.GetConfig(); v != nil {
 		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (a *ActionResponseDto) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
 	}
 	return nil
 }
@@ -87,6 +288,13 @@ func (a *ActionResponseDto) GetID() *string {
 	return a.ID
 }
 
+func (a *ActionResponseDto) GetLastTrigger() *ActionResponseDtoLastTrigger {
+	if a == nil {
+		return nil
+	}
+	return a.LastTrigger
+}
+
 func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {
 	if a == nil {
 		return nil
@@ -106,6 +314,20 @@ func (a *ActionResponseDto) GetNextExecution() *time.Time {
 		return nil
 	}
 	return a.NextExecution
+}
+
+func (a *ActionResponseDto) GetPipeline() *PipelineActionResponse {
+	if a == nil {
+		return nil
+	}
+	return a.Pipeline
+}
+
+func (a *ActionResponseDto) GetResponseType() *ActionResponseType {
+	if a == nil {
+		return nil
+	}
+	return a.ResponseType
 }
 
 func (a *ActionResponseDto) GetSource() *ActionSource {

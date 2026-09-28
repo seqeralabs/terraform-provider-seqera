@@ -1175,7 +1175,7 @@ func (s *Credentials) DeleteCredentials(ctx context.Context, request operations.
 }
 
 // DescribeCredentials - Describe credentials
-// Retrieves the details of the credentials identified by the given `credentialsId`.
+// Retrieves the details of the credentials identified by the given `credentialsId`. Include `workspaceId` when accessing workspace credentials; omit it for user-owned credentials.
 func (s *Credentials) DescribeCredentials(ctx context.Context, request operations.DescribeCredentialsRequest, opts ...operations.Option) (*operations.DescribeCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
