@@ -38,6 +38,57 @@ resource "seqera_action" "tower_basic" {
 }
 ```
 
+### Bucket Trigger
+
+```terraform
+# Launches a run when the marker file appears in the watched data link.
+resource "seqera_action" "bucket_trigger" {
+  workspace_id = seqera_workspace.main.id
+  name         = "run-on-upload"
+  source       = "bucket"
+
+  bucket = {
+    data_link_id = seqera_data_link.inputs.data_link_id
+    marker_file  = "ready.txt"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/nf-core/rnaseq"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
+
+    params_text = jsonencode({
+      input  = "s3://my-bucket/inputs/samplesheet.csv"
+      outdir = "s3://my-bucket/results"
+    })
+  }
+}
+```
+
+### Cron Schedule
+
+```terraform
+# Launches a run every night at 02:00 UTC.
+resource "seqera_action" "nightly" {
+  workspace_id = seqera_workspace.main.id
+  name         = "nightly-run"
+  source       = "cron"
+
+  cron = {
+    expression = "0 2 * * *"
+    timezone   = "UTC"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/nextflow-io/hello"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
+  }
+}
+```
+
 ### Github Webhook
 
 ```terraform
@@ -66,6 +117,31 @@ resource "seqera_action" "github_webhook" {
       input  = "s3://my-bucket/input.csv"
       output = "s3://my-bucket/results"
     })
+  }
+}
+```
+
+### Pipeline Status Trigger
+
+```terraform
+# Launches a downstream run each time a run of the watched pipeline succeeds.
+# The watched pipeline is set in pipeline_status; the run the action starts is
+# set in launch.
+resource "seqera_action" "on_upstream_success" {
+  workspace_id = seqera_workspace.main.id
+  name         = "run-after-upstream"
+  source       = "pipeline_status"
+
+  pipeline_status = {
+    pipeline_id = seqera_pipeline.upstream.pipeline_id
+    run_status  = "SUCCEEDED"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/myorg/downstream-pipeline"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
   }
 }
 ```
