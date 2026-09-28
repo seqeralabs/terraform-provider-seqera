@@ -181,10 +181,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.43.0-RC2",
+		SDKVersion: "0.43.0-RC3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/terraform 0.43.0-RC2 2.941.0 1.226.2 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
-			SDKVersion:        "0.43.0-RC2",
+			UserAgent:         "speakeasy-sdk/terraform 0.43.0-RC3 2.941.0 1.226.2 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			SDKVersion:        "0.43.0-RC3",
 			GenVersion:        "2.941.0",
 			OpenAPIDocVersion: "1.226.2",
 			ServerList:        ServerList,
