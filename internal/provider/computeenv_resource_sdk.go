@@ -432,6 +432,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 						}
 					}
+					r.ComputeEnv.Config.AzureCloud.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeEnabled)
 					r.ComputeEnv.Config.AzureCloud.LogTableName = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogTableName)
 					r.ComputeEnv.Config.AzureCloud.LogWorkspaceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogWorkspaceID)
 					r.ComputeEnv.Config.AzureCloud.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityClientID)
@@ -442,7 +443,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AzureCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.Region)
 					r.ComputeEnv.Config.AzureCloud.ResourceGroup = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ResourceGroup)
-					r.ComputeEnv.Config.AzureCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.AzureCloud.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureCloudConfiguration.Subnets))
 					for _, v := range resp.ComputeEnv.Config.AzureCloudConfiguration.Subnets {
 						r.ComputeEnv.Config.AzureCloud.Subnets = append(r.ComputeEnv.Config.AzureCloud.Subnets, types.StringValue(v))
@@ -570,6 +570,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 						}
 					}
+					r.ComputeEnv.Config.GoogleCloud.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeEnabled)
 					r.ComputeEnv.Config.GoogleCloud.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Network)
 					if resp.ComputeEnv.Config.GoogleCloudConfiguration.NetworkTags != nil {
 						r.ComputeEnv.Config.GoogleCloud.NetworkTags = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleCloudConfiguration.NetworkTags))
@@ -584,7 +585,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.GoogleCloud.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ProjectID)
 					r.ComputeEnv.Config.GoogleCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.Region)
-					r.ComputeEnv.Config.GoogleCloud.SchedEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.SchedEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ServiceAccountEmail)
 					if resp.ComputeEnv.Config.GoogleCloudConfiguration.Subnetworks != nil {
 						r.ComputeEnv.Config.GoogleCloud.Subnetworks = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleCloudConfiguration.Subnetworks))
@@ -2346,11 +2346,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				ProvisioningModel:  provisioningModel1,
 			}
 		}
-		schedEnabled := new(bool)
-		if !r.ComputeEnv.Config.GoogleCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.SchedEnabled.IsNull() {
-			*schedEnabled = r.ComputeEnv.Config.GoogleCloud.SchedEnabled.ValueBool()
+		intelligentComputeEnabled1 := new(bool)
+		if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeEnabled.IsNull() {
+			*intelligentComputeEnabled1 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeEnabled.ValueBool()
 		} else {
-			schedEnabled = nil
+			intelligentComputeEnabled1 = nil
 		}
 		serviceAccountEmail := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.ServiceAccountEmail.IsNull() {
@@ -2384,26 +2384,26 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			zone = nil
 		}
 		googleCloudConfiguration = &shared.GoogleCloudConfiguration{
-			Arm64Enabled:             arm64Enabled2,
-			BootDiskSizeGb:           bootDiskSizeGb1,
-			Environment:              environment4,
-			GpuEnabled:               gpuEnabled2,
-			ImageID:                  imageId2,
-			InstanceType:             instanceType1,
-			Network:                  network1,
-			NetworkTags:              networkTags1,
-			NextflowConfig:           nextflowConfig4,
-			PostRunScript:            postRunScript4,
-			PreRunScript:             preRunScript4,
-			ProjectID:                projectId1,
-			Region:                   region3,
-			IntelligentComputeConfig: intelligentComputeConfig1,
-			SchedEnabled:             schedEnabled,
-			ServiceAccountEmail:      serviceAccountEmail,
-			Subnetworks:              subnetworks,
-			UsePrivateAddress:        usePrivateAddress1,
-			WorkDir:                  workDir4,
-			Zone:                     zone,
+			Arm64Enabled:              arm64Enabled2,
+			BootDiskSizeGb:            bootDiskSizeGb1,
+			Environment:               environment4,
+			GpuEnabled:                gpuEnabled2,
+			ImageID:                   imageId2,
+			InstanceType:              instanceType1,
+			Network:                   network1,
+			NetworkTags:               networkTags1,
+			NextflowConfig:            nextflowConfig4,
+			PostRunScript:             postRunScript4,
+			PreRunScript:              preRunScript4,
+			ProjectID:                 projectId1,
+			Region:                    region3,
+			IntelligentComputeConfig:  intelligentComputeConfig1,
+			IntelligentComputeEnabled: intelligentComputeEnabled1,
+			ServiceAccountEmail:       serviceAccountEmail,
+			Subnetworks:               subnetworks,
+			UsePrivateAddress:         usePrivateAddress1,
+			WorkDir:                   workDir4,
+			Zone:                      zone,
 		}
 	}
 	if googleCloudConfiguration != nil {
@@ -2956,11 +2956,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				ProvisioningModel:  provisioningModel2,
 			}
 		}
-		schedEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.AzureCloud.SchedEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.SchedEnabled.IsNull() {
-			*schedEnabled1 = r.ComputeEnv.Config.AzureCloud.SchedEnabled.ValueBool()
+		intelligentComputeEnabled2 := new(bool)
+		if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeEnabled.IsNull() {
+			*intelligentComputeEnabled2 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeEnabled.ValueBool()
 		} else {
-			schedEnabled1 = nil
+			intelligentComputeEnabled2 = nil
 		}
 		subnets1 := make([]string, 0, len(r.ComputeEnv.Config.AzureCloud.Subnets))
 		for subnetsIndex := range r.ComputeEnv.Config.AzureCloud.Subnets {
@@ -2979,26 +2979,26 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir6 = nil
 		}
 		azureCloudConfiguration = &shared.AzureCloudConfiguration{
-			BootDiskSizeGB:           bootDiskSizeGb4,
-			DataCollectionEndpoint:   dataCollectionEndpoint,
-			DataCollectionRuleID:     dataCollectionRuleID,
-			Environment:              environment6,
-			InstanceType:             instanceType2,
-			LogTableName:             logTableName,
-			LogWorkspaceID:           logWorkspaceID,
-			ManagedIdentityClientID:  managedIdentityClientId1,
-			ManagedIdentityID:        managedIdentityID,
-			NetworkID:                networkID,
-			NextflowConfig:           nextflowConfig6,
-			PostRunScript:            postRunScript6,
-			PreRunScript:             preRunScript6,
-			Region:                   region5,
-			ResourceGroup:            resourceGroup,
-			IntelligentComputeConfig: intelligentComputeConfig2,
-			SchedEnabled:             schedEnabled1,
-			Subnets:                  subnets1,
-			SubscriptionID:           subscriptionID,
-			WorkDir:                  workDir6,
+			BootDiskSizeGB:            bootDiskSizeGb4,
+			DataCollectionEndpoint:    dataCollectionEndpoint,
+			DataCollectionRuleID:      dataCollectionRuleID,
+			Environment:               environment6,
+			InstanceType:              instanceType2,
+			LogTableName:              logTableName,
+			LogWorkspaceID:            logWorkspaceID,
+			ManagedIdentityClientID:   managedIdentityClientId1,
+			ManagedIdentityID:         managedIdentityID,
+			NetworkID:                 networkID,
+			NextflowConfig:            nextflowConfig6,
+			PostRunScript:             postRunScript6,
+			PreRunScript:              preRunScript6,
+			Region:                    region5,
+			ResourceGroup:             resourceGroup,
+			IntelligentComputeConfig:  intelligentComputeConfig2,
+			IntelligentComputeEnabled: intelligentComputeEnabled2,
+			Subnets:                   subnets1,
+			SubscriptionID:            subscriptionID,
+			WorkDir:                   workDir6,
 		}
 	}
 	if azureCloudConfiguration != nil {
@@ -4363,11 +4363,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				ProvisioningModel:  provisioningModel3,
 			}
 		}
-		intelligentComputeEnabled1 := new(bool)
+		intelligentComputeEnabled3 := new(bool)
 		if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.IsNull() {
-			*intelligentComputeEnabled1 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.ValueBool()
+			*intelligentComputeEnabled3 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled.ValueBool()
 		} else {
-			intelligentComputeEnabled1 = nil
+			intelligentComputeEnabled3 = nil
 		}
 		waveEnabled := new(bool)
 		if !r.ComputeEnv.Config.LocalPlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.WaveEnabled.IsNull() {
@@ -4385,7 +4385,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PostRunScript:             postRunScript15,
 			PreRunScript:              preRunScript15,
 			IntelligentComputeConfig:  intelligentComputeConfig3,
-			IntelligentComputeEnabled: intelligentComputeEnabled1,
+			IntelligentComputeEnabled: intelligentComputeEnabled3,
 			WaveEnabled:               waveEnabled,
 			WorkDir:                   workDir15,
 		}

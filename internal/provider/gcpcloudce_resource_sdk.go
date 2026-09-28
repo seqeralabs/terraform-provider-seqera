@@ -100,6 +100,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.Network = types.StringPointerValue(resp.Config.Network)
 		if resp.Config.NetworkTags != nil {
 			r.Config.NetworkTags = make([]types.String, 0, len(resp.Config.NetworkTags))
@@ -114,7 +115,6 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
 		if resp.Config.Subnetworks != nil {
 			r.Config.Subnetworks = make([]types.String, 0, len(resp.Config.Subnetworks))
@@ -522,11 +522,11 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	serviceAccountEmail := new(string)
 	if !r.Config.ServiceAccountEmail.IsUnknown() && !r.Config.ServiceAccountEmail.IsNull() {
@@ -560,26 +560,26 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		zone = nil
 	}
 	config := shared.GoogleCloudConfig{
-		Arm64Enabled:             arm64Enabled,
-		BootDiskSizeGb:           bootDiskSizeGb,
-		Environment:              environment,
-		GpuEnabled:               gpuEnabled,
-		ImageID:                  imageID,
-		InstanceType:             instanceType,
-		Network:                  network,
-		NetworkTags:              networkTags,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		ProjectID:                projectID,
-		Region:                   region,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		ServiceAccountEmail:      serviceAccountEmail,
-		Subnetworks:              subnetworks,
-		UsePrivateAddress:        usePrivateAddress,
-		WorkDir:                  workDir,
-		Zone:                     zone,
+		Arm64Enabled:              arm64Enabled,
+		BootDiskSizeGb:            bootDiskSizeGb,
+		Environment:               environment,
+		GpuEnabled:                gpuEnabled,
+		ImageID:                   imageID,
+		InstanceType:              instanceType,
+		Network:                   network,
+		NetworkTags:               networkTags,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		ProjectID:                 projectID,
+		Region:                    region,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		ServiceAccountEmail:       serviceAccountEmail,
+		Subnetworks:               subnetworks,
+		UsePrivateAddress:         usePrivateAddress,
+		WorkDir:                   workDir,
+		Zone:                      zone,
 	}
 	out := shared.GCPCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

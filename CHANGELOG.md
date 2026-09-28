@@ -1,5 +1,13 @@
 # v0.43.0
 
+BREAKING CHANGES:
+
+- **`sched_enabled` renamed to `intelligent_compute_enabled` on Azure and Google Cloud compute environments.** Applies to `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud` / `google_cloud` blocks of `seqera_compute_env`, matching `seqera_aws_cloud_ce` and the name of the companion `intelligent_compute_config` block. Configurations that set `sched_enabled` must switch to the new name. The value sent to the API is unchanged.
+
+  Existing state migrates automatically: `seqera_azure_cloud_ce` and `seqera_gcp_cloud_ce` move to schema version 2 and `seqera_compute_env` to schema version 3, and their state upgraders carry the value across, so there is no diff and no replacement.
+
+  As on AWS Cloud, setting `intelligent_compute_config` while `intelligent_compute_enabled` is false or unset is now rejected at plan time on these resources.
+
 FEATURES:
 
 - **Pipeline-status triggers and agent outcomes on `seqera_action`.** A new `pipeline_status` source, configured through a `pipeline_status` block, fires the action when a watched pipeline's run reaches a given state (`run_status`). A new `response_type` chooses what the action does when it fires: `pipeline` (the default) launches a run, and `agent` runs the workspace agent named in the new `agent` block. `agent` is only allowed for `bucket`, `cron` and `pipeline_status` sources. Changing `response_type` or `agent.agent_config_id` forces replacement. A new optional `pipeline` block links a `pipeline` action to an existing Launchpad pipeline and version, so each run is recorded against it. A new `label_ids` attaches labels to actions that have no launch. The most recent firing is exposed read-only as `last_trigger`, and the pipeline-status trigger as `config.pipeline_status`.
