@@ -3,9 +3,148 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
+
+type ListActionsResponseActionInfoSource string
+
+const (
+	ListActionsResponseActionInfoSourceGithub         ListActionsResponseActionInfoSource = "github"
+	ListActionsResponseActionInfoSourceTower          ListActionsResponseActionInfoSource = "tower"
+	ListActionsResponseActionInfoSourceBucket         ListActionsResponseActionInfoSource = "bucket"
+	ListActionsResponseActionInfoSourceCron           ListActionsResponseActionInfoSource = "cron"
+	ListActionsResponseActionInfoSourcePipelineStatus ListActionsResponseActionInfoSource = "pipeline_status"
+)
+
+func (e ListActionsResponseActionInfoSource) ToPointer() *ListActionsResponseActionInfoSource {
+	return &e
+}
+func (e *ListActionsResponseActionInfoSource) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "github":
+		fallthrough
+	case "tower":
+		fallthrough
+	case "bucket":
+		fallthrough
+	case "cron":
+		fallthrough
+	case "pipeline_status":
+		*e = ListActionsResponseActionInfoSource(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListActionsResponseActionInfoSource: %v", v)
+	}
+}
+
+type ListActionsResponseActionInfoLastTrigger struct {
+	ActionID          *string                              `json:"actionId,omitempty"`
+	ActorID           *int64                               `json:"actorId,omitempty"`
+	AgentRunID        *string                              `json:"agentRunId,omitempty"`
+	CausedByTriggerID *string                              `json:"causedByTriggerId,omitempty"`
+	EventSummary      *string                              `json:"eventSummary,omitempty"`
+	FiredAt           *time.Time                           `json:"firedAt,omitempty"`
+	ID                *string                              `json:"id,omitempty"`
+	Outcome           *ActionTriggerResult                 `json:"outcome,omitempty"`
+	OutcomeDetail     *string                              `json:"outcomeDetail,omitempty"`
+	Source            *ListActionsResponseActionInfoSource `json:"source,omitempty"`
+	WorkflowID        *string                              `json:"workflowId,omitempty"`
+}
+
+func (l ListActionsResponseActionInfoLastTrigger) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetActionID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ActionID
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetActorID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.ActorID
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetAgentRunID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.AgentRunID
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetCausedByTriggerID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CausedByTriggerID
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetEventSummary() *string {
+	if l == nil {
+		return nil
+	}
+	return l.EventSummary
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetFiredAt() *time.Time {
+	if l == nil {
+		return nil
+	}
+	return l.FiredAt
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetOutcome() *ActionTriggerResult {
+	if l == nil {
+		return nil
+	}
+	return l.Outcome
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetOutcomeDetail() *string {
+	if l == nil {
+		return nil
+	}
+	return l.OutcomeDetail
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetSource() *ListActionsResponseActionInfoSource {
+	if l == nil {
+		return nil
+	}
+	return l.Source
+}
+
+func (l *ListActionsResponseActionInfoLastTrigger) GetWorkflowID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.WorkflowID
+}
 
 type ListActionsResponseActionInfo struct {
 	Config      *ActionConfigType `json:"config,omitempty"`
@@ -17,9 +156,10 @@ type ListActionsResponseActionInfo struct {
 	ID          *string           `json:"id,omitempty"`
 	Labels      []LabelDbDto      `json:"labels,omitempty"`
 	// Last seen timestamp (null if never seen)
-	LastSeen      *time.Time `json:"lastSeen,omitempty"`
-	Name          *string    `json:"name,omitempty"`
-	NextExecution *time.Time `json:"nextExecution,omitempty"`
+	LastSeen      *time.Time                                `json:"lastSeen,omitempty"`
+	LastTrigger   *ListActionsResponseActionInfoLastTrigger `json:"lastTrigger,omitempty"`
+	Name          *string                                   `json:"name,omitempty"`
+	NextExecution *time.Time                                `json:"nextExecution,omitempty"`
 	// Pipeline name
 	Pipeline *string       `json:"pipeline,omitempty"`
 	Source   *ActionSource `json:"source,omitempty"`
@@ -46,9 +186,30 @@ func (l *ListActionsResponseActionInfo) GetConfig() *ActionConfigType {
 	return l.Config
 }
 
+func (l *ListActionsResponseActionInfo) GetConfigBucket() *BucketActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigCron() *CronActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
 func (l *ListActionsResponseActionInfo) GetConfigGithub() *GithubActionConfig {
 	if v := l.GetConfig(); v != nil {
 		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := l.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
 	}
 	return nil
 }
@@ -88,9 +249,30 @@ func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
 	return l.Event
 }
 
+func (l *ListActionsResponseActionInfo) GetEventBucket() *BucketActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetEventCron() *CronActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.CronActionEvent
+	}
+	return nil
+}
+
 func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
 	if v := l.GetEvent(); v != nil {
 		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (l *ListActionsResponseActionInfo) GetEventPipelineStatus() *PipelineStatusActionEvent {
+	if v := l.GetEvent(); v != nil {
+		return v.PipelineStatusActionEvent
 	}
 	return nil
 }
@@ -128,6 +310,13 @@ func (l *ListActionsResponseActionInfo) GetLastSeen() *time.Time {
 		return nil
 	}
 	return l.LastSeen
+}
+
+func (l *ListActionsResponseActionInfo) GetLastTrigger() *ListActionsResponseActionInfoLastTrigger {
+	if l == nil {
+		return nil
+	}
+	return l.LastTrigger
 }
 
 func (l *ListActionsResponseActionInfo) GetName() *string {

@@ -46,9 +46,30 @@ func (a *ActionImage) GetConfig() *ActionConfigType {
 	return a.Config
 }
 
+func (a *ActionImage) GetConfigBucket() *BucketActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (a *ActionImage) GetConfigCron() *CronActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
 func (a *ActionImage) GetConfigGithub() *GithubActionConfig {
 	if v := a.GetConfig(); v != nil {
 		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (a *ActionImage) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := a.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
 	}
 	return nil
 }
@@ -74,9 +95,30 @@ func (a *ActionImage) GetEvent() *ActionEventType {
 	return a.Event
 }
 
+func (a *ActionImage) GetEventBucket() *BucketActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (a *ActionImage) GetEventCron() *CronActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.CronActionEvent
+	}
+	return nil
+}
+
 func (a *ActionImage) GetEventGithub() *GithubActionEvent {
 	if v := a.GetEvent(); v != nil {
 		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (a *ActionImage) GetEventPipelineStatus() *PipelineStatusActionEvent {
+	if v := a.GetEvent(); v != nil {
+		return v.PipelineStatusActionEvent
 	}
 	return nil
 }

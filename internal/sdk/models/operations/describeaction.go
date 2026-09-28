@@ -12,7 +12,7 @@ type DescribeActionRequest struct {
 	ActionID string `pathParam:"style=simple,explode=false,name=actionId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
+	// Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
 	Attributes []shared.ActionQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
 

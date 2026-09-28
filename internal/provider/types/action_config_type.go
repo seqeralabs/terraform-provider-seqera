@@ -3,6 +3,9 @@
 package types
 
 type ActionConfigType struct {
-	Tower  *ActionTowerActionConfig `queryParam:"inline" tfsdk:"tower"`
-	Github *GithubActionConfig      `queryParam:"inline" tfsdk:"github"`
+	Tower          *ActionTowerActionConfig    `queryParam:"inline" tfsdk:"tower"`
+	Github         *GithubActionConfig         `queryParam:"inline" tfsdk:"github"`
+	Bucket         *BucketActionConfig         `queryParam:"inline" tfsdk:"bucket"`
+	Cron           *CronActionConfig           `queryParam:"inline" tfsdk:"cron"`
+	PipelineStatus *PipelineStatusActionConfig `queryParam:"inline" tfsdk:"pipeline_status"`
 }

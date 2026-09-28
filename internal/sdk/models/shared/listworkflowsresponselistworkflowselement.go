@@ -2,6 +2,60 @@
 
 package shared
 
+type ListWorkflowsResponseListWorkflowsElementPipelineInfo struct {
+	ID          *int64                                                 `json:"id,omitempty"`
+	Version     *PipelineMinInfoResponsePipelineVersionMinInfoResponse `json:"version,omitempty"`
+	WorkspaceID *int64                                                 `json:"workspaceId,omitempty"`
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElementPipelineInfo) GetID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElementPipelineInfo) GetVersion() *PipelineMinInfoResponsePipelineVersionMinInfoResponse {
+	if l == nil {
+		return nil
+	}
+	return l.Version
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElementPipelineInfo) GetWorkspaceID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.WorkspaceID
+}
+
+type Progress struct {
+	ProcessesProgress []ProcessLoad `json:"processesProgress,omitempty"`
+	TotalProcesses    *int          `json:"totalProcesses,omitempty"`
+	WorkflowProgress  *WorkflowLoad `json:"workflowProgress,omitempty"`
+}
+
+func (p *Progress) GetProcessesProgress() []ProcessLoad {
+	if p == nil {
+		return nil
+	}
+	return p.ProcessesProgress
+}
+
+func (p *Progress) GetTotalProcesses() *int {
+	if p == nil {
+		return nil
+	}
+	return p.TotalProcesses
+}
+
+func (p *Progress) GetWorkflowProgress() *WorkflowLoad {
+	if p == nil {
+		return nil
+	}
+	return p.WorkflowProgress
+}
+
 type ListWorkflowsResponseListWorkflowsElement struct {
 	Labels []LabelDbDto `json:"labels,omitempty"`
 	// Whether workflow is optimized
@@ -9,9 +63,9 @@ type ListWorkflowsResponseListWorkflowsElement struct {
 	// Organization ID
 	OrgID *int64 `json:"orgId,omitempty"`
 	// Organization name
-	OrgName      *string                  `json:"orgName,omitempty"`
-	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
-	Progress     *ProgressData            `json:"progress,omitempty"`
+	OrgName      *string                                                `json:"orgName,omitempty"`
+	PipelineInfo *ListWorkflowsResponseListWorkflowsElementPipelineInfo `json:"pipelineInfo,omitempty"`
+	Progress     *Progress                                              `json:"progress,omitempty"`
 	// Whether workflow is starred
 	Starred *bool `json:"starred,omitempty"`
 	// Represents a workflow execution record.
@@ -53,14 +107,14 @@ func (l *ListWorkflowsResponseListWorkflowsElement) GetOrgName() *string {
 	return l.OrgName
 }
 
-func (l *ListWorkflowsResponseListWorkflowsElement) GetPipelineInfo() *PipelineMinInfoResponse {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetPipelineInfo() *ListWorkflowsResponseListWorkflowsElementPipelineInfo {
 	if l == nil {
 		return nil
 	}
 	return l.PipelineInfo
 }
 
-func (l *ListWorkflowsResponseListWorkflowsElement) GetProgress() *ProgressData {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetProgress() *Progress {
 	if l == nil {
 		return nil
 	}

@@ -14,9 +14,12 @@ type AgentDbDto struct {
 	CreatedByUserName           *string      `json:"createdByUserName,omitempty"`
 	DateCreated                 *time.Time   `json:"dateCreated,omitempty"`
 	Description                 *string      `json:"description,omitempty"`
+	GithubAppCredentialID       *string      `json:"githubAppCredentialId,omitempty"`
 	ID                          *string      `json:"id,omitempty"`
 	LastUpdated                 *time.Time   `json:"lastUpdated,omitempty"`
 	Name                        *string      `json:"name,omitempty"`
+	ServiceAccountID            *int64       `json:"serviceAccountId,omitempty"`
+	ServiceAccountName          *string      `json:"serviceAccountName,omitempty"`
 	Status                      *AgentStatus `json:"status,omitempty"`
 	UpdatedBy                   *int64       `json:"updatedBy,omitempty"`
 	WorkspaceID                 *int64       `json:"workspaceId,omitempty"`
@@ -75,6 +78,13 @@ func (a *AgentDbDto) GetDescription() *string {
 	return a.Description
 }
 
+func (a *AgentDbDto) GetGithubAppCredentialID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GithubAppCredentialID
+}
+
 func (a *AgentDbDto) GetID() *string {
 	if a == nil {
 		return nil
@@ -94,6 +104,20 @@ func (a *AgentDbDto) GetName() *string {
 		return nil
 	}
 	return a.Name
+}
+
+func (a *AgentDbDto) GetServiceAccountID() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountID
+}
+
+func (a *AgentDbDto) GetServiceAccountName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountName
 }
 
 func (a *AgentDbDto) GetStatus() *AgentStatus {

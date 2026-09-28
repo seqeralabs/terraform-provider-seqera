@@ -1,12 +1,8 @@
 # v0.43.0
 
-BREAKING CHANGES:
-
-- **`bucket` and `cron` removed from `seqera_action`.** Platform 1.214.0 dropped the bucket and cron action types from the API (`BucketActionConfig`/`CronActionConfig`, `BucketActionRequest`/`CronActionRequest` and `GET /actions/cron/resolve`), so the resource loses its `bucket` and `cron` argument blocks along with the read-only `config.bucket` and `config.cron` blocks. Configurations that set either block must remove it. The `source` enum still advertises `"bucket"` and `"cron"` — that is upstream's shape, left as-is.
-
-  No state migration is required. The bucket and cron action types never reached GA in the backend and were never enabled in production, so no real state holds either block; `seqera_action` stays at schema version 1 with no new upgrader.
-
 FEATURES:
+
+- **Pipeline-status triggers and agent outcomes on `seqera_action`.** A new `pipeline_status` source, configured through a `pipeline_status` block, fires the action when a watched pipeline's run reaches a given state (`run_status`). A new `response_type` chooses what the action does when it fires: `pipeline` (the default) launches a run, and `agent` runs the workspace agent named in the new `agent` block. `agent` is only allowed for `bucket`, `cron` and `pipeline_status` sources. Changing `response_type` or `agent.agent_config_id` forces replacement. A new optional `pipeline` block links a `pipeline` action to an existing Launchpad pipeline and version, so each run is recorded against it. A new `label_ids` attaches labels to actions that have no launch. The most recent firing is exposed read-only as `last_trigger`, and the pipeline-status trigger as `config.pipeline_status`.
 
 - **Fusion metrics collection on compute environments.** New top-level `fusion_metrics_collection_enabled` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and `seqera_aws_compute_env`. It updates in place — changing it does not replace the compute environment. On the Batch/Forge environments it requires `enable_fusion = true`, enforced at plan time rather than failing at apply. Not exposed on `seqera_slurm_ce` (no Fusion support in its config) or `seqera_managed_compute_ce` (backend-owned config).
 
@@ -39,6 +35,8 @@ BUG FIXES:
   No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
 
 NOTES:
+
+- **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
 
 - **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
 
