@@ -162,6 +162,39 @@ actions:
         - name
         - agentInstructions
 
+  # The agent PUT replaces every field, so these are plain Optional: removing
+  # one from the configuration must reach the API as null (unbind / clear).
+  # Optional+Computed would keep the prior state value instead. As in
+  # pipelines.yaml, the extension must be on the request schemas AND the
+  # response schema, or the merged attribute stays Computed.
+  - target: $.components.schemas.CreateAgentRequest.properties.serviceAccountId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.CreateAgentRequest.properties.description
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.CreateAgentRequest.properties.githubAppCredentialId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.UpdateAgentRequest.properties.serviceAccountId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.UpdateAgentRequest.properties.description
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.UpdateAgentRequest.properties.githubAppCredentialId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AgentDbDto.properties.serviceAccountId
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AgentDbDto.properties.description
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AgentDbDto.properties.githubAppCredentialId
+    update:
+      x-speakeasy-param-computed: false
+
   # -------------------------------------------------------------------------
   # Request fields: descriptions and backend limits (become plan-time validators)
   # -------------------------------------------------------------------------
@@ -200,11 +233,17 @@ actions:
   - target: $.components.schemas.CreateAgentRequest.properties.description
     update:
       maxLength: 120
-      description: Short description of the agent, up to 120 characters.
+      pattern: "^\\S(?:.*\\S)?$"
+      description: >-
+        Short description of the agent, up to 120 characters. It cannot be
+        empty or start or end with whitespace, because the Platform trims it.
   - target: $.components.schemas.UpdateAgentRequest.properties.description
     update:
       maxLength: 120
-      description: Short description of the agent, up to 120 characters.
+      pattern: "^\\S(?:.*\\S)?$"
+      description: >-
+        Short description of the agent, up to 120 characters. It cannot be
+        empty or start or end with whitespace, because the Platform trims it.
 
   - target: $.components.schemas.CreateAgentRequest.properties.serviceAccountId
     update:
@@ -220,7 +259,8 @@ actions:
         available. When set, the service account must already be a participant
         in the workspace with a role that allows launching agents (configure
         the `seqera_workspace_participant` first, by reference or with
-        `depends_on`), otherwise the apply fails with a conflict. Removing it
+        `depends_on`), otherwise the apply fails with the Platform's error
+        explaining what is missing. Removing it
         from the configuration unbinds the service account on the next apply.
         Requires service accounts to be enabled on the Platform instance.
   - target: $.components.schemas.UpdateAgentRequest.properties.serviceAccountId
@@ -237,18 +277,21 @@ actions:
         available. When set, the service account must already be a participant
         in the workspace with a role that allows launching agents (configure
         the `seqera_workspace_participant` first, by reference or with
-        `depends_on`), otherwise the apply fails with a conflict. Removing it
+        `depends_on`), otherwise the apply fails with the Platform's error
+        explaining what is missing. Removing it
         from the configuration unbinds the service account on the next apply.
         Requires service accounts to be enabled on the Platform instance.
 
   - target: $.components.schemas.CreateAgentRequest.properties.githubAppCredentialId
     update:
+      pattern: "^\\S(?:.*\\S)?$"
       description: >-
         GitHub App credential the agent uses for GitHub access
         (`seqera_github_app_credential.x.id`). Requires GitHub App credentials
         to be enabled on the Platform instance.
   - target: $.components.schemas.UpdateAgentRequest.properties.githubAppCredentialId
     update:
+      pattern: "^\\S(?:.*\\S)?$"
       description: >-
         GitHub App credential the agent uses for GitHub access
         (`seqera_github_app_credential.x.id`). Requires GitHub App credentials

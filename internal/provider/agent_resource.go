@@ -71,17 +71,19 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Creation timestamp.`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
-				Description: `Short description of the agent, up to 120 characters.`,
+				Description: `Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(120),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^\S(?:.*\S)?$`), "must match pattern "+regexp.MustCompile(`^\S(?:.*\S)?$`).String()),
 				},
 			},
 			"github_app_credential_id": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `GitHub App credential the agent uses for GitHub access (` + "`" + `seqera_github_app_credential.x.id` + "`" + `). Requires GitHub App credentials to be enabled on the Platform instance.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^\S(?:.*\S)?$`), "must match pattern "+regexp.MustCompile(`^\S(?:.*\S)?$`).String()),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
@@ -100,9 +102,8 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"service_account_id": schema.Int64Attribute{
-				Computed:    true,
 				Optional:    true,
-				Description: `Service account the agent runs as (` + "`" + `seqera_service_account.x.id` + "`" + `). When unset, the agent runs with the identity of whoever triggers it: for a ` + "`" + `seqera_action` + "`" + `, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the ` + "`" + `seqera_workspace_participant` + "`" + ` first, by reference or with ` + "`" + `depends_on` + "`" + `), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.`,
+				Description: `Service account the agent runs as (` + "`" + `seqera_service_account.x.id` + "`" + `). When unset, the agent runs with the identity of whoever triggers it: for a ` + "`" + `seqera_action` + "`" + `, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the ` + "`" + `seqera_workspace_participant` + "`" + ` first, by reference or with ` + "`" + `depends_on` + "`" + `), otherwise the apply fails with the Platform's error explaining what is missing. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.`,
 			},
 			"service_account_name": schema.StringAttribute{
 				Computed:    true,

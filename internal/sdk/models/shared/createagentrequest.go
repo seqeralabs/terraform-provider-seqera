@@ -5,13 +5,13 @@ package shared
 type CreateAgentRequest struct {
 	// Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
 	AgentInstructions string `json:"agentInstructions"`
-	// Short description of the agent, up to 120 characters.
+	// Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
 	Description *string `json:"description,omitempty"`
 	// GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
 	GithubAppCredentialID *string `json:"githubAppCredentialId,omitempty"`
 	// Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
 	Name string `json:"name"`
-	// Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
+	// Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
 	ServiceAccountID *int64 `json:"serviceAccountId,omitempty"`
 }
 

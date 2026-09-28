@@ -58,7 +58,7 @@ resource "seqera_workspace_participant" "ci" {
 
 ### Required
 
-- `name` (String) Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+- `name` (String) Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
 - `org_id` (Number) Organization numeric identifier. Requires replacement if changed.
 
 ### Optional

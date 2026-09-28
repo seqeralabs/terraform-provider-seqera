@@ -17074,9 +17074,11 @@ components:
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
         id:
           type: string
           description: >-
@@ -17091,6 +17093,7 @@ components:
           type: integer
           format: int64
           nullable: true
+          x-speakeasy-param-computed: false
         serviceAccountName:
           type: string
           nullable: true
@@ -19843,11 +19846,16 @@ components:
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
           maxLength: 120
-          description: Short description of the agent, up to 120 characters.
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          pattern: "^\\S(?:.*\\S)?$"
           description: >-
             GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
@@ -19861,8 +19869,9 @@ components:
           type: integer
           format: int64
           nullable: true
+          x-speakeasy-param-computed: false
           description: >-
-            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
+            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
       required:
         - name
         - agentInstructions
@@ -20190,10 +20199,15 @@ components:
           description: Description of the service account, up to 1000 characters.
         name:
           type: string
-          maxLength: 40
-          minLength: 1
+          maxLength: 39
+          minLength: 2
+          # The Platform validates the name as a user name (SHORT_NAME_REGEX):
+          # 2-39 lower-case letters, digits and single dashes, no leading or
+          # trailing dash. Expressed without the upstream lookahead, which RE2
+          # does not support.
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           description: >-
-            Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+            Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
       required:
         - name
     CreateServiceAccountResponse:
@@ -27298,11 +27312,16 @@ components:
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
           maxLength: 120
-          description: Short description of the agent, up to 120 characters.
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          pattern: "^\\S(?:.*\\S)?$"
           description: >-
             GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
@@ -27316,8 +27335,9 @@ components:
           type: integer
           format: int64
           nullable: true
+          x-speakeasy-param-computed: false
           description: >-
-            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
+            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
       required:
         - name
         - agentInstructions
@@ -27488,10 +27508,15 @@ components:
           description: Description of the service account, up to 1000 characters.
         name:
           type: string
-          maxLength: 40
-          minLength: 1
+          maxLength: 39
+          # The Platform validates the name as a user name (SHORT_NAME_REGEX):
+          # 2-39 lower-case letters, digits and single dashes, no leading or
+          # trailing dash. Expressed without the upstream lookahead, which RE2
+          # does not support.
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          minLength: 2
           description: >-
-            Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+            Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
     UpdateTeamRequest:
       type: object
       properties:

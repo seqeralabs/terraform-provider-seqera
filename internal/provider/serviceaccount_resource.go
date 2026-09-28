@@ -17,6 +17,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -73,9 +74,10 @@ func (r *ServiceAccountResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
-				Description: `Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.`,
+				Description: `Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 40),
+					stringvalidator.UTF8LengthBetween(2, 39),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`), "must match pattern "+regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`).String()),
 				},
 			},
 			"org_id": schema.Int64Attribute{

@@ -5,7 +5,7 @@ package shared
 type UpdateServiceAccountRequest struct {
 	// Description of the service account, up to 1000 characters.
 	Description *string `json:"description,omitempty"`
-	// Service account name, 1 to 40 characters. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+	// Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
 	Name *string `json:"name,omitempty"`
 }
 
