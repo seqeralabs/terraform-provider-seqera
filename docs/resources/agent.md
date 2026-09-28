@@ -25,7 +25,7 @@ resource, and `status` reports the current state.
 ## Example Usage
 
 ```terraform
-# Recommended setup: the agent runs as a dedicated service account.
+# Every agent runs as a service account.
 resource "seqera_service_account" "triage" {
   org_id = var.org_id
   name   = "run-triage"
@@ -50,18 +50,8 @@ resource "seqera_agent" "triage" {
   EOT
   service_account_id = seqera_service_account.triage.id
 
-  # Otherwise the Platform rejects the binding with a conflict.
+  # Otherwise the Platform rejects the service account binding.
   depends_on = [seqera_workspace_participant.triage]
-}
-
-# Without a service account the agent runs with the identity of whoever
-# triggers it: for an action, the action's owner (the user behind the
-# provider's token for Terraform-managed actions); for a direct launch, the
-# launching user. Prefer binding a service account where they are enabled.
-resource "seqera_agent" "minimal" {
-  workspace_id       = var.workspace_id
-  name               = "release-notes"
-  agent_instructions = "Draft release notes from the merged pull requests."
 }
 ```
 
@@ -72,13 +62,13 @@ resource "seqera_agent" "minimal" {
 
 - `agent_instructions` (String) Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
 - `name` (String) Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
+- `service_account_id` (Number) Service account the agent runs as (`seqera_service_account.x.id`). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `description` (String) Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
 - `github_app_credential_id` (String) GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
-- `service_account_id` (Number) Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
 
 ### Read-Only
 

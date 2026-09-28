@@ -1,4 +1,4 @@
-# Recommended setup: the agent runs as a dedicated service account.
+# Every agent runs as a service account.
 resource "seqera_service_account" "triage" {
   org_id = var.org_id
   name   = "run-triage"
@@ -23,16 +23,6 @@ resource "seqera_agent" "triage" {
   EOT
   service_account_id = seqera_service_account.triage.id
 
-  # Otherwise the Platform rejects the binding with a conflict.
+  # Otherwise the Platform rejects the service account binding.
   depends_on = [seqera_workspace_participant.triage]
-}
-
-# Without a service account the agent runs with the identity of whoever
-# triggers it: for an action, the action's owner (the user behind the
-# provider's token for Terraform-managed actions); for a direct launch, the
-# launching user. Prefer binding a service account where they are enabled.
-resource "seqera_agent" "minimal" {
-  workspace_id       = var.workspace_id
-  name               = "release-notes"
-  agent_instructions = "Draft release notes from the merged pull requests."
 }

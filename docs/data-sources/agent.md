@@ -43,6 +43,6 @@ output "triage_agent_status" {
 - `github_app_credential_id` (String) GitHub App credential the agent uses, if any.
 - `id` (String) Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
 - `last_updated` (String) Last update timestamp.
-- `service_account_id` (Number) Service account the agent runs as. Null when none is bound, in which case the agent runs with the identity of whoever triggers it.
+- `service_account_id` (Number) Service account the agent runs as, or null if none is bound.
 - `service_account_name` (String) Name of the bound service account, if any.
 - `status` (String) Current status, `active` or `inactive`.

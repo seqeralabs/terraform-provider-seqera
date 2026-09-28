@@ -74,7 +74,7 @@ func (d *DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, r
 			},
 			"service_account_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: "Service account the agent runs as. Null when none is bound, in which case the agent runs with the identity of whoever triggers it.",
+				Description: "Service account the agent runs as, or null if none is bound.",
 			},
 			"service_account_name": schema.StringAttribute{
 				Computed:    true,

@@ -38,12 +38,25 @@ func stringAttributeErrors(t *testing.T, s schema.Schema, attr, value string) bo
 	return false
 }
 
+// The Agent Backend rejects an agent without a service account (a null
+// serviceAccountId fails its request validation), so the provider requires one.
+func TestAgentServiceAccountIsRequired(t *testing.T) {
+	s := resourceSchema(t, NewAgentResource())
+	a := s.Attributes["service_account_id"]
+	if a == nil {
+		t.Fatal("missing attribute service_account_id")
+	}
+	if !a.IsRequired() || a.IsComputed() {
+		t.Errorf("service_account_id: required=%v computed=%v, want required and not computed", a.IsRequired(), a.IsComputed())
+	}
+}
+
 // The agent PUT replaces every field, so removing one of these from the
 // configuration must reach the API as null. An Optional+Computed attribute
 // keeps its prior state value instead, so they must be plain Optional.
 func TestAgentClearableAttributesAreNotComputed(t *testing.T) {
 	s := resourceSchema(t, NewAgentResource())
-	for _, name := range []string{"service_account_id", "description", "github_app_credential_id"} {
+	for _, name := range []string{"description", "github_app_credential_id"} {
 		a := s.Attributes[name]
 		if a == nil {
 			t.Fatalf("missing attribute %s", name)

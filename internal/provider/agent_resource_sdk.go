@@ -181,12 +181,9 @@ func (r *AgentResourceModel) ToSharedCreateAgentRequest(ctx context.Context) (*s
 	var name string
 	name = r.Name.ValueString()
 
-	serviceAccountID := new(int64)
-	if !r.ServiceAccountID.IsUnknown() && !r.ServiceAccountID.IsNull() {
-		*serviceAccountID = r.ServiceAccountID.ValueInt64()
-	} else {
-		serviceAccountID = nil
-	}
+	var serviceAccountID int64
+	serviceAccountID = r.ServiceAccountID.ValueInt64()
+
 	out := shared.CreateAgentRequest{
 		AgentInstructions:     agentInstructions,
 		Description:           description,
@@ -219,12 +216,9 @@ func (r *AgentResourceModel) ToSharedUpdateAgentRequest(ctx context.Context) (*s
 	var name string
 	name = r.Name.ValueString()
 
-	serviceAccountID := new(int64)
-	if !r.ServiceAccountID.IsUnknown() && !r.ServiceAccountID.IsNull() {
-		*serviceAccountID = r.ServiceAccountID.ValueInt64()
-	} else {
-		serviceAccountID = nil
-	}
+	var serviceAccountID int64
+	serviceAccountID = r.ServiceAccountID.ValueInt64()
+
 	out := shared.UpdateAgentRequest{
 		AgentInstructions:     agentInstructions,
 		Description:           description,

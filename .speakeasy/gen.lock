@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 3b3f68b304ba8718228a51a81da014b2
+  docChecksum: e339e800c7868ab675859693829d1f8e
   docVersion: 1.226.2
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -6452,7 +6452,7 @@ examples:
         query:
           workspaceId: 777445
       requestBody:
-        application/json: {"agentInstructions": "<value>", "name": "<value>"}
+        application/json: {"agentInstructions": "<value>", "name": "<value>", "serviceAccountId": 777445}
       responses:
         "200":
           application/json: {}
@@ -6488,7 +6488,7 @@ examples:
         query:
           workspaceId: 12637
       requestBody:
-        application/json: {"agentInstructions": "<value>", "name": "<value>"}
+        application/json: {"agentInstructions": "<value>", "name": "<value>", "serviceAccountId": 12637}
       responses:
         "200":
           application/json: {}
