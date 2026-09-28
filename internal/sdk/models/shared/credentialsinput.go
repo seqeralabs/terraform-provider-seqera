@@ -14,6 +14,7 @@ import (
 // - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
 // - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
 // - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+// - `github_app`   → `keys.github_app`   (GitHub App authentication)
 type CredentialsProviderType string
 
 const (
@@ -23,6 +24,7 @@ const (
 	CredentialsProviderTypeAzureCloud    CredentialsProviderType = "azure-cloud"
 	CredentialsProviderTypeGoogle        CredentialsProviderType = "google"
 	CredentialsProviderTypeGithub        CredentialsProviderType = "github"
+	CredentialsProviderTypeGithubApp     CredentialsProviderType = "github_app"
 	CredentialsProviderTypeGitlab        CredentialsProviderType = "gitlab"
 	CredentialsProviderTypeBitbucket     CredentialsProviderType = "bitbucket"
 	CredentialsProviderTypeSSH           CredentialsProviderType = "ssh"
@@ -55,6 +57,8 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	case "google":
 		fallthrough
 	case "github":
+		fallthrough
+	case "github_app":
 		fallthrough
 	case "gitlab":
 		fallthrough
@@ -102,6 +106,7 @@ type CredentialsInput struct {
 	// - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
 	// - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
 	// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+	// - `github_app`   → `keys.github_app`   (GitHub App authentication)
 	//
 	ProviderType CredentialsProviderType `json:"provider"`
 }
@@ -289,6 +294,7 @@ type CredentialsOutput struct {
 	// - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
 	// - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
 	// - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+	// - `github_app`   → `keys.github_app`   (GitHub App authentication)
 	//
 	ProviderType CredentialsProviderType `json:"provider"`
 	// Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.

@@ -6,6 +6,8 @@ description: |-
   Credentials store authentication information for accessing cloud providers,
   Git repositories, container registries, and other external services
   within the Seqera Platform workflows.
+  To rotate GitHub App secrets, change a managed field such as description in the same apply.
+  Changes to write-only secret values alone do not trigger an update.
 ---
 
 # seqera_credential (Resource)
@@ -34,6 +36,9 @@ Manage workspace credentials in Seqera platform using this resource.
 Credentials store authentication information for accessing cloud providers,
 Git repositories, container registries, and other external services
 within the Seqera Platform workflows.
+
+To rotate GitHub App secrets, change a managed field such as `description` in the same apply.
+Changes to write-only secret values alone do not trigger an update.
 
 ## Example Usage
 
@@ -104,7 +109,8 @@ resource "seqera_credential" "azure_cloud" {
 - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
 - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
 - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
-must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
+- `github_app`   → `keys.github_app`   (GitHub App authentication)
+must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "github_app", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
@@ -261,10 +267,10 @@ Optional:
 
 - `app_id` (String)
 - `client_id` (String)
-- `client_secret` (String)
-- `private_key` (String)
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
+- `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
 - `slug` (String)
-- `webhook_secret` (String)
+- `webhook_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments))
 
 
 <a id="nestedatt--keys--gitlab"></a>

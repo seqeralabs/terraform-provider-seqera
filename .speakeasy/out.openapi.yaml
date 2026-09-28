@@ -20273,6 +20273,7 @@ components:
             - azure-cloud
             - google
             - github
+            - github_app
             - gitlab
             - bitbucket
             - ssh
@@ -20294,6 +20295,7 @@ components:
             - `azure`        → `keys.azure`        (Azure Batch, shared-key auth)
             - `azure_entra`  → `keys.azure_entra`  (Azure Batch, Entra service principal)
             - `azure-cloud`  → `keys.azure_cloud`  (Azure Cloud / SingleVM, Entra service principal)
+            - `github_app`   → `keys.github_app`   (GitHub App authentication)
         status:
           description: Validation health for these credentials. AVAILABLE = last probe succeeded (or no probe has been attempted yet). INVALID = the last probe was authoritatively rejected by the provider (see message). Transient probe failures (network / 5xx) leave this field untouched.
           allOf:
@@ -20312,6 +20314,9 @@ components:
         Credentials store authentication information for accessing cloud providers,
         Git repositories, container registries, and other external services
         within the Seqera Platform workflows.
+
+        To rotate GitHub App secrets, change a managed field such as `description` in the same apply.
+        Changes to write-only secret values alone do not trigger an update.
       description: |
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
@@ -22398,16 +22403,22 @@ components:
         clientSecret:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
         discriminator:
           type: string
         privateKey:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
         slug:
           type: string
         webhookSecret:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
     GitHubSecurityKeys:
       type: object
       properties:

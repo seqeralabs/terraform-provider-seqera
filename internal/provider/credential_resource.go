@@ -55,7 +55,7 @@ func (r *CredentialResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage workspace credentials in Seqera platform using this resource.\n\nCredentials store authentication information for accessing cloud providers,\nGit repositories, container registries, and other external services\nwithin the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage workspace credentials in Seqera platform using this resource.\n\nCredentials store authentication information for accessing cloud providers,\nGit repositories, container registries, and other external services\nwithin the Seqera Platform workflows.\n\nTo rotate GitHub App secrets, change a managed field such as `description` in the same apply.\nChanges to write-only secret values alone do not trigger an update.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
@@ -517,17 +517,23 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"client_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
+								WriteOnly: true,
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
+								WriteOnly: true,
 							},
 							"slug": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
 							"webhook_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
+								WriteOnly: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -864,7 +870,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					`- ` + "`" + `azure` + "`" + `        → ` + "`" + `keys.azure` + "`" + `        (Azure Batch, shared-key auth)` + "\n" +
 					`- ` + "`" + `azure_entra` + "`" + `  → ` + "`" + `keys.azure_entra` + "`" + `  (Azure Batch, Entra service principal)` + "\n" +
 					`- ` + "`" + `azure-cloud` + "`" + `  → ` + "`" + `keys.azure_cloud` + "`" + `  (Azure Cloud / SingleVM, Entra service principal)` + "\n" +
-					`must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+					`- ` + "`" + `github_app` + "`" + `   → ` + "`" + `keys.github_app` + "`" + `   (GitHub App authentication)` + "\n" +
+					`must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "github_app", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",
@@ -873,6 +880,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"azure-cloud",
 						"google",
 						"github",
+						"github_app",
 						"gitlab",
 						"bitbucket",
 						"ssh",
@@ -916,8 +924,21 @@ func (r *CredentialResource) Configure(ctx context.Context, req resource.Configu
 }
 
 func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *CredentialResourceModel
-	var plan types.Object
+	var (
+		configData CredentialResourceModel
+		data       CredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -933,7 +954,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -970,7 +991,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1030,7 +1051,7 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1071,8 +1092,29 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 }
 
 func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *CredentialResourceModel
-	var plan types.Object
+	var (
+		configData CredentialResourceModel
+		data       CredentialResourceModel
+		plan       types.Object
+		stateData  CredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -1084,7 +1126,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1112,7 +1154,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -1172,7 +1214,7 @@ func (r *CredentialResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

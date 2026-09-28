@@ -18,7 +18,7 @@ import (
 var allKeyNames = []string{
 	"aws", "azure", "azure_cloud", "azure_entra", "azurerepos",
 	"bitbucket", "codecommit", "container_reg", "gitea", "github",
-	"gitlab", "google", "k8s", "local", "s3", "ssh", "seqeracompute", "tw_agent",
+	"gitlab", "github_app", "google", "k8s", "local", "s3", "ssh", "seqeracompute", "tw_agent",
 }
 
 // keyBlockTFType is the tftypes representation of a single key block (object with "id" string).
@@ -128,6 +128,7 @@ func TestCredentialsConfigValidator_ValidSingleKeyProviders(t *testing.T) {
 		"azure":         "azure",
 		"google":        "google",
 		"github":        "github",
+		"github_app":    "github_app",
 		"gitlab":        "gitlab",
 		"bitbucket":     "bitbucket",
 		"ssh":           "ssh",
@@ -276,6 +277,7 @@ func TestSchemaNameToKeysFieldName(t *testing.T) {
 		"ContainerRegistryKeys":     "container_reg",
 		"GiteaSecurityKeys":         "gitea",
 		"GitHubSecurityKeys":        "github",
+		"GitHubAppSecurityKeys":     "github_app",
 		"GitLabSecurityKeys":        "gitlab",
 		"GoogleSecurityKeys":        "google",
 		"K8sSecurityKeys":           "k8s",
