@@ -1398,6 +1398,8 @@ func (s *Agents) DeleteAgent(ctx context.Context, request operations.DeleteAgent
 		}
 	case httpRes.StatusCode == 403:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 404:
+		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

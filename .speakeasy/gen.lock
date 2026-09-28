@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: a1937e919b10518bb979cd4b287aa5ba
+  docChecksum: a5fc29db6e8c285d9226f384eeab2382
   docVersion: 1.226.2
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -45,6 +45,9 @@ trackedFiles:
   examples/resources/seqera_action/import.sh:
     id: 771fa2ccd8d1
     pristine_git_object: 8c64813c1c33e262ff021894a61e0a6354df681f
+  examples/resources/seqera_agent/import-by-string-id.tf: {}
+  examples/resources/seqera_agent/import.sh: {}
+  examples/resources/seqera_agent/resource.tf: {}
   examples/resources/seqera_aws_batch_ce/import-by-string-id.tf:
     id: 4811e134260a
     pristine_git_object: 4a52cca3c72f31414cf7695b70392a7b8e4f3649
@@ -321,6 +324,8 @@ trackedFiles:
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
+  internal/provider/agent_resource.go: {}
+  internal/provider/agent_resource_sdk.go: {}
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
@@ -1801,7 +1806,6 @@ trackedFiles:
   internal/sdk/models/shared/agentrundbdto.go: {}
   internal/sdk/models/shared/agentrunstatus.go: {}
   internal/sdk/models/shared/agentrunstatusresponse.go: {}
-  internal/sdk/models/shared/agentstatus.go: {}
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -6446,8 +6450,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateAgent:
     speakeasy-default-create-agent:
+      parameters:
+        query:
+          workspaceId: 777445
       requestBody:
-        application/json: {}
+        application/json: {"agentInstructions": "<value>", "name": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -6458,6 +6465,8 @@ examples:
       parameters:
         path:
           agentId: "<id>"
+        query:
+          workspaceId: 715915
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -6466,6 +6475,8 @@ examples:
       parameters:
         path:
           agentId: "<id>"
+        query:
+          workspaceId: 195595
       responses:
         "200":
           application/json: {}
@@ -6476,8 +6487,10 @@ examples:
       parameters:
         path:
           agentId: "<id>"
+        query:
+          workspaceId: 12637
       requestBody:
-        application/json: {}
+        application/json: {"agentInstructions": "<value>", "name": "<value>"}
       responses:
         "200":
           application/json: {}

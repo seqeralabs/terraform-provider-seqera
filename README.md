@@ -84,6 +84,7 @@ Available configuration:
 * [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
 * [seqera_aws_credential](docs/resources/aws_credential.md)
 * [seqera_action](docs/resources/action.md)
+* [seqera_agent](docs/resources/agent.md)
 * [seqera_aws_cloud_ce](docs/resources/aws_cloud_ce.md)
 * [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
 * [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)

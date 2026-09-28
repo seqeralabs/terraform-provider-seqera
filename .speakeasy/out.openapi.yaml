@@ -860,6 +860,8 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Agent create request
         required: true
@@ -892,6 +894,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#create
   /agents/launch:
     post:
       operationId: LaunchAgent
@@ -1051,12 +1056,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '204':
           description: OK - No content
@@ -1072,6 +1080,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#delete
     get:
       operationId: DescribeAgent
       summary: Describe agent
@@ -1083,12 +1094,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '200':
           description: OK
@@ -1114,6 +1128,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#read
     put:
       operationId: UpdateAgent
       summary: Update agent
@@ -1125,12 +1142,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Agent update request
         required: true
@@ -1169,6 +1189,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#update
   /agents/{agentId}/disable:
     post:
       operationId: DisableAgent
@@ -17044,18 +17067,10 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
-        createdBy:
-          type: integer
-          format: int64
-        createdByUserName:
-          type: string
-          nullable: true
         dateCreated:
           type: string
           format: date-time
+          description: Creation timestamp.
         description:
           type: string
           nullable: true
@@ -17064,9 +17079,12 @@ components:
           nullable: true
         id:
           type: string
+          description: >-
+            Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
         lastUpdated:
           type: string
           format: date-time
+          description: Last update timestamp.
         name:
           type: string
         serviceAccountId:
@@ -17076,14 +17094,27 @@ components:
         serviceAccountName:
           type: string
           nullable: true
+          description: Name of the bound service account, if any.
         status:
-          $ref: '#/components/schemas/Agent.Status'
-        updatedBy:
-          type: integer
-          format: int64
+          allOf:
+            - $ref: "#/components/schemas/Agent.Status"
+          description: >-
+            Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
+          x-speakeasy-param-suppress-computed-diff: true
         workspaceId:
           type: integer
           format: int64
+      x-speakeasy-entity: Agent
+      x-speakeasy-terraform-resource-name: agent
+      x-speakeasy-entity-description: |
+        Manage an agent in a Seqera workspace. An agent runs its
+        `agent_instructions` when triggered by a `seqera_action` with
+        `response_type = "agent"` (referencing `seqera_agent.x.id` as
+        `agent.agent_config_id`) or when launched directly.
+
+        Deleting an agent pauses every action that targets it. Agents are
+        created active; enabling and disabling is not managed by this
+        resource, and `status` reports the current state.
     AgentRun.Status:
       type: string
       enum:
@@ -19805,21 +19836,36 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
+          minLength: 1
+          maxLength: 50000
+          description: >-
+            Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
         description:
           type: string
           nullable: true
+          maxLength: 120
+          description: Short description of the agent, up to 120 characters.
         githubAppCredentialId:
           type: string
           nullable: true
+          description: >-
+            GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
           type: string
+          pattern: "^[A-Za-z0-9_-]+$"
+          minLength: 1
+          maxLength: 255
+          description: >-
+            Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
         serviceAccountId:
           type: integer
           format: int64
           nullable: true
+          description: >-
+            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
+      required:
+        - name
+        - agentInstructions
     CreateAgentResponse:
       type: object
       properties:
@@ -27245,21 +27291,36 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
+          minLength: 1
+          maxLength: 50000
+          description: >-
+            Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
         description:
           type: string
           nullable: true
+          maxLength: 120
+          description: Short description of the agent, up to 120 characters.
         githubAppCredentialId:
           type: string
           nullable: true
+          description: >-
+            GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
           type: string
+          pattern: "^[A-Za-z0-9_-]+$"
+          minLength: 1
+          maxLength: 255
+          description: >-
+            Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
         serviceAccountId:
           type: integer
           format: int64
           nullable: true
+          description: >-
+            Service account the agent runs as (`seqera_service_account.x.id`). When unset, the agent runs with the identity of whoever triggers it: for a `seqera_action`, the action's owner, which for Terraform-managed actions is the user behind the provider's token; for a direct launch, the launching user. Seqera intends every agent to have a service account: the Platform UI requires one when service accounts are enabled, and a future Platform release is expected to reject launches of agents without one, so set it wherever service accounts are available. When set, the service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with a conflict. Removing it from the configuration unbinds the service account on the next apply. Requires service accounts to be enabled on the Platform instance.
+      required:
+        - name
+        - agentInstructions
     UpdateAgentResponse:
       type: object
       properties:

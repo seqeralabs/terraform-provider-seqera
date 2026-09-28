@@ -11,7 +11,7 @@ type DeleteAgentRequest struct {
 	// Agent string identifier
 	AgentID string `pathParam:"style=simple,explode=false,name=agentId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeleteAgentRequest) GetAgentID() string {
@@ -21,9 +21,9 @@ func (d *DeleteAgentRequest) GetAgentID() string {
 	return d.AgentID
 }
 
-func (d *DeleteAgentRequest) GetWorkspaceID() *int64 {
+func (d *DeleteAgentRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

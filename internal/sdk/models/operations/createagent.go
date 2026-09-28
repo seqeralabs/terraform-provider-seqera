@@ -9,14 +9,14 @@ import (
 
 type CreateAgentRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Agent create request
 	CreateAgentRequest shared.CreateAgentRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateAgentRequest) GetWorkspaceID() *int64 {
+func (c *CreateAgentRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

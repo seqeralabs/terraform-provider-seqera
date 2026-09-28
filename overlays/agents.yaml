@@ -1,0 +1,255 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Agents Overlay
+  version: 0.0.0
+
+# ==============================================================================
+# AGENTS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Binds /agents to the seqera_agent resource. An agent is a workspace-scoped
+# configuration that a seqera_action (response_type = "agent") or a direct
+# launch runs. Enable/disable (/agents/{id}/enable|disable), launch and run
+# endpoints stay SDK-only.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+# resource "seqera_agent" "triage" {
+#   workspace_id       = seqera_workspace.main.id
+#   name               = "failed-run-triage"
+#   agent_instructions = "Summarise why the run failed and suggest a fix."
+#   service_account_id = seqera_service_account.ci.id
+# }
+#
+# ==============================================================================
+
+actions:
+  # -------------------------------------------------------------------------
+  # Operation-level entity bindings
+  # -------------------------------------------------------------------------
+  - target: $.paths["/agents"].post
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#create
+
+  - target: $.paths["/agents/{agentId}"].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#read
+
+  - target: $.paths["/agents/{agentId}"].put
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#update
+
+  - target: $.paths["/agents/{agentId}"].delete
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#delete
+
+  # -------------------------------------------------------------------------
+  # workspaceId: required and force-new (agents are workspace-scoped only)
+  # -------------------------------------------------------------------------
+  - target: $.paths["/agents"].post.parameters[?(@.name=="workspaceId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/agents/{agentId}"].get.parameters[?(@.name=="workspaceId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/agents/{agentId}"].put.parameters[?(@.name=="workspaceId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/agents/{agentId}"].delete.parameters[?(@.name=="workspaceId")]
+    update:
+      required: true
+      x-speakeasy-param-force-new: true
+
+  # agentId in the URL is the `id` returned by create.
+  - target: $.paths["/agents/{agentId}"].get.parameters[?(@.name=="agentId")]
+    update:
+      x-speakeasy-match: id
+  - target: $.paths["/agents/{agentId}"].put.parameters[?(@.name=="agentId")]
+    update:
+      x-speakeasy-match: id
+  - target: $.paths["/agents/{agentId}"].delete.parameters[?(@.name=="agentId")]
+    update:
+      x-speakeasy-match: id
+
+  # -------------------------------------------------------------------------
+  # Field cleanup
+  # -------------------------------------------------------------------------
+  # agentInstructionsTemplateId only records which UI template pre-filled the
+  # form (analytics); the API never derives instructions from it.
+  - target: $.components.schemas.CreateAgentRequest.properties.agentInstructionsTemplateId
+    remove: true
+  - target: $.components.schemas.UpdateAgentRequest.properties.agentInstructionsTemplateId
+    remove: true
+  - target: $.components.schemas.AgentDbDto.properties.agentInstructionsTemplateId
+    remove: true
+  # Audit metadata, not managed by the user.
+  - target: $.components.schemas.AgentDbDto.properties.createdBy
+    remove: true
+  - target: $.components.schemas.AgentDbDto.properties.createdByUserName
+    remove: true
+  - target: $.components.schemas.AgentDbDto.properties.updatedBy
+    remove: true
+
+  # -------------------------------------------------------------------------
+  # Entity binding
+  # -------------------------------------------------------------------------
+  - target: $.components.schemas.AgentDbDto
+    update:
+      x-speakeasy-entity: Agent
+      x-speakeasy-terraform-resource-name: agent
+      x-speakeasy-entity-description: |
+        Manage an agent in a Seqera workspace. An agent runs its
+        `agent_instructions` when triggered by a `seqera_action` with
+        `response_type = "agent"` (referencing `seqera_agent.x.id` as
+        `agent.agent_config_id`) or when launched directly.
+
+        Deleting an agent pauses every action that targets it. Agents are
+        created active; enabling and disabling is not managed by this
+        resource, and `status` reports the current state.
+
+  - target: $.components.schemas.AgentDbDto.properties.id
+    update:
+      description: >-
+        Agent identifier. Use it as `agent.agent_config_id` on
+        `seqera_action`.
+  - target: $.components.schemas.AgentDbDto.properties.serviceAccountName
+    update:
+      description: Name of the bound service account, if any.
+  - target: $.components.schemas.AgentDbDto.properties.dateCreated
+    update:
+      description: Creation timestamp.
+  - target: $.components.schemas.AgentDbDto.properties.lastUpdated
+    update:
+      description: Last update timestamp.
+
+  # status is a bare $ref; extensions next to a $ref are dropped, so wrap it
+  # in allOf to carry the suppress-diff extension.
+  - target: $.components.schemas.AgentDbDto.properties.status["$ref"]
+    remove: true
+  - target: $.components.schemas.AgentDbDto.properties.status
+    update:
+      allOf:
+        - $ref: "#/components/schemas/Agent.Status"
+      description: >-
+        Current status, `active` or `inactive`. It can change outside
+        Terraform: from the Platform UI, or automatically when the bound
+        service account stops participating in the workspace. Updating the
+        agent does not change it.
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # The backend rejects create and update without a name and instructions,
+  # but upstream declares neither as required.
+  - target: $.components.schemas.CreateAgentRequest
+    update:
+      required:
+        - name
+        - agentInstructions
+  - target: $.components.schemas.UpdateAgentRequest
+    update:
+      required:
+        - name
+        - agentInstructions
+
+  # -------------------------------------------------------------------------
+  # Request fields: descriptions and backend limits (become plan-time validators)
+  # -------------------------------------------------------------------------
+  - target: $.components.schemas.CreateAgentRequest.properties.name
+    update:
+      pattern: "^[A-Za-z0-9_-]+$"
+      minLength: 1
+      maxLength: 255
+      description: >-
+        Agent name: letters, numbers, dashes and underscores, up to 255
+        characters. Unique within the workspace.
+  - target: $.components.schemas.UpdateAgentRequest.properties.name
+    update:
+      pattern: "^[A-Za-z0-9_-]+$"
+      minLength: 1
+      maxLength: 255
+      description: >-
+        Agent name: letters, numbers, dashes and underscores, up to 255
+        characters. Unique within the workspace.
+
+  - target: $.components.schemas.CreateAgentRequest.properties.agentInstructions
+    update:
+      minLength: 1
+      maxLength: 50000
+      description: >-
+        Instructions the agent follows when it runs, up to 50000 characters.
+        They are appended to the platform's base agent prompt.
+  - target: $.components.schemas.UpdateAgentRequest.properties.agentInstructions
+    update:
+      minLength: 1
+      maxLength: 50000
+      description: >-
+        Instructions the agent follows when it runs, up to 50000 characters.
+        They are appended to the platform's base agent prompt.
+
+  - target: $.components.schemas.CreateAgentRequest.properties.description
+    update:
+      maxLength: 120
+      description: Short description of the agent, up to 120 characters.
+  - target: $.components.schemas.UpdateAgentRequest.properties.description
+    update:
+      maxLength: 120
+      description: Short description of the agent, up to 120 characters.
+
+  - target: $.components.schemas.CreateAgentRequest.properties.serviceAccountId
+    update:
+      description: >-
+        Service account the agent runs as (`seqera_service_account.x.id`).
+        When unset, the agent runs with the identity of whoever triggers it:
+        for a `seqera_action`, the action's owner, which for Terraform-managed
+        actions is the user behind the provider's token; for a direct launch,
+        the launching user. Seqera intends every agent to have a service
+        account: the Platform UI requires one when service accounts are
+        enabled, and a future Platform release is expected to reject launches
+        of agents without one, so set it wherever service accounts are
+        available. When set, the service account must already be a participant
+        in the workspace with a role that allows launching agents (configure
+        the `seqera_workspace_participant` first, by reference or with
+        `depends_on`), otherwise the apply fails with a conflict. Removing it
+        from the configuration unbinds the service account on the next apply.
+        Requires service accounts to be enabled on the Platform instance.
+  - target: $.components.schemas.UpdateAgentRequest.properties.serviceAccountId
+    update:
+      description: >-
+        Service account the agent runs as (`seqera_service_account.x.id`).
+        When unset, the agent runs with the identity of whoever triggers it:
+        for a `seqera_action`, the action's owner, which for Terraform-managed
+        actions is the user behind the provider's token; for a direct launch,
+        the launching user. Seqera intends every agent to have a service
+        account: the Platform UI requires one when service accounts are
+        enabled, and a future Platform release is expected to reject launches
+        of agents without one, so set it wherever service accounts are
+        available. When set, the service account must already be a participant
+        in the workspace with a role that allows launching agents (configure
+        the `seqera_workspace_participant` first, by reference or with
+        `depends_on`), otherwise the apply fails with a conflict. Removing it
+        from the configuration unbinds the service account on the next apply.
+        Requires service accounts to be enabled on the Platform instance.
+
+  - target: $.components.schemas.CreateAgentRequest.properties.githubAppCredentialId
+    update:
+      description: >-
+        GitHub App credential the agent uses for GitHub access
+        (`seqera_github_app_credential.x.id`). Requires GitHub App credentials
+        to be enabled on the Platform instance.
+  - target: $.components.schemas.UpdateAgentRequest.properties.githubAppCredentialId
+    update:
+      description: >-
+        GitHub App credential the agent uses for GitHub access
+        (`seqera_github_app_credential.x.id`). Requires GitHub App credentials
+        to be enabled on the Platform instance.

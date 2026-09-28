@@ -11,7 +11,7 @@ type UpdateAgentRequest struct {
 	// Agent string identifier
 	AgentID string `pathParam:"style=simple,explode=false,name=agentId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Agent update request
 	UpdateAgentRequest shared.UpdateAgentRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateAgentRequest) GetAgentID() string {
 	return u.AgentID
 }
 
-func (u *UpdateAgentRequest) GetWorkspaceID() *int64 {
+func (u *UpdateAgentRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

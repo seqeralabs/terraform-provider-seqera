@@ -2,8 +2,8 @@ speakeasyVersion: 1.799.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:adc6ee97e98d8ce0d35a7346acc11e8d9d7cf3572a6aa61fd7f4a2fa59149de3
-        sourceBlobDigest: sha256:468c250908b2bd3693534c20941e76d3468aa47f7b4c38cef86b8fa6a8dee093
+        sourceRevisionDigest: sha256:bc16b198ad1841713aa5e88002f67028b48dd997aecf81af21df9a0333e0c2e4
+        sourceBlobDigest: sha256:336d8931aebf5a0ccc622f89e91465a164d7083f05caeb6a4eeb4988f1e4dbe4
         tags:
             - latest
             - 1.226.2
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:adc6ee97e98d8ce0d35a7346acc11e8d9d7cf3572a6aa61fd7f4a2fa59149de3
-        sourceBlobDigest: sha256:468c250908b2bd3693534c20941e76d3468aa47f7b4c38cef86b8fa6a8dee093
+        sourceRevisionDigest: sha256:bc16b198ad1841713aa5e88002f67028b48dd997aecf81af21df9a0333e0c2e4
+        sourceBlobDigest: sha256:336d8931aebf5a0ccc622f89e91465a164d7083f05caeb6a4eeb4988f1e4dbe4
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -23,6 +23,7 @@ workflow:
             overlays:
                 - location: overlays/nullable-fixes.yaml
                 - location: overlays/actions.yaml
+                - location: overlays/agents.yaml
                 - location: overlays/api-description.yaml
                 - location: overlays/aws-compute-env.yaml
                 - location: overlays/compute-env-aws-batch.yaml
