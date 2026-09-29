@@ -106,14 +106,14 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Optional:    true,
 				Description: `Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.`,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[^@]+@[^.]+\.iam\.gserviceaccount\.com$`), "must match pattern "+regexp.MustCompile(`^[^@]+@[^.]+\.iam\.gserviceaccount\.com$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.iam\.gserviceaccount\.com$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.iam\.gserviceaccount\.com$`).String()),
 					custom_stringvalidators.GoogleCredentialKeysValidator(),
 				},
 			},
 			"token_audience": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `OIDC audience claim embedded in the Seqera-issued JWT. Defaults to ` + "`" + `//iam.googleapis.com/<workload_identity_provider>` + "`" + `, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.`,
+				Description: `OIDC audience claim embedded in the Seqera-issued JWT. Defaults to ` + "`" + `//iam.googleapis.com/<workload_identity_provider>` + "`" + `, which matches GCP's allowed-audiences check. Only set when the workload identity provider is configured with a custom allowed audience.`,
 			},
 			"workload_identity_provider": schema.StringAttribute{
 				Computed:    true,

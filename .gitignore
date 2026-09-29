@@ -15,6 +15,7 @@ terraform-provider-* # We should not include the provider binary in the reposito
 !*.tfvars.example
 *.code-workspace
 settings.local.json
+.idea
 # LLMS
 .claude
 .agents

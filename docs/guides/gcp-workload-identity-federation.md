@@ -7,44 +7,62 @@ description: |-
 
 # GCP Credentials with Workload Identity Federation
 
-This guide creates a `seqera_google_credential` that authenticates to Google Cloud using [Workload Identity Federation (WIF)](https://docs.cloud.google.com/iam/docs/workload-identity-federation) instead of a long-lived service account key. The Seqera Platform acts as an OIDC identity provider: it mints a short-lived JWT on each workflow run, GCP's Security Token Service exchanges that JWT for a federated token, and Seqera then impersonates a GCP service account to drive Batch, Storage, and other Google APIs.
+This guide creates a `seqera_google_credential` that authenticates to Google Cloud using [Workload Identity Federation (WIF)](https://docs.cloud.google.com/iam/docs/workload-identity-federation) instead of a long-lived service account key. The Seqera Platform acts as an OIDC identity provider: it mints a short-lived token for each operation, GCP's Security Token Service exchanges that token for a federated token, and Seqera then impersonates a GCP service account to call Batch, Storage, and other Google APIs.
 
-~> **Note:** WIF is the recommended way to grant Seqera access to GCP and is the most secure path, since no long-lived service account key is stored in the platform. The alternative is uploading a service account key as `data`, which is long-lived and must be rotated manually.
+~> **Note:** WIF is the recommended way to grant Seqera access to GCP, since no long-lived service account key is stored in the platform. The alternative is uploading a service account key as `data`, which is long-lived and must be rotated manually. WIF is gated behind the Identity Federation feature flag; where it is disabled, creating the credential fails at apply time.
 
 ## How the trust works
 
-The Seqera Platform's OIDC issuer is the `issuer` value advertised at
-`<host>/.well-known/openid-configuration`. For Seqera Cloud production this
-is `https://cloud.seqera.io/api`; for Enterprise installs it is your
-install's `/api` URL (whatever your browser hits to load the platform UI,
-with `/api` appended). Note that for Seqera Cloud the issuer is NOT
-`https://api.cloud.seqera.io` even though the API itself is served from
-that host — the OIDC `iss` claim uses the non-`api.` hostname with `/api` as
-the path. GCP STS does a byte-exact match between this value and the `iss`
-claim in the JWT, so getting it wrong silently breaks the federation. Always
-verify by fetching `/.well-known/openid-configuration` against your target
-deployment before setting `issuer-uri`.
+Seqera signs a token with these claims:
 
-For each workflow run, the platform signs a JWT with these claims:
+| Claim          | Value                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `iss`          | The Seqera OIDC issuer URL, for example `https://cloud.seqera.io/api`                                   |
+| `aud`          | `//iam.googleapis.com/<workload_identity_provider>` by default, or `token_audience` if you set it       |
+| `sub`          | `org:<ORG_ID>:wsp:<WORKSPACE_ID>:<WORKLOAD>` for workspaces inside an org, or `usr:<USER_ID>:<WORKLOAD>` for a personal workspace |
+| `principal_id` | The internal numeric ID of the acting user, on requests a user initiated                                |
 
-| Claim        | Value                                                                                                                         |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `iss`        | The Seqera public API endpoint, e.g. `https://cloud.seqera.io/api`                                                            |
-| `aud`        | `//iam.googleapis.com/<workload_identity_provider>` by default, or `token_audience` if you set it                             |
-| `sub`        | `org:<ORG_ID>:wsp:<WORKSPACE_ID>:workflow` for workspaces inside an org, or `usr:<USER_ID>:workflow` for a personal workspace |
-| `iat`, `exp` | Issued-at and a one-hour expiry                                                                                               |
+The last segment of `sub` is the workload type, and **one credential presents all four**:
 
-The `sub` claim is what GCP's IAM binding grants access to, so pinning the binding to a specific Seqera org/workspace or user is what scopes the federation. Any workflow run in a different workspace produces a different `sub` and will not match the binding.
+| Workload   | Used by                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------- |
+| `platform` | Credential validation, compute environment describe and provisioning, job submission, run logs |
+| `data`     | Data Explorer browsing and presigned download and upload URLs                           |
+| `studio`   | A Studio session reading and writing its own data                                       |
+| `workflow` | The bucket-reachability check before a pipeline launch                                  |
+
+A binding that admits only one workload type breaks the others. Credential validation presents `platform`, so the credential cannot even be saved without it.
+
+The issuer URL is the Platform's public address with `/api`, and GCP matches it byte for byte against the token's `iss`. The [`seqera_gcp_credentials_federation_setup`](../data-sources/gcp_credentials_federation_setup.md) data source returns the exact value for your installation, together with the attribute mapping and attribute condition described below, so you do not need to assemble them by hand.
+
+### Attribute mapping and audit
+
+GCP Cloud Audit Logs record only the mapped `google.subject`. The Platform therefore recommends this mapping, which appends the acting user to the subject:
+
+```
+google.subject = assertion.sub + (has(assertion.principal_id) ? ':usr:' + assertion.principal_id : '')
+```
+
+A user-initiated request is then logged as, for example, `org:<ORG_ID>:wsp:<WORKSPACE_ID>:data:usr:448291`. The `has()` guard keeps background tokens (cache refreshes, checkpoints, job polling), which carry no `principal_id`, valid. Data-plane activity such as Cloud Storage reads only appears in Data Access audit logs, which are off by default.
+
+### Attribute condition
+
+The Seqera issuer is shared by every organization and workspace on an installation. Pin the provider to your tenant with an attribute condition, otherwise a pool-wide binding also accepts tokens minted for other workspaces:
+
+```
+assertion.sub.startsWith('org:<ORG_ID>:wsp:<WORKSPACE_ID>:')
+```
 
 ## Prerequisites
 
-- A Seqera Platform workspace you can create credentials in, and the **numeric** org ID and workspace ID (not the slug). Retrieve these from the workspace URL or the `seqera_workspace` data source.
+- Identity Federation enabled for your Seqera organization.
+- A Seqera workspace you can create credentials in, and its **numeric** org ID and workspace ID (not the slug).
 - A GCP project where you can create a workload identity pool and provider, a service account, and IAM bindings.
-- Your project **number** (not project ID). `gcloud projects describe PROJECT_ID --format='value(projectNumber)'`.
+- Your project **number** (not project ID): `gcloud projects describe PROJECT_ID --format='value(projectNumber)'`.
 
 ## Step 1: Create the GCP workload identity pool and provider
 
-On the GCP side, create a pool, an OIDC provider inside it that trusts Seqera as the issuer, and a service account for Seqera to impersonate. The trust policy is enforced by three fields: the `issuer-uri`, the `allowed-audiences`, and the `attribute-mapping` that extracts `sub` from the Seqera JWT.
+Create a pool and an OIDC provider inside it that trusts Seqera as the issuer, with the attribute mapping and condition above.
 
 ```shell
 # Pool — logical container for external identities.
@@ -57,42 +75,42 @@ gcloud iam workload-identity-pools providers create-oidc seqera-provider \
     --location=global \
     --workload-identity-pool=seqera-pool \
     --issuer-uri="https://cloud.seqera.io/api" \
-    --allowed-audiences="//iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/seqera-pool/providers/seqera-provider" \
-    --attribute-mapping="google.subject=assertion.sub"
+    --attribute-mapping="google.subject=assertion.sub + (has(assertion.principal_id) ? ':usr:' + assertion.principal_id : '')" \
+    --attribute-condition="assertion.sub.startsWith('org:ORG_ID:wsp:WORKSPACE_ID:')"
+```
 
-# Service account Seqera will impersonate. Grant it the GCP roles your
-# pipelines need (e.g. roles/batch.jobsEditor, roles/storage.objectAdmin).
+For Enterprise installs, replace `--issuer-uri` with your installation's issuer URL, for example `https://seqera.example.com/api`. Leave the allowed audiences at their default unless you set a custom `token_audience` on the credential.
+
+~> **Note:** Pool and provider IDs cannot be changed. To rename one, create a new pool or provider instead.
+
+## Step 2: Create the service account and let the pool impersonate it
+
+Create the service account Seqera will impersonate, and grant `roles/iam.workloadIdentityUser` on it to the whole pool. The provider's attribute condition already restricts the pool to your tenant.
+
+```shell
 gcloud iam service-accounts create seqera-runner \
     --display-name="Seqera workflow runner"
-```
 
-Substitute `PROJECT_NUMBER` in `--allowed-audiences` for your project number. The audience must exactly match the value Seqera puts in the JWT `aud` claim, which defaults to `//iam.googleapis.com/<workload_identity_provider>`.
-
-For Enterprise installs, replace `--issuer-uri` with the `/api` endpoint of your install, for example `https://seqera.example.com/api`.
-
-## Step 2: Grant the Seqera subject permission to impersonate the service account
-
-Bind the specific Seqera subject that will run workflows to `roles/iam.workloadIdentityUser` on the service account.
-
-For a workspace inside an organisation:
-
-```shell
 gcloud iam service-accounts add-iam-policy-binding \
     seqera-runner@PROJECT_ID.iam.gserviceaccount.com \
     --role=roles/iam.workloadIdentityUser \
-    --member="principal://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/seqera-pool/subject/org:ORG_ID:wsp:WORKSPACE_ID:workflow"
-```
+    --member="principalSet://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/seqera-pool/*"
 
-For a personal workspace (no org):
-
-```shell
+# Presigned download URLs are signed with the IAM signBlob API, which needs
+# the service account to be able to sign as itself.
 gcloud iam service-accounts add-iam-policy-binding \
     seqera-runner@PROJECT_ID.iam.gserviceaccount.com \
-    --role=roles/iam.workloadIdentityUser \
-    --member="principal://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/seqera-pool/subject/usr:USER_ID:workflow"
+    --role=roles/iam.serviceAccountTokenCreator \
+    --member="serviceAccount:seqera-runner@PROJECT_ID.iam.gserviceaccount.com"
 ```
 
-A `principalSet://` binding on `attribute.*` allows any workspace in the pool to use the service account. This is typically too broad; prefer per-workspace bindings and add more as more workspaces need access.
+~> **Warning:** Do not bind exact subjects (`.../seqera-pool/subject/org:ORG_ID:wsp:WORKSPACE_ID:workflow`). A binding on one subject admits only that workload type, and once the attribute mapping appends the acting user, a user-initiated request's mapped subject no longer matches an exact binding at all. To scope a shared pool to individual workspaces, use an `attribute.workspace` binding instead, as shown in [Scoping a shared pool per workspace](#scoping-a-shared-pool-per-workspace).
+
+Then grant the service account the permissions your workloads need:
+
+- **Compute environments:** the Batch, Logging, and Compute describe permissions the compute environment needs, plus job submission. Forge-created environments also need `iam.serviceAccounts.create`, `iam.serviceAccounts.delete`, `iam.serviceAccounts.get`, `resourcemanager.projects.getIamPolicy`, `resourcemanager.projects.setIamPolicy`, and `compute.*` on the instances it creates.
+- **Work directory bucket:** object read and write, for example `roles/storage.objectUser`, and `storage.objects.list`, which the check before each pipeline launch uses.
+- **Data Explorer:** read on the buckets you browse, and write for uploads, for example `roles/storage.objectViewer` and `roles/storage.objectCreator`.
 
 ## Step 3: Define the Seqera credential
 
@@ -129,7 +147,7 @@ resource "seqera_google_credential" "wif" {
 }
 ```
 
-Setting `workload_identity_provider` and `service_account_email` together selects WIF mode — the platform mints OIDC tokens and exchanges them via GCP STS, and no `data` (service account key) is stored. The two fields must be provided together; the credential's plan validator rejects a configuration that sets only one. If you need to override the audience embedded in the JWT — for example when fronting multiple pools with the same Seqera workspace — set `token_audience`.
+Setting `workload_identity_provider` and `service_account_email` together selects WIF mode: no `data` (service account key) is stored. The two fields must be provided together; the credential's plan validator rejects a configuration that sets only one. Set `token_audience` only when the provider is configured with a custom allowed audience.
 
 ## Step 4: Apply and use
 
@@ -137,7 +155,9 @@ Setting `workload_identity_provider` and `service_account_email` together select
 terraform apply
 ```
 
-Once the credential is created, reference it from any resource that accepts `credentials_id`, such as a Google Batch compute environment:
+The Platform validates the credential when it is saved by performing a live token exchange and impersonation, so a wrong issuer, mapping, condition, or binding shows up straight away: the credential is marked invalid with the reason GCP returned. See [Troubleshooting](#troubleshooting).
+
+Reference the credential from any resource that accepts `credentials_id`, such as a Google Batch compute environment:
 
 ```terraform
 resource "seqera_google_batch_ce" "example" {
@@ -148,18 +168,9 @@ resource "seqera_google_batch_ce" "example" {
 }
 ```
 
-The first workflow run will surface any trust-policy mismatch — GCP returns a clear error message that names the failing claim (`iss`, `aud`, or `sub`). See [Troubleshoot Workload Identity Federation](https://docs.cloud.google.com/iam/docs/troubleshooting-workload-identity-federation) for a list of error codes.
-
 ## Managing the GCP resources with the google provider
 
-The gcloud flow above requires operator access to the GCP project. To manage the pool, provider, service account, and IAM binding from the same Terraform configuration, pair the `seqera` provider with `hashicorp/google`.
-
-The order of operations matches the manual flow:
-
-1. Terraform creates the workload identity pool and OIDC provider, trusting the Seqera issuer.
-2. Terraform creates the service account Seqera will impersonate, and attaches any project-level roles the service account needs for your workloads.
-3. Terraform creates the IAM binding on the service account, granting `roles/iam.workloadIdentityUser` to the exact Seqera subject that will federate in.
-4. Terraform creates `seqera_google_credential` with the provider path and service account email. Downstream resources that trigger WIF token exchange (compute environments and similar) set `depends_on = [google_service_account_iam_member.seqera_impersonate]` so the binding is live before Seqera uses the credential.
+To manage the pool, provider, service account, and IAM bindings from the same Terraform configuration, pair the `seqera` provider with `hashicorp/google`. The `seqera_gcp_credentials_federation_setup` data source supplies the issuer, attribute mapping, and attribute condition for the workspace.
 
 ```terraform
 terraform {
@@ -178,51 +189,36 @@ variable "workspace_id" {
   type = number
 }
 
-variable "org_id" {
-  type        = number
-  description = "Seqera organization ID that owns the workspace."
-}
-
 variable "gcp_project_id" {
   type = string
 }
 
-variable "seqera_issuer" {
-  type        = string
-  default     = "https://cloud.seqera.io/api"
-  description = "Seqera Platform OIDC issuer. Use the /api base URL for Enterprise installs."
-}
-
-data "google_project" "current" {
-  project_id = var.gcp_project_id
-}
-
-locals {
-  pool_id     = "seqera-pool"
-  provider_id = "seqera-provider"
-
-  provider_path = "projects/${data.google_project.current.number}/locations/global/workloadIdentityPools/${local.pool_id}/providers/${local.provider_id}"
-
-  seqera_subject = "org:${var.org_id}:wsp:${var.workspace_id}:workflow"
+data "seqera_gcp_credentials_federation_setup" "this" {
+  workspace_id = var.workspace_id
 }
 
 resource "google_iam_workload_identity_pool" "seqera" {
-  workload_identity_pool_id = local.pool_id
+  workload_identity_pool_id = "seqera-pool"
   display_name              = "Seqera Platform"
 }
 
 resource "google_iam_workload_identity_pool_provider" "seqera" {
   workload_identity_pool_id          = google_iam_workload_identity_pool.seqera.workload_identity_pool_id
-  workload_identity_pool_provider_id = local.provider_id
+  workload_identity_pool_provider_id = "seqera-provider"
 
   oidc {
-    issuer_uri        = var.seqera_issuer
-    allowed_audiences = ["//iam.googleapis.com/${local.provider_path}"]
+    issuer_uri = data.seqera_gcp_credentials_federation_setup.this.oidc_issuer_url
   }
 
+  # GCP writes only google.subject to Cloud Audit Logs, so the acting user is
+  # folded into the subject rather than mapped to a custom attribute.
   attribute_mapping = {
-    "google.subject" = "assertion.sub"
+    "google.subject" = data.seqera_gcp_credentials_federation_setup.this.google_subject_mapping
   }
+
+  # The Seqera issuer is shared by every tenant of an installation; this pins
+  # the provider to subjects minted for this workspace.
+  attribute_condition = data.seqera_gcp_credentials_federation_setup.this.recommended_attribute_condition
 }
 
 resource "google_service_account" "seqera_runner" {
@@ -230,8 +226,7 @@ resource "google_service_account" "seqera_runner" {
   display_name = "Seqera workflow runner"
 }
 
-# Attach the GCP roles your workloads need here — see Google Batch and
-# Cloud Storage permission references for the exact role set.
+# Attach the GCP roles your workloads need here, for example:
 #
 # resource "google_project_iam_member" "seqera_runner_batch" {
 #   project = var.gcp_project_id
@@ -239,10 +234,19 @@ resource "google_service_account" "seqera_runner" {
 #   member  = "serviceAccount:${google_service_account.seqera_runner.email}"
 # }
 
+# Every identity the pool admits may impersonate the service account; the
+# provider's attribute condition limits those to this workspace.
 resource "google_service_account_iam_member" "seqera_impersonate" {
   service_account_id = google_service_account.seqera_runner.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principal://iam.googleapis.com/projects/${data.google_project.current.number}/locations/global/workloadIdentityPools/${local.pool_id}/subject/${local.seqera_subject}"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.seqera.name}/*"
+}
+
+# Presigned download URLs are signed with the IAM signBlob API.
+resource "google_service_account_iam_member" "seqera_sign_blob" {
+  service_account_id = google_service_account.seqera_runner.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${google_service_account.seqera_runner.email}"
 }
 
 resource "seqera_google_credential" "wif" {
@@ -250,18 +254,50 @@ resource "seqera_google_credential" "wif" {
   workspace_id = var.workspace_id
 
   service_account_email      = google_service_account.seqera_runner.email
-  workload_identity_provider = local.provider_path
+  workload_identity_provider = google_iam_workload_identity_pool_provider.seqera.name
 
+  # The Platform validates the credential on save, so the bindings must be
+  # live first.
   depends_on = [
-    google_iam_workload_identity_pool_provider.seqera,
     google_service_account_iam_member.seqera_impersonate,
+    google_service_account_iam_member.seqera_sign_blob,
   ]
 }
 ```
 
+### Scoping a shared pool per workspace
+
+When one pool serves several Seqera workspaces, pin the provider to your organization instead of a single workspace, and map the workspace ID out of the subject so each service account can be bound to one workspace:
+
+```terraform
+variable "org_id" {
+  type        = number
+  description = "Seqera organization ID that owns the workspaces."
+}
+
+resource "google_iam_workload_identity_pool_provider" "seqera" {
+  # ... as above ...
+
+  attribute_mapping = {
+    "google.subject"      = data.seqera_gcp_credentials_federation_setup.this.google_subject_mapping
+    "attribute.workspace" = "assertion.sub.extract('wsp:{workspace}:')"
+  }
+
+  attribute_condition = "assertion.sub.startsWith('org:${var.org_id}:')"
+}
+
+resource "google_service_account_iam_member" "seqera_impersonate" {
+  service_account_id = google_service_account.seqera_runner.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.seqera.name}/attribute.workspace/${var.workspace_id}"
+}
+```
+
+One `attribute.workspace` binding covers every workload type of that workspace. It reads the raw `sub`, so appending the acting user in `google.subject` does not affect it.
+
 ### Variant — attach to an existing workload identity pool
 
-If the pool and provider are already managed out of band — typical when a central platform team owns WIF for the whole organization — skip creating them and look them up as data sources. You only need to own the service account and its IAM binding, and pass the existing provider's full path into the Seqera credential.
+If the pool and provider are already managed out of band — typical when a central platform team owns WIF for the whole organization — look up the provider as a data source. You only need to own the service account and its IAM bindings, and pass the existing provider's full path into the Seqera credential.
 
 ```terraform
 variable "existing_pool_id" {
@@ -286,18 +322,32 @@ resource "seqera_google_credential" "wif" {
 }
 ```
 
-The existing provider's `issuer-uri` must already be set to the Seqera issuer (`https://cloud.seqera.io/api` for Cloud, your `/api` endpoint for Enterprise). If the central team owns a single shared provider for multiple external issuers, they will need to confirm Seqera is one of them.
+The existing provider must already use the Seqera issuer URL, and its attribute condition and bindings must admit this workspace's subjects.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+| ------- | ----- | --- |
+| Validation fails with an issuer or discovery error | The issuer URL is wrong, missing `/api`, or not publicly reachable over HTTPS | Use `oidc_issuer_url` from the data source. GCP must be able to fetch `<issuer>/.well-known/openid-configuration` |
+| Validation fails with an audience mismatch | A custom allowed audience on the provider, or a provider that was recreated under a new ID | Set `token_audience` to the provider's allowed audience, or update `workload_identity_provider` |
+| The exchange succeeds but impersonation is denied | `roles/iam.workloadIdentityUser` is missing, or bound to exact subjects | Bind the whole pool or `attribute.workspace`, as in Step 2 |
+| `Could not obtain a value for google.subject` | The mapping uses `principal_id` without the `has()` guard | Use the mapping from the data source |
+| Presigned downloads fail to sign | The service account lacks the `serviceAccountTokenCreator` binding on itself | Add it, as in Step 2 |
+| Pipeline launch refused with `WORK_DIR_INVALID` | The service account cannot list the work directory bucket | Grant `storage.objects.list` on the bucket |
+| No acting user in the audit logs | The mapping does not append `principal_id`, or Data Access logs are off | Use the recommended mapping and enable Data Access audit logs |
+
+See [Troubleshoot Workload Identity Federation](https://docs.cloud.google.com/iam/docs/troubleshooting-workload-identity-federation) for GCP's error codes.
 
 ## Notes
 
-- The `workload_identity_provider` path uses the GCP **project number**, not the project ID. Passing the project ID silently produces tokens with an `aud` that GCP cannot match.
-- The `sub` claim is derived from the workspace that owns the credential. Moving the credential between workspaces — or changing `workspace_id` — forces replacement and produces a new subject, so the GCP IAM binding must be updated in lockstep.
-- Personal-workspace credentials use the `usr:<USER_ID>:workflow` subject. Prefer org/workspace credentials in production — a personal workspace binding is tied to one individual's account.
-- `token_audience` is an advanced override. The default `//iam.googleapis.com/<workload_identity_provider>` is the value GCP's `allowed-audiences` check expects; set a custom audience only when fronting multiple pools with the same credential.
-- Credentials are tied to the workspace they were created in. Changing `workspace_id` forces replacement.
+- The `workload_identity_provider` path uses the GCP **project number**, not the project ID.
+- The subjects are derived from the workspace that owns the credential. Changing `workspace_id` forces replacement and produces new subjects, so the attribute condition and bindings must be updated in lockstep.
+- Personal-workspace credentials use `usr:<USER_ID>:<WORKLOAD>` subjects, and the data source returns the matching attribute condition. Prefer org workspace credentials in production — a personal workspace binding is tied to one individual's account.
+- `principal_id` is an internal numeric user ID, not an email. Background operations carry none, so some audit entries show the workspace but no user.
 
 ## Related
 
 - Resource reference: [`seqera_google_credential`](../resources/google_credential.md)
+- Data source reference: [`seqera_gcp_credentials_federation_setup`](../data-sources/gcp_credentials_federation_setup.md)
 - [Configure Workload Identity Federation with other identity providers](https://docs.cloud.google.com/iam/docs/workload-identity-federation-with-other-providers) — authoritative GCP reference for the pool, provider, and IAM binding flow used above.
 - [Best practices for using Workload Identity Federation](https://cloud.google.com/iam/docs/best-practices-for-using-workload-identity-federation) — audience validation, attribute conditions, and principal scoping guidance.

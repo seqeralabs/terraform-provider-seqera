@@ -20,7 +20,7 @@ FEATURES:
 
 - **New `seqera_aws_credentials_federation_setup` and `seqera_gcp_credentials_federation_setup` data sources.** Surface `GET /credentials/federation-setup` — the values an administrator copies into their cloud provider console before a workload-identity credential can be created. Each data source flattens the API's untyped `[{label, value}]` list into typed attributes for its provider, and keeps the raw `setup_values` list alongside so nothing the API returns is unreachable. Only AWS and GCP are surfaced; the endpoint returns an empty list for every other provider.
 
-- **`workloadIdentity` mode on `seqera_aws_credential`.** The `mode` enum now accepts `workloadIdentity` — OIDC workload identity federation against `assume_role_arn`, with no stored long-lived key. Requires `access_key`, `secret_key` and `use_external_id` to be unset. It is gated behind the Identity Federation feature flag and rejected for Forge compute environments, neither of which is detectable at plan time, so it can still fail at apply.
+- **`workloadIdentity` mode on `seqera_aws_credential`.** The `mode` enum now accepts `workloadIdentity` — OIDC workload identity federation against `assume_role_arn`, with no stored long-lived key. The mode rules are checked at plan time: `role` and `workloadIdentity` require `assume_role_arn` and reject `access_key` and `secret_key`, and `workloadIdentity` also rejects `use_external_id = true`. The Platform does not allow changing the mode of an existing credential, so changing `mode` now forces replacement instead of an update that fails at apply. It is gated behind the Identity Federation feature flag, which is not detectable at plan time, so it can still fail at apply. See the new [AWS Credentials with Workload Identity Federation](docs/guides/aws-workload-identity-federation.md) guide and the `resource_wif.tf` example.
 
 - **Customer-managed KMS key for pipeline-secret encryption on AWS.** New `config.secrets_kms_key_id` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_aws_compute_env` and the matching `seqera_compute_env` blocks. Accepts a key ARN or key id, and encrypts the temporary Secrets Manager secrets created for runs that use pipeline secrets. When omitted, the AWS-managed default Secrets Manager key is used.
 
@@ -46,6 +46,8 @@ BUG FIXES:
 
   No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
 
+- **`seqera_google_credential` accepts every service account email the Platform accepts.** `service_account_email` now uses the Platform's pattern, `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.iam\.gserviceaccount\.com$`. The previous pattern rejected service accounts of domain-scoped projects, whose email has dots in the project part, and accepted local parts with characters such as spaces that the Platform rejects.
+
 NOTES:
 
 - **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
@@ -53,6 +55,8 @@ NOTES:
 - **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
 
 - **Fusion examples corrected on the Cloud compute environments.** The `seqera_aws_cloud_ce` and `seqera_gcp_cloud_ce` examples set `enable_wave` and `enable_fusion`, which are not attributes of those resources — Fusion v2 and Wave are always on for Cloud compute environments and are not user-settable. The examples now omit them.
+
+- **GCP Workload Identity Federation guide rewritten to match the Platform.** It described a single `:workflow` subject and told readers to bind exact subjects, but one credential presents four subjects (`platform`, `data`, `studio`, `workflow`) and credential validation uses `platform`, so a configuration built from the guide failed validation. The guide now binds the whole pool, pinned to the workspace with the recommended attribute condition, sets the audit `google.subject` mapping, adds the `roles/iam.serviceAccountTokenCreator` self-binding needed for presigned downloads, and takes the issuer, mapping and condition from `seqera_gcp_credentials_federation_setup`. The `token_audience` description now matches the Platform: set it only when the provider has a custom allowed audience.
 
 # v0.42.0
 

@@ -56,7 +56,7 @@ type GoogleCredential struct {
 	WorkloadIdentityProvider *string `json:"workload_identity_provider,omitempty"`
 	// Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
 	ServiceAccountEmail *string `json:"service_account_email,omitempty"`
-	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when the workload identity provider is configured with a custom allowed audience.
 	TokenAudience *string `json:"token_audience,omitempty"`
 }
 
@@ -189,7 +189,7 @@ type GoogleCredentialOutput struct {
 	WorkloadIdentityProvider *string `json:"workload_identity_provider,omitempty"`
 	// Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
 	ServiceAccountEmail *string `json:"service_account_email,omitempty"`
-	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+	// OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when the workload identity provider is configured with a custom allowed audience.
 	TokenAudience *string `json:"token_audience,omitempty"`
 }
 
