@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	agent_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/agent_data"
 	compute_env_enabled "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/compute_env_enabled"
 	custom_role_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/custom_role_data"
 	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
@@ -27,6 +28,7 @@ import (
 	pipeline_secret_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data"
 	pipeline_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_version"
 	pipeline_versions_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data"
+	service_account_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_data"
 	team_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_data"
 	team_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member"
 	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
@@ -144,6 +146,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewAWSComputeEnvResource,
 		NewAWSCredentialResource,
 		NewActionResource,
+		NewAgentResource,
 		NewAwsCloudCEResource,
 		NewAzureBatchCEResource,
 		NewAzureCloudCEResource,
@@ -173,6 +176,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewPipelineSecretResource,
 		NewPrimaryComputeEnvResource,
 		NewSSHCredentialResource,
+		NewServiceAccountResource,
 		NewSlurmCEResource,
 		NewStudiosResource,
 		NewTeamsResource,
@@ -206,6 +210,8 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		pipeline_data.NewDataSource,
 		pipeline_secret_data.NewDataSource,
 		pipeline_versions_data.NewDataSource,
+		service_account_data.NewDataSource,
+		agent_data.NewDataSource,
 	}
 }
 

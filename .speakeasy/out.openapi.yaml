@@ -860,6 +860,8 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Agent create request
         required: true
@@ -892,6 +894,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#create
   /agents/launch:
     post:
       operationId: LaunchAgent
@@ -1051,12 +1056,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '204':
           description: OK - No content
@@ -1072,6 +1080,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#delete
     get:
       operationId: DescribeAgent
       summary: Describe agent
@@ -1083,12 +1094,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       responses:
         '200':
           description: OK
@@ -1114,6 +1128,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#read
     put:
       operationId: UpdateAgent
       summary: Update agent
@@ -1125,12 +1142,15 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-match: id
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Agent update request
         required: true
@@ -1169,6 +1189,9 @@ paths:
         - BearerAuth: []
       tags:
         - agents
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Agent#update
   /agents/{agentId}/disable:
     post:
       operationId: DisableAgent
@@ -5979,6 +6002,8 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
       requestBody:
         required: true
         content:
@@ -6010,6 +6035,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#create
   /orgs/{orgId}/service-accounts/{saId}:
     delete:
       operationId: DeleteServiceAccount
@@ -6021,12 +6049,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       responses:
         '204':
           description: No content
@@ -6042,6 +6073,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#delete
     get:
       operationId: DescribeServiceAccount
       summary: Describe a service account
@@ -6052,12 +6086,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       responses:
         '200':
           description: OK
@@ -6077,6 +6114,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#read
     patch:
       operationId: UpdateServiceAccount
       summary: Update a service account
@@ -6087,12 +6127,15 @@ paths:
           schema:
             type: integer
             format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-force-new: true
         - name: saId
           in: path
           required: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-match: id
       requestBody:
         required: true
         content:
@@ -6124,6 +6167,9 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ServiceAccount#update
   /orgs/{orgId}/teams:
     get:
       operationId: ListOrganizationTeams
@@ -17021,29 +17067,28 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
-        createdBy:
-          type: integer
-          format: int64
-        createdByUserName:
-          type: string
-          nullable: true
         dateCreated:
           type: string
           format: date-time
+          description: Creation timestamp.
+          x-speakeasy-param-suppress-computed-diff: true
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
         id:
           type: string
+          description: >-
+            Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
+          x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
+          description: Last update timestamp.
         name:
           type: string
         serviceAccountId:
@@ -17053,14 +17098,28 @@ components:
         serviceAccountName:
           type: string
           nullable: true
+          description: Name of the bound service account.
+          x-speakeasy-plan-modifiers: ServiceAccountNameFollowsID
         status:
-          $ref: '#/components/schemas/Agent.Status'
-        updatedBy:
-          type: integer
-          format: int64
+          allOf:
+            - $ref: "#/components/schemas/Agent.Status"
+          description: >-
+            Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
+          x-speakeasy-param-suppress-computed-diff: true
         workspaceId:
           type: integer
           format: int64
+      x-speakeasy-entity: Agent
+      x-speakeasy-terraform-resource-name: agent
+      x-speakeasy-entity-description: |
+        Manage an agent in a Seqera workspace. An agent runs its
+        `agent_instructions` when triggered by a `seqera_action` with
+        `response_type = "agent"` (referencing `seqera_agent.x.id` as
+        `agent.agent_config_id`) or when launched directly.
+
+        Deleting an agent pauses every action that targets it. Agents are
+        created active; enabling and disabling is not managed by this
+        resource, and `status` reports the current state.
     AgentRun.Status:
       type: string
       enum:
@@ -19764,7 +19823,6 @@ components:
           x-speakeasy-param-optional: true
       required:
         - name
-        - launch
     CreateActionResponse:
       type: object
       properties:
@@ -19782,21 +19840,42 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
+          minLength: 1
+          maxLength: 50000
+          description: >-
+            Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          maxLength: 120
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
           type: string
+          pattern: "^[A-Za-z0-9_-]+$"
+          minLength: 1
+          maxLength: 255
+          description: >-
+            Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
         serviceAccountId:
           type: integer
           format: int64
-          nullable: true
+          nullable: false
+          description: >-
+            Service account the agent runs as (`seqera_service_account.x.id`). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.
+      required:
+        - name
+        - agentInstructions
+        - serviceAccountId
     CreateAgentResponse:
       type: object
       properties:
@@ -20118,10 +20197,20 @@ components:
         description:
           type: string
           maxLength: 1000
+          default: ""
+          description: >-
+            Description of the service account, up to 1000 characters. Removing it from the configuration clears it.
         name:
           type: string
-          maxLength: 40
-          minLength: 1
+          maxLength: 39
+          minLength: 2
+          # The Platform validates the name as a user name (SHORT_NAME_REGEX):
+          # 2-39 lower-case letters, digits and single dashes, no leading or
+          # trailing dash. Expressed without the upstream lookahead, which RE2
+          # does not support.
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          description: >-
+            Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
       required:
         - name
     CreateServiceAccountResponse:
@@ -26187,19 +26276,43 @@ components:
         createdAt:
           type: string
           format: date-time
+          description: Creation timestamp.
+          x-speakeasy-param-suppress-computed-diff: true
         description:
           type: string
           nullable: true
+          default: ""
         id:
           type: integer
           format: int64
+          description: >-
+            Service account numeric identifier (the account's user id). Use it as `seqera_agent.service_account_id`.
+          x-speakeasy-param-suppress-computed-diff: true
         memberId:
-          description: Organization membership ID of this service account
+          description: Organization membership identifier of the service account. Use it as `seqera_workspace_participant.member_id` to add the account to a workspace.
           type: integer
           format: int64
           nullable: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           type: string
+      x-speakeasy-entity: ServiceAccount
+      x-speakeasy-terraform-resource-name: service_account
+      x-speakeasy-entity-description: |
+        Manage a service account in a Seqera organization. A service account
+        is a non-human identity that agents run as.
+
+        To use it, add it to a workspace with `seqera_workspace_participant`
+        (`member_id = seqera_service_account.x.member_id`) using a role that
+        allows launching agents, then bind it to an agent with
+        `seqera_agent.service_account_id = seqera_service_account.x.id`.
+
+        Deleting a service account removes it from every workspace. The
+        platform then disables every agent bound to it and pauses every action
+        that targets those agents. Terraform does not show these side effects
+        in a plan.
+
+        Requires service accounts to be enabled on the Platform instance.
     ServiceAccountImage:
       type: object
       properties:
@@ -27199,21 +27312,42 @@ components:
       properties:
         agentInstructions:
           type: string
-        agentInstructionsTemplateId:
-          type: string
-          nullable: true
+          minLength: 1
+          maxLength: 50000
+          description: >-
+            Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
         description:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          maxLength: 120
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
         githubAppCredentialId:
           type: string
           nullable: true
+          x-speakeasy-param-computed: false
+          pattern: "^\\S(?:.*\\S)?$"
+          description: >-
+            GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
         name:
           type: string
+          pattern: "^[A-Za-z0-9_-]+$"
+          minLength: 1
+          maxLength: 255
+          description: >-
+            Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
         serviceAccountId:
           type: integer
           format: int64
-          nullable: true
+          nullable: false
+          description: >-
+            Service account the agent runs as (`seqera_service_account.x.id`). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.
+      required:
+        - name
+        - agentInstructions
+        - serviceAccountId
     UpdateAgentResponse:
       type: object
       properties:
@@ -27378,9 +27512,20 @@ components:
         description:
           type: string
           maxLength: 1000
+          default: ""
+          description: >-
+            Description of the service account, up to 1000 characters. Removing it from the configuration clears it.
         name:
           type: string
-          maxLength: 40
+          maxLength: 39
+          # The Platform validates the name as a user name (SHORT_NAME_REGEX):
+          # 2-39 lower-case letters, digits and single dashes, no leading or
+          # trailing dash. Expressed without the upstream lookahead, which RE2
+          # does not support.
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          minLength: 2
+          description: >-
+            Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
     UpdateTeamRequest:
       type: object
       properties:
@@ -29054,7 +29199,9 @@ components:
         - team
     ActionLaunchRequest:
       type: object
-      description: Launch payload for `seqera_action` Create / Update endpoints.
+      description: >-
+        Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
+      x-speakeasy-plan-validators: ActionOutcomeValidator
       allOf:
         - $ref: "#/components/schemas/WorkflowLaunchRequest"
       properties:

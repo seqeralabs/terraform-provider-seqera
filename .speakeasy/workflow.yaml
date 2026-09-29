@@ -7,6 +7,7 @@ sources:
         overlays:
             - location: overlays/nullable-fixes.yaml
             - location: overlays/actions.yaml
+            - location: overlays/agents.yaml
             - location: overlays/api-description.yaml
             - location: overlays/aws-compute-env.yaml
             - location: overlays/compute-env-aws-batch.yaml
@@ -52,6 +53,7 @@ sources:
             - location: overlays/speakeasy.yaml
             - location: overlays/studios.yaml
             - location: overlays/teams.yaml
+            - location: overlays/service-accounts.yaml
             - location: overlays/tokens.yaml
             - location: overlays/users.yaml
             - location: overlays/workflows.yaml

@@ -2,9 +2,26 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type UpdateServiceAccountRequest struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	// Description of the service account, up to 1000 characters. Removing it from the configuration clears it.
+	Description *string `default:"" json:"description"`
+	// Service account name: 2 to 39 lower-case letters, digits and single dashes, starting and ending with a letter or digit. Names are unique across the whole platform, not only the organization; a name already in use fails the apply with a conflict.
+	Name *string `json:"name,omitempty"`
+}
+
+func (u UpdateServiceAccountRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateServiceAccountRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UpdateServiceAccountRequest) GetDescription() *string {

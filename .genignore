@@ -8,6 +8,8 @@ internal/sdk/internal/hooks/credential_error_hook.go
 internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
 internal/sdk/internal/hooks/token_list_error_hook.go
+internal/sdk/internal/hooks/agent_binding_conflict_hook.go
+internal/sdk/internal/hooks/agent_binding_conflict_hook_test.go
 
 
 # Custom validators
@@ -35,6 +37,8 @@ internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/objectvalidators/sched_config_consistency_validator.go
 internal/validators/objectvalidators/billing_export_table_google_only_validator.go
 internal/validators/objectvalidators/billing_export_table_google_only_validator_test.go
+internal/validators/objectvalidators/action_outcome_validator.go
+internal/validators/objectvalidators/action_outcome_validator_test.go
 internal/validators/boolvalidators/graviton_validator.go
 internal/validators/boolvalidators/requires_sibling_string_set.go
 internal/validators/boolvalidators/private_address_requires_network_validator.go
@@ -80,6 +84,9 @@ internal/provider/stateupgrader_schemas.go
 internal/provider/computeenv_upgrade_decode_test.go
 internal/provider/stateupgrader_all_test.go
 internal/provider/cloudce_sched_enabled_upgrade_test.go
+internal/provider/agent_service_account_schema_test.go
+internal/provider/agent_service_account_plan_test.go
+internal/planmodifiers/stringplanmodifier/service_account_name_follows_id.go
 
 # Custom examples that should be manually maintained
 examples/resources/seqera_pipeline/resource*.tf
@@ -87,6 +94,10 @@ examples/resources/seqera_action/resource*.tf
 examples/resources/seqera_labels/resource*.tf
 examples/resources/seqera_orgs/resource*.tf
 examples/resources/seqera_custom_role/resource.tf
+examples/resources/seqera_service_account/resource.tf
+examples/resources/seqera_agent/resource.tf
+examples/data-sources/seqera_service_account/data-source.tf
+examples/data-sources/seqera_agent/data-source.tf
 examples/resources/seqera_primary_compute_env/resource*.tf
 examples/resources/seqera_aws_cloud_ce/resource*.tf
 examples/resources/seqera_aws_batch_ce/resource*.tf

@@ -8,6 +8,7 @@ import (
 )
 
 type DeleteServiceAccountRequest struct {
+	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 	SaID  int64 `pathParam:"style=simple,explode=false,name=saId"`
 }

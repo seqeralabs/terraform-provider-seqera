@@ -8,6 +8,7 @@ import (
 )
 
 type CreateServiceAccountRequest struct {
+	// Organization numeric identifier
 	OrgID                       int64                              `pathParam:"style=simple,explode=false,name=orgId"`
 	CreateServiceAccountRequest shared.CreateServiceAccountRequest `request:"mediaType=application/json"`
 }
