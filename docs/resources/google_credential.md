@@ -63,7 +63,7 @@ resource "seqera_google_credential" "wif" {
 
 - `data` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Google Cloud service account key JSON. Required unless workload_identity_provider and service_account_email are provided.
 - `service_account_email` (String) Email of the GCP service account that Seqera will impersonate via Workload Identity Federation. Required (with workload_identity_provider) unless data is provided.
-- `token_audience` (String) OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when fronting multiple workload identity pools with the same credential.
+- `token_audience` (String) OIDC audience claim embedded in the Seqera-issued JWT. Defaults to `//iam.googleapis.com/<workload_identity_provider>`, which matches GCP's allowed-audiences check. Only set when the workload identity provider is configured with a custom allowed audience.
 - `workload_identity_provider` (String) Full resource path of the GCP workload identity provider that trusts Seqera as an OIDC issuer. Format: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID. Uses the GCP project number, not the project ID. Required (with service_account_email) unless data is provided.
 
 ### Read-Only

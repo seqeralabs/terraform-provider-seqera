@@ -20,6 +20,16 @@ resource "seqera_aws_credential" "example_with_role" {
   workspace_id = seqera_workspace.test.id
 }
 
+# AWS credential with OIDC workload identity federation (no stored keys).
+# Requires Identity Federation to be enabled for the organization.
+resource "seqera_aws_credential" "example_workload_identity" {
+  name            = "example-aws-credentials-workload-identity"
+  mode            = "workloadIdentity"
+  assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraWorkloadIdentityRole"
+
+  workspace_id = seqera_workspace.test.id
+}
+
 # Output the credential ID
 output "aws_credential_id" {
   value       = seqera_aws_credential.example_basic.credentials_id

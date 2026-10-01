@@ -20,34 +20,48 @@ func awsCredObjectType() tftypes.Object {
 			"access_key":      tftypes.String,
 			"secret_key":      tftypes.String,
 			"assume_role_arn": tftypes.String,
+			"mode":            tftypes.String,
+			"use_external_id": tftypes.Bool,
+		},
+	}
+}
+
+// awsCredSchema returns the sibling attributes the AWS credential validator reads.
+func awsCredSchema() resourceschema.Schema {
+	return resourceschema.Schema{
+		Attributes: map[string]resourceschema.Attribute{
+			"access_key":      resourceschema.StringAttribute{Optional: true},
+			"secret_key":      resourceschema.StringAttribute{Optional: true},
+			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
+			"mode":            resourceschema.StringAttribute{Optional: true},
+			"use_external_id": resourceschema.BoolAttribute{Optional: true},
 		},
 	}
 }
 
 // makeAWSRequest constructs a validator.StringRequest for the AWS credential validator.
 // fieldName is the field being validated (access_key, secret_key, or assume_role_arn).
-// values maps field names to string values; nil means null.
+// values maps field names to string values; nil means null. use_external_id takes "true" or "false".
 func makeAWSRequest(fieldName string, values map[string]*string) validator.StringRequest {
 	ct := awsCredObjectType()
 
 	tfvals := make(map[string]tftypes.Value)
-	for _, name := range []string{"access_key", "secret_key", "assume_role_arn"} {
+	for _, name := range []string{"access_key", "secret_key", "assume_role_arn", "mode"} {
 		if v, ok := values[name]; ok && v != nil {
 			tfvals[name] = tftypes.NewValue(tftypes.String, *v)
 		} else {
 			tfvals[name] = tftypes.NewValue(tftypes.String, nil)
 		}
 	}
+	if v, ok := values["use_external_id"]; ok && v != nil {
+		tfvals["use_external_id"] = tftypes.NewValue(tftypes.Bool, *v == "true")
+	} else {
+		tfvals["use_external_id"] = tftypes.NewValue(tftypes.Bool, nil)
+	}
 
 	rawVal := tftypes.NewValue(ct, tfvals)
 
-	s := resourceschema.Schema{
-		Attributes: map[string]resourceschema.Attribute{
-			"access_key":      resourceschema.StringAttribute{Optional: true},
-			"secret_key":      resourceschema.StringAttribute{Optional: true},
-			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
-		},
-	}
+	s := awsCredSchema()
 
 	config := tfsdk.Config{
 		Schema: s,
@@ -156,15 +170,11 @@ func TestAWSCredentialKeys_UnknownValuesSkipsValidation(t *testing.T) {
 		"access_key":      tftypes.NewValue(tftypes.String, tftypes.UnknownValue),
 		"secret_key":      tftypes.NewValue(tftypes.String, nil),
 		"assume_role_arn": tftypes.NewValue(tftypes.String, nil),
+		"mode":            tftypes.NewValue(tftypes.String, nil),
+		"use_external_id": tftypes.NewValue(tftypes.Bool, nil),
 	})
 
-	s := resourceschema.Schema{
-		Attributes: map[string]resourceschema.Attribute{
-			"access_key":      resourceschema.StringAttribute{Optional: true},
-			"secret_key":      resourceschema.StringAttribute{Optional: true},
-			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
-		},
-	}
+	s := awsCredSchema()
 
 	req := validator.StringRequest{
 		Path:        path.Root("access_key"),
@@ -219,4 +229,175 @@ func TestAWSCredentialKeys_AssumeRoleWithAccessKeyOnly(t *testing.T) {
 	diags := runAWSValidator(makeAWSRequest("access_key", values))
 	assert.True(t, diags.HasError(), "access_key without secret_key should fail even with assume_role_arn")
 	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+}
+
+// -----------------------------------------------------------------------
+// Mode rules
+// -----------------------------------------------------------------------
+
+const testRoleArn = "arn:aws:iam::123456789012:role/MyRole"
+
+func TestAWSCredentialKeys_WorkloadIdentityWithRoleArn(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("workloadIdentity"),
+	}
+	for _, field := range []string{"access_key", "secret_key", "assume_role_arn"} {
+		t.Run("validate_"+field, func(t *testing.T) {
+			t.Parallel()
+			diags := runAWSValidator(makeAWSRequest(field, values))
+			assert.False(t, diags.HasError(), "workloadIdentity with assume_role_arn should be valid, got: %s", diags.Errors())
+		})
+	}
+}
+
+func TestAWSCredentialKeys_WorkloadIdentityWithUseExternalIDFalse(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("workloadIdentity"),
+		"use_external_id": strPtr("false"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.False(t, diags.HasError(), "use_external_id = false is allowed with workloadIdentity, got: %s", diags.Errors())
+}
+
+func TestAWSCredentialKeys_WorkloadIdentityRejectsKeys(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"access_key":      strPtr("AKIAIOSFODNN7EXAMPLE"),
+		"secret_key":      strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("workloadIdentity"),
+	}
+	diags := runAWSValidator(makeAWSRequest("access_key", values))
+	assert.True(t, diags.HasError(), "workloadIdentity must reject static keys")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Conflicting Attributes")
+	assert.Contains(t, diags.Errors()[0].Detail(), `"workloadIdentity"`)
+}
+
+func TestAWSCredentialKeys_WorkloadIdentityRejectsSecretKeyOnly(t *testing.T) {
+	t.Parallel()
+	// Reported as a mode conflict, not as the generic "access_key missing" pairing error.
+	values := map[string]*string{
+		"secret_key":      strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("workloadIdentity"),
+	}
+	diags := runAWSValidator(makeAWSRequest("secret_key", values))
+	assert.True(t, diags.HasError(), "workloadIdentity must reject secret_key")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Conflicting Attributes")
+}
+
+func TestAWSCredentialKeys_WorkloadIdentityRequiresRoleArn(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"mode": strPtr("workloadIdentity"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.True(t, diags.HasError(), "workloadIdentity must require assume_role_arn")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+	assert.Contains(t, diags.Errors()[0].Detail(), "'assume_role_arn' attribute is required")
+}
+
+func TestAWSCredentialKeys_WorkloadIdentityRejectsUseExternalID(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("workloadIdentity"),
+		"use_external_id": strPtr("true"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.True(t, diags.HasError(), "workloadIdentity must reject use_external_id = true")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Conflicting Attributes")
+	assert.Contains(t, diags.Errors()[0].Detail(), "use_external_id")
+}
+
+func TestAWSCredentialKeys_RoleWithRoleArnAndExternalID(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("role"),
+		"use_external_id": strPtr("true"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.False(t, diags.HasError(), "role mode with assume_role_arn and use_external_id should be valid, got: %s", diags.Errors())
+}
+
+func TestAWSCredentialKeys_RoleRejectsKeys(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"access_key":      strPtr("AKIAIOSFODNN7EXAMPLE"),
+		"secret_key":      strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("role"),
+	}
+	diags := runAWSValidator(makeAWSRequest("access_key", values))
+	assert.True(t, diags.HasError(), "role mode must reject static keys")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Conflicting Attributes")
+	assert.Contains(t, diags.Errors()[0].Detail(), `"role"`)
+}
+
+func TestAWSCredentialKeys_RoleRequiresRoleArn(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"mode": strPtr("role"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.True(t, diags.HasError(), "role mode must require assume_role_arn")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+}
+
+func TestAWSCredentialKeys_KeysModeAllowsRoleArnWithKeys(t *testing.T) {
+	t.Parallel()
+	values := map[string]*string{
+		"access_key":      strPtr("AKIAIOSFODNN7EXAMPLE"),
+		"secret_key":      strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("keys"),
+	}
+	diags := runAWSValidator(makeAWSRequest("access_key", values))
+	assert.False(t, diags.HasError(), "keys mode keeps allowing assume_role_arn with keys, got: %s", diags.Errors())
+}
+
+func TestAWSCredentialKeys_UnknownModeSkipsValidation(t *testing.T) {
+	t.Parallel()
+	// Static keys with an unknown mode: could be valid (keys) or invalid (role), so validation waits.
+	req := makeAWSRequest("access_key", map[string]*string{
+		"access_key": strPtr("AKIAIOSFODNN7EXAMPLE"),
+		"secret_key": strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+	})
+	req.Config.Raw = tftypes.NewValue(awsCredObjectType(), map[string]tftypes.Value{
+		"access_key":      tftypes.NewValue(tftypes.String, "AKIAIOSFODNN7EXAMPLE"),
+		"secret_key":      tftypes.NewValue(tftypes.String, "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": tftypes.NewValue(tftypes.String, nil),
+		"mode":            tftypes.NewValue(tftypes.String, tftypes.UnknownValue),
+		"use_external_id": tftypes.NewValue(tftypes.Bool, nil),
+	})
+	diags := runAWSValidator(req)
+	assert.False(t, diags.HasError(), "an unknown mode must defer validation, got: %s", diags.Errors())
+}
+
+func TestAWSCredentialKeys_KeysModeRequiresKeys(t *testing.T) {
+	t.Parallel()
+	// An explicit keys mode with only a role ARN is rejected by the Platform ("access key is required").
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("keys"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.True(t, diags.HasError(), "keys mode must require access_key and secret_key")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+	assert.Contains(t, diags.Errors()[0].Detail(), `"keys"`)
+}
+
+func TestAWSCredentialKeys_NoModeAllowsRoleArnOnly(t *testing.T) {
+	t.Parallel()
+	// Leaving mode unset keeps accepting assume_role_arn on its own, as before.
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.False(t, diags.HasError(), "no mode with only assume_role_arn keeps passing, got: %s", diags.Errors())
 }

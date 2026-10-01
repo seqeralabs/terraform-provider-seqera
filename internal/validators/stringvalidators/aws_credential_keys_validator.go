@@ -2,6 +2,7 @@ package stringvalidators
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -13,7 +14,7 @@ type AWSCredentialKeysValidatorValidator struct{}
 
 // Description describes the validation in plain text formatting.
 func (v AWSCredentialKeysValidatorValidator) Description(_ context.Context) string {
-	return "validates that either (access_key and secret_key) or assume_role_arn must be provided"
+	return "validates that either (access_key and secret_key) or assume_role_arn must be provided, and that the fields match the selected mode ('keys' requires access_key and secret_key; 'role' and 'workloadIdentity' require assume_role_arn without static keys)"
 }
 
 // MarkdownDescription describes the validation in Markdown formatting.
@@ -27,21 +28,28 @@ func (v AWSCredentialKeysValidatorValidator) ValidateString(ctx context.Context,
 	var accessKeyValue types.String
 	var secretKeyValue types.String
 	var assumeRoleArnValue types.String
+	var modeValue types.String
+	var useExternalIDValue types.Bool
 
 	accessKeyPath := req.Path.ParentPath().AtName("access_key")
 	secretKeyPath := req.Path.ParentPath().AtName("secret_key")
 	assumeRoleArnPath := req.Path.ParentPath().AtName("assume_role_arn")
+	modePath := req.Path.ParentPath().AtName("mode")
+	useExternalIDPath := req.Path.ParentPath().AtName("use_external_id")
 
 	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, accessKeyPath, &accessKeyValue)...)
 	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, secretKeyPath, &secretKeyValue)...)
 	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, assumeRoleArnPath, &assumeRoleArnValue)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, modePath, &modeValue)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, useExternalIDPath, &useExternalIDValue)...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Allow unknown values during plan phase
-	if accessKeyValue.IsUnknown() || secretKeyValue.IsUnknown() || assumeRoleArnValue.IsUnknown() || req.ConfigValue.IsUnknown() {
+	if accessKeyValue.IsUnknown() || secretKeyValue.IsUnknown() || assumeRoleArnValue.IsUnknown() ||
+		modeValue.IsUnknown() || useExternalIDValue.IsUnknown() || req.ConfigValue.IsUnknown() {
 		return
 	}
 
@@ -49,6 +57,52 @@ func (v AWSCredentialKeysValidatorValidator) ValidateString(ctx context.Context,
 	accessKeyProvided := !accessKeyValue.IsNull() && accessKeyValue.ValueString() != ""
 	secretKeyProvided := !secretKeyValue.IsNull() && secretKeyValue.ValueString() != ""
 	assumeRoleArnProvided := !assumeRoleArnValue.IsNull() && assumeRoleArnValue.ValueString() != ""
+	useExternalID := !useExternalIDValue.IsNull() && useExternalIDValue.ValueBool()
+	mode := modeValue.ValueString()
+
+	// Mode rules mirror the Platform's AwsSecurityKeys.validate(), so a mismatch fails at plan time
+	// rather than at apply. Errors are attached to fixed paths so the three attributes carrying this
+	// validator report each problem once.
+	if mode == "role" || mode == "workloadIdentity" {
+		if accessKeyProvided || secretKeyProvided {
+			errPath := accessKeyPath
+			if !accessKeyProvided {
+				errPath = secretKeyPath
+			}
+			resp.Diagnostics.AddAttributeError(
+				errPath,
+				"Conflicting Attributes",
+				fmt.Sprintf("The 'access_key' and 'secret_key' attributes must not be set when 'mode' is %q. This mode authenticates by assuming 'assume_role_arn' without static credentials.", mode),
+			)
+			return
+		}
+		if !assumeRoleArnProvided {
+			resp.Diagnostics.AddAttributeError(
+				assumeRoleArnPath,
+				"Missing Required Attribute",
+				fmt.Sprintf("The 'assume_role_arn' attribute is required when 'mode' is %q.", mode),
+			)
+			return
+		}
+	}
+
+	if mode == "keys" && !accessKeyProvided && !secretKeyProvided {
+		resp.Diagnostics.AddAttributeError(
+			accessKeyPath,
+			"Missing Required Attribute",
+			"The 'access_key' and 'secret_key' attributes are required when 'mode' is \"keys\". To assume 'assume_role_arn' without static keys, set 'mode' to \"role\".",
+		)
+		return
+	}
+
+	if mode == "workloadIdentity" && useExternalID {
+		resp.Diagnostics.AddAttributeError(
+			useExternalIDPath,
+			"Conflicting Attributes",
+			"The 'use_external_id' attribute must not be true when 'mode' is \"workloadIdentity\". Workload identity federation does not use an External ID.",
+		)
+		return
+	}
 
 	// Rule 1: If access_key is provided, secret_key must also be provided
 	if accessKeyProvided && !secretKeyProvided {
