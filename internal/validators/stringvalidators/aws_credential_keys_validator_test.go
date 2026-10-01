@@ -378,3 +378,26 @@ func TestAWSCredentialKeys_UnknownModeSkipsValidation(t *testing.T) {
 	diags := runAWSValidator(req)
 	assert.False(t, diags.HasError(), "an unknown mode must defer validation, got: %s", diags.Errors())
 }
+
+func TestAWSCredentialKeys_KeysModeRequiresKeys(t *testing.T) {
+	t.Parallel()
+	// An explicit keys mode with only a role ARN is rejected by the Platform ("access key is required").
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+		"mode":            strPtr("keys"),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.True(t, diags.HasError(), "keys mode must require access_key and secret_key")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+	assert.Contains(t, diags.Errors()[0].Detail(), `"keys"`)
+}
+
+func TestAWSCredentialKeys_NoModeAllowsRoleArnOnly(t *testing.T) {
+	t.Parallel()
+	// Leaving mode unset keeps accepting assume_role_arn on its own, as before.
+	values := map[string]*string{
+		"assume_role_arn": strPtr(testRoleArn),
+	}
+	diags := runAWSValidator(makeAWSRequest("assume_role_arn", values))
+	assert.False(t, diags.HasError(), "no mode with only assume_role_arn keeps passing, got: %s", diags.Errors())
+}

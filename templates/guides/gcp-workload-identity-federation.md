@@ -160,7 +160,7 @@ The Platform validates the credential when it is saved by performing a live toke
 Reference the credential from any resource that accepts `credentials_id`, such as a Google Batch compute environment:
 
 ```terraform
-resource "seqera_google_batch_ce" "example" {
+resource "seqera_gcp_batch_ce" "example" {
   name           = "gcp-batch-example"
   workspace_id   = var.workspace_id
   credentials_id = seqera_google_credential.wif.credentials_id

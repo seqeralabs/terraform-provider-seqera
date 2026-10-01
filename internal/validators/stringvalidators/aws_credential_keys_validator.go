@@ -14,7 +14,7 @@ type AWSCredentialKeysValidatorValidator struct{}
 
 // Description describes the validation in plain text formatting.
 func (v AWSCredentialKeysValidatorValidator) Description(_ context.Context) string {
-	return "validates that either (access_key and secret_key) or assume_role_arn must be provided, and that the fields match the selected mode ('role' and 'workloadIdentity' require assume_role_arn without static keys)"
+	return "validates that either (access_key and secret_key) or assume_role_arn must be provided, and that the fields match the selected mode ('keys' requires access_key and secret_key; 'role' and 'workloadIdentity' require assume_role_arn without static keys)"
 }
 
 // MarkdownDescription describes the validation in Markdown formatting.
@@ -84,6 +84,15 @@ func (v AWSCredentialKeysValidatorValidator) ValidateString(ctx context.Context,
 			)
 			return
 		}
+	}
+
+	if mode == "keys" && !accessKeyProvided && !secretKeyProvided {
+		resp.Diagnostics.AddAttributeError(
+			accessKeyPath,
+			"Missing Required Attribute",
+			"The 'access_key' and 'secret_key' attributes are required when 'mode' is \"keys\". To assume 'assume_role_arn' without static keys, set 'mode' to \"role\".",
+		)
+		return
 	}
 
 	if mode == "workloadIdentity" && useExternalID {
