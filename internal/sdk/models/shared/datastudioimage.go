@@ -14,6 +14,7 @@ type DataStudioImage struct {
 	ComputeEnvID             *string        `json:"computeEnvId,omitempty"`
 	CondaEnvironment         *string        `json:"condaEnvironment,omitempty"`
 	ConnectVersion           *string        `json:"connectVersion,omitempty"`
+	CustomIconID             *string        `json:"customIconId,omitempty"`
 	Description              *string        `json:"description,omitempty"`
 	EffectiveLifespanHours   *int           `json:"effectiveLifespanHours,omitempty"`
 	Environment              *string        `json:"environment,omitempty"`
@@ -95,6 +96,13 @@ func (d *DataStudioImage) GetConnectVersion() *string {
 		return nil
 	}
 	return d.ConnectVersion
+}
+
+func (d *DataStudioImage) GetCustomIconID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CustomIconID
 }
 
 func (d *DataStudioImage) GetDescription() *string {

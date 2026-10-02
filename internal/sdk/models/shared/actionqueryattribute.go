@@ -10,7 +10,8 @@ import (
 type ActionQueryAttribute string
 
 const (
-	ActionQueryAttributeLabels ActionQueryAttribute = "labels"
+	ActionQueryAttributeLabels      ActionQueryAttribute = "labels"
+	ActionQueryAttributeLastTrigger ActionQueryAttribute = "lastTrigger"
 )
 
 func (e ActionQueryAttribute) ToPointer() *ActionQueryAttribute {
@@ -23,6 +24,8 @@ func (e *ActionQueryAttribute) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "labels":
+		fallthrough
+	case "lastTrigger":
 		*e = ActionQueryAttribute(v)
 		return nil
 	default:

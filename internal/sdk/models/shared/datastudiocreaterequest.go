@@ -4,13 +4,15 @@ package shared
 
 type DataStudioCreateRequest struct {
 	// IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
-	AllowedUserIds      []int64                 `json:"allowedUserIds,omitempty"`
-	ComputeEnvID        string                  `json:"computeEnvId"`
-	Configuration       DataStudioConfiguration `json:"configuration"`
-	DataStudioToolURL   string                  `json:"dataStudioToolUrl"`
-	Description         *string                 `json:"description,omitempty"`
-	InitialCheckpointID *int64                  `json:"initialCheckpointId,omitempty"`
-	IsPrivate           *bool                   `json:"isPrivate,omitempty"`
+	AllowedUserIds []int64                 `json:"allowedUserIds,omitempty"`
+	ComputeEnvID   string                  `json:"computeEnvId"`
+	Configuration  DataStudioConfiguration `json:"configuration"`
+	// Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.
+	CustomIconID        *string `json:"customIconId,omitempty"`
+	DataStudioToolURL   string  `json:"dataStudioToolUrl"`
+	Description         *string `json:"description,omitempty"`
+	InitialCheckpointID *int64  `json:"initialCheckpointId,omitempty"`
+	IsPrivate           *bool   `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	Name     string  `json:"name"`
@@ -37,6 +39,13 @@ func (d *DataStudioCreateRequest) GetConfiguration() DataStudioConfiguration {
 		return DataStudioConfiguration{}
 	}
 	return d.Configuration
+}
+
+func (d *DataStudioCreateRequest) GetCustomIconID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CustomIconID
 }
 
 func (d *DataStudioCreateRequest) GetDataStudioToolURL() string {

@@ -8,13 +8,13 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-// MemberRole - Member role (can be null for collaborators)
 type MemberRole string
 
 const (
-	MemberRoleOwner        MemberRole = "owner"
-	MemberRoleMember       MemberRole = "member"
-	MemberRoleCollaborator MemberRole = "collaborator"
+	MemberRoleOwner          MemberRole = "owner"
+	MemberRoleMember         MemberRole = "member"
+	MemberRoleCollaborator   MemberRole = "collaborator"
+	MemberRoleServiceAccount MemberRole = "service_account"
 )
 
 func (e MemberRole) ToPointer() *MemberRole {
@@ -31,6 +31,8 @@ func (e *MemberRole) UnmarshalJSON(data []byte) error {
 	case "member":
 		fallthrough
 	case "collaborator":
+		fallthrough
+	case "service_account":
 		*e = MemberRole(v)
 		return nil
 	default:
@@ -49,8 +51,7 @@ type OrganizationDbDto struct {
 	// Geographic location or address of the organization
 	Location *string `json:"location,omitempty"`
 	// Member ID (can be null for collaborators)
-	MemberID *int64 `json:"memberId,omitempty"`
-	// Member role (can be null for collaborators)
+	MemberID   *int64      `json:"memberId,omitempty"`
 	MemberRole *MemberRole `json:"memberRole,omitempty"`
 	// Short name or handle for the organization (used in URLs and paths)
 	Name *string `json:"name,omitempty"`

@@ -38,6 +38,105 @@ resource "seqera_action" "tower_basic" {
 }
 ```
 
+### Agent Trigger
+
+```terraform
+# Runs an agent each time a run of the watched pipeline fails, instead of
+# launching a pipeline. An agent action sets response_type = "agent" and the
+# agent to run, and must not set launch or pipeline. The source must be
+# pipeline_status, cron or bucket.
+
+# The agent runs as a service account, which must be a workspace participant
+# with a role that allows launching agents.
+resource "seqera_service_account" "triage" {
+  org_id = seqera_workspace.main.org_id
+  name   = "run-triage"
+}
+
+resource "seqera_workspace_participant" "triage" {
+  org_id       = seqera_workspace.main.org_id
+  workspace_id = seqera_workspace.main.id
+  member_id    = seqera_service_account.triage.member_id
+  role         = "launch"
+}
+
+resource "seqera_agent" "triage" {
+  workspace_id       = seqera_workspace.main.id
+  name               = "failed-run-triage"
+  agent_instructions = "Read the logs of the failed run, summarise the root cause and suggest a fix."
+  service_account_id = seqera_service_account.triage.id
+
+  depends_on = [seqera_workspace_participant.triage]
+}
+
+resource "seqera_action" "triage_on_failure" {
+  workspace_id  = seqera_workspace.main.id
+  name          = "triage-failed-runs"
+  source        = "pipeline_status"
+  response_type = "agent"
+
+  pipeline_status = {
+    pipeline_id = seqera_pipeline.upstream.pipeline_id
+    run_status  = "FAILED"
+  }
+
+  agent = {
+    agent_config_id = seqera_agent.triage.id
+  }
+}
+```
+
+### Bucket Trigger
+
+```terraform
+# Launches a run when the marker file appears in the watched data link.
+resource "seqera_action" "bucket_trigger" {
+  workspace_id = seqera_workspace.main.id
+  name         = "run-on-upload"
+  source       = "bucket"
+
+  bucket = {
+    data_link_id = seqera_data_link.inputs.data_link_id
+    marker_file  = "ready.txt"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/nf-core/rnaseq"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
+
+    params_text = jsonencode({
+      input  = "s3://my-bucket/inputs/samplesheet.csv"
+      outdir = "s3://my-bucket/results"
+    })
+  }
+}
+```
+
+### Cron Schedule
+
+```terraform
+# Launches a run every night at 02:00 UTC.
+resource "seqera_action" "nightly" {
+  workspace_id = seqera_workspace.main.id
+  name         = "nightly-run"
+  source       = "cron"
+
+  cron = {
+    expression = "0 2 * * *"
+    timezone   = "UTC"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/nextflow-io/hello"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
+  }
+}
+```
+
 ### Github Webhook
 
 ```terraform
@@ -47,12 +146,6 @@ resource "seqera_action" "github_webhook" {
   workspace_id = seqera_workspace.main.id
   name         = "github-push-trigger"
   source       = "github"
-
-  config = {
-    github = {
-      discriminator = "github"
-    }
-  }
 
   launch = {
     pipeline       = "https://github.com/myorg/my-pipeline"
@@ -66,6 +159,31 @@ resource "seqera_action" "github_webhook" {
       input  = "s3://my-bucket/input.csv"
       output = "s3://my-bucket/results"
     })
+  }
+}
+```
+
+### Pipeline Status Trigger
+
+```terraform
+# Launches a downstream run each time a run of the watched pipeline succeeds.
+# The watched pipeline is set in pipeline_status; the run the action starts is
+# set in launch.
+resource "seqera_action" "on_upstream_success" {
+  workspace_id = seqera_workspace.main.id
+  name         = "run-after-upstream"
+  source       = "pipeline_status"
+
+  pipeline_status = {
+    pipeline_id = seqera_pipeline.upstream.pipeline_id
+    run_status  = "SUCCEEDED"
+  }
+
+  launch = {
+    pipeline       = "https://github.com/myorg/downstream-pipeline"
+    compute_env_id = seqera_compute_env.aws.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "master"
   }
 }
 ```
@@ -122,13 +240,20 @@ resource "seqera_action" "tower_advanced" {
 
 ### Required
 
-- `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. (see [below for nested schema](#nestedatt--launch))
 - `name` (String) Human-readable name for the action
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 
-- `source` (String) must be one of ["github", "tower", "bucket", "cron"]; Requires replacement if changed.
+- `agent` (Attributes) Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Requires replacement if changed. (see [below for nested schema](#nestedatt--agent))
+- `bucket` (Attributes) Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources. (see [below for nested schema](#nestedatt--bucket))
+- `cron` (Attributes) Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources. (see [below for nested schema](#nestedatt--cron))
+- `label_ids` (List of Number) The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+- `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`. (see [below for nested schema](#nestedatt--launch))
+- `pipeline` (Attributes) Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. (see [below for nested schema](#nestedatt--pipeline))
+- `pipeline_status` (Attributes) Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here. (see [below for nested schema](#nestedatt--pipeline_status))
+- `response_type` (String) What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists. must be one of ["pipeline", "agent"]; Requires replacement if changed.
+- `source` (String) must be one of ["github", "tower", "bucket", "cron", "pipeline_status"]; Requires replacement if changed.
 
 ### Read-Only
 
@@ -138,15 +263,40 @@ resource "seqera_action" "tower_advanced" {
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
+- `last_trigger` (Attributes) (see [below for nested schema](#nestedatt--last_trigger))
 - `next_execution` (String)
 - `status` (String)
 
+<a id="nestedatt--agent"></a>
+### Nested Schema for `agent`
+
+Optional:
+
+- `agent_config_id` (String) ID of an existing workspace agent to run. Not Null; Requires replacement if changed.
+
+
+<a id="nestedatt--bucket"></a>
+### Nested Schema for `bucket`
+
+Optional:
+
+- `data_link_id` (String)
+- `events` (List of String)
+- `marker_file` (String)
+
+
+<a id="nestedatt--cron"></a>
+### Nested Schema for `cron`
+
+Optional:
+
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
+
+
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
-
-Required:
-
-- `pipeline` (String)
 
 Optional:
 
@@ -163,6 +313,7 @@ Optional:
 - `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 Nextflow 24.10.0 or later and the workflow outputs syntax.
 - `params_text` (String) Pipeline parameters text
+- `pipeline` (String) Not Null
 - `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution
 - `pre_run_script` (String) Script to run before pipeline execution
@@ -188,13 +339,59 @@ Read-Only:
 - `workspace_id` (Number)
 
 
+<a id="nestedatt--pipeline"></a>
+### Nested Schema for `pipeline`
+
+Optional:
+
+- `target_pipeline_id` (Number)
+- `target_pipeline_version_id` (String)
+
+
+<a id="nestedatt--pipeline_status"></a>
+### Nested Schema for `pipeline_status`
+
+Optional:
+
+- `pipeline_id` (Number)
+- `run_status` (String) must be one of ["SUBMITTED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED", "UNKNOWN"]
+
+
 <a id="nestedatt--config"></a>
 ### Nested Schema for `config`
 
 Read-Only:
 
+- `bucket` (Attributes) (see [below for nested schema](#nestedatt--config--bucket))
+- `cron` (Attributes) (see [below for nested schema](#nestedatt--config--cron))
 - `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
+- `pipeline_status` (Attributes) (see [below for nested schema](#nestedatt--config--pipeline_status))
 - `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
+
+<a id="nestedatt--config--bucket"></a>
+### Nested Schema for `config.bucket`
+
+Read-Only:
+
+- `bucket_name` (String)
+- `data_link_id` (String)
+- `discriminator` (String)
+- `events` (List of String)
+- `marker_file` (String)
+- `subscription_arn` (String)
+- `topic_arn` (String)
+
+
+<a id="nestedatt--config--cron"></a>
+### Nested Schema for `config.cron`
+
+Read-Only:
+
+- `discriminator` (String)
+- `expression` (String)
+- `preset` (String)
+- `timezone` (String)
+
 
 <a id="nestedatt--config--github"></a>
 ### Nested Schema for `config.github`
@@ -204,12 +401,41 @@ Read-Only:
 - `discriminator` (String)
 
 
+<a id="nestedatt--config--pipeline_status"></a>
+### Nested Schema for `config.pipeline_status`
+
+Read-Only:
+
+- `discriminator` (String)
+- `pipeline_id` (Number)
+- `run_status` (String)
+
+
 <a id="nestedatt--config--tower"></a>
 ### Nested Schema for `config.tower`
 
 Read-Only:
 
 - `discriminator` (String)
+
+
+
+<a id="nestedatt--last_trigger"></a>
+### Nested Schema for `last_trigger`
+
+Read-Only:
+
+- `action_id` (String)
+- `actor_id` (Number)
+- `agent_run_id` (String)
+- `caused_by_trigger_id` (String)
+- `event_summary` (String)
+- `fired_at` (String)
+- `id` (String)
+- `outcome` (String)
+- `outcome_detail` (String)
+- `source` (String)
+- `workflow_id` (String)
 
 ## Import
 

@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.214.0 and generator version 2.938.0
+// Generated from OpenAPI doc version 1.226.2 and generator version 2.941.0
 
 import (
 	"context"
@@ -75,6 +75,8 @@ type Seqera struct {
 	Lineage *Lineage
 	// Organizations
 	Orgs *Orgs
+	// Service accounts in an organization context
+	ServiceAccounts *ServiceAccounts
 	// Teams in an organization context
 	Teams *Teams
 	// Workspaces in an organization context
@@ -179,12 +181,12 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.43.0-RC1",
+		SDKVersion: "0.43.0-RC3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/terraform 0.43.0-RC1 2.938.0 1.214.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
-			SDKVersion:        "0.43.0-RC1",
-			GenVersion:        "2.938.0",
-			OpenAPIDocVersion: "1.214.0",
+			UserAgent:         "speakeasy-sdk/terraform 0.43.0-RC3 2.941.0 1.226.2 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			SDKVersion:        "0.43.0-RC3",
+			GenVersion:        "2.941.0",
+			OpenAPIDocVersion: "1.226.2",
 			ServerList:        ServerList,
 		},
 		hooks: hooks.New(),
@@ -220,6 +222,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Lineage = newLineage(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ServiceAccounts = newServiceAccounts(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PipelineSchemas = newPipelineSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)

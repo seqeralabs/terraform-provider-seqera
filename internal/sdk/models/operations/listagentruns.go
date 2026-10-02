@@ -10,7 +10,7 @@ import (
 type ListAgentRunsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId` and `sourcePipelineId`. Free text is not supported.
+	// Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId` and `serviceAccountName`. Free text is not supported.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

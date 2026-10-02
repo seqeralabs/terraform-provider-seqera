@@ -83,6 +83,8 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			}
 			r.Configuration.SSHEnabled = types.BoolPointerValue(resp.Configuration.SSHEnabled)
 		}
+		r.CustomIcon = types.StringPointerValue(resp.CustomIcon)
+		r.CustomIconID = types.StringPointerValue(resp.CustomIconID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
@@ -273,6 +275,12 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		MountDataV2:      mountDataV2,
 		SSHEnabled:       sshEnabled,
 	}
+	customIconID := new(string)
+	if !r.CustomIconID.IsUnknown() && !r.CustomIconID.IsNull() {
+		*customIconID = r.CustomIconID.ValueString()
+	} else {
+		customIconID = nil
+	}
 	var dataStudioToolURL string
 	dataStudioToolURL = r.DataStudioToolURL.ValueString()
 
@@ -314,6 +322,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		AllowedUserIds:      allowedUserIds,
 		ComputeEnvID:        computeEnvID,
 		Configuration:       configuration,
+		CustomIconID:        customIconID,
 		DataStudioToolURL:   dataStudioToolURL,
 		Description:         description,
 		InitialCheckpointID: initialCheckpointID,

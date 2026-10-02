@@ -16,6 +16,12 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Agent == nil {
+			r.Agent = nil
+		} else {
+			r.Agent = &tfTypes.AgentActionRequest{}
+			r.Agent.AgentConfigID = types.StringPointerValue(resp.Agent.AgentConfigID)
+		}
 		if resp.Config != nil {
 			r.Config = &tfTypes.ActionConfigType{}
 			if resp.Config.ActionTowerActionConfig != nil {
@@ -26,12 +32,68 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Config.Github = &tfTypes.GithubActionConfig{}
 				r.Config.Github.Discriminator = types.StringPointerValue(resp.Config.GithubActionConfig.Discriminator)
 			}
+			if resp.Config.BucketActionConfig != nil {
+				r.Config.Bucket = &tfTypes.BucketActionConfig{}
+				r.Config.Bucket.BucketName = types.StringPointerValue(resp.Config.BucketActionConfig.BucketName)
+				r.Config.Bucket.DataLinkID = types.StringPointerValue(resp.Config.BucketActionConfig.DataLinkID)
+				r.Config.Bucket.Discriminator = types.StringPointerValue(resp.Config.BucketActionConfig.Discriminator)
+				r.Config.Bucket.Events = make([]types.String, 0, len(resp.Config.BucketActionConfig.Events))
+				for _, v := range resp.Config.BucketActionConfig.Events {
+					r.Config.Bucket.Events = append(r.Config.Bucket.Events, types.StringValue(v))
+				}
+				r.Config.Bucket.MarkerFile = types.StringPointerValue(resp.Config.BucketActionConfig.MarkerFile)
+				r.Config.Bucket.SubscriptionArn = types.StringPointerValue(resp.Config.BucketActionConfig.SubscriptionArn)
+				r.Config.Bucket.TopicArn = types.StringPointerValue(resp.Config.BucketActionConfig.TopicArn)
+			}
+			if resp.Config.CronActionConfig != nil {
+				r.Config.Cron = &tfTypes.CronActionConfig{}
+				r.Config.Cron.Discriminator = types.StringPointerValue(resp.Config.CronActionConfig.Discriminator)
+				r.Config.Cron.Expression = types.StringPointerValue(resp.Config.CronActionConfig.Expression)
+				r.Config.Cron.Preset = types.StringPointerValue(resp.Config.CronActionConfig.Preset)
+				r.Config.Cron.Timezone = types.StringPointerValue(resp.Config.CronActionConfig.Timezone)
+			}
+			if resp.Config.PipelineStatusActionConfig != nil {
+				r.Config.PipelineStatus = &tfTypes.PipelineStatusActionConfig{}
+				r.Config.PipelineStatus.Discriminator = types.StringPointerValue(resp.Config.PipelineStatusActionConfig.Discriminator)
+				r.Config.PipelineStatus.PipelineID = types.Int64PointerValue(resp.Config.PipelineStatusActionConfig.PipelineID)
+				if resp.Config.PipelineStatusActionConfig.RunStatus != nil {
+					r.Config.PipelineStatus.RunStatus = types.StringValue(string(*resp.Config.PipelineStatusActionConfig.RunStatus))
+				} else {
+					r.Config.PipelineStatus.RunStatus = types.StringNull()
+				}
+			}
 		}
 		r.Error = types.StringPointerValue(resp.Error)
 		r.HookID = types.StringPointerValue(resp.HookID)
 		r.HookURL = types.StringPointerValue(resp.HookURL)
 		r.ID = types.StringPointerValue(resp.ID)
-		if resp.Launch != nil {
+		if resp.LastTrigger == nil {
+			r.LastTrigger = nil
+		} else {
+			r.LastTrigger = &tfTypes.ActionResponseDtoLastTrigger{}
+			r.LastTrigger.ActionID = types.StringPointerValue(resp.LastTrigger.ActionID)
+			r.LastTrigger.ActorID = types.Int64PointerValue(resp.LastTrigger.ActorID)
+			r.LastTrigger.AgentRunID = types.StringPointerValue(resp.LastTrigger.AgentRunID)
+			r.LastTrigger.CausedByTriggerID = types.StringPointerValue(resp.LastTrigger.CausedByTriggerID)
+			r.LastTrigger.EventSummary = types.StringPointerValue(resp.LastTrigger.EventSummary)
+			r.LastTrigger.FiredAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastTrigger.FiredAt))
+			r.LastTrigger.ID = types.StringPointerValue(resp.LastTrigger.ID)
+			if resp.LastTrigger.Outcome != nil {
+				r.LastTrigger.Outcome = types.StringValue(string(*resp.LastTrigger.Outcome))
+			} else {
+				r.LastTrigger.Outcome = types.StringNull()
+			}
+			r.LastTrigger.OutcomeDetail = types.StringPointerValue(resp.LastTrigger.OutcomeDetail)
+			if resp.LastTrigger.Source != nil {
+				r.LastTrigger.Source = types.StringValue(string(*resp.LastTrigger.Source))
+			} else {
+				r.LastTrigger.Source = types.StringNull()
+			}
+			r.LastTrigger.WorkflowID = types.StringPointerValue(resp.LastTrigger.WorkflowID)
+		}
+		if resp.Launch == nil {
+			r.Launch = nil
+		} else {
 			launchPriorData := r.Launch
 			r.Launch = &tfTypes.ActionLaunchRequest{}
 			r.Launch.ConfigProfiles = make([]types.String, 0, len(resp.Launch.ConfigProfiles))
@@ -85,6 +147,18 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		}
 		r.Name = types.StringPointerValue(resp.Name)
 		r.NextExecution = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.NextExecution))
+		if resp.Pipeline == nil {
+			r.Pipeline = nil
+		} else {
+			r.Pipeline = &tfTypes.PipelineActionRequest{}
+			r.Pipeline.TargetPipelineID = types.Int64PointerValue(resp.Pipeline.TargetPipelineID)
+			r.Pipeline.TargetPipelineVersionID = types.StringPointerValue(resp.Pipeline.TargetPipelineVersionID)
+		}
+		if resp.ResponseType != nil {
+			r.ResponseType = types.StringValue(string(*resp.ResponseType))
+		} else {
+			r.ResponseType = types.StringNull()
+		}
 		if resp.Source != nil {
 			r.Source = types.StringValue(string(*resp.Source))
 		} else {
@@ -218,189 +292,302 @@ func (r *ActionResourceModel) ToOperationsUpdateActionRequest(ctx context.Contex
 func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (*shared.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	computeEnvID := new(string)
-	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-	} else {
-		computeEnvID = nil
-	}
-	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-	for configProfilesIndex := range r.Launch.ConfigProfiles {
-		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
-	}
-	configText := new(string)
-	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-		*configText = r.Launch.ConfigText.ValueString()
-	} else {
-		configText = nil
-	}
-	entryName := new(string)
-	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-		*entryName = r.Launch.EntryName.ValueString()
-	} else {
-		entryName = nil
-	}
-	fusionVersion := new(string)
-	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
-		*fusionVersion = r.Launch.FusionVersion.ValueString()
-	} else {
-		fusionVersion = nil
-	}
-	headJobCpus := new(int)
-	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-	} else {
-		headJobCpus = nil
-	}
-	headJobMemoryMb := new(int)
-	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-	} else {
-		headJobMemoryMb = nil
-	}
-	id := new(string)
-	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
-		*id = r.Launch.ID.ValueString()
-	} else {
-		id = nil
-	}
-	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-	for labelIdsIndex := range r.Launch.LabelIds {
-		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
-	}
-	mainScript := new(string)
-	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-		*mainScript = r.Launch.MainScript.ValueString()
-	} else {
-		mainScript = nil
-	}
-	nextflowVersion := new(string)
-	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
-		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
-	} else {
-		nextflowVersion = nil
-	}
-	outputDir := new(string)
-	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
-		*outputDir = r.Launch.OutputDir.ValueString()
-	} else {
-		outputDir = nil
-	}
-	paramsText := new(string)
-	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-		*paramsText = r.Launch.ParamsText.ValueString()
-	} else {
-		paramsText = nil
-	}
-	var pipeline string
-	pipeline = r.Launch.Pipeline.ValueString()
+	var agent *shared.AgentActionRequest
+	if r.Agent != nil {
+		var agentConfigID string
+		agentConfigID = r.Agent.AgentConfigID.ValueString()
 
-	pipelineSchemaID := new(int64)
-	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
-		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
-	} else {
-		pipelineSchemaID = nil
+		agent = &shared.AgentActionRequest{
+			AgentConfigID: agentConfigID,
+		}
 	}
-	postRunScript := new(string)
-	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-		*postRunScript = r.Launch.PostRunScript.ValueString()
-	} else {
-		postRunScript = nil
+	var bucket *shared.BucketActionRequest
+	if r.Bucket != nil {
+		dataLinkID := new(string)
+		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
+			*dataLinkID = r.Bucket.DataLinkID.ValueString()
+		} else {
+			dataLinkID = nil
+		}
+		events := make([]string, 0, len(r.Bucket.Events))
+		for eventsIndex := range r.Bucket.Events {
+			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
+		}
+		markerFile := new(string)
+		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
+			*markerFile = r.Bucket.MarkerFile.ValueString()
+		} else {
+			markerFile = nil
+		}
+		bucket = &shared.BucketActionRequest{
+			DataLinkID: dataLinkID,
+			Events:     events,
+			MarkerFile: markerFile,
+		}
 	}
-	preRunScript := new(string)
-	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-		*preRunScript = r.Launch.PreRunScript.ValueString()
-	} else {
-		preRunScript = nil
+	var cron *shared.CronActionRequest
+	if r.Cron != nil {
+		expression := new(string)
+		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
+			*expression = r.Cron.Expression.ValueString()
+		} else {
+			expression = nil
+		}
+		preset := new(string)
+		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
+			*preset = r.Cron.Preset.ValueString()
+		} else {
+			preset = nil
+		}
+		timezone := new(string)
+		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
+			*timezone = r.Cron.Timezone.ValueString()
+		} else {
+			timezone = nil
+		}
+		cron = &shared.CronActionRequest{
+			Expression: expression,
+			Preset:     preset,
+			Timezone:   timezone,
+		}
 	}
-	pullLatest := new(bool)
-	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-		*pullLatest = r.Launch.PullLatest.ValueBool()
-	} else {
-		pullLatest = nil
+	var labelIds []int64
+	if r.LabelIds != nil {
+		labelIds = make([]int64, 0, len(r.LabelIds))
+		for labelIdsIndex := range r.LabelIds {
+			labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
+		}
 	}
-	revision := new(string)
-	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-		*revision = r.Launch.Revision.ValueString()
-	} else {
-		revision = nil
-	}
-	runName := new(string)
-	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-		*runName = r.Launch.RunName.ValueString()
-	} else {
-		runName = nil
-	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
-	} else {
-		schemaName = nil
-	}
-	stubRun := new(bool)
-	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-		*stubRun = r.Launch.StubRun.ValueBool()
-	} else {
-		stubRun = nil
-	}
-	syntaxParser := new(shared.ActionLaunchRequestSyntaxParser)
-	if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
-		*syntaxParser = shared.ActionLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
-	} else {
-		syntaxParser = nil
-	}
-	towerConfig := new(string)
-	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-		*towerConfig = r.Launch.TowerConfig.ValueString()
-	} else {
-		towerConfig = nil
-	}
-	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-	for userSecretsIndex := range r.Launch.UserSecrets {
-		userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
-	}
-	workDir := new(string)
-	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-		*workDir = r.Launch.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
-	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
-	}
-	launch := shared.ActionLaunchRequest{
-		ComputeEnvID:     computeEnvID,
-		ConfigProfiles:   configProfiles,
-		ConfigText:       configText,
-		EntryName:        entryName,
-		FusionVersion:    fusionVersion,
-		HeadJobCpus:      headJobCpus,
-		HeadJobMemoryMb:  headJobMemoryMb,
-		ID:               id,
-		LabelIds:         labelIds,
-		MainScript:       mainScript,
-		NextflowVersion:  nextflowVersion,
-		OutputDir:        outputDir,
-		ParamsText:       paramsText,
-		Pipeline:         pipeline,
-		PipelineSchemaID: pipelineSchemaID,
-		PostRunScript:    postRunScript,
-		PreRunScript:     preRunScript,
-		PullLatest:       pullLatest,
-		Revision:         revision,
-		RunName:          runName,
-		SchemaName:       schemaName,
-		StubRun:          stubRun,
-		SyntaxParser:     syntaxParser,
-		TowerConfig:      towerConfig,
-		UserSecrets:      userSecrets,
-		WorkDir:          workDir,
-		WorkspaceSecrets: workspaceSecrets,
+	var launch *shared.ActionLaunchRequest
+	if r.Launch != nil {
+		computeEnvID := new(string)
+		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+		} else {
+			computeEnvID = nil
+		}
+		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+		for configProfilesIndex := range r.Launch.ConfigProfiles {
+			configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
+		}
+		configText := new(string)
+		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+			*configText = r.Launch.ConfigText.ValueString()
+		} else {
+			configText = nil
+		}
+		entryName := new(string)
+		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+			*entryName = r.Launch.EntryName.ValueString()
+		} else {
+			entryName = nil
+		}
+		fusionVersion := new(string)
+		if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+			*fusionVersion = r.Launch.FusionVersion.ValueString()
+		} else {
+			fusionVersion = nil
+		}
+		headJobCpus := new(int)
+		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+		} else {
+			headJobCpus = nil
+		}
+		headJobMemoryMb := new(int)
+		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+		} else {
+			headJobMemoryMb = nil
+		}
+		id := new(string)
+		if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+			*id = r.Launch.ID.ValueString()
+		} else {
+			id = nil
+		}
+		labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
+		for labelIdsIndex1 := range r.Launch.LabelIds {
+			labelIds1 = append(labelIds1, r.Launch.LabelIds[labelIdsIndex1].ValueInt64())
+		}
+		mainScript := new(string)
+		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+			*mainScript = r.Launch.MainScript.ValueString()
+		} else {
+			mainScript = nil
+		}
+		nextflowVersion := new(string)
+		if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+			*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+		} else {
+			nextflowVersion = nil
+		}
+		outputDir := new(string)
+		if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
+			*outputDir = r.Launch.OutputDir.ValueString()
+		} else {
+			outputDir = nil
+		}
+		paramsText := new(string)
+		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+			*paramsText = r.Launch.ParamsText.ValueString()
+		} else {
+			paramsText = nil
+		}
+		var pipeline string
+		pipeline = r.Launch.Pipeline.ValueString()
+
+		pipelineSchemaID := new(int64)
+		if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+			*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
+		} else {
+			pipelineSchemaID = nil
+		}
+		postRunScript := new(string)
+		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+			*postRunScript = r.Launch.PostRunScript.ValueString()
+		} else {
+			postRunScript = nil
+		}
+		preRunScript := new(string)
+		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+			*preRunScript = r.Launch.PreRunScript.ValueString()
+		} else {
+			preRunScript = nil
+		}
+		pullLatest := new(bool)
+		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+			*pullLatest = r.Launch.PullLatest.ValueBool()
+		} else {
+			pullLatest = nil
+		}
+		revision := new(string)
+		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+			*revision = r.Launch.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		runName := new(string)
+		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+			*runName = r.Launch.RunName.ValueString()
+		} else {
+			runName = nil
+		}
+		schemaName := new(string)
+		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+			*schemaName = r.Launch.SchemaName.ValueString()
+		} else {
+			schemaName = nil
+		}
+		stubRun := new(bool)
+		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+			*stubRun = r.Launch.StubRun.ValueBool()
+		} else {
+			stubRun = nil
+		}
+		syntaxParser := new(shared.ActionLaunchRequestSyntaxParser)
+		if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
+			*syntaxParser = shared.ActionLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
+		} else {
+			syntaxParser = nil
+		}
+		towerConfig := new(string)
+		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+			*towerConfig = r.Launch.TowerConfig.ValueString()
+		} else {
+			towerConfig = nil
+		}
+		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+		for userSecretsIndex := range r.Launch.UserSecrets {
+			userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
+		}
+		workDir := new(string)
+		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+			*workDir = r.Launch.WorkDir.ValueString()
+		} else {
+			workDir = nil
+		}
+		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+		for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
+			workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
+		}
+		launch = &shared.ActionLaunchRequest{
+			ComputeEnvID:     computeEnvID,
+			ConfigProfiles:   configProfiles,
+			ConfigText:       configText,
+			EntryName:        entryName,
+			FusionVersion:    fusionVersion,
+			HeadJobCpus:      headJobCpus,
+			HeadJobMemoryMb:  headJobMemoryMb,
+			ID:               id,
+			LabelIds:         labelIds1,
+			MainScript:       mainScript,
+			NextflowVersion:  nextflowVersion,
+			OutputDir:        outputDir,
+			ParamsText:       paramsText,
+			Pipeline:         pipeline,
+			PipelineSchemaID: pipelineSchemaID,
+			PostRunScript:    postRunScript,
+			PreRunScript:     preRunScript,
+			PullLatest:       pullLatest,
+			Revision:         revision,
+			RunName:          runName,
+			SchemaName:       schemaName,
+			StubRun:          stubRun,
+			SyntaxParser:     syntaxParser,
+			TowerConfig:      towerConfig,
+			UserSecrets:      userSecrets,
+			WorkDir:          workDir,
+			WorkspaceSecrets: workspaceSecrets,
+		}
 	}
 	var name string
 	name = r.Name.ValueString()
 
+	var pipeline1 *shared.PipelineActionRequest
+	if r.Pipeline != nil {
+		targetPipelineID := new(int64)
+		if !r.Pipeline.TargetPipelineID.IsUnknown() && !r.Pipeline.TargetPipelineID.IsNull() {
+			*targetPipelineID = r.Pipeline.TargetPipelineID.ValueInt64()
+		} else {
+			targetPipelineID = nil
+		}
+		targetPipelineVersionID := new(string)
+		if !r.Pipeline.TargetPipelineVersionID.IsUnknown() && !r.Pipeline.TargetPipelineVersionID.IsNull() {
+			*targetPipelineVersionID = r.Pipeline.TargetPipelineVersionID.ValueString()
+		} else {
+			targetPipelineVersionID = nil
+		}
+		pipeline1 = &shared.PipelineActionRequest{
+			TargetPipelineID:        targetPipelineID,
+			TargetPipelineVersionID: targetPipelineVersionID,
+		}
+	}
+	var pipelineStatus *shared.PipelineStatusActionRequest
+	if r.PipelineStatus != nil {
+		pipelineID := new(int64)
+		if !r.PipelineStatus.PipelineID.IsUnknown() && !r.PipelineStatus.PipelineID.IsNull() {
+			*pipelineID = r.PipelineStatus.PipelineID.ValueInt64()
+		} else {
+			pipelineID = nil
+		}
+		runStatus := new(shared.RunStatusEnum)
+		if !r.PipelineStatus.RunStatus.IsUnknown() && !r.PipelineStatus.RunStatus.IsNull() {
+			*runStatus = shared.RunStatusEnum(r.PipelineStatus.RunStatus.ValueString())
+		} else {
+			runStatus = nil
+		}
+		pipelineStatus = &shared.PipelineStatusActionRequest{
+			PipelineID: pipelineID,
+			RunStatus:  runStatus,
+		}
+	}
+	responseType := new(shared.ActionResponseType)
+	if !r.ResponseType.IsUnknown() && !r.ResponseType.IsNull() {
+		*responseType = shared.ActionResponseType(r.ResponseType.ValueString())
+	} else {
+		responseType = nil
+	}
 	source := new(shared.ActionSource)
 	if !r.Source.IsUnknown() && !r.Source.IsNull() {
 		*source = shared.ActionSource(r.Source.ValueString())
@@ -408,9 +595,16 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		source = nil
 	}
 	out := shared.CreateActionRequest{
-		Launch: launch,
-		Name:   name,
-		Source: source,
+		Agent:          agent,
+		Bucket:         bucket,
+		Cron:           cron,
+		LabelIds:       labelIds,
+		Launch:         launch,
+		Name:           name,
+		Pipeline:       pipeline1,
+		PipelineStatus: pipelineStatus,
+		ResponseType:   responseType,
+		Source:         source,
 	}
 
 	return &out, diags
@@ -419,186 +613,245 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (*shared.UpdateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	var bucket *shared.BucketActionRequest
+	if r.Bucket != nil {
+		dataLinkID := new(string)
+		if !r.Bucket.DataLinkID.IsUnknown() && !r.Bucket.DataLinkID.IsNull() {
+			*dataLinkID = r.Bucket.DataLinkID.ValueString()
+		} else {
+			dataLinkID = nil
+		}
+		events := make([]string, 0, len(r.Bucket.Events))
+		for eventsIndex := range r.Bucket.Events {
+			events = append(events, r.Bucket.Events[eventsIndex].ValueString())
+		}
+		markerFile := new(string)
+		if !r.Bucket.MarkerFile.IsUnknown() && !r.Bucket.MarkerFile.IsNull() {
+			*markerFile = r.Bucket.MarkerFile.ValueString()
+		} else {
+			markerFile = nil
+		}
+		bucket = &shared.BucketActionRequest{
+			DataLinkID: dataLinkID,
+			Events:     events,
+			MarkerFile: markerFile,
+		}
+	}
+	var cron *shared.CronActionRequest
+	if r.Cron != nil {
+		expression := new(string)
+		if !r.Cron.Expression.IsUnknown() && !r.Cron.Expression.IsNull() {
+			*expression = r.Cron.Expression.ValueString()
+		} else {
+			expression = nil
+		}
+		preset := new(string)
+		if !r.Cron.Preset.IsUnknown() && !r.Cron.Preset.IsNull() {
+			*preset = r.Cron.Preset.ValueString()
+		} else {
+			preset = nil
+		}
+		timezone := new(string)
+		if !r.Cron.Timezone.IsUnknown() && !r.Cron.Timezone.IsNull() {
+			*timezone = r.Cron.Timezone.ValueString()
+		} else {
+			timezone = nil
+		}
+		cron = &shared.CronActionRequest{
+			Expression: expression,
+			Preset:     preset,
+			Timezone:   timezone,
+		}
+	}
+	var labelIds []int64
+	if r.LabelIds != nil {
+		labelIds = make([]int64, 0, len(r.LabelIds))
+		for labelIdsIndex := range r.LabelIds {
+			labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
+		}
+	}
 	var launch *shared.ActionLaunchRequest
-	computeEnvID := new(string)
-	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-	} else {
-		computeEnvID = nil
-	}
-	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-	for configProfilesIndex := range r.Launch.ConfigProfiles {
-		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
-	}
-	configText := new(string)
-	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-		*configText = r.Launch.ConfigText.ValueString()
-	} else {
-		configText = nil
-	}
-	entryName := new(string)
-	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-		*entryName = r.Launch.EntryName.ValueString()
-	} else {
-		entryName = nil
-	}
-	fusionVersion := new(string)
-	if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
-		*fusionVersion = r.Launch.FusionVersion.ValueString()
-	} else {
-		fusionVersion = nil
-	}
-	headJobCpus := new(int)
-	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-	} else {
-		headJobCpus = nil
-	}
-	headJobMemoryMb := new(int)
-	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-	} else {
-		headJobMemoryMb = nil
-	}
-	id := new(string)
-	if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
-		*id = r.Launch.ID.ValueString()
-	} else {
-		id = nil
-	}
-	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-	for labelIdsIndex := range r.Launch.LabelIds {
-		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
-	}
-	mainScript := new(string)
-	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-		*mainScript = r.Launch.MainScript.ValueString()
-	} else {
-		mainScript = nil
-	}
-	nextflowVersion := new(string)
-	if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
-		*nextflowVersion = r.Launch.NextflowVersion.ValueString()
-	} else {
-		nextflowVersion = nil
-	}
-	outputDir := new(string)
-	if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
-		*outputDir = r.Launch.OutputDir.ValueString()
-	} else {
-		outputDir = nil
-	}
-	paramsText := new(string)
-	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-		*paramsText = r.Launch.ParamsText.ValueString()
-	} else {
-		paramsText = nil
-	}
-	var pipeline string
-	pipeline = r.Launch.Pipeline.ValueString()
+	if r.Launch != nil {
+		computeEnvID := new(string)
+		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+		} else {
+			computeEnvID = nil
+		}
+		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+		for configProfilesIndex := range r.Launch.ConfigProfiles {
+			configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
+		}
+		configText := new(string)
+		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+			*configText = r.Launch.ConfigText.ValueString()
+		} else {
+			configText = nil
+		}
+		entryName := new(string)
+		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+			*entryName = r.Launch.EntryName.ValueString()
+		} else {
+			entryName = nil
+		}
+		fusionVersion := new(string)
+		if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
+			*fusionVersion = r.Launch.FusionVersion.ValueString()
+		} else {
+			fusionVersion = nil
+		}
+		headJobCpus := new(int)
+		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+		} else {
+			headJobCpus = nil
+		}
+		headJobMemoryMb := new(int)
+		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+		} else {
+			headJobMemoryMb = nil
+		}
+		id := new(string)
+		if !r.Launch.ID.IsUnknown() && !r.Launch.ID.IsNull() {
+			*id = r.Launch.ID.ValueString()
+		} else {
+			id = nil
+		}
+		labelIds1 := make([]int64, 0, len(r.Launch.LabelIds))
+		for labelIdsIndex1 := range r.Launch.LabelIds {
+			labelIds1 = append(labelIds1, r.Launch.LabelIds[labelIdsIndex1].ValueInt64())
+		}
+		mainScript := new(string)
+		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+			*mainScript = r.Launch.MainScript.ValueString()
+		} else {
+			mainScript = nil
+		}
+		nextflowVersion := new(string)
+		if !r.Launch.NextflowVersion.IsUnknown() && !r.Launch.NextflowVersion.IsNull() {
+			*nextflowVersion = r.Launch.NextflowVersion.ValueString()
+		} else {
+			nextflowVersion = nil
+		}
+		outputDir := new(string)
+		if !r.Launch.OutputDir.IsUnknown() && !r.Launch.OutputDir.IsNull() {
+			*outputDir = r.Launch.OutputDir.ValueString()
+		} else {
+			outputDir = nil
+		}
+		paramsText := new(string)
+		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+			*paramsText = r.Launch.ParamsText.ValueString()
+		} else {
+			paramsText = nil
+		}
+		var pipeline string
+		pipeline = r.Launch.Pipeline.ValueString()
 
-	pipelineSchemaID := new(int64)
-	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
-		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
-	} else {
-		pipelineSchemaID = nil
-	}
-	postRunScript := new(string)
-	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-		*postRunScript = r.Launch.PostRunScript.ValueString()
-	} else {
-		postRunScript = nil
-	}
-	preRunScript := new(string)
-	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-		*preRunScript = r.Launch.PreRunScript.ValueString()
-	} else {
-		preRunScript = nil
-	}
-	pullLatest := new(bool)
-	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-		*pullLatest = r.Launch.PullLatest.ValueBool()
-	} else {
-		pullLatest = nil
-	}
-	revision := new(string)
-	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-		*revision = r.Launch.Revision.ValueString()
-	} else {
-		revision = nil
-	}
-	runName := new(string)
-	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-		*runName = r.Launch.RunName.ValueString()
-	} else {
-		runName = nil
-	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
-	} else {
-		schemaName = nil
-	}
-	stubRun := new(bool)
-	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-		*stubRun = r.Launch.StubRun.ValueBool()
-	} else {
-		stubRun = nil
-	}
-	syntaxParser := new(shared.ActionLaunchRequestSyntaxParser)
-	if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
-		*syntaxParser = shared.ActionLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
-	} else {
-		syntaxParser = nil
-	}
-	towerConfig := new(string)
-	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-		*towerConfig = r.Launch.TowerConfig.ValueString()
-	} else {
-		towerConfig = nil
-	}
-	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-	for userSecretsIndex := range r.Launch.UserSecrets {
-		userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
-	}
-	workDir := new(string)
-	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-		*workDir = r.Launch.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
-	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
-	}
-	launch = &shared.ActionLaunchRequest{
-		ComputeEnvID:     computeEnvID,
-		ConfigProfiles:   configProfiles,
-		ConfigText:       configText,
-		EntryName:        entryName,
-		FusionVersion:    fusionVersion,
-		HeadJobCpus:      headJobCpus,
-		HeadJobMemoryMb:  headJobMemoryMb,
-		ID:               id,
-		LabelIds:         labelIds,
-		MainScript:       mainScript,
-		NextflowVersion:  nextflowVersion,
-		OutputDir:        outputDir,
-		ParamsText:       paramsText,
-		Pipeline:         pipeline,
-		PipelineSchemaID: pipelineSchemaID,
-		PostRunScript:    postRunScript,
-		PreRunScript:     preRunScript,
-		PullLatest:       pullLatest,
-		Revision:         revision,
-		RunName:          runName,
-		SchemaName:       schemaName,
-		StubRun:          stubRun,
-		SyntaxParser:     syntaxParser,
-		TowerConfig:      towerConfig,
-		UserSecrets:      userSecrets,
-		WorkDir:          workDir,
-		WorkspaceSecrets: workspaceSecrets,
+		pipelineSchemaID := new(int64)
+		if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+			*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
+		} else {
+			pipelineSchemaID = nil
+		}
+		postRunScript := new(string)
+		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+			*postRunScript = r.Launch.PostRunScript.ValueString()
+		} else {
+			postRunScript = nil
+		}
+		preRunScript := new(string)
+		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+			*preRunScript = r.Launch.PreRunScript.ValueString()
+		} else {
+			preRunScript = nil
+		}
+		pullLatest := new(bool)
+		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+			*pullLatest = r.Launch.PullLatest.ValueBool()
+		} else {
+			pullLatest = nil
+		}
+		revision := new(string)
+		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+			*revision = r.Launch.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		runName := new(string)
+		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+			*runName = r.Launch.RunName.ValueString()
+		} else {
+			runName = nil
+		}
+		schemaName := new(string)
+		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+			*schemaName = r.Launch.SchemaName.ValueString()
+		} else {
+			schemaName = nil
+		}
+		stubRun := new(bool)
+		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+			*stubRun = r.Launch.StubRun.ValueBool()
+		} else {
+			stubRun = nil
+		}
+		syntaxParser := new(shared.ActionLaunchRequestSyntaxParser)
+		if !r.Launch.SyntaxParser.IsUnknown() && !r.Launch.SyntaxParser.IsNull() {
+			*syntaxParser = shared.ActionLaunchRequestSyntaxParser(r.Launch.SyntaxParser.ValueString())
+		} else {
+			syntaxParser = nil
+		}
+		towerConfig := new(string)
+		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+			*towerConfig = r.Launch.TowerConfig.ValueString()
+		} else {
+			towerConfig = nil
+		}
+		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+		for userSecretsIndex := range r.Launch.UserSecrets {
+			userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
+		}
+		workDir := new(string)
+		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+			*workDir = r.Launch.WorkDir.ValueString()
+		} else {
+			workDir = nil
+		}
+		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+		for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
+			workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
+		}
+		launch = &shared.ActionLaunchRequest{
+			ComputeEnvID:     computeEnvID,
+			ConfigProfiles:   configProfiles,
+			ConfigText:       configText,
+			EntryName:        entryName,
+			FusionVersion:    fusionVersion,
+			HeadJobCpus:      headJobCpus,
+			HeadJobMemoryMb:  headJobMemoryMb,
+			ID:               id,
+			LabelIds:         labelIds1,
+			MainScript:       mainScript,
+			NextflowVersion:  nextflowVersion,
+			OutputDir:        outputDir,
+			ParamsText:       paramsText,
+			Pipeline:         pipeline,
+			PipelineSchemaID: pipelineSchemaID,
+			PostRunScript:    postRunScript,
+			PreRunScript:     preRunScript,
+			PullLatest:       pullLatest,
+			Revision:         revision,
+			RunName:          runName,
+			SchemaName:       schemaName,
+			StubRun:          stubRun,
+			SyntaxParser:     syntaxParser,
+			TowerConfig:      towerConfig,
+			UserSecrets:      userSecrets,
+			WorkDir:          workDir,
+			WorkspaceSecrets: workspaceSecrets,
+		}
 	}
 	name := new(string)
 	if !r.Name.IsUnknown() && !r.Name.IsNull() {
@@ -606,9 +859,52 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		name = nil
 	}
+	var pipeline1 *shared.PipelineActionRequest
+	if r.Pipeline != nil {
+		targetPipelineID := new(int64)
+		if !r.Pipeline.TargetPipelineID.IsUnknown() && !r.Pipeline.TargetPipelineID.IsNull() {
+			*targetPipelineID = r.Pipeline.TargetPipelineID.ValueInt64()
+		} else {
+			targetPipelineID = nil
+		}
+		targetPipelineVersionID := new(string)
+		if !r.Pipeline.TargetPipelineVersionID.IsUnknown() && !r.Pipeline.TargetPipelineVersionID.IsNull() {
+			*targetPipelineVersionID = r.Pipeline.TargetPipelineVersionID.ValueString()
+		} else {
+			targetPipelineVersionID = nil
+		}
+		pipeline1 = &shared.PipelineActionRequest{
+			TargetPipelineID:        targetPipelineID,
+			TargetPipelineVersionID: targetPipelineVersionID,
+		}
+	}
+	var pipelineStatus *shared.PipelineStatusActionRequest
+	if r.PipelineStatus != nil {
+		pipelineID := new(int64)
+		if !r.PipelineStatus.PipelineID.IsUnknown() && !r.PipelineStatus.PipelineID.IsNull() {
+			*pipelineID = r.PipelineStatus.PipelineID.ValueInt64()
+		} else {
+			pipelineID = nil
+		}
+		runStatus := new(shared.RunStatusEnum)
+		if !r.PipelineStatus.RunStatus.IsUnknown() && !r.PipelineStatus.RunStatus.IsNull() {
+			*runStatus = shared.RunStatusEnum(r.PipelineStatus.RunStatus.ValueString())
+		} else {
+			runStatus = nil
+		}
+		pipelineStatus = &shared.PipelineStatusActionRequest{
+			PipelineID: pipelineID,
+			RunStatus:  runStatus,
+		}
+	}
 	out := shared.UpdateActionRequest{
-		Launch: launch,
-		Name:   name,
+		Bucket:         bucket,
+		Cron:           cron,
+		LabelIds:       labelIds,
+		Launch:         launch,
+		Name:           name,
+		Pipeline:       pipeline1,
+		PipelineStatus: pipelineStatus,
 	}
 
 	return &out, diags

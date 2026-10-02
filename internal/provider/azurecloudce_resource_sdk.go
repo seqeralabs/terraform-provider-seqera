@@ -48,6 +48,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -72,6 +73,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.LogTableName = types.StringPointerValue(resp.Config.LogTableName)
 		r.Config.LogWorkspaceID = types.StringPointerValue(resp.Config.LogWorkspaceID)
 		r.Config.ManagedIdentityClientID = types.StringPointerValue(resp.Config.ManagedIdentityClientID)
@@ -82,7 +84,6 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
 		r.Config.ResourceGroup = types.StringPointerValue(resp.Config.ResourceGroup)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.Subnets = make([]types.String, 0, len(resp.Config.Subnets))
 		for _, v := range resp.Config.Subnets {
 			r.Config.Subnets = append(r.Config.Subnets, types.StringValue(v))
@@ -414,6 +415,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -481,22 +488,23 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			MaxCpusPerUser:    maxCpusPerUser,
-			MaxSpotAttempts:   maxSpotAttempts,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	subnets := make([]string, 0, len(r.Config.Subnets))
 	for subnetsIndex := range r.Config.Subnets {
@@ -515,26 +523,26 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		workDir = nil
 	}
 	config := shared.AzCloudConfig{
-		BootDiskSizeGB:           bootDiskSizeGB,
-		DataCollectionEndpoint:   dataCollectionEndpoint,
-		DataCollectionRuleID:     dataCollectionRuleID,
-		Environment:              environment,
-		InstanceType:             instanceType,
-		LogTableName:             logTableName,
-		LogWorkspaceID:           logWorkspaceID,
-		ManagedIdentityClientID:  managedIdentityClientID,
-		ManagedIdentityID:        managedIdentityID,
-		NetworkID:                networkID,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		Region:                   region,
-		ResourceGroup:            resourceGroup,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		Subnets:                  subnets,
-		SubscriptionID:           subscriptionID,
-		WorkDir:                  workDir,
+		BootDiskSizeGB:            bootDiskSizeGB,
+		DataCollectionEndpoint:    dataCollectionEndpoint,
+		DataCollectionRuleID:      dataCollectionRuleID,
+		Environment:               environment,
+		InstanceType:              instanceType,
+		LogTableName:              logTableName,
+		LogWorkspaceID:            logWorkspaceID,
+		ManagedIdentityClientID:   managedIdentityClientID,
+		ManagedIdentityID:         managedIdentityID,
+		NetworkID:                 networkID,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		Region:                    region,
+		ResourceGroup:             resourceGroup,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		Subnets:                   subnets,
+		SubscriptionID:            subscriptionID,
+		WorkDir:                   workDir,
 	}
 	out := shared.AzureCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

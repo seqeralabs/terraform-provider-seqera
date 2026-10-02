@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.214.0
+  version: 1.226.2
 tags:
   - name: actions
     description: Pipeline actions
@@ -35,6 +35,8 @@ tags:
     description: Pipeline secrets in a user or workspace context
   - name: platforms
     description: Computing platforms
+  - name: service-accounts
+    description: Service accounts in an organization context
   - name: service-info
     description: Seqera Platform API service information
   - name: studios
@@ -66,7 +68,7 @@ paths:
             format: int64
         - name: attributes
           in: query
-          description: 'Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
+          description: Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
           schema:
             type: array
             items:
@@ -93,7 +95,7 @@ paths:
     post:
       operationId: CreateAction
       summary: Create action
-      description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
+      description: 'Creates a new action. Append `?workspaceId` to associate the action with the given workspace. Send the trigger block that matches the `source`: `bucket`, `cron`, or `pipelineStatus`.'
       parameters:
         - name: workspaceId
           in: query
@@ -115,6 +117,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateActionResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/cron/resolve:
+    post:
+      operationId: ResolveCronExpression
+      summary: Resolve a schedule description to a cron expression
+      description: Resolves a free-text schedule description, such as `Every 10 minutes`, to a standard 5-field cron expression. A valid cron expression is returned unchanged. Append `?workspaceId` to resolve in a workspace context.
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveCronExpressionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolveCronExpressionResponse'
         '400':
           description: Bad request
           content:
@@ -332,7 +371,7 @@ paths:
             format: int64
         - name: attributes
           in: query
-          description: 'Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
+          description: Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
           schema:
             type: array
             items:
@@ -359,7 +398,7 @@ paths:
     put:
       operationId: UpdateAction
       summary: Update action
-      description: Updates the details of the action identified by the given `actionId`. The `source` of an existing action cannot be changed.
+      description: Updates the details of the action identified by the given `actionId`. The `source`, `responseType` and `launch.id` of an existing action cannot change. A pipeline action requires the whole `launch` on every update, because the update overwrites every stored launch setting.
       parameters:
         - name: actionId
           in: path
@@ -391,6 +430,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Duplicate element, or another write changed the action after this request read it
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -473,6 +518,129 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Another request changed the action status first
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/{actionId}/triggers:
+    get:
+      operationId: ListActionTriggers
+      summary: List action triggers
+      description: Lists the trigger history of the action identified by the given `actionId`, newest first. Append `?workspaceId` to read a workspace action.
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: max
+          in: query
+          description: Pagination max results
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
+        - name: outcome
+          in: query
+          description: Return only the triggers that ended one of these ways
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ActionTriggerResult'
+        - name: firedAfterOrEqual
+          in: query
+          description: Return only the triggers at or after this moment
+          schema:
+            type: string
+            format: date-time
+        - name: firedBeforeOrEqual
+          in: query
+          description: Return only the triggers at or before this moment
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListActionTriggersResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - actions
+  /actions/{actionId}/triggers/{triggerId}:
+    get:
+      operationId: DescribeActionTrigger
+      summary: Describe action trigger
+      description: 'Retrieves one trigger of the action identified by the given `actionId`, including the event that caused it. The event payload is untrusted input: escape it before displaying it. Append `?workspaceId` to read a workspace action.'
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+        - name: triggerId
+          in: path
+          description: Action trigger string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeActionTriggerResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Action trigger not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -701,7 +869,7 @@ paths:
         '403':
           description: Operation not allowed
         '409':
-          description: Duplicate element
+          description: Duplicate agent name or bound service account cannot be validated
           content:
             application/json:
               schema:
@@ -744,6 +912,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Bound service account cannot be validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '429':
           description: Rate limit or credit budget exhausted
           content:
@@ -768,7 +948,7 @@ paths:
             format: int64
         - name: search
           in: query
-          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId` and `sourcePipelineId`. Free text is not supported.
+          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId` and `serviceAccountName`. Free text is not supported.
           schema:
             type: string
         - name: max
@@ -966,7 +1146,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Duplicate element
+          description: Duplicate agent name or bound service account cannot be validated
           content:
             application/json:
               schema:
@@ -1135,7 +1315,33 @@ paths:
     get:
       operationId: CatalogComponentVersions
       summary: Catalog versions for a single component
+      description: As /versions but scoped to {key}; the same registered component compatibility-filter parameters apply (PF-2).
       parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: key
           in: path
           required: true
@@ -1154,8 +1360,33 @@ paths:
     get:
       operationId: CatalogVersions
       summary: Component compatibility catalog versions
-      description: Returns the catalog versions from the local state document (unconstrained in PF-1), with servedFrom provenance. Optionally narrowed to a single component.
+      description: Returns catalog versions with servedFrom provenance and observed deploymentVersions. Optionally narrowed to a single component and compatibility-constrained by registered component query parameters plus platform/nextflow/fusion/sched/wave deployment context, for example fusion=2.5 or connect=0.11.2 (comma-lists; AND across, OR within; edge-less params do not constrain). Unknown parameters and malformed expressions return 400; unknown selected components return 404.
       parameters:
+        - name: platform
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: nextflow
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: fusion
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: sched
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: wave
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: component
           in: query
           schema:
@@ -1802,7 +2033,7 @@ paths:
     get:
       operationId: DescribeCredentials
       summary: Describe credentials
-      description: Retrieves the details of the credentials identified by the given `credentialsId`.
+      description: Retrieves the details of the credentials identified by the given `credentialsId`. Include `workspaceId` when accessing workspace credentials; omit it for user-owned credentials.
       parameters:
         - name: credentialsId
           in: path
@@ -1812,7 +2043,7 @@ paths:
             type: string
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier; required for workspace credentials and omitted for user-owned credentials
           schema:
             type: integer
             format: int64
@@ -5608,6 +5839,207 @@ paths:
         - BearerAuth: []
       tags:
         - orgs
+  /orgs/{orgId}/service-accounts:
+    get:
+      operationId: ListServiceAccounts
+      summary: List service accounts
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+            nullable: true
+          explode: false
+        - name: max
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 20
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListServiceAccountsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    post:
+      operationId: CreateServiceAccount
+      summary: Create a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServiceAccountRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Duplicate service account name, name must be unique across all platform users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+  /orgs/{orgId}/service-accounts/{saId}:
+    delete:
+      operationId: DeleteServiceAccount
+      summary: Delete a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    get:
+      operationId: DescribeServiceAccount
+      summary: Describe a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    patch:
+      operationId: UpdateServiceAccount
+      summary: Update a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceAccountRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeServiceAccountResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Duplicate service account name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/teams:
     get:
       operationId: ListOrganizationTeams
@@ -6440,7 +6872,7 @@ paths:
     put:
       operationId: CreateWorkspaceParticipant
       summary: Create workspace participant
-      description: Adds a new participant to the workspace identified by the given `workspaceId`.
+      description: Adds a new participant to the workspace identified by the given `workspaceId`. The participant is assigned the requested `role`, defaulting to `launch` when omitted (`view` for service accounts).
       parameters:
         - name: orgId
           in: path
@@ -6579,6 +7011,56 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+  /orgs/{orgId}/workspaces/{workspaceId}/service-accounts:
+    get:
+      operationId: ListWorkspaceServiceAccounts
+      summary: List workspace service accounts
+      description: Lists the service accounts assigned to the workspace identified by the given `workspaceId`.
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: pageToken
+          in: query
+          schema:
+            type: string
+            nullable: true
+          explode: false
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            nullable: true
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWorkspaceServiceAccountsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       operationId: FindDataStudiosWorkspaceSettings
@@ -10694,6 +11176,11 @@ paths:
           description: Search tasks by name
           schema:
             type: string
+        - name: process
+          in: query
+          description: Exact process name filter
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -10703,6 +11190,49 @@ paths:
                 $ref: '#/components/schemas/ListTasksResponse'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+      tags:
+        - workflows
+  /workflow/{workflowId}/tasks/summary:
+    get:
+      operationId: SummarizeWorkflowTasks
+      summary: Summarize the tasks of the given workflow per process, optionally filtered by search
+      description: Rolls up matching tasks per process so the run-timeline grouped view stays complete on large runs, where a capped/paged task list could hide processes whose matches fall past the page. Rejected with a 400 when the run's total task count exceeds 20,000, since the search term does not bound the cost of the underlying query -- only run size does.
+      parameters:
+        - name: workflowId
+          in: path
+          description: Workflow string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: search
+          in: query
+          description: Search tasks by name; required and must not be blank, since an unfiltered summary would run an unfiltered GROUP BY over every task in the run
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTaskProcessSummaryResponse'
+        '400':
+          description: Bad request. Missing/blank search parameter, or the run has more tasks than this endpoint allows
           content:
             application/json:
               schema:
@@ -11143,12 +11673,18 @@ components:
           type: string
       discriminator:
         mapping:
+          bucket: '#/components/schemas/BucketActionConfig'
+          cron: '#/components/schemas/CronActionConfig'
           github: '#/components/schemas/GithubActionConfig'
+          pipeline_status: '#/components/schemas/PipelineStatusActionConfig'
           tower: '#/components/schemas/Action.TowerActionConfig'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/Action.TowerActionConfig'
         - $ref: '#/components/schemas/GithubActionConfig'
+        - $ref: '#/components/schemas/BucketActionConfig'
+        - $ref: '#/components/schemas/CronActionConfig'
+        - $ref: '#/components/schemas/PipelineStatusActionConfig'
     Action.EventType:
       type: object
       properties:
@@ -11159,12 +11695,26 @@ components:
           format: date-time
       discriminator:
         mapping:
+          bucket: '#/components/schemas/BucketActionEvent'
+          cron: '#/components/schemas/CronActionEvent'
           github: '#/components/schemas/GithubActionEvent'
+          pipeline_status: '#/components/schemas/PipelineStatusActionEvent'
           tower: '#/components/schemas/Action.TowerActionEvent'
         propertyName: discriminator
       oneOf:
         - $ref: '#/components/schemas/GithubActionEvent'
         - $ref: '#/components/schemas/Action.TowerActionEvent'
+        - $ref: '#/components/schemas/BucketActionEvent'
+        - $ref: '#/components/schemas/CronActionEvent'
+        - $ref: '#/components/schemas/PipelineStatusActionEvent'
+    Action.ResponseType:
+      type: string
+      enum:
+        - pipeline
+        - agent
+      x-enum-varnames:
+        - pipeline
+        - agent
     Action.Source:
       type: string
       enum:
@@ -11172,11 +11722,13 @@ components:
         - tower
         - bucket
         - cron
+        - pipeline_status
       x-enum-varnames:
         - github
         - tower
         - bucket
         - cron
+        - pipeline_status
     Action.Status:
       type: string
       enum:
@@ -11234,11 +11786,17 @@ components:
       type: string
       enum:
         - labels
+        - lastTrigger
       x-enum-varnames:
         - labels
+        - lastTrigger
     ActionResponseDto:
       type: object
       properties:
+        agent:
+          allOf:
+            - $ref: '#/components/schemas/AgentActionResponse'
+          nullable: true
         config:
           $ref: '#/components/schemas/Action.ConfigType'
         dateCreated:
@@ -11261,6 +11819,10 @@ components:
         lastSeen:
           type: string
           format: date-time
+        lastTrigger:
+          allOf:
+            - $ref: '#/components/schemas/ActionTriggerDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -11271,10 +11833,95 @@ components:
         nextExecution:
           type: string
           format: date-time
+        pipeline:
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionResponse'
+          nullable: true
+        responseType:
+          $ref: '#/components/schemas/Action.ResponseType'
         source:
           $ref: '#/components/schemas/Action.Source'
         status:
           $ref: '#/components/schemas/Action.Status'
+    ActionTriggerDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+        actorId:
+          type: integer
+          format: int64
+        agentRunId:
+          type: string
+          nullable: true
+        causedByTriggerId:
+          type: string
+          nullable: true
+        eventSummary:
+          type: string
+          nullable: true
+        firedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+        outcome:
+          $ref: '#/components/schemas/ActionTriggerResult'
+        outcomeDetail:
+          type: string
+          nullable: true
+        source:
+          allOf:
+            - $ref: '#/components/schemas/Action.Source'
+          nullable: true
+        workflowId:
+          type: string
+          nullable: true
+    ActionTriggerResponseDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+        actorId:
+          type: integer
+          format: int64
+        agentRunId:
+          type: string
+          nullable: true
+        causedByTriggerId:
+          type: string
+          nullable: true
+        eventPayload:
+          type: string
+          nullable: true
+        eventSummary:
+          type: string
+          nullable: true
+        firedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+        outcome:
+          $ref: '#/components/schemas/ActionTriggerResult'
+        outcomeDetail:
+          type: string
+          nullable: true
+        source:
+          allOf:
+            - $ref: '#/components/schemas/Action.Source'
+          nullable: true
+        workflowId:
+          type: string
+          nullable: true
+    ActionTriggerResult:
+      type: string
+      enum:
+        - PENDING
+        - LAUNCHED
+        - LAUNCH_FAILED
+        - SUPPRESSED_CYCLE
+        - SUPPRESSED_RATE
     ActiveConnection:
       type: object
       allOf:
@@ -11300,6 +11947,9 @@ components:
         memberId:
           type: integer
           format: int64
+        role:
+          description: "Role to assign to the new participant: either a predefined workspace role ('owner', 'admin', 'maintain', 'launch', 'connect', 'view', case-insensitive) or the name of a custom role defined in the organization. Defaults to 'launch' when omitted ('view' for service accounts)."
+          type: string
         teamId:
           type: integer
           format: int64
@@ -11325,6 +11975,21 @@ components:
         - active
         - inactive
         - deleted
+    AgentActionRequest:
+      type: object
+      properties:
+        agentConfigId:
+          description: ID of an existing workspace agent to run.
+          type: string
+      required:
+        - agentConfigId
+      title: Agent action request
+    AgentActionResponse:
+      type: object
+      properties:
+        agentConfigId:
+          type: string
+      title: Agent action response
     AgentDbDto:
       type: object
       properties:
@@ -11345,6 +12010,9 @@ components:
         description:
           type: string
           nullable: true
+        githubAppCredentialId:
+          type: string
+          nullable: true
         id:
           type: string
         lastUpdated:
@@ -11352,6 +12020,13 @@ components:
           format: date-time
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
+        serviceAccountName:
+          type: string
+          nullable: true
         status:
           $ref: '#/components/schemas/Agent.Status'
         updatedBy:
@@ -11396,6 +12071,9 @@ components:
         serviceAccountId:
           type: integer
           format: int64
+          nullable: true
+        serviceAccountName:
+          type: string
           nullable: true
         sessionId:
           type: string
@@ -11574,6 +12252,7 @@ components:
       type: string
       enum:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -11597,6 +12276,7 @@ components:
         - action_created
         - action_updated
         - action_deleted
+        - action_triggered
         - agent_created
         - agent_updated
         - agent_enabled
@@ -11770,6 +12450,7 @@ components:
         - workflow_status_changed
       x-enum-varnames:
         - workflow_launched
+        - catalog_override_applied
         - workflow_created
         - workflow_updated
         - workflow_completed
@@ -11793,6 +12474,7 @@ components:
         - action_created
         - action_updated
         - action_deleted
+        - action_triggered
         - agent_created
         - agent_updated
         - agent_enabled
@@ -12209,6 +12891,9 @@ components:
     AuditLogV2ResponseDto.Actor:
       type: object
       properties:
+        agentId:
+          type: string
+          nullable: true
         email:
           type: string
         firstName:
@@ -12997,6 +13682,56 @@ components:
       properties:
         path:
           type: string
+    BucketActionConfig:
+      type: object
+      properties:
+        bucketName:
+          type: string
+        dataLinkId:
+          type: string
+        discriminator:
+          type: string
+        events:
+          type: array
+          items:
+            type: string
+        markerFile:
+          type: string
+        subscriptionArn:
+          type: string
+        topicArn:
+          type: string
+      title: Bucket action config
+    BucketActionEvent:
+      type: object
+      properties:
+        bucketName:
+          type: string
+        discriminator:
+          type: string
+        eventName:
+          type: string
+        provider:
+          type: string
+        recordCount:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+          format: date-time
+      title: Bucket action event
+    BucketActionRequest:
+      type: object
+      properties:
+        dataLinkId:
+          type: string
+        events:
+          type: array
+          items:
+            type: string
+        markerFile:
+          type: string
+          nullable: true
     CatalogArtifact:
       type: object
       properties:
@@ -13045,6 +13780,10 @@ components:
       properties:
         defaultVersion:
           type: string
+        deploymentVersions:
+          type: object
+          additionalProperties:
+            type: string
         generatedAt:
           type: string
         servedFrom:
@@ -13259,6 +13998,7 @@ components:
           nullable: true
         description:
           type: string
+          nullable: true
         fusionMetricsCollectionEnabled:
           type: boolean
         id:
@@ -13307,6 +14047,7 @@ components:
             - google-lifesciences
         primary:
           type: boolean
+          nullable: true
         resources:
           allOf:
             - $ref: '#/components/schemas/ComputeEnvResources'
@@ -13492,10 +14233,41 @@ components:
     CreateActionRequest:
       type: object
       properties:
+        agent:
+          description: Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`.
+          allOf:
+            - $ref: '#/components/schemas/AgentActionRequest'
+        bucket:
+          description: Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources.
+          allOf:
+            - $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          description: Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources.
+          allOf:
+            - $ref: '#/components/schemas/CronActionRequest'
+        labelIds:
+          description: The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
           type: string
+        pipeline:
+          description: Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionRequest'
+        pipelineStatus:
+          description: Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here.
+          allOf:
+            - $ref: '#/components/schemas/PipelineStatusActionRequest'
+        responseType:
+          description: What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists.
+          allOf:
+            - $ref: '#/components/schemas/Action.ResponseType'
         source:
           $ref: '#/components/schemas/Action.Source'
     CreateActionResponse:
@@ -13514,8 +14286,15 @@ components:
         description:
           type: string
           nullable: true
+        githubAppCredentialId:
+          type: string
+          nullable: true
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
     CreateAgentResponse:
       type: object
       properties:
@@ -13602,6 +14381,7 @@ components:
           type: boolean
         value:
           type: string
+          nullable: true
     CreateManagedCredentialsRequest:
       type: object
       properties:
@@ -13743,6 +14523,23 @@ components:
           type: string
         token:
           type: string
+    CreateServiceAccountRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        name:
+          type: string
+          maxLength: 40
+          minLength: 1
+      required:
+        - name
+    CreateServiceAccountResponse:
+      type: object
+      properties:
+        serviceAccount:
+          $ref: '#/components/schemas/ServiceAccountDto'
     CreateSshKeyRequest:
       type: object
       properties:
@@ -13955,6 +14752,41 @@ components:
       required:
         - auditImageType
       title: Credit purchase audit image
+    CronActionConfig:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
+      title: Cron action config
+    CronActionEvent:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        scheduledTime:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+        workflowId:
+          type: string
+      title: Cron action event
+    CronActionRequest:
+      type: object
+      properties:
+        expression:
+          type: string
+        preset:
+          type: string
+        timezone:
+          type: string
     CustomRoleImage:
       type: object
       properties:
@@ -14072,12 +14904,14 @@ components:
             $ref: '#/components/schemas/DataLinkCredentials'
         description:
           type: string
+          nullable: true
         hidden:
           type: boolean
         id:
           type: string
         message:
           type: string
+          nullable: true
         name:
           type: string
         provider:
@@ -14336,6 +15170,7 @@ components:
           type: integer
           format: int32
           minimum: 0
+          nullable: true
         memory:
           type: integer
           format: int32
@@ -14384,6 +15219,11 @@ components:
           minLength: 1
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.'
+          type: string
+          maxLength: 22
+          nullable: true
         dataStudioToolUrl:
           type: string
         description:
@@ -14438,6 +15278,14 @@ components:
           $ref: '#/components/schemas/DataStudioComputeEnvDto'
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
+        customIcon:
+          description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
+          type: string
+          nullable: true
+        customIconId:
+          description: Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
+          type: string
+          nullable: true
         customImage:
           type: boolean
         dateCreated:
@@ -14448,6 +15296,7 @@ components:
         effectiveLifespanHours:
           type: integer
           format: int32
+          nullable: true
         isPrivate:
           type: boolean
         labels:
@@ -14528,6 +15377,8 @@ components:
         condaEnvironment:
           type: string
         connectVersion:
+          type: string
+        customIconId:
           type: string
         description:
           type: string
@@ -14646,6 +15497,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
     DataStudioProgressStep.Status:
       type: string
       enum:
@@ -14671,6 +15523,11 @@ components:
         configuration:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
+          nullable: true
+        customIconId:
+          description: "Avatar id (from POST /avatars) for the Studio session icon. Semantics on start: null = leave the existing icon unchanged (so a no-arg start from the connect/loading dialog doesn't touch it); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one."
+          type: string
+          maxLength: 22
           nullable: true
         description:
           type: string
@@ -14791,6 +15648,11 @@ components:
           allOf:
             - $ref: '#/components/schemas/DataStudioConfiguration'
           nullable: true
+        customIconId:
+          description: 'Avatar id (from POST /avatars) for the Studio session icon. Semantics on update: null = leave the existing icon unchanged (partial-PATCH-safe); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one if any.'
+          type: string
+          maxLength: 22
+          nullable: true
         description:
           type: string
           maxLength: 2048
@@ -14878,6 +15740,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -14885,6 +15748,7 @@ components:
           $ref: '#/components/schemas/UserInfo'
         mediaType:
           type: string
+          nullable: true
         name:
           type: string
         organizationId:
@@ -14944,6 +15808,7 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         runsCount:
           type: integer
           format: int64
@@ -14974,7 +15839,9 @@ components:
           type: string
           format: date-time
         linkedSource:
-          $ref: '#/components/schemas/LinkedSourceDto'
+          allOf:
+            - $ref: '#/components/schemas/LinkedSourceDto'
+          nullable: true
         mediaType:
           type: string
         url:
@@ -15105,6 +15972,11 @@ components:
       properties:
         action:
           $ref: '#/components/schemas/ActionResponseDto'
+    DescribeActionTriggerResponse:
+      type: object
+      properties:
+        trigger:
+          $ref: '#/components/schemas/ActionTriggerResponseDto'
     DescribeAgentResponse:
       type: object
       properties:
@@ -15199,6 +16071,11 @@ components:
           type: string
           format: date-time
           nullable: true
+    DescribeServiceAccountResponse:
+      type: object
+      properties:
+        serviceAccount:
+          $ref: '#/components/schemas/ServiceAccountDto'
     DescribeSshKeyResponse:
       type: object
       properties:
@@ -15247,28 +16124,39 @@ components:
           format: int32
           nullable: true
         jobInfo:
-          $ref: '#/components/schemas/JobInfoDto'
+          allOf:
+            - $ref: '#/components/schemas/JobInfoDto'
+          nullable: true
         labels:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         messages:
           type: array
           items:
             type: string
+          nullable: true
         optimized:
           type: boolean
+          nullable: true
         orgId:
           type: integer
           format: int64
         orgName:
           type: string
         pipelineInfo:
-          $ref: '#/components/schemas/PipelineMinInfoResponse'
+          allOf:
+            - $ref: '#/components/schemas/PipelineMinInfoResponse'
+          nullable: true
         platform:
-          $ref: '#/components/schemas/ComputePlatformDto'
+          allOf:
+            - $ref: '#/components/schemas/ComputePlatformDto'
+          nullable: true
         progress:
-          $ref: '#/components/schemas/ProgressData'
+          allOf:
+            - $ref: '#/components/schemas/ProgressData'
+          nullable: true
         schedConfig:
           allOf:
             - $ref: '#/components/schemas/SchedConfig'
@@ -15591,6 +16479,7 @@ components:
           writeOnly: true
         token:
           type: string
+          writeOnly: true
         username:
           type: string
       title: GitHub credentials
@@ -16223,8 +17112,6 @@ components:
           type: string
       required:
         - arch
-    Iterator_String_:
-      type: object
     JobCleanupPolicy:
       type: string
       enum:
@@ -16241,13 +17128,16 @@ components:
         exitCode:
           type: integer
           format: int32
+          nullable: true
         id:
           type: integer
           format: int64
         message:
           type: string
+          nullable: true
         operationId:
           type: string
+          nullable: true
         status:
           type: string
     JobQueue:
@@ -16650,6 +17540,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccessToken'
+    ListActionTriggersResponse:
+      type: object
+      properties:
+        totalSize:
+          type: integer
+          format: int64
+        triggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionTriggerDto'
     ListActionsResponse:
       type: object
       properties:
@@ -16682,6 +17582,10 @@ components:
         lastSeen:
           type: string
           format: date-time
+        lastTrigger:
+          allOf:
+            - $ref: '#/components/schemas/ActionTriggerDto'
+          nullable: true
         name:
           type: string
         nextExecution:
@@ -16983,6 +17887,16 @@ components:
           type: boolean
         name:
           type: string
+    ListServiceAccountsResponse:
+      type: object
+      properties:
+        serviceAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceAccountDto'
+        totalSize:
+          type: integer
+          format: int64
     ListSshKeysResponse:
       type: object
       properties:
@@ -16990,6 +17904,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserSshPublicKeyDto'
+    ListTaskProcessSummaryResponse:
+      type: object
+      properties:
+        processes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskProcessSummary'
     ListTasksResponse:
       type: object
       properties:
@@ -17038,17 +17959,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LabelDbDto'
+          nullable: true
         optimized:
           type: boolean
+          nullable: true
         orgId:
           type: integer
           format: int64
         orgName:
           type: string
         pipelineInfo:
-          $ref: '#/components/schemas/PipelineMinInfoResponse'
+          allOf:
+            - $ref: '#/components/schemas/PipelineMinInfoResponse'
+          nullable: true
         progress:
-          $ref: '#/components/schemas/ProgressData'
+          allOf:
+            - $ref: '#/components/schemas/ProgressData'
+          nullable: true
         starred:
           type: boolean
         workflow:
@@ -17058,6 +17985,16 @@ components:
           format: int64
         workspaceName:
           type: string
+    ListWorkspaceServiceAccountsResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceServiceAccountDto'
+        nextPageToken:
+          type: string
+          nullable: true
     ListWorkspacesAndOrgResponse:
       type: object
       properties:
@@ -17160,11 +18097,14 @@ components:
           items:
             $ref: '#/components/schemas/LogPage.Download'
         entries:
-          $ref: '#/components/schemas/Iterator_String_'
+          type: array
+          items:
+            type: string
         forwardToken:
           type: string
         message:
           type: string
+          nullable: true
         pending:
           type: boolean
         rewindToken:
@@ -17501,10 +18441,12 @@ components:
         - owner
         - member
         - collaborator
+        - service_account
       x-enum-varnames:
         - owner
         - member
         - collaborator
+        - service_account
     OrgSsoConnectionImage:
       type: object
       properties:
@@ -17713,35 +18655,51 @@ components:
     ParticipantResponseDto:
       type: object
       properties:
+        displayName:
+          type: string
+          nullable: true
         email:
           type: string
+          nullable: true
         firstName:
           type: string
+          nullable: true
         lastName:
           type: string
+          nullable: true
         memberId:
           type: integer
           format: int64
+          nullable: true
         orgRole:
-          $ref: '#/components/schemas/OrgRole'
+          allOf:
+            - $ref: '#/components/schemas/OrgRole'
+          nullable: true
         participantId:
           type: integer
           format: int64
         teamAvatarUrl:
           type: string
+          nullable: true
         teamId:
           type: integer
           format: int64
+          nullable: true
         teamName:
           type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/ParticipantType'
         userAvatarUrl:
           type: string
+          nullable: true
         userName:
           type: string
+          nullable: true
         userType:
-          $ref: '#/components/schemas/UserType'
+          allOf:
+            - $ref: '#/components/schemas/UserType'
+          nullable: true
         wspRole:
           type: string
     ParticipantType:
@@ -17750,6 +18708,25 @@ components:
         - MEMBER
         - TEAM
         - COLLABORATOR
+    PipelineActionRequest:
+      type: object
+      properties:
+        targetPipelineId:
+          type: integer
+          format: int64
+          nullable: true
+        targetPipelineVersionId:
+          type: string
+          nullable: true
+    PipelineActionResponse:
+      type: object
+      properties:
+        targetPipelineId:
+          type: integer
+          format: int64
+        targetPipelineVersionId:
+          type: string
+      title: Pipeline action response
     PipelineDbDto:
       type: object
       properties:
@@ -17848,6 +18825,9 @@ components:
           type: array
           items:
             type: string
+        diagramImage:
+          type: string
+          nullable: true
         manifest:
           $ref: '#/components/schemas/WfManifest'
         profiles:
@@ -18000,20 +18980,59 @@ components:
       required:
         - auditImageType
       title: Pipeline secret audit image
+    PipelineStatusActionConfig:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        pipelineId:
+          type: integer
+          format: int64
+        runStatus:
+          $ref: '#/components/schemas/WorkflowStatus'
+      title: Pipeline status action config
+    PipelineStatusActionEvent:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        runStatus:
+          $ref: '#/components/schemas/WorkflowStatus'
+        timestamp:
+          type: string
+          format: date-time
+        watchedWorkflowId:
+          type: string
+      title: Pipeline status action event
+    PipelineStatusActionRequest:
+      type: object
+      properties:
+        pipelineId:
+          type: integer
+          format: int64
+          nullable: true
+        runStatus:
+          allOf:
+            - $ref: '#/components/schemas/WorkflowStatus'
+          nullable: true
     PipelineVersionFullInfoDto:
       type: object
       properties:
         creatorAvatarUrl:
           type: string
+          nullable: true
         creatorFirstName:
           type: string
+          nullable: true
         creatorLastName:
           type: string
+          nullable: true
         creatorUserId:
           type: integer
           format: int64
         creatorUserName:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -18028,6 +19047,7 @@ components:
           format: date-time
         name:
           type: string
+          nullable: true
     PipelineVersionManageRequest:
       type: object
       properties:
@@ -18117,6 +19137,10 @@ components:
         failed:
           type: integer
           format: int64
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
         ignored:
           type: integer
           format: int64
@@ -18124,6 +19148,10 @@ components:
           type: integer
           format: int64
           deprecated: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
         lastUpdated:
           type: string
           format: date-time
@@ -18231,6 +19259,18 @@ components:
       type: object
       properties:
         name:
+          type: string
+    ResolveCronExpressionRequest:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+        - text
+    ResolveCronExpressionResponse:
+      type: object
+      properties:
+        expression:
           type: string
     ResourceAllocation:
       type: object
@@ -18397,6 +19437,10 @@ components:
             - ECS
             - EC2
             - VM
+        billingExportTable:
+          description: Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
+          type: string
+          nullable: true
         diskAllocation:
           type: string
         fusionSnapshots:
@@ -18656,6 +19700,25 @@ components:
         - LICMAN
         - CACHE
       x-type: String
+    ServiceAccountDto:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        memberId:
+          description: Organization membership ID of this service account
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
     ServiceAccountImage:
       type: object
       properties:
@@ -18890,6 +19953,11 @@ components:
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
+        warnings:
+          type: array
+          items:
+            type: string
+          nullable: true
         workflowId:
           type: string
     Subnet:
@@ -18926,13 +19994,16 @@ components:
         disk:
           type: integer
           format: int64
+          nullable: true
         duration:
           type: integer
           format: int64
         env:
           type: string
+          nullable: true
         errorAction:
           type: string
+          nullable: true
         errorMessage:
           type: string
           nullable: true
@@ -18963,11 +20034,13 @@ components:
           nullable: true
         logStreamId:
           type: string
+          nullable: true
         machineType:
           type: string
         memory:
           type: integer
           format: int64
+          nullable: true
         module:
           type: array
           items:
@@ -18979,6 +20052,7 @@ components:
         numSpotInterruptions:
           type: integer
           format: int32
+          nullable: true
         pcpu:
           type: number
           format: double
@@ -19007,12 +20081,15 @@ components:
           type: integer
           format: int64
         resourceAllocation:
-          $ref: '#/components/schemas/ResourceAllocation'
+          allOf:
+            - $ref: '#/components/schemas/ResourceAllocation'
+          nullable: true
         rss:
           type: integer
           format: int64
         scratch:
           type: string
+          nullable: true
         script:
           type: string
         start:
@@ -19031,12 +20108,14 @@ components:
           format: int64
         tag:
           type: string
+          nullable: true
         taskId:
           type: integer
           format: int64
         time:
           type: integer
           format: int64
+          nullable: true
         vmem:
           type: integer
           format: int64
@@ -19054,6 +20133,22 @@ components:
       required:
         - status
         - taskId
+    TaskProcessSummary:
+      type: object
+      properties:
+        firstSubmit:
+          type: string
+          format: date-time
+          nullable: true
+        lastComplete:
+          type: string
+          format: date-time
+          nullable: true
+        process:
+          type: string
+        taskCount:
+          type: integer
+          format: int64
     TaskStatus:
       type: string
       enum:
@@ -19471,10 +20566,33 @@ components:
     UpdateActionRequest:
       type: object
       properties:
+        bucket:
+          description: Bucket trigger updates. Changes the marker file and the events. The data link cannot change. Allowed only on a `bucket` action. On other actions, the request returns 400.
+          allOf:
+            - $ref: '#/components/schemas/BucketActionRequest'
+        cron:
+          description: Cron trigger updates. Changes the schedule and its timezone. An omitted field keeps its stored value, but an `expression` clears a stored `preset`. Allowed only on a `cron` action. On other actions, the request returns 400.
+          allOf:
+            - $ref: '#/components/schemas/CronActionRequest'
+        labelIds:
+          description: The labels of the action, as a whole set. Omit to leave them unchanged. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
+          type: array
+          items:
+            format: int64
+            type: integer
+          nullable: true
         launch:
           $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
           type: string
+        pipeline:
+          description: Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          allOf:
+            - $ref: '#/components/schemas/PipelineActionRequest'
+        pipelineStatus:
+          description: Pipeline-status trigger updates. Changes the pipeline to watch and the run state that fires the action. Allowed only on a `pipeline_status` action. On other actions, the request returns 400. The run that the action starts is set in `launch`, not here.
+          allOf:
+            - $ref: '#/components/schemas/PipelineStatusActionRequest'
     UpdateAgentRequest:
       type: object
       properties:
@@ -19486,8 +20604,15 @@ components:
         description:
           type: string
           nullable: true
+        githubAppCredentialId:
+          type: string
+          nullable: true
         name:
           type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+          nullable: true
     UpdateAgentResponse:
       type: object
       properties:
@@ -19538,6 +20663,7 @@ components:
           type: string
         value:
           type: string
+          nullable: true
     UpdateManagedCredentialsRequest:
       type: object
       properties:
@@ -19628,6 +20754,15 @@ components:
             type: string
       required:
         - description
+    UpdateServiceAccountRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        name:
+          type: string
+          maxLength: 40
     UpdateTeamRequest:
       type: object
       properties:
@@ -19757,6 +20892,7 @@ components:
       properties:
         avatar:
           type: string
+          nullable: true
         email:
           type: string
         id:
@@ -19903,6 +21039,9 @@ components:
     UserWorkspaceRolesDto:
       type: object
       properties:
+        participantId:
+          type: integer
+          format: int64
         permissions:
           type: array
           items:
@@ -20113,6 +21252,7 @@ components:
         failedPct:
           type: number
           format: float
+          nullable: true
         ignoredCount:
           type: integer
           format: int32
@@ -20286,36 +21426,48 @@ components:
           type: string
         commitId:
           type: string
+          nullable: true
         complete:
           type: string
           format: date-time
+          nullable: true
         configFiles:
           type: array
           items:
             type: string
+          nullable: true
         configText:
           type: string
+          nullable: true
         container:
           type: string
+          nullable: true
         containerEngine:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
         deleted:
           type: boolean
+          nullable: true
         duration:
           type: integer
           format: int64
+          nullable: true
         errorMessage:
           type: string
+          nullable: true
         errorReport:
           type: string
+          nullable: true
         exitStatus:
           type: integer
           format: int32
+          nullable: true
         homeDir:
           type: string
+          nullable: true
         id:
           type: string
         lastUpdated:
@@ -20323,12 +21475,17 @@ components:
           format: date-time
         launchDir:
           type: string
+          nullable: true
         launchId:
           type: string
         manifest:
-          $ref: '#/components/schemas/WfManifest'
+          allOf:
+            - $ref: '#/components/schemas/WfManifest'
+          nullable: true
         nextflow:
-          $ref: '#/components/schemas/WfNextflow'
+          allOf:
+            - $ref: '#/components/schemas/WfNextflow'
+          nullable: true
         ownerId:
           type: integer
           format: int64
@@ -20336,26 +21493,33 @@ components:
           type: object
           additionalProperties:
             type: object
+          nullable: true
         profile:
           type: string
+          nullable: true
         projectDir:
           type: string
+          nullable: true
         projectName:
           type: string
         repository:
           type: string
+          nullable: true
         requiresAttention:
           type: boolean
         resume:
           type: boolean
         revision:
           type: string
+          nullable: true
         runName:
           type: string
         scriptFile:
           type: string
+          nullable: true
         scriptId:
           type: string
+          nullable: true
         scriptName:
           type: string
         sessionId:
@@ -20363,8 +21527,11 @@ components:
         start:
           type: string
           format: date-time
+          nullable: true
         stats:
-          $ref: '#/components/schemas/WfStats'
+          allOf:
+            - $ref: '#/components/schemas/WfStats'
+          nullable: true
         status:
           $ref: '#/components/schemas/WorkflowStatus'
         submit:
@@ -20372,6 +21539,7 @@ components:
           format: date-time
         success:
           type: boolean
+          nullable: true
         userName:
           type: string
         workDir:
@@ -20589,19 +21757,23 @@ components:
       properties:
         commitId:
           type: string
+          nullable: true
         computeEnv:
           $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
         configProfiles:
           type: array
           items:
             type: string
+          nullable: true
         configText:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
         entryName:
           type: string
+          nullable: true
         fusionVersion:
           description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
           type: string
@@ -20609,39 +21781,53 @@ components:
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
         id:
           type: string
+        launchContainer:
+          description: Custom launcher image that takes precedence over the selected Nextflow version.
+          type: string
+          nullable: true
         mainScript:
           type: string
+          nullable: true
         nextflowVersion:
-          description: Nextflow release version this workflow was launched with; used to pre-select the same version on relaunch/resume.
+          description: Saved Nextflow release selection, retained for relaunch/resume. A custom launcher image takes precedence over this selection.
           type: string
           nullable: true
         optimizationId:
           type: string
+          nullable: true
         optimizationTargets:
           type: string
+          nullable: true
         outputDir:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
           nullable: true
         paramsText:
           type: string
+          nullable: true
         pipeline:
           type: string
         pipelineId:
           type: integer
           format: int64
+          nullable: true
         pipelineSchemaId:
           type: integer
           format: int64
+          nullable: true
         postRunScript:
           type: string
+          nullable: true
         preRunScript:
           type: string
+          nullable: true
         pullLatest:
           type: boolean
         resume:
@@ -20654,8 +21840,10 @@ components:
           type: string
         schemaName:
           type: string
+          nullable: true
         sessionId:
           type: string
+          nullable: true
         stubRun:
           type: boolean
         syntaxParser:
@@ -20666,16 +21854,19 @@ components:
           nullable: true
         towerConfig:
           type: string
+          nullable: true
         userSecrets:
           type: array
           items:
             type: string
+          nullable: true
         workDir:
           type: string
         workspaceSecrets:
           type: array
           items:
             type: string
+          nullable: true
     WorkflowLaunchValidationErrorResponse:
       type: object
       properties:
@@ -20701,6 +21892,7 @@ components:
           format: int64
         cost:
           type: number
+          nullable: true
         cpuEfficiency:
           type: number
           format: float
@@ -20728,6 +21920,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
         failed:
           type: integer
           format: int64
@@ -20760,12 +21953,15 @@ components:
           format: int64
         netCost:
           type: number
+          nullable: true
         netCpuLoad:
           type: integer
           format: int64
+          nullable: true
         netCpus:
           type: integer
           format: int64
+          nullable: true
         netCpuShareMillis:
           type: integer
           format: int64
@@ -20777,29 +21973,38 @@ components:
         netCpuTime:
           type: integer
           format: int64
+          nullable: true
         netInvCtxSwitch:
           type: integer
           format: int64
+          nullable: true
         netMemoryConsumption:
           type: number
+          nullable: true
         netMemoryReq:
           type: integer
           format: int64
+          nullable: true
         netMemoryRss:
           type: integer
           format: int64
+          nullable: true
         netReadBytes:
           type: integer
           format: int64
+          nullable: true
         netVolCtxSwitch:
           type: integer
           format: int64
+          nullable: true
         netWriteBytes:
           type: integer
           format: int64
+          nullable: true
         numSpotInterruptions:
           type: integer
           format: int32
+          nullable: true
         peakCpus:
           type: integer
           format: int64
@@ -20838,6 +22043,7 @@ components:
         version:
           type: integer
           format: int64
+          nullable: true
         volCtxSwitch:
           type: integer
           format: int64
@@ -20885,12 +22091,15 @@ components:
                 type: string
               nullable: true
             fusion:
-              $ref: '#/components/schemas/WfFusionMeta'
+              allOf:
+                - $ref: '#/components/schemas/WfFusionMeta'
+              nullable: true
             fusionVersion:
               type: string
               nullable: true
             logFile:
               type: string
+              nullable: true
             nextflowConfig:
               type: string
               nullable: true
@@ -20899,8 +22108,10 @@ components:
               nullable: true
             operationId:
               type: string
+              nullable: true
             outFile:
               type: string
+              nullable: true
             postRunScript:
               type: string
               nullable: true
@@ -20914,7 +22125,9 @@ components:
               type: string
               nullable: true
             wave:
-              $ref: '#/components/schemas/WfWaveMeta'
+              allOf:
+                - $ref: '#/components/schemas/WfWaveMeta'
+              nullable: true
           type: object
     WorkflowMetrics:
       type: object
@@ -21061,6 +22274,20 @@ components:
           type: integer
           format: int64
         workspaceName:
+          type: string
+    WorkspaceServiceAccountDto:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        name:
           type: string
     WspRole:
       type: string

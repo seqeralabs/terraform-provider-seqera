@@ -78,7 +78,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
-		Version:             2,
+		Version:             3,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -1210,6 +1210,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -1512,6 +1520,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"azure_batch": schema.SingleNestedAttribute{
@@ -2127,6 +2136,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -2262,6 +2279,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Azure VMs with` + "\n" +
+											`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+											`all tasks run on a single instance (Classic mode).` + "\n" +
+											`` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+											`to accept the platform defaults, or provide it (only when` + "\n" +
+											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+											`Requires replacement if changed.`,
+									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -2355,14 +2388,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`ignores any user-supplied value, so this field is computed by the` + "\n" +
 											`backend rather than configured.`,
 									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"subnets": schema.ListAttribute{
 										Computed: true,
 										Optional: true,
@@ -2412,8 +2437,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.SchedConfigConsistencyValidator(),
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"eks_platform": schema.SingleNestedAttribute{
@@ -3513,6 +3540,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -3648,6 +3683,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"intelligent_compute_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+											`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Compute Engine VMs with` + "\n" +
+											`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+											`all tasks run on a single instance (Classic mode).` + "\n" +
+											`` + "\n" +
+											`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+											`to accept the platform defaults, or provide it (only when` + "\n" +
+											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+											`Requires replacement if changed.`,
+									},
 									"network": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -3715,14 +3766,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
-									},
-									"sched_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"service_account_email": schema.StringAttribute{
 										Computed: true,
@@ -3796,6 +3839,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.SchedConfigConsistencyValidator(),
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 								},
 							},
@@ -4420,6 +4464,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													),
 												},
 											},
+											"billing_export_table": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													stringplanmodifier.RequiresReplaceIfConfigured(),
+												},
+												Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+											},
 											"disk_allocation": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4633,6 +4685,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
 							"lsf_platform": schema.SingleNestedAttribute{
@@ -6232,5 +6285,6 @@ func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resourc
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
 		1: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV1},
+		2: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV2},
 	}
 }

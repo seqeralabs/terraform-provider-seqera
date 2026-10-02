@@ -87,9 +87,9 @@ actions:
   # First remove the entire required array
   - target: $["components"]["schemas"]["CreateActionRequest"]["required"]
     remove: true
-  # Then add it back with correct values
+  # Then add it back with correct values. launch is deliberately absent: an
+  # agent action must not carry one (see ActionOutcomeValidator in actions.yaml).
   - target: $["components"]["schemas"]["CreateActionRequest"]
     update:
       required:
         - name
-        - launch

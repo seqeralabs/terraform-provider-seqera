@@ -81,7 +81,7 @@ func (r *AzureCloudCEResource) Metadata(ctx context.Context, req resource.Metada
 func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Azure Cloud compute environments in Seqera platform.\n\nAzure Cloud compute environments execute Nextflow pipelines directly on\nAzure VMs managed by Seqera. Use this resource for long-running or\ninteractive workloads where Seqera provisions and manages the underlying\ncompute instances directly (rather than via Azure Batch).\n",
-		Version:             1,
+		Version:             2,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Computed:    true,
@@ -230,6 +230,15 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									),
 								},
 							},
+							"billing_export_table": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									stringplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+								Description: `Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.`,
+							},
 							"disk_allocation": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -376,6 +385,23 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Requires replacement if changed.`,
 					},
+					"intelligent_compute_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						MarkdownDescription: `Enable Seqera Intelligent Compute (Preview).` + "\n" +
+							`When ` + "`" + `true` + "`" + `, tasks are distributed across multiple Azure VMs with` + "\n" +
+							`optimized scheduling and resource allocation. When ` + "`" + `false` + "`" + ` (default),` + "\n" +
+							`all tasks run on a single instance (Classic mode).` + "\n" +
+							`` + "\n" +
+							`` + "`" + `intelligent_compute_config` + "`" + ` is optional in both modes: leave it null` + "\n" +
+							`to accept the platform defaults, or provide it (only when` + "\n" +
+							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
+							`Requires replacement if changed.`,
+					},
 					"log_table_name": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -479,15 +505,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`ignores any user-supplied value, so this field is computed by the` + "\n" +
 							`backend rather than configured.`,
 					},
-					"sched_enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
 					"subnets": schema.ListAttribute{
 						Computed: true,
 						Optional: true,
@@ -523,8 +540,10 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					custom_objectvalidators.SchedConfigConsistencyValidator(),
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 					custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{
@@ -960,5 +979,6 @@ func (r *AzureCloudCEResource) ImportState(ctx context.Context, req resource.Imp
 func (r *AzureCloudCEResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
 	return map[int64]resource.StateUpgrader{
 		0: {StateUpgrader: stateupgraders.AzurecloudceStateUpgraderV0},
+		1: {StateUpgrader: stateupgraders.AzurecloudceStateUpgraderV1},
 	}
 }

@@ -3,24 +3,23 @@
 package shared
 
 type UpdateAgentRequest struct {
-	AgentInstructions           *string `json:"agentInstructions,omitempty"`
-	AgentInstructionsTemplateID *string `json:"agentInstructionsTemplateId,omitempty"`
-	Description                 *string `json:"description,omitempty"`
-	Name                        *string `json:"name,omitempty"`
+	// Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
+	AgentInstructions string `json:"agentInstructions"`
+	// Short description of the agent, up to 120 characters. It cannot be empty or start or end with whitespace, because the Platform trims it.
+	Description *string `json:"description,omitempty"`
+	// GitHub App credential the agent uses for GitHub access (`seqera_github_app_credential.x.id`). Requires GitHub App credentials to be enabled on the Platform instance.
+	GithubAppCredentialID *string `json:"githubAppCredentialId,omitempty"`
+	// Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
+	Name string `json:"name"`
+	// Service account the agent runs as (`seqera_service_account.x.id`). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.
+	ServiceAccountID int64 `json:"serviceAccountId"`
 }
 
-func (u *UpdateAgentRequest) GetAgentInstructions() *string {
+func (u *UpdateAgentRequest) GetAgentInstructions() string {
 	if u == nil {
-		return nil
+		return ""
 	}
 	return u.AgentInstructions
-}
-
-func (u *UpdateAgentRequest) GetAgentInstructionsTemplateID() *string {
-	if u == nil {
-		return nil
-	}
-	return u.AgentInstructionsTemplateID
 }
 
 func (u *UpdateAgentRequest) GetDescription() *string {
@@ -30,9 +29,23 @@ func (u *UpdateAgentRequest) GetDescription() *string {
 	return u.Description
 }
 
-func (u *UpdateAgentRequest) GetName() *string {
+func (u *UpdateAgentRequest) GetGithubAppCredentialID() *string {
 	if u == nil {
 		return nil
 	}
+	return u.GithubAppCredentialID
+}
+
+func (u *UpdateAgentRequest) GetName() string {
+	if u == nil {
+		return ""
+	}
 	return u.Name
+}
+
+func (u *UpdateAgentRequest) GetServiceAccountID() int64 {
+	if u == nil {
+		return 0
+	}
+	return u.ServiceAccountID
 }

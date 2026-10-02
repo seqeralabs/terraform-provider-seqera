@@ -32,6 +32,7 @@ func newCompatibility(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks 
 }
 
 // CatalogComponentVersions - Catalog versions for a single component
+// As /versions but scoped to {key}; the same registered component compatibility-filter parameters apply (PF-2).
 func (s *Compatibility) CatalogComponentVersions(ctx context.Context, request operations.CatalogComponentVersionsRequest, opts ...operations.Option) (*operations.CatalogComponentVersionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -83,6 +84,10 @@ func (s *Compatibility) CatalogComponentVersions(ctx context.Context, request op
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -233,7 +238,7 @@ func (s *Compatibility) CatalogComponentVersions(ctx context.Context, request op
 }
 
 // CatalogVersions - Component compatibility catalog versions
-// Returns the catalog versions from the local state document (unconstrained in PF-1), with servedFrom provenance. Optionally narrowed to a single component.
+// Returns catalog versions with servedFrom provenance and observed deploymentVersions. Optionally narrowed to a single component and compatibility-constrained by registered component query parameters plus platform/nextflow/fusion/sched/wave deployment context, for example fusion=2.5 or connect=0.11.2 (comma-lists; AND across, OR within; edge-less params do not constrain). Unknown parameters and malformed expressions return 400; unknown selected components return 404.
 func (s *Compatibility) CatalogVersions(ctx context.Context, request operations.CatalogVersionsRequest, opts ...operations.Option) (*operations.CatalogVersionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

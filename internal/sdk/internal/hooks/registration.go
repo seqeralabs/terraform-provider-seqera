@@ -23,6 +23,11 @@ func initHooks(h *Hooks) {
 	tokenListErrorHook := &TokenListErrorHook{}
 	h.registerAfterSuccessHook(tokenListErrorHook)
 
+	// Register agent binding conflict hook so a service account binding error
+	// on agent create shows the Platform's message instead of "already exists"
+	agentBindingConflictHook := &AgentBindingConflictHook{}
+	h.registerAfterSuccessHook(agentBindingConflictHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)

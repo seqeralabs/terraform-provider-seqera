@@ -75,6 +75,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			} else {
 				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
 			}
+			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
 			machineTypesValue, machineTypesDiags := types.ListValueFrom(ctx, types.StringType, resp.Config.IntelligentComputeConfig.MachineTypes)
@@ -99,6 +100,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 				r.Config.IntelligentComputeConfig.ProvisioningModel = types.StringNull()
 			}
 		}
+		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.Network = types.StringPointerValue(resp.Config.Network)
 		if resp.Config.NetworkTags != nil {
 			r.Config.NetworkTags = make([]types.String, 0, len(resp.Config.NetworkTags))
@@ -113,7 +115,6 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
-		r.Config.SchedEnabled = types.BoolPointerValue(resp.Config.SchedEnabled)
 		r.Config.ServiceAccountEmail = types.StringPointerValue(resp.Config.ServiceAccountEmail)
 		if resp.Config.Subnetworks != nil {
 			r.Config.Subnetworks = make([]types.String, 0, len(resp.Config.Subnetworks))
@@ -436,6 +437,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		} else {
 			backendStrategy = nil
 		}
+		billingExportTable := new(string)
+		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
+			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
+		} else {
+			billingExportTable = nil
+		}
 		diskAllocation := new(string)
 		if !r.Config.IntelligentComputeConfig.DiskAllocation.IsUnknown() && !r.Config.IntelligentComputeConfig.DiskAllocation.IsNull() {
 			*diskAllocation = r.Config.IntelligentComputeConfig.DiskAllocation.ValueString()
@@ -503,22 +510,23 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:   backendStrategy,
-			DiskAllocation:    diskAllocation,
-			FusionSnapshots:   fusionSnapshots,
-			MachineTypes:      machineTypes,
-			MaxCpusPerUser:    maxCpusPerUser,
-			MaxSpotAttempts:   maxSpotAttempts,
-			Pool:              pool,
-			PredictionModel:   predictionModel,
-			ProvisioningModel: provisioningModel,
+			BackendStrategy:    backendStrategy,
+			BillingExportTable: billingExportTable,
+			DiskAllocation:     diskAllocation,
+			FusionSnapshots:    fusionSnapshots,
+			MachineTypes:       machineTypes,
+			MaxCpusPerUser:     maxCpusPerUser,
+			MaxSpotAttempts:    maxSpotAttempts,
+			Pool:               pool,
+			PredictionModel:    predictionModel,
+			ProvisioningModel:  provisioningModel,
 		}
 	}
-	schedEnabled := new(bool)
-	if !r.Config.SchedEnabled.IsUnknown() && !r.Config.SchedEnabled.IsNull() {
-		*schedEnabled = r.Config.SchedEnabled.ValueBool()
+	intelligentComputeEnabled := new(bool)
+	if !r.Config.IntelligentComputeEnabled.IsUnknown() && !r.Config.IntelligentComputeEnabled.IsNull() {
+		*intelligentComputeEnabled = r.Config.IntelligentComputeEnabled.ValueBool()
 	} else {
-		schedEnabled = nil
+		intelligentComputeEnabled = nil
 	}
 	serviceAccountEmail := new(string)
 	if !r.Config.ServiceAccountEmail.IsUnknown() && !r.Config.ServiceAccountEmail.IsNull() {
@@ -552,26 +560,26 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		zone = nil
 	}
 	config := shared.GoogleCloudConfig{
-		Arm64Enabled:             arm64Enabled,
-		BootDiskSizeGb:           bootDiskSizeGb,
-		Environment:              environment,
-		GpuEnabled:               gpuEnabled,
-		ImageID:                  imageID,
-		InstanceType:             instanceType,
-		Network:                  network,
-		NetworkTags:              networkTags,
-		NextflowConfig:           nextflowConfig,
-		PostRunScript:            postRunScript,
-		PreRunScript:             preRunScript,
-		ProjectID:                projectID,
-		Region:                   region,
-		IntelligentComputeConfig: intelligentComputeConfig,
-		SchedEnabled:             schedEnabled,
-		ServiceAccountEmail:      serviceAccountEmail,
-		Subnetworks:              subnetworks,
-		UsePrivateAddress:        usePrivateAddress,
-		WorkDir:                  workDir,
-		Zone:                     zone,
+		Arm64Enabled:              arm64Enabled,
+		BootDiskSizeGb:            bootDiskSizeGb,
+		Environment:               environment,
+		GpuEnabled:                gpuEnabled,
+		ImageID:                   imageID,
+		InstanceType:              instanceType,
+		Network:                   network,
+		NetworkTags:               networkTags,
+		NextflowConfig:            nextflowConfig,
+		PostRunScript:             postRunScript,
+		PreRunScript:              preRunScript,
+		ProjectID:                 projectID,
+		Region:                    region,
+		IntelligentComputeConfig:  intelligentComputeConfig,
+		IntelligentComputeEnabled: intelligentComputeEnabled,
+		ServiceAccountEmail:       serviceAccountEmail,
+		Subnetworks:               subnetworks,
+		UsePrivateAddress:         usePrivateAddress,
+		WorkDir:                   workDir,
+		Zone:                      zone,
 	}
 	out := shared.GCPCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

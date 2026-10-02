@@ -74,6 +74,7 @@ type WorkflowsResourceModel struct {
 	SyntaxParser              types.String                                  `tfsdk:"syntax_parser"`
 	TowerConfig               types.String                                  `tfsdk:"tower_config"`
 	UserSecrets               []types.String                                `tfsdk:"user_secrets"`
+	Warnings                  []types.String                                `tfsdk:"warnings"`
 	WorkDir                   types.String                                  `tfsdk:"work_dir"`
 	WorkflowID                types.String                                  `tfsdk:"workflow_id"`
 	WorkspaceID               types.Int64                                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
@@ -364,6 +365,10 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				ElementType: types.StringType,
 				Description: `Default: []; Requires replacement if changed.`,
+			},
+			"warnings": schema.ListAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
 			},
 			"work_dir": schema.StringAttribute{
 				Optional: true,

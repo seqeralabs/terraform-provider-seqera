@@ -32,7 +32,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.43.0-RC1
+  version: 0.43.0-RC3
   additionalActions: []
   additionalDataSources:
     - datasource: custom_role_data.NewDataSource
@@ -65,6 +65,12 @@ terraform:
     - datasource: pipeline_versions_data.NewDataSource
       importAlias: pipeline_versions_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data
+    - datasource: service_account_data.NewDataSource
+      importAlias: service_account_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_data
+    - datasource: agent_data.NewDataSource
+      importAlias: agent_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/agent_data
   additionalDependencies: {}
   additionalEphemeralResources: []
   additionalFunctions: []
@@ -107,6 +113,8 @@ terraform:
     - env: TOWER_ACCESS_TOKEN
       providerAttribute: bearer_auth
   excludeEmptyObjectSchemas: false
+  fixFlags:
+    encodePathParams: false
   forwardCompatibleEnumsByDefault: false
   generateValidationHelpers: true
   includeEmptyObjects: false

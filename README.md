@@ -47,7 +47,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.43.0-RC1"
+      version = "0.43.0-RC3"
     }
   }
 }
@@ -84,6 +84,7 @@ Available configuration:
 * [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
 * [seqera_aws_credential](docs/resources/aws_credential.md)
 * [seqera_action](docs/resources/action.md)
+* [seqera_agent](docs/resources/agent.md)
 * [seqera_aws_cloud_ce](docs/resources/aws_cloud_ce.md)
 * [seqera_azure_batch_ce](docs/resources/azure_batch_ce.md)
 * [seqera_azure_cloud_ce](docs/resources/azure_cloud_ce.md)
@@ -113,6 +114,7 @@ Available configuration:
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
 * [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
 * [seqera_ssh_credential](docs/resources/ssh_credential.md)
+* [seqera_service_account](docs/resources/service_account.md)
 * [seqera_slurm_ce](docs/resources/slurm_ce.md)
 * [seqera_studios](docs/resources/studios.md)
 * [seqera_teams](docs/resources/teams.md)

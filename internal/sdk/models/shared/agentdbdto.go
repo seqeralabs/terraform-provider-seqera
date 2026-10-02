@@ -3,23 +3,59 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
 
+// AgentDbDtoStatus - Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
+type AgentDbDtoStatus string
+
+const (
+	AgentDbDtoStatusActive   AgentDbDtoStatus = "active"
+	AgentDbDtoStatusInactive AgentDbDtoStatus = "inactive"
+	AgentDbDtoStatusDeleted  AgentDbDtoStatus = "deleted"
+)
+
+func (e AgentDbDtoStatus) ToPointer() *AgentDbDtoStatus {
+	return &e
+}
+func (e *AgentDbDtoStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "active":
+		fallthrough
+	case "inactive":
+		fallthrough
+	case "deleted":
+		*e = AgentDbDtoStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AgentDbDtoStatus: %v", v)
+	}
+}
+
 type AgentDbDto struct {
-	AgentInstructions           *string      `json:"agentInstructions,omitempty"`
-	AgentInstructionsTemplateID *string      `json:"agentInstructionsTemplateId,omitempty"`
-	CreatedBy                   *int64       `json:"createdBy,omitempty"`
-	CreatedByUserName           *string      `json:"createdByUserName,omitempty"`
-	DateCreated                 *time.Time   `json:"dateCreated,omitempty"`
-	Description                 *string      `json:"description,omitempty"`
-	ID                          *string      `json:"id,omitempty"`
-	LastUpdated                 *time.Time   `json:"lastUpdated,omitempty"`
-	Name                        *string      `json:"name,omitempty"`
-	Status                      *AgentStatus `json:"status,omitempty"`
-	UpdatedBy                   *int64       `json:"updatedBy,omitempty"`
-	WorkspaceID                 *int64       `json:"workspaceId,omitempty"`
+	AgentInstructions *string `json:"agentInstructions,omitempty"`
+	// Creation timestamp.
+	DateCreated           *time.Time `json:"dateCreated,omitempty"`
+	Description           *string    `json:"description,omitempty"`
+	GithubAppCredentialID *string    `json:"githubAppCredentialId,omitempty"`
+	// Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
+	ID *string `json:"id,omitempty"`
+	// Last update timestamp.
+	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Name             *string    `json:"name,omitempty"`
+	ServiceAccountID *int64     `json:"serviceAccountId,omitempty"`
+	// Name of the bound service account.
+	ServiceAccountName *string `json:"serviceAccountName,omitempty"`
+	// Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
+	Status      *AgentDbDtoStatus `json:"status,omitempty"`
+	WorkspaceID *int64            `json:"workspaceId,omitempty"`
 }
 
 func (a AgentDbDto) MarshalJSON() ([]byte, error) {
@@ -40,27 +76,6 @@ func (a *AgentDbDto) GetAgentInstructions() *string {
 	return a.AgentInstructions
 }
 
-func (a *AgentDbDto) GetAgentInstructionsTemplateID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.AgentInstructionsTemplateID
-}
-
-func (a *AgentDbDto) GetCreatedBy() *int64 {
-	if a == nil {
-		return nil
-	}
-	return a.CreatedBy
-}
-
-func (a *AgentDbDto) GetCreatedByUserName() *string {
-	if a == nil {
-		return nil
-	}
-	return a.CreatedByUserName
-}
-
 func (a *AgentDbDto) GetDateCreated() *time.Time {
 	if a == nil {
 		return nil
@@ -73,6 +88,13 @@ func (a *AgentDbDto) GetDescription() *string {
 		return nil
 	}
 	return a.Description
+}
+
+func (a *AgentDbDto) GetGithubAppCredentialID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GithubAppCredentialID
 }
 
 func (a *AgentDbDto) GetID() *string {
@@ -96,18 +118,25 @@ func (a *AgentDbDto) GetName() *string {
 	return a.Name
 }
 
-func (a *AgentDbDto) GetStatus() *AgentStatus {
+func (a *AgentDbDto) GetServiceAccountID() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountID
+}
+
+func (a *AgentDbDto) GetServiceAccountName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceAccountName
+}
+
+func (a *AgentDbDto) GetStatus() *AgentDbDtoStatus {
 	if a == nil {
 		return nil
 	}
 	return a.Status
-}
-
-func (a *AgentDbDto) GetUpdatedBy() *int64 {
-	if a == nil {
-		return nil
-	}
-	return a.UpdatedBy
 }
 
 func (a *AgentDbDto) GetWorkspaceID() *int64 {

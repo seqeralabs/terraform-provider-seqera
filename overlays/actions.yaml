@@ -169,11 +169,13 @@ actions:
       default: "tower"
       x-speakeasy-param-optional: true
 
-  # Remove source from required array to allow default value
+  # Remove source from required array to allow default value. launch is not
+  # required either: an agent action (response_type = "agent") must not carry
+  # one. ActionOutcomeValidator (on ActionLaunchRequest below) requires it for
+  # pipeline actions instead.
   - target: $.components.schemas.CreateActionRequest.required
     update:
       - name
-      - launch
 
   # `ActionLaunchRequest` wraps `WorkflowLaunchRequest` and re-adds the `id`
   # field that workflows.yaml hides. `seqera_action` Update echoes the
@@ -185,7 +187,11 @@ actions:
     update:
       ActionLaunchRequest:
         type: object
-        description: Launch payload for `seqera_action` Create / Update endpoints.
+        description: >-
+          Launch payload for `seqera_action` Create / Update endpoints.
+          Required when `response_type` is `pipeline` (the default); must not
+          be set when `response_type` is `agent`.
+        x-speakeasy-plan-validators: ActionOutcomeValidator
         allOf:
           - $ref: "#/components/schemas/WorkflowLaunchRequest"
         properties:

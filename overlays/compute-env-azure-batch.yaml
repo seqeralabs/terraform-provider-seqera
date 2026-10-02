@@ -413,13 +413,14 @@ actions:
 
   - target: $.components.schemas.AzBatchForgeConfig.properties.containerRegIds
     update:
+      # Mirror Platform #12696 until these constraints reach the published spec.
       description: Seqera Platform container registry credential ID used by Azure Batch to pull private images. Only one ID is supported.
       maxItems: 1
+      nullable: true
       items:
         type: string
-        minLength: 1
-        maxLength: 22
-        pattern: ^[0-9A-Za-z]+$
+        pattern: ^[0-9A-Za-z]{1,22}$
+        example: 2dzgMSW1UqQHFhZqGQZ99X
       x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:

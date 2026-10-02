@@ -3,7 +3,15 @@
 package shared
 
 type SubmitWorkflowLaunchResponse struct {
-	WorkflowID *string `json:"workflowId,omitempty"`
+	Warnings   []string `json:"warnings,omitempty"`
+	WorkflowID *string  `json:"workflowId,omitempty"`
+}
+
+func (s *SubmitWorkflowLaunchResponse) GetWarnings() []string {
+	if s == nil {
+		return nil
+	}
+	return s.Warnings
 }
 
 func (s *SubmitWorkflowLaunchResponse) GetWorkflowID() *string {

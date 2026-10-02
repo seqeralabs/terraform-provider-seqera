@@ -34,7 +34,7 @@ func (e *ActionLaunchRequestSyntaxParser) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ActionLaunchRequest - Launch payload for `seqera_action` Create / Update endpoints.
+// ActionLaunchRequest - Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
 type ActionLaunchRequest struct {
 	ComputeEnvID   *string  `json:"computeEnvId,omitempty"`
 	ConfigProfiles []string `json:"configProfiles,omitempty"`

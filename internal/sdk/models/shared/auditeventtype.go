@@ -11,6 +11,7 @@ type AuditEventType string
 
 const (
 	AuditEventTypeWorkflowLaunched                  AuditEventType = "workflow_launched"
+	AuditEventTypeCatalogOverrideApplied            AuditEventType = "catalog_override_applied"
 	AuditEventTypeWorkflowCreated                   AuditEventType = "workflow_created"
 	AuditEventTypeWorkflowUpdated                   AuditEventType = "workflow_updated"
 	AuditEventTypeWorkflowCompleted                 AuditEventType = "workflow_completed"
@@ -34,6 +35,7 @@ const (
 	AuditEventTypeActionCreated                     AuditEventType = "action_created"
 	AuditEventTypeActionUpdated                     AuditEventType = "action_updated"
 	AuditEventTypeActionDeleted                     AuditEventType = "action_deleted"
+	AuditEventTypeActionTriggered                   AuditEventType = "action_triggered"
 	AuditEventTypeAgentCreated                      AuditEventType = "agent_created"
 	AuditEventTypeAgentUpdated                      AuditEventType = "agent_updated"
 	AuditEventTypeAgentEnabled                      AuditEventType = "agent_enabled"
@@ -179,6 +181,8 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "workflow_launched":
 		fallthrough
+	case "catalog_override_applied":
+		fallthrough
 	case "workflow_created":
 		fallthrough
 	case "workflow_updated":
@@ -224,6 +228,8 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "action_updated":
 		fallthrough
 	case "action_deleted":
+		fallthrough
+	case "action_triggered":
 		fallthrough
 	case "agent_created":
 		fallthrough

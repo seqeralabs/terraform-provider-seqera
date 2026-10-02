@@ -57,8 +57,17 @@ type AzCloudConfig struct {
 	//
 	ResourceGroup            *string      `json:"resourceGroup,omitempty"`
 	IntelligentComputeConfig *SchedConfig `json:"schedConfig,omitempty"`
-	SchedEnabled             *bool        `json:"schedEnabled,omitempty"`
-	Subnets                  []string     `json:"subnets,omitempty"`
+	// Enable Seqera Intelligent Compute (Preview).
+	// When `true`, tasks are distributed across multiple Azure VMs with
+	// optimized scheduling and resource allocation. When `false` (default),
+	// all tasks run on a single instance (Classic mode).
+	//
+	// `intelligent_compute_config` is optional in both modes: leave it null
+	// to accept the platform defaults, or provide it (only when
+	// `intelligent_compute_enabled = true`) to override the scheduler settings.
+	//
+	IntelligentComputeEnabled *bool    `json:"schedEnabled,omitempty"`
+	Subnets                   []string `json:"subnets,omitempty"`
 	// Azure subscription ID where compute resources will be created.
 	//
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
@@ -195,11 +204,11 @@ func (a *AzCloudConfig) GetIntelligentComputeConfig() *SchedConfig {
 	return a.IntelligentComputeConfig
 }
 
-func (a *AzCloudConfig) GetSchedEnabled() *bool {
+func (a *AzCloudConfig) GetIntelligentComputeEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.SchedEnabled
+	return a.IntelligentComputeEnabled
 }
 
 func (a *AzCloudConfig) GetSubnets() []string {

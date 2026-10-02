@@ -7,24 +7,24 @@ import (
 )
 
 type GoogleCloudConfig struct {
-	Arm64Enabled             types.Bool          `tfsdk:"arm64_enabled"`
-	BootDiskSizeGb           types.Int32         `tfsdk:"boot_disk_size_gb"`
-	Environment              []ConfigEnvVariable `tfsdk:"environment"`
-	GpuEnabled               types.Bool          `tfsdk:"gpu_enabled"`
-	ImageID                  types.String        `tfsdk:"image_id"`
-	InstanceType             types.String        `tfsdk:"instance_type"`
-	IntelligentComputeConfig *SchedConfig        `tfsdk:"intelligent_compute_config"`
-	Network                  types.String        `tfsdk:"network"`
-	NetworkTags              []types.String      `tfsdk:"network_tags"`
-	NextflowConfig           types.String        `tfsdk:"nextflow_config"`
-	PostRunScript            types.String        `tfsdk:"post_run_script"`
-	PreRunScript             types.String        `tfsdk:"pre_run_script"`
-	ProjectID                types.String        `tfsdk:"project_id"`
-	Region                   types.String        `tfsdk:"region"`
-	SchedEnabled             types.Bool          `tfsdk:"sched_enabled"`
-	ServiceAccountEmail      types.String        `tfsdk:"service_account_email"`
-	Subnetworks              []types.String      `tfsdk:"subnetworks"`
-	UsePrivateAddress        types.Bool          `tfsdk:"use_private_address"`
-	WorkDir                  types.String        `tfsdk:"work_dir"`
-	Zone                     types.String        `tfsdk:"zone"`
+	Arm64Enabled              types.Bool          `tfsdk:"arm64_enabled"`
+	BootDiskSizeGb            types.Int32         `tfsdk:"boot_disk_size_gb"`
+	Environment               []ConfigEnvVariable `tfsdk:"environment"`
+	GpuEnabled                types.Bool          `tfsdk:"gpu_enabled"`
+	ImageID                   types.String        `tfsdk:"image_id"`
+	InstanceType              types.String        `tfsdk:"instance_type"`
+	IntelligentComputeConfig  *SchedConfig        `tfsdk:"intelligent_compute_config"`
+	IntelligentComputeEnabled types.Bool          `tfsdk:"intelligent_compute_enabled"`
+	Network                   types.String        `tfsdk:"network"`
+	NetworkTags               []types.String      `tfsdk:"network_tags"`
+	NextflowConfig            types.String        `tfsdk:"nextflow_config"`
+	PostRunScript             types.String        `tfsdk:"post_run_script"`
+	PreRunScript              types.String        `tfsdk:"pre_run_script"`
+	ProjectID                 types.String        `tfsdk:"project_id"`
+	Region                    types.String        `tfsdk:"region"`
+	ServiceAccountEmail       types.String        `tfsdk:"service_account_email"`
+	Subnetworks               []types.String      `tfsdk:"subnetworks"`
+	UsePrivateAddress         types.Bool          `tfsdk:"use_private_address"`
+	WorkDir                   types.String        `tfsdk:"work_dir"`
+	Zone                      types.String        `tfsdk:"zone"`
 }

@@ -316,6 +316,7 @@ Optional:
 
 Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
+- `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave
 unset for no local-storage requirement.

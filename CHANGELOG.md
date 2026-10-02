@@ -2,11 +2,19 @@
 
 BREAKING CHANGES:
 
-- **`bucket` and `cron` removed from `seqera_action`.** Platform 1.214.0 dropped the bucket and cron action types from the API (`BucketActionConfig`/`CronActionConfig`, `BucketActionRequest`/`CronActionRequest` and `GET /actions/cron/resolve`), so the resource loses its `bucket` and `cron` argument blocks along with the read-only `config.bucket` and `config.cron` blocks. Configurations that set either block must remove it. The `source` enum still advertises `"bucket"` and `"cron"` — that is upstream's shape, left as-is.
+- **`sched_enabled` renamed to `intelligent_compute_enabled` on Azure and Google Cloud compute environments.** Applies to `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud` / `google_cloud` blocks of `seqera_compute_env`, matching `seqera_aws_cloud_ce` and the name of the companion `intelligent_compute_config` block. Configurations that set `sched_enabled` must switch to the new name. The value sent to the API is unchanged.
 
-  No state migration is required. The bucket and cron action types never reached GA in the backend and were never enabled in production, so no real state holds either block; `seqera_action` stays at schema version 1 with no new upgrader.
+  Existing state migrates automatically: `seqera_azure_cloud_ce` and `seqera_gcp_cloud_ce` move to schema version 2 and `seqera_compute_env` to schema version 3, and their state upgraders carry the value across, so there is no diff and no replacement.
+
+  As on AWS Cloud, setting `intelligent_compute_config` while `intelligent_compute_enabled` is false or unset is now rejected at plan time on these resources.
 
 FEATURES:
+
+- **Pipeline-status triggers and agent outcomes on `seqera_action`.** A new `pipeline_status` source, configured through a `pipeline_status` block, fires the action when a watched pipeline's run reaches a given state (`run_status`). A new `response_type` chooses what the action does when it fires: `pipeline` (the default) launches a run, and `agent` runs the workspace agent named in the new `agent` block. `agent` is only allowed for `bucket`, `cron` and `pipeline_status` sources. `launch` is no longer required: a `pipeline` action still needs it, while an `agent` action must set `agent` and must not set `launch` or `pipeline`, all checked at plan time. Changing `response_type` or `agent.agent_config_id` forces replacement. A new optional `pipeline` block links a `pipeline` action to an existing Launchpad pipeline and version, so each run is recorded against it. A new `label_ids` attaches labels to actions that have no launch. The most recent firing is exposed read-only as `last_trigger`, and the pipeline-status trigger as `config.pipeline_status`.
+
+- **New `seqera_service_account` resource and data source.** Manage organization service accounts (`org_id`, `name`, `description`), the non-human identities agents run as. `id` feeds `seqera_agent.service_account_id` and `member_id` feeds `seqera_workspace_participant.member_id`; the participant's role must allow launching agents (`launch` or higher, not `connect` or `view`). The data source looks an existing account up by `org_id` and `name`. Service account names are unique across the whole platform. Deleting a service account removes it from every workspace; the platform then disables the agents bound to it and pauses the actions that target them, which a plan does not show. Requires service accounts to be enabled on the Platform instance.
+
+- **New `seqera_agent` resource and data source.** Manage workspace agents (`workspace_id`, `name`, `agent_instructions`, `description`), which actions and direct launches run. `service_account_id` is required and sets the identity the agent runs as: the Platform rejects agents without a service account, and the account must already be a workspace participant with a role that allows launching agents. `github_app_credential_id` binds a GitHub App credential. `status` is read-only and can change outside Terraform; enabling and disabling agents is not managed by the provider. The data source looks an agent up by `workspace_id` and exact `name`. Requires service accounts to be enabled on the Platform instance.
 
 - **Fusion metrics collection on compute environments.** New top-level `fusion_metrics_collection_enabled` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and `seqera_aws_compute_env`. It updates in place — changing it does not replace the compute environment. On the Batch/Forge environments it requires `enable_fusion = true`, enforced at plan time rather than failing at apply. Not exposed on `seqera_slurm_ce` (no Fusion support in its config) or `seqera_managed_compute_ce` (backend-owned config).
 
@@ -26,7 +34,21 @@ FEATURES:
 
 - **`creation_source` filter on the `seqera_data_links` data source** — `user` for manually created data links, `cloud` for those discovered from credentials.
 
+- **Billed-cost retrieval from a Cloud Billing export on Google Cloud.** New `billing_export_table` on `intelligent_compute_config` for `seqera_gcp_cloud_ce` and the `google_cloud` block of `seqera_compute_env`. It names the BigQuery table holding the Cloud Billing export, as `project.dataset.table`, and lets the platform retrieve billed cost for runs on the compute environment. The export is not retroactive, so cost is unavailable for runs that predate it. Changing it forces replacement. The field also appears on the AWS Cloud and Azure Cloud compute environments because upstream shares the schema, but those platforms ignore it, so setting it on `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce` or the `aws_cloud` / `azure_cloud` blocks of `seqera_compute_env` is rejected at plan time.
+
+- **Custom icons on `seqera_studios`.** New `custom_icon_id` sets the Studio's icon from an avatar id (from `POST /avatars`). When null the icon is inherited from the parent checkpoint, an empty string clears it explicitly, and any other value assigns that avatar. Changing it forces replacement. The resolved icon URL is exposed read-only as `custom_icon`, and is null when no icon is set.
+
+- **Launch warnings on `seqera_workflows`.** New read-only `warnings` holds the warnings the platform returns when it accepts a launch.
+
+BUG FIXES:
+
+- **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
+
+  No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
+
 NOTES:
+
+- **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
 
 - **Dead `label` and `value` attributes dropped from `seqera_credential`.** Platform 1.214.0 added a read-only `setupValues` array to the describe-credentials response, which flattened into two bare computed attributes at the resource root. They were never populated, so they always read null. No state migration is required. The same values are reachable through the two federation-setup data sources above.
 
