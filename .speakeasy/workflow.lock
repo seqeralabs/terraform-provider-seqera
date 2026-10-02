@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:4c0f7acc000041925ae5643414b0ac5c764f87209576af7455c9fc4a8174570c
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: latest
+    speakeasyVersion: 1.799.0
     sources:
         Seqera API:
             inputs:

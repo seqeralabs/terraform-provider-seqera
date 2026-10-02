@@ -13,6 +13,8 @@ internal/sdk/internal/hooks/agent_binding_conflict_hook_test.go
 
 
 # Custom validators
+internal/validators/listvalidators/container_registry_credential_ids_validator.go
+internal/validators/listvalidators/container_registry_credential_ids_validator_test.go
 internal/validators/mapvalidators/google_resource_labels_validator.go
 internal/validators/stringvalidators/label_name_validator.go
 internal/validators/stringvalidators/label_value_resource_validator.go
@@ -85,6 +87,7 @@ internal/provider/computeenv_upgrade_decode_test.go
 internal/provider/stateupgrader_all_test.go
 internal/provider/cloudce_sched_enabled_upgrade_test.go
 internal/provider/agent_service_account_schema_test.go
+internal/provider/registry_credential_ids_schema_test.go
 internal/provider/agent_service_account_plan_test.go
 internal/planmodifiers/stringplanmodifier/service_account_name_follows_id.go
 

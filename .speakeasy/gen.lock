@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 1efa973d06eda7446fe954f600f19e5c
+  docChecksum: fd60517fbf82d61845c470a896256213
   docVersion: 1.226.2
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -5957,7 +5957,7 @@ examples:
         query:
           workspaceId: 407920
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -5972,7 +5972,7 @@ examples:
           workspaceId: 501081
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureBatchCE:
