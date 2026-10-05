@@ -121,7 +121,7 @@ resource "seqera_aws_credential" "with_keys_role_and_external_id" {
 }
 ```
 
-### Wif
+### Workload Identity
 
 ```terraform
 # The IAM role must trust this Seqera installation's OIDC provider. Build its
@@ -150,7 +150,7 @@ resource "seqera_aws_credential" "wif" {
 
 - `access_key` (String) AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
 - `assume_role_arn` (String) IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.
-- `mode` (String) Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key. `role` and `workloadIdentity` require `assume_role_arn` and `access_key` and `secret_key` to be unset, and `workloadIdentity` also requires `use_external_id` to be unset, all checked at plan time. The mode cannot be changed after creation. Note that `workloadIdentity` is gated behind the Identity Federation feature flag, so it can fail at apply time even when the configuration is valid. must be one of ["keys", "role", "workloadIdentity"]; Requires replacement if changed.
+- `mode` (String) Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key. `keys`, or no mode, requires `access_key` and `secret_key`; `role` and `workloadIdentity` require `assume_role_arn` and reject `access_key` and `secret_key`; `workloadIdentity` also rejects `use_external_id = true`. These rules are checked at plan time, except on Platform installations that allow instance credentials, which do not enforce them. The mode cannot be changed after creation. Note that `workloadIdentity` is gated behind the Identity Federation feature flag, so it can fail at apply time even when the configuration is valid. must be one of ["keys", "role", "workloadIdentity"]; Requires replacement if changed.
 - `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `use_external_id` (Boolean) Generate External ID for AWS credentials (requires IAM Role ARN)
 

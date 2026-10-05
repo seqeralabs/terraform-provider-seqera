@@ -86,6 +86,8 @@ internal/provider/stateupgrader_all_test.go
 internal/provider/cloudce_sched_enabled_upgrade_test.go
 internal/provider/agent_service_account_schema_test.go
 internal/provider/agent_service_account_plan_test.go
+internal/provider/awscredential_resource_modify_plan.go
+internal/provider/awscredential_resource_modify_plan_test.go
 internal/planmodifiers/stringplanmodifier/service_account_name_follows_id.go
 
 # Custom examples that should be manually maintained

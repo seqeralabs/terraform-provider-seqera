@@ -35,7 +35,7 @@ You do not need to assemble these values by hand. The [`seqera_aws_credentials_f
 
 ## Step 1: Register Seqera as an OIDC provider and create the role
 
-The OIDC provider is registered once per AWS account and Seqera installation. The role's trust policy lists every subject the workspace can present.
+The OIDC provider is registered once per AWS account and Seqera installation. The role's trust policy admits every subject the workspace can present, with the same `org:<ORG_ID>:wsp:<WORKSPACE_ID>:*` wildcard the Platform uses in the trust policy it renders, so workload types added later keep working.
 
 ```terraform
 terraform {
@@ -60,12 +60,15 @@ data "seqera_aws_credentials_federation_setup" "this" {
 
 locals {
   # AWS names the provider, and prefixes its condition keys, with the issuer
-  # without the scheme.
-  issuer_host = replace(
-    data.seqera_aws_credentials_federation_setup.this.platform_public_address,
-    "https://",
-    "",
+  # without the scheme or a trailing slash, as the Platform does.
+  issuer_host = trimsuffix(
+    replace(data.seqera_aws_credentials_federation_setup.this.platform_public_address, "/^https?:///", ""),
+    "/",
   )
+
+  # Every subject the workspace presents, one per workload type: the same
+  # wildcard the Platform uses in the trust policy it renders.
+  subject_pattern = "${trimsuffix(data.seqera_aws_credentials_federation_setup.this.subject_platform_actions, ":platform")}:*"
 }
 
 resource "aws_iam_openid_connect_provider" "seqera" {
@@ -90,12 +93,9 @@ resource "aws_iam_role" "seqera" {
       Condition = {
         StringEquals = {
           "${local.issuer_host}:aud" = data.seqera_aws_credentials_federation_setup.this.audience
-          "${local.issuer_host}:sub" = [
-            data.seqera_aws_credentials_federation_setup.this.subject_platform_actions,
-            data.seqera_aws_credentials_federation_setup.this.subject_data_explorer,
-            data.seqera_aws_credentials_federation_setup.this.subject_studios,
-            data.seqera_aws_credentials_federation_setup.this.subject_pipeline_launches,
-          ]
+        }
+        StringLike = {
+          "${local.issuer_host}:sub" = local.subject_pattern
         }
       }
     }]
@@ -106,6 +106,8 @@ resource "aws_iam_role" "seqera" {
 Attach to the role the permissions your workloads need, as you would for an access-key or `role` credential. Workload identity changes how Seqera authenticates to AWS, not what the role must be allowed to do.
 
 If the account already has an OIDC provider for this Seqera installation, look it up with the `aws_iam_openid_connect_provider` data source instead of creating a second one.
+
+To pin the exact subjects instead of the wildcard, list `subject_platform_actions`, `subject_data_explorer`, `subject_studios` and `subject_pipeline_launches` under `StringEquals`. The role then rejects any workload type the Platform adds later until you add its subject, and because credential validation uses `subject_platform_actions`, the credential keeps looking valid while the new feature fails.
 
 ## Step 2: Define the Seqera credential
 
@@ -119,7 +121,7 @@ resource "seqera_aws_credential" "wif" {
 }
 ```
 
-Referencing `aws_iam_role.seqera.arn` orders the role before the credential. In `workloadIdentity` mode the plan rejects `access_key`, `secret_key` and `use_external_id = true`, and requires `assume_role_arn`.
+Referencing `aws_iam_role.seqera.arn` orders the role before the credential. In `workloadIdentity` mode the plan rejects `access_key`, `secret_key` and `use_external_id = true`, and requires `assume_role_arn`. These checks are skipped on Platform installations that allow instance credentials, which do not enforce them.
 
 ## Step 3: Apply and use
 
@@ -142,7 +144,7 @@ The Platform validates the credential after creation by performing a real token 
 
 ## Notes
 
-- The mode cannot be changed after creation. Changing `mode` forces replacement of the credential, which gives it a new ID.
+- The mode cannot be changed after creation. Changing `mode` forces replacement of the credential, which gives it a new ID. Compute environments that reference it get the new `credentials_id` in the same plan and are updated in place. Terraform deletes the old credential first, and pipelines running on those compute environments are stopped, so apply the change when nothing is running.
 - Workload identity covers the calls Seqera makes to AWS. The Nextflow head job and its tasks still run under the compute environment's instance role, which needs its own permissions.
 - The subjects are derived from the workspace that owns the credential. Changing `workspace_id` forces replacement and produces new subjects, so the trust policy must be updated in lockstep.
 - The data source's `cloudtrail_session_tag_keys` lists the session tags Seqera sets, for filtering CloudTrail events by acting user.

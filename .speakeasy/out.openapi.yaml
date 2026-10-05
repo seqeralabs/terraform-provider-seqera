@@ -30640,7 +30640,9 @@ components:
         # The Platform rejects mode changes after creation ("AWS credential mode
         # cannot be changed after creation"), so a changed mode forces
         # replacement instead of an update that fails at apply. The per-mode
-        # field rules are enforced at plan time by AWSCredentialKeysValidator.
+        # field rules are checked at plan time by the resource's ModifyPlan
+        # (awscredential_resource_modify_plan.go), which skips them when the
+        # Platform allows instance credentials.
         mode:
           type: string
           enum:
@@ -30649,7 +30651,7 @@ components:
             - workloadIdentity
           # Kept to a single line: multi-line markdown here is spliced into the
           # docs' attribute list, so sub-bullets render as sibling attributes.
-          description: 'Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key. `role` and `workloadIdentity` require `assume_role_arn` and `access_key` and `secret_key` to be unset, and `workloadIdentity` also requires `use_external_id` to be unset, all checked at plan time. The mode cannot be changed after creation. Note that `workloadIdentity` is gated behind the Identity Federation feature flag, so it can fail at apply time even when the configuration is valid.'
+          description: 'Authentication mode. `keys` (default) uses a static access key and secret key; `role` assumes the IAM role given by `assume_role_arn`; `workloadIdentity` uses OIDC workload identity federation against `assume_role_arn` with no stored long-lived key. `keys`, or no mode, requires `access_key` and `secret_key`; `role` and `workloadIdentity` require `assume_role_arn` and reject `access_key` and `secret_key`; `workloadIdentity` also rejects `use_external_id = true`. These rules are checked at plan time, except on Platform installations that allow instance credentials, which do not enforce them. The mode cannot be changed after creation. Note that `workloadIdentity` is gated behind the Identity Federation feature flag, so it can fail at apply time even when the configuration is valid.'
           example: role
           x-speakeasy-param-optional: true
           x-speakeasy-param-force-new: true

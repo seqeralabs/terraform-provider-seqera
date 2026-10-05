@@ -39,12 +39,11 @@ data "seqera_workspace" "main" {
 
 # AWS credentials scoped to that workspace.
 resource "seqera_aws_credential" "main" {
-  name         = "aws-main"
-  workspace_id = data.seqera_workspace.main.id
-  mode         = "role"
-  keys = {
-    assume_role_arn = "arn:aws:iam::123456789012:role/seqera-runner"
-  }
+  name            = "aws-main"
+  workspace_id    = data.seqera_workspace.main.id
+  mode            = "role"
+  assume_role_arn = "arn:aws:iam::123456789012:role/seqera-runner"
+  use_external_id = true
 }
 
 # An AWS Batch compute environment that uses those credentials.
