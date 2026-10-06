@@ -2520,6 +2520,7 @@ paths:
           description: When true, enrich the response with the bucket versioning status (extra provider round-trip)
           schema:
             type: boolean
+            default: true
       responses:
         '200':
           description: OK
@@ -18990,7 +18991,7 @@ components:
           nullable: true
           pattern: ^https://[a-zA-Z](?!.*--)[a-zA-Z0-9-]{1,22}[a-zA-Z0-9]\.vault\.azure\.net/?$
           x-pattern-message: Must be in the form https://<vault-name>.vault.azure.net
-          x-speakeasy-plan-validators: KeyVaultUrlValidator
+          x-speakeasy-plan-validators: KeyVaultURLValidator
         logTableName:
           type: string
           description: |
@@ -20828,6 +20829,8 @@ components:
             - $ref: '#/components/schemas/BucketVersioning'
           nullable: true
           readOnly: true
+          description: >-
+            Versioning status of the underlying bucket (`ENABLED`, `SUSPENDED` or `DISABLED`), as reported by the cloud provider. Versioning is managed on the bucket itself, not through Seqera. Null when the provider does not report it.
         data_link_id:
           type: string
           description: Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.

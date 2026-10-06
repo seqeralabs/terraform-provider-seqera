@@ -160,7 +160,8 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"versioning": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Versioning status of the underlying bucket (` + "`" + `ENABLED` + "`" + `, ` + "`" + `SUSPENDED` + "`" + ` or ` + "`" + `DISABLED` + "`" + `), as reported by the cloud provider. Versioning is managed on the bucket itself, not through Seqera. Null when the provider does not report it.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,

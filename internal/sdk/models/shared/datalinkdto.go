@@ -34,6 +34,7 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// Versioning status of the underlying bucket (`ENABLED`, `SUSPENDED` or `DISABLED`), as reported by the cloud provider. Versioning is managed on the bucket itself, not through Seqera. Null when the provider does not report it.
 type Versioning string
 
 const (
@@ -85,7 +86,8 @@ type DataLinkDto struct {
 	ResourceRef *string            `json:"resourceRef,omitempty"`
 	Status      *DataLinkDtoStatus `json:"status,omitempty"`
 	Type        *DataLinkType      `json:"type,omitempty"`
-	Versioning  *Versioning        `json:"versioning,omitempty"`
+	// Versioning status of the underlying bucket (`ENABLED`, `SUSPENDED` or `DISABLED`), as reported by the cloud provider. Versioning is managed on the bucket itself, not through Seqera. Null when the provider does not report it.
+	Versioning *Versioning `json:"versioning,omitempty"`
 	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
 	DataLinkID *string `json:"data_link_id,omitempty"`
 }

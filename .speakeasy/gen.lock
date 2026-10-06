@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 86ba7c2c74416be218a9c97b0d95dde9
+  docChecksum: 6ed5a125c5f4930f684b4f1ed297f940
   docVersion: 1.231.0
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
@@ -4179,6 +4179,8 @@ examples:
       parameters:
         path:
           dataLinkId: "<id>"
+        query:
+          includeVersioning: true
       responses:
         "200":
           application/json: {}

@@ -55,7 +55,7 @@ resource "seqera_data_link" "my_datalink" {
 - `message` (String)
 - `region` (String) Geographic region where the data link is hosted
 - `status` (String)
-- `versioning` (String)
+- `versioning` (String) Versioning status of the underlying bucket (`ENABLED`, `SUSPENDED` or `DISABLED`), as reported by the cloud provider. Versioning is managed on the bucket itself, not through Seqera. Null when the provider does not report it.
 
 <a id="nestedatt--credentials"></a>
 ### Nested Schema for `credentials`
