@@ -176,6 +176,8 @@ func (r *AgentResource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateAgentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -184,7 +186,7 @@ func (r *AgentResource) Create(ctx context.Context, req resource.CreateRequest, 
 	}
 	res, err := r.client.Agents.CreateAgent(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -243,6 +245,8 @@ func (r *AgentResource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeAgentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -251,7 +255,7 @@ func (r *AgentResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	}
 	res, err := r.client.Agents.DescribeAgent(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -297,6 +301,8 @@ func (r *AgentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateAgentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -305,7 +311,7 @@ func (r *AgentResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 	res, err := r.client.Agents.UpdateAgent(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -357,6 +363,8 @@ func (r *AgentResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAgentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -365,7 +373,7 @@ func (r *AgentResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 	res, err := r.client.Agents.DeleteAgent(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

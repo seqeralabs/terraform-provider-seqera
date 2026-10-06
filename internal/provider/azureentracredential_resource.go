@@ -176,6 +176,8 @@ func (r *AzureEntraCredentialResource) Create(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateAzureEntraCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -184,7 +186,7 @@ func (r *AzureEntraCredentialResource) Create(ctx context.Context, req resource.
 	}
 	res, err := r.client.Credentials.CreateAzureEntraCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -243,6 +245,8 @@ func (r *AzureEntraCredentialResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeAzureEntraCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -251,7 +255,7 @@ func (r *AzureEntraCredentialResource) Read(ctx context.Context, req resource.Re
 	}
 	res, err := r.client.Credentials.DescribeAzureEntraCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -318,6 +322,8 @@ func (r *AzureEntraCredentialResource) Update(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateAzureEntraCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -326,7 +332,7 @@ func (r *AzureEntraCredentialResource) Update(ctx context.Context, req resource.
 	}
 	res, err := r.client.Credentials.UpdateAzureEntraCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -369,6 +375,8 @@ func (r *AzureEntraCredentialResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAzureEntraCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -377,7 +385,7 @@ func (r *AzureEntraCredentialResource) Delete(ctx context.Context, req resource.
 	}
 	res, err := r.client.Credentials.DeleteAzureEntraCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

@@ -186,6 +186,8 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateGoogleCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -194,7 +196,7 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 	}
 	res, err := r.client.Credentials.CreateGoogleCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -238,7 +240,7 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 	}
 	res1, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -290,6 +292,8 @@ func (r *GoogleCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeGoogleCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -298,7 +302,7 @@ func (r *GoogleCredentialResource) Read(ctx context.Context, req resource.ReadRe
 	}
 	res, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -365,6 +369,8 @@ func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateGoogleCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -373,7 +379,7 @@ func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.Upda
 	}
 	res, err := r.client.Credentials.UpdateGoogleCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -416,6 +422,8 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteGoogleCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -424,7 +432,7 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 	}
 	res, err := r.client.Credentials.DeleteGoogleCredentials(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

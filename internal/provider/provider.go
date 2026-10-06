@@ -109,6 +109,7 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 			"Either the environment variable TOWER_ACCESS_TOKEN or provider configuration bearer_auth attribute must be configured.",
 		)
 	}
+	registerSensitiveValues(security.BearerAuth)
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),

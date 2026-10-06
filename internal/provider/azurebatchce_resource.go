@@ -744,6 +744,8 @@ func (r *AzureBatchCEResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -752,7 +754,7 @@ func (r *AzureBatchCEResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res, err := r.client.ComputeEnvs.CreateAzureBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -796,7 +798,7 @@ func (r *AzureBatchCEResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res1, err := r.client.ComputeEnvs.DescribeAzureBatchCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -848,6 +850,8 @@ func (r *AzureBatchCEResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -856,7 +860,7 @@ func (r *AzureBatchCEResource) Read(ctx context.Context, req resource.ReadReques
 	}
 	res, err := r.client.ComputeEnvs.DescribeAzureBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -907,6 +911,8 @@ func (r *AzureBatchCEResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -915,7 +921,7 @@ func (r *AzureBatchCEResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res, err := r.client.ComputeEnvs.UpdateAzureBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -943,7 +949,7 @@ func (r *AzureBatchCEResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res1, err := r.client.ComputeEnvs.DescribeAzureBatchCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -995,6 +1001,8 @@ func (r *AzureBatchCEResource) Delete(ctx context.Context, req resource.DeleteRe
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1003,7 +1011,7 @@ func (r *AzureBatchCEResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 	res, err := r.client.ComputeEnvs.DeleteAzureBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

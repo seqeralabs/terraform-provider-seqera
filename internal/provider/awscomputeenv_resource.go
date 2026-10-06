@@ -992,6 +992,8 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateAWSComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1000,7 +1002,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	}
 	res, err := r.client.ComputeEnvs.CreateAWSComputeEnv(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1044,7 +1046,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	}
 	res1, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -1096,6 +1098,8 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeAWSComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1104,7 +1108,7 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 	}
 	res, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1150,6 +1154,8 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateAWSComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1158,7 +1164,7 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 	}
 	res, err := r.client.ComputeEnvs.UpdateAWSComputeEnv(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1186,7 +1192,7 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 	}
 	res1, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -1238,6 +1244,8 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAWSComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1246,7 +1254,7 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 	}
 	res, err := r.client.ComputeEnvs.DeleteAWSComputeEnv(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

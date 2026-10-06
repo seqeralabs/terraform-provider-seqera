@@ -632,6 +632,8 @@ func (r *GCPBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -640,7 +642,7 @@ func (r *GCPBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	res, err := r.client.ComputeEnvs.CreateGCPBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -684,7 +686,7 @@ func (r *GCPBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	res1, err := r.client.ComputeEnvs.DescribeGCPBatchCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -736,6 +738,8 @@ func (r *GCPBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -744,7 +748,7 @@ func (r *GCPBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 	res, err := r.client.ComputeEnvs.DescribeGCPBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -795,6 +799,8 @@ func (r *GCPBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -803,7 +809,7 @@ func (r *GCPBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	res, err := r.client.ComputeEnvs.UpdateGCPBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -831,7 +837,7 @@ func (r *GCPBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	res1, err := r.client.ComputeEnvs.DescribeGCPBatchCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -883,6 +889,8 @@ func (r *GCPBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -891,7 +899,7 @@ func (r *GCPBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	}
 	res, err := r.client.ComputeEnvs.DeleteGCPBatchCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
