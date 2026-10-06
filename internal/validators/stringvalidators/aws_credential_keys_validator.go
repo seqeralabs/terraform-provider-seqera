@@ -50,6 +50,10 @@ func (v AWSCredentialKeysValidatorValidator) ValidateString(ctx context.Context,
 	secretKeyProvided := !secretKeyValue.IsNull() && secretKeyValue.ValueString() != ""
 	assumeRoleArnProvided := !assumeRoleArnValue.IsNull() && assumeRoleArnValue.ValueString() != ""
 
+	// These rules hold on every installation. The per-mode rules depend on whether the Platform allows
+	// instance credentials, so they are checked in the resource's ModifyPlan instead. Errors are attached
+	// to fixed paths so the three attributes carrying this validator report each problem once.
+
 	// Rule 1: If access_key is provided, secret_key must also be provided
 	if accessKeyProvided && !secretKeyProvided {
 		resp.Diagnostics.AddAttributeError(
@@ -72,9 +76,8 @@ func (v AWSCredentialKeysValidatorValidator) ValidateString(ctx context.Context,
 
 	// Rule 3: At least one authentication method must be provided
 	if !accessKeyProvided && !secretKeyProvided && !assumeRoleArnProvided {
-		// Add error to the current field being validated
 		resp.Diagnostics.AddAttributeError(
-			req.Path,
+			assumeRoleArnPath,
 			"Missing Required Configuration",
 			"AWS credentials require either 'assume_role_arn' or both 'access_key' and 'secret_key' to be provided. At least one authentication method must be configured.",
 		)

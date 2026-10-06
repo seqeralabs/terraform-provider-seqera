@@ -39,12 +39,11 @@ data "seqera_workspace" "main" {
 
 # AWS credentials scoped to that workspace.
 resource "seqera_aws_credential" "main" {
-  name         = "aws-main"
-  workspace_id = data.seqera_workspace.main.id
-  mode         = "role"
-  keys = {
-    assume_role_arn = "arn:aws:iam::123456789012:role/seqera-runner"
-  }
+  name            = "aws-main"
+  workspace_id    = data.seqera_workspace.main.id
+  mode            = "role"
+  assume_role_arn = "arn:aws:iam::123456789012:role/seqera-runner"
+  use_external_id = true
 }
 
 # An AWS Batch compute environment that uses those credentials.
@@ -123,4 +122,5 @@ Use the navigation on the left to explore the available resources and data sourc
 - [Upgrading from v0.30.5 to v0.40.0](guides/upgrading-from-0.30.5-to-0.40.md)
 - [Migrating from `seqera_credential` to typed credential resources](guides/migrating-from-seqera-credential.md)
 - [AWS Credentials with IAM Role and External ID](guides/aws-iam-role-with-external-id.md)
+- [AWS Credentials with Workload Identity Federation](guides/aws-workload-identity-federation.md)
 - [GCP Credentials with Workload Identity Federation](guides/gcp-workload-identity-federation.md)

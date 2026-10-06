@@ -20,34 +20,48 @@ func awsCredObjectType() tftypes.Object {
 			"access_key":      tftypes.String,
 			"secret_key":      tftypes.String,
 			"assume_role_arn": tftypes.String,
+			"mode":            tftypes.String,
+			"use_external_id": tftypes.Bool,
+		},
+	}
+}
+
+// awsCredSchema returns the sibling attributes the AWS credential validator reads.
+func awsCredSchema() resourceschema.Schema {
+	return resourceschema.Schema{
+		Attributes: map[string]resourceschema.Attribute{
+			"access_key":      resourceschema.StringAttribute{Optional: true},
+			"secret_key":      resourceschema.StringAttribute{Optional: true},
+			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
+			"mode":            resourceschema.StringAttribute{Optional: true},
+			"use_external_id": resourceschema.BoolAttribute{Optional: true},
 		},
 	}
 }
 
 // makeAWSRequest constructs a validator.StringRequest for the AWS credential validator.
 // fieldName is the field being validated (access_key, secret_key, or assume_role_arn).
-// values maps field names to string values; nil means null.
+// values maps field names to string values; nil means null. use_external_id takes "true" or "false".
 func makeAWSRequest(fieldName string, values map[string]*string) validator.StringRequest {
 	ct := awsCredObjectType()
 
 	tfvals := make(map[string]tftypes.Value)
-	for _, name := range []string{"access_key", "secret_key", "assume_role_arn"} {
+	for _, name := range []string{"access_key", "secret_key", "assume_role_arn", "mode"} {
 		if v, ok := values[name]; ok && v != nil {
 			tfvals[name] = tftypes.NewValue(tftypes.String, *v)
 		} else {
 			tfvals[name] = tftypes.NewValue(tftypes.String, nil)
 		}
 	}
+	if v, ok := values["use_external_id"]; ok && v != nil {
+		tfvals["use_external_id"] = tftypes.NewValue(tftypes.Bool, *v == "true")
+	} else {
+		tfvals["use_external_id"] = tftypes.NewValue(tftypes.Bool, nil)
+	}
 
 	rawVal := tftypes.NewValue(ct, tfvals)
 
-	s := resourceschema.Schema{
-		Attributes: map[string]resourceschema.Attribute{
-			"access_key":      resourceschema.StringAttribute{Optional: true},
-			"secret_key":      resourceschema.StringAttribute{Optional: true},
-			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
-		},
-	}
+	s := awsCredSchema()
 
 	config := tfsdk.Config{
 		Schema: s,
@@ -156,15 +170,11 @@ func TestAWSCredentialKeys_UnknownValuesSkipsValidation(t *testing.T) {
 		"access_key":      tftypes.NewValue(tftypes.String, tftypes.UnknownValue),
 		"secret_key":      tftypes.NewValue(tftypes.String, nil),
 		"assume_role_arn": tftypes.NewValue(tftypes.String, nil),
+		"mode":            tftypes.NewValue(tftypes.String, nil),
+		"use_external_id": tftypes.NewValue(tftypes.Bool, nil),
 	})
 
-	s := resourceschema.Schema{
-		Attributes: map[string]resourceschema.Attribute{
-			"access_key":      resourceschema.StringAttribute{Optional: true},
-			"secret_key":      resourceschema.StringAttribute{Optional: true},
-			"assume_role_arn": resourceschema.StringAttribute{Optional: true},
-		},
-	}
+	s := awsCredSchema()
 
 	req := validator.StringRequest{
 		Path:        path.Root("access_key"),
@@ -219,4 +229,29 @@ func TestAWSCredentialKeys_AssumeRoleWithAccessKeyOnly(t *testing.T) {
 	diags := runAWSValidator(makeAWSRequest("access_key", values))
 	assert.True(t, diags.HasError(), "access_key without secret_key should fail even with assume_role_arn")
 	assert.Contains(t, diags.Errors()[0].Summary(), "Missing Required Attribute")
+}
+
+func TestAWSCredentialKeys_NothingProvidedReportedOnce(t *testing.T) {
+	t.Parallel()
+	// The validator runs on three attributes; the error must attach to one fixed path so it is reported once.
+	for _, field := range []string{"access_key", "secret_key", "assume_role_arn"} {
+		diags := runAWSValidator(makeAWSRequest(field, map[string]*string{}))
+		assert.Len(t, diags.Errors(), 1, "validating %s", field)
+		errWithPath, ok := diags.Errors()[0].(diag.DiagnosticWithPath)
+		assert.True(t, ok, "validating %s: expected an attribute error", field)
+		assert.Equal(t, path.Root("assume_role_arn"), errWithPath.Path(), "validating %s", field)
+	}
+}
+
+func TestAWSCredentialKeys_IgnoresMode(t *testing.T) {
+	t.Parallel()
+	// Mode rules depend on the Platform's instance-credentials setting and live in the resource's ModifyPlan.
+	values := map[string]*string{
+		"access_key":      strPtr("AKIAIOSFODNN7EXAMPLE"),
+		"secret_key":      strPtr("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
+		"assume_role_arn": strPtr("arn:aws:iam::123456789012:role/MyRole"),
+		"mode":            strPtr("role"),
+	}
+	diags := runAWSValidator(makeAWSRequest("access_key", values))
+	assert.False(t, diags.HasError(), "the validator must not apply mode rules, got: %s", diags.Errors())
 }
