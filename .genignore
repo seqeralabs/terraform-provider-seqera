@@ -49,6 +49,8 @@ internal/validators/stringvalidators/work_dir_format_validator.go
 internal/validators/stringvalidators/key_vault_url_validator.go
 internal/validators/stringvalidators/key_vault_url_validator_test.go
 internal/validators/int32validators/max_spot_attempts_validator.go
+internal/validators/listvalidators/container_registry_credential_ids_validator.go
+internal/validators/listvalidators/container_registry_credential_ids_validator_test.go
 
 # Custom state upgraders — all follow the default lenient-decode pattern
 # (docs-internal/STATE_UPGRADER_GUIDE.md); hand-maintained, not regenerated.

@@ -39,6 +39,7 @@ import (
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
+	custom_listvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/listvalidators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -1702,9 +1703,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
+												Description: `Seqera Platform credentials ID of the container registry to attach to the Batch pool to pull private images. At most one ID can be specified. Requires replacement if changed.`,
 												Validators: []validator.List{
 													listvalidator.SizeAtMost(1),
+													custom_listvalidators.ContainerRegistryCredentialIdsValidator(),
 												},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{

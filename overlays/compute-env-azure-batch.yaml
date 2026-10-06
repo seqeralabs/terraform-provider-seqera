@@ -413,8 +413,7 @@ actions:
 
   - target: $.components.schemas.AzBatchForgeConfig.properties.containerRegIds
     update:
-      description: |
-        List of Azure Container Registry IDs whose images compute jobs may pull.
+      x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
         imports:
