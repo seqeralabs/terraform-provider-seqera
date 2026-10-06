@@ -74,6 +74,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			}
 		}
 		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
+		r.Config.KeyVaultURL = types.StringPointerValue(resp.Config.KeyVaultURL)
 		r.Config.LogTableName = types.StringPointerValue(resp.Config.LogTableName)
 		r.Config.LogWorkspaceID = types.StringPointerValue(resp.Config.LogWorkspaceID)
 		r.Config.ManagedIdentityClientID = types.StringPointerValue(resp.Config.ManagedIdentityClientID)
@@ -347,6 +348,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		instanceType = nil
 	}
+	keyVaultURL := new(string)
+	if !r.Config.KeyVaultURL.IsUnknown() && !r.Config.KeyVaultURL.IsNull() {
+		*keyVaultURL = r.Config.KeyVaultURL.ValueString()
+	} else {
+		keyVaultURL = nil
+	}
 	logTableName := new(string)
 	if !r.Config.LogTableName.IsUnknown() && !r.Config.LogTableName.IsNull() {
 		*logTableName = r.Config.LogTableName.ValueString()
@@ -528,6 +535,7 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		DataCollectionRuleID:      dataCollectionRuleID,
 		Environment:               environment,
 		InstanceType:              instanceType,
+		KeyVaultURL:               keyVaultURL,
 		LogTableName:              logTableName,
 		LogWorkspaceID:            logWorkspaceID,
 		ManagedIdentityClientID:   managedIdentityClientID,

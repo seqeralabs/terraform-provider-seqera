@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -287,6 +288,9 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 								},
 								ElementType: types.StringType,
 								Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
+								Validators: []validator.List{
+									listvalidator.SizeAtMost(1),
+								},
 							},
 							"dispose_on_deletion": schema.BoolAttribute{
 								Computed: true,
@@ -569,6 +573,18 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"use_private_address": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.PrivateAddressRequiresSubnetValidator(),
+						},
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,

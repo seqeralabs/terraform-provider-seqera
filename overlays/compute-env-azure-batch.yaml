@@ -431,3 +431,11 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.postRunScript
     update:
       x-speakeasy-plan-validators: RunScriptSizeValidator
+
+  # `usePrivateAddress` is only accepted together with a dedicated `subnetId`;
+  # the API rejects it otherwise, even when explicitly false. Presence-based, so
+  # the custom validator is used instead of RequiresSiblingStringSet (true-only).
+  # (internal/validators/boolvalidators/private_address_requires_subnet_validator.go)
+  - target: $.components.schemas.AzBatchConfig.properties.usePrivateAddress
+    update:
+      x-speakeasy-plan-validators: PrivateAddressRequiresSubnetValidator

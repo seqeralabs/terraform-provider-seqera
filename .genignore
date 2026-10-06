@@ -43,7 +43,11 @@ internal/validators/boolvalidators/graviton_validator.go
 internal/validators/boolvalidators/requires_sibling_string_set.go
 internal/validators/boolvalidators/private_address_requires_network_validator.go
 internal/validators/boolvalidators/private_address_requires_network_validator_test.go
+internal/validators/boolvalidators/private_address_requires_subnet_validator.go
+internal/validators/boolvalidators/private_address_requires_subnet_validator_test.go
 internal/validators/stringvalidators/work_dir_format_validator.go
+internal/validators/stringvalidators/key_vault_url_validator.go
+internal/validators/stringvalidators/key_vault_url_validator_test.go
 internal/validators/int32validators/max_spot_attempts_validator.go
 
 # Custom state upgraders — all follow the default lenient-decode pattern

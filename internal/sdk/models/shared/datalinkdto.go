@@ -34,6 +34,35 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type Versioning string
+
+const (
+	VersioningEnabled   Versioning = "ENABLED"
+	VersioningSuspended Versioning = "SUSPENDED"
+	VersioningDisabled  Versioning = "DISABLED"
+)
+
+func (e Versioning) ToPointer() *Versioning {
+	return &e
+}
+func (e *Versioning) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ENABLED":
+		fallthrough
+	case "SUSPENDED":
+		fallthrough
+	case "DISABLED":
+		*e = Versioning(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for Versioning: %v", v)
+	}
+}
+
 // DataLinkDto - Represents a data link connection to external storage systems.
 // Provides access to cloud storage, file systems, and data repositories
 // for pipeline input/output operations.
@@ -56,6 +85,7 @@ type DataLinkDto struct {
 	ResourceRef *string            `json:"resourceRef,omitempty"`
 	Status      *DataLinkDtoStatus `json:"status,omitempty"`
 	Type        *DataLinkType      `json:"type,omitempty"`
+	Versioning  *Versioning        `json:"versioning,omitempty"`
 	// Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
 	DataLinkID *string `json:"data_link_id,omitempty"`
 }
@@ -158,6 +188,13 @@ func (d *DataLinkDto) GetType() *DataLinkType {
 		return nil
 	}
 	return d.Type
+}
+
+func (d *DataLinkDto) GetVersioning() *Versioning {
+	if d == nil {
+		return nil
+	}
+	return d.Versioning
 }
 
 func (d *DataLinkDto) GetDataLinkID() *string {

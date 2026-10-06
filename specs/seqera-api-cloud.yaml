@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.226.2
+  version: 1.231.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -831,6 +831,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agents are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -868,6 +874,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agents are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Duplicate agent name or bound service account cannot be validated
           content:
@@ -913,7 +925,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Agent not found
+          description: Agent not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -978,6 +990,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agents are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1016,7 +1034,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Not found
+          description: Not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -1054,6 +1072,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Agents are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1091,7 +1115,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Not found
+          description: Not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -1140,7 +1164,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Not found
+          description: Not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -1189,7 +1213,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Not found
+          description: Not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -1232,7 +1256,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: Not found
+          description: Not found, or agents are not enabled for this organization
           content:
             application/json:
               schema:
@@ -2415,6 +2439,11 @@ paths:
           description: Credentials string identifier
           schema:
             type: string
+        - name: includeVersioning
+          in: query
+          description: When true, enrich the response with the bucket versioning status (extra provider round-trip)
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK
@@ -5881,6 +5910,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -5916,6 +5951,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Duplicate service account name, name must be unique across all platform users
           content:
@@ -5954,6 +5995,24 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Service account is bound to active agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: Agent service unreachable, so agent bindings could not be verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -5989,6 +6048,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -6030,6 +6095,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Duplicate service account name
           content:
@@ -6809,6 +6880,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Participant is bound to active agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: Agent service unreachable, so agent bindings could not be verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -6958,6 +7041,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Participant is bound to active agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: Agent service unreachable, so agent bindings could not be verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -7057,6 +7152,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -7197,6 +7298,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: User is bound to active agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: Agent service unreachable, so agent bindings could not be verified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -12042,11 +12155,13 @@ components:
         - running
         - completed
         - failed
+        - cancelled
       x-enum-varnames:
         - pending
         - running
         - completed
         - failed
+        - cancelled
     AgentRun.Trigger:
       type: object
       properties:
@@ -13378,6 +13493,10 @@ components:
           nullable: true
         tokenDuration:
           type: string
+        usePrivateAddress:
+          description: Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs.
+          type: boolean
+          nullable: true
         waveEnabled:
           type: boolean
         workDir:
@@ -13400,9 +13519,14 @@ components:
           minimum: 50
           nullable: true
         containerRegIds:
+          description: Seqera Platform credentials ID of the container registry to attach to the Batch pool to pull private images. At most one ID can be specified.
           type: array
           items:
+            example: 2dzgMSW1UqQHFhZqGQZ99X
+            pattern: ^[0-9A-Za-z]{1,22}$
             type: string
+          maxItems: 1
+          nullable: true
         disposeOnDeletion:
           type: boolean
         dualPoolConfig:
@@ -13498,6 +13622,13 @@ components:
           type: boolean
         instanceType:
           type: string
+        keyVaultUrl:
+          description: Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used.
+          type: string
+          example: https://my-vault.vault.azure.net
+          nullable: true
+          pattern: ^https://[a-zA-Z](?!.*--)[a-zA-Z0-9-]{1,22}[a-zA-Z0-9]\.vault\.azure\.net/?$
+          x-pattern-message: Must be in the form https://<vault-name>.vault.azure.net
         logTableName:
           type: string
         logWorkspaceId:
@@ -13732,6 +13863,12 @@ components:
         markerFile:
           type: string
           nullable: true
+    BucketVersioning:
+      type: string
+      enum:
+        - ENABLED
+        - SUSPENDED
+        - DISABLED
     CatalogArtifact:
       type: object
       properties:
@@ -14928,6 +15065,11 @@ components:
           readOnly: true
         type:
           $ref: '#/components/schemas/DataLinkType'
+        versioning:
+          allOf:
+            - $ref: '#/components/schemas/BucketVersioning'
+          nullable: true
+          readOnly: true
     DataLinkFileImage:
       type: object
       properties:
@@ -18962,7 +19104,7 @@ components:
         name:
           type: string
           maxLength: 100
-          pattern: ^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\1)){1,49}$
+          pattern: ^[a-zA-Z_](?:[0-9A-Za-z]+(?:_[0-9A-Za-z]+){0,24}|[0-9A-Za-z]+(?:_[0-9A-Za-z]+){0,23}_|_[0-9A-Za-z]+(?:_[0-9A-Za-z]+){0,23}_?|_)$
       required:
         - name
     PipelineSecretImage:

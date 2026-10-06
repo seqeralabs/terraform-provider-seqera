@@ -95,6 +95,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 		r.Config.SubnetID = types.StringPointerValue(resp.Config.SubnetID)
 		r.Config.TerminateJobsOnCompletion = types.BoolPointerValue(resp.Config.TerminateJobsOnCompletion)
 		r.Config.TokenDuration = types.StringPointerValue(resp.Config.TokenDuration)
+		r.Config.UsePrivateAddress = types.BoolPointerValue(resp.Config.UsePrivateAddress)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.Config.WorkerPool = types.StringPointerValue(resp.Config.WorkerPool)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
@@ -570,6 +571,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 	} else {
 		tokenDuration = nil
 	}
+	usePrivateAddress := new(bool)
+	if !r.Config.UsePrivateAddress.IsUnknown() && !r.Config.UsePrivateAddress.IsNull() {
+		*usePrivateAddress = r.Config.UsePrivateAddress.ValueBool()
+	} else {
+		usePrivateAddress = nil
+	}
 	enableWave := new(bool)
 	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
 		*enableWave = r.Config.EnableWave.ValueBool()
@@ -612,6 +619,7 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		SubnetID:                      subnetID,
 		TerminateJobsOnCompletion:     terminateJobsOnCompletion,
 		TokenDuration:                 tokenDuration,
+		UsePrivateAddress:             usePrivateAddress,
 		EnableWave:                    enableWave,
 		WorkDir:                       workDir,
 		WorkerPool:                    workerPool1,

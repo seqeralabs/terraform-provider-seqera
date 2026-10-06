@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 1efa973d06eda7446fe954f600f19e5c
-  docVersion: 1.226.2
+  docChecksum: 86ba7c2c74416be218a9c97b0d95dde9
+  docVersion: 1.231.0
   speakeasyVersion: 1.799.0
   generationVersion: 2.941.0
   releaseVersion: 0.43.0-RC3
@@ -5021,6 +5021,8 @@ examples:
       responses:
         "400":
           application/json: {"message": "<value>"}
+        "502":
+          application/json: {"message": "<value>"}
   CreateWorkspaceParticipant:
     speakeasy-default-create-workspace-participant:
       parameters:
@@ -5043,6 +5045,8 @@ examples:
           participantId: 219884
       responses:
         "400":
+          application/json: {"message": "<value>"}
+        "502":
           application/json: {"message": "<value>"}
   UpdateWorkspaceParticipantRole:
     speakeasy-default-update-workspace-participant-role:
@@ -5723,6 +5727,8 @@ examples:
       responses:
         "400":
           application/json: {"message": "<value>"}
+        "502":
+          application/json: {"message": "<value>"}
   CreatePipelineSchema:
     speakeasy-default-create-pipeline-schema:
       requestBody:
@@ -5957,7 +5963,7 @@ examples:
         query:
           workspaceId: 407920
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -5972,7 +5978,7 @@ examples:
           workspaceId: 501081
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureBatchCE:
@@ -5991,7 +5997,7 @@ examples:
         query:
           workspaceId: 892944
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6006,7 +6012,7 @@ examples:
           workspaceId: 366403
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureCloudCE:
@@ -6827,6 +6833,8 @@ examples:
           saId: 494449
       responses:
         "400":
+          application/json: {"message": "<value>"}
+        "502":
           application/json: {"message": "<value>"}
   DescribeServiceAccount:
     speakeasy-default-describe-service-account:

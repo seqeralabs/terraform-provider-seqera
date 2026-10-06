@@ -14,6 +14,7 @@ type AzCloudConfig struct {
 	InstanceType              types.String        `tfsdk:"instance_type"`
 	IntelligentComputeConfig  *SchedConfig        `tfsdk:"intelligent_compute_config"`
 	IntelligentComputeEnabled types.Bool          `tfsdk:"intelligent_compute_enabled"`
+	KeyVaultURL               types.String        `tfsdk:"key_vault_url"`
 	LogTableName              types.String        `tfsdk:"log_table_name"`
 	LogWorkspaceID            types.String        `tfsdk:"log_workspace_id"`
 	ManagedIdentityClientID   types.String        `tfsdk:"managed_identity_client_id"`

@@ -55,6 +55,7 @@ resource "seqera_data_link" "my_datalink" {
 - `message` (String)
 - `region` (String) Geographic region where the data link is hosted
 - `status` (String)
+- `versioning` (String)
 
 <a id="nestedatt--credentials"></a>
 ### Nested Schema for `credentials`

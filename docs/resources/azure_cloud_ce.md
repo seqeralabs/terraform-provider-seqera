@@ -142,6 +142,7 @@ all tasks run on a single instance (Classic mode).
 to accept the platform defaults, or provide it (only when
 `intelligent_compute_enabled = true`) to override the scheduler settings.
 Requires replacement if changed.
+- `key_vault_url` (String) Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used. Requires replacement if changed.
 - `log_table_name` (String) Azure Log Analytics table name for execution logs. Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.

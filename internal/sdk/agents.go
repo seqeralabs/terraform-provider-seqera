@@ -225,7 +225,11 @@ func (s *Agents) ListAgents(ctx context.Context, request operations.ListAgentsRe
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -246,8 +250,6 @@ func (s *Agents) ListAgents(ctx context.Context, request operations.ListAgentsRe
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -464,6 +466,8 @@ func (s *Agents) CreateAgent(ctx context.Context, request operations.CreateAgent
 	case httpRes.StatusCode == 403:
 		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
 		fallthrough
 	case httpRes.StatusCode == 409:
 		switch {
@@ -934,7 +938,11 @@ func (s *Agents) ListAgentRuns(ctx context.Context, request operations.ListAgent
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -955,8 +963,6 @@ func (s *Agents) ListAgentRuns(ctx context.Context, request operations.ListAgent
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -1375,7 +1381,11 @@ func (s *Agents) DeleteAgent(ctx context.Context, request operations.DeleteAgent
 	switch {
 	case httpRes.StatusCode == 204:
 		utils.DrainBody(httpRes)
+	case httpRes.StatusCode == 403:
+		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1396,10 +1406,6 @@ func (s *Agents) DeleteAgent(ctx context.Context, request operations.DeleteAgent
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
-		utils.DrainBody(httpRes)
-	case httpRes.StatusCode == 404:
-		utils.DrainBody(httpRes)
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

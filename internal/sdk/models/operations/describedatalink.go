@@ -14,6 +14,8 @@ type DescribeDataLinkRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
+	// When true, enrich the response with the bucket versioning status (extra provider round-trip)
+	IncludeVersioning *bool `queryParam:"style=form,explode=true,name=includeVersioning"`
 }
 
 func (d *DescribeDataLinkRequest) GetDataLinkID() string {
@@ -35,6 +37,13 @@ func (d *DescribeDataLinkRequest) GetCredentialsID() *string {
 		return nil
 	}
 	return d.CredentialsID
+}
+
+func (d *DescribeDataLinkRequest) GetIncludeVersioning() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.IncludeVersioning
 }
 
 type DescribeDataLinkResponse struct {

@@ -463,3 +463,11 @@ actions:
   - target: $.components.schemas.AzCloudConfig.properties.postRunScript
     update:
       x-speakeasy-plan-validators: RunScriptSizeValidator
+
+  # The upstream `pattern` uses a negative lookahead (no consecutive hyphens),
+  # which Go's RE2 engine does not support, so Speakeasy drops it and emits no
+  # validator. The custom validator enforces the same rules with a clear message.
+  # (internal/validators/stringvalidators/key_vault_url_validator.go)
+  - target: $.components.schemas.AzCloudConfig.properties.keyVaultUrl
+    update:
+      x-speakeasy-plan-validators: KeyVaultURLValidator

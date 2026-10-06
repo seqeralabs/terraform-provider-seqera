@@ -14,6 +14,7 @@ const (
 	AgentRunStatusRunning   AgentRunStatus = "running"
 	AgentRunStatusCompleted AgentRunStatus = "completed"
 	AgentRunStatusFailed    AgentRunStatus = "failed"
+	AgentRunStatusCancelled AgentRunStatus = "cancelled"
 )
 
 func (e AgentRunStatus) ToPointer() *AgentRunStatus {
@@ -32,6 +33,8 @@ func (e *AgentRunStatus) UnmarshalJSON(data []byte) error {
 	case "completed":
 		fallthrough
 	case "failed":
+		fallthrough
+	case "cancelled":
 		*e = AgentRunStatus(v)
 		return nil
 	default:

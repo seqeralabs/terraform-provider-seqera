@@ -50,6 +50,11 @@ func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context
 		} else {
 			r.Type = types.StringNull()
 		}
+		if resp.Versioning != nil {
+			r.Versioning = types.StringValue(string(*resp.Versioning))
+		} else {
+			r.Versioning = types.StringNull()
+		}
 	}
 
 	return diags
