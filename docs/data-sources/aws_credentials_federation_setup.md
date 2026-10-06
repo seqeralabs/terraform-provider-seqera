@@ -88,6 +88,7 @@ resource "aws_iam_role" "seqera" {
 resource "seqera_aws_credential" "workload_identity" {
   name            = "aws-workload-identity"
   workspace_id    = seqera_workspace.my_workspace.id
+  mode            = "workloadIdentity"
   assume_role_arn = aws_iam_role.seqera.arn
 }
 

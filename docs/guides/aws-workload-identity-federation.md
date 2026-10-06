@@ -144,7 +144,7 @@ The Platform validates the credential after creation by performing a real token 
 
 ## Notes
 
-- The mode cannot be changed after creation. Changing `mode` forces replacement of the credential, which gives it a new ID. Compute environments that reference it get the new `credentials_id` in the same plan and are updated in place. Terraform deletes the old credential first, and pipelines running on those compute environments are stopped, so apply the change when nothing is running.
+- The mode cannot be changed after creation. Changing `mode` forces replacement of the credential, which gives it a new ID. Compute environments that reference it get the new `credentials_id` in the same plan and are updated in place. Terraform deletes the old credential first, which stops running pipelines and Studio sessions that use it, so apply the change when nothing is running.
 - Workload identity covers the calls Seqera makes to AWS. The Nextflow head job and its tasks still run under the compute environment's instance role, which needs its own permissions.
 - The subjects are derived from the workspace that owns the credential. Changing `workspace_id` forces replacement and produces new subjects, so the trust policy must be updated in lockstep.
 - The data source's `cloudtrail_session_tag_keys` lists the session tags Seqera sets, for filtering CloudTrail events by acting user.
