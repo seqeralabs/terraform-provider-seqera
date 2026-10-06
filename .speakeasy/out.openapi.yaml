@@ -15778,7 +15778,9 @@ paths:
     get:
       x-speakeasy-entity-operation:
         terraform-datasource: null
-        terraform-resource: GithubAppCredential#read
+        terraform-resource:
+          - GithubAppCredential#read
+          - GithubAppCredential#create#2
       x-speakeasy-name-override: DescribeGithubAppCredentials
       summary: Describe GitHub App credentials
       description: Retrieves the details of the GitHub App credentials identified by the given `credentialsId`.
@@ -20501,6 +20503,7 @@ components:
             - azure-cloud
             - google
             - github
+            - github_app
             - gitlab
             - bitbucket
             - ssh
@@ -22628,21 +22631,36 @@ components:
       properties:
         appId:
           type: string
+          nullable: true
         clientId:
           type: string
+          nullable: true
         clientSecret:
           type: string
           writeOnly: true
+          nullable: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         privateKey:
           type: string
           writeOnly: true
+          nullable: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         slug:
           type: string
+          nullable: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         webhookSecret:
           type: string
           writeOnly: true
+          nullable: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     GitHubSecurityKeys:
       type: object
       properties:
@@ -31972,16 +31990,32 @@ components:
       x-speakeasy-entity: GithubAppCredential
       x-speakeasy-entity-version: 1
       x-speakeasy-terraform-resource-name: github_app_credential
-      x-speakeasy-entity-description: 'Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+      x-speakeasy-entity-description: |
+        Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource.
 
+        GitHub App credentials provide access to private repositories for pipeline execution, as an
+        alternative to a personal access token. At launch time, Seqera Platform signs a JWT with the app's
+        private key and exchanges it for a short-lived installation access token. This resource registers a
+        pre-existing GitHub App (one you have already created and installed on GitHub); to find the required
+        values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.
 
-        GitHub App credentials provide access to private repositories for pipeline execution, as an alternative to a personal access token. This resource registers a pre-existing GitHub App (one you have already created and installed on GitHub); to find the required values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.
+        **Considerations:**
 
-'
+        - **Single installation.** Seqera Platform uses the first installation GitHub returns for the app.
+          If the app is installed on more than one organization or account, use a separate GitHub App per
+          installation.
+        - **One GitHub credential per base URL.** GitHub App credentials and GitHub personal access token
+          credentials (`seqera_github_credential`) are treated as equivalent: a workspace cannot hold both for
+          the same `base_url`. When migrating from `seqera_github_credential`, remove the PAT credential before
+          creating the GitHub App credential (do not use `create_before_destroy`), or use a different `base_url`.
+        - **Feature availability.** On Seqera Enterprise, GitHub App credentials must be enabled for the
+          workspace with `TOWER_GITHUB_APP_CREDENTIALS_ALLOWED_WORKSPACES`.
+        - **User-context credentials.** To manage GitHub App credentials in a personal (user) context, use
+          the generic `seqera_credential` resource with `provider_type = "github_app"` and a `keys.github_app` block.
       x-speakeasy-transform-from-api:
-        jq: '. + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)'
+        jq: '. + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, slug: .keys.slug, credentials_id: .id } | del(.keys)'
       x-speakeasy-transform-to-api:
-        jq: '. + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key } } | del(.app_id, .client_id, .private_key, .credentials_id)'
+        jq: '. + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key, slug: .slug } } | del(.app_id, .client_id, .private_key, .slug, .credentials_id)'
       required:
         - name
         - app_id
@@ -32064,6 +32098,11 @@ components:
             ...
             -----END RSA PRIVATE KEY-----
           writeOnly: true
+        slug:
+          type: string
+          description: GitHub App URL slug, as reported by Seqera Platform. Only populated for apps created through the Seqera Platform GitHub App manifest flow.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
     CreateGithubAppCredentialsRequest:
       type: object
       properties:

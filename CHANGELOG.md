@@ -46,6 +46,8 @@ FEATURES:
 
 - **Bucket versioning status on `seqera_data_link`.** New read-only `versioning` reports whether versioning is `ENABLED`, `SUSPENDED` or `DISABLED` on the underlying bucket. Versioning is managed on the bucket in the cloud provider, not through Seqera, so it can't be set from Terraform. It is null when the cloud provider does not report it. Every read of a data link now asks the Platform for this status, which costs one extra call from the Platform to the cloud provider per data link on each refresh.
 
+- **`slug` on `seqera_github_app_credential`.** New read-only `slug` holds the GitHub App URL slug reported by the Platform. Only apps created through the Platform's GitHub App manifest flow have one; for apps registered by ID and private key it is null. The credential is read back after create so `slug` is known after apply, and it is sent back on update because the Platform replaces all keys when a credential is updated. The resource documentation now covers how installation tokens are issued, the use of the app's first installation only, the rule that a workspace cannot hold both a GitHub App and a GitHub personal access token credential for the same `base_url`, the `TOWER_GITHUB_APP_CREDENTIALS_ALLOWED_WORKSPACES` setting on Seqera Enterprise, and a new GitHub Enterprise Server example. `client_secret` and `webhook_secret` are not exposed: the Platform stores them only from the manifest flow and never reads them.
+
 BUG FIXES:
 
 - **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
@@ -53,6 +55,8 @@ BUG FIXES:
   No state migration is required. Participants created with the default role by earlier versions may hold `launch` in the platform. They show a role change to `view` on the next plan, and applying it narrows them to read-only access as configured.
 
 - **`seqera_google_credential` accepts every service account email the Platform accepts.** `service_account_email` now uses the Platform's pattern, `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.iam\.gserviceaccount\.com$`. The previous pattern rejected service accounts of domain-scoped projects, whose email has dots in the project part, and accepted local parts with characters such as spaces that the Platform rejects.
+
+- **GitHub App credentials can be created with `seqera_credential`.** The `keys.github_app` block was generated from the API, but `github_app` was not an accepted `provider_type`, so no configuration could use it. `provider_type = "github_app"` is now accepted and checked against `keys.github_app` at plan time. `private_key`, `client_secret` and `webhook_secret` are now marked sensitive and are no longer shown in plan output. `slug` is now read-only and keeps its value across updates. This is the way to manage GitHub App credentials in a personal (user) context; workspace configurations should prefer `seqera_github_app_credential`, which is now listed among the typed credential resources in the `seqera_credential` documentation and in the migration guide.
 
 NOTES:
 

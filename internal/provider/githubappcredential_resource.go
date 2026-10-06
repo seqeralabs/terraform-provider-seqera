@@ -48,6 +48,7 @@ type GithubAppCredentialResourceModel struct {
 	Name          types.String `tfsdk:"name"`
 	PrivateKey    types.String `tfsdk:"private_key"`
 	ProviderType  types.String `tfsdk:"provider_type"`
+	Slug          types.String `tfsdk:"slug"`
 	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -57,7 +58,7 @@ func (r *GithubAppCredentialResource) Metadata(ctx context.Context, req resource
 
 func (r *GithubAppCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.\n\nGitHub App credentials provide access to private repositories for pipeline execution, as an alternative to a personal access token. This resource registers a pre-existing GitHub App (one you have already created and installed on GitHub); to find the required values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.\n",
+		MarkdownDescription: "Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource.\n\nGitHub App credentials provide access to private repositories for pipeline execution, as an\nalternative to a personal access token. At launch time, Seqera Platform signs a JWT with the app's\nprivate key and exchanges it for a short-lived installation access token. This resource registers a\npre-existing GitHub App (one you have already created and installed on GitHub); to find the required\nvalues, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.\n\n**Considerations:**\n\n- **Single installation.** Seqera Platform uses the first installation GitHub returns for the app.\n  If the app is installed on more than one organization or account, use a separate GitHub App per\n  installation.\n- **One GitHub credential per base URL.** GitHub App credentials and GitHub personal access token\n  credentials (`seqera_github_credential`) are treated as equivalent: a workspace cannot hold both for\n  the same `base_url`. When migrating from `seqera_github_credential`, remove the PAT credential before\n  creating the GitHub App credential (do not use `create_before_destroy`), or use a different `base_url`.\n- **Feature availability.** On Seqera Enterprise, GitHub App credentials must be enabled for the\n  workspace with `TOWER_GITHUB_APP_CREDENTIALS_ALLOWED_WORKSPACES`.\n- **User-context credentials.** To manage GitHub App credentials in a personal (user) context, use\n  the generic `seqera_credential` resource with `provider_type = \"github_app\"` and a `keys.github_app` block.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"app_id": schema.StringAttribute{
@@ -77,7 +78,7 @@ func (r *GithubAppCredentialResource) Schema(ctx context.Context, req resource.S
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Alias of ` + "`" + `id` + "`" + `. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.`,
+				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -108,6 +109,13 @@ func (r *GithubAppCredentialResource) Schema(ctx context.Context, req resource.S
 				Computed:    true,
 				Default:     stringdefault.StaticString(`github_app`),
 				Description: `Cloud provider type. Always set by the provider for this resource. Default: "github_app"`,
+			},
+			"slug": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `GitHub App URL slug, as reported by Seqera Platform. Only populated for apps created through the Seqera Platform GitHub App manifest flow.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
@@ -207,6 +215,43 @@ func (r *GithubAppCredentialResource) Create(ctx context.Context, req resource.C
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedCreateGithubAppCredentialsResponse(ctx, res.CreateGithubAppCredentialsResponse)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribeGithubAppCredentialsRequest(ctx, opts)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Credentials.DescribeGithubAppCredentials(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DescribeGithubAppCredentialsResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGithubAppCredentialsResponse(ctx, res1.DescribeGithubAppCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

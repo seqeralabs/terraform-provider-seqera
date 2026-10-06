@@ -57,6 +57,7 @@ func (r *GithubAppCredentialResourceModel) RefreshFromSharedGithubAppCredentialO
 		} else {
 			r.ProviderType = types.StringNull()
 		}
+		r.Slug = types.StringPointerValue(resp.Slug)
 	}
 
 	return diags
@@ -198,6 +199,12 @@ func (r *GithubAppCredentialResourceModel) ToSharedGithubAppCredential(ctx conte
 	var privateKey string
 	privateKey = opts.Config.PrivateKey.ValueString()
 
+	slug := new(string)
+	if !r.Slug.IsUnknown() && !r.Slug.IsNull() {
+		*slug = r.Slug.ValueString()
+	} else {
+		slug = nil
+	}
 	out := shared.GithubAppCredential{
 		ID:            id,
 		CredentialsID: credentialsID,
@@ -207,6 +214,7 @@ func (r *GithubAppCredentialResourceModel) ToSharedGithubAppCredential(ctx conte
 		AppID:         appID,
 		ClientID:      clientID,
 		PrivateKey:    privateKey,
+		Slug:          slug,
 	}
 
 	return &out, diags

@@ -17,7 +17,7 @@ import (
 // allKeyNames is the single source of truth for credential key block names in tests.
 var allKeyNames = []string{
 	"aws", "azure", "azure_cloud", "azure_entra", "azurerepos",
-	"bitbucket", "codecommit", "container_reg", "gitea", "github",
+	"bitbucket", "codecommit", "container_reg", "gitea", "github", "github_app",
 	"gitlab", "google", "k8s", "local", "s3", "ssh", "seqeracompute", "tw_agent",
 }
 
@@ -128,6 +128,7 @@ func TestCredentialsConfigValidator_ValidSingleKeyProviders(t *testing.T) {
 		"azure":         "azure",
 		"google":        "google",
 		"github":        "github",
+		"github_app":    "github_app",
 		"gitlab":        "gitlab",
 		"bitbucket":     "bitbucket",
 		"ssh":           "ssh",
@@ -178,6 +179,8 @@ func TestCredentialsConfigValidator_MismatchedKeys(t *testing.T) {
 		{"aws with google keys", "aws", "google"},
 		{"google with aws keys", "google", "aws"},
 		{"azure with github keys", "azure", "github"},
+		{"github with github_app keys", "github", "github_app"},
+		{"github_app with github keys", "github_app", "github"},
 		{"azure with azure_cloud keys", "azure", "azure_cloud"},
 		{"azure with azure_entra keys", "azure", "azure_entra"},
 		{"azure_entra with azure keys", "azure_entra", "azure"},
@@ -275,6 +278,7 @@ func TestSchemaNameToKeysFieldName(t *testing.T) {
 		"CodeCommitSecurityKeys":    "codecommit",
 		"ContainerRegistryKeys":     "container_reg",
 		"GiteaSecurityKeys":         "gitea",
+		"GitHubAppSecurityKeys":     "github_app",
 		"GitHubSecurityKeys":        "github",
 		"GitLabSecurityKeys":        "gitlab",
 		"GoogleSecurityKeys":        "google",
