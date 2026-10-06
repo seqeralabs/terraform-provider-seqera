@@ -40,6 +40,12 @@ FEATURES:
 
 - **Launch warnings on `seqera_workflows`.** New read-only `warnings` holds the warnings the platform returns when it accepts a launch.
 
+- **Pool nodes without public IPs on Azure Batch.** New `config.use_private_address` on `seqera_azure_batch_ce` and the `azure_batch` block of `seqera_compute_env`. It creates Batch Forge pool nodes without public IP addresses, using simplified node communication. It requires Batch Forge and a `subnet_id` with outbound connectivity, such as a NAT gateway. Setting it without `subnet_id` is rejected at plan time, even when it is `false`, because the Platform rejects the field without a subnet. When omitted, the Platform enables it for Batch Forge compute environments that have a subnet. Changing it forces replacement.
+
+- **Key Vault for pipeline secrets on Azure Cloud.** New `config.key_vault_url` on `seqera_azure_cloud_ce` and the `azure_cloud` block of `seqera_compute_env` sets the Azure Key Vault that stores pipeline secrets. When omitted, the installation default is used. The URL must be in the form `https://<vault-name>.vault.azure.net`, with a vault name of 3–24 letters, digits and non-consecutive hyphens that starts with a letter and ends with a letter or digit. This is checked at plan time. Changing it forces replacement.
+
+- **Bucket versioning status on `seqera_data_link`.** New read-only `versioning` reports whether versioning is `ENABLED`, `SUSPENDED` or `DISABLED` on the underlying bucket. Versioning is managed on the bucket in the cloud provider, not through Seqera, so it can't be set from Terraform. It is null when the cloud provider does not report it. Every read of a data link now asks the Platform for this status, which costs one extra call from the Platform to the cloud provider per data link on each refresh.
+
 BUG FIXES:
 
 - **`seqera_workspace_participant` now creates participants with the configured role.** Previously the role was not sent when it was `view`, the resource's default, so new participants got the API's create default of `launch` while Terraform recorded `view`. The role is now sent on create, falling back to a separate role update on Platform releases that don't accept it on create.
@@ -59,6 +65,8 @@ NOTES:
 - **GCP Workload Identity Federation guide rewritten to match the Platform.** It described a single `:workflow` subject and told readers to bind exact subjects, but one credential presents four subjects (`platform`, `data`, `studio`, `workflow`) and credential validation uses `platform`, so a configuration built from the guide failed validation. The guide now binds the whole pool, pinned to the workspace with the recommended attribute condition, sets the audit `google.subject` mapping, adds the `roles/iam.serviceAccountTokenCreator` self-binding needed for presigned downloads, and takes the issuer, mapping and condition from `seqera_gcp_credentials_federation_setup`. The `token_audience` description now matches the Platform: set it only when the provider has a custom allowed audience.
 
 - **Provider index example corrected.** The quick-start `seqera_aws_credential` set `assume_role_arn` inside a `keys` block, which is not an attribute of the resource, so the example did not parse. It now sets `assume_role_arn` directly, with `use_external_id = true` so it also works on Seqera Cloud.
+
+- **At most one container registry on Azure Batch Forge pools.** `config.forge.container_reg_ids` on `seqera_azure_batch_ce` and the `azure_batch` block of `seqera_compute_env` now accepts a single credential ID, matching the Platform's limit. A longer list is rejected at plan time instead of failing at apply.
 
 # v0.42.0
 

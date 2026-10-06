@@ -402,6 +402,18 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
 							`Requires replacement if changed.`,
 					},
+					"key_vault_url": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used. Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.KeyVaultURLValidator(),
+						},
+					},
 					"log_table_name": schema.StringAttribute{
 						Computed: true,
 						Optional: true,

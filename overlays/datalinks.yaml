@@ -131,3 +131,19 @@ actions:
   - target: $.components.schemas.DataLinkDto.properties.credentials
     update:
       description: Array of credentials required to access the data link
+
+  # Bucket versioning status. `versioning` is only populated when the describe
+  # call sends `includeVersioning=true` (one extra Platform -> cloud provider
+  # round-trip per read). Default the query parameter to true so every read
+  # requests it without exposing a user-facing attribute.
+  - target: $["paths"]["/data-links/{dataLinkId}"]["get"]["parameters"][?(@.name == "includeVersioning")]
+    update:
+      schema:
+        type: boolean
+        default: true
+  - target: $.components.schemas.DataLinkDto.properties.versioning
+    update:
+      description: >-
+        Versioning status of the underlying bucket (`ENABLED`, `SUSPENDED` or `DISABLED`),
+        as reported by the cloud provider. Versioning is managed on the bucket itself, not
+        through Seqera. Null when the provider does not report it.

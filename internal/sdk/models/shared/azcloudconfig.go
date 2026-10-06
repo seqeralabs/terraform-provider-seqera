@@ -21,6 +21,8 @@ type AzCloudConfig struct {
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
+	// Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used.
+	KeyVaultURL *string `json:"keyVaultUrl,omitempty"`
 	// Azure Log Analytics table name for execution logs.
 	//
 	LogTableName *string `json:"logTableName,omitempty"`
@@ -125,6 +127,13 @@ func (a *AzCloudConfig) GetInstanceType() *string {
 		return nil
 	}
 	return a.InstanceType
+}
+
+func (a *AzCloudConfig) GetKeyVaultURL() *string {
+	if a == nil {
+		return nil
+	}
+	return a.KeyVaultURL
 }
 
 func (a *AzCloudConfig) GetLogTableName() *string {

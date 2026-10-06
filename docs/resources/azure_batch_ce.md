@@ -207,6 +207,7 @@ Requires replacement if changed.
 - `subnet_id` (String) Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials. Requires replacement if changed.
 - `terminate_jobs_on_completion` (Boolean) Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
+- `use_private_address` (Boolean) Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs. Requires replacement if changed.
 - `worker_pool` (String) Requires replacement if changed.
 
 <a id="nestedatt--config--environment"></a>

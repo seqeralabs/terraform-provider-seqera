@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -1702,6 +1703,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 												ElementType: types.StringType,
 												Description: `List of Azure Container Registry IDs whose images compute jobs may pull. Requires replacement if changed.`,
+												Validators: []validator.List{
+													listvalidator.SizeAtMost(1),
+												},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -1959,6 +1963,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"use_private_address": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.PrivateAddressRequiresSubnetValidator(),
+										},
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -2288,6 +2303,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`to accept the platform defaults, or provide it (only when` + "\n" +
 											`` + "`" + `intelligent_compute_enabled = true` + "`" + `) to override the scheduler settings.` + "\n" +
 											`Requires replacement if changed.`,
+									},
+									"key_vault_url": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.KeyVaultURLValidator(),
+										},
 									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,

@@ -1692,6 +1692,8 @@ type AzureCloudConfiguration struct {
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
+	// Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used.
+	KeyVaultURL *string `json:"keyVaultUrl,omitempty"`
 	// Azure Log Analytics table name for execution logs.
 	//
 	LogTableName *string `json:"logTableName,omitempty"`
@@ -1803,6 +1805,13 @@ func (a *AzureCloudConfiguration) GetInstanceType() *string {
 		return nil
 	}
 	return a.InstanceType
+}
+
+func (a *AzureCloudConfiguration) GetKeyVaultURL() *string {
+	if a == nil {
+		return nil
+	}
+	return a.KeyVaultURL
 }
 
 func (a *AzureCloudConfiguration) GetLogTableName() *string {
@@ -2002,6 +2011,8 @@ type AzureBatchConfiguration struct {
 	SubnetID                  *string `json:"subnetId,omitempty"`
 	TerminateJobsOnCompletion *bool   `json:"terminateJobsOnCompletion,omitempty"`
 	TokenDuration             *string `json:"tokenDuration,omitempty"`
+	// Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs.
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
 	// Allow access to private container repositories and the provisioning of containers in your
 	// Nextflow pipelines via the Wave containers service.
 	//
@@ -2190,6 +2201,13 @@ func (a *AzureBatchConfiguration) GetTokenDuration() *string {
 		return nil
 	}
 	return a.TokenDuration
+}
+
+func (a *AzureBatchConfiguration) GetUsePrivateAddress() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.UsePrivateAddress
 }
 
 func (a *AzureBatchConfiguration) GetEnableWave() *bool {

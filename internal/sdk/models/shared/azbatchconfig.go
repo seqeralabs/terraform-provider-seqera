@@ -90,6 +90,8 @@ type AzBatchConfig struct {
 	SubnetID                  *string `json:"subnetId,omitempty"`
 	TerminateJobsOnCompletion *bool   `json:"terminateJobsOnCompletion,omitempty"`
 	TokenDuration             *string `json:"tokenDuration,omitempty"`
+	// Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs.
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
 	// Allow access to private container repositories and the provisioning of containers in your
 	// Nextflow pipelines via the Wave containers service.
 	//
@@ -267,6 +269,13 @@ func (a *AzBatchConfig) GetTokenDuration() *string {
 		return nil
 	}
 	return a.TokenDuration
+}
+
+func (a *AzBatchConfig) GetUsePrivateAddress() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.UsePrivateAddress
 }
 
 func (a *AzBatchConfig) GetEnableWave() *bool {

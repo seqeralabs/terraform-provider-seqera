@@ -31,6 +31,7 @@ type AzureBatchConfiguration struct {
 	SubnetID                      types.String        `tfsdk:"subnet_id"`
 	TerminateJobsOnCompletion     types.Bool          `tfsdk:"terminate_jobs_on_completion"`
 	TokenDuration                 types.String        `tfsdk:"token_duration"`
+	UsePrivateAddress             types.Bool          `tfsdk:"use_private_address"`
 	WorkDir                       types.String        `tfsdk:"work_dir"`
 	WorkerPool                    types.String        `tfsdk:"worker_pool"`
 }

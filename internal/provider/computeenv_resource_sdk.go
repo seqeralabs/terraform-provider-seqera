@@ -373,6 +373,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureBatch.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.SubnetID)
 					r.ComputeEnv.Config.AzureBatch.TerminateJobsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TerminateJobsOnCompletion)
 					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
+					r.ComputeEnv.Config.AzureBatch.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.UsePrivateAddress)
 					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
 					r.ComputeEnv.Config.AzureBatch.WorkerPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkerPool)
 				}
@@ -433,6 +434,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						}
 					}
 					r.ComputeEnv.Config.AzureCloud.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeEnabled)
+					r.ComputeEnv.Config.AzureCloud.KeyVaultURL = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.KeyVaultURL)
 					r.ComputeEnv.Config.AzureCloud.LogTableName = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogTableName)
 					r.ComputeEnv.Config.AzureCloud.LogWorkspaceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.LogWorkspaceID)
 					r.ComputeEnv.Config.AzureCloud.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityClientID)
@@ -2689,6 +2691,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			tokenDuration = nil
 		}
+		usePrivateAddress2 := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.UsePrivateAddress.IsNull() {
+			*usePrivateAddress2 = r.ComputeEnv.Config.AzureBatch.UsePrivateAddress.ValueBool()
+		} else {
+			usePrivateAddress2 = nil
+		}
 		enableWave2 := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.EnableWave.IsNull() {
 			*enableWave2 = r.ComputeEnv.Config.AzureBatch.EnableWave.ValueBool()
@@ -2731,6 +2739,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			SubnetID:                      subnetId1,
 			TerminateJobsOnCompletion:     terminateJobsOnCompletion,
 			TokenDuration:                 tokenDuration,
+			UsePrivateAddress:             usePrivateAddress2,
 			EnableWave:                    enableWave2,
 			WorkDir:                       workDir5,
 			WorkerPool:                    workerPool1,
@@ -2802,6 +2811,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*instanceType2 = r.ComputeEnv.Config.AzureCloud.InstanceType.ValueString()
 		} else {
 			instanceType2 = nil
+		}
+		keyVaultURL := new(string)
+		if !r.ComputeEnv.Config.AzureCloud.KeyVaultURL.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.KeyVaultURL.IsNull() {
+			*keyVaultURL = r.ComputeEnv.Config.AzureCloud.KeyVaultURL.ValueString()
+		} else {
+			keyVaultURL = nil
 		}
 		logTableName := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.LogTableName.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.LogTableName.IsNull() {
@@ -2984,6 +2999,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DataCollectionRuleID:      dataCollectionRuleID,
 			Environment:               environment6,
 			InstanceType:              instanceType2,
+			KeyVaultURL:               keyVaultURL,
 			LogTableName:              logTableName,
 			LogWorkspaceID:            logWorkspaceID,
 			ManagedIdentityClientID:   managedIdentityClientId1,
@@ -4536,11 +4552,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			sshImage1 = nil
 		}
-		usePrivateAddress2 := new(bool)
+		usePrivateAddress3 := new(bool)
 		if !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsNull() {
-			*usePrivateAddress2 = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
+			*usePrivateAddress3 = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
 		} else {
-			usePrivateAddress2 = nil
+			usePrivateAddress3 = nil
 		}
 		workDir16 := new(string)
 		if !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsNull() {
@@ -4571,7 +4587,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:            region8,
 			SSHDaemon:         sshDaemon1,
 			SSHImage:          sshImage1,
-			UsePrivateAddress: usePrivateAddress2,
+			UsePrivateAddress: usePrivateAddress3,
 			WorkDir:           workDir16,
 			Zones:             zones,
 		}

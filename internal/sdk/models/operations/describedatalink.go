@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
@@ -14,6 +15,19 @@ type DescribeDataLinkRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
+	// When true, enrich the response with the bucket versioning status (extra provider round-trip)
+	IncludeVersioning *bool `default:"true" queryParam:"style=form,explode=true,name=includeVersioning"`
+}
+
+func (d DescribeDataLinkRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DescribeDataLinkRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DescribeDataLinkRequest) GetDataLinkID() string {
@@ -35,6 +49,13 @@ func (d *DescribeDataLinkRequest) GetCredentialsID() *string {
 		return nil
 	}
 	return d.CredentialsID
+}
+
+func (d *DescribeDataLinkRequest) GetIncludeVersioning() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.IncludeVersioning
 }
 
 type DescribeDataLinkResponse struct {
