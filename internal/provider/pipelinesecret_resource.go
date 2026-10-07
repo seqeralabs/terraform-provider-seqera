@@ -141,6 +141,8 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreatePipelineSecretRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -149,7 +151,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 	}
 	res, err := r.client.PipelineSecrets.CreatePipelineSecret(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -186,7 +188,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 	}
 	res1, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -238,6 +240,8 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribePipelineSecretRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -246,7 +250,7 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 	res, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -292,6 +296,8 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdatePipelineSecretRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -300,7 +306,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 	}
 	res, err := r.client.PipelineSecrets.UpdatePipelineSecret(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -328,7 +334,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 	}
 	res1, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -380,6 +386,8 @@ func (r *PipelineSecretResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePipelineSecretRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -388,7 +396,7 @@ func (r *PipelineSecretResource) Delete(ctx context.Context, req resource.Delete
 	}
 	res, err := r.client.PipelineSecrets.DeletePipelineSecret(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

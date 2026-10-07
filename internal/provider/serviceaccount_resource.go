@@ -142,6 +142,8 @@ func (r *ServiceAccountResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -150,7 +152,7 @@ func (r *ServiceAccountResource) Create(ctx context.Context, req resource.Create
 	}
 	res, err := r.client.ServiceAccounts.CreateServiceAccount(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -209,6 +211,8 @@ func (r *ServiceAccountResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -217,7 +221,7 @@ func (r *ServiceAccountResource) Read(ctx context.Context, req resource.ReadRequ
 	}
 	res, err := r.client.ServiceAccounts.DescribeServiceAccount(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -263,6 +267,8 @@ func (r *ServiceAccountResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -271,7 +277,7 @@ func (r *ServiceAccountResource) Update(ctx context.Context, req resource.Update
 	}
 	res, err := r.client.ServiceAccounts.UpdateServiceAccount(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -323,6 +329,8 @@ func (r *ServiceAccountResource) Delete(ctx context.Context, req resource.Delete
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -331,7 +339,7 @@ func (r *ServiceAccountResource) Delete(ctx context.Context, req resource.Delete
 	}
 	res, err := r.client.ServiceAccounts.DeleteServiceAccount(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

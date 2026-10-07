@@ -209,6 +209,8 @@ func (r *DataLinkResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -217,7 +219,7 @@ func (r *DataLinkResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res, err := r.client.DataLinks.CreateCustomDataLink(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -254,7 +256,7 @@ func (r *DataLinkResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res1, err := r.client.DataLinks.DescribeDataLink(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -306,6 +308,8 @@ func (r *DataLinkResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -314,7 +318,7 @@ func (r *DataLinkResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	res, err := r.client.DataLinks.DescribeDataLink(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -360,6 +364,8 @@ func (r *DataLinkResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -368,7 +374,7 @@ func (r *DataLinkResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res, err := r.client.DataLinks.UpdateCustomDataLink(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -405,7 +411,7 @@ func (r *DataLinkResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res1, err := r.client.DataLinks.DescribeDataLink(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -457,6 +463,8 @@ func (r *DataLinkResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -465,7 +473,7 @@ func (r *DataLinkResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 	res, err := r.client.DataLinks.DeleteCustomDataLink(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

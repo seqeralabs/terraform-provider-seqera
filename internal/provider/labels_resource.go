@@ -141,6 +141,8 @@ func (r *LabelsResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -149,7 +151,7 @@ func (r *LabelsResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	res, err := r.client.Labels.CreateLabel(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -186,7 +188,7 @@ func (r *LabelsResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	res1, err := r.client.Labels.ListLabels(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -233,6 +235,8 @@ func (r *LabelsResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsListLabelsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -241,7 +245,7 @@ func (r *LabelsResource) Read(ctx context.Context, req resource.ReadRequest, res
 	}
 	res, err := r.client.Labels.ListLabels(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -282,6 +286,8 @@ func (r *LabelsResource) Update(ctx context.Context, req resource.UpdateRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -290,7 +296,7 @@ func (r *LabelsResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 	res, err := r.client.Labels.UpdateLabel(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -327,7 +333,7 @@ func (r *LabelsResource) Update(ctx context.Context, req resource.UpdateRequest,
 	}
 	res1, err := r.client.Labels.ListLabels(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -374,6 +380,8 @@ func (r *LabelsResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -382,7 +390,7 @@ func (r *LabelsResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 	res, err := r.client.Labels.DeleteLabel(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

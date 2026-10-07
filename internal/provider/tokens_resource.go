@@ -150,6 +150,8 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToSharedCreateAccessTokenRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -158,7 +160,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	res, err := r.client.Tokens.CreateToken(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -196,7 +198,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	res1, err := r.client.Tokens.TokenList(ctx)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -242,9 +244,11 @@ func (r *TokensResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	res, err := r.client.Tokens.TokenList(ctx)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -314,6 +318,8 @@ func (r *TokensResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteTokenRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -322,7 +328,7 @@ func (r *TokensResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	}
 	res, err := r.client.Tokens.DeleteToken(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

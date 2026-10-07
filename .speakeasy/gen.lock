@@ -3,8 +3,8 @@ id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
   docChecksum: 6ed5a125c5f4930f684b4f1ed297f940
   docVersion: 1.231.0
-  speakeasyVersion: 1.799.0
-  generationVersion: 2.941.0
+  speakeasyVersion: 1.800.1
+  generationVersion: 2.943.0
   releaseVersion: 0.43.0-RC3
   configChecksum: 054d1421777062a1056a2729c2e1b965
 persistentEdits:
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.48.2
+    core: 3.48.3
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
@@ -28,7 +28,7 @@ features:
     nullables: 0.0.0
     retries: 2.81.6
     transformJq: 0.0.1
-    unions: 2.82.18
+    unions: 2.82.20
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -533,6 +533,7 @@ trackedFiles:
   internal/provider/reflect/struct.go:
     id: 973d7dbf96c1
     pristine_git_object: c588f768bd7b39be33962188f97d81e1c4c25f4b
+  internal/provider/sensitive_values.go: {}
   internal/provider/serviceaccount_resource.go: {}
   internal/provider/serviceaccount_resource_sdk.go: {}
   internal/provider/slurmce_resource.go: {}

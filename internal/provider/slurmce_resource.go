@@ -413,6 +413,8 @@ func (r *SlurmCEResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -421,7 +423,7 @@ func (r *SlurmCEResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 	res, err := r.client.ComputeEnvs.CreateSlurmCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -465,7 +467,7 @@ func (r *SlurmCEResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 	res1, err := r.client.ComputeEnvs.DescribeSlurmCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -517,6 +519,8 @@ func (r *SlurmCEResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDescribeSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -525,7 +529,7 @@ func (r *SlurmCEResource) Read(ctx context.Context, req resource.ReadRequest, re
 	}
 	res, err := r.client.ComputeEnvs.DescribeSlurmCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -571,6 +575,8 @@ func (r *SlurmCEResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsUpdateSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -579,7 +585,7 @@ func (r *SlurmCEResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 	res, err := r.client.ComputeEnvs.UpdateSlurmCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -607,7 +613,7 @@ func (r *SlurmCEResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 	res1, err := r.client.ComputeEnvs.DescribeSlurmCE(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -659,6 +665,8 @@ func (r *SlurmCEResource) Delete(ctx context.Context, req resource.DeleteRequest
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -667,7 +675,7 @@ func (r *SlurmCEResource) Delete(ctx context.Context, req resource.DeleteRequest
 	}
 	res, err := r.client.ComputeEnvs.DeleteSlurmCE(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
