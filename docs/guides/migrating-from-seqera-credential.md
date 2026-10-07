@@ -50,6 +50,7 @@ The `keys.<provider>` sub-block in `seqera_credential` maps to a typed resource 
 | `container_reg` | `seqera_container_registry_credential` | `username`, `password`, `registry` |
 | `gitea` | `seqera_gitea_credential` | `username`, `password` |
 | `github` | `seqera_github_credential` | `password` → `access_token` |
+| `github_app` | `seqera_github_app_credential` | `app_id`, `client_id`, `private_key`; `client_secret` and `webhook_secret` have no typed equivalent (unused by the Platform) |
 | `gitlab` | `seqera_gitlab_credential` | `username`, `token` |
 | `google` | `seqera_google_credential` | `data` (service account JSON) |
 | `k8s` | `seqera_kubernetes_credential` | `data` (kubeconfig) |

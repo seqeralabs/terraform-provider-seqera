@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 85d2da15a446b50f7a30f8e5c1ec2720
+  docChecksum: a4ed9e01cb4a015b75ebca2e39531bff
   docVersion: 1.231.0
   speakeasyVersion: 1.800.1
   generationVersion: 2.943.0

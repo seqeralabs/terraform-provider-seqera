@@ -1,16 +1,47 @@
 ---
 page_title: "seqera_github_app_credential Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Credentials"
 description: |-
-  Manage GitHub App credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic seqera_credential resource.
-  GitHub App credentials provide access to private repositories for pipeline execution, as an alternative to a personal access token. This resource registers a pre-existing GitHub App (one you have already created and installed on GitHub); to find the required values, go to Settings > Developer settings > GitHub Apps > [your app] on GitHub.
+  Manage GitHub App credentials in Seqera platform using this resource. Note: This is a workspace-scoped resource.
+  GitHub App credentials provide access to private repositories for pipeline execution, as an
+  alternative to a personal access token. At launch time, Seqera Platform signs a JWT with the app's
+  private key and exchanges it for a short-lived installation access token. This resource registers a
+  pre-existing GitHub App (one you have already created and installed on GitHub); to find the required
+  values, go to Settings > Developer settings > GitHub Apps > [your app] on GitHub.
+  Considerations:
+  Single installation. Seqera Platform uses the first installation GitHub returns for the app.
+  If the app is installed on more than one organization or account, use a separate GitHub App per
+  installation.One GitHub credential per base URL. GitHub App credentials and GitHub personal access token
+  credentials (seqera_github_credential) are treated as equivalent: a workspace cannot hold both for
+  the same base_url. When migrating from seqera_github_credential, remove the PAT credential before
+  creating the GitHub App credential (do not use create_before_destroy), or use a different base_url.Feature availability. On Seqera Enterprise, GitHub App credentials must be enabled for the
+  workspace with TOWER_GITHUB_APP_CREDENTIALS_ALLOWED_WORKSPACES.User-context credentials. To manage GitHub App credentials in a personal (user) context, use
+  the generic seqera_credential resource with provider_type = "github_app" and a keys.github_app block.
 ---
 
 # seqera_github_app_credential (Resource)
 
-Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource. To manage user-context (personal) credentials, use the generic `seqera_credential` resource.
+Manage GitHub App credentials in Seqera platform using this resource. **Note:** This is a workspace-scoped resource.
 
-GitHub App credentials provide access to private repositories for pipeline execution, as an alternative to a personal access token. This resource registers a pre-existing GitHub App (one you have already created and installed on GitHub); to find the required values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.
+GitHub App credentials provide access to private repositories for pipeline execution, as an
+alternative to a personal access token. At launch time, Seqera Platform signs a JWT with the app's
+private key and exchanges it for a short-lived installation access token. This resource registers a
+pre-existing GitHub App (one you have already created and installed on GitHub); to find the required
+values, go to **Settings > Developer settings > GitHub Apps > [your app]** on GitHub.
+
+**Considerations:**
+
+- **Single installation.** Seqera Platform uses the first installation GitHub returns for the app.
+  If the app is installed on more than one organization or account, use a separate GitHub App per
+  installation.
+- **One GitHub credential per base URL.** GitHub App credentials and GitHub personal access token
+  credentials (`seqera_github_credential`) are treated as equivalent: a workspace cannot hold both for
+  the same `base_url`. When migrating from `seqera_github_credential`, remove the PAT credential before
+  creating the GitHub App credential (do not use `create_before_destroy`), or use a different `base_url`.
+- **Feature availability.** On Seqera Enterprise, GitHub App credentials must be enabled for the
+  workspace with `TOWER_GITHUB_APP_CREDENTIALS_ALLOWED_WORKSPACES`.
+- **User-context credentials.** To manage GitHub App credentials in a personal (user) context, use
+  the generic `seqera_credential` resource with `provider_type = "github_app"` and a `keys.github_app` block.
 
 ## Example Usage
 
@@ -41,6 +72,32 @@ resource "seqera_github_app_credential" "example" {
 }
 ```
 
+### Enterprise
+
+```terraform
+variable "github_app_id" {
+  type = string
+}
+
+variable "github_app_client_id" {
+  type = string
+}
+
+# GitHub Enterprise Server: base_url points at the instance, and installation
+# tokens are requested from <base_url>/api/v3. The private key is read from the
+# PEM file downloaded from the GitHub App settings page.
+resource "seqera_github_app_credential" "enterprise" {
+  name         = "github-app-enterprise"
+  workspace_id = seqera_workspace.main.id
+
+  app_id      = var.github_app_id
+  client_id   = var.github_app_client_id
+  private_key = file("${path.module}/github-app.private-key.pem")
+
+  base_url = "https://github.mycompany.com"
+}
+```
+
 <!-- schema generated by tfplugindocs -->
 ## Schema
 
@@ -60,9 +117,10 @@ resource "seqera_github_app_credential" "example" {
 
 ### Read-Only
 
-- `credentials_id` (String) Alias of `id`. Retained for backwards compatibility with existing customer HCL — both fields hold the same value.
+- `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type. Always set by the provider for this resource. Default: "github_app"
+- `slug` (String) GitHub App URL slug, as reported by Seqera Platform. Only populated for apps created through the Seqera Platform GitHub App manifest flow.
 
 ## Import
 

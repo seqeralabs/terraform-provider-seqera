@@ -1107,6 +1107,40 @@ actions:
       type: string
       nullable: true
 
+  # GitHubAppSecurityKeys
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.appId"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.clientId"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.slug"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.privateKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.clientSecret"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.GitHubAppSecurityKeys.properties.webhookSecret"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
   # GitHubSecurityKeys (capital H)
   - target: "$.components.schemas.GitHubSecurityKeys.properties.token"
     update:

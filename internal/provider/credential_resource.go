@@ -517,17 +517,22 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"client_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"slug": schema.StringAttribute{
 								Computed: true,
-								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"webhook_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -864,7 +869,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					`- ` + "`" + `azure` + "`" + `        → ` + "`" + `keys.azure` + "`" + `        (Azure Batch, shared-key auth)` + "\n" +
 					`- ` + "`" + `azure_entra` + "`" + `  → ` + "`" + `keys.azure_entra` + "`" + `  (Azure Batch, Entra service principal)` + "\n" +
 					`- ` + "`" + `azure-cloud` + "`" + `  → ` + "`" + `keys.azure_cloud` + "`" + `  (Azure Cloud / SingleVM, Entra service principal)` + "\n" +
-					`must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+					`must be one of ["aws", "azure", "azure_entra", "azure-cloud", "google", "github", "github_app", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",
@@ -873,6 +878,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"azure-cloud",
 						"google",
 						"github",
+						"github_app",
 						"gitlab",
 						"bitbucket",
 						"ssh",

@@ -58,6 +58,8 @@ type GithubAppCredential struct {
 	ClientID string `json:"client_id"`
 	// GitHub App private key in PEM format. Download this from your GitHub App settings.
 	PrivateKey string `json:"private_key"`
+	// GitHub App URL slug, as reported by Seqera Platform. Only populated for apps created through the Seqera Platform GitHub App manifest flow.
+	Slug *string `json:"slug,omitempty"`
 }
 
 func (g GithubAppCredential) MarshalJSON() ([]byte, error) {
@@ -65,7 +67,7 @@ func (g GithubAppCredential) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key } } | del(.app_id, .client_id, .private_key, .credentials_id)")
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key, slug: .slug } } | del(.app_id, .client_id, .private_key, .slug, .credentials_id)")
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +75,7 @@ func (g GithubAppCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GithubAppCredential) UnmarshalJSON(data []byte) error {
-	if out, err := utils.RunJQBytes(data, ". + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)"); err != nil {
+	if out, err := utils.RunJQBytes(data, ". + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, slug: .keys.slug, credentials_id: .id } | del(.keys)"); err != nil {
 		return err
 	} else {
 		data = out
@@ -168,6 +170,13 @@ func (g *GithubAppCredential) GetPrivateKey() string {
 	return g.PrivateKey
 }
 
+func (g *GithubAppCredential) GetSlug() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Slug
+}
+
 type GithubAppCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -191,6 +200,8 @@ type GithubAppCredentialOutput struct {
 	AppID string `json:"app_id"`
 	// GitHub App client ID. Find this in your GitHub App settings (**Settings > Developer settings > GitHub Apps > [your app]** on GitHub).
 	ClientID string `json:"client_id"`
+	// GitHub App URL slug, as reported by Seqera Platform. Only populated for apps created through the Seqera Platform GitHub App manifest flow.
+	Slug *string `json:"slug,omitempty"`
 }
 
 func (g GithubAppCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -198,7 +209,7 @@ func (g GithubAppCredentialOutput) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key } } | del(.app_id, .client_id, .private_key, .credentials_id)")
+	out, err := utils.RunJQBytes(jsonBytes, ". + { keys: { appId: .app_id, clientId: .client_id, privateKey: .private_key, slug: .slug } } | del(.app_id, .client_id, .private_key, .slug, .credentials_id)")
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +217,7 @@ func (g GithubAppCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GithubAppCredentialOutput) UnmarshalJSON(data []byte) error {
-	if out, err := utils.RunJQBytes(data, ". + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, credentials_id: .id } | del(.keys)"); err != nil {
+	if out, err := utils.RunJQBytes(data, ". + { app_id: .keys.appId, client_id: .keys.clientId, private_key: .keys.privateKey, slug: .keys.slug, credentials_id: .id } | del(.keys)"); err != nil {
 		return err
 	} else {
 		data = out
@@ -292,4 +303,11 @@ func (g *GithubAppCredentialOutput) GetClientID() string {
 		return ""
 	}
 	return g.ClientID
+}
+
+func (g *GithubAppCredentialOutput) GetSlug() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Slug
 }

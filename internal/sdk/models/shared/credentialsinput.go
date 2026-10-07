@@ -23,6 +23,7 @@ const (
 	CredentialsProviderTypeAzureCloud    CredentialsProviderType = "azure-cloud"
 	CredentialsProviderTypeGoogle        CredentialsProviderType = "google"
 	CredentialsProviderTypeGithub        CredentialsProviderType = "github"
+	CredentialsProviderTypeGithubApp     CredentialsProviderType = "github_app"
 	CredentialsProviderTypeGitlab        CredentialsProviderType = "gitlab"
 	CredentialsProviderTypeBitbucket     CredentialsProviderType = "bitbucket"
 	CredentialsProviderTypeSSH           CredentialsProviderType = "ssh"
@@ -55,6 +56,8 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	case "google":
 		fallthrough
 	case "github":
+		fallthrough
+	case "github_app":
 		fallthrough
 	case "gitlab":
 		fallthrough
