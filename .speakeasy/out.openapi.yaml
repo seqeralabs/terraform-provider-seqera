@@ -18865,8 +18865,7 @@ components:
           minimum: 50
           nullable: true
         containerRegIds:
-          description: |
-            List of Azure Container Registry IDs whose images compute jobs may pull.
+          description: Seqera Platform credentials ID of the container registry to attach to the Batch pool to pull private images. At most one ID can be specified.
           type: array
           items:
             example: 2dzgMSW1UqQHFhZqGQZ99X
@@ -18874,6 +18873,7 @@ components:
             type: string
           maxItems: 1
           nullable: true
+          x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
           x-speakeasy-param-force-new: true
           x-speakeasy-terraform-custom-type:
             imports:
