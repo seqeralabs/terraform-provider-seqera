@@ -2,6 +2,9 @@
 # launching a pipeline. An agent action sets response_type = "agent" and the
 # agent to run, and must not set launch or pipeline. The source must be
 # pipeline_status, cron or bucket.
+#
+# seqera_agent_action manages the same kind of action with the agent rules in
+# its schema, and is the recommended resource for new agent actions.
 
 # The agent runs as a service account, which must be a workspace participant
 # with a role that allows launching agents.
