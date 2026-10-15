@@ -1,0 +1,52 @@
+name: Speakeasy Regenerate
+
+# Regenerates the provider when Renovate bumps speakeasyVersion in
+# .speakeasy/workflow.yaml and pushes the result to the Renovate branch.
+on:
+  push:
+    branches:
+      - 'renovate/speakeasy-update-*'
+    paths:
+      - .speakeasy/workflow.yaml
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      with:
+        ref: ${{ github.ref_name }}
+
+    - name: Set up Go
+      uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+      with:
+        go-version-file: go.mod
+
+    # Any recent CLI works: it downloads the version pinned in workflow.yaml.
+    - name: Install Speakeasy CLI
+      run: curl -fsSL https://go.speakeasy.com/cli-install.sh | sh
+
+    - name: Regenerate provider
+      env:
+        SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
+      run: speakeasy run --skip-versioning
+
+    # Pushes made with GITHUB_TOKEN do not trigger other workflows, so verify here.
+    - name: Build
+      run: go build ./...
+
+    - name: Commit and push changes
+      run: |
+        if [[ -n "$(git status --porcelain)" ]]; then
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: regenerate provider with updated Speakeasy"
+          git push
+        else
+          echo "No changes after regeneration"
+        fi
