@@ -7,6 +7,8 @@ sources:
         overlays:
             - location: overlays/nullable-fixes.yaml
             - location: overlays/actions.yaml
+            - location: overlays/actions-agent.yaml
+            - location: overlays/actions-pipeline.yaml
             - location: overlays/agents.yaml
             - location: overlays/api-description.yaml
             - location: overlays/aws-compute-env.yaml

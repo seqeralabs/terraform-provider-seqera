@@ -11998,6 +11998,366 @@ paths:
         - BearerAuth: []
       tags:
         - datasets
+  /actions#agent:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AgentAction#create
+      x-speakeasy-name-override: CreateAgentAction
+      operationId: CreateAgentAction
+      summary: Create agent action
+      description: Creates an action that runs a workspace agent when it triggers.
+      tags:
+        - actions
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Agent action create request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAgentActionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAgentActionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  /actions/{actionId}#agent:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AgentAction#read
+      x-speakeasy-name-override: DescribeAgentAction
+      operationId: DescribeAgentAction
+      summary: Describe agent action
+      description: Retrieves the agent action identified by the given `actionId`.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeAgentActionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AgentAction#update
+      x-speakeasy-name-override: UpdateAgentAction
+      operationId: UpdateAgentAction
+      summary: Update agent action
+      description: >-
+        Updates the agent action identified by the given `actionId`. The `source` and the agent of an existing action cannot change.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Agent action update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAgentActionRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element, or another write changed the action after this request read it
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AgentAction#delete
+      x-speakeasy-name-override: DeleteAgentAction
+      operationId: DeleteAgentAction
+      summary: Delete agent action
+      description: Deletes the agent action identified by the given `actionId`.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  /actions#pipeline:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineAction#create
+      x-speakeasy-name-override: CreatePipelineAction
+      operationId: CreatePipelineAction
+      summary: Create pipeline action
+      description: Creates an action that launches a pipeline run when it triggers.
+      tags:
+        - actions
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Pipeline action create request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePipelineActionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatePipelineActionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  /actions/{actionId}#pipeline:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineAction#read
+      x-speakeasy-name-override: DescribePipelineAction
+      operationId: DescribePipelineAction
+      summary: Describe pipeline action
+      description: Retrieves the pipeline action identified by the given `actionId`.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribePipelineActionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineAction#update
+      x-speakeasy-name-override: UpdatePipelineAction
+      operationId: UpdatePipelineAction
+      summary: Update pipeline action
+      description: >-
+        Updates the pipeline action identified by the given `actionId`. The `source` and `launch.id` of an existing action cannot change. The whole `launch` is sent on every update, because the update overwrites every stored launch setting.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Pipeline action update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePipelineActionRequest"
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element, or another write changed the action after this request read it
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineAction#delete
+      x-speakeasy-name-override: DeletePipelineAction
+      operationId: DeletePipelineAction
+      summary: Delete pipeline action
+      description: Deletes the pipeline action identified by the given `actionId`.
+      tags:
+        - actions
+      parameters:
+        - name: actionId
+          in: path
+          description: Action string identifier
+          required: true
+          schema:
+            type: string
+          x-speakeasy-match: id
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   "/compute-envs#aws-compute-env":
     post:
       x-speakeasy-entity-operation:
@@ -29373,6 +29733,617 @@ components:
           type: string
           description: Server-generated launch identifier; echoed back on Update.
           x-speakeasy-param-readonly: true
+    # ------------------------------------------------------------------------
+    # Trigger blocks (shared with seqera_pipeline_action)
+    # ------------------------------------------------------------------------
+    ActionBucketTrigger:
+      type: object
+      description: >-
+        Bucket trigger. Fires when the marker file appears under the data link. Required when `source` is `bucket`; must not be set otherwise.
+      required:
+        - dataLinkId
+      properties:
+        dataLinkId:
+          type: string
+          description: ID of the data link (bucket) to watch.
+          x-speakeasy-param-force-new: true
+        markerFile:
+          type: string
+          description: Name of the file whose arrival fires the action.
+        events:
+          type: array
+          description: Bucket events that fire the action.
+          items:
+            type: string
+    ActionCronTrigger:
+      type: object
+      description: >-
+        Cron trigger. Fires on a schedule. Required when `source` is `cron`; must not be set otherwise. Set either `expression` or `preset`.
+      properties:
+        expression:
+          type: string
+          description: Cron expression for the schedule, for example `0 2 * * *`.
+        preset:
+          type: string
+          description: Named schedule preset, used instead of `expression`.
+        timezone:
+          type: string
+          description: IANA timezone the schedule runs in, for example `Europe/Madrid`.
+    ActionPipelineStatusTrigger:
+      type: object
+      description: >-
+        Pipeline-status trigger. Fires when a run of the watched pipeline reaches `run_status`. Required when `source` is `pipeline_status`; must not be set otherwise.
+      required:
+        - pipelineId
+        - runStatus
+      properties:
+        pipelineId:
+          type: integer
+          format: int64
+          description: ID of the Launchpad pipeline to watch.
+        runStatus:
+          description: Run status that fires the action.
+          allOf:
+            - $ref: "#/components/schemas/WorkflowStatus"
+    # ------------------------------------------------------------------------
+    # Entity
+    # ------------------------------------------------------------------------
+    AgentAction:
+      type: object
+      x-speakeasy-entity: AgentAction
+      x-speakeasy-terraform-resource-name: agent_action
+      x-speakeasy-entity-description: |
+        Manage an action that runs a Seqera agent when it triggers.
+
+        An agent action watches a bucket, a schedule or the status of a
+        pipeline's runs, and runs the `seqera_agent` named by
+        `agent_id` each time it fires. The agent must be active.
+        To launch a pipeline instead, use `seqera_pipeline_action`.
+
+        Migrating from `seqera_action`: an action created with
+        `response_type = "agent"` can be moved here without recreating it,
+        using a `moved` block (Terraform 1.8+).
+      # The API nests trigger settings under the discriminated `config`
+      # object and the agent under `agent`. Hoist them to match the
+      # request shape. A pipeline action read through this resource (for
+      # example on import) is refused instead of producing a broken state.
+      x-speakeasy-transform-from-api:
+        jq: >-
+          if (.responseType // "agent") != "agent" then
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
+          else
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            . + {
+              agentId: .agent.agentConfigId,
+              bucket: (if .config.discriminator == "bucket" then .config | {dataLinkId, markerFile, events} else null end),
+              cron: (if .config.discriminator == "cron" then .config | {expression, preset, timezone} else null end),
+              pipelineStatus: (if .config.discriminator == "pipeline_status" then .config | {pipelineId, runStatus} else null end)
+            } | del(.agent, .config)
+          end
+      properties:
+        id:
+          type: string
+          description: Action identifier.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          type: string
+          description: Name of the action.
+        source:
+          type: string
+          description: Event source that triggers the action.
+          enum:
+            - bucket
+            - cron
+            - pipeline_status
+        agentId:
+          type: string
+          description: ID of the `seqera_agent` to run.
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        status:
+          description: Current status of the action.
+          allOf:
+            - $ref: "#/components/schemas/Action.Status"
+          x-speakeasy-param-readonly: true
+        error:
+          type: string
+          description: Error reported by the Platform for the action, if any.
+          x-speakeasy-param-readonly: true
+        nextExecution:
+          type: string
+          format: date-time
+          description: Next scheduled run of a `cron` action.
+          x-speakeasy-param-readonly: true
+    CreateAgentActionRequest:
+      type: object
+      required:
+        - name
+        - source
+        - agentId
+      x-speakeasy-transform-to-api:
+        jq: '. + { responseType: "agent", agent: { agentConfigId: .agentId } } | del(.agentId)'
+      properties:
+        name:
+          type: string
+        source:
+          type: string
+          enum:
+            - bucket
+            - cron
+            - pipeline_status
+          x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: ActionTriggerSourceValidator
+        agentId:
+          type: string
+          x-speakeasy-param-force-new: true
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        labelIds:
+          type: array
+          description: >-
+            IDs of the labels to attach to the action. Removing this attribute leaves the current labels in place.
+          items:
+            type: integer
+            format: int64
+    UpdateAgentActionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateAgentActionResponse:
+      type: object
+      x-speakeasy-transform-from-api:
+        jq: ". + { id: .actionId }"
+      properties:
+        id:
+          type: string
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+    DescribeAgentActionResponse:
+      type: object
+      properties:
+        action:
+          $ref: "#/components/schemas/AgentAction"
+    # Same shape as ActionLaunchRequest (actions.yaml), without
+    # ActionOutcomeValidator: launch is simply required here. The `id` is
+    # echoed back on Update.
+    PipelineActionLaunchRequest:
+      type: object
+      description: >-
+        Launch settings for the run the action starts. The whole block is sent on every update.
+      allOf:
+        - $ref: "#/components/schemas/WorkflowLaunchRequest"
+      properties:
+        id:
+          type: string
+          description: Server-generated launch identifier; echoed back on Update.
+          x-speakeasy-param-readonly: true
+          # Never changes for an existing action: keep the state value in
+          # the plan so Update echoes it instead of "(known after apply)".
+          x-speakeasy-param-suppress-computed-diff: true
+    PipelineActionTarget:
+      type: object
+      description: >-
+        Links the action to an existing Launchpad pipeline and version, so each run is recorded as a run of that pipeline. The run itself uses the settings in `launch`. On a `pipeline_status` action, the pipeline to watch is set in `pipeline_status`, not here.
+      properties:
+        targetPipelineId:
+          type: integer
+          format: int64
+          description: ID of the Launchpad pipeline to link.
+        targetPipelineVersionId:
+          type: string
+          description: ID of the pipeline version to link.
+    # ------------------------------------------------------------------------
+    # Entity
+    # ------------------------------------------------------------------------
+    PipelineAction:
+      type: object
+      x-speakeasy-entity: PipelineAction
+      x-speakeasy-terraform-resource-name: pipeline_action
+      x-speakeasy-entity-description: |
+        Manage an action that launches a pipeline run when it triggers.
+
+        A pipeline action fires on a GitHub webhook (`github`), a call to
+        its Seqera webhook (`tower`), a file arriving in a bucket
+        (`bucket`), a schedule (`cron`) or the status of another pipeline's
+        runs (`pipeline_status`), and launches a run with the settings in
+        `launch`. GitHub webhooks require a GitHub account linked to the
+        workspace. To run an agent instead, use `seqera_agent_action`.
+
+        Migrating from `seqera_action`: an action that launches a pipeline
+        can be moved here without recreating it, using a `moved` block
+        (Terraform 1.8+).
+      # The API nests trigger settings under the discriminated `config`
+      # object. Hoist them to match the request shape. An agent action read
+      # through this resource (for example on import) is refused instead
+      # of producing a broken state.
+      x-speakeasy-transform-from-api:
+        jq: >-
+          if (.responseType // "pipeline") != "pipeline" then
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            error("action " + .id + " runs an agent; manage it with seqera_agent_action")
+          else
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            . + {
+              bucket: (if .config.discriminator == "bucket" then .config | {dataLinkId, markerFile, events} else null end),
+              cron: (if .config.discriminator == "cron" then .config | {expression, preset, timezone} else null end),
+              pipelineStatus: (if .config.discriminator == "pipeline_status" then .config | {pipelineId, runStatus} else null end)
+            } | del(.agent, .config)
+          end
+      properties:
+        id:
+          type: string
+          description: Action identifier.
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          type: string
+          description: Name of the action.
+        source:
+          type: string
+          description: >-
+            Event source that triggers the action. `tower` (the default) is a webhook called programmatically; `github` requires a GitHub account linked to the workspace.
+          enum:
+            - github
+            - tower
+            - bucket
+            - cron
+            - pipeline_status
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        launch:
+          $ref: "#/components/schemas/LaunchDbDto"
+        pipeline:
+          $ref: "#/components/schemas/PipelineActionTarget"
+        status:
+          description: Current status of the action.
+          allOf:
+            - $ref: "#/components/schemas/Action.Status"
+          x-speakeasy-param-readonly: true
+        hookId:
+          type: string
+          description: Identifier of the webhook that triggers a `github` or `tower` action.
+          x-speakeasy-param-readonly: true
+        hookUrl:
+          type: string
+          description: URL of the webhook that triggers a `github` or `tower` action.
+          x-speakeasy-param-readonly: true
+        error:
+          type: string
+          description: Error reported by the Platform for the action, if any.
+          x-speakeasy-param-readonly: true
+        nextExecution:
+          type: string
+          format: date-time
+          description: Next scheduled run of a `cron` action.
+          x-speakeasy-param-readonly: true
+    CreatePipelineActionRequest:
+      type: object
+      required:
+        - name
+        - launch
+      x-speakeasy-transform-to-api:
+        jq: '. + { responseType: "pipeline" }'
+      properties:
+        name:
+          type: string
+        source:
+          type: string
+          enum:
+            - github
+            - tower
+            - bucket
+            - cron
+            - pipeline_status
+          default: tower
+          x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: ActionTriggerSourceValidator
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        launch:
+          $ref: "#/components/schemas/PipelineActionLaunchRequest"
+        pipeline:
+          $ref: "#/components/schemas/PipelineActionTarget"
+    UpdatePipelineActionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        bucket:
+          allOf:
+            - $ref: "#/components/schemas/ActionBucketTrigger"
+          x-speakeasy-param-computed: false
+        cron:
+          allOf:
+            - $ref: "#/components/schemas/ActionCronTrigger"
+          x-speakeasy-param-computed: false
+        pipelineStatus:
+          allOf:
+            - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+          x-speakeasy-param-computed: false
+        launch:
+          $ref: "#/components/schemas/PipelineActionLaunchRequest"
+        pipeline:
+          $ref: "#/components/schemas/PipelineActionTarget"
+    CreatePipelineActionResponse:
+      type: object
+      x-speakeasy-transform-from-api:
+        jq: ". + { id: .actionId }"
+      properties:
+        id:
+          type: string
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+    DescribePipelineActionResponse:
+      type: object
+      properties:
+        action:
+          $ref: "#/components/schemas/PipelineAction"
     # AWS-specific compute environment schema
     AWSComputeEnv_ComputeConfig:
       x-speakeasy-entity: AWSComputeEnv

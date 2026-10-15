@@ -39,6 +39,8 @@ internal/validators/objectvalidators/billing_export_table_google_only_validator.
 internal/validators/objectvalidators/billing_export_table_google_only_validator_test.go
 internal/validators/objectvalidators/action_outcome_validator.go
 internal/validators/objectvalidators/action_outcome_validator_test.go
+internal/validators/stringvalidators/action_trigger_source_validator.go
+internal/validators/stringvalidators/action_trigger_source_validator_test.go
 internal/validators/boolvalidators/graviton_validator.go
 internal/validators/boolvalidators/requires_sibling_string_set.go
 internal/validators/boolvalidators/private_address_requires_network_validator.go
@@ -94,11 +96,20 @@ internal/provider/agent_service_account_schema_test.go
 internal/provider/agent_service_account_plan_test.go
 internal/provider/awscredential_resource_modify_plan.go
 internal/provider/awscredential_resource_modify_plan_test.go
+internal/provider/action_state_move.go
+internal/provider/agentaction_resource_state_move.go
+internal/provider/agentaction_resource_state_move_test.go
+internal/provider/agentaction_transform_test.go
+internal/provider/pipelineaction_resource_state_move.go
+internal/provider/pipelineaction_resource_state_move_test.go
+internal/provider/pipelineaction_transform_test.go
 internal/planmodifiers/stringplanmodifier/service_account_name_follows_id.go
 
 # Custom examples that should be manually maintained
 examples/resources/seqera_pipeline/resource*.tf
 examples/resources/seqera_action/resource*.tf
+examples/resources/seqera_agent_action/resource*.tf
+examples/resources/seqera_pipeline_action/resource*.tf
 examples/resources/seqera_labels/resource*.tf
 examples/resources/seqera_orgs/resource*.tf
 examples/resources/seqera_custom_role/resource.tf

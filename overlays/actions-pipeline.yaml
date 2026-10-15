@@ -1,0 +1,446 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Pipeline Actions Overlay
+  version: 0.0.0
+
+# ==============================================================================
+# PIPELINE ACTION RESOURCE OVERLAY
+# ==============================================================================
+#
+# Binds synthetic /actions#pipeline paths to the seqera_pipeline_action
+# resource: an action whose outcome is launching a pipeline run
+# (responseType = "pipeline"). The generic seqera_action (actions.yaml) still
+# covers both outcomes; this resource states the pipeline-outcome rules in its
+# schema:
+#   - launch is required and there is no agent block
+#   - responseType is not an attribute; the create transform always sends
+#     "pipeline"
+#
+# Trigger schemas (ActionBucketTrigger, ActionCronTrigger,
+# ActionPipelineStatusTrigger) and ActionTriggerSourceValidator are shared
+# with seqera_agent_action (actions-agent.yaml, which must be applied first).
+# The `github` and `tower` sources take no trigger block.
+#
+# Labels: a pipeline action carries its labels in `launch.label_ids`; the API
+# refuses the top-level `labelIds` when a launch is present, so it is not
+# exposed here.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# resource "seqera_pipeline_action" "api_trigger" {
+#   workspace_id = seqera_workspace.main.id
+#   name         = "api-triggered-pipeline"
+#   source       = "tower"
+#
+#   launch = {
+#     pipeline       = "https://github.com/myorg/api-pipeline"
+#     compute_env_id = seqera_compute_env.aws.id
+#     work_dir       = "s3://my-bucket/work"
+#     revision       = "main"
+#   }
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # SYNTHETIC PATHS
+  # ============================================================================
+  - target: $.paths
+    update:
+      /actions#pipeline:
+        post:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: PipelineAction#create
+          x-speakeasy-name-override: CreatePipelineAction
+          operationId: CreatePipelineAction
+          summary: Create pipeline action
+          description: Creates an action that launches a pipeline run when it triggers.
+          tags:
+            - actions
+          parameters:
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              x-speakeasy-param-force-new: true
+          requestBody:
+            description: Pipeline action create request
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CreatePipelineActionRequest"
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CreatePipelineActionResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+      /actions/{actionId}#pipeline:
+        get:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: PipelineAction#read
+          x-speakeasy-name-override: DescribePipelineAction
+          operationId: DescribePipelineAction
+          summary: Describe pipeline action
+          description: Retrieves the pipeline action identified by the given `actionId`.
+          tags:
+            - actions
+          parameters:
+            - name: actionId
+              in: path
+              description: Action string identifier
+              required: true
+              schema:
+                type: string
+              x-speakeasy-match: id
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              x-speakeasy-param-force-new: true
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DescribePipelineActionResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+        put:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: PipelineAction#update
+          x-speakeasy-name-override: UpdatePipelineAction
+          operationId: UpdatePipelineAction
+          summary: Update pipeline action
+          description: >-
+            Updates the pipeline action identified by the given `actionId`. The
+            `source` and `launch.id` of an existing action cannot change. The
+            whole `launch` is sent on every update, because the update
+            overwrites every stored launch setting.
+          tags:
+            - actions
+          parameters:
+            - name: actionId
+              in: path
+              description: Action string identifier
+              required: true
+              schema:
+                type: string
+              x-speakeasy-match: id
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              x-speakeasy-param-force-new: true
+          requestBody:
+            description: Pipeline action update request
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UpdatePipelineActionRequest"
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Duplicate element, or another write changed the action after this request read it
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+        delete:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: PipelineAction#delete
+          x-speakeasy-name-override: DeletePipelineAction
+          operationId: DeletePipelineAction
+          summary: Delete pipeline action
+          description: Deletes the pipeline action identified by the given `actionId`.
+          tags:
+            - actions
+          parameters:
+            - name: actionId
+              in: path
+              description: Action string identifier
+              required: true
+              schema:
+                type: string
+              x-speakeasy-match: id
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              required: true
+              schema:
+                type: integer
+                format: int64
+              x-speakeasy-param-force-new: true
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+
+  # ============================================================================
+  # SCHEMAS
+  # ============================================================================
+  - target: $.components.schemas
+    update:
+      # Same shape as ActionLaunchRequest (actions.yaml), without
+      # ActionOutcomeValidator: launch is simply required here. The `id` is
+      # echoed back on Update.
+      PipelineActionLaunchRequest:
+        type: object
+        description: >-
+          Launch settings for the run the action starts. The whole block is
+          sent on every update.
+        allOf:
+          - $ref: "#/components/schemas/WorkflowLaunchRequest"
+        properties:
+          id:
+            type: string
+            description: Server-generated launch identifier; echoed back on Update.
+            x-speakeasy-param-readonly: true
+            # Never changes for an existing action: keep the state value in
+            # the plan so Update echoes it instead of "(known after apply)".
+            x-speakeasy-param-suppress-computed-diff: true
+
+      PipelineActionTarget:
+        type: object
+        description: >-
+          Links the action to an existing Launchpad pipeline and version, so
+          each run is recorded as a run of that pipeline. The run itself uses
+          the settings in `launch`. On a `pipeline_status` action, the
+          pipeline to watch is set in `pipeline_status`, not here.
+        properties:
+          targetPipelineId:
+            type: integer
+            format: int64
+            description: ID of the Launchpad pipeline to link.
+          targetPipelineVersionId:
+            type: string
+            description: ID of the pipeline version to link.
+
+      # ------------------------------------------------------------------------
+      # Entity
+      # ------------------------------------------------------------------------
+      PipelineAction:
+        type: object
+        x-speakeasy-entity: PipelineAction
+        x-speakeasy-terraform-resource-name: pipeline_action
+        x-speakeasy-entity-description: |
+          Manage an action that launches a pipeline run when it triggers.
+
+          A pipeline action fires on a GitHub webhook (`github`), a call to
+          its Seqera webhook (`tower`), a file arriving in a bucket
+          (`bucket`), a schedule (`cron`) or the status of another pipeline's
+          runs (`pipeline_status`), and launches a run with the settings in
+          `launch`. GitHub webhooks require a GitHub account linked to the
+          workspace. To run an agent instead, use `seqera_agent_action`.
+
+          Migrating from `seqera_action`: an action that launches a pipeline
+          can be moved here without recreating it, using a `moved` block
+          (Terraform 1.8+).
+        # The API nests trigger settings under the discriminated `config`
+        # object. Hoist them to match the request shape. An agent action read
+        # through this resource (for example on import) is refused instead
+        # of producing a broken state.
+        x-speakeasy-transform-from-api:
+          jq: >-
+            if (.responseType // "pipeline") != "pipeline" then
+              error("action " + .id + " runs an agent; manage it with seqera_agent_action")
+            else
+              . + {
+                bucket: (if .config.discriminator == "bucket" then .config | {dataLinkId, markerFile, events} else null end),
+                cron: (if .config.discriminator == "cron" then .config | {expression, preset, timezone} else null end),
+                pipelineStatus: (if .config.discriminator == "pipeline_status" then .config | {pipelineId, runStatus} else null end)
+              } | del(.agent, .config)
+            end
+        properties:
+          id:
+            type: string
+            description: Action identifier.
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-suppress-computed-diff: true
+          name:
+            type: string
+            description: Name of the action.
+          source:
+            type: string
+            description: >-
+              Event source that triggers the action. `tower` (the default) is
+              a webhook called programmatically; `github` requires a GitHub
+              account linked to the workspace.
+            enum:
+              - github
+              - tower
+              - bucket
+              - cron
+              - pipeline_status
+          bucket:
+            allOf:
+              - $ref: "#/components/schemas/ActionBucketTrigger"
+            x-speakeasy-param-computed: false
+          cron:
+            allOf:
+              - $ref: "#/components/schemas/ActionCronTrigger"
+            x-speakeasy-param-computed: false
+          pipelineStatus:
+            allOf:
+              - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+            x-speakeasy-param-computed: false
+          launch:
+            $ref: "#/components/schemas/LaunchDbDto"
+          pipeline:
+            $ref: "#/components/schemas/PipelineActionTarget"
+          status:
+            description: Current status of the action.
+            allOf:
+              - $ref: "#/components/schemas/Action.Status"
+            x-speakeasy-param-readonly: true
+          hookId:
+            type: string
+            description: Identifier of the webhook that triggers a `github` or `tower` action.
+            x-speakeasy-param-readonly: true
+          hookUrl:
+            type: string
+            description: URL of the webhook that triggers a `github` or `tower` action.
+            x-speakeasy-param-readonly: true
+          error:
+            type: string
+            description: Error reported by the Platform for the action, if any.
+            x-speakeasy-param-readonly: true
+          nextExecution:
+            type: string
+            format: date-time
+            description: Next scheduled run of a `cron` action.
+            x-speakeasy-param-readonly: true
+
+      CreatePipelineActionRequest:
+        type: object
+        required:
+          - name
+          - launch
+        x-speakeasy-transform-to-api:
+          jq: '. + { responseType: "pipeline" }'
+        properties:
+          name:
+            type: string
+          source:
+            type: string
+            enum:
+              - github
+              - tower
+              - bucket
+              - cron
+              - pipeline_status
+            default: tower
+            x-speakeasy-param-force-new: true
+            x-speakeasy-plan-validators: ActionTriggerSourceValidator
+          bucket:
+            allOf:
+              - $ref: "#/components/schemas/ActionBucketTrigger"
+            x-speakeasy-param-computed: false
+          cron:
+            allOf:
+              - $ref: "#/components/schemas/ActionCronTrigger"
+            x-speakeasy-param-computed: false
+          pipelineStatus:
+            allOf:
+              - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+            x-speakeasy-param-computed: false
+          launch:
+            $ref: "#/components/schemas/PipelineActionLaunchRequest"
+          pipeline:
+            $ref: "#/components/schemas/PipelineActionTarget"
+
+      UpdatePipelineActionRequest:
+        type: object
+        properties:
+          name:
+            type: string
+          bucket:
+            allOf:
+              - $ref: "#/components/schemas/ActionBucketTrigger"
+            x-speakeasy-param-computed: false
+          cron:
+            allOf:
+              - $ref: "#/components/schemas/ActionCronTrigger"
+            x-speakeasy-param-computed: false
+          pipelineStatus:
+            allOf:
+              - $ref: "#/components/schemas/ActionPipelineStatusTrigger"
+            x-speakeasy-param-computed: false
+          launch:
+            $ref: "#/components/schemas/PipelineActionLaunchRequest"
+          pipeline:
+            $ref: "#/components/schemas/PipelineActionTarget"
+
+      CreatePipelineActionResponse:
+        type: object
+        x-speakeasy-transform-from-api:
+          jq: ". + { id: .actionId }"
+        properties:
+          id:
+            type: string
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-suppress-computed-diff: true
+
+      DescribePipelineActionResponse:
+        type: object
+        properties:
+          action:
+            $ref: "#/components/schemas/PipelineAction"
