@@ -33,7 +33,7 @@ jobs:
     - name: Regenerate provider
       env:
         SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
-      run: speakeasy run --skip-versioning
+      run: speakeasy run --skip-versioning --skip-upload-spec
 
     # Pushes made with GITHUB_TOKEN do not trigger other workflows, so verify here.
     - name: Build
