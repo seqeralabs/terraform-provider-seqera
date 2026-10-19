@@ -32,7 +32,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -124,7 +123,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -235,6 +233,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"ECS",
 										"EC2",
@@ -315,6 +314,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 									`Requires replacement if changed.`,
 								Validators: []validator.Int32{
+									// KEPT: no server equivalent
 									custom_int32validators.MaxSpotAttemptsValidator(),
 								},
 							},
@@ -387,6 +387,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 									`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"spot",
 										"spotFirst",
@@ -453,6 +454,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -465,6 +467,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -516,9 +519,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
 						Description: `Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.PrivateAddressRequiresNetworkValidator(),
-						},
+						Validators:  []validator.Bool{},
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,
@@ -531,6 +532,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Format: gs://bucket-name/path` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							stringvalidator.RegexMatches(regexp.MustCompile(`^gs://.+`), "must match pattern "+regexp.MustCompile(`^gs://.+`).String()),
 						},
 					},
@@ -548,7 +550,9 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					// KEPT: no server equivalent
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
+					// KEPT: no server equivalent
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 				},
 			},
@@ -567,9 +571,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -609,10 +611,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,

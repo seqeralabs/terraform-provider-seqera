@@ -314,7 +314,6 @@ actions:
             description: Optional description of the compute environment
           fusionMetricsCollectionEnabled:
             type: boolean
-            x-speakeasy-plan-validators: FusionMetricsCollectionValidator
             description: |
               Enable Fusion metrics collection for this compute environment. Can be changed
               in place without replacing the compute environment.
@@ -516,9 +515,6 @@ actions:
       x-speakeasy-param-force-new: true
 
   # Forge configuration - add validator and force-new to all properties
-  - target: $.components.schemas.ForgeConfig
-    update:
-      x-speakeasy-plan-validators: FargateHeadValidator
 
   - target: $.components.schemas.ForgeConfig.properties.type
     update:
@@ -776,7 +772,6 @@ actions:
 
   - target: $.components.schemas.ForgeConfig.properties.arm64Enabled
     update:
-      x-speakeasy-plan-validators: GravitonValidator
       description: |
         Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
         compute jobs.
@@ -826,7 +821,6 @@ actions:
         Requires `enable_fusion = true`.
       example: false
       x-speakeasy-param-force-new: true
-      x-speakeasy-plan-validators: FusionSnapshotsValidator
 
   - target: $.components.schemas.AwsBatchConfig.properties.dragenQueue
     update:
@@ -846,7 +840,6 @@ actions:
   - target: $.components.schemas.AwsBatchConfig.properties.nvnmeStorageEnabled
     update:
       x-speakeasy-name-override: nvme_storage_enabled
-      x-speakeasy-plan-validators: NvmeStorageValidator
       description: |
         Allow the use of NVMe instance storage to speed up I/O and disk access operations.
 

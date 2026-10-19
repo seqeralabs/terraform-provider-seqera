@@ -30,10 +30,8 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -117,7 +115,6 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-						custom_objectvalidators.ConfigEnvVariableValidator(),
 					},
 					PlanModifiers: []planmodifier.Object{
 						objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -193,12 +190,12 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 					`- LARGE: High-performance compute for demanding workflows` + "\n" +
 					`Default: "SMALL"; must be one of ["SMALL", "MEDIUM", "LARGE"]; Requires replacement if changed.`,
 				Validators: []validator.String{
+					// KEPT: no server equivalent
 					stringvalidator.OneOf(
 						"SMALL",
 						"MEDIUM",
 						"LARGE",
 					),
-					custom_stringvalidators.InstanceTypeSizeValidator(),
 				},
 			},
 			"label_ids": schema.ListAttribute{
@@ -226,10 +223,7 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"nextflow_config": schema.StringAttribute{
 				Computed: true,
@@ -279,6 +273,7 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 					`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
 					`Requires replacement if changed.`,
 				Validators: []validator.String{
+					// KEPT: no server equivalent
 					custom_stringvalidators.SeqeraComputeRegionValidator(),
 				},
 			},

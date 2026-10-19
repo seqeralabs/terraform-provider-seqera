@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -37,7 +36,6 @@ import (
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -102,9 +100,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
-						Validators: []validator.Int32{
-							int32validator.Between(50, 4095),
-						},
+						Validators:  []validator.Int32{},
 					},
 					"data_collection_endpoint": schema.StringAttribute{
 						Computed: true,
@@ -134,7 +130,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -223,6 +218,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"ECS",
 										"EC2",
@@ -303,6 +299,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 									`Requires replacement if changed.`,
 								Validators: []validator.Int32{
+									// KEPT: no server equivalent
 									custom_int32validators.MaxSpotAttemptsValidator(),
 								},
 							},
@@ -375,6 +372,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 									`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"spot",
 										"spotFirst",
@@ -410,9 +408,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used. Requires replacement if changed.`,
-						Validators: []validator.String{
-							custom_stringvalidators.KeyVaultURLValidator(),
-						},
+						Validators:  []validator.String{},
 					},
 					"log_table_name": schema.StringAttribute{
 						Computed: true,
@@ -481,6 +477,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -493,6 +490,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -545,16 +543,18 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						MarkdownDescription: `Azure Blob Storage container path for Nextflow work directory.` + "\n" +
 							`Format: az://container-name/path` + "\n" +
 							`Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^az://.+`), "must match pattern "+regexp.MustCompile(`^az://.+`).String()),
-						},
+						Validators: []validator.String{},
 					},
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					// KEPT: no server equivalent
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
+					// KEPT: no server equivalent
 					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
+					// KEPT: no server equivalent
 					custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+					// KEPT: no server equivalent
 					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
@@ -573,9 +573,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -615,10 +613,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,

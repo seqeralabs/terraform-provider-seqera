@@ -36,7 +36,6 @@ import (
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -151,7 +150,9 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`encryption key is used.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.EbsKmsKeyEncryptionValidator(),
+							// KEPT: no server equivalent
 							custom_stringvalidators.EbsKmsKeyArnValidator(),
 						},
 					},
@@ -176,7 +177,6 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -296,6 +296,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"ECS",
 										"EC2",
@@ -376,6 +377,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 									`Requires replacement if changed.`,
 								Validators: []validator.Int32{
+									// KEPT: no server equivalent
 									custom_int32validators.MaxSpotAttemptsValidator(),
 								},
 							},
@@ -448,6 +450,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 									`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"spot",
 										"spotFirst",
@@ -509,6 +512,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -521,6 +525,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -569,6 +574,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.SubnetConflictsValidator(),
 						},
 					},
@@ -610,13 +616,16 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Max 100 characters.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.WorkDirS3Validator(),
 						},
 					},
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					// KEPT: no server equivalent
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
+					// KEPT: no server equivalent
 					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},
 			},
@@ -635,9 +644,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -677,10 +684,7 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,

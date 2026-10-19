@@ -294,7 +294,6 @@ actions:
             description: Optional description of the compute environment
           fusionMetricsCollectionEnabled:
             type: boolean
-            x-speakeasy-plan-validators: FusionMetricsCollectionValidator
             description: |
               Enable Fusion metrics collection for this compute environment. Can be changed
               in place without replacing the compute environment.
@@ -413,7 +412,6 @@ actions:
 
   - target: $.components.schemas.AzBatchForgeConfig.properties.containerRegIds
     update:
-      x-speakeasy-plan-validators: ContainerRegistryCredentialIdsValidator
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
         imports:
@@ -435,6 +433,3 @@ actions:
   # the API rejects it otherwise, even when explicitly false. Presence-based, so
   # the custom validator is used instead of RequiresSiblingStringSet (true-only).
   # (internal/validators/boolvalidators/private_address_requires_subnet_validator.go)
-  - target: $.components.schemas.AzBatchConfig.properties.usePrivateAddress
-    update:
-      x-speakeasy-plan-validators: PrivateAddressRequiresSubnetValidator

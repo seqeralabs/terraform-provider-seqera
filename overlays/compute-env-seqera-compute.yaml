@@ -394,7 +394,6 @@ actions:
             default: "SMALL"
             x-speakeasy-param-force-new: true
             x-speakeasy-param-optional: true
-            x-speakeasy-plan-validators: InstanceTypeSizeValidator
           work_dir:
             type: string
             description: |

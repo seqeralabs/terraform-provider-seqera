@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -39,7 +38,6 @@ import (
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
-	custom_listvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/listvalidators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -129,7 +127,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -243,6 +240,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -254,6 +252,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -287,6 +286,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -372,6 +372,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
+											// KEPT: no server equivalent
 											custom_boolvalidators.FusionEnabledValidator(),
 										},
 									},
@@ -396,7 +397,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -478,6 +478,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT` + "\n" +
 													`must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"BEST_FIT",
 														"BEST_FIT_PROGRESSIVE",
@@ -509,9 +510,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`` + "\n" +
 													`Requires ` + "`" + `fargate_head_enabled = true` + "`" + `, ` + "`" + `enable_wave = true` + "`" + `, and ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 													`Requires replacement if changed.`,
-												Validators: []validator.Bool{
-													custom_boolvalidators.GravitonValidator(),
-												},
+												Validators: []validator.Bool{},
 											},
 											"bid_percentage": schema.Int32Attribute{
 												Computed: true,
@@ -529,6 +528,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
+													// KEPT: no server equivalent
 													int32validator.Between(0, 100),
 												},
 											},
@@ -802,6 +802,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"SPOT",
 														"EC2",
@@ -820,9 +821,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Requires replacement if changed.`,
-										Validators: []validator.Object{
-											custom_objectvalidators.FargateHeadValidator(),
-										},
+										Validators:  []validator.Object{},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -835,9 +834,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`` + "\n" +
 											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.FusionSnapshotsValidator(),
-										},
+										Validators: []validator.Bool{},
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -910,9 +907,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`` + "\n" +
 											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.NvmeStorageValidator(),
-										},
+										Validators: []validator.Bool{},
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -922,6 +917,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -933,6 +929,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -991,6 +988,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("altair_platform"),
@@ -1009,6 +1007,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									// KEPT: no server equivalent
 									custom_objectvalidators.AwsForgeValidator(),
 								},
 							},
@@ -1071,7 +1070,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`encryption key is used.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.EbsKmsKeyEncryptionValidator(),
+											// KEPT: no server equivalent
 											custom_stringvalidators.EbsKmsKeyArnValidator(),
 										},
 									},
@@ -1094,7 +1095,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -1203,6 +1203,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"ECS",
 														"EC2",
@@ -1277,6 +1278,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
+													// KEPT: no server equivalent
 													custom_int32validators.MaxSpotAttemptsValidator(),
 												},
 											},
@@ -1343,6 +1345,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"spot",
 														"spotFirst",
@@ -1400,6 +1403,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -1411,6 +1415,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -1459,6 +1464,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.SubnetConflictsValidator(),
 										},
 									},
@@ -1501,6 +1507,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("altair_platform"),
@@ -1519,7 +1526,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									// KEPT: no server equivalent
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									// KEPT: no server equivalent
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
@@ -1552,6 +1561,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`server and the boolean fields are authoritative.`,
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											stringvalidator.OneOf(
 												"on_success",
 												"always",
@@ -1595,6 +1605,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
+											// KEPT: no server equivalent
 											custom_boolvalidators.FusionEnabledValidator(),
 										},
 									},
@@ -1619,7 +1630,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -1691,9 +1701,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 												},
 												Description: `Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode. Requires replacement if changed.`,
-												Validators: []validator.Int32{
-													int32validator.Between(50, 4095),
-												},
+												Validators:  []validator.Int32{},
 											},
 											"container_reg_ids": schema.ListAttribute{
 												CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
@@ -1704,10 +1712,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 												ElementType: types.StringType,
 												Description: `Seqera Platform credentials ID of the container registry to attach to the Batch pool to pull private images. At most one ID can be specified. Requires replacement if changed.`,
-												Validators: []validator.List{
-													listvalidator.SizeAtMost(1),
-													custom_listvalidators.ContainerRegistryCredentialIdsValidator(),
-												},
+												Validators:  []validator.List{},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -1747,9 +1752,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															int32planmodifier.RequiresReplaceIfConfigured(),
 														},
 														Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
-														Validators: []validator.Int32{
-															int32validator.Between(50, 4095),
-														},
+														Validators:  []validator.Int32{},
 													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,
@@ -1811,9 +1814,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															int32planmodifier.RequiresReplaceIfConfigured(),
 														},
 														Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
-														Validators: []validator.Int32{
-															int32validator.Between(50, 4095),
-														},
+														Validators:  []validator.Int32{},
 													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,
@@ -1917,6 +1918,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -1928,6 +1930,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -1973,9 +1976,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs. Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.PrivateAddressRequiresSubnetValidator(),
-										},
+										Validators:  []validator.Bool{},
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -1999,6 +2000,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -2032,9 +2034,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `OS disk size in GB for the head node instance, between 50 and 4095 (inclusive). When omitted, Azure uses the default disk size for the VM image. Requires replacement if changed.`,
-										Validators: []validator.Int32{
-											int32validator.Between(50, 4095),
-										},
+										Validators:  []validator.Int32{},
 									},
 									"data_collection_endpoint": schema.StringAttribute{
 										Computed: true,
@@ -2061,7 +2061,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -2140,6 +2139,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"ECS",
 														"EC2",
@@ -2214,6 +2214,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
+													// KEPT: no server equivalent
 													custom_int32validators.MaxSpotAttemptsValidator(),
 												},
 											},
@@ -2280,6 +2281,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"spot",
 														"spotFirst",
@@ -2313,9 +2315,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Azure Key Vault URL used to store pipeline secrets. When omitted, the installation default is used. Requires replacement if changed.`,
-										Validators: []validator.String{
-											custom_stringvalidators.KeyVaultURLValidator(),
-										},
+										Validators:  []validator.String{},
 									},
 									"log_table_name": schema.StringAttribute{
 										Computed: true,
@@ -2375,6 +2375,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -2386,6 +2387,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -2441,6 +2443,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -2459,9 +2462,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									// KEPT: no server equivalent
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									// KEPT: no server equivalent
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
+									// KEPT: no server equivalent
 									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
+									// KEPT: no server equivalent
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
@@ -2502,6 +2509,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
+											// KEPT: no server equivalent
 											custom_boolvalidators.FusionEnabledValidator(),
 										},
 									},
@@ -2526,7 +2534,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -2632,6 +2639,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											stringvalidator.OneOf(
 												"on_success",
 												"always",
@@ -2647,6 +2655,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -2658,6 +2667,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -2726,6 +2736,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -2783,6 +2794,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
+											// KEPT: no server equivalent
 											custom_boolvalidators.FusionEnabledValidator(),
 										},
 									},
@@ -2807,7 +2819,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -2917,6 +2928,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											stringvalidator.OneOf(
 												"on_success",
 												"always",
@@ -2932,6 +2944,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -2943,6 +2956,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -3013,6 +3027,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -3115,6 +3130,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
+											// KEPT: no server equivalent
 											custom_boolvalidators.FusionEnabledValidator(),
 										},
 									},
@@ -3139,7 +3155,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3235,6 +3250,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`attach seqera_labels via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Map{
+											// KEPT: no server equivalent
 											custom_mapvalidators.GoogleResourceLabelsValidator(),
 										},
 									},
@@ -3311,6 +3327,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -3322,6 +3339,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -3403,6 +3421,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -3456,7 +3475,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3555,6 +3573,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"ECS",
 														"EC2",
@@ -3629,6 +3648,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
+													// KEPT: no server equivalent
 													custom_int32validators.MaxSpotAttemptsValidator(),
 												},
 											},
@@ -3695,6 +3715,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"spot",
 														"spotFirst",
@@ -3754,6 +3775,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -3765,6 +3787,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -3815,9 +3838,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.PrivateAddressRequiresNetworkValidator(),
-										},
+										Validators:  []validator.Bool{},
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -3843,6 +3864,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -3861,7 +3883,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									// KEPT: no server equivalent
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									// KEPT: no server equivalent
 									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 								},
 							},
@@ -3904,7 +3928,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3982,6 +4005,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											`attach seqera_labels via label_ids.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Map{
+											// KEPT: no server equivalent
 											custom_mapvalidators.GoogleResourceLabelsValidator(),
 										},
 									},
@@ -4027,6 +4051,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4038,6 +4063,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4118,6 +4144,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -4161,7 +4188,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -4273,6 +4299,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											stringvalidator.OneOf(
 												"on_success",
 												"always",
@@ -4288,6 +4315,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4299,6 +4327,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4365,6 +4394,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -4400,7 +4430,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -4479,6 +4508,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"ECS",
 														"EC2",
@@ -4553,6 +4583,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 1 and 10 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
+													// KEPT: no server equivalent
 													custom_int32validators.MaxSpotAttemptsValidator(),
 												},
 											},
@@ -4619,6 +4650,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Note: ` + "`" + `"onDemand"` + "`" + ` / ` + "`" + `"on-demand"` + "`" + ` are rejected by the API.` + "\n" +
 													`Default: "spotFirst"; must be one of ["spot", "spotFirst", "ondemand"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													// KEPT: no server equivalent
 													stringvalidator.OneOf(
 														"spot",
 														"spotFirst",
@@ -4653,6 +4685,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4664,6 +4697,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4689,6 +4723,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -4707,6 +4742,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									// KEPT: no server equivalent
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
@@ -4733,7 +4769,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -4863,6 +4898,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4874,6 +4910,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -4915,6 +4952,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -4958,7 +4996,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -5072,6 +5109,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5083,6 +5121,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5116,6 +5155,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -5159,7 +5199,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -5217,6 +5256,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Size of the Data Studios instance (SMALL, MEDIUM, LARGE). must be one of ["SMALL", "MEDIUM", "LARGE"]; Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											stringvalidator.OneOf(
 												"SMALL",
 												"MEDIUM",
@@ -5240,6 +5280,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5251,6 +5292,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5279,6 +5321,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -5322,7 +5365,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -5436,6 +5478,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5447,6 +5490,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5480,6 +5524,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -5523,7 +5568,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -5637,6 +5681,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5648,6 +5693,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 										Validators: []validator.String{
+											// KEPT: no server equivalent
 											custom_stringvalidators.RunScriptSizeValidator(),
 										},
 									},
@@ -5681,6 +5727,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
+									// KEPT: no server equivalent
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
@@ -5728,9 +5775,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Compute environment description. Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(2000),
-						},
+						Validators:  []validator.String{},
 					},
 					"fusion_metrics_collection_enabled": schema.BoolAttribute{
 						Computed: true,
@@ -5835,9 +5880,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
+						Validators:  []validator.String{},
 					},
 					"org_id": schema.Int64Attribute{
 						Computed: true,
@@ -5853,6 +5896,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "google-cloud", "azure-batch", "azure-cloud", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "seqeracompute-platform"]; Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							stringvalidator.OneOf(
 								"aws-batch",
 								"aws-cloud",
@@ -5871,6 +5915,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"moab-platform",
 								"seqeracompute-platform",
 							),
+							// KEPT: no server equivalent
 							custom_stringvalidators.ComputeConfigValidator(),
 						},
 					},
