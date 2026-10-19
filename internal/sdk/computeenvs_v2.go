@@ -42,6 +42,8 @@ func (s *ComputeEnvsV2) client() (*computeenvs.Client, error) {
 	})
 }
 
+// KEPT: no server equivalent. seqera_compute_env and seqera_compute_env_enabled take an optional workspace_id
+// (v1 also served the user context); every v2 compute environment route is under a workspace.
 func requireWorkspace(workspaceID *int64) (int64, error) {
 	if workspaceID == nil {
 		return 0, fmt.Errorf("API v2 scopes compute environments to a workspace: workspace_id is required")
