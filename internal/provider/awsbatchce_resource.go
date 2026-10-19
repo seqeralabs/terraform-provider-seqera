@@ -985,7 +985,7 @@ func (r *AWSBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.CreateAWSBatchCE(ctx, *request)
+	res, created, err := r.client.ComputeEnvsV2().CreateAWSBatchCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1004,7 +1004,7 @@ func (r *AWSBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 		)
 		return
 	}
-	if res.StatusCode != 200 {
+	if res.StatusCode != 201 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -1023,33 +1023,11 @@ func (r *AWSBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeAWSBatchCERequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if created == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeAWSBatchCE(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeAWSBatchCEResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSBatchCEResponse(ctx, res1.DescribeAWSBatchCEResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSBatchCEResponse(ctx, created)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1091,7 +1069,7 @@ func (r *AWSBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeAWSBatchCE(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DescribeAWSBatchCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1103,7 +1081,9 @@ func (r *AWSBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 400 || res.StatusCode == 404 {
+	// KEPT: no server equivalent. v2 refuses to read a deleted compute environment with 403 (CONVENTIONS
+	// 2.1.2), which the v1 SDK hook used to turn into a 404; either way the resource is gone from state.
+	if res.StatusCode == 400 || res.StatusCode == 403 || res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -1152,7 +1132,7 @@ func (r *AWSBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateAWSBatchCE(ctx, *request)
+	res, updated, err := r.client.ComputeEnvsV2().UpdateAWSBatchCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1164,7 +1144,7 @@ func (r *AWSBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -1174,33 +1154,11 @@ func (r *AWSBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeAWSBatchCERequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if updated == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeAWSBatchCE(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeAWSBatchCEResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSBatchCEResponse(ctx, res1.DescribeAWSBatchCEResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSBatchCEResponse(ctx, updated)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1242,7 +1200,7 @@ func (r *AWSBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DeleteAWSBatchCE(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DeleteAWSBatchCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1254,8 +1212,10 @@ func (r *AWSBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
+	// KEPT: no server equivalent. v2 refuses a second deletion with 403 (CONVENTIONS 2.1.2): the compute
+	// environment is already gone, as with the 400 and 404 v1 answered.
 	switch res.StatusCode {
-	case 204, 400, 404:
+	case 204, 400, 403, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))

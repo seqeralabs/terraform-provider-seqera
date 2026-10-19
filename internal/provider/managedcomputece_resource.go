@@ -368,7 +368,7 @@ func (r *ManagedComputeCEResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.CreateManagedComputeCE(ctx, *request)
+	res, created, err := r.client.ComputeEnvsV2().CreateManagedComputeCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -387,7 +387,7 @@ func (r *ManagedComputeCEResource) Create(ctx context.Context, req resource.Crea
 		)
 		return
 	}
-	if res.StatusCode != 200 {
+	if res.StatusCode != 201 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -406,33 +406,11 @@ func (r *ManagedComputeCEResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeManagedComputeCERequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if created == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeManagedComputeCE(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeManagedComputeCEResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeManagedComputeCEResponse(ctx, res1.DescribeManagedComputeCEResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeManagedComputeCEResponse(ctx, created)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -474,7 +452,7 @@ func (r *ManagedComputeCEResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeManagedComputeCE(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DescribeManagedComputeCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -486,7 +464,9 @@ func (r *ManagedComputeCEResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 400 || res.StatusCode == 404 {
+	// KEPT: no server equivalent. v2 refuses to read a deleted compute environment with 403 (CONVENTIONS
+	// 2.1.2), which the v1 SDK hook used to turn into a 404; either way the resource is gone from state.
+	if res.StatusCode == 400 || res.StatusCode == 403 || res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -535,7 +515,7 @@ func (r *ManagedComputeCEResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateManagedComputeCE(ctx, *request)
+	res, updated, err := r.client.ComputeEnvsV2().UpdateManagedComputeCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -547,7 +527,7 @@ func (r *ManagedComputeCEResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -557,33 +537,11 @@ func (r *ManagedComputeCEResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeManagedComputeCERequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if updated == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeManagedComputeCE(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeManagedComputeCEResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeManagedComputeCEResponse(ctx, res1.DescribeManagedComputeCEResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeManagedComputeCEResponse(ctx, updated)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -625,7 +583,7 @@ func (r *ManagedComputeCEResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DeleteManagedComputeCE(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DeleteManagedComputeCE(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -637,8 +595,10 @@ func (r *ManagedComputeCEResource) Delete(ctx context.Context, req resource.Dele
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
+	// KEPT: no server equivalent. v2 refuses a second deletion with 403 (CONVENTIONS 2.1.2): the compute
+	// environment is already gone, as with the 400 and 404 v1 answered.
 	switch res.StatusCode {
-	case 204, 400, 404:
+	case 204, 400, 403, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
