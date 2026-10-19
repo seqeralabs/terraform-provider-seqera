@@ -1000,7 +1000,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.CreateAWSComputeEnv(ctx, *request)
+	res, created, err := r.client.ComputeEnvsV2().CreateAWSComputeEnv(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1019,7 +1019,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 		)
 		return
 	}
-	if res.StatusCode != 200 {
+	if res.StatusCode != 201 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -1038,33 +1038,11 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeAWSComputeEnvRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if created == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeAWSComputeEnvResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res1.DescribeAWSComputeEnvResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, created)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1106,7 +1084,7 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DescribeAWSComputeEnv(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1118,7 +1096,9 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode == 404 {
+	// KEPT: no server equivalent. v2 refuses to read a deleted compute environment with 403 (CONVENTIONS
+	// 2.1.2), which the v1 SDK hook used to turn into a 404; either way the resource is gone from state.
+	if res.StatusCode == 403 || res.StatusCode == 404 {
 		resp.State.RemoveResource(ctx)
 		return
 	}
@@ -1162,7 +1142,7 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateAWSComputeEnv(ctx, *request)
+	res, updated, err := r.client.ComputeEnvsV2().UpdateAWSComputeEnv(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1174,7 +1154,7 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -1184,33 +1164,11 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeAWSComputeEnvRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
+	if updated == nil {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeAWSComputeEnvResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res1.DescribeAWSComputeEnvResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, updated)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1252,7 +1210,7 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DeleteAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().DeleteAWSComputeEnv(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
@@ -1264,8 +1222,10 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
+	// KEPT: no server equivalent. v2 refuses a second deletion with 403 (CONVENTIONS 2.1.2): the compute
+	// environment is already gone, as with the 404 v1 answered.
 	switch res.StatusCode {
-	case 204, 404:
+	case 204, 403, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
