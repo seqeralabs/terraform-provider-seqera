@@ -475,6 +475,3 @@ actions:
   #
   # Hence the custom validator
   # (internal/validators/boolvalidators/private_address_requires_network_validator.go).
-  - target: $.components.schemas.GoogleCloudConfig.properties.usePrivateAddress
-    update:
-      x-speakeasy-plan-validators: PrivateAddressRequiresNetworkValidator

@@ -43,7 +43,6 @@ actions:
   # ConfigEnvVariable validator - ensures at least one of head or compute is true
   - target: $["components"]["schemas"]["ConfigEnvVariable"]
     update:
-      x-speakeasy-plan-validators: ConfigEnvVariableValidator
       description: |
         Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
         At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.

@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -31,10 +30,8 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -126,9 +123,7 @@ func (r *SlurmCEResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"environment": schema.ListNestedAttribute{
 				Computed: true,
@@ -140,7 +135,6 @@ func (r *SlurmCEResource) Schema(ctx context.Context, req resource.SchemaRequest
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-						custom_objectvalidators.ConfigEnvVariableValidator(),
 					},
 					PlanModifiers: []planmodifier.Object{
 						objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -272,10 +266,7 @@ func (r *SlurmCEResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"nextflow_config": schema.StringAttribute{
 				Computed: true,
@@ -315,6 +306,7 @@ func (r *SlurmCEResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 				Description: `Script that executes after all Nextflow processes have completed. Requires replacement if changed.`,
 				Validators: []validator.String{
+					// KEPT: no server equivalent
 					custom_stringvalidators.RunScriptSizeValidator(),
 				},
 			},
@@ -327,6 +319,7 @@ func (r *SlurmCEResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 				Description: `Script that executes in the nf-launch script prior to invoking Nextflow processes. Requires replacement if changed.`,
 				Validators: []validator.String{
+					// KEPT: no server equivalent
 					custom_stringvalidators.RunScriptSizeValidator(),
 				},
 			},

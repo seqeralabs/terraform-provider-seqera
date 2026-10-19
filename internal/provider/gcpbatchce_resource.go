@@ -36,7 +36,6 @@ import (
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
-	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
@@ -180,6 +179,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.Bool{
+							// KEPT: no server equivalent
 							custom_boolvalidators.FusionEnabledValidator(),
 						},
 					},
@@ -206,7 +206,6 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -312,6 +311,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`attach seqera_labels via label_ids.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.Map{
+							// KEPT: no server equivalent
 							custom_mapvalidators.GoogleResourceLabelsValidator(),
 						},
 					},
@@ -392,6 +392,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -404,6 +405,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -491,6 +493,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Format: gs://bucket-name/path` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							stringvalidator.RegexMatches(regexp.MustCompile(`^gs://.+`), "must match pattern "+regexp.MustCompile(`^gs://.+`).String()),
 						},
 					},
@@ -512,9 +515,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -523,9 +524,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 					`in place without replacing the compute environment.` + "\n" +
 					`` + "\n" +
 					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
-				Validators: []validator.Bool{
-					custom_boolvalidators.FusionMetricsCollectionValidator(),
-				},
+				Validators: []validator.Bool{},
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -559,10 +558,7 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,

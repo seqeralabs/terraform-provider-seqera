@@ -38,7 +38,6 @@ import (
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -160,6 +159,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.Bool{
+							// KEPT: no server equivalent
 							custom_boolvalidators.FusionEnabledValidator(),
 						},
 					},
@@ -186,7 +186,6 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -278,6 +277,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT` + "\n" +
 									`must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
 								Validators: []validator.String{
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"BEST_FIT",
 										"BEST_FIT_PROGRESSIVE",
@@ -311,9 +311,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`` + "\n" +
 									`Requires ` + "`" + `fargate_head_enabled = true` + "`" + `, ` + "`" + `enable_wave = true` + "`" + `, and ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 									`Requires replacement if changed.`,
-								Validators: []validator.Bool{
-									custom_boolvalidators.GravitonValidator(),
-								},
+								Validators: []validator.Bool{},
 							},
 							"bid_percentage": schema.Int32Attribute{
 								Computed: true,
@@ -332,6 +330,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
 									`Requires replacement if changed.`,
 								Validators: []validator.Int32{
+									// KEPT: no server equivalent
 									int32validator.Between(0, 100),
 								},
 							},
@@ -629,6 +628,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 									`Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
+									// KEPT: no server equivalent
 									stringvalidator.OneOf(
 										"SPOT",
 										"EC2",
@@ -648,9 +648,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							},
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.Object{
-							custom_objectvalidators.FargateHeadValidator(),
-						},
+						Validators:  []validator.Object{},
 					},
 					"fusion_snapshots": schema.BoolAttribute{
 						Computed: true,
@@ -664,9 +662,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`` + "\n" +
 							`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 							`Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.FusionSnapshotsValidator(),
-						},
+						Validators: []validator.Bool{},
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
@@ -749,9 +745,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`` + "\n" +
 							`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 							`Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.NvmeStorageValidator(),
-						},
+						Validators: []validator.Bool{},
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,
@@ -764,6 +758,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Use for cleanup, archiving results, sending notifications, etc.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -778,6 +773,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Use for environment setup, loading modules, downloading reference data, etc.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -832,12 +828,14 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							`Format: s3://bucket-name/path` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.WorkDirS3Validator(),
 						},
 					},
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
+					// KEPT: no server equivalent
 					custom_objectvalidators.AwsForgeValidator(),
 				},
 			},
@@ -863,9 +861,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -874,9 +870,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					`in place without replacing the compute environment.` + "\n" +
 					`` + "\n" +
 					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
-				Validators: []validator.Bool{
-					custom_boolvalidators.FusionMetricsCollectionValidator(),
-				},
+				Validators: []validator.Bool{},
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -914,10 +908,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					`the canonical resource going forward. Migrate with a ` + "`" + `moved {}` + "`" + ` block —` + "\n" +
 					`see the resource docs.`,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,
@@ -930,6 +921,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 				Description: `AWS platform type. must be "aws-batch"; Requires replacement if changed.`,
 				Validators: []validator.String{
+					// KEPT: no server equivalent
 					stringvalidator.OneOf(
 						"aws-batch",
 					),

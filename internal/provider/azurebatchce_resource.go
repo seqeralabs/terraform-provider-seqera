@@ -7,8 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -36,11 +34,8 @@ import (
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
-	custom_listvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/listvalidators"
-	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -122,6 +117,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`server and the boolean fields are authoritative.`,
 						Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							stringvalidator.OneOf(
 								"on_success",
 								"always",
@@ -169,6 +165,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
 							`Requires replacement if changed.`,
 						Validators: []validator.Bool{
+							// KEPT: no server equivalent
 							custom_boolvalidators.FusionEnabledValidator(),
 						},
 					},
@@ -195,7 +192,6 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
-								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -275,9 +271,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 								},
 								Description: `Boot disk size in GB for all pool nodes. When omitted, Azure uses the default disk size for the selected VM image. Per-pool values in headPool/workerPool take precedence in dual-pool mode. Requires replacement if changed.`,
-								Validators: []validator.Int32{
-									int32validator.Between(50, 4095),
-								},
+								Validators:  []validator.Int32{},
 							},
 							"container_reg_ids": schema.ListAttribute{
 								CustomType: basetypes.ListType{ElemType: basetypes.StringType{}},
@@ -289,10 +283,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 								},
 								ElementType: types.StringType,
 								Description: `Seqera Platform credentials ID of the container registry to attach to the Batch pool to pull private images. At most one ID can be specified. Requires replacement if changed.`,
-								Validators: []validator.List{
-									listvalidator.SizeAtMost(1),
-									custom_listvalidators.ContainerRegistryCredentialIdsValidator(),
-								},
+								Validators:  []validator.List{},
 							},
 							"dispose_on_deletion": schema.BoolAttribute{
 								Computed: true,
@@ -337,9 +328,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
-										Validators: []validator.Int32{
-											int32validator.Between(50, 4095),
-										},
+										Validators:  []validator.Int32{},
 									},
 									"vm_count": schema.Int32Attribute{
 										Computed: true,
@@ -408,9 +397,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.`,
-										Validators: []validator.Int32{
-											int32validator.Between(50, 4095),
-										},
+										Validators:  []validator.Int32{},
 									},
 									"vm_count": schema.Int32Attribute{
 										Computed: true,
@@ -526,6 +513,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -538,6 +526,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
 						Validators: []validator.String{
+							// KEPT: no server equivalent
 							custom_stringvalidators.RunScriptSizeValidator(),
 						},
 					},
@@ -584,9 +573,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
 						Description: `Create Batch Forge pool nodes without public IP addresses, using simplified node communication. Requires Batch Forge and a 'subnetId' with outbound connectivity (e.g. NAT gateway); rejected otherwise. When omitted, defaults to true for Batch Forge compute environments with a subnet; null on existing compute environments means the pools have public IPs. Requires replacement if changed.`,
-						Validators: []validator.Bool{
-							custom_boolvalidators.PrivateAddressRequiresSubnetValidator(),
-						},
+						Validators:  []validator.Bool{},
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,
@@ -595,9 +582,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Must be a valid Azure Blob container URL with format az://container-name/path. Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^az://.+`), "must match pattern "+regexp.MustCompile(`^az://.+`).String()),
-						},
+						Validators:  []validator.String{},
 					},
 					"worker_pool": schema.StringAttribute{
 						Computed: true,
@@ -626,9 +611,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Computed:    true,
 				Optional:    true,
 				Description: `Optional description of the compute environment`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2000),
-				},
+				Validators:  []validator.String{},
 			},
 			"fusion_metrics_collection_enabled": schema.BoolAttribute{
 				Computed: true,
@@ -637,9 +620,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 					`in place without replacing the compute environment.` + "\n" +
 					`` + "\n" +
 					`Requires ` + "`" + `enable_fusion = true` + "`" + `.`,
-				Validators: []validator.Bool{
-					custom_boolvalidators.FusionMetricsCollectionValidator(),
-				},
+				Validators: []validator.Bool{},
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -673,10 +654,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 			"name": schema.StringAttribute{
 				Required:    true,
 				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
-				},
+				Validators:  []validator.String{},
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,
