@@ -11,6 +11,9 @@ internal/sdk/internal/hooks/token_list_error_hook.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook_test.go
 
+# API v2 compute environment operations (hand-written facade over internal/apiv2)
+internal/sdk/computeenvs_v2.go
+
 
 # Custom validators
 internal/validators/mapvalidators/google_resource_labels_validator.go
