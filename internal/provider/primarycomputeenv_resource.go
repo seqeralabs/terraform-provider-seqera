@@ -107,7 +107,7 @@ func (r *PrimaryComputeEnvResource) Create(ctx context.Context, req resource.Cre
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateComputeEnvPrimary(ctx, *request)
+	res, err := r.client.ComputeEnvsV2().SetPrimaryComputeEnv(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {

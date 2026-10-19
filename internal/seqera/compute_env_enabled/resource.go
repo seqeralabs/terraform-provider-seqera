@@ -1,7 +1,7 @@
 // Package compute_env_enabled provides the seqera_compute_env_enabled
 // resource. It lives outside the generated typed CE resources because the
 // platform exposes enable / disable as two POST-without-body endpoints
-// (POST /compute-envs/{id}/enable, POST /compute-envs/{id}/disable), which
+// (POST /v2/workspaces/{workspaceId}/compute-envs/{id}/enable and /disable), which
 // don't fit Speakeasy's CRUD generation. See the schema MarkdownDescription
 // for user-facing semantics.
 package compute_env_enabled
@@ -116,7 +116,7 @@ func (r *Resource) apply(ctx context.Context, data ResourceModel) error {
 	var err error
 	if enabled {
 		var res *operations.EnableComputeEnvResponse
-		res, err = r.client.ComputeEnvs.EnableComputeEnv(ctx, operations.EnableComputeEnvRequest{
+		res, err = r.client.ComputeEnvsV2().EnableComputeEnv(ctx, operations.EnableComputeEnvRequest{
 			ComputeEnvID: ceID,
 			WorkspaceID:  &workspaceID,
 		})
@@ -125,7 +125,7 @@ func (r *Resource) apply(ctx context.Context, data ResourceModel) error {
 		}
 	} else {
 		var res *operations.DisableComputeEnvResponse
-		res, err = r.client.ComputeEnvs.DisableComputeEnv(ctx, operations.DisableComputeEnvRequest{
+		res, err = r.client.ComputeEnvsV2().DisableComputeEnv(ctx, operations.DisableComputeEnvRequest{
 			ComputeEnvID: ceID,
 			WorkspaceID:  &workspaceID,
 		})
@@ -151,14 +151,16 @@ func (r *Resource) apply(ctx context.Context, data ResourceModel) error {
 func (r *Resource) refresh(ctx context.Context, data *ResourceModel) (bool, error) {
 	ceID := data.ComputeEnvID.ValueString()
 	workspaceID := data.WorkspaceID.ValueInt64()
-	res, err := r.client.ComputeEnvs.DescribeComputeEnv(ctx, operations.DescribeComputeEnvRequest{
+	res, err := r.client.ComputeEnvsV2().DescribeComputeEnv(ctx, operations.DescribeComputeEnvRequest{
 		ComputeEnvID: ceID,
 		WorkspaceID:  workspaceID,
 	})
 	if err != nil {
 		return false, err
 	}
-	if res.StatusCode == http.StatusNotFound || res.StatusCode == http.StatusBadRequest {
+	// KEPT: no server equivalent. v2 refuses to read a deleted compute environment with 403 (CONVENTIONS 2.1.2),
+	// which the v1 SDK hook used to turn into a 404; either way the compute environment is missing.
+	if res.StatusCode == http.StatusNotFound || res.StatusCode == http.StatusBadRequest || res.StatusCode == http.StatusForbidden {
 		return false, nil
 	}
 	if res.StatusCode != http.StatusOK || res.DescribeComputeEnvResponse == nil || res.DescribeComputeEnvResponse.ComputeEnv == nil {
