@@ -35,6 +35,7 @@ var v2PlatformOf = map[string]string{
 var v1PlatformOf = invert(v2PlatformOf)
 
 // Fields renamed between the v1 and v2 configuration models, by v1 discriminator, as v1 path -> v2 path.
+// KEPT: no server equivalent. The resources keep their v1 attribute names, so the client renames them.
 var renamedFields = map[string]map[string]string{
 	"aws-batch": {
 		"nvnmeStorageEnabled": "nvmeStorageEnabled",
@@ -50,6 +51,7 @@ var renamedFields = map[string]map[string]string{
 }
 
 // Enum values spelled differently in v1 and v2, by field name, as v1 value -> v2 value.
+// KEPT: no server equivalent. The resources accept the v1 spellings, so the client maps them.
 var renamedValues = map[string]map[string]string{
 	"schedConfig.provisioningModel": {"spot": "SPOT", "spotFirst": "SPOT_FIRST", "ondemand": "ON_DEMAND"},
 	"podCleanup":                    {"on_success": "ON_SUCCESS", "always": "ALWAYS", "never": "NEVER"},
@@ -57,6 +59,7 @@ var renamedValues = map[string]map[string]string{
 
 // Configuration fields the v2 write model does not carry, by v1 discriminator: either v1-only fields with no v2
 // counterpart, or fields v2 documents as set by the server from the resources it provisions. They are not sent.
+// KEPT: no server equivalent. v2 does not accept them, so a value set for them in Terraform cannot be honoured.
 var unwritableFields = map[string][]string{
 	"aws-batch":    {"lustreId", "storageType"},
 	"aws-cloud":    {"subnetId", "schedConfig.diskAllocation"},
