@@ -58,6 +58,8 @@ BUG FIXES:
 
 - **GitHub App credentials can be created with `seqera_credential`.** The `keys.github_app` block was generated from the API, but `github_app` was not an accepted `provider_type`, so no configuration could use it. `provider_type = "github_app"` is now accepted and checked against `keys.github_app` at plan time. `private_key`, `client_secret` and `webhook_secret` are now marked sensitive and are no longer shown in plan output. `slug` is now read-only and keeps its value across updates. This is the way to manage GitHub App credentials in a personal (user) context; workspace configurations should prefer `seqera_github_app_credential`, which is now listed among the typed credential resources in the `seqera_credential` documentation and in the migration guide.
 
+- **Compute environment create and delete no longer time out after 5 minutes.** The provider polls a compute environment until it reaches `AVAILABLE` on create, or is gone on delete. That wait is now capped at 15 minutes instead of 5, so deletions that take longer no longer fail with `timeout waiting for compute environment (last status: DELETING)`. Applies to every compute environment resource. ([#283](https://github.com/seqeralabs/terraform-provider-seqera/issues/283))
+
 NOTES:
 
 - **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
