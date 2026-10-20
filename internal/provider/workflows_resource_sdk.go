@@ -16,6 +16,9 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.InstancesOnDemand = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.InstancesOnDemand))
+		r.InstancesSpot = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.InstancesSpot))
+		r.InstancesUnknown = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.InstancesUnknown))
 		r.IntelligentComputeEnabled = types.BoolPointerValue(resp.IntelligentComputeEnabled)
 		if resp.PipelineInfo == nil {
 			r.PipelineInfo = nil
@@ -36,6 +39,7 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			}
 			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
 		}
+		r.ProvisioningModel = types.StringPointerValue(resp.ProvisioningModel)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -177,6 +181,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		entryName = nil
 	}
+	fusionSnapshots := new(bool)
+	if !r.FusionSnapshots.IsUnknown() && !r.FusionSnapshots.IsNull() {
+		*fusionSnapshots = r.FusionSnapshots.ValueBool()
+	} else {
+		fusionSnapshots = nil
+	}
 	fusionVersion := new(string)
 	if !r.FusionVersion.IsUnknown() && !r.FusionVersion.IsNull() {
 		*fusionVersion = r.FusionVersion.ValueString()
@@ -216,6 +226,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		*outputDir = r.OutputDir.ValueString()
 	} else {
 		outputDir = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.OverrideNextflowFusionVersion.IsUnknown() && !r.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	paramsText := new(string)
 	if !r.ParamsText.IsUnknown() && !r.ParamsText.IsNull() {
@@ -301,32 +317,34 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		workspaceSecrets = append(workspaceSecrets, r.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
 	out := shared.WorkflowLaunchRequest{
-		ComputeEnvID:     computeEnvID,
-		ConfigProfiles:   configProfiles,
-		ConfigText:       configText,
-		EntryName:        entryName,
-		FusionVersion:    fusionVersion,
-		HeadJobCpus:      headJobCpus,
-		HeadJobMemoryMb:  headJobMemoryMb,
-		LabelIds:         labelIds,
-		MainScript:       mainScript,
-		NextflowVersion:  nextflowVersion,
-		OutputDir:        outputDir,
-		ParamsText:       paramsText,
-		Pipeline:         pipeline,
-		PipelineSchemaID: pipelineSchemaID,
-		PostRunScript:    postRunScript,
-		PreRunScript:     preRunScript,
-		PullLatest:       pullLatest,
-		Revision:         revision,
-		RunName:          runName,
-		SchemaName:       schemaName,
-		StubRun:          stubRun,
-		SyntaxParser:     syntaxParser,
-		TowerConfig:      towerConfig,
-		UserSecrets:      userSecrets,
-		WorkDir:          workDir,
-		WorkspaceSecrets: workspaceSecrets,
+		ComputeEnvID:                  computeEnvID,
+		ConfigProfiles:                configProfiles,
+		ConfigText:                    configText,
+		EntryName:                     entryName,
+		FusionSnapshots:               fusionSnapshots,
+		FusionVersion:                 fusionVersion,
+		HeadJobCpus:                   headJobCpus,
+		HeadJobMemoryMb:               headJobMemoryMb,
+		LabelIds:                      labelIds,
+		MainScript:                    mainScript,
+		NextflowVersion:               nextflowVersion,
+		OutputDir:                     outputDir,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		ParamsText:                    paramsText,
+		Pipeline:                      pipeline,
+		PipelineSchemaID:              pipelineSchemaID,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		PullLatest:                    pullLatest,
+		Revision:                      revision,
+		RunName:                       runName,
+		SchemaName:                    schemaName,
+		StubRun:                       stubRun,
+		SyntaxParser:                  syntaxParser,
+		TowerConfig:                   towerConfig,
+		UserSecrets:                   userSecrets,
+		WorkDir:                       workDir,
+		WorkspaceSecrets:              workspaceSecrets,
 	}
 
 	return &out, diags

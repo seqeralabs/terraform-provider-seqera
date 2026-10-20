@@ -97,20 +97,22 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
       type   = "SPOT"
       vpc_id = "vpc-1234567890abcdef0"
     }
-    fusion_snapshots     = false
-    head_job_cpus        = 4
-    head_job_memory_mb   = 8192
-    head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
-    head_queue           = "...my_head_queue..."
-    log_group            = "/aws/batch/seqera"
-    lustre_id            = "...my_lustre_id..."
-    nextflow_config      = "...my_nextflow_config..."
-    nvme_storage_enabled = true
-    post_run_script      = "...my_post_run_script..."
-    pre_run_script       = "...my_pre_run_script..."
-    region               = "us-east-1"
-    secrets_kms_key_id   = "...my_secrets_kms_key_id..."
-    storage_type         = "...my_storage_type..."
+    fusion_snapshots                 = false
+    fusion_version                   = "...my_fusion_version..."
+    head_job_cpus                    = 4
+    head_job_memory_mb               = 8192
+    head_job_role                    = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+    head_queue                       = "...my_head_queue..."
+    log_group                        = "/aws/batch/seqera"
+    lustre_id                        = "...my_lustre_id..."
+    nextflow_config                  = "...my_nextflow_config..."
+    nvme_storage_enabled             = true
+    override_nextflow_fusion_version = true
+    post_run_script                  = "...my_post_run_script..."
+    pre_run_script                   = "...my_pre_run_script..."
+    region                           = "us-east-1"
+    secrets_kms_key_id               = "...my_secrets_kms_key_id..."
+    storage_type                     = "...my_storage_type..."
     volumes = [
       "..."
     ]
@@ -208,6 +210,7 @@ when it is interrupted by a spot reclamation.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
@@ -225,6 +228,7 @@ Requires replacement if changed.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Bash script to run after workflow execution completes.
 Use for cleanup, archiving results, sending notifications, etc.
 Requires replacement if changed.

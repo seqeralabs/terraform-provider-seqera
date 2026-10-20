@@ -3,7 +3,7 @@
 package shared
 
 type CreateActionRequest struct {
-	// Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`.
+	// Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Must be omitted when `responseType` is `pipeline`.
 	Agent *AgentActionRequest `json:"agent,omitempty"`
 	// Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources.
 	Bucket *BucketActionRequest `json:"bucket,omitempty"`
@@ -14,7 +14,7 @@ type CreateActionRequest struct {
 	// Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
 	Launch *ActionLaunchRequest `json:"launch,omitempty"`
 	Name   string               `json:"name"`
-	// Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+	// Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. Must be omitted when `responseType` is `agent`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
 	Pipeline *PipelineActionRequest `json:"pipeline,omitempty"`
 	// Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here.
 	PipelineStatus *PipelineStatusActionRequest `json:"pipelineStatus,omitempty"`

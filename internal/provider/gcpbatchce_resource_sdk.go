@@ -75,6 +75,7 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 			r.Config.Environment = nil
 		}
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobInstanceTemplate = types.StringPointerValue(resp.Config.HeadJobInstanceTemplate)
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
@@ -95,6 +96,7 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.NfsMount = types.StringPointerValue(resp.Config.NfsMount)
 		r.Config.NfsTarget = types.StringPointerValue(resp.Config.NfsTarget)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
@@ -386,6 +388,12 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		fusionSnapshots = nil
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
@@ -447,6 +455,12 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 		*nfsTarget = r.Config.NfsTarget.ValueString()
 	} else {
 		nfsTarget = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
@@ -515,38 +529,40 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 		workDir = nil
 	}
 	config := shared.GoogleBatchConfig{
-		BootDiskImage:               bootDiskImage,
-		BootDiskSizeGb:              bootDiskSizeGb,
-		ComputeJobsInstanceTemplate: computeJobsInstanceTemplate,
-		ComputeJobsMachineType:      computeJobsMachineType,
-		CopyImage:                   copyImage,
-		CPUPlatform:                 cpuPlatform,
-		DebugMode:                   debugMode,
-		Environment:                 environment,
-		EnableFusion:                enableFusion,
-		FusionSnapshots:             fusionSnapshots,
-		HeadJobCpus:                 headJobCpus,
-		HeadJobInstanceTemplate:     headJobInstanceTemplate,
-		HeadJobMemoryMb:             headJobMemoryMb,
-		Labels:                      labels,
-		Location:                    location,
-		MachineType:                 machineType,
-		Network:                     network,
-		NetworkTags:                 networkTags,
-		NextflowConfig:              nextflowConfig,
-		NfsMount:                    nfsMount,
-		NfsTarget:                   nfsTarget,
-		PostRunScript:               postRunScript,
-		PreRunScript:                preRunScript,
-		ProjectID:                   projectID,
-		ServiceAccount:              serviceAccount,
-		Spot:                        spot,
-		SSHDaemon:                   sshDaemon,
-		SSHImage:                    sshImage,
-		Subnetwork:                  subnetwork,
-		UsePrivateAddress:           usePrivateAddress,
-		EnableWave:                  enableWave,
-		WorkDir:                     workDir,
+		BootDiskImage:                 bootDiskImage,
+		BootDiskSizeGb:                bootDiskSizeGb,
+		ComputeJobsInstanceTemplate:   computeJobsInstanceTemplate,
+		ComputeJobsMachineType:        computeJobsMachineType,
+		CopyImage:                     copyImage,
+		CPUPlatform:                   cpuPlatform,
+		DebugMode:                     debugMode,
+		Environment:                   environment,
+		EnableFusion:                  enableFusion,
+		FusionSnapshots:               fusionSnapshots,
+		FusionVersion:                 fusionVersion,
+		HeadJobCpus:                   headJobCpus,
+		HeadJobInstanceTemplate:       headJobInstanceTemplate,
+		HeadJobMemoryMb:               headJobMemoryMb,
+		Labels:                        labels,
+		Location:                      location,
+		MachineType:                   machineType,
+		Network:                       network,
+		NetworkTags:                   networkTags,
+		NextflowConfig:                nextflowConfig,
+		NfsMount:                      nfsMount,
+		NfsTarget:                     nfsTarget,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		ProjectID:                     projectID,
+		ServiceAccount:                serviceAccount,
+		Spot:                          spot,
+		SSHDaemon:                     sshDaemon,
+		SSHImage:                      sshImage,
+		Subnetwork:                    subnetwork,
+		UsePrivateAddress:             usePrivateAddress,
+		EnableWave:                    enableWave,
+		WorkDir:                       workDir,
 	}
 	out := shared.GCPBatchCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

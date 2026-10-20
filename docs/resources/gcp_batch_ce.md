@@ -147,7 +147,8 @@ Nextflow pipelines via the Wave containers service.
 Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
-- `fusion_snapshots` (Boolean) Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`. Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.
@@ -167,6 +168,7 @@ Requires replacement if changed.
 - `nfs_target` (String) NFS server hostname or IP address for shared file system access.
 Format: hostname:/export/path
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `service_account` (String) Google Cloud service account email for compute instances.

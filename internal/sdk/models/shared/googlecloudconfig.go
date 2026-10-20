@@ -17,6 +17,8 @@ type GoogleCloudConfig struct {
 	//
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable machine types will be selected.
 	//
@@ -36,6 +38,8 @@ type GoogleCloudConfig struct {
 	// Applied globally to all pipelines launched in this compute environment.
 	//
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -113,6 +117,13 @@ func (g *GoogleCloudConfig) GetFusion2Enabled() *bool {
 	return g.Fusion2Enabled
 }
 
+func (g *GoogleCloudConfig) GetFusionVersion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.FusionVersion
+}
+
 func (g *GoogleCloudConfig) GetGpuEnabled() *bool {
 	if g == nil {
 		return nil
@@ -153,6 +164,13 @@ func (g *GoogleCloudConfig) GetNextflowConfig() *string {
 		return nil
 	}
 	return g.NextflowConfig
+}
+
+func (g *GoogleCloudConfig) GetOverrideNextflowFusionVersion() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.OverrideNextflowFusionVersion
 }
 
 func (g *GoogleCloudConfig) GetPostRunScript() *string {

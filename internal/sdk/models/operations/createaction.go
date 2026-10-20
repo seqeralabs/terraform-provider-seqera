@@ -37,7 +37,7 @@ type CreateActionResponse struct {
 	RawResponse *http.Response
 	// OK
 	CreateActionResponse *shared.CreateActionResponse
-	// Bad request
+	// Bad request: the request is invalid. This includes a pipeline action without `launch` or with `agent`, an agent action with `launch` or `pipeline` or without `agent`, and an agent action whose `source` is not `bucket`, `cron` or `pipeline_status`
 	ErrorResponse *shared.ErrorResponse
 }
 

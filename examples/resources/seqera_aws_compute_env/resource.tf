@@ -65,20 +65,22 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
       type   = "SPOT"
       vpc_id = "vpc-1234567890abcdef0"
     }
-    fusion_snapshots     = false
-    head_job_cpus        = 4
-    head_job_memory_mb   = 8192
-    head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
-    head_queue           = "...my_head_queue..."
-    log_group            = "/aws/batch/seqera"
-    lustre_id            = "...my_lustre_id..."
-    nextflow_config      = "...my_nextflow_config..."
-    nvme_storage_enabled = true
-    post_run_script      = "...my_post_run_script..."
-    pre_run_script       = "...my_pre_run_script..."
-    region               = "us-east-1"
-    secrets_kms_key_id   = "...my_secrets_kms_key_id..."
-    storage_type         = "...my_storage_type..."
+    fusion_snapshots                 = false
+    fusion_version                   = "...my_fusion_version..."
+    head_job_cpus                    = 4
+    head_job_memory_mb               = 8192
+    head_job_role                    = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+    head_queue                       = "...my_head_queue..."
+    log_group                        = "/aws/batch/seqera"
+    lustre_id                        = "...my_lustre_id..."
+    nextflow_config                  = "...my_nextflow_config..."
+    nvme_storage_enabled             = true
+    override_nextflow_fusion_version = true
+    post_run_script                  = "...my_post_run_script..."
+    pre_run_script                   = "...my_pre_run_script..."
+    region                           = "us-east-1"
+    secrets_kms_key_id               = "...my_secrets_kms_key_id..."
+    storage_type                     = "...my_storage_type..."
     volumes = [
       "..."
     ]

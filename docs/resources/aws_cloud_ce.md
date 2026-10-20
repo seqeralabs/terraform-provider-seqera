@@ -238,6 +238,7 @@ Requires replacement if changed.
 Key pair must exist in the specified region.
 Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
 Requires replacement if changed.
@@ -267,6 +268,7 @@ Requires replacement if changed.
 If specified, logs are sent to this existing log group instead of the default.
 Requires replacement if changed.
 - `nextflow_config` (String) Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `secrets_kms_key_id` (String) Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used. Requires replacement if changed.

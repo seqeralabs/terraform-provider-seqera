@@ -1346,3 +1346,48 @@ actions:
   - target: $.components.schemas.ComputeConfig.properties.discriminator
     update:
       description: Read-only property identifying the compute platform type
+
+  # ============================================================================
+  # FUSION VERSION OVERRIDE - fusion_version is ignored by the backend unless
+  # override_nextflow_fusion_version is true, so reject it at plan time.
+  # ============================================================================
+  - target: $.components.schemas.AwsBatchConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.AwsCloudConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.AzBatchConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.AzCloudConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.EksComputeConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.GkeComputeConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.GoogleCloudConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.LocalComputeConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.fusionVersion
+    update:
+      description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+      x-speakeasy-plan-validators: FusionVersionValidator

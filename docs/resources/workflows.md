@@ -90,7 +90,8 @@ resource "seqera_workflows" "with_params" {
 - `config_text` (String) Nextflow configuration text. Requires replacement if changed.
 - `entry_name` (String) Entry workflow name. Requires replacement if changed.
 - `force` (Boolean) Force the deletion even if the workflow is active
-- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2. Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting. Requires replacement if changed.
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default. Requires replacement if changed.
 - `head_job_cpus` (Number) Head job CPU allocation. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Head job memory allocation in MB. Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
@@ -99,6 +100,7 @@ resource "seqera_workflows" "with_params" {
 - `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 Nextflow 24.10.0 or later and the workflow outputs syntax.
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting. Requires replacement if changed.
 - `params_text` (String) Pipeline parameters text. Requires replacement if changed.
 - `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
@@ -117,8 +119,12 @@ Requires replacement if changed.
 
 ### Read-Only
 
+- `instances_on_demand` (Number)
+- `instances_spot` (Number)
+- `instances_unknown` (Number)
 - `intelligent_compute_enabled` (Boolean)
 - `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
+- `provisioning_model` (String)
 - `warnings` (List of String)
 - `workflow_id` (String) Workflow string identifier
 

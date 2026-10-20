@@ -436,6 +436,18 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						Description: `Requires replacement if changed.`,
 					},
+					"fusion_version": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+						Validators: []validator.String{
+							custom_stringvalidators.FusionVersionValidator(),
+						},
+					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
@@ -516,6 +528,15 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"override_nextflow_fusion_version": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,

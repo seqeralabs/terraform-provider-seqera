@@ -456,3 +456,8 @@ actions:
   - target: $.components.schemas.GoogleBatchConfig.properties.postRunScript
     update:
       x-speakeasy-plan-validators: RunScriptSizeValidator
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.fusionSnapshots
+    update:
+      description: Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`.
+      x-speakeasy-plan-validators: FusionSnapshotsValidator

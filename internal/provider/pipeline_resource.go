@@ -113,10 +113,15 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 							stringvalidator.UTF8LengthAtMost(80),
 						},
 					},
+					"fusion_snapshots": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting.`,
+					},
 					"fusion_version": schema.StringAttribute{
 						Computed:    true,
 						Optional:    true,
-						Description: `Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.`,
+						Description: `Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.`,
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Optional:    true,
@@ -166,6 +171,11 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Optional: true,
 						MarkdownDescription: `Per-run output directory, passed to Nextflow as ` + "`" + `-output-dir` + "`" + `. Requires` + "\n" +
 							`Nextflow 24.10.0 or later and the workflow outputs syntax.`,
+					},
+					"override_nextflow_fusion_version": schema.BoolAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting.`,
 					},
 					"params_text": schema.StringAttribute{
 						Optional:    true,

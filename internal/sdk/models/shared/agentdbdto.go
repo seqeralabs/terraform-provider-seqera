@@ -42,9 +42,12 @@ func (e *AgentDbDtoStatus) UnmarshalJSON(data []byte) error {
 type AgentDbDto struct {
 	AgentInstructions *string `json:"agentInstructions,omitempty"`
 	// Creation timestamp.
-	DateCreated           *time.Time `json:"dateCreated,omitempty"`
-	Description           *string    `json:"description,omitempty"`
-	GithubAppCredentialID *string    `json:"githubAppCredentialId,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Null when not set; never blank
+	Description *string `json:"description,omitempty"`
+	// Null when not set; never blank
+	GithubAppCredentialID   *string `json:"githubAppCredentialId,omitempty"`
+	GithubAppCredentialName *string `json:"githubAppCredentialName,omitempty"`
 	// Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
 	ID *string `json:"id,omitempty"`
 	// Last update timestamp.
@@ -95,6 +98,13 @@ func (a *AgentDbDto) GetGithubAppCredentialID() *string {
 		return nil
 	}
 	return a.GithubAppCredentialID
+}
+
+func (a *AgentDbDto) GetGithubAppCredentialName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GithubAppCredentialName
 }
 
 func (a *AgentDbDto) GetID() *string {

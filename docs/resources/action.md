@@ -248,12 +248,12 @@ resource "seqera_action" "tower_advanced" {
 
 ### Optional
 
-- `agent` (Attributes) Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Requires replacement if changed. (see [below for nested schema](#nestedatt--agent))
+- `agent` (Attributes) Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Must be omitted when `responseType` is `pipeline`. Requires replacement if changed. (see [below for nested schema](#nestedatt--agent))
 - `bucket` (Attributes) Bucket trigger configuration. Names the data link and the marker file to watch. Required when `source` is `bucket`. Ignored for other sources. (see [below for nested schema](#nestedatt--bucket))
 - `cron` (Attributes) Cron trigger configuration. Sets the schedule and its timezone. Required when `source` is `cron`. Ignored for other sources. (see [below for nested schema](#nestedatt--cron))
 - `label_ids` (List of Number) The labels to attach to the action. Send it only when the action has no launch. A request that also sends `launch.labelIds` is refused.
 - `launch` (Attributes) Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`. (see [below for nested schema](#nestedatt--launch))
-- `pipeline` (Attributes) Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. (see [below for nested schema](#nestedatt--pipeline))
+- `pipeline` (Attributes) Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. Must be omitted when `responseType` is `agent`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. (see [below for nested schema](#nestedatt--pipeline))
 - `pipeline_status` (Attributes) Pipeline-status trigger configuration. Names the pipeline to watch and the run state that fires the action. Required when `source` is `pipeline_status`. Ignored for other sources. The run that the action starts is set in `launch`, not here. (see [below for nested schema](#nestedatt--pipeline_status))
 - `response_type` (String) What the action does when it triggers. Defaults to `pipeline` when omitted. Immutable once the action exists. must be one of ["pipeline", "agent"]; Requires replacement if changed.
 - `source` (String) must be one of ["github", "tower", "bucket", "cron", "pipeline_status"]; Requires replacement if changed.
@@ -307,7 +307,8 @@ Optional:
 - `config_profiles` (List of String) Default: []
 - `config_text` (String) Nextflow configuration text
 - `entry_name` (String) Entry workflow name
-- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+- `fusion_snapshots` (Boolean) Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting.
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.
 - `head_job_cpus` (Number) Head job CPU allocation
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
@@ -315,6 +316,7 @@ Optional:
 - `nextflow_version` (String) Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
 - `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 Nextflow 24.10.0 or later and the workflow outputs syntax.
+- `override_nextflow_fusion_version` (Boolean) Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting.
 - `params_text` (String) Pipeline parameters text
 - `pipeline` (String) Not Null
 - `pipeline_schema_id` (Number)

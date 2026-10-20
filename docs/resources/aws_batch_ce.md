@@ -182,6 +182,7 @@ when it is interrupted by a spot reclamation.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
@@ -199,6 +200,7 @@ Requires replacement if changed.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Bash script to run after workflow execution completes.
 Use for cleanup, archiving results, sending notifications, etc.
 Requires replacement if changed.

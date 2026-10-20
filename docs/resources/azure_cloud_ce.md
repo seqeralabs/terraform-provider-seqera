@@ -131,6 +131,7 @@ Optional:
 - `environment` (Attributes List) Array of environment variables for the compute environment.
 Each variable can target the head node, compute nodes, or both.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
@@ -153,6 +154,7 @@ Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `subnets` (List of String) Requires replacement if changed.

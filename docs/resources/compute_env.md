@@ -229,6 +229,7 @@ when it is interrupted by a spot reclamation.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
@@ -244,6 +245,7 @@ Requires replacement if changed.
 
 Requires `enable_fusion = true`.
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region where the Batch compute environment will be created.
@@ -423,6 +425,7 @@ Requires replacement if changed.
 Key pair must exist in the specified region.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
 Requires replacement if changed.
@@ -452,6 +455,7 @@ Requires replacement if changed.
 If specified, logs are sent to this existing log group instead of the default.
 Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region where the compute environment will be created.
@@ -578,6 +582,7 @@ Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
@@ -587,6 +592,7 @@ Requires replacement if changed.
 - `managed_identity_pool_client_id` (String) Requires replacement if changed.
 - `managed_identity_pool_resource_id` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.
@@ -662,6 +668,7 @@ Optional:
 - `data_collection_endpoint` (String) Azure Monitor data collection endpoint URL for diagnostic telemetry. Requires replacement if changed.
 - `data_collection_rule_id` (String) Azure Monitor data collection rule resource ID associated with the endpoint. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
@@ -682,6 +689,7 @@ Requires replacement if changed.
 Required when using private network isolation.
 Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Azure region where the compute environment will be created.
@@ -797,12 +805,14 @@ Nextflow pipelines via the Wave containers service.
 Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Requires replacement if changed.
 - `namespace` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
@@ -850,6 +860,7 @@ Nextflow pipelines via the Wave containers service.
 Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head/launcher pod. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the Nextflow head/launcher pod in MB. Requires replacement if changed.
 - `head_pod_spec` (String) Custom pod specification (YAML) for the Nextflow head/launcher pod.
@@ -860,6 +871,7 @@ Must have access to the storage bucket when using Fusion v2.
 Requires replacement if changed.
 - `namespace` (String) Kubernetes namespace for running Nextflow workloads (default: tower-nf). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
@@ -920,7 +932,8 @@ Nextflow pipelines via the Wave containers service.
 Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
-- `fusion_snapshots` (Boolean) Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`. Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.
@@ -941,6 +954,7 @@ Requires replacement if changed.
 - `nfs_target` (String) NFS server hostname or IP address for shared file system access.
 Format: hostname:/export/path
 Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `service_account` (String) Google Cloud service account email for compute instances.
@@ -995,6 +1009,7 @@ When enabled, ARM-based machines will be selected for cost savings.
 Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable machine types will be selected.
 Requires replacement if changed.
@@ -1015,6 +1030,7 @@ Requires replacement if changed.
 - `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
@@ -1222,9 +1238,11 @@ Optional:
 
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -1396,8 +1414,10 @@ Optional:
 
 - `default_data_retention_policy` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `instance_type_size` (String) Size of the Data Studios instance (SMALL, MEDIUM, LARGE). must be one of ["SMALL", "MEDIUM", "LARGE"]; Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.

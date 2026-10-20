@@ -45,6 +45,8 @@ type AwsBatchConfig struct {
 	// Requires `enable_fusion = true`.
 	//
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
@@ -70,6 +72,8 @@ type AwsBatchConfig struct {
 	// Requires `enable_fusion = true`.
 	//
 	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Bash script to run after workflow execution completes.
 	// Use for cleanup, archiving results, sending notifications, etc.
 	//
@@ -179,6 +183,13 @@ func (a *AwsBatchConfig) GetFusionSnapshots() *bool {
 	return a.FusionSnapshots
 }
 
+func (a *AwsBatchConfig) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AwsBatchConfig) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -233,6 +244,13 @@ func (a *AwsBatchConfig) GetNvmeStorageEnabled() *bool {
 		return nil
 	}
 	return a.NvmeStorageEnabled
+}
+
+func (a *AwsBatchConfig) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AwsBatchConfig) GetPostRunScript() *string {

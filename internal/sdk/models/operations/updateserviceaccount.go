@@ -44,7 +44,7 @@ type UpdateServiceAccountResponse struct {
 	RawResponse *http.Response
 	// OK
 	DescribeServiceAccountResponse *shared.DescribeServiceAccountResponse
-	// Bad request
+	// Bad request: the name does not match the naming rules or is reserved
 	ErrorResponse *shared.ErrorResponse
 }
 

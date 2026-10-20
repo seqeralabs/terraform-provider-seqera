@@ -19,6 +19,7 @@ func (r *AgentResourceModel) RefreshFromSharedAgentDbDto(ctx context.Context, re
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Description = types.StringPointerValue(resp.Description)
 		r.GithubAppCredentialID = types.StringPointerValue(resp.GithubAppCredentialID)
+		r.GithubAppCredentialName = types.StringPointerValue(resp.GithubAppCredentialName)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.Name = types.StringPointerValue(resp.Name)

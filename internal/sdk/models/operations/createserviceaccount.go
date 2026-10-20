@@ -36,7 +36,7 @@ type CreateServiceAccountResponse struct {
 	RawResponse *http.Response
 	// Created
 	CreateServiceAccountResponse *shared.CreateServiceAccountResponse
-	// Bad request
+	// Bad request: the name does not match the naming rules or is reserved
 	ErrorResponse *shared.ErrorResponse
 }
 

@@ -7,12 +7,14 @@ import (
 )
 
 type SeqeraComputeConfiguration struct {
-	DefaultDataRetentionPolicy types.Bool          `tfsdk:"default_data_retention_policy"`
-	Environment                []ConfigEnvVariable `tfsdk:"environment"`
-	InstanceTypeSize           types.String        `tfsdk:"instance_type_size"`
-	NextflowConfig             types.String        `tfsdk:"nextflow_config"`
-	PostRunScript              types.String        `tfsdk:"post_run_script"`
-	PreRunScript               types.String        `tfsdk:"pre_run_script"`
-	Region                     types.String        `tfsdk:"region"`
-	WorkDir                    types.String        `tfsdk:"work_dir"`
+	DefaultDataRetentionPolicy    types.Bool          `tfsdk:"default_data_retention_policy"`
+	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
+	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	InstanceTypeSize              types.String        `tfsdk:"instance_type_size"`
+	NextflowConfig                types.String        `tfsdk:"nextflow_config"`
+	OverrideNextflowFusionVersion types.Bool          `tfsdk:"override_nextflow_fusion_version"`
+	PostRunScript                 types.String        `tfsdk:"post_run_script"`
+	PreRunScript                  types.String        `tfsdk:"pre_run_script"`
+	Region                        types.String        `tfsdk:"region"`
+	WorkDir                       types.String        `tfsdk:"work_dir"`
 }

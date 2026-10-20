@@ -6,7 +6,13 @@ type UpdateComputeEnvRequest struct {
 	CredentialsID                  *string `json:"credentialsId,omitempty"`
 	Description                    *string `json:"description,omitempty"`
 	FusionMetricsCollectionEnabled *bool   `json:"fusionMetricsCollectionEnabled,omitempty"`
-	Name                           *string `json:"name,omitempty"`
+	// Whether to enable Fusion snapshots on this compute environment. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null the current value is left unchanged.
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version used when overrideNextflowFusionVersion is enabled; must exist in the system catalog, be compatible with the deployed services and requires Wave and Fusion v2 to be enabled. An empty value clears it, so the catalog default is used. When null the current value is left unchanged.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. Can only be enabled when the compute environment runs Wave and Fusion v2. When null the current value is left unchanged.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 }
 
 func (u *UpdateComputeEnvRequest) GetCredentialsID() *string {
@@ -30,9 +36,30 @@ func (u *UpdateComputeEnvRequest) GetFusionMetricsCollectionEnabled() *bool {
 	return u.FusionMetricsCollectionEnabled
 }
 
+func (u *UpdateComputeEnvRequest) GetFusionSnapshots() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.FusionSnapshots
+}
+
+func (u *UpdateComputeEnvRequest) GetFusionVersion() *string {
+	if u == nil {
+		return nil
+	}
+	return u.FusionVersion
+}
+
 func (u *UpdateComputeEnvRequest) GetName() *string {
 	if u == nil {
 		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdateComputeEnvRequest) GetOverrideNextflowFusionVersion() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.OverrideNextflowFusionVersion
 }

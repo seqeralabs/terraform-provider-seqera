@@ -655,8 +655,12 @@ type DescribeWorkflowResponse struct {
 	Cost                      *float64                              `json:"cost,omitempty"`
 	CostCurrency              *string                               `json:"costCurrency,omitempty"`
 	CostIsEstimate            *bool                                 `json:"costIsEstimate,omitempty"`
+	InstancesOnDemand         *int                                  `json:"instancesOnDemand,omitempty"`
 	InstancesProvisioned      *int                                  `json:"instancesProvisioned,omitempty"`
+	InstancesSpot             *int                                  `json:"instancesSpot,omitempty"`
+	InstancesUnknown          *int                                  `json:"instancesUnknown,omitempty"`
 	PipelineInfo              *DescribeWorkflowResponsePipelineInfo `json:"pipelineInfo,omitempty"`
+	ProvisioningModel         *string                               `json:"provisioningModel,omitempty"`
 	SchedConfig               *DescribeWorkflowResponseSchedConfig  `json:"schedConfig,omitempty"`
 	IntelligentComputeEnabled *bool                                 `json:"schedEnabled,omitempty"`
 	SchedRunID                *string                               `json:"schedRunId,omitempty"`
@@ -685,6 +689,13 @@ func (d *DescribeWorkflowResponse) GetCostIsEstimate() *bool {
 	return d.CostIsEstimate
 }
 
+func (d *DescribeWorkflowResponse) GetInstancesOnDemand() *int {
+	if d == nil {
+		return nil
+	}
+	return d.InstancesOnDemand
+}
+
 func (d *DescribeWorkflowResponse) GetInstancesProvisioned() *int {
 	if d == nil {
 		return nil
@@ -692,11 +703,32 @@ func (d *DescribeWorkflowResponse) GetInstancesProvisioned() *int {
 	return d.InstancesProvisioned
 }
 
+func (d *DescribeWorkflowResponse) GetInstancesSpot() *int {
+	if d == nil {
+		return nil
+	}
+	return d.InstancesSpot
+}
+
+func (d *DescribeWorkflowResponse) GetInstancesUnknown() *int {
+	if d == nil {
+		return nil
+	}
+	return d.InstancesUnknown
+}
+
 func (d *DescribeWorkflowResponse) GetPipelineInfo() *DescribeWorkflowResponsePipelineInfo {
 	if d == nil {
 		return nil
 	}
 	return d.PipelineInfo
+}
+
+func (d *DescribeWorkflowResponse) GetProvisioningModel() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ProvisioningModel
 }
 
 func (d *DescribeWorkflowResponse) GetSchedConfig() *DescribeWorkflowResponseSchedConfig {

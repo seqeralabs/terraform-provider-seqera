@@ -80,6 +80,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 				r.Config.Forge.WorkerPool.VMType = types.StringPointerValue(resp.Config.Forge.WorkerPool.VMType)
 			}
 		}
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
 		r.Config.HeadPool = types.StringPointerValue(resp.Config.HeadPool)
@@ -89,6 +90,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 		r.Config.ManagedIdentityPoolClientID = types.StringPointerValue(resp.Config.ManagedIdentityPoolClientID)
 		r.Config.ManagedIdentityPoolResourceID = types.StringPointerValue(resp.Config.ManagedIdentityPoolResourceID)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
@@ -484,6 +486,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 	} else {
 		enableFusion = nil
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
@@ -537,6 +545,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		*nextflowConfig = r.Config.NextflowConfig.ValueString()
 	} else {
 		nextflowConfig = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
@@ -604,6 +618,7 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		Environment:                   environment,
 		Forge:                         forge,
 		EnableFusion:                  enableFusion,
+		FusionVersion:                 fusionVersion,
 		HeadJobCpus:                   headJobCpus,
 		HeadJobMemoryMb:               headJobMemoryMb,
 		HeadPool:                      headPool1,
@@ -613,6 +628,7 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		ManagedIdentityPoolClientID:   managedIdentityPoolClientID,
 		ManagedIdentityPoolResourceID: managedIdentityPoolResourceID,
 		NextflowConfig:                nextflowConfig,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
 		PostRunScript:                 postRunScript,
 		PreRunScript:                  preRunScript,
 		Region:                        region,

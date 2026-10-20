@@ -18,6 +18,8 @@ type AzCloudConfig struct {
 	//
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
@@ -43,6 +45,8 @@ type AzCloudConfig struct {
 	// Applied globally to all pipelines launched in this compute environment.
 	//
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -122,6 +126,13 @@ func (a *AzCloudConfig) GetFusion2Enabled() *bool {
 	return a.Fusion2Enabled
 }
 
+func (a *AzCloudConfig) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AzCloudConfig) GetInstanceType() *string {
 	if a == nil {
 		return nil
@@ -176,6 +187,13 @@ func (a *AzCloudConfig) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AzCloudConfig) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AzCloudConfig) GetPostRunScript() *string {
