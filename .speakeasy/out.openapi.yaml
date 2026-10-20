@@ -24817,8 +24817,9 @@ components:
         lineageDefault:
           description: When true, the lineage toggle in the pipeline launch form defaults to enabled.
           type: boolean
+          default: false
         provisioningMode:
-          description: "Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted."
+          description: "How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself."
           allOf:
             - $ref: '#/components/schemas/LineageProvisioningMode'
           nullable: true
@@ -24834,7 +24835,7 @@ components:
           description: Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
           type: string
         storeName:
-          description: Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.
+          description: Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
           type: string
           nullable: true
           x-speakeasy-param-computed: true
@@ -24915,6 +24916,7 @@ components:
           type: string
           nullable: true
           x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         wspId:
           description: Workspace numeric identifier.
           type: integer

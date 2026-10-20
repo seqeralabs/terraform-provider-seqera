@@ -17,7 +17,7 @@ info:
 # -------------------
 # resource "seqera_workspace_lineage_settings" "main" {
 #   org_id         = seqera_orgs.main.org_id
-#   workspace_id   = seqera_workspace.main.workspace_id
+#   workspace_id   = seqera_workspace.main.id
 #   credentials_id = seqera_aws_credential.lineage.credentials_id
 #   region         = "us-east-1"
 # }
@@ -101,12 +101,17 @@ actions:
   # ============================================================================
   - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.provisioningMode
     update:
+      description: "How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself."
       default: AUTO
       x-speakeasy-param-computed: true
 
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.lineageDefault
+    update:
+      default: false
+
   - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.storeName
     update:
-      description: Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.
+      description: Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
       x-speakeasy-param-computed: true
       x-speakeasy-plan-validators: LineageManualFieldValidator
 
@@ -119,6 +124,7 @@ actions:
   - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.webhookUrl
     update:
       x-speakeasy-param-sensitive: true
+      x-speakeasy-param-suppress-computed-diff: true
 
   # ============================================================================
   # CLEANUP

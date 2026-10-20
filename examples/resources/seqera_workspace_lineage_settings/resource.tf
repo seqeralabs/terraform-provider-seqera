@@ -1,16 +1,19 @@
-# Use one of the two configurations below per workspace.
+# Use one of the two configurations below per workspace: exactly one resource
+# may manage a given workspace's lineage settings, so the AUTO and MANUAL
+# examples use different workspaces.
+# var.* and seqera_aws_credential.main are placeholders for your own values.
 #
 # AUTO provisioning (default): Platform creates the lineage bucket, the
 # notification topic and the subscription. Do not set store_name or topic_arn.
 #
-# credentials_id and region are locked once provisioning has started; changing
+# credentials_id and region are locked once AUTO provisioning has completed; changing
 # them afterwards is rejected by the Platform.
 #
 # Destroying this resource disables lineage for the workspace. The AWS
 # infrastructure that was created is left in place.
 resource "seqera_workspace_lineage_settings" "auto" {
-  org_id            = var.org_id
-  workspace_id      = var.workspace_id
+  org_id            = var.auto_org_id
+  workspace_id      = var.auto_workspace_id
   provisioning_mode = "AUTO"
 
   credentials_id  = seqera_aws_credential.main.credentials_id
@@ -25,8 +28,8 @@ resource "aws_sns_topic" "lineage" {
 }
 
 resource "seqera_workspace_lineage_settings" "manual" {
-  org_id            = var.org_id
-  workspace_id      = var.workspace_id
+  org_id            = var.manual_org_id
+  workspace_id      = var.manual_workspace_id
   provisioning_mode = "MANUAL"
 
   credentials_id = seqera_aws_credential.main.credentials_id

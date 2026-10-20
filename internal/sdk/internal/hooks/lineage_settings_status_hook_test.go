@@ -143,3 +143,25 @@ func TestLineageSettingsStatusHook_ContextCancelled(t *testing.T) {
 		t.Errorf("hook did not stop promptly after cancel")
 	}
 }
+
+func TestLineageSettingsStatusHook_EmptyStatusFailsFast(t *testing.T) {
+	var n int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&n, 1)
+		fmt.Fprint(w, `{}`)
+	}))
+	defer srv.Close()
+	h := newLineageHook()
+	h.OverallTimeout = 5 * time.Second
+	start := time.Now()
+	err := lineageCall(t, h, context.Background(), srv.URL, "UpdateLineageWorkspaceSettings")
+	if err == nil || !strings.Contains(err.Error(), "not saved") {
+		t.Fatalf("expected error containing 'not saved', got %v", err)
+	}
+	if time.Since(start) > time.Second {
+		t.Errorf("expected prompt failure, took %v", time.Since(start))
+	}
+	if got := atomic.LoadInt32(&n); got != 1 {
+		t.Errorf("expected 1 GET, got %d", got)
+	}
+}

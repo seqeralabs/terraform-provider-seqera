@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
@@ -18,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
@@ -72,7 +74,8 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 			"lineage_default": schema.BoolAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `When true, the lineage toggle in the pipeline launch form defaults to enabled.`,
+				Default:     booldefault.StaticBool(false),
+				Description: `When true, the lineage toggle in the pipeline launch form defaults to enabled. Default: false`,
 			},
 			"message": schema.StringAttribute{
 				Computed:    true,
@@ -94,7 +97,7 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 				Computed:    true,
 				Optional:    true,
 				Default:     stringdefault.StaticString(`AUTO`),
-				Description: `Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted. Default: "AUTO"; must be one of ["AUTO", "MANUAL"]`,
+				Description: `How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see ` + "`" + `webhook_url` + "`" + `) to the topic yourself. Default: "AUTO"; must be one of ["AUTO", "MANUAL"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"AUTO",
@@ -113,7 +116,7 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 			"store_name": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.`,
+				Description: `Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket ` + "`" + `seqera-lineage-{workspaceId}` + "`" + `; required in MANUAL mode and must match the existing bucket.`,
 				Validators: []validator.String{
 					custom_stringvalidators.LineageManualFieldValidator(),
 				},
@@ -127,8 +130,11 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 				},
 			},
 			"webhook_url": schema.StringAttribute{
-				Computed:    true,
-				Sensitive:   true,
+				Computed:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Endpoint the cloud provider delivers object events to. In MANUAL mode, subscribe this URL to your topic.`,
 			},
 			"workspace_id": schema.Int64Attribute{

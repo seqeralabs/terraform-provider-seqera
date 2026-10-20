@@ -173,6 +173,10 @@ func (h *LineageSettingsStatusHook) pollLineageStatus(ctx context.Context, baseU
 		lastStatus = parsed.Status
 
 		switch parsed.Status {
+		case "":
+			// The Platform has no lineage module: the PUT was a silent 204 and
+			// the GET returns an empty settings object. Polling cannot succeed.
+			return fmt.Errorf("lineage settings were not saved; lineage may not be enabled on this Platform")
 		case "AVAILABLE":
 			return nil
 		case "ERRORED":

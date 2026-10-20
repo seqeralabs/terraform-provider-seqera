@@ -18,19 +18,22 @@ Lineage records how data and runs relate to each other. In `AUTO` provisioning m
 ## Example Usage
 
 ```terraform
-# Use one of the two configurations below per workspace.
+# Use one of the two configurations below per workspace: exactly one resource
+# may manage a given workspace's lineage settings, so the AUTO and MANUAL
+# examples use different workspaces.
+# var.* and seqera_aws_credential.main are placeholders for your own values.
 #
 # AUTO provisioning (default): Platform creates the lineage bucket, the
 # notification topic and the subscription. Do not set store_name or topic_arn.
 #
-# credentials_id and region are locked once provisioning has started; changing
+# credentials_id and region are locked once AUTO provisioning has completed; changing
 # them afterwards is rejected by the Platform.
 #
 # Destroying this resource disables lineage for the workspace. The AWS
 # infrastructure that was created is left in place.
 resource "seqera_workspace_lineage_settings" "auto" {
-  org_id            = var.org_id
-  workspace_id      = var.workspace_id
+  org_id            = var.auto_org_id
+  workspace_id      = var.auto_workspace_id
   provisioning_mode = "AUTO"
 
   credentials_id  = seqera_aws_credential.main.credentials_id
@@ -45,8 +48,8 @@ resource "aws_sns_topic" "lineage" {
 }
 
 resource "seqera_workspace_lineage_settings" "manual" {
-  org_id            = var.org_id
-  workspace_id      = var.workspace_id
+  org_id            = var.manual_org_id
+  workspace_id      = var.manual_workspace_id
   provisioning_mode = "MANUAL"
 
   credentials_id = seqera_aws_credential.main.credentials_id
@@ -76,9 +79,9 @@ resource "aws_sns_topic_subscription" "lineage" {
 
 ### Optional
 
-- `lineage_default` (Boolean) When true, the lineage toggle in the pipeline launch form defaults to enabled.
-- `provisioning_mode` (String) Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted. Default: "AUTO"; must be one of ["AUTO", "MANUAL"]
-- `store_name` (String) Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.
+- `lineage_default` (Boolean) When true, the lineage toggle in the pipeline launch form defaults to enabled. Default: false
+- `provisioning_mode` (String) How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself. Default: "AUTO"; must be one of ["AUTO", "MANUAL"]
+- `store_name` (String) Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
 - `topic_arn` (String) AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
 
 ### Read-Only
