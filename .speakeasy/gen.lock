@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: d79d22d4169b0822a212d2d2f192fd07
-  docVersion: 1.231.0
+  docChecksum: 8acce75ef5aa5a21c6cff7b0c3448f6e
+  docVersion: 1.244.0
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
   releaseVersion: 0.43.0-RC3
@@ -1115,6 +1115,7 @@ trackedFiles:
   internal/sdk/models/operations/deletelabel.go:
     id: 0137e86b7026
     pristine_git_object: 3cc227b504c8fa30d7aa9b5516b4f90bbf901290
+  internal/sdk/models/operations/deletelineageworkspacesettings.go: {}
   internal/sdk/models/operations/deletemanagedcomputece.go:
     id: b2c3256dc4f8
     pristine_git_object: a11e5411457641157666703ec6c6dec40c3d864c
@@ -1362,6 +1363,7 @@ trackedFiles:
   internal/sdk/models/operations/finddatastudiosworkspacesettings.go:
     id: 5400cef769e3
     pristine_git_object: 80444f4a7f33b00f072dc855493db6500f595be5
+  internal/sdk/models/operations/findlineageworkspacesettings.go: {}
   internal/sdk/models/operations/finishdatalinkupload.go:
     id: c1d9f29c30c2
     pristine_git_object: f48ffc038c6a22cb1f92aac76d8b82b4da805c66
@@ -1668,6 +1670,7 @@ trackedFiles:
   internal/sdk/models/operations/updatelabel.go:
     id: 05d3f0b86579
     pristine_git_object: 772478ab423b2082b92ec3801415300156851a49
+  internal/sdk/models/operations/updatelineageworkspacesettings.go: {}
   internal/sdk/models/operations/updatemanagedcomputece.go: {}
   internal/sdk/models/operations/updatemanagedcredentials.go:
     id: b23eb77587f3
@@ -2549,8 +2552,11 @@ trackedFiles:
   internal/sdk/models/shared/launchdbdto.go: {}
   internal/sdk/models/shared/launchimage.go: {}
   internal/sdk/models/shared/launchvalidationerror.go: {}
+  internal/sdk/models/shared/lineageprovisioningmode.go: {}
   internal/sdk/models/shared/lineagerecordresponse.go: {}
   internal/sdk/models/shared/lineageresolveresponse.go: {}
+  internal/sdk/models/shared/lineageworkspacesettingsrequest.go: {}
+  internal/sdk/models/shared/lineageworkspacesettingsresponse.go: {}
   internal/sdk/models/shared/linkversionrequest.go: {}
   internal/sdk/models/shared/listaccesstokensresponse.go:
     id: e9e6ce9fec76
@@ -7000,6 +7006,37 @@ examples:
           actionId: "<id>"
         query:
           workspaceId: 280336
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteLineageWorkspaceSettings:
+    speakeasy-default-delete-lineage-workspace-settings:
+      parameters:
+        path:
+          orgId: 989204
+          workspaceId: 401702
+      responses:
+        "404":
+          application/json: {"message": "<value>"}
+  FindLineageWorkspaceSettings:
+    speakeasy-default-find-lineage-workspace-settings:
+      parameters:
+        path:
+          orgId: 10894
+          workspaceId: 302667
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateLineageWorkspaceSettings:
+    speakeasy-default-update-lineage-workspace-settings:
+      parameters:
+        path:
+          orgId: 979574
+          workspaceId: 635460
+      requestBody:
+        application/json: {}
       responses:
         "400":
           application/json: {"message": "<value>"}
