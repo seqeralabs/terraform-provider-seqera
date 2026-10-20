@@ -28,6 +28,11 @@ func initHooks(h *Hooks) {
 	agentBindingConflictHook := &AgentBindingConflictHook{}
 	h.registerAfterSuccessHook(agentBindingConflictHook)
 
+	// Register lineage settings status hook to wait for AUTO provisioning to finish
+	// (status PENDING -> AVAILABLE/ERRORED) after the settings update
+	lineageSettingsStatusHook := &LineageSettingsStatusHook{}
+	h.registerAfterSuccessHook(lineageSettingsStatusHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)
