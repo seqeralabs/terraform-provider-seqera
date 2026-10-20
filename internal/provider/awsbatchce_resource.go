@@ -977,8 +977,6 @@ func (r *AWSBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateAWSBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1083,8 +1081,6 @@ func (r *AWSBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeAWSBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1143,8 +1139,6 @@ func (r *AWSBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateAWSBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1233,8 +1227,6 @@ func (r *AWSBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAWSBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

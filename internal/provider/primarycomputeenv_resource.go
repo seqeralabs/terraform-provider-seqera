@@ -99,8 +99,6 @@ func (r *PrimaryComputeEnvResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsUpdateComputeEnvPrimaryRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

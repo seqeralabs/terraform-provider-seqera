@@ -3,8 +3,8 @@ id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
   docChecksum: a4ed9e01cb4a015b75ebca2e39531bff
   docVersion: 1.231.0
-  speakeasyVersion: 1.800.1
-  generationVersion: 2.943.0
+  speakeasyVersion: 1.802.0
+  generationVersion: 2.948.4
   releaseVersion: 0.43.0-RC3
   configChecksum: 054d1421777062a1056a2729c2e1b965
 persistentEdits:
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.48.3
+    core: 3.50.1
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
@@ -26,7 +26,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
     nullables: 0.0.0
-    retries: 2.81.6
+    retries: 2.81.7
     transformJq: 0.0.1
     unions: 2.82.20
 trackedFiles:
@@ -3071,6 +3071,7 @@ trackedFiles:
   internal/sdk/platforms.go:
     id: 517ff966abb5
     pristine_git_object: d07fa87cfd1375e9b69b5bf95f4cce5884a4f4f4
+  internal/sdk/redact/redact.go: {}
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
     pristine_git_object: aa809fccb3445b1e2530a979dad620512f50e70f

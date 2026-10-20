@@ -209,8 +209,6 @@ func (r *DataLinkResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -308,8 +306,6 @@ func (r *DataLinkResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -363,8 +359,6 @@ func (r *DataLinkResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -462,8 +456,6 @@ func (r *DataLinkResource) Delete(ctx context.Context, req resource.DeleteReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteCustomDataLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

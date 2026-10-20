@@ -142,8 +142,6 @@ func (r *ServiceAccountResource) Create(ctx context.Context, req resource.Create
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -211,8 +209,6 @@ func (r *ServiceAccountResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -266,8 +262,6 @@ func (r *ServiceAccountResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -328,8 +322,6 @@ func (r *ServiceAccountResource) Delete(ctx context.Context, req resource.Delete
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteServiceAccountRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

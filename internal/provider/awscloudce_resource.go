@@ -750,8 +750,6 @@ func (r *AwsCloudCEResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateAwsCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -856,8 +854,6 @@ func (r *AwsCloudCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeAwsCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -916,8 +912,6 @@ func (r *AwsCloudCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateAwsCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1006,8 +1000,6 @@ func (r *AwsCloudCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAwsCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

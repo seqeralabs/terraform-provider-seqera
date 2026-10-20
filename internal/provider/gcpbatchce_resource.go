@@ -632,8 +632,6 @@ func (r *GCPBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -738,8 +736,6 @@ func (r *GCPBatchCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -798,8 +794,6 @@ func (r *GCPBatchCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -888,8 +882,6 @@ func (r *GCPBatchCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteGCPBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

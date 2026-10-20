@@ -149,8 +149,6 @@ func (r *TowerAgentCredentialResource) Create(ctx context.Context, req resource.
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateTowerAgentCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -255,8 +253,6 @@ func (r *TowerAgentCredentialResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeTowerAgentCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -311,8 +307,6 @@ func (r *TowerAgentCredentialResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
-
 	request, requestDiags := data.ToOperationsUpdateTowerAgentCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -363,8 +357,6 @@ func (r *TowerAgentCredentialResource) Delete(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteTowerAgentCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

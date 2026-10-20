@@ -360,8 +360,6 @@ func (r *ManagedComputeCEResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateManagedComputeCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -466,8 +464,6 @@ func (r *ManagedComputeCEResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeManagedComputeCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -526,8 +522,6 @@ func (r *ManagedComputeCEResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateManagedComputeCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -616,8 +610,6 @@ func (r *ManagedComputeCEResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteManagedComputeCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

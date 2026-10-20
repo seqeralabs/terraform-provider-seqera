@@ -129,8 +129,6 @@ func (r *GCPCredentialsFederationSetupDataSource) Read(ctx context.Context, req 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsDescribeGCPCredentialsFederationSetupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

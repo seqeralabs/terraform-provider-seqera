@@ -433,8 +433,6 @@ func (r *StudiosResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateDataStudioRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -504,8 +502,6 @@ func (r *StudiosResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDescribeDataStudioRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -587,8 +583,6 @@ func (r *StudiosResource) Delete(ctx context.Context, req resource.DeleteRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteDataStudioRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

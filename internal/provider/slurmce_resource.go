@@ -413,8 +413,6 @@ func (r *SlurmCEResource) Create(ctx context.Context, req resource.CreateRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -519,8 +517,6 @@ func (r *SlurmCEResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -574,8 +570,6 @@ func (r *SlurmCEResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -664,8 +658,6 @@ func (r *SlurmCEResource) Delete(ctx context.Context, req resource.DeleteRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteSlurmCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

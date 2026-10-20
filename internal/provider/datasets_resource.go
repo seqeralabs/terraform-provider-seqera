@@ -146,8 +146,6 @@ func (r *DatasetsResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateDatasetV2Request(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

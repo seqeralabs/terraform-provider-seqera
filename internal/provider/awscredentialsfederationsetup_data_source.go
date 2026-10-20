@@ -149,8 +149,6 @@ func (r *AWSCredentialsFederationSetupDataSource) Read(ctx context.Context, req 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsDescribeAWSCredentialsFederationSetupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
