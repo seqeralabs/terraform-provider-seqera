@@ -9,6 +9,9 @@ internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
 internal/sdk/internal/hooks/token_list_error_hook.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook.go
+internal/sdk/internal/hooks/ce_delete_error_hook.go
+internal/sdk/internal/hooks/ce_delete_error_hook_test.go
+internal/sdk/internal/hooks/ce_delete_error_hook_sdk_test.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook_test.go
 internal/sdk/internal/hooks/lineage_settings_status_hook.go
 internal/sdk/internal/hooks/lineage_settings_status_hook_test.go

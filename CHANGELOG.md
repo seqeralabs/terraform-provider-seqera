@@ -76,6 +76,10 @@ BUG FIXES:
 
 - **Compute environment create and delete no longer time out after 5 minutes.** The provider polls a compute environment until it reaches `AVAILABLE` on create, or is gone on delete. That wait is now capped at 15 minutes instead of 5, so deletions that take longer no longer fail with `timeout waiting for compute environment (last status: DELETING)`. Applies to every compute environment resource. ([#283](https://github.com/seqeralabs/terraform-provider-seqera/issues/283))
 
+- **Rejected compute environment deletions now fail `terraform destroy` instead of being treated as success.** The compute environment resources (`seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce`, `seqera_slurm_ce`, `seqera_managed_compute_ce`) accepted an HTTP 400 from the Platform as a completed delete, so a refused deletion, for example of an environment with active jobs, reported `Destruction complete` and dropped the resource from state while the compute environment stayed in the Platform. A 400, or the 409 the Platform returns for a conflicting deletion, now fails the destroy with the Platform's message and keeps the resource in state, so the destroy can be retried. A 404 still counts as already deleted. The same applies to `seqera_compute_env` and `seqera_aws_compute_env`, which already failed on these responses but now also show the Platform's message.
+
+  Environments that were dropped from state by an earlier destroy are still present in the Platform and have to be removed there or re-imported.
+
 NOTES:
 
 - **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.

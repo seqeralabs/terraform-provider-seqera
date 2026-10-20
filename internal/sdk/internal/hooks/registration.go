@@ -38,6 +38,12 @@ func initHooks(h *Hooks) {
 	lineageSettingsNotConfiguredHook := &LineageSettingsNotConfiguredHook{}
 	h.registerAfterSuccessHook(lineageSettingsNotConfiguredHook)
 
+	// Register compute environment delete error hook so a 400/409 rejection of a
+	// deletion fails the destroy with the Platform's message instead of being
+	// treated as success
+	ceDeleteErrorHook := &CEDeleteErrorHook{}
+	h.registerAfterSuccessHook(ceDeleteErrorHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)
