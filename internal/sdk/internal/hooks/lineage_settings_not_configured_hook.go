@@ -21,7 +21,7 @@ func (h *LineageSettingsNotConfiguredHook) AfterSuccess(hookCtx AfterSuccessCont
 	}
 
 	raw, err := io.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		return res, err
 	}

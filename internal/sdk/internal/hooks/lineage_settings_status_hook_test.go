@@ -40,7 +40,7 @@ func TestLineageSettingsStatusHook_AvailableImmediately(t *testing.T) {
 		if r.Method != "GET" || r.URL.Path != lineageTestPath || r.Header.Get("Authorization") != "Bearer x" {
 			t.Errorf("unexpected request %s %s auth=%q", r.Method, r.URL.Path, r.Header.Get("Authorization"))
 		}
-		fmt.Fprint(w, `{"status":"AVAILABLE"}`)
+		_, _ = fmt.Fprint(w, `{"status":"AVAILABLE"}`)
 	}))
 	defer srv.Close()
 	if err := lineageCall(t, newLineageHook(), context.Background(), srv.URL, "UpdateLineageWorkspaceSettings"); err != nil {
@@ -52,10 +52,10 @@ func TestLineageSettingsStatusHook_PendingThenAvailable(t *testing.T) {
 	var n int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if atomic.AddInt32(&n, 1) <= 2 {
-			fmt.Fprint(w, `{"status":"PENDING"}`)
+			_, _ = fmt.Fprint(w, `{"status":"PENDING"}`)
 			return
 		}
-		fmt.Fprint(w, `{"status":"AVAILABLE"}`)
+		_, _ = fmt.Fprint(w, `{"status":"AVAILABLE"}`)
 	}))
 	defer srv.Close()
 	if err := lineageCall(t, newLineageHook(), context.Background(), srv.URL, "UpdateLineageWorkspaceSettings"); err != nil {
@@ -68,7 +68,7 @@ func TestLineageSettingsStatusHook_PendingThenAvailable(t *testing.T) {
 
 func TestLineageSettingsStatusHook_ErroredReturnsMessage(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, `{"status":"ERRORED","message":"boom"}`)
+		_, _ = fmt.Fprint(w, `{"status":"ERRORED","message":"boom"}`)
 	}))
 	defer srv.Close()
 	err := lineageCall(t, newLineageHook(), context.Background(), srv.URL, "UpdateLineageWorkspaceSettings")
@@ -79,7 +79,7 @@ func TestLineageSettingsStatusHook_ErroredReturnsMessage(t *testing.T) {
 
 func TestLineageSettingsStatusHook_TimesOutWhilePending(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, `{"status":"PENDING"}`)
+		_, _ = fmt.Fprint(w, `{"status":"PENDING"}`)
 	}))
 	defer srv.Close()
 	h := newLineageHook()
@@ -97,7 +97,7 @@ func TestLineageSettingsStatusHook_RetriesOn503ThenSucceeds(t *testing.T) {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
-		fmt.Fprint(w, `{"status":"AVAILABLE"}`)
+		_, _ = fmt.Fprint(w, `{"status":"AVAILABLE"}`)
 	}))
 	defer srv.Close()
 	if err := lineageCall(t, newLineageHook(), context.Background(), srv.URL, "UpdateLineageWorkspaceSettings"); err != nil {
@@ -124,7 +124,7 @@ func TestLineageSettingsStatusHook_IgnoresOtherOperations(t *testing.T) {
 
 func TestLineageSettingsStatusHook_ContextCancelled(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, `{"status":"PENDING"}`)
+		_, _ = fmt.Fprint(w, `{"status":"PENDING"}`)
 	}))
 	defer srv.Close()
 	h := newLineageHook()
@@ -148,7 +148,7 @@ func TestLineageSettingsStatusHook_EmptyStatusFailsFast(t *testing.T) {
 	var n int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		atomic.AddInt32(&n, 1)
-		fmt.Fprint(w, `{}`)
+		_, _ = fmt.Fprint(w, `{}`)
 	}))
 	defer srv.Close()
 	h := newLineageHook()
