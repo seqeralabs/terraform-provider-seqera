@@ -38,7 +38,13 @@ FEATURES:
 
 - **Head-node OS disk size on Azure Cloud.** New `config.boot_disk_size_gb` on `seqera_azure_cloud_ce` and the `azure_cloud` block of `seqera_compute_env`, between 50 and 4095 GB. When omitted, Azure uses the default disk size for the VM image.
 
-- **`fusion_version` on launches.** New `fusion_version` on the `seqera_pipeline` and `seqera_action` launch config and on `seqera_workflows`. Pins the Fusion release used for the run; the version must exist in the platform's system catalog, and it applies only when the compute environment enables Fusion v2.
+- **Fusion version and snapshots on launches.** New `fusion_version`, `override_nextflow_fusion_version` and `fusion_snapshots` on the `seqera_pipeline` and `seqera_action` launch config and on `seqera_workflows`. `fusion_version` pins the Fusion release used for the run: the version must exist in the platform's system catalog and be compatible with the deployed services, and it applies only when the compute environment enables Wave and Fusion v2 and `override_nextflow_fusion_version` is true. `fusion_snapshots` can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When a field is null, the run inherits the source pipeline or run, then the compute environment setting.
+
+- **Fusion version override on compute environments.** New `fusion_version` and `override_nextflow_fusion_version` in `config` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_aws_compute_env`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and the matching `seqera_compute_env` blocks. With `override_nextflow_fusion_version = true`, launches on the compute environment use `fusion_version` instead of the Fusion version provided by the Nextflow launcher container; when it is false or unset, the container default is used. The backend ignores `fusion_version` unless the override is on, so setting it without `override_nextflow_fusion_version = true` is rejected at plan time. Changing either forces replacement, as with the other compute environment settings. `fusion_snapshots` on `seqera_gcp_batch_ce` is now checked at plan time too: it requires `enable_fusion = true`.
+
+- **`github_app_credential_name` on `seqera_agent`.** New read-only attribute holding the name of the bound GitHub App credential.
+
+- **Instance counts and provisioning model on `seqera_workflows`.** New read-only `instances_on_demand`, `instances_spot`, `instances_unknown` and `provisioning_model` expose the instance mix and provisioning model the Platform reports for a run.
 
 - **`creation_source` filter on the `seqera_data_links` data source** — `user` for manually created data links, `cloud` for those discovered from credentials.
 
