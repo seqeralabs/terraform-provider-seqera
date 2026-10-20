@@ -2760,6 +2760,7 @@ func (s *Workspaces) FindLineageWorkspaceSettings(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "FindLineageWorkspaceSettings")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
