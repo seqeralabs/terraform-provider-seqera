@@ -122,7 +122,8 @@ Optional:
 - `config_profiles` (List of String) Default: []
 - `config_text` (String) Nextflow configuration text
 - `entry_name` (String) Entry workflow name
-- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+- `fusion_snapshots` (Boolean) Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting.
+- `fusion_version` (String) Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.
 - `head_job_cpus` (Number) Head job CPU allocation
 - `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
@@ -130,6 +131,7 @@ Optional:
 - `nextflow_version` (String) Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
 - `output_dir` (String) Per-run output directory, passed to Nextflow as `-output-dir`. Requires
 Nextflow 24.10.0 or later and the workflow outputs syntax.
+- `override_nextflow_fusion_version` (Boolean) Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting.
 - `params_text` (String) Pipeline parameters text
 - `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution

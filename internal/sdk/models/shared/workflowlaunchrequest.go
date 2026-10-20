@@ -41,7 +41,9 @@ type WorkflowLaunchRequest struct {
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
-	// Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+	// Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting.
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -58,6 +60,8 @@ type WorkflowLaunchRequest struct {
 	// Nextflow 24.10.0 or later and the workflow outputs syntax.
 	//
 	OutputDir *string `json:"outputDir,omitempty"`
+	// Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
 	Pipeline         string  `json:"pipeline"`
@@ -123,6 +127,13 @@ func (w *WorkflowLaunchRequest) GetEntryName() *string {
 	return w.EntryName
 }
 
+func (w *WorkflowLaunchRequest) GetFusionSnapshots() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.FusionSnapshots
+}
+
 func (w *WorkflowLaunchRequest) GetFusionVersion() *string {
 	if w == nil {
 		return nil
@@ -177,6 +188,13 @@ func (w *WorkflowLaunchRequest) GetOutputDir() *string {
 		return nil
 	}
 	return w.OutputDir
+}
+
+func (w *WorkflowLaunchRequest) GetOverrideNextflowFusionVersion() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.OverrideNextflowFusionVersion
 }
 
 func (w *WorkflowLaunchRequest) GetParamsText() *string {

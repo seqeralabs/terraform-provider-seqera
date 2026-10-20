@@ -12,7 +12,7 @@ type UpdateActionRequest struct {
 	// Launch payload for `seqera_action` Create / Update endpoints. Required when `response_type` is `pipeline` (the default); must not be set when `response_type` is `agent`.
 	Launch *ActionLaunchRequest `json:"launch,omitempty"`
 	Name   *string              `json:"name,omitempty"`
-	// Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+	// Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. Allowed only on an action whose `responseType` is `pipeline`. On an agent action, the request returns 400.
 	Pipeline *PipelineActionRequest `json:"pipeline,omitempty"`
 	// Pipeline-status trigger updates. Changes the pipeline to watch and the run state that fires the action. Allowed only on a `pipeline_status` action. On other actions, the request returns 400. The run that the action starts is set in `launch`, not here.
 	PipelineStatus *PipelineStatusActionRequest `json:"pipelineStatus,omitempty"`

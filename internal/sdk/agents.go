@@ -1650,7 +1650,7 @@ func (s *Agents) DescribeAgent(ctx context.Context, request operations.DescribeA
 }
 
 // UpdateAgent - Update agent
-// Updates an agent in a workspace.
+// Replaces an agent in a workspace. Every field is overwritten, so an omitted optional field is cleared.
 func (s *Agents) UpdateAgent(ctx context.Context, request operations.UpdateAgentRequest, opts ...operations.Option) (*operations.UpdateAgentResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -2319,6 +2319,8 @@ func (s *Agents) EnableAgent(ctx context.Context, request operations.EnableAgent
 	case httpRes.StatusCode == 400:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

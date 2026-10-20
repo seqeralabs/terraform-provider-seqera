@@ -252,8 +252,12 @@ type LocalExecutionConfiguration struct {
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -297,11 +301,25 @@ func (l *LocalExecutionConfiguration) GetFusion2Enabled() *bool {
 	return l.Fusion2Enabled
 }
 
+func (l *LocalExecutionConfiguration) GetFusionVersion() *string {
+	if l == nil {
+		return nil
+	}
+	return l.FusionVersion
+}
+
 func (l *LocalExecutionConfiguration) GetNextflowConfig() *string {
 	if l == nil {
 		return nil
 	}
 	return l.NextflowConfig
+}
+
+func (l *LocalExecutionConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.OverrideNextflowFusionVersion
 }
 
 func (l *LocalExecutionConfiguration) GetPostRunScript() *string {
@@ -782,6 +800,8 @@ type GoogleGKEClusterConfiguration struct {
 	// Requires `enable_wave = true`.
 	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPUs allocated for the Nextflow head/launcher pod.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -800,8 +820,10 @@ type GoogleGKEClusterConfiguration struct {
 	//
 	Namespace *string `json:"namespace,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig *string           `json:"nextflowConfig,omitempty"`
-	PodCleanup     *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool             `json:"overrideNextflowFusionVersion,omitempty"`
+	PodCleanup                    *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -880,6 +902,13 @@ func (g *GoogleGKEClusterConfiguration) GetEnableFusion() *bool {
 	return g.EnableFusion
 }
 
+func (g *GoogleGKEClusterConfiguration) GetFusionVersion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.FusionVersion
+}
+
 func (g *GoogleGKEClusterConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -920,6 +949,13 @@ func (g *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return g.NextflowConfig
+}
+
+func (g *GoogleGKEClusterConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.OverrideNextflowFusionVersion
 }
 
 func (g *GoogleGKEClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
@@ -1012,15 +1048,19 @@ type AmazonEKSClusterConfiguration struct {
 	//
 	// Requires `enable_wave = true`.
 	//
-	EnableFusion       *bool   `json:"fusion2Enabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion      *string `json:"fusionVersion,omitempty"`
 	HeadJobCpus        *int    `json:"headJobCpus,omitempty"`
 	HeadJobMemoryMb    *int    `json:"headJobMemoryMb,omitempty"`
 	HeadPodSpec        *string `json:"headPodSpec,omitempty"`
 	HeadServiceAccount *string `json:"headServiceAccount,omitempty"`
 	Namespace          *string `json:"namespace,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig *string           `json:"nextflowConfig,omitempty"`
-	PodCleanup     *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool             `json:"overrideNextflowFusionVersion,omitempty"`
+	PodCleanup                    *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -1088,6 +1128,13 @@ func (a *AmazonEKSClusterConfiguration) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
+func (a *AmazonEKSClusterConfiguration) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AmazonEKSClusterConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -1128,6 +1175,13 @@ func (a *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AmazonEKSClusterConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AmazonEKSClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
@@ -1689,6 +1743,8 @@ type AzureCloudConfiguration struct {
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
@@ -1712,6 +1768,8 @@ type AzureCloudConfiguration struct {
 	NetworkID *string `json:"networkId,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -1800,6 +1858,13 @@ func (a *AzureCloudConfiguration) GetFusion2Enabled() *bool {
 	return a.Fusion2Enabled
 }
 
+func (a *AzureCloudConfiguration) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AzureCloudConfiguration) GetInstanceType() *string {
 	if a == nil {
 		return nil
@@ -1854,6 +1919,13 @@ func (a *AzureCloudConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AzureCloudConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AzureCloudConfiguration) GetPostRunScript() *string {
@@ -1989,6 +2061,8 @@ type AzureBatchConfiguration struct {
 	// Requires `enable_wave = true`.
 	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
@@ -2002,6 +2076,8 @@ type AzureBatchConfiguration struct {
 	ManagedIdentityPoolResourceID *string `json:"managedIdentityPoolResourceId,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -2098,6 +2174,13 @@ func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
+func (a *AzureBatchConfiguration) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AzureBatchConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -2159,6 +2242,13 @@ func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AzureBatchConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AzureBatchConfiguration) GetPostRunScript() *string {
@@ -2244,6 +2334,8 @@ type GoogleCloudConfiguration struct {
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable machine types will be selected.
 	//
@@ -2261,6 +2353,8 @@ type GoogleCloudConfiguration struct {
 	NetworkTags []string `json:"networkTags,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -2346,6 +2440,13 @@ func (g *GoogleCloudConfiguration) GetFusion2Enabled() *bool {
 	return g.Fusion2Enabled
 }
 
+func (g *GoogleCloudConfiguration) GetFusionVersion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.FusionVersion
+}
+
 func (g *GoogleCloudConfiguration) GetGpuEnabled() *bool {
 	if g == nil {
 		return nil
@@ -2386,6 +2487,13 @@ func (g *GoogleCloudConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return g.NextflowConfig
+}
+
+func (g *GoogleCloudConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.OverrideNextflowFusionVersion
 }
 
 func (g *GoogleCloudConfiguration) GetPostRunScript() *string {
@@ -2504,8 +2612,11 @@ type GoogleBatchServiceConfiguration struct {
 	//
 	// Requires `enable_wave = true`.
 	//
-	EnableFusion    *bool `json:"fusion2Enabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`.
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPUs allocated for the Nextflow head job.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -2543,6 +2654,8 @@ type GoogleBatchServiceConfiguration struct {
 	// Format: hostname:/export/path
 	//
 	NfsTarget *string `json:"nfsTarget,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -2673,6 +2786,13 @@ func (g *GoogleBatchServiceConfiguration) GetFusionSnapshots() *bool {
 	return g.FusionSnapshots
 }
 
+func (g *GoogleBatchServiceConfiguration) GetFusionVersion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.FusionVersion
+}
+
 func (g *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -2748,6 +2868,13 @@ func (g *GoogleBatchServiceConfiguration) GetNfsTarget() *string {
 		return nil
 	}
 	return g.NfsTarget
+}
+
+func (g *GoogleBatchServiceConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.OverrideNextflowFusionVersion
 }
 
 func (g *GoogleBatchServiceConfiguration) GetPostRunScript() *string {
@@ -2833,10 +2960,14 @@ type SeqeraComputeConfiguration struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
 	InstanceTypeSize *SeqeraComputeCloudInstanceTypeSize `json:"instanceTypeSize,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -2878,6 +3009,13 @@ func (s *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return s.Environment
 }
 
+func (s *SeqeraComputeConfiguration) GetFusionVersion() *string {
+	if s == nil {
+		return nil
+	}
+	return s.FusionVersion
+}
+
 func (s *SeqeraComputeConfiguration) GetInstanceTypeSize() *SeqeraComputeCloudInstanceTypeSize {
 	if s == nil {
 		return nil
@@ -2890,6 +3028,13 @@ func (s *SeqeraComputeConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return s.NextflowConfig
+}
+
+func (s *SeqeraComputeConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.OverrideNextflowFusionVersion
 }
 
 func (s *SeqeraComputeConfiguration) GetPostRunScript() *string {
@@ -2951,6 +3096,8 @@ type AWSCloudConfiguration struct {
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -2972,6 +3119,8 @@ type AWSCloudConfiguration struct {
 	LogGroup *string `json:"logGroup,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -3099,6 +3248,13 @@ func (a *AWSCloudConfiguration) GetFusion2Enabled() *bool {
 	return a.Fusion2Enabled
 }
 
+func (a *AWSCloudConfiguration) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AWSCloudConfiguration) GetGpuEnabled() *bool {
 	if a == nil {
 		return nil
@@ -3139,6 +3295,13 @@ func (a *AWSCloudConfiguration) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AWSCloudConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AWSCloudConfiguration) GetPostRunScript() *string {
@@ -3266,6 +3429,8 @@ type AWSBatchConfiguration struct {
 	// Requires `enable_fusion = true`.
 	//
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
@@ -3289,6 +3454,8 @@ type AWSBatchConfiguration struct {
 	// Requires `enable_fusion = true`.
 	//
 	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Shell script to execute before workflow starts
@@ -3403,6 +3570,13 @@ func (a *AWSBatchConfiguration) GetFusionSnapshots() *bool {
 	return a.FusionSnapshots
 }
 
+func (a *AWSBatchConfiguration) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AWSBatchConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -3457,6 +3631,13 @@ func (a *AWSBatchConfiguration) GetNvmeStorageEnabled() *bool {
 		return nil
 	}
 	return a.NvmeStorageEnabled
+}
+
+func (a *AWSBatchConfiguration) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AWSBatchConfiguration) GetPostRunScript() *string {

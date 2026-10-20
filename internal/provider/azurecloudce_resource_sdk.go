@@ -38,6 +38,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		} else {
 			r.Config.Environment = nil
 		}
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
 		if resp.Config.IntelligentComputeConfig == nil {
 			r.Config.IntelligentComputeConfig = nil
@@ -81,6 +82,7 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 		r.Config.ManagedIdentityID = types.StringPointerValue(resp.Config.ManagedIdentityID)
 		r.Config.NetworkID = types.StringPointerValue(resp.Config.NetworkID)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringPointerValue(resp.Config.Region)
@@ -342,6 +344,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 			})
 		}
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	instanceType := new(string)
 	if !r.Config.InstanceType.IsUnknown() && !r.Config.InstanceType.IsNull() {
 		*instanceType = r.Config.InstanceType.ValueString()
@@ -389,6 +397,12 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		*nextflowConfig = r.Config.NextflowConfig.ValueString()
 	} else {
 		nextflowConfig = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
@@ -530,27 +544,29 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		workDir = nil
 	}
 	config := shared.AzCloudConfig{
-		BootDiskSizeGB:            bootDiskSizeGB,
-		DataCollectionEndpoint:    dataCollectionEndpoint,
-		DataCollectionRuleID:      dataCollectionRuleID,
-		Environment:               environment,
-		InstanceType:              instanceType,
-		KeyVaultURL:               keyVaultURL,
-		LogTableName:              logTableName,
-		LogWorkspaceID:            logWorkspaceID,
-		ManagedIdentityClientID:   managedIdentityClientID,
-		ManagedIdentityID:         managedIdentityID,
-		NetworkID:                 networkID,
-		NextflowConfig:            nextflowConfig,
-		PostRunScript:             postRunScript,
-		PreRunScript:              preRunScript,
-		Region:                    region,
-		ResourceGroup:             resourceGroup,
-		IntelligentComputeConfig:  intelligentComputeConfig,
-		IntelligentComputeEnabled: intelligentComputeEnabled,
-		Subnets:                   subnets,
-		SubscriptionID:            subscriptionID,
-		WorkDir:                   workDir,
+		BootDiskSizeGB:                bootDiskSizeGB,
+		DataCollectionEndpoint:        dataCollectionEndpoint,
+		DataCollectionRuleID:          dataCollectionRuleID,
+		Environment:                   environment,
+		FusionVersion:                 fusionVersion,
+		InstanceType:                  instanceType,
+		KeyVaultURL:                   keyVaultURL,
+		LogTableName:                  logTableName,
+		LogWorkspaceID:                logWorkspaceID,
+		ManagedIdentityClientID:       managedIdentityClientID,
+		ManagedIdentityID:             managedIdentityID,
+		NetworkID:                     networkID,
+		NextflowConfig:                nextflowConfig,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		Region:                        region,
+		ResourceGroup:                 resourceGroup,
+		IntelligentComputeConfig:      intelligentComputeConfig,
+		IntelligentComputeEnabled:     intelligentComputeEnabled,
+		Subnets:                       subnets,
+		SubscriptionID:                subscriptionID,
+		WorkDir:                       workDir,
 	}
 	out := shared.AzureCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

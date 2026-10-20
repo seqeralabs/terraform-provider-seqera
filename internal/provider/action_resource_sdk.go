@@ -102,6 +102,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			}
 			r.Launch.ConfigText = types.StringPointerValue(resp.Launch.ConfigText)
 			r.Launch.EntryName = types.StringPointerValue(resp.Launch.EntryName)
+			r.Launch.FusionSnapshots = types.BoolPointerValue(resp.Launch.FusionSnapshots)
 			r.Launch.FusionVersion = types.StringPointerValue(resp.Launch.FusionVersion)
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
@@ -112,6 +113,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
 			r.Launch.OptimizationTargets = types.StringPointerValue(resp.Launch.OptimizationTargets)
 			r.Launch.OutputDir = types.StringPointerValue(resp.Launch.OutputDir)
+			r.Launch.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Launch.OverrideNextflowFusionVersion)
 			r.Launch.ParamsText = types.StringPointerValue(resp.Launch.ParamsText)
 			r.Launch.Pipeline = types.StringPointerValue(resp.Launch.Pipeline)
 			r.Launch.PipelineSchemaID = types.Int64PointerValue(resp.Launch.PipelineSchemaID)
@@ -382,6 +384,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		} else {
 			entryName = nil
 		}
+		fusionSnapshots := new(bool)
+		if !r.Launch.FusionSnapshots.IsUnknown() && !r.Launch.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Launch.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots = nil
+		}
 		fusionVersion := new(string)
 		if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
 			*fusionVersion = r.Launch.FusionVersion.ValueString()
@@ -427,6 +435,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 			*outputDir = r.Launch.OutputDir.ValueString()
 		} else {
 			outputDir = nil
+		}
+		overrideNextflowFusionVersion := new(bool)
+		if !r.Launch.OverrideNextflowFusionVersion.IsUnknown() && !r.Launch.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion = r.Launch.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion = nil
 		}
 		paramsText := new(string)
 		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
@@ -512,33 +526,35 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 			workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 		}
 		launch = &shared.ActionLaunchRequest{
-			ComputeEnvID:     computeEnvID,
-			ConfigProfiles:   configProfiles,
-			ConfigText:       configText,
-			EntryName:        entryName,
-			FusionVersion:    fusionVersion,
-			HeadJobCpus:      headJobCpus,
-			HeadJobMemoryMb:  headJobMemoryMb,
-			ID:               id,
-			LabelIds:         labelIds1,
-			MainScript:       mainScript,
-			NextflowVersion:  nextflowVersion,
-			OutputDir:        outputDir,
-			ParamsText:       paramsText,
-			Pipeline:         pipeline,
-			PipelineSchemaID: pipelineSchemaID,
-			PostRunScript:    postRunScript,
-			PreRunScript:     preRunScript,
-			PullLatest:       pullLatest,
-			Revision:         revision,
-			RunName:          runName,
-			SchemaName:       schemaName,
-			StubRun:          stubRun,
-			SyntaxParser:     syntaxParser,
-			TowerConfig:      towerConfig,
-			UserSecrets:      userSecrets,
-			WorkDir:          workDir,
-			WorkspaceSecrets: workspaceSecrets,
+			ComputeEnvID:                  computeEnvID,
+			ConfigProfiles:                configProfiles,
+			ConfigText:                    configText,
+			EntryName:                     entryName,
+			FusionSnapshots:               fusionSnapshots,
+			FusionVersion:                 fusionVersion,
+			HeadJobCpus:                   headJobCpus,
+			HeadJobMemoryMb:               headJobMemoryMb,
+			ID:                            id,
+			LabelIds:                      labelIds1,
+			MainScript:                    mainScript,
+			NextflowVersion:               nextflowVersion,
+			OutputDir:                     outputDir,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+			ParamsText:                    paramsText,
+			Pipeline:                      pipeline,
+			PipelineSchemaID:              pipelineSchemaID,
+			PostRunScript:                 postRunScript,
+			PreRunScript:                  preRunScript,
+			PullLatest:                    pullLatest,
+			Revision:                      revision,
+			RunName:                       runName,
+			SchemaName:                    schemaName,
+			StubRun:                       stubRun,
+			SyntaxParser:                  syntaxParser,
+			TowerConfig:                   towerConfig,
+			UserSecrets:                   userSecrets,
+			WorkDir:                       workDir,
+			WorkspaceSecrets:              workspaceSecrets,
 		}
 	}
 	var name string
@@ -694,6 +710,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		} else {
 			entryName = nil
 		}
+		fusionSnapshots := new(bool)
+		if !r.Launch.FusionSnapshots.IsUnknown() && !r.Launch.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Launch.FusionSnapshots.ValueBool()
+		} else {
+			fusionSnapshots = nil
+		}
 		fusionVersion := new(string)
 		if !r.Launch.FusionVersion.IsUnknown() && !r.Launch.FusionVersion.IsNull() {
 			*fusionVersion = r.Launch.FusionVersion.ValueString()
@@ -739,6 +761,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 			*outputDir = r.Launch.OutputDir.ValueString()
 		} else {
 			outputDir = nil
+		}
+		overrideNextflowFusionVersion := new(bool)
+		if !r.Launch.OverrideNextflowFusionVersion.IsUnknown() && !r.Launch.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion = r.Launch.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion = nil
 		}
 		paramsText := new(string)
 		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
@@ -824,33 +852,35 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 			workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 		}
 		launch = &shared.ActionLaunchRequest{
-			ComputeEnvID:     computeEnvID,
-			ConfigProfiles:   configProfiles,
-			ConfigText:       configText,
-			EntryName:        entryName,
-			FusionVersion:    fusionVersion,
-			HeadJobCpus:      headJobCpus,
-			HeadJobMemoryMb:  headJobMemoryMb,
-			ID:               id,
-			LabelIds:         labelIds1,
-			MainScript:       mainScript,
-			NextflowVersion:  nextflowVersion,
-			OutputDir:        outputDir,
-			ParamsText:       paramsText,
-			Pipeline:         pipeline,
-			PipelineSchemaID: pipelineSchemaID,
-			PostRunScript:    postRunScript,
-			PreRunScript:     preRunScript,
-			PullLatest:       pullLatest,
-			Revision:         revision,
-			RunName:          runName,
-			SchemaName:       schemaName,
-			StubRun:          stubRun,
-			SyntaxParser:     syntaxParser,
-			TowerConfig:      towerConfig,
-			UserSecrets:      userSecrets,
-			WorkDir:          workDir,
-			WorkspaceSecrets: workspaceSecrets,
+			ComputeEnvID:                  computeEnvID,
+			ConfigProfiles:                configProfiles,
+			ConfigText:                    configText,
+			EntryName:                     entryName,
+			FusionSnapshots:               fusionSnapshots,
+			FusionVersion:                 fusionVersion,
+			HeadJobCpus:                   headJobCpus,
+			HeadJobMemoryMb:               headJobMemoryMb,
+			ID:                            id,
+			LabelIds:                      labelIds1,
+			MainScript:                    mainScript,
+			NextflowVersion:               nextflowVersion,
+			OutputDir:                     outputDir,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+			ParamsText:                    paramsText,
+			Pipeline:                      pipeline,
+			PipelineSchemaID:              pipelineSchemaID,
+			PostRunScript:                 postRunScript,
+			PreRunScript:                  preRunScript,
+			PullLatest:                    pullLatest,
+			Revision:                      revision,
+			RunName:                       runName,
+			SchemaName:                    schemaName,
+			StubRun:                       stubRun,
+			SyntaxParser:                  syntaxParser,
+			TowerConfig:                   towerConfig,
+			UserSecrets:                   userSecrets,
+			WorkDir:                       workDir,
+			WorkspaceSecrets:              workspaceSecrets,
 		}
 	}
 	name := new(string)

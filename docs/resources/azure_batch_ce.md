@@ -226,6 +226,7 @@ Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--forge))
+- `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
@@ -235,6 +236,7 @@ Requires replacement if changed.
 - `managed_identity_pool_client_id` (String) Requires replacement if changed.
 - `managed_identity_pool_resource_id` (String) Requires replacement if changed.
 - `nextflow_config` (String) Requires replacement if changed.
+- `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `subnet_id` (String) Azure VNet subnet resource ID for private network isolation. Requires Entra (service principal) credentials. Requires replacement if changed.

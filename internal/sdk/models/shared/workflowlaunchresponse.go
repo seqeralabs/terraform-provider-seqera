@@ -42,6 +42,8 @@ type WorkflowLaunchResponse struct {
 	ConfigText     *string                  `json:"configText,omitempty"`
 	DateCreated    *time.Time               `json:"dateCreated,omitempty"`
 	EntryName      *string                  `json:"entryName,omitempty"`
+	// Fusion snapshots override this workflow was launched with; null means the compute environment setting applies. Used to pre-select the same value on relaunch/resume.
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
 	FusionVersion   *string `json:"fusionVersion,omitempty"`
 	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
@@ -55,26 +57,28 @@ type WorkflowLaunchResponse struct {
 	OptimizationID      *string `json:"optimizationId,omitempty"`
 	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
 	// Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
-	OutputDir        *string                             `json:"outputDir,omitempty"`
-	ParamsText       *string                             `json:"paramsText,omitempty"`
-	Pipeline         *string                             `json:"pipeline,omitempty"`
-	PipelineID       *int64                              `json:"pipelineId,omitempty"`
-	PipelineSchemaID *int64                              `json:"pipelineSchemaId,omitempty"`
-	PostRunScript    *string                             `json:"postRunScript,omitempty"`
-	PreRunScript     *string                             `json:"preRunScript,omitempty"`
-	PullLatest       *bool                               `json:"pullLatest,omitempty"`
-	Resume           *bool                               `json:"resume,omitempty"`
-	ResumeCommitID   *string                             `json:"resumeCommitId,omitempty"`
-	ResumeDir        *string                             `json:"resumeDir,omitempty"`
-	Revision         *string                             `json:"revision,omitempty"`
-	SchemaName       *string                             `json:"schemaName,omitempty"`
-	SessionID        *string                             `json:"sessionId,omitempty"`
-	StubRun          *bool                               `json:"stubRun,omitempty"`
-	SyntaxParser     *WorkflowLaunchResponseSyntaxParser `json:"syntaxParser,omitempty"`
-	TowerConfig      *string                             `json:"towerConfig,omitempty"`
-	UserSecrets      []string                            `json:"userSecrets,omitempty"`
-	WorkDir          *string                             `json:"workDir,omitempty"`
-	WorkspaceSecrets []string                            `json:"workspaceSecrets,omitempty"`
+	OutputDir *string `json:"outputDir,omitempty"`
+	// Whether this workflow was launched with fusionVersion instead of the Fusion version provided by the Nextflow launcher container; null means the compute environment setting applies. Used to pre-select the same value on relaunch/resume.
+	OverrideNextflowFusionVersion *bool                               `json:"overrideNextflowFusionVersion,omitempty"`
+	ParamsText                    *string                             `json:"paramsText,omitempty"`
+	Pipeline                      *string                             `json:"pipeline,omitempty"`
+	PipelineID                    *int64                              `json:"pipelineId,omitempty"`
+	PipelineSchemaID              *int64                              `json:"pipelineSchemaId,omitempty"`
+	PostRunScript                 *string                             `json:"postRunScript,omitempty"`
+	PreRunScript                  *string                             `json:"preRunScript,omitempty"`
+	PullLatest                    *bool                               `json:"pullLatest,omitempty"`
+	Resume                        *bool                               `json:"resume,omitempty"`
+	ResumeCommitID                *string                             `json:"resumeCommitId,omitempty"`
+	ResumeDir                     *string                             `json:"resumeDir,omitempty"`
+	Revision                      *string                             `json:"revision,omitempty"`
+	SchemaName                    *string                             `json:"schemaName,omitempty"`
+	SessionID                     *string                             `json:"sessionId,omitempty"`
+	StubRun                       *bool                               `json:"stubRun,omitempty"`
+	SyntaxParser                  *WorkflowLaunchResponseSyntaxParser `json:"syntaxParser,omitempty"`
+	TowerConfig                   *string                             `json:"towerConfig,omitempty"`
+	UserSecrets                   []string                            `json:"userSecrets,omitempty"`
+	WorkDir                       *string                             `json:"workDir,omitempty"`
+	WorkspaceSecrets              []string                            `json:"workspaceSecrets,omitempty"`
 }
 
 func (w WorkflowLaunchResponse) MarshalJSON() ([]byte, error) {
@@ -128,6 +132,13 @@ func (w *WorkflowLaunchResponse) GetEntryName() *string {
 		return nil
 	}
 	return w.EntryName
+}
+
+func (w *WorkflowLaunchResponse) GetFusionSnapshots() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.FusionSnapshots
 }
 
 func (w *WorkflowLaunchResponse) GetFusionVersion() *string {
@@ -198,6 +209,13 @@ func (w *WorkflowLaunchResponse) GetOutputDir() *string {
 		return nil
 	}
 	return w.OutputDir
+}
+
+func (w *WorkflowLaunchResponse) GetOverrideNextflowFusionVersion() *bool {
+	if w == nil {
+		return nil
+	}
+	return w.OverrideNextflowFusionVersion
 }
 
 func (w *WorkflowLaunchResponse) GetParamsText() *string {

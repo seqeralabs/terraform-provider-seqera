@@ -839,6 +839,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											custom_boolvalidators.FusionSnapshotsValidator(),
 										},
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -913,6 +924,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.Bool{
 											custom_boolvalidators.NvmeStorageValidator(),
 										},
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1143,6 +1162,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
 									},
 									"gpu_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1391,6 +1421,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1837,6 +1875,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -1908,6 +1957,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2110,6 +2167,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
 									},
 									"instance_type": schema.StringAttribute{
 										Computed: true,
@@ -2367,6 +2435,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
+									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -2576,6 +2652,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -2623,6 +2710,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"pod_cleanup": schema.StringAttribute{
 										Computed: true,
@@ -2857,6 +2952,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -2908,6 +3014,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"pod_cleanup": schema.StringAttribute{
 										Computed: true,
@@ -3195,7 +3309,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires ` + "`" + `enable_fusion = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionSnapshotsValidator(),
+										},
+									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -3302,6 +3430,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										MarkdownDescription: `NFS server hostname or IP address for shared file system access.` + "\n" +
 											`Format: hostname:/export/path` + "\n" +
 											`Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3505,6 +3641,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
 									},
 									"gpu_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -3745,6 +3892,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4450,6 +4605,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
@@ -4644,6 +4810,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -5209,6 +5383,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
+									"fusion_version": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
+										Validators: []validator.String{
+											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
 									"instance_type_size": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -5231,6 +5416,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"override_nextflow_fusion_version": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,

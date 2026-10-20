@@ -44,7 +44,7 @@ type UpdateActionResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Bad request
+	// Bad request: the request is invalid. This includes `launch` or `pipeline` on an agent action
 	ErrorResponse *shared.ErrorResponse
 }
 

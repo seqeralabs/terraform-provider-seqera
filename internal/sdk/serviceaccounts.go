@@ -953,6 +953,7 @@ func (s *ServiceAccounts) DescribeServiceAccount(ctx context.Context, request op
 }
 
 // UpdateServiceAccount - Update a service account
+// Updates the fields present in the request. Omitted fields keep their current values.
 func (s *ServiceAccounts) UpdateServiceAccount(ctx context.Context, request operations.UpdateServiceAccountRequest, opts ...operations.Option) (*operations.UpdateServiceAccountResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

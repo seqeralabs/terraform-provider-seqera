@@ -73,6 +73,7 @@ resource "seqera_agent" "triage" {
 ### Read-Only
 
 - `date_created` (String) Creation timestamp.
+- `github_app_credential_name` (String)
 - `id` (String) Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
 - `last_updated` (String) Last update timestamp.
 - `service_account_name` (String) Name of the bound service account.

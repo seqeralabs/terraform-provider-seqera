@@ -114,6 +114,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					}
 					r.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
+					r.ComputeEnv.Config.AwsBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionVersion)
 					r.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobRole)
@@ -122,6 +123,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
 					r.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NvmeStorageEnabled)
+					r.ComputeEnv.Config.AwsBatch.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Region)
@@ -161,6 +163,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.AwsCloud.Environment = nil
 					}
+					r.ComputeEnv.Config.AwsCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.FusionVersion)
 					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
@@ -202,6 +205,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeEnabled)
 					r.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.LogGroup)
 					r.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AwsCloud.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Region)
@@ -274,12 +278,14 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.EksPlatform.Environment = nil
 					}
+					r.ComputeEnv.Config.EksPlatform.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.FusionVersion)
 					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
 					r.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
 					r.ComputeEnv.Config.EksPlatform.Namespace = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
 					r.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.EksPlatform.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.OverrideNextflowFusionVersion)
 					if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
 						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
 					} else {
@@ -358,6 +364,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMType)
 						}
 					}
+					r.ComputeEnv.Config.AzureBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.FusionVersion)
 					r.ComputeEnv.Config.AzureBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
@@ -367,6 +374,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityPoolClientID)
 					r.ComputeEnv.Config.AzureBatch.ManagedIdentityPoolResourceID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityPoolResourceID)
 					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AzureBatch.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
@@ -398,6 +406,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.AzureCloud.Environment = nil
 					}
+					r.ComputeEnv.Config.AzureCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.FusionVersion)
 					r.ComputeEnv.Config.AzureCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.InstanceType)
 					if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig == nil {
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig = nil
@@ -441,6 +450,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud.ManagedIdentityID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityID)
 					r.ComputeEnv.Config.AzureCloud.NetworkID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.NetworkID)
 					r.ComputeEnv.Config.AzureCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AzureCloud.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.AzureCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AzureCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AzureCloud.Region = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.Region)
@@ -484,6 +494,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.GoogleBatch.Environment = nil
 					}
 					r.ComputeEnv.Config.GoogleBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.FusionSnapshots)
+					r.ComputeEnv.Config.GoogleBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.FusionVersion)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
@@ -504,6 +515,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
 					r.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
 					r.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
+					r.ComputeEnv.Config.GoogleBatch.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PostRunScript)
 					r.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PreRunScript)
 					r.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ProjectID)
@@ -535,6 +547,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.GoogleCloud.Environment = nil
 					}
+					r.ComputeEnv.Config.GoogleCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.FusionVersion)
 					r.ComputeEnv.Config.GoogleCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.GoogleCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.InstanceType)
@@ -583,6 +596,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.GoogleCloud.NetworkTags = nil
 					}
 					r.ComputeEnv.Config.GoogleCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.GoogleCloud.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.GoogleCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PostRunScript)
 					r.ComputeEnv.Config.GoogleCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.GoogleCloud.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ProjectID)
@@ -622,12 +636,14 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.GkePlatform.Environment = nil
 					}
+					r.ComputeEnv.Config.GkePlatform.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.FusionVersion)
 					r.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadPodSpec)
 					r.ComputeEnv.Config.GkePlatform.HeadServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadServiceAccount)
 					r.ComputeEnv.Config.GkePlatform.Namespace = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Namespace)
 					r.ComputeEnv.Config.GkePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.GkePlatform.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.OverrideNextflowFusionVersion)
 					if resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup != nil {
 						r.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup))
 					} else {
@@ -783,6 +799,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.Environment = nil
 					}
 					r.ComputeEnv.Config.LocalPlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.LocalPlatform.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.FusionVersion)
 					if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig == nil {
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = nil
 					} else {
@@ -819,6 +836,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					}
 					r.ComputeEnv.Config.LocalPlatform.IntelligentComputeEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeEnabled)
 					r.ComputeEnv.Config.LocalPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.LocalPlatform.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.LocalPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PostRunScript)
 					r.ComputeEnv.Config.LocalPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.PreRunScript)
 					r.ComputeEnv.Config.LocalPlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.WaveEnabled)
@@ -875,12 +893,14 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					} else {
 						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = nil
 					}
+					r.ComputeEnv.Config.SeqeracomputePlatform.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.FusionVersion)
 					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize != nil {
 						r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize))
 					} else {
 						r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize = types.StringNull()
 					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.SeqeracomputePlatform.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.OverrideNextflowFusionVersion)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
@@ -1382,6 +1402,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionSnapshots = nil
 		}
+		fusionVersion := new(string)
+		if !r.ComputeEnv.Config.AwsBatch.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.FusionVersion.IsNull() {
+			*fusionVersion = r.ComputeEnv.Config.AwsBatch.FusionVersion.ValueString()
+		} else {
+			fusionVersion = nil
+		}
 		headJobCpus := new(int)
 		if !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsNull() {
 			*headJobCpus = int(r.ComputeEnv.Config.AwsBatch.HeadJobCpus.ValueInt32())
@@ -1430,6 +1456,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			nvmeStorageEnabled = nil
 		}
+		overrideNextflowFusionVersion := new(bool)
+		if !r.ComputeEnv.Config.AwsBatch.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion = r.ComputeEnv.Config.AwsBatch.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion = nil
+		}
 		postRunScript := new(string)
 		if !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsNull() {
 			*postRunScript = r.ComputeEnv.Config.AwsBatch.PostRunScript.ValueString()
@@ -1474,32 +1506,34 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir = nil
 		}
 		awsBatchConfiguration = &shared.AWSBatchConfiguration{
-			CliPath:            cliPath,
-			ComputeJobRole:     computeJobRole,
-			ComputeQueue:       computeQueue,
-			DragenInstanceType: dragenInstanceType,
-			DragenQueue:        dragenQueue,
-			Environment:        environment,
-			ExecutionRole:      executionRole,
-			Forge:              forge,
-			EnableFusion:       enableFusion,
-			FusionSnapshots:    fusionSnapshots,
-			HeadJobCpus:        headJobCpus,
-			HeadJobMemoryMb:    headJobMemoryMb,
-			HeadJobRole:        headJobRole,
-			HeadQueue:          headQueue,
-			LogGroup:           logGroup,
-			LustreID:           lustreID,
-			NextflowConfig:     nextflowConfig,
-			NvmeStorageEnabled: nvmeStorageEnabled,
-			PostRunScript:      postRunScript,
-			PreRunScript:       preRunScript,
-			Region:             region,
-			SecretsKmsKeyID:    secretsKmsKeyID,
-			StorageType:        storageType,
-			Volumes:            volumes,
-			EnableWave:         enableWave,
-			WorkDir:            workDir,
+			CliPath:                       cliPath,
+			ComputeJobRole:                computeJobRole,
+			ComputeQueue:                  computeQueue,
+			DragenInstanceType:            dragenInstanceType,
+			DragenQueue:                   dragenQueue,
+			Environment:                   environment,
+			ExecutionRole:                 executionRole,
+			Forge:                         forge,
+			EnableFusion:                  enableFusion,
+			FusionSnapshots:               fusionSnapshots,
+			FusionVersion:                 fusionVersion,
+			HeadJobCpus:                   headJobCpus,
+			HeadJobMemoryMb:               headJobMemoryMb,
+			HeadJobRole:                   headJobRole,
+			HeadQueue:                     headQueue,
+			LogGroup:                      logGroup,
+			LustreID:                      lustreID,
+			NextflowConfig:                nextflowConfig,
+			NvmeStorageEnabled:            nvmeStorageEnabled,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+			PostRunScript:                 postRunScript,
+			PreRunScript:                  preRunScript,
+			Region:                        region,
+			SecretsKmsKeyID:               secretsKmsKeyID,
+			StorageType:                   storageType,
+			Volumes:                       volumes,
+			EnableWave:                    enableWave,
+			WorkDir:                       workDir,
 		}
 	}
 	if awsBatchConfiguration != nil {
@@ -1579,6 +1613,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				})
 			}
 		}
+		fusionVersion1 := new(string)
+		if !r.ComputeEnv.Config.AwsCloud.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.FusionVersion.IsNull() {
+			*fusionVersion1 = r.ComputeEnv.Config.AwsCloud.FusionVersion.ValueString()
+		} else {
+			fusionVersion1 = nil
+		}
 		gpuEnabled1 := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsNull() {
 			*gpuEnabled1 = r.ComputeEnv.Config.AwsCloud.GpuEnabled.ValueBool()
@@ -1614,6 +1654,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig1 = r.ComputeEnv.Config.AwsCloud.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig1 = nil
+		}
+		overrideNextflowFusionVersion1 := new(bool)
+		if !r.ComputeEnv.Config.AwsCloud.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion1 = r.ComputeEnv.Config.AwsCloud.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion1 = nil
 		}
 		postRunScript1 := new(string)
 		if !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsNull() {
@@ -1762,30 +1808,32 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir1 = nil
 		}
 		awsCloudConfiguration = &shared.AWSCloudConfiguration{
-			AllowBuckets:              allowBuckets1,
-			Arm64Enabled:              arm64Enabled1,
-			EbsBootSize:               ebsBootSize1,
-			EbsEncrypted:              ebsEncrypted,
-			EbsKmsKeyID:               ebsKmsKeyID,
-			Ec2KeyPair:                ec2KeyPair1,
-			Environment:               environment1,
-			GpuEnabled:                gpuEnabled1,
-			ImageID:                   imageId1,
-			InstanceProfileArn:        instanceProfileArn,
-			InstanceType:              instanceType,
-			LogGroup:                  logGroup1,
-			NextflowConfig:            nextflowConfig1,
-			PostRunScript:             postRunScript1,
-			PreRunScript:              preRunScript1,
-			Region:                    region1,
-			IntelligentComputeConfig:  intelligentComputeConfig,
-			IntelligentComputeEnabled: intelligentComputeEnabled,
-			SecretsKmsKeyID:           secretsKmsKeyId1,
-			SecurityGroups:            securityGroups1,
-			SubnetID:                  subnetID,
-			SubnetIds:                 subnetIds,
-			VpcID:                     vpcId1,
-			WorkDir:                   workDir1,
+			AllowBuckets:                  allowBuckets1,
+			Arm64Enabled:                  arm64Enabled1,
+			EbsBootSize:                   ebsBootSize1,
+			EbsEncrypted:                  ebsEncrypted,
+			EbsKmsKeyID:                   ebsKmsKeyID,
+			Ec2KeyPair:                    ec2KeyPair1,
+			Environment:                   environment1,
+			FusionVersion:                 fusionVersion1,
+			GpuEnabled:                    gpuEnabled1,
+			ImageID:                       imageId1,
+			InstanceProfileArn:            instanceProfileArn,
+			InstanceType:                  instanceType,
+			LogGroup:                      logGroup1,
+			NextflowConfig:                nextflowConfig1,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion1,
+			PostRunScript:                 postRunScript1,
+			PreRunScript:                  preRunScript1,
+			Region:                        region1,
+			IntelligentComputeConfig:      intelligentComputeConfig,
+			IntelligentComputeEnabled:     intelligentComputeEnabled,
+			SecretsKmsKeyID:               secretsKmsKeyId1,
+			SecurityGroups:                securityGroups1,
+			SubnetID:                      subnetID,
+			SubnetIds:                     subnetIds,
+			VpcID:                         vpcId1,
+			WorkDir:                       workDir1,
 		}
 	}
 	if awsCloudConfiguration != nil {
@@ -1837,6 +1885,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				})
 			}
 		}
+		fusionVersion2 := new(string)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.FusionVersion.IsNull() {
+			*fusionVersion2 = r.ComputeEnv.Config.SeqeracomputePlatform.FusionVersion.ValueString()
+		} else {
+			fusionVersion2 = nil
+		}
 		instanceTypeSize := new(shared.SeqeraComputeCloudInstanceTypeSize)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsNull() {
 			*instanceTypeSize = shared.SeqeraComputeCloudInstanceTypeSize(r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.ValueString())
@@ -1848,6 +1902,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig2 = r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig2 = nil
+		}
+		overrideNextflowFusionVersion2 := new(bool)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion2 = r.ComputeEnv.Config.SeqeracomputePlatform.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion2 = nil
 		}
 		postRunScript2 := new(string)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsNull() {
@@ -1871,14 +1931,16 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir2 = nil
 		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
-			DefaultDataRetentionPolicy: defaultDataRetentionPolicy,
-			Environment:                environment2,
-			InstanceTypeSize:           instanceTypeSize,
-			NextflowConfig:             nextflowConfig2,
-			PostRunScript:              postRunScript2,
-			PreRunScript:               preRunScript2,
-			Region:                     region2,
-			WorkDir:                    workDir2,
+			DefaultDataRetentionPolicy:    defaultDataRetentionPolicy,
+			Environment:                   environment2,
+			FusionVersion:                 fusionVersion2,
+			InstanceTypeSize:              instanceTypeSize,
+			NextflowConfig:                nextflowConfig2,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion2,
+			PostRunScript:                 postRunScript2,
+			PreRunScript:                  preRunScript2,
+			Region:                        region2,
+			WorkDir:                       workDir2,
 		}
 	}
 	if seqeraComputeConfiguration != nil {
@@ -1976,6 +2038,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionSnapshots2 = nil
 		}
+		fusionVersion3 := new(string)
+		if !r.ComputeEnv.Config.GoogleBatch.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.FusionVersion.IsNull() {
+			*fusionVersion3 = r.ComputeEnv.Config.GoogleBatch.FusionVersion.ValueString()
+		} else {
+			fusionVersion3 = nil
+		}
 		headJobCpus1 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
 			*headJobCpus1 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.ValueInt32())
@@ -2037,6 +2105,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nfsTarget = r.ComputeEnv.Config.GoogleBatch.NfsTarget.ValueString()
 		} else {
 			nfsTarget = nil
+		}
+		overrideNextflowFusionVersion3 := new(bool)
+		if !r.ComputeEnv.Config.GoogleBatch.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion3 = r.ComputeEnv.Config.GoogleBatch.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion3 = nil
 		}
 		postRunScript3 := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsNull() {
@@ -2105,38 +2179,40 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir3 = nil
 		}
 		googleBatchServiceConfiguration = &shared.GoogleBatchServiceConfiguration{
-			BootDiskImage:               bootDiskImage,
-			BootDiskSizeGb:              bootDiskSizeGb,
-			ComputeJobsInstanceTemplate: computeJobsInstanceTemplate,
-			ComputeJobsMachineType:      computeJobsMachineType,
-			CopyImage:                   copyImage,
-			CPUPlatform:                 cpuPlatform,
-			DebugMode:                   debugMode,
-			Environment:                 environment3,
-			EnableFusion:                enableFusion1,
-			FusionSnapshots:             fusionSnapshots2,
-			HeadJobCpus:                 headJobCpus1,
-			HeadJobInstanceTemplate:     headJobInstanceTemplate,
-			HeadJobMemoryMb:             headJobMemoryMb1,
-			Labels:                      labels,
-			Location:                    location,
-			MachineType:                 machineType,
-			Network:                     network,
-			NetworkTags:                 networkTags,
-			NextflowConfig:              nextflowConfig3,
-			NfsMount:                    nfsMount,
-			NfsTarget:                   nfsTarget,
-			PostRunScript:               postRunScript3,
-			PreRunScript:                preRunScript3,
-			ProjectID:                   projectID,
-			ServiceAccount:              serviceAccount,
-			Spot:                        spot,
-			SSHDaemon:                   sshDaemon,
-			SSHImage:                    sshImage,
-			Subnetwork:                  subnetwork,
-			UsePrivateAddress:           usePrivateAddress,
-			EnableWave:                  enableWave1,
-			WorkDir:                     workDir3,
+			BootDiskImage:                 bootDiskImage,
+			BootDiskSizeGb:                bootDiskSizeGb,
+			ComputeJobsInstanceTemplate:   computeJobsInstanceTemplate,
+			ComputeJobsMachineType:        computeJobsMachineType,
+			CopyImage:                     copyImage,
+			CPUPlatform:                   cpuPlatform,
+			DebugMode:                     debugMode,
+			Environment:                   environment3,
+			EnableFusion:                  enableFusion1,
+			FusionSnapshots:               fusionSnapshots2,
+			FusionVersion:                 fusionVersion3,
+			HeadJobCpus:                   headJobCpus1,
+			HeadJobInstanceTemplate:       headJobInstanceTemplate,
+			HeadJobMemoryMb:               headJobMemoryMb1,
+			Labels:                        labels,
+			Location:                      location,
+			MachineType:                   machineType,
+			Network:                       network,
+			NetworkTags:                   networkTags,
+			NextflowConfig:                nextflowConfig3,
+			NfsMount:                      nfsMount,
+			NfsTarget:                     nfsTarget,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion3,
+			PostRunScript:                 postRunScript3,
+			PreRunScript:                  preRunScript3,
+			ProjectID:                     projectID,
+			ServiceAccount:                serviceAccount,
+			Spot:                          spot,
+			SSHDaemon:                     sshDaemon,
+			SSHImage:                      sshImage,
+			Subnetwork:                    subnetwork,
+			UsePrivateAddress:             usePrivateAddress,
+			EnableWave:                    enableWave1,
+			WorkDir:                       workDir3,
 		}
 	}
 	if googleBatchServiceConfiguration != nil {
@@ -2194,6 +2270,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				})
 			}
 		}
+		fusionVersion4 := new(string)
+		if !r.ComputeEnv.Config.GoogleCloud.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.FusionVersion.IsNull() {
+			*fusionVersion4 = r.ComputeEnv.Config.GoogleCloud.FusionVersion.ValueString()
+		} else {
+			fusionVersion4 = nil
+		}
 		gpuEnabled2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsNull() {
 			*gpuEnabled2 = r.ComputeEnv.Config.GoogleCloud.GpuEnabled.ValueBool()
@@ -2230,6 +2312,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig4 = r.ComputeEnv.Config.GoogleCloud.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig4 = nil
+		}
+		overrideNextflowFusionVersion4 := new(bool)
+		if !r.ComputeEnv.Config.GoogleCloud.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion4 = r.ComputeEnv.Config.GoogleCloud.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion4 = nil
 		}
 		postRunScript4 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.PostRunScript.IsNull() {
@@ -2386,26 +2474,28 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			zone = nil
 		}
 		googleCloudConfiguration = &shared.GoogleCloudConfiguration{
-			Arm64Enabled:              arm64Enabled2,
-			BootDiskSizeGb:            bootDiskSizeGb1,
-			Environment:               environment4,
-			GpuEnabled:                gpuEnabled2,
-			ImageID:                   imageId2,
-			InstanceType:              instanceType1,
-			Network:                   network1,
-			NetworkTags:               networkTags1,
-			NextflowConfig:            nextflowConfig4,
-			PostRunScript:             postRunScript4,
-			PreRunScript:              preRunScript4,
-			ProjectID:                 projectId1,
-			Region:                    region3,
-			IntelligentComputeConfig:  intelligentComputeConfig1,
-			IntelligentComputeEnabled: intelligentComputeEnabled1,
-			ServiceAccountEmail:       serviceAccountEmail,
-			Subnetworks:               subnetworks,
-			UsePrivateAddress:         usePrivateAddress1,
-			WorkDir:                   workDir4,
-			Zone:                      zone,
+			Arm64Enabled:                  arm64Enabled2,
+			BootDiskSizeGb:                bootDiskSizeGb1,
+			Environment:                   environment4,
+			FusionVersion:                 fusionVersion4,
+			GpuEnabled:                    gpuEnabled2,
+			ImageID:                       imageId2,
+			InstanceType:                  instanceType1,
+			Network:                       network1,
+			NetworkTags:                   networkTags1,
+			NextflowConfig:                nextflowConfig4,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion4,
+			PostRunScript:                 postRunScript4,
+			PreRunScript:                  preRunScript4,
+			ProjectID:                     projectId1,
+			Region:                        region3,
+			IntelligentComputeConfig:      intelligentComputeConfig1,
+			IntelligentComputeEnabled:     intelligentComputeEnabled1,
+			ServiceAccountEmail:           serviceAccountEmail,
+			Subnetworks:                   subnetworks,
+			UsePrivateAddress:             usePrivateAddress1,
+			WorkDir:                       workDir4,
+			Zone:                          zone,
 		}
 	}
 	if googleCloudConfiguration != nil {
@@ -2604,6 +2694,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion2 = nil
 		}
+		fusionVersion5 := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.FusionVersion.IsNull() {
+			*fusionVersion5 = r.ComputeEnv.Config.AzureBatch.FusionVersion.ValueString()
+		} else {
+			fusionVersion5 = nil
+		}
 		headJobCpus2 := new(int)
 		if !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsNull() {
 			*headJobCpus2 = int(r.ComputeEnv.Config.AzureBatch.HeadJobCpus.ValueInt32())
@@ -2657,6 +2753,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig5 = r.ComputeEnv.Config.AzureBatch.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig5 = nil
+		}
+		overrideNextflowFusionVersion5 := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion5 = r.ComputeEnv.Config.AzureBatch.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion5 = nil
 		}
 		postRunScript5 := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsNull() {
@@ -2724,6 +2826,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Environment:                   environment5,
 			Forge:                         forge1,
 			EnableFusion:                  enableFusion2,
+			FusionVersion:                 fusionVersion5,
 			HeadJobCpus:                   headJobCpus2,
 			HeadJobMemoryMb:               headJobMemoryMb2,
 			HeadPool:                      headPool1,
@@ -2733,6 +2836,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			ManagedIdentityPoolClientID:   managedIdentityPoolClientID,
 			ManagedIdentityPoolResourceID: managedIdentityPoolResourceID,
 			NextflowConfig:                nextflowConfig5,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion5,
 			PostRunScript:                 postRunScript5,
 			PreRunScript:                  preRunScript5,
 			Region:                        region4,
@@ -2806,6 +2910,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				})
 			}
 		}
+		fusionVersion6 := new(string)
+		if !r.ComputeEnv.Config.AzureCloud.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.FusionVersion.IsNull() {
+			*fusionVersion6 = r.ComputeEnv.Config.AzureCloud.FusionVersion.ValueString()
+		} else {
+			fusionVersion6 = nil
+		}
 		instanceType2 := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.InstanceType.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.InstanceType.IsNull() {
 			*instanceType2 = r.ComputeEnv.Config.AzureCloud.InstanceType.ValueString()
@@ -2853,6 +2963,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig6 = r.ComputeEnv.Config.AzureCloud.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig6 = nil
+		}
+		overrideNextflowFusionVersion6 := new(bool)
+		if !r.ComputeEnv.Config.AzureCloud.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion6 = r.ComputeEnv.Config.AzureCloud.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion6 = nil
 		}
 		postRunScript6 := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.PostRunScript.IsNull() {
@@ -2994,27 +3110,29 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir6 = nil
 		}
 		azureCloudConfiguration = &shared.AzureCloudConfiguration{
-			BootDiskSizeGB:            bootDiskSizeGb4,
-			DataCollectionEndpoint:    dataCollectionEndpoint,
-			DataCollectionRuleID:      dataCollectionRuleID,
-			Environment:               environment6,
-			InstanceType:              instanceType2,
-			KeyVaultURL:               keyVaultURL,
-			LogTableName:              logTableName,
-			LogWorkspaceID:            logWorkspaceID,
-			ManagedIdentityClientID:   managedIdentityClientId1,
-			ManagedIdentityID:         managedIdentityID,
-			NetworkID:                 networkID,
-			NextflowConfig:            nextflowConfig6,
-			PostRunScript:             postRunScript6,
-			PreRunScript:              preRunScript6,
-			Region:                    region5,
-			ResourceGroup:             resourceGroup,
-			IntelligentComputeConfig:  intelligentComputeConfig2,
-			IntelligentComputeEnabled: intelligentComputeEnabled2,
-			Subnets:                   subnets1,
-			SubscriptionID:            subscriptionID,
-			WorkDir:                   workDir6,
+			BootDiskSizeGB:                bootDiskSizeGb4,
+			DataCollectionEndpoint:        dataCollectionEndpoint,
+			DataCollectionRuleID:          dataCollectionRuleID,
+			Environment:                   environment6,
+			FusionVersion:                 fusionVersion6,
+			InstanceType:                  instanceType2,
+			KeyVaultURL:                   keyVaultURL,
+			LogTableName:                  logTableName,
+			LogWorkspaceID:                logWorkspaceID,
+			ManagedIdentityClientID:       managedIdentityClientId1,
+			ManagedIdentityID:             managedIdentityID,
+			NetworkID:                     networkID,
+			NextflowConfig:                nextflowConfig6,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion6,
+			PostRunScript:                 postRunScript6,
+			PreRunScript:                  preRunScript6,
+			Region:                        region5,
+			ResourceGroup:                 resourceGroup,
+			IntelligentComputeConfig:      intelligentComputeConfig2,
+			IntelligentComputeEnabled:     intelligentComputeEnabled2,
+			Subnets:                       subnets1,
+			SubscriptionID:                subscriptionID,
+			WorkDir:                       workDir6,
 		}
 	}
 	if azureCloudConfiguration != nil {
@@ -3510,6 +3628,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion3 = nil
 		}
+		fusionVersion7 := new(string)
+		if !r.ComputeEnv.Config.EksPlatform.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.FusionVersion.IsNull() {
+			*fusionVersion7 = r.ComputeEnv.Config.EksPlatform.FusionVersion.ValueString()
+		} else {
+			fusionVersion7 = nil
+		}
 		headJobCpus4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
 			*headJobCpus4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
@@ -3545,6 +3669,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig10 = r.ComputeEnv.Config.EksPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig10 = nil
+		}
+		overrideNextflowFusionVersion7 := new(bool)
+		if !r.ComputeEnv.Config.EksPlatform.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion7 = r.ComputeEnv.Config.EksPlatform.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion7 = nil
 		}
 		podCleanup1 := new(shared.PodCleanupPolicy)
 		if !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsNull() {
@@ -3610,27 +3740,29 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir10 = nil
 		}
 		amazonEKSClusterConfiguration = &shared.AmazonEKSClusterConfiguration{
-			ClusterName:           clusterName,
-			ComputeServiceAccount: computeServiceAccount1,
-			Environment:           environment10,
-			EnableFusion:          enableFusion3,
-			HeadJobCpus:           headJobCpus4,
-			HeadJobMemoryMb:       headJobMemoryMb4,
-			HeadPodSpec:           headPodSpec1,
-			HeadServiceAccount:    headServiceAccount1,
-			Namespace:             namespace1,
-			NextflowConfig:        nextflowConfig10,
-			PodCleanup:            podCleanup1,
-			PostRunScript:         postRunScript10,
-			PreRunScript:          preRunScript10,
-			Region:                region6,
-			Server:                server1,
-			ServicePodSpec:        servicePodSpec1,
-			SslCert:               sslCert1,
-			StorageClaimName:      storageClaimName1,
-			StorageMountPath:      storageMountPath1,
-			EnableWave:            enableWave3,
-			WorkDir:               workDir10,
+			ClusterName:                   clusterName,
+			ComputeServiceAccount:         computeServiceAccount1,
+			Environment:                   environment10,
+			EnableFusion:                  enableFusion3,
+			FusionVersion:                 fusionVersion7,
+			HeadJobCpus:                   headJobCpus4,
+			HeadJobMemoryMb:               headJobMemoryMb4,
+			HeadPodSpec:                   headPodSpec1,
+			HeadServiceAccount:            headServiceAccount1,
+			Namespace:                     namespace1,
+			NextflowConfig:                nextflowConfig10,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion7,
+			PodCleanup:                    podCleanup1,
+			PostRunScript:                 postRunScript10,
+			PreRunScript:                  preRunScript10,
+			Region:                        region6,
+			Server:                        server1,
+			ServicePodSpec:                servicePodSpec1,
+			SslCert:                       sslCert1,
+			StorageClaimName:              storageClaimName1,
+			StorageMountPath:              storageMountPath1,
+			EnableWave:                    enableWave3,
+			WorkDir:                       workDir10,
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
@@ -3691,6 +3823,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion4 = nil
 		}
+		fusionVersion8 := new(string)
+		if !r.ComputeEnv.Config.GkePlatform.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.FusionVersion.IsNull() {
+			*fusionVersion8 = r.ComputeEnv.Config.GkePlatform.FusionVersion.ValueString()
+		} else {
+			fusionVersion8 = nil
+		}
 		headJobCpus5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
 			*headJobCpus5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
@@ -3726,6 +3864,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*nextflowConfig11 = r.ComputeEnv.Config.GkePlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig11 = nil
+		}
+		overrideNextflowFusionVersion8 := new(bool)
+		if !r.ComputeEnv.Config.GkePlatform.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion8 = r.ComputeEnv.Config.GkePlatform.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion8 = nil
 		}
 		podCleanup2 := new(shared.PodCleanupPolicy)
 		if !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsNull() {
@@ -3791,27 +3935,29 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir11 = nil
 		}
 		googleGKEClusterConfiguration = &shared.GoogleGKEClusterConfiguration{
-			ClusterName:           clusterName1,
-			ComputeServiceAccount: computeServiceAccount2,
-			Environment:           environment11,
-			EnableFusion:          enableFusion4,
-			HeadJobCpus:           headJobCpus5,
-			HeadJobMemoryMb:       headJobMemoryMb5,
-			HeadPodSpec:           headPodSpec2,
-			HeadServiceAccount:    headServiceAccount2,
-			Namespace:             namespace2,
-			NextflowConfig:        nextflowConfig11,
-			PodCleanup:            podCleanup2,
-			PostRunScript:         postRunScript11,
-			PreRunScript:          preRunScript11,
-			Region:                region7,
-			Server:                server2,
-			ServicePodSpec:        servicePodSpec2,
-			SslCert:               sslCert2,
-			StorageClaimName:      storageClaimName2,
-			StorageMountPath:      storageMountPath2,
-			EnableWave:            enableWave4,
-			WorkDir:               workDir11,
+			ClusterName:                   clusterName1,
+			ComputeServiceAccount:         computeServiceAccount2,
+			Environment:                   environment11,
+			EnableFusion:                  enableFusion4,
+			FusionVersion:                 fusionVersion8,
+			HeadJobCpus:                   headJobCpus5,
+			HeadJobMemoryMb:               headJobMemoryMb5,
+			HeadPodSpec:                   headPodSpec2,
+			HeadServiceAccount:            headServiceAccount2,
+			Namespace:                     namespace2,
+			NextflowConfig:                nextflowConfig11,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion8,
+			PodCleanup:                    podCleanup2,
+			PostRunScript:                 postRunScript11,
+			PreRunScript:                  preRunScript11,
+			Region:                        region7,
+			Server:                        server2,
+			ServicePodSpec:                servicePodSpec2,
+			SslCert:                       sslCert2,
+			StorageClaimName:              storageClaimName2,
+			StorageMountPath:              storageMountPath2,
+			EnableWave:                    enableWave4,
+			WorkDir:                       workDir11,
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
@@ -4268,11 +4414,23 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusion2Enabled = nil
 		}
+		fusionVersion9 := new(string)
+		if !r.ComputeEnv.Config.LocalPlatform.FusionVersion.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.FusionVersion.IsNull() {
+			*fusionVersion9 = r.ComputeEnv.Config.LocalPlatform.FusionVersion.ValueString()
+		} else {
+			fusionVersion9 = nil
+		}
 		nextflowConfig15 := new(string)
 		if !r.ComputeEnv.Config.LocalPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.NextflowConfig.IsNull() {
 			*nextflowConfig15 = r.ComputeEnv.Config.LocalPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig15 = nil
+		}
+		overrideNextflowFusionVersion9 := new(bool)
+		if !r.ComputeEnv.Config.LocalPlatform.OverrideNextflowFusionVersion.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.OverrideNextflowFusionVersion.IsNull() {
+			*overrideNextflowFusionVersion9 = r.ComputeEnv.Config.LocalPlatform.OverrideNextflowFusionVersion.ValueBool()
+		} else {
+			overrideNextflowFusionVersion9 = nil
 		}
 		postRunScript15 := new(string)
 		if !r.ComputeEnv.Config.LocalPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.PostRunScript.IsNull() {
@@ -4395,15 +4553,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		workDir15 = r.ComputeEnv.Config.LocalPlatform.WorkDir.ValueString()
 
 		localExecutionConfiguration = &shared.LocalExecutionConfiguration{
-			Environment:               environment15,
-			Fusion2Enabled:            fusion2Enabled,
-			NextflowConfig:            nextflowConfig15,
-			PostRunScript:             postRunScript15,
-			PreRunScript:              preRunScript15,
-			IntelligentComputeConfig:  intelligentComputeConfig3,
-			IntelligentComputeEnabled: intelligentComputeEnabled3,
-			WaveEnabled:               waveEnabled,
-			WorkDir:                   workDir15,
+			Environment:                   environment15,
+			Fusion2Enabled:                fusion2Enabled,
+			FusionVersion:                 fusionVersion9,
+			NextflowConfig:                nextflowConfig15,
+			OverrideNextflowFusionVersion: overrideNextflowFusionVersion9,
+			PostRunScript:                 postRunScript15,
+			PreRunScript:                  preRunScript15,
+			IntelligentComputeConfig:      intelligentComputeConfig3,
+			IntelligentComputeEnabled:     intelligentComputeEnabled3,
+			WaveEnabled:                   waveEnabled,
+			WorkDir:                       workDir15,
 		}
 	}
 	if localExecutionConfiguration != nil {

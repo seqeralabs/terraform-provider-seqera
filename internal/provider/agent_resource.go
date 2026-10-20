@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -39,17 +40,18 @@ type AgentResource struct {
 
 // AgentResourceModel describes the resource data model.
 type AgentResourceModel struct {
-	AgentInstructions     types.String `tfsdk:"agent_instructions"`
-	DateCreated           types.String `tfsdk:"date_created"`
-	Description           types.String `tfsdk:"description"`
-	GithubAppCredentialID types.String `tfsdk:"github_app_credential_id"`
-	ID                    types.String `tfsdk:"id"`
-	LastUpdated           types.String `tfsdk:"last_updated"`
-	Name                  types.String `tfsdk:"name"`
-	ServiceAccountID      types.Int64  `tfsdk:"service_account_id"`
-	ServiceAccountName    types.String `tfsdk:"service_account_name"`
-	Status                types.String `tfsdk:"status"`
-	WorkspaceID           types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AgentInstructions       types.String `tfsdk:"agent_instructions"`
+	DateCreated             types.String `tfsdk:"date_created"`
+	Description             types.String `tfsdk:"description"`
+	GithubAppCredentialID   types.String `tfsdk:"github_app_credential_id"`
+	GithubAppCredentialName types.String `tfsdk:"github_app_credential_name"`
+	ID                      types.String `tfsdk:"id"`
+	LastUpdated             types.String `tfsdk:"last_updated"`
+	Name                    types.String `tfsdk:"name"`
+	ServiceAccountID        types.Int64  `tfsdk:"service_account_id"`
+	ServiceAccountName      types.String `tfsdk:"service_account_name"`
+	Status                  types.String `tfsdk:"status"`
+	WorkspaceID             types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -89,6 +91,9 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringvalidator.RegexMatches(regexp.MustCompile(`^\S(?:.*\S)?$`), "must match pattern "+regexp.MustCompile(`^\S(?:.*\S)?$`).String()),
 				},
 			},
+			"github_app_credential_name": schema.StringAttribute{
+				Computed: true,
+			},
 			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
@@ -111,6 +116,9 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"service_account_id": schema.Int64Attribute{
 				Required:    true,
 				Description: `Service account the agent runs as (` + "`" + `seqera_service_account.x.id` + "`" + `). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the ` + "`" + `seqera_workspace_participant` + "`" + ` first, by reference or with ` + "`" + `depends_on` + "`" + `), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.`,
+				Validators: []validator.Int64{
+					int64validator.AtLeast(1),
+				},
 			},
 			"service_account_name": schema.StringAttribute{
 				Computed: true,

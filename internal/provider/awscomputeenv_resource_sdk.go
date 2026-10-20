@@ -98,6 +98,7 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 			r.Config.Forge.VpcID = types.StringPointerValue(resp.Config.Forge.VpcID)
 		}
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
 		r.Config.HeadJobRole = types.StringPointerValue(resp.Config.HeadJobRole)
@@ -106,6 +107,7 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.Config.LustreID = types.StringPointerValue(resp.Config.LustreID)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
 		r.Config.NvmeStorageEnabled = types.BoolPointerValue(resp.Config.NvmeStorageEnabled)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
@@ -577,6 +579,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		fusionSnapshots = nil
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
@@ -625,6 +633,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		nvmeStorageEnabled = nil
 	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
+	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
 		*postRunScript = r.Config.PostRunScript.ValueString()
@@ -669,32 +683,34 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		workDir = nil
 	}
 	config := shared.AwsBatchConfig{
-		CliPath:            cliPath,
-		ComputeJobRole:     computeJobRole,
-		ComputeQueue:       computeQueue,
-		DragenInstanceType: dragenInstanceType,
-		DragenQueue:        dragenQueue,
-		Environment:        environment,
-		ExecutionRole:      executionRole,
-		Forge:              forge,
-		EnableFusion:       enableFusion,
-		FusionSnapshots:    fusionSnapshots,
-		HeadJobCpus:        headJobCpus,
-		HeadJobMemoryMb:    headJobMemoryMb,
-		HeadJobRole:        headJobRole,
-		HeadQueue:          headQueue,
-		LogGroup:           logGroup,
-		LustreID:           lustreID,
-		NextflowConfig:     nextflowConfig,
-		NvmeStorageEnabled: nvmeStorageEnabled,
-		PostRunScript:      postRunScript,
-		PreRunScript:       preRunScript,
-		Region:             region,
-		SecretsKmsKeyID:    secretsKmsKeyID,
-		StorageType:        storageType,
-		Volumes:            volumes,
-		EnableWave:         enableWave,
-		WorkDir:            workDir,
+		CliPath:                       cliPath,
+		ComputeJobRole:                computeJobRole,
+		ComputeQueue:                  computeQueue,
+		DragenInstanceType:            dragenInstanceType,
+		DragenQueue:                   dragenQueue,
+		Environment:                   environment,
+		ExecutionRole:                 executionRole,
+		Forge:                         forge,
+		EnableFusion:                  enableFusion,
+		FusionSnapshots:               fusionSnapshots,
+		FusionVersion:                 fusionVersion,
+		HeadJobCpus:                   headJobCpus,
+		HeadJobMemoryMb:               headJobMemoryMb,
+		HeadJobRole:                   headJobRole,
+		HeadQueue:                     headQueue,
+		LogGroup:                      logGroup,
+		LustreID:                      lustreID,
+		NextflowConfig:                nextflowConfig,
+		NvmeStorageEnabled:            nvmeStorageEnabled,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		Region:                        region,
+		SecretsKmsKeyID:               secretsKmsKeyID,
+		StorageType:                   storageType,
+		Volumes:                       volumes,
+		EnableWave:                    enableWave,
+		WorkDir:                       workDir,
 	}
 	out := shared.AWSComputeEnvComputeConfigInput{
 		CredentialsID:                  credentialsID,

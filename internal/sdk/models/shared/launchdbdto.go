@@ -364,6 +364,8 @@ type LaunchDbDto struct {
 	ConfigText *string `json:"configText,omitempty"`
 	// Entry workflow name
 	EntryName *string `json:"entryName,omitempty"`
+	// Whether to enable Fusion snapshots, overriding the compute environment setting; null inherits the compute environment setting. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances.
+	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Head job CPU allocation
@@ -384,6 +386,8 @@ type LaunchDbDto struct {
 	// Nextflow 24.10.0 or later and the workflow outputs syntax.
 	//
 	OutputDir *string `json:"outputDir,omitempty"`
+	// Whether to run with fusionVersion instead of the Fusion version provided by the Nextflow launcher container, overriding the compute environment setting; null inherits the compute environment setting.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Pipeline parameters text
 	ParamsText       *string `json:"paramsText,omitempty"`
 	Pipeline         *string `json:"pipeline,omitempty"`
@@ -441,6 +445,13 @@ func (l *LaunchDbDto) GetEntryName() *string {
 		return nil
 	}
 	return l.EntryName
+}
+
+func (l *LaunchDbDto) GetFusionSnapshots() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.FusionSnapshots
 }
 
 func (l *LaunchDbDto) GetFusionVersion() *string {
@@ -511,6 +522,13 @@ func (l *LaunchDbDto) GetOutputDir() *string {
 		return nil
 	}
 	return l.OutputDir
+}
+
+func (l *LaunchDbDto) GetOverrideNextflowFusionVersion() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.OverrideNextflowFusionVersion
 }
 
 func (l *LaunchDbDto) GetParamsText() *string {

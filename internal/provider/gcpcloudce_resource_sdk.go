@@ -63,6 +63,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 		} else {
 			r.Config.Environment = nil
 		}
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
@@ -111,6 +112,7 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			r.Config.NetworkTags = nil
 		}
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.ProjectID = types.StringPointerValue(resp.Config.ProjectID)
@@ -368,6 +370,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 			})
 		}
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -404,6 +412,12 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		*nextflowConfig = r.Config.NextflowConfig.ValueString()
 	} else {
 		nextflowConfig = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
@@ -560,26 +574,28 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		zone = nil
 	}
 	config := shared.GoogleCloudConfig{
-		Arm64Enabled:              arm64Enabled,
-		BootDiskSizeGb:            bootDiskSizeGb,
-		Environment:               environment,
-		GpuEnabled:                gpuEnabled,
-		ImageID:                   imageID,
-		InstanceType:              instanceType,
-		Network:                   network,
-		NetworkTags:               networkTags,
-		NextflowConfig:            nextflowConfig,
-		PostRunScript:             postRunScript,
-		PreRunScript:              preRunScript,
-		ProjectID:                 projectID,
-		Region:                    region,
-		IntelligentComputeConfig:  intelligentComputeConfig,
-		IntelligentComputeEnabled: intelligentComputeEnabled,
-		ServiceAccountEmail:       serviceAccountEmail,
-		Subnetworks:               subnetworks,
-		UsePrivateAddress:         usePrivateAddress,
-		WorkDir:                   workDir,
-		Zone:                      zone,
+		Arm64Enabled:                  arm64Enabled,
+		BootDiskSizeGb:                bootDiskSizeGb,
+		Environment:                   environment,
+		FusionVersion:                 fusionVersion,
+		GpuEnabled:                    gpuEnabled,
+		ImageID:                       imageID,
+		InstanceType:                  instanceType,
+		Network:                       network,
+		NetworkTags:                   networkTags,
+		NextflowConfig:                nextflowConfig,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		ProjectID:                     projectID,
+		Region:                        region,
+		IntelligentComputeConfig:      intelligentComputeConfig,
+		IntelligentComputeEnabled:     intelligentComputeEnabled,
+		ServiceAccountEmail:           serviceAccountEmail,
+		Subnetworks:                   subnetworks,
+		UsePrivateAddress:             usePrivateAddress,
+		WorkDir:                       workDir,
+		Zone:                          zone,
 	}
 	out := shared.GCPCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

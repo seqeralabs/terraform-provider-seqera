@@ -69,6 +69,8 @@ type AzBatchConfig struct {
 	// Requires `enable_wave = true`.
 	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
@@ -81,6 +83,8 @@ type AzBatchConfig struct {
 	ManagedIdentityPoolClientID   *string `json:"managedIdentityPoolClientId,omitempty"`
 	ManagedIdentityPoolResourceID *string `json:"managedIdentityPoolResourceId,omitempty"`
 	NextflowConfig                *string `json:"nextflowConfig,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -166,6 +170,13 @@ func (a *AzBatchConfig) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
+func (a *AzBatchConfig) GetFusionVersion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.FusionVersion
+}
+
 func (a *AzBatchConfig) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -227,6 +238,13 @@ func (a *AzBatchConfig) GetNextflowConfig() *string {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AzBatchConfig) GetOverrideNextflowFusionVersion() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.OverrideNextflowFusionVersion
 }
 
 func (a *AzBatchConfig) GetPostRunScript() *string {

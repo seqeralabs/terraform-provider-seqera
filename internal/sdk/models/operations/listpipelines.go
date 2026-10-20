@@ -20,7 +20,7 @@ type ListPipelinesRequest struct {
 	SortBy *shared.PipelineListParamsSortBy `queryParam:"style=form,explode=true,name=sortBy"`
 	// Sort direction (`ASCENDING` by default)
 	SortDir *shared.PipelineListParamsSortDir `queryParam:"style=form,explode=true,name=sortDir"`
-	// Filter search parameter
+	// Optional search criteria, allowing free text search on name and description. Use double quotes for an exact match and `*` as a wildcard.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Filter visibility parameter
 	Visibility *string `queryParam:"style=form,explode=true,name=visibility"`

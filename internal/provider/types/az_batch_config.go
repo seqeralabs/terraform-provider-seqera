@@ -16,6 +16,7 @@ type AzBatchConfig struct {
 	EnableWave                    types.Bool          `tfsdk:"enable_wave"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	Forge                         *AzBatchForgeConfig `tfsdk:"forge"`
+	FusionVersion                 types.String        `tfsdk:"fusion_version"`
 	HeadJobCpus                   types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb               types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadPool                      types.String        `tfsdk:"head_pool"`
@@ -25,6 +26,7 @@ type AzBatchConfig struct {
 	ManagedIdentityPoolClientID   types.String        `tfsdk:"managed_identity_pool_client_id"`
 	ManagedIdentityPoolResourceID types.String        `tfsdk:"managed_identity_pool_resource_id"`
 	NextflowConfig                types.String        `tfsdk:"nextflow_config"`
+	OverrideNextflowFusionVersion types.Bool          `tfsdk:"override_nextflow_fusion_version"`
 	PostRunScript                 types.String        `tfsdk:"post_run_script"`
 	PreRunScript                  types.String        `tfsdk:"pre_run_script"`
 	Region                        types.String        `tfsdk:"region"`

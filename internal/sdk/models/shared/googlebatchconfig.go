@@ -33,8 +33,11 @@ type GoogleBatchConfig struct {
 	//
 	// Requires `enable_wave = true`.
 	//
-	EnableFusion    *bool `json:"fusion2Enabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`.
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
+	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Number of CPUs allocated for the Nextflow head job.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -71,6 +74,8 @@ type GoogleBatchConfig struct {
 	// Format: hostname:/export/path
 	//
 	NfsTarget *string `json:"nfsTarget,omitempty"`
+	// Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+	OverrideNextflowFusionVersion *bool `json:"overrideNextflowFusionVersion,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -193,6 +198,13 @@ func (g *GoogleBatchConfig) GetFusionSnapshots() *bool {
 	return g.FusionSnapshots
 }
 
+func (g *GoogleBatchConfig) GetFusionVersion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.FusionVersion
+}
+
 func (g *GoogleBatchConfig) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -268,6 +280,13 @@ func (g *GoogleBatchConfig) GetNfsTarget() *string {
 		return nil
 	}
 	return g.NfsTarget
+}
+
+func (g *GoogleBatchConfig) GetOverrideNextflowFusionVersion() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.OverrideNextflowFusionVersion
 }
 
 func (g *GoogleBatchConfig) GetPostRunScript() *string {

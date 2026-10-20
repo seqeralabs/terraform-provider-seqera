@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.231.0
+  version: 1.244.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -118,7 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateActionResponse'
         '400':
-          description: Bad request
+          description: 'Bad request: the request is invalid. This includes a pipeline action without `launch` or with `agent`, an agent action with `launch` or `pipeline` or without `agent`, and an agent action whose `source` is not `bucket`, `cron` or `pipeline_status`'
           content:
             application/json:
               schema:
@@ -423,7 +423,7 @@ paths:
         '204':
           description: OK - No content
         '400':
-          description: Bad request
+          description: 'Bad request: the request is invalid. This includes `launch` or `pipeline` on an agent action'
           content:
             application/json:
               schema:
@@ -867,7 +867,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAgentResponse'
         '400':
-          description: Bad request
+          description: 'Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace'
           content:
             application/json:
               schema:
@@ -881,7 +881,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Duplicate agent name or bound service account cannot be validated
+          description: Duplicate agent name in the workspace, or the service account is deleted or disabled, is not a participant of the workspace, or has a workspace role without agent:execute
           content:
             application/json:
               schema:
@@ -931,7 +931,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Bound service account cannot be validated
+          description: 'Bound service account cannot be validated: the service account is deleted or disabled, is not a participant of the workspace, or has a workspace role without agent:execute'
           content:
             application/json:
               schema:
@@ -1127,7 +1127,7 @@ paths:
     put:
       operationId: UpdateAgent
       summary: Update agent
-      description: Updates an agent in a workspace.
+      description: Replaces an agent in a workspace. Every field is overwritten, so an omitted optional field is cleared.
       parameters:
         - name: agentId
           in: path
@@ -1156,7 +1156,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UpdateAgentResponse'
         '400':
-          description: Bad request
+          description: 'Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace'
           content:
             application/json:
               schema:
@@ -1170,7 +1170,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Duplicate agent name or bound service account cannot be validated
+          description: Duplicate agent name in the workspace, or the service account is deleted or disabled, is not a participant of the workspace, or has a workspace role without agent:execute
           content:
             application/json:
               schema:
@@ -1257,6 +1257,12 @@ paths:
           description: Operation not allowed
         '404':
           description: Not found, or agents are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: 'Bound service account cannot be validated: the service account is deleted or disabled, is not a participant of the workspace, or has a workspace role without agent:execute'
           content:
             application/json:
               schema:
@@ -1378,6 +1384,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CatalogVersionsResponse'
+      security:
+        - BearerAuth: []
       tags:
         - compatibility
   /catalog/versions:
@@ -1424,6 +1432,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CatalogVersionsResponse'
+      security:
+        - BearerAuth: []
       tags:
         - compatibility
   /compute-envs:
@@ -4082,6 +4092,8 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
     post:
@@ -4113,6 +4125,8 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}:
@@ -4148,6 +4162,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WesErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/cancel:
@@ -4188,6 +4204,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WesErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
   /ga4gh/wes/v1/runs/{run_id}/status:
@@ -4223,6 +4241,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WesErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
   /ga4gh/wes/v1/service-info:
@@ -4244,6 +4264,8 @@ paths:
                 $ref: '#/components/schemas/WesErrorResponse'
         '403':
           description: Operation not allowed
+      security:
+        - BearerAuth: []
       tags:
         - ga4gh
   /identities:
@@ -5944,7 +5966,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateServiceAccountResponse'
         '400':
-          description: Bad request
+          description: 'Bad request: the name does not match the naming rules or is reserved'
           content:
             application/json:
               schema:
@@ -6061,6 +6083,7 @@ paths:
     patch:
       operationId: UpdateServiceAccount
       summary: Update a service account
+      description: Updates the fields present in the request. Omitted fields keep their current values.
       parameters:
         - name: orgId
           in: path
@@ -6088,7 +6111,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DescribeServiceAccountResponse'
         '400':
-          description: Bad request
+          description: 'Bad request: the name does not match the naming rules or is reserved'
           content:
             application/json:
               schema:
@@ -7162,6 +7185,132 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+  /orgs/{orgId}/workspaces/{workspaceId}/settings/lineage:
+    delete:
+      operationId: DeleteLineageWorkspaceSettings
+      summary: Delete workspace lineage settings
+      description: Disables lineage for the workspace identified by the given `workspaceId`. Stops queue polling and removes the lineage configuration. AWS infrastructure is left intact.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: path
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Workspace not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - workspaces
+    get:
+      operationId: FindLineageWorkspaceSettings
+      summary: Get workspace lineage settings
+      description: Retrieves the lineage settings of the workspace identified by the given `workspaceId`.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: path
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineageWorkspaceSettingsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Workspace not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - workspaces
+    put:
+      operationId: UpdateLineageWorkspaceSettings
+      summary: Update workspace lineage settings
+      description: Updates the lineage settings of the workspace identified by the given `workspaceId`. `credentialsId` and `region` are always required. In `MANUAL` provisioning mode, `storeName` and `topicArn` are also required.
+      parameters:
+        - name: orgId
+          in: path
+          description: Organization numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: path
+          description: Workspace numeric identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Lineage settings update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LineageWorkspaceSettingsRequest'
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Workspace not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - workspaces
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       operationId: FindDataStudiosWorkspaceSettings
@@ -7613,7 +7762,7 @@ paths:
             $ref: '#/components/schemas/PipelineListParams.SortDir'
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional search criteria, allowing free text search on name and description. Use double quotes for an exact match and `*` as a wildcard.
           schema:
             type: string
         - name: visibility
@@ -8387,6 +8536,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - nextflow
   /platforms:
@@ -11126,6 +11277,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - workflows
     get:
@@ -11160,6 +11313,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - workflows
     post:
@@ -11200,6 +11355,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
       tags:
         - workflows
   /workflow/{workflowId}/task/{taskId}:
@@ -12121,9 +12278,15 @@ components:
           type: string
           format: date-time
         description:
+          description: Null when not set; never blank
           type: string
+          maxLength: 120
           nullable: true
         githubAppCredentialId:
+          description: Null when not set; never blank
+          type: string
+          nullable: true
+        githubAppCredentialName:
           type: string
           nullable: true
         id:
@@ -12133,6 +12296,8 @@ components:
           format: date-time
         name:
           type: string
+          maxLength: 255
+          pattern: ^[A-Za-z0-9_-]+$
         serviceAccountId:
           type: integer
           format: int64
@@ -13136,6 +13301,10 @@ components:
         fusionSnapshots:
           type: boolean
           nullable: true
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -13159,6 +13328,10 @@ components:
           type: string
           nullable: true
         nvnmeStorageEnabled:
+          type: boolean
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
           type: boolean
           nullable: true
         postRunScript:
@@ -13286,6 +13459,10 @@ components:
             type: object
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         gpuEnabled:
           type: boolean
         imageId:
@@ -13298,6 +13475,10 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -13439,6 +13620,10 @@ components:
           $ref: '#/components/schemas/AzBatchForgeConfig'
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         headJobCpus:
           description: Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
           type: integer
@@ -13472,6 +13657,10 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -13620,6 +13809,10 @@ components:
             $ref: '#/components/schemas/Map.Entry_String.String_'
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         instanceType:
           type: string
         keyVaultUrl:
@@ -13641,6 +13834,10 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -14371,7 +14568,7 @@ components:
       type: object
       properties:
         agent:
-          description: Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`.
+          description: Agent outcome configuration. Required when `responseType` is `agent`, which in turn requires `source` to be `bucket`, `cron` or `pipeline_status`. Must be omitted when `responseType` is `pipeline`.
           allOf:
             - $ref: '#/components/schemas/AgentActionRequest'
         bucket:
@@ -14390,11 +14587,14 @@ components:
             type: integer
           nullable: true
         launch:
-          $ref: '#/components/schemas/WorkflowLaunchRequest'
+          description: Settings for the run the action starts. Required when `responseType` is `pipeline`. Must be omitted when `responseType` is `agent`.
+          allOf:
+            - $ref: '#/components/schemas/WorkflowLaunchRequest'
+          nullable: true
         name:
           type: string
         pipeline:
-          description: Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          description: Pipeline outcome configuration. Optional. Links the action to an existing Launchpad pipeline and version. The run itself uses the settings in `launch`, and each run is recorded as a run of the linked pipeline. Allowed when `responseType` is `pipeline`, for any `source`. Must be omitted when `responseType` is `agent`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
           allOf:
             - $ref: '#/components/schemas/PipelineActionRequest'
         pipelineStatus:
@@ -14416,22 +14616,38 @@ components:
       type: object
       properties:
         agentInstructions:
+          description: Instructions the agent follows. Must not be blank
           type: string
+          maxLength: 50000
+          minLength: 1
         agentInstructionsTemplateId:
+          description: Template the instructions were created from. Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
+          maxLength: 255
           nullable: true
         description:
+          description: Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
+          maxLength: 120
           nullable: true
         githubAppCredentialId:
+          description: GitHub App credential in the workspace the agent uses for repository access. Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
           nullable: true
         name:
+          description: Agent name, unique in the workspace. Letters, digits, dashes and underscores only. Surrounding whitespace is trimmed
           type: string
+          maxLength: 255
+          pattern: ^[A-Za-z0-9_-]+$
         serviceAccountId:
+          description: Service account the agent runs as. It must be enabled, be a participant of the workspace, and have a workspace role that grants agent:execute (launch, maintain, admin or owner)
           type: integer
           format: int64
-          nullable: true
+          minimum: 1
+      required:
+        - agentInstructions
+        - name
+        - serviceAccountId
     CreateAgentResponse:
       type: object
       properties:
@@ -14667,9 +14883,11 @@ components:
           type: string
           maxLength: 1000
         name:
+          description: Lower-case letters, digits and single dashes, starting and ending with a letter or digit. Must be unique across all platform users, and reserved names are rejected
           type: string
-          maxLength: 40
-          minLength: 1
+          maxLength: 39
+          minLength: 2
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       required:
         - name
     CreateServiceAccountResponse:
@@ -16261,7 +16479,19 @@ components:
         costIsEstimate:
           type: boolean
           nullable: true
+        instancesOnDemand:
+          type: integer
+          format: int32
+          nullable: true
         instancesProvisioned:
+          type: integer
+          format: int32
+          nullable: true
+        instancesSpot:
+          type: integer
+          format: int32
+          nullable: true
+        instancesUnknown:
           type: integer
           format: int32
           nullable: true
@@ -16298,6 +16528,9 @@ components:
         progress:
           allOf:
             - $ref: '#/components/schemas/ProgressData'
+          nullable: true
+        provisioningModel:
+          type: string
           nullable: true
         schedConfig:
           allOf:
@@ -16363,6 +16596,10 @@ components:
           nullable: true
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -16377,6 +16614,10 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
@@ -16710,6 +16951,10 @@ components:
           nullable: true
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -16724,6 +16969,10 @@ components:
           type: string
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         podCleanup:
           $ref: '#/components/schemas/PodCleanupPolicy'
@@ -16802,6 +17051,10 @@ components:
           type: boolean
         fusionSnapshots:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -16831,6 +17084,10 @@ components:
           type: string
         nfsTarget:
           type: string
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
+          nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
           type: string
@@ -16895,6 +17152,10 @@ components:
             type: object
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         gpuEnabled:
           type: boolean
         imageId:
@@ -16913,6 +17174,10 @@ components:
           nullable: true
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -17479,6 +17744,10 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionSnapshots:
+          description: Whether to enable Fusion snapshots, overriding the compute environment setting; null inherits the compute environment setting. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances.
+          type: boolean
+          nullable: true
         fusionVersion:
           description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
           type: string
@@ -17509,6 +17778,10 @@ components:
         outputDir:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether to run with fusionVersion instead of the Fusion version provided by the Nextflow launcher container, overriding the compute environment setting; null inherits the compute environment setting.
+          type: boolean
           nullable: true
         paramsText:
           type: string
@@ -17636,6 +17909,18 @@ components:
         message:
           description: Human-readable explanation of this single blocker
           type: string
+    LineageEventDeliveryStatus:
+      type: string
+      enum:
+        - NOT_CONFIGURED
+        - PENDING_CONFIRMATION
+        - ACTIVE
+        - FAILED
+    LineageProvisioningMode:
+      type: string
+      enum:
+        - AUTO
+        - MANUAL
     LineageRecordResponse:
       type: object
       properties:
@@ -17656,6 +17941,108 @@ components:
       properties:
         lid:
           type: string
+    LineageWorkspaceConfig.Status:
+      type: string
+      enum:
+        - AVAILABLE
+        - PENDING
+        - ERRORED
+    LineageWorkspaceSettingsRequest:
+      type: object
+      properties:
+        credentialsId:
+          description: Credentials ID used to create and access the lineage storage bucket.
+          type: string
+        lineageDefault:
+          description: When true, the lineage toggle in the pipeline launch form defaults to enabled.
+          type: boolean
+        provisioningMode:
+          description: "Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted."
+          allOf:
+            - $ref: '#/components/schemas/LineageProvisioningMode'
+          nullable: true
+        queueArn:
+          description: Deprecated. The SQS transport has been replaced by SNS push delivery; supply 'topicArn' instead. Sending this field is rejected.
+          type: string
+          deprecated: true
+          nullable: true
+        region:
+          description: Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
+          type: string
+        storeName:
+          description: Bucket name for the lineage store. Ignored in AUTO mode (Platform always selects 'seqera-lineage-{workspaceId}'); required in MANUAL mode (must match the existing customer-managed bucket).
+          type: string
+          nullable: true
+        topicArn:
+          description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode to identify the existing topic; ignored on input in AUTO mode.
+          type: string
+          nullable: true
+    LineageWorkspaceSettingsResponse:
+      type: object
+      properties:
+        credentialsId:
+          description: Credentials ID used to create and access the lineage storage bucket.
+          type: string
+        eventDelivery:
+          description: 'Whether object events are being delivered to Platform: NOT_CONFIGURED, PENDING_CONFIRMATION, ACTIVE or FAILED.'
+          allOf:
+            - $ref: '#/components/schemas/LineageEventDeliveryStatus'
+          nullable: true
+        lineageDefault:
+          description: When true, the lineage toggle in the pipeline launch form defaults to enabled.
+          type: boolean
+        message:
+          description: Error message when status is ERRORED.
+          type: string
+          nullable: true
+        orgId:
+          description: Organization numeric identifier.
+          type: integer
+          format: int64
+        provider:
+          description: Cloud provider of the lineage store (e.g. 'aws'). Null when lineage is not configured.
+          type: string
+          nullable: true
+        provisioned:
+          description: Whether the lineage infrastructure has been provisioned for the workspace.
+          type: boolean
+        provisioningMode:
+          description: 'Provisioning mode: AUTO (Platform creates and manages the lineage infrastructure) or MANUAL (customer-managed bucket and topic).'
+          allOf:
+            - $ref: '#/components/schemas/LineageProvisioningMode'
+        queueArn:
+          description: Deprecated. Queue ARN from the retired SQS transport, only set on workspaces not yet migrated to SNS delivery. Use 'topicArn' instead.
+          type: string
+          deprecated: true
+          nullable: true
+        region:
+          description: Cloud region of the lineage storage bucket.
+          type: string
+        status:
+          description: 'Lifecycle status of the lineage configuration: PENDING, AVAILABLE or ERRORED. Null when lineage is not configured.'
+          allOf:
+            - $ref: '#/components/schemas/LineageWorkspaceConfig.Status'
+          nullable: true
+        storeName:
+          description: Bucket name of the lineage store.
+          type: string
+          nullable: true
+        storeUri:
+          description: URI of the lineage store. Not returned by the settings endpoints.
+          type: string
+          nullable: true
+        topicArn:
+          description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications.
+          type: string
+          nullable: true
+        webhookUrl:
+          description: Endpoint the cloud provider delivers object events to. In MANUAL mode, subscribe this URL to your topic.
+          type: string
+          nullable: true
+        wspId:
+          description: Workspace numeric identifier.
+          type: integer
+          format: int64
     LinkVersionRequest:
       type: object
       properties:
@@ -18174,8 +18561,16 @@ components:
           nullable: true
         fusion2Enabled:
           type: boolean
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -18523,6 +18918,10 @@ components:
       properties:
         catalogEnabled:
           type: boolean
+        nextflowFeatureDefaultVersions:
+          type: object
+          additionalProperties:
+            type: string
         nextflowFeatureMinVersions:
           type: object
           additionalProperties:
@@ -19573,7 +19972,7 @@ components:
       type: object
       properties:
         backendStrategy:
-          description: Backend used by Intelligent Compute to run tasks. 'ECS' (AWS only, default) delegates task execution to AWS ECS; 'EC2' (AWS only) runs tasks directly on AWS EC2 instances; 'VM' runs tasks on cloud VMs (provider-agnostic).
+          description: Backend used by Intelligent Compute to run tasks. 'VM' (default) runs tasks on cloud VMs and is the only value accepted when creating a compute environment. 'ECS' and 'EC2' (AWS only) are deprecated and only reported for existing compute environments.
           type: string
           enum:
             - ECS
@@ -19734,12 +20133,20 @@ components:
           items:
             $ref: '#/components/schemas/ConfigEnvVariable'
           nullable: true
+        fusionVersion:
+          description: Fusion version used by launches on this compute environment when overrideNextflowFusionVersion is true; must exist in the system catalog and be compatible with the deployed services. When null, the catalog default Fusion version is used.
+          type: string
+          nullable: true
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:
             - $ref: '#/components/schemas/SeqeraComputeCloudInstanceTypeSize'
         nextflowConfig:
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled.
+          type: boolean
           nullable: true
         postRunScript:
           description: Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -20724,11 +21131,13 @@ components:
             type: integer
           nullable: true
         launch:
-          $ref: '#/components/schemas/WorkflowLaunchRequest'
+          description: Settings for the run the action starts. Required on an action whose `responseType` is `pipeline`, because the update overwrites every stored launch setting. On an agent action, the request returns 400.
+          allOf:
+            - $ref: '#/components/schemas/WorkflowLaunchRequest'
         name:
           type: string
         pipeline:
-          description: Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`.
+          description: Pipeline outcome updates. Changes the Launchpad pipeline and version that the action is linked to. The run itself uses the settings in `launch`. On a `pipeline_status` action, set the pipeline to watch in `pipelineStatus`. Allowed only on an action whose `responseType` is `pipeline`. On an agent action, the request returns 400.
           allOf:
             - $ref: '#/components/schemas/PipelineActionRequest'
         pipelineStatus:
@@ -20739,22 +21148,38 @@ components:
       type: object
       properties:
         agentInstructions:
+          description: Instructions the agent follows. Must not be blank
           type: string
+          maxLength: 50000
+          minLength: 1
         agentInstructionsTemplateId:
+          description: Template the instructions were created from. Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
+          maxLength: 255
           nullable: true
         description:
+          description: Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
+          maxLength: 120
           nullable: true
         githubAppCredentialId:
+          description: GitHub App credential in the workspace the agent uses for repository access. Surrounding whitespace is trimmed, and a blank value is stored as null
           type: string
           nullable: true
         name:
+          description: Agent name, unique in the workspace. Letters, digits, dashes and underscores only. Surrounding whitespace is trimmed
           type: string
+          maxLength: 255
+          pattern: ^[A-Za-z0-9_-]+$
         serviceAccountId:
+          description: Service account the agent runs as. It must be enabled, be a participant of the workspace, and have a workspace role that grants agent:execute (launch, maintain, admin or owner)
           type: integer
           format: int64
-          nullable: true
+          minimum: 1
+      required:
+        - agentInstructions
+        - name
+        - serviceAccountId
     UpdateAgentResponse:
       type: object
       properties:
@@ -20770,8 +21195,20 @@ components:
           maxLength: 2000
         fusionMetricsCollectionEnabled:
           type: boolean
+        fusionSnapshots:
+          description: Whether to enable Fusion snapshots on this compute environment. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null the current value is left unchanged.
+          type: boolean
+          nullable: true
+        fusionVersion:
+          description: Fusion version used when overrideNextflowFusionVersion is enabled; must exist in the system catalog, be compatible with the deployed services and requires Wave and Fusion v2 to be enabled. An empty value clears it, so the catalog default is used. When null the current value is left unchanged.
+          type: string
+          nullable: true
         name:
           type: string
+        overrideNextflowFusionVersion:
+          description: Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. Can only be enabled when the compute environment runs Wave and Fusion v2. When null the current value is left unchanged.
+          type: boolean
+          nullable: true
     UpdateCredentialsRequest:
       type: object
       properties:
@@ -20900,11 +21337,15 @@ components:
       type: object
       properties:
         description:
+          description: New description. Omit to keep the current description, or send an empty string to clear it
           type: string
           maxLength: 1000
         name:
+          description: New name. Omit to keep the current name. Lower-case letters, digits and single dashes, starting and ending with a letter or digit. Must be unique across all platform users, and reserved names are rejected
           type: string
-          maxLength: 40
+          maxLength: 39
+          minLength: 2
+          pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
     UpdateTeamRequest:
       type: object
       properties:
@@ -21698,9 +22139,20 @@ components:
           format: int32
         empty:
           type: boolean
+        instancesOnDemand:
+          type: integer
+          format: int32
         instancesProvisioned:
           type: integer
           format: int32
+        instancesSpot:
+          type: integer
+          format: int32
+        instancesUnknown:
+          type: integer
+          format: int32
+        provisioningModel:
+          type: string
         schedRunId:
           type: string
     WorkflowImage:
@@ -21818,8 +22270,12 @@ components:
           format: date-time
         entryName:
           type: string
+        fusionSnapshots:
+          description: Whether to enable Fusion snapshots for this workflow. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances. When null, inherits the source pipeline or run, then the compute environment setting.
+          type: boolean
+          nullable: true
         fusionVersion:
-          description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
+          description: Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.
           type: string
           nullable: true
         headJobCpus:
@@ -21850,6 +22306,10 @@ components:
         outputDir:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
+          nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether to run this workflow with fusionVersion instead of the Fusion version provided by the Nextflow launcher container. Applies only when the compute environment enables Wave and Fusion v2. When null, inherits the source pipeline or run, then the compute environment setting.
+          type: boolean
           nullable: true
         paramsText:
           type: string
@@ -21916,6 +22376,10 @@ components:
         entryName:
           type: string
           nullable: true
+        fusionSnapshots:
+          description: Fusion snapshots override this workflow was launched with; null means the compute environment setting applies. Used to pre-select the same value on relaunch/resume.
+          type: boolean
+          nullable: true
         fusionVersion:
           description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
           type: string
@@ -21951,6 +22415,10 @@ components:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
           nullable: true
+        overrideNextflowFusionVersion:
+          description: Whether this workflow was launched with fusionVersion instead of the Fusion version provided by the Nextflow launcher container; null means the compute environment setting applies. Used to pre-select the same value on relaunch/resume.
+          type: boolean
+          nullable: true
         paramsText:
           type: string
           nullable: true
@@ -21976,8 +22444,10 @@ components:
           type: boolean
         resumeCommitId:
           type: string
+          nullable: true
         resumeDir:
           type: string
+          nullable: true
         revision:
           type: string
         schemaName:

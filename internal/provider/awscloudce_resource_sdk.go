@@ -45,6 +45,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		} else {
 			r.Config.Environment = nil
 		}
+		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceProfileArn = types.StringPointerValue(resp.Config.InstanceProfileArn)
@@ -86,6 +87,7 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 		r.Config.IntelligentComputeEnabled = types.BoolPointerValue(resp.Config.IntelligentComputeEnabled)
 		r.Config.LogGroup = types.StringPointerValue(resp.Config.LogGroup)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
+		r.Config.OverrideNextflowFusionVersion = types.BoolPointerValue(resp.Config.OverrideNextflowFusionVersion)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
@@ -370,6 +372,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 			})
 		}
 	}
+	fusionVersion := new(string)
+	if !r.Config.FusionVersion.IsUnknown() && !r.Config.FusionVersion.IsNull() {
+		*fusionVersion = r.Config.FusionVersion.ValueString()
+	} else {
+		fusionVersion = nil
+	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -405,6 +413,12 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		*nextflowConfig = r.Config.NextflowConfig.ValueString()
 	} else {
 		nextflowConfig = nil
+	}
+	overrideNextflowFusionVersion := new(bool)
+	if !r.Config.OverrideNextflowFusionVersion.IsUnknown() && !r.Config.OverrideNextflowFusionVersion.IsNull() {
+		*overrideNextflowFusionVersion = r.Config.OverrideNextflowFusionVersion.ValueBool()
+	} else {
+		overrideNextflowFusionVersion = nil
 	}
 	postRunScript := new(string)
 	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
@@ -553,30 +567,32 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		workDir = nil
 	}
 	config := shared.AwsCloudConfig{
-		AllowBuckets:              allowBuckets,
-		Arm64Enabled:              arm64Enabled,
-		EbsBootSize:               ebsBootSize,
-		EbsEncrypted:              ebsEncrypted,
-		EbsKmsKeyID:               ebsKmsKeyID,
-		Ec2KeyPair:                ec2KeyPair,
-		Environment:               environment,
-		GpuEnabled:                gpuEnabled,
-		ImageID:                   imageID,
-		InstanceProfileArn:        instanceProfileArn,
-		InstanceType:              instanceType,
-		LogGroup:                  logGroup,
-		NextflowConfig:            nextflowConfig,
-		PostRunScript:             postRunScript,
-		PreRunScript:              preRunScript,
-		Region:                    region,
-		IntelligentComputeConfig:  intelligentComputeConfig,
-		IntelligentComputeEnabled: intelligentComputeEnabled,
-		SecretsKmsKeyID:           secretsKmsKeyID,
-		SecurityGroups:            securityGroups,
-		SubnetID:                  subnetID,
-		SubnetIds:                 subnetIds,
-		VpcID:                     vpcID,
-		WorkDir:                   workDir,
+		AllowBuckets:                  allowBuckets,
+		Arm64Enabled:                  arm64Enabled,
+		EbsBootSize:                   ebsBootSize,
+		EbsEncrypted:                  ebsEncrypted,
+		EbsKmsKeyID:                   ebsKmsKeyID,
+		Ec2KeyPair:                    ec2KeyPair,
+		Environment:                   environment,
+		FusionVersion:                 fusionVersion,
+		GpuEnabled:                    gpuEnabled,
+		ImageID:                       imageID,
+		InstanceProfileArn:            instanceProfileArn,
+		InstanceType:                  instanceType,
+		LogGroup:                      logGroup,
+		NextflowConfig:                nextflowConfig,
+		OverrideNextflowFusionVersion: overrideNextflowFusionVersion,
+		PostRunScript:                 postRunScript,
+		PreRunScript:                  preRunScript,
+		Region:                        region,
+		IntelligentComputeConfig:      intelligentComputeConfig,
+		IntelligentComputeEnabled:     intelligentComputeEnabled,
+		SecretsKmsKeyID:               secretsKmsKeyID,
+		SecurityGroups:                securityGroups,
+		SubnetID:                      subnetID,
+		SubnetIds:                     subnetIds,
+		VpcID:                         vpcID,
+		WorkDir:                       workDir,
 	}
 	out := shared.AwsCloudCEComputeConfigInput{
 		CredentialsID:                  credentialsID,

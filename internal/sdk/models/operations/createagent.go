@@ -37,7 +37,7 @@ type CreateAgentResponse struct {
 	RawResponse *http.Response
 	// OK
 	CreateAgentResponse *shared.CreateAgentResponse
-	// Bad request
+	// Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace
 	ErrorResponse *shared.ErrorResponse
 }
 
