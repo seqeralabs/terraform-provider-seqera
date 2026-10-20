@@ -1,0 +1,12 @@
+# Generates the Seqera API v2 client from specs/seqera-api-v2.yml.
+# Regenerate with: go generate ./internal/apiv2/client
+package: seqerav2
+output: client.gen.go
+generate:
+  models: true
+  client: true
+output-options:
+  include-tags:
+    - Compute environments
+  # The schema ValidateComputeEnvResponse collides with the default response-type name of validateComputeEnv.
+  response-type-suffix: HTTPResponse
