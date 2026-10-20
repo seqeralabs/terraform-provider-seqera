@@ -30339,8 +30339,10 @@ components:
 
 
 
+
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
+
 
 
 
@@ -30631,8 +30633,10 @@ components:
 
 
 
+
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
+
 
 
 

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 8acce75ef5aa5a21c6cff7b0c3448f6e
+  docChecksum: c4006634f6ce712291ceec225c231a7c
   docVersion: 1.244.0
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -236,6 +236,8 @@ trackedFiles:
   examples/resources/seqera_workspace/resource.tf:
     id: 0861dd715211
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
+  examples/resources/seqera_workspace_lineage_settings/import-by-string-id.tf: {}
+  examples/resources/seqera_workspace_lineage_settings/import.sh: {}
   go.mod:
     id: c47645c391ad
     pristine_git_object: 0197aba33874c19d2d4a76f51d3c37929a4d811e
@@ -783,6 +785,8 @@ trackedFiles:
   internal/provider/workspace_resource_sdk.go:
     id: 6b7b5772bf74
     pristine_git_object: ef08f3fe5d664b406cd4c6ef11d883cb611dfdb7
+  internal/provider/workspacelineagesettings_resource.go: {}
+  internal/provider/workspacelineagesettings_resource_sdk.go: {}
   internal/sdk/.gitattributes:
     id: 1ea4c4e0a39d
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
@@ -7036,7 +7040,7 @@ examples:
           orgId: 979574
           workspaceId: 635460
       requestBody:
-        application/json: {}
+        application/json: {"credentialsId": "<id>", "lineageDefault": false, "provisioningMode": "AUTO", "region": "<value>"}
       responses:
         "400":
           application/json: {"message": "<value>"}
