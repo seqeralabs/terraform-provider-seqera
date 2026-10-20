@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_workspace_lineage_settings Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Manage the lineage settings of a Seqera workspace.
   Lineage records how data and runs relate to each other. In AUTO provisioning mode Platform creates the storage bucket, notification topic and subscription; in MANUAL mode you pre-create the bucket and topic and subscribe the webhook_url to the topic.
