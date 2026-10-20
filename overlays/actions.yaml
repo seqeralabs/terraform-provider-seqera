@@ -163,6 +163,22 @@ actions:
   # FIELD CONFIGURATION
   # ============================================================================
 
+  # Make workspaceId required across all action operations. Personal workspaces
+  # are not supported, and a required workspaceId on the read operation makes
+  # Speakeasy generate the composite import ID ({"action_id": ..., "workspace_id": ...}).
+  - target: $.paths["/actions"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/actions/{actionId}"].get.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/actions/{actionId}"].put.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/actions/{actionId}"].delete.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
   # Set default value for source field and make it optional
   - target: $.components.schemas.CreateActionRequest.properties.source
     update:

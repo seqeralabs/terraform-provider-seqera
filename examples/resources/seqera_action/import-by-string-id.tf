@@ -1,4 +1,7 @@
 import {
   to = seqera_action.my_seqera_action
-  id = "..."
+  id = jsonencode({
+    action_id    = "..."
+    workspace_id = 0
+  })
 }

@@ -11,7 +11,7 @@ type UpdateActionRequest struct {
 	// Action string identifier
 	ActionID string `pathParam:"style=simple,explode=false,name=actionId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Action update request
 	UpdateActionRequest shared.UpdateActionRequest `request:"mediaType=application/json"`
 }
@@ -23,9 +23,9 @@ func (u *UpdateActionRequest) GetActionID() string {
 	return u.ActionID
 }
 
-func (u *UpdateActionRequest) GetWorkspaceID() *int64 {
+func (u *UpdateActionRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }

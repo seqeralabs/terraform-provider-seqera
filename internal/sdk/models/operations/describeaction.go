@@ -11,7 +11,7 @@ type DescribeActionRequest struct {
 	// Action string identifier
 	ActionID string `pathParam:"style=simple,explode=false,name=actionId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
 	Attributes []shared.ActionQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
@@ -23,9 +23,9 @@ func (d *DescribeActionRequest) GetActionID() string {
 	return d.ActionID
 }
 
-func (d *DescribeActionRequest) GetWorkspaceID() *int64 {
+func (d *DescribeActionRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

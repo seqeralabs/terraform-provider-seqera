@@ -229,12 +229,9 @@ func (r *ActionResourceModel) ToOperationsDeleteActionRequest(ctx context.Contex
 	var actionID string
 	actionID = r.ActionID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteActionRequest{
 		ActionID:    actionID,
 		WorkspaceID: workspaceID,
@@ -249,12 +246,9 @@ func (r *ActionResourceModel) ToOperationsDescribeActionRequest(ctx context.Cont
 	var actionID string
 	actionID = r.ActionID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeActionRequest{
 		ActionID:    actionID,
 		WorkspaceID: workspaceID,
@@ -269,12 +263,9 @@ func (r *ActionResourceModel) ToOperationsUpdateActionRequest(ctx context.Contex
 	var actionID string
 	actionID = r.ActionID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	updateActionRequest, updateActionRequestDiags := r.ToSharedUpdateActionRequest(ctx)
 	diags.Append(updateActionRequestDiags...)
 
