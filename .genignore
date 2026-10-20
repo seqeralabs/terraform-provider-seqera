@@ -123,6 +123,7 @@ examples/resources/seqera_orgs/resource*.tf
 examples/resources/seqera_custom_role/resource.tf
 examples/resources/seqera_service_account/resource.tf
 examples/resources/seqera_agent/resource.tf
+examples/resources/seqera_workspace_lineage_settings/resource.tf
 examples/data-sources/seqera_service_account/data-source.tf
 examples/data-sources/seqera_agent/data-source.tf
 examples/resources/seqera_primary_compute_env/resource*.tf

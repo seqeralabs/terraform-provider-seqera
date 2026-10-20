@@ -1,10 +1,44 @@
-resource "seqera_workspace_lineage_settings" "my_workspacelineagesettings" {
-  credentials_id    = "...my_credentials_id..."
-  lineage_default   = false
-  org_id            = 3
+# Use one of the two configurations below per workspace.
+#
+# AUTO provisioning (default): Platform creates the lineage bucket, the
+# notification topic and the subscription. Do not set store_name or topic_arn.
+#
+# credentials_id and region are locked once provisioning has started; changing
+# them afterwards is rejected by the Platform.
+#
+# Destroying this resource disables lineage for the workspace. The AWS
+# infrastructure that was created is left in place.
+resource "seqera_workspace_lineage_settings" "auto" {
+  org_id            = var.org_id
+  workspace_id      = var.workspace_id
   provisioning_mode = "AUTO"
-  region            = "...my_region..."
-  store_name        = "...my_store_name..."
-  topic_arn         = "...my_topic_arn..."
-  workspace_id      = 1
+
+  credentials_id  = seqera_aws_credential.main.credentials_id
+  region          = "eu-west-1"
+  lineage_default = true
+}
+
+# MANUAL provisioning: you create the bucket and the SNS topic, and subscribe
+# the Platform webhook to the topic. store_name and topic_arn are required.
+resource "aws_sns_topic" "lineage" {
+  name = "seqera-lineage-events"
+}
+
+resource "seqera_workspace_lineage_settings" "manual" {
+  org_id            = var.org_id
+  workspace_id      = var.workspace_id
+  provisioning_mode = "MANUAL"
+
+  credentials_id = seqera_aws_credential.main.credentials_id
+  region         = "eu-west-1"
+  store_name     = "my-existing-lineage-bucket"
+  topic_arn      = aws_sns_topic.lineage.arn
+}
+
+# The subscription is confirmed by the Platform. event_delivery stays
+# PENDING_CONFIRMATION until the confirmation completes.
+resource "aws_sns_topic_subscription" "lineage" {
+  topic_arn = aws_sns_topic.lineage.arn
+  protocol  = "https"
+  endpoint  = seqera_workspace_lineage_settings.manual.webhook_url
 }
