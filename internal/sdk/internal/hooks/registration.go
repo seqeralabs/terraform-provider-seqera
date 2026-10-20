@@ -33,6 +33,11 @@ func initHooks(h *Hooks) {
 	lineageSettingsStatusHook := &LineageSettingsStatusHook{}
 	h.registerAfterSuccessHook(lineageSettingsStatusHook)
 
+	// Register lineage settings not-configured hook to turn the 200-with-empty-fields
+	// response for a workspace without lineage into a 404 so Terraform drops the resource
+	lineageSettingsNotConfiguredHook := &LineageSettingsNotConfiguredHook{}
+	h.registerAfterSuccessHook(lineageSettingsNotConfiguredHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)
