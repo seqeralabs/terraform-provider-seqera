@@ -25,7 +25,7 @@ For Compute Environment Creation:
   - We poll the describe endpoint until the status field becomes "AVAILABLE"
   - If status becomes "ERRORED" or "INVALID", the operation fails
   - Polling configuration: 10-second intervals with 5-minute overall timeout (1s retry for transient errors)
-  - Total timeout: 5 minutes
+  - Total timeout: 15 minutes
 
 For Compute Environment Deletion:
   - The API responds with a 204 status code acknowledging the deletion request
@@ -50,7 +50,7 @@ const (
 	// ComputeEnvHTTPTimeout defines timeout for individual HTTP requests
 	ComputeEnvHTTPTimeout = 30 * time.Second
 	// ComputeEnvOverallTimeout defines maximum total time for polling operations
-	ComputeEnvOverallTimeout = 5 * time.Minute
+	ComputeEnvOverallTimeout = 15 * time.Minute
 )
 
 // ComputeEnvStatusHook polls compute environment status:
