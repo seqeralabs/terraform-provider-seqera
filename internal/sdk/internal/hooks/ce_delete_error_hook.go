@@ -28,7 +28,9 @@ func (h *CEDeleteErrorHook) AfterSuccess(hookCtx AfterSuccessContext, res *http.
 	}
 
 	opID := hookCtx.OperationID
-	if !strings.HasPrefix(opID, "Delete") || !(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE")) {
+	isCEDelete := strings.HasPrefix(opID, "Delete") &&
+		(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE"))
+	if !isCEDelete {
 		return res, nil
 	}
 
