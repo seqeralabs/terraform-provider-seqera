@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_service_account Data Source - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Look up an organization service account by name.
 ---

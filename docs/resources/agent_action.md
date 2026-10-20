@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_agent_action Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Pipelines"
 description: |-
   Manage an action that runs a Seqera agent when it triggers.
   An agent action watches a bucket, a schedule or the status of a

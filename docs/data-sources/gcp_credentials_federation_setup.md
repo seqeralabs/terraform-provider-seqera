@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_gcp_credentials_federation_setup Data Source - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Credentials"
 description: |-
   Data source for the Google Workload Identity Federation setup values of a
   Seqera scope.
