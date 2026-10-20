@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_pipeline_action Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Pipelines"
 description: |-
   Manage an action that launches a pipeline run when it triggers.
   A pipeline action fires on a GitHub webhook (github), a call to

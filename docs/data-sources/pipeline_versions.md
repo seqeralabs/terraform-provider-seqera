@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_pipeline_versions Data Source - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Pipelines"
 description: |-
   List versions of a Seqera Platform pipeline.
   Wraps GET /pipelines/{pipelineId}/versions. Use to discover version_ids

@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_agent Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Agents"
 description: |-
   Manage an agent in a Seqera workspace. An agent runs its
   agent_instructions when triggered by a seqera_action with

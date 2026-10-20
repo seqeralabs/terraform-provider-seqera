@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_service_account Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Manage a service account in a Seqera organization. A service account
   is a non-human identity that agents run as.

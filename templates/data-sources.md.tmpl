@@ -1,11 +1,13 @@
 ---
 page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
-{{- if eq .Name "seqera_credentials" }}
+{{- if or (eq .Name "seqera_credentials") (eq .Name "seqera_aws_credentials_federation_setup") (eq .Name "seqera_gcp_credentials_federation_setup") }}
 subcategory: "Credentials"
-{{- else if or (eq .Name "seqera_custom_role") (eq .Name "seqera_organization") (eq .Name "seqera_organization_member") (eq .Name "seqera_permissions") (eq .Name "seqera_team") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
+{{- else if or (eq .Name "seqera_custom_role") (eq .Name "seqera_organization") (eq .Name "seqera_organization_member") (eq .Name "seqera_permissions") (eq .Name "seqera_service_account") (eq .Name "seqera_team") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
 subcategory: "Organization"
-{{- else if or (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") }}
+{{- else if or (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") (eq .Name "seqera_pipeline_versions") }}
 subcategory: "Pipelines"
+{{- else if eq .Name "seqera_agent" }}
+subcategory: "Agents"
 {{- else if eq .Name "seqera_data_links" }}
 subcategory: "Data"
 {{- else }}
