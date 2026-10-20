@@ -20853,8 +20853,17 @@ components:
         value:
           type: string
           x-speakeasy-param-sensitive: true
-          description: The sensitive secret value to store (will be encrypted)
+          x-speakeasy-terraform-write-only: true
+          description: The sensitive secret value to store (will be encrypted). Write-only; never stored in Terraform state. To rotate it in place, change it together with `value_version`.
           example: "secret_value_here"
+        valueVersion:
+          type: integer
+          format: int64
+          description: Rotation trigger for the write-only `value`. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change `value` to update the secret in place. It is never sent to the API. Not needed on creation.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-computed: false
+      x-speakeasy-transform-to-api:
+        jq: 'del(.valueVersion)'
       required:
         - name
         - value
@@ -26457,6 +26466,14 @@ components:
         Pipeline secrets store encrypted sensitive data such as API keys,
         passwords, and configuration values used in workflows, providing
         secure access to external services and resources.
+
+        The `value` is write-only (Terraform 1.11 or later) and is never stored
+        in state, so it can be supplied from an ephemeral resource. Because
+        Terraform cannot detect changes to a write-only argument, rotate a
+        secret by changing `value` and incrementing `value_version` in the same
+        apply; this updates the secret in place. Without bumping
+        `value_version`, a changed `value` is ignored. Replacing the resource
+        (`terraform apply -replace`) also writes the current `value`.
       description: |
         Represents a secure secret for pipeline execution.
         Contains encrypted sensitive data such as API keys, passwords,
@@ -28468,6 +28485,15 @@ components:
         value:
           type: string
           x-speakeasy-param-sensitive: true
+          x-speakeasy-terraform-write-only: true
+        valueVersion:
+          type: integer
+          format: int64
+          description: Rotation trigger for the write-only `value`. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change `value` to update the secret in place. It is never sent to the API. Not needed on creation.
+          x-speakeasy-param-optional: true
+          x-speakeasy-param-computed: false
+      x-speakeasy-transform-to-api:
+        jq: 'del(.valueVersion)'
     UpdateRoleRequest:
       type: object
       properties:

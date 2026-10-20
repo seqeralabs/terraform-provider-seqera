@@ -6,6 +6,13 @@ description: |-
   Pipeline secrets store encrypted sensitive data such as API keys,
   passwords, and configuration values used in workflows, providing
   secure access to external services and resources.
+  The value is write-only (Terraform 1.11 or later) and is never stored
+  in state, so it can be supplied from an ephemeral resource. Because
+  Terraform cannot detect changes to a write-only argument, rotate a
+  secret by changing value and incrementing value_version in the same
+  apply; this updates the secret in place. Without bumping
+  value_version, a changed value is ignored. Replacing the resource
+  (terraform apply -replace) also writes the current value.
 ---
 
 # seqera_pipeline_secret (Resource)
@@ -16,6 +23,14 @@ Pipeline secrets store encrypted sensitive data such as API keys,
 passwords, and configuration values used in workflows, providing
 secure access to external services and resources.
 
+The `value` is write-only (Terraform 1.11 or later) and is never stored
+in state, so it can be supplied from an ephemeral resource. Because
+Terraform cannot detect changes to a write-only argument, rotate a
+secret by changing `value` and incrementing `value_version` in the same
+apply; this updates the secret in place. Without bumping
+`value_version`, a changed `value` is ignored. Replacing the resource
+(`terraform apply -replace`) also writes the current `value`.
+
 ## Example Usage
 
 ```terraform
@@ -25,10 +40,21 @@ variable "github_token" {
   sensitive   = true
 }
 
+# `value` is write-only (Terraform >= 1.11): it is sent to the API but never
+# stored in state, so it can come from a variable or an ephemeral resource.
 resource "seqera_pipeline_secret" "github_token" {
   name         = "github_api_token"
   value        = var.github_token
   workspace_id = seqera_workspace.main.id
+}
+
+# Rotating a secret: Terraform cannot detect changes to a write-only argument,
+# so bump `value_version` together with `value` to update the secret in place.
+resource "seqera_pipeline_secret" "rotated" {
+  name          = "database_password"
+  value         = var.database_password
+  value_version = 2 # increment whenever `value` changes
+  workspace_id  = seqera_workspace.main.id
 }
 ```
 
@@ -89,9 +115,15 @@ resource "seqera_pipeline_secret" "service_secrets" {
 
 ### Required
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `name` (String) Secret name used to reference the secret in workflows (max 100 characters). Requires replacement if changed.
-- `value` (String, Sensitive) The sensitive secret value to store (will be encrypted)
+- `value` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The sensitive secret value to store (will be encrypted). Write-only; never stored in Terraform state. To rotate it in place, change it together with `value_version`.
 - `workspace_id` (Number) Workspace numeric identifier where the secret will be stored
+
+### Optional
+
+- `value_version` (Number) Rotation trigger for the write-only `value`. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change `value` to update the secret in place. It is never sent to the API. Not needed on creation.
 
 ### Read-Only
 

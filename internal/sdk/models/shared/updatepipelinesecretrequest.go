@@ -2,8 +2,33 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type UpdatePipelineSecretRequest struct {
 	Value *string `json:"value,omitempty"`
+	// Rotation trigger for the write-only `value`. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change `value` to update the secret in place. It is never sent to the API. Not needed on creation.
+	ValueVersion *int64 `json:"valueVersion,omitempty"`
+}
+
+func (u UpdatePipelineSecretRequest) MarshalJSON() ([]byte, error) {
+	jsonBytes, err := utils.MarshalJSON(u, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, "del(.valueVersion)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (u *UpdatePipelineSecretRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UpdatePipelineSecretRequest) GetValue() *string {
@@ -11,4 +36,11 @@ func (u *UpdatePipelineSecretRequest) GetValue() *string {
 		return nil
 	}
 	return u.Value
+}
+
+func (u *UpdatePipelineSecretRequest) GetValueVersion() *int64 {
+	if u == nil {
+		return nil
+	}
+	return u.ValueVersion
 }

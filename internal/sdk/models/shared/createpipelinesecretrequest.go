@@ -2,11 +2,36 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type CreatePipelineSecretRequest struct {
 	// Secret name used to reference the secret in workflows (max 100 characters)
 	Name string `json:"name"`
-	// The sensitive secret value to store (will be encrypted)
+	// The sensitive secret value to store (will be encrypted). Write-only; never stored in Terraform state. To rotate it in place, change it together with `value_version`.
 	Value string `json:"value"`
+	// Rotation trigger for the write-only `value`. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change `value` to update the secret in place. It is never sent to the API. Not needed on creation.
+	ValueVersion *int64 `json:"valueVersion,omitempty"`
+}
+
+func (c CreatePipelineSecretRequest) MarshalJSON() ([]byte, error) {
+	jsonBytes, err := utils.MarshalJSON(c, "", false)
+	if err != nil {
+		return nil, err
+	}
+	out, err := utils.RunJQBytes(jsonBytes, "del(.valueVersion)")
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *CreatePipelineSecretRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreatePipelineSecretRequest) GetName() string {
@@ -21,4 +46,11 @@ func (c *CreatePipelineSecretRequest) GetValue() string {
 		return ""
 	}
 	return c.Value
+}
+
+func (c *CreatePipelineSecretRequest) GetValueVersion() *int64 {
+	if c == nil {
+		return nil
+	}
+	return c.ValueVersion
 }

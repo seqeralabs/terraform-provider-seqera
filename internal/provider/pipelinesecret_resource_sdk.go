@@ -11,6 +11,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// PipelineSecretResourceModelOptions enables patch sdk method construction.
+type PipelineSecretResourceModelOptions struct {
+	Config *PipelineSecretResourceModel
+	State  *PipelineSecretResourceModel
+}
+
 func (r *PipelineSecretResourceModel) RefreshFromSharedCreatePipelineSecretResponse(ctx context.Context, resp *shared.CreatePipelineSecretResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -51,13 +57,13 @@ func (r *PipelineSecretResourceModel) RefreshFromSharedPipelineSecret(ctx contex
 	return diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsCreatePipelineSecretRequest(ctx context.Context) (*operations.CreatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToOperationsCreatePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*operations.CreatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
-	createPipelineSecretRequest, createPipelineSecretRequestDiags := r.ToSharedCreatePipelineSecretRequest(ctx)
+	createPipelineSecretRequest, createPipelineSecretRequestDiags := r.ToSharedCreatePipelineSecretRequest(ctx, opts)
 	diags.Append(createPipelineSecretRequestDiags...)
 
 	if diags.HasError() {
@@ -72,7 +78,7 @@ func (r *PipelineSecretResourceModel) ToOperationsCreatePipelineSecretRequest(ct
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ctx context.Context) (*operations.DeletePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*operations.DeletePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var secretID int64
@@ -89,7 +95,7 @@ func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ct
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(ctx context.Context) (*operations.DescribePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*operations.DescribePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var secretID int64
@@ -106,7 +112,7 @@ func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ctx context.Context) (*operations.UpdatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*operations.UpdatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var secretID int64
@@ -115,7 +121,7 @@ func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ct
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
-	updatePipelineSecretRequest, updatePipelineSecretRequestDiags := r.ToSharedUpdatePipelineSecretRequest(ctx)
+	updatePipelineSecretRequest, updatePipelineSecretRequestDiags := r.ToSharedUpdatePipelineSecretRequest(ctx, opts)
 	diags.Append(updatePipelineSecretRequestDiags...)
 
 	if diags.HasError() {
@@ -131,34 +137,48 @@ func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ct
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToSharedCreatePipelineSecretRequest(ctx context.Context) (*shared.CreatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToSharedCreatePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*shared.CreatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var name string
 	name = r.Name.ValueString()
 
 	var value string
-	value = r.Value.ValueString()
+	value = opts.Config.Value.ValueString()
 
+	valueVersion := new(int64)
+	if !r.ValueVersion.IsUnknown() && !r.ValueVersion.IsNull() {
+		*valueVersion = r.ValueVersion.ValueInt64()
+	} else {
+		valueVersion = nil
+	}
 	out := shared.CreatePipelineSecretRequest{
-		Name:  name,
-		Value: value,
+		Name:         name,
+		Value:        value,
+		ValueVersion: valueVersion,
 	}
 
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToSharedUpdatePipelineSecretRequest(ctx context.Context) (*shared.UpdatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToSharedUpdatePipelineSecretRequest(ctx context.Context, opts *PipelineSecretResourceModelOptions) (*shared.UpdatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	value := new(string)
-	if !r.Value.IsUnknown() && !r.Value.IsNull() {
-		*value = r.Value.ValueString()
+	if !opts.Config.Value.IsUnknown() && !opts.Config.Value.IsNull() {
+		*value = opts.Config.Value.ValueString()
 	} else {
 		value = nil
 	}
+	valueVersion := new(int64)
+	if !r.ValueVersion.IsUnknown() && !r.ValueVersion.IsNull() {
+		*valueVersion = r.ValueVersion.ValueInt64()
+	} else {
+		valueVersion = nil
+	}
 	out := shared.UpdatePipelineSecretRequest{
-		Value: value,
+		Value:        value,
+		ValueVersion: valueVersion,
 	}
 
 	return &out, diags

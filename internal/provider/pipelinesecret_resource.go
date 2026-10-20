@@ -38,14 +38,15 @@ type PipelineSecretResource struct {
 
 // PipelineSecretResourceModel describes the resource data model.
 type PipelineSecretResourceModel struct {
-	DateCreated types.String `tfsdk:"date_created"`
-	ID          types.Int64  `tfsdk:"id"`
-	LastUpdated types.String `tfsdk:"last_updated"`
-	LastUsed    types.String `tfsdk:"last_used"`
-	Name        types.String `tfsdk:"name"`
-	SecretID    types.Int64  `tfsdk:"secret_id"`
-	Value       types.String `tfsdk:"value"`
-	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	DateCreated  types.String `tfsdk:"date_created"`
+	ID           types.Int64  `tfsdk:"id"`
+	LastUpdated  types.String `tfsdk:"last_updated"`
+	LastUsed     types.String `tfsdk:"last_used"`
+	Name         types.String `tfsdk:"name"`
+	SecretID     types.Int64  `tfsdk:"secret_id"`
+	Value        types.String `tfsdk:"value"`
+	ValueVersion types.Int64  `tfsdk:"value_version"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *PipelineSecretResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -54,7 +55,7 @@ func (r *PipelineSecretResource) Metadata(ctx context.Context, req resource.Meta
 
 func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage secure secrets for pipeline execution.\n\nPipeline secrets store encrypted sensitive data such as API keys,\npasswords, and configuration values used in workflows, providing\nsecure access to external services and resources.\n",
+		MarkdownDescription: "Manage secure secrets for pipeline execution.\n\nPipeline secrets store encrypted sensitive data such as API keys,\npasswords, and configuration values used in workflows, providing\nsecure access to external services and resources.\n\nThe `value` is write-only (Terraform 1.11 or later) and is never stored\nin state, so it can be supplied from an ephemeral resource. Because\nTerraform cannot detect changes to a write-only argument, rotate a\nsecret by changing `value` and incrementing `value_version` in the same\napply; this updates the secret in place. Without bumping\n`value_version`, a changed `value` is ignored. Replacing the resource\n(`terraform apply -replace`) also writes the current `value`.\n",
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed:    true,
@@ -93,7 +94,12 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 			"value": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
-				Description: `The sensitive secret value to store (will be encrypted)`,
+				WriteOnly:   true,
+				Description: `The sensitive secret value to store (will be encrypted). Write-only; never stored in Terraform state. To rotate it in place, change it together with ` + "`" + `value_version` + "`" + `.`,
+			},
+			"value_version": schema.Int64Attribute{
+				Optional:    true,
+				Description: `Rotation trigger for the write-only ` + "`" + `value` + "`" + `. Terraform cannot detect changes to a write-only argument, so increment this number whenever you change ` + "`" + `value` + "`" + ` to update the secret in place. It is never sent to the API. Not needed on creation.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
@@ -124,8 +130,21 @@ func (r *PipelineSecretResource) Configure(ctx context.Context, req resource.Con
 }
 
 func (r *PipelineSecretResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *PipelineSecretResourceModel
-	var plan types.Object
+	var (
+		configData PipelineSecretResourceModel
+		data       PipelineSecretResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &PipelineSecretResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -143,7 +162,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
 
-	request, requestDiags := data.ToOperationsCreatePipelineSecretRequest(ctx)
+	request, requestDiags := data.ToOperationsCreatePipelineSecretRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -180,7 +199,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribePipelineSecretRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribePipelineSecretRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -242,7 +261,7 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 
 	ctx = withSensitiveValues(ctx, req.State)
 
-	request, requestDiags := data.ToOperationsDescribePipelineSecretRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribePipelineSecretRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -283,8 +302,29 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 }
 
 func (r *PipelineSecretResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *PipelineSecretResourceModel
-	var plan types.Object
+	var (
+		configData PipelineSecretResourceModel
+		data       PipelineSecretResourceModel
+		plan       types.Object
+		stateData  PipelineSecretResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &PipelineSecretResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -298,7 +338,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
-	request, requestDiags := data.ToOperationsUpdatePipelineSecretRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdatePipelineSecretRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -326,7 +366,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribePipelineSecretRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribePipelineSecretRequest(ctx, opts)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
@@ -388,7 +428,7 @@ func (r *PipelineSecretResource) Delete(ctx context.Context, req resource.Delete
 
 	ctx = withSensitiveValues(ctx, req.State)
 
-	request, requestDiags := data.ToOperationsDeletePipelineSecretRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePipelineSecretRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
