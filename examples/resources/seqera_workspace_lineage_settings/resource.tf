@@ -16,7 +16,7 @@ resource "seqera_workspace_lineage_settings" "auto" {
   workspace_id      = var.auto_workspace_id
   provisioning_mode = "AUTO"
 
-  credentials_id  = seqera_aws_credential.main.credentials_id
+  credentials_id  = seqera_aws_credential.main.id
   region          = "eu-west-1"
   lineage_default = true
 }
@@ -32,7 +32,7 @@ resource "seqera_workspace_lineage_settings" "manual" {
   workspace_id      = var.manual_workspace_id
   provisioning_mode = "MANUAL"
 
-  credentials_id = seqera_aws_credential.main.credentials_id
+  credentials_id = seqera_aws_credential.main.id
   region         = "eu-west-1"
   store_name     = "my-existing-lineage-bucket"
   topic_arn      = aws_sns_topic.lineage.arn
