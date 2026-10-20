@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_compute_env_enabled Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Compute Environments"
 description: |-
   Own the enable/disable state of an existing Seqera compute environment.
   Wraps the POST /compute-envs/{id}/enable and POST /compute-envs/{id}/disable endpoints, available on Seqera Enterprise v26.1+ and Seqera Platform Cloud.

@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_pipeline_version Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Pipelines"
 description: |-
   Own the name and is_default flag of an existing Seqera Platform pipeline version.
   Wraps PUT /pipelines/{pipelineId}/versions/{versionId}/manage. Use with the

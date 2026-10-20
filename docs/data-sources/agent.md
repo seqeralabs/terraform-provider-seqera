@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_agent Data Source - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Agents"
 description: |-
   Look up a workspace agent by name.
 ---

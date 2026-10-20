@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_pipeline_schema Resource - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Pipelines"
 description: |-
   Create a Nextflow pipeline schema in a Seqera workspace and expose its server-assigned id.
   Reference the returned id from seqera_pipeline.launch.pipeline_schema_id to bind the schema to a pipeline:

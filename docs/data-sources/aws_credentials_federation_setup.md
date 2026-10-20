@@ -1,6 +1,6 @@
 ---
 page_title: "seqera_aws_credentials_federation_setup Data Source - terraform-provider-seqera"
-subcategory: ""
+subcategory: "Credentials"
 description: |-
   Data source for the AWS OIDC workload identity setup values of a Seqera
   scope.
