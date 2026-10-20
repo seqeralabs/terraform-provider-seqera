@@ -124,6 +124,7 @@ Available configuration:
 * [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
+* [seqera_workspace_lineage_settings](docs/resources/workspace_lineage_settings.md)
 
 ### Data Sources
 

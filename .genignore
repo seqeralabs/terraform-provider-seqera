@@ -10,6 +10,10 @@ internal/sdk/internal/hooks/conflict_error_hook.go
 internal/sdk/internal/hooks/token_list_error_hook.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook.go
 internal/sdk/internal/hooks/agent_binding_conflict_hook_test.go
+internal/sdk/internal/hooks/lineage_settings_status_hook.go
+internal/sdk/internal/hooks/lineage_settings_status_hook_test.go
+internal/sdk/internal/hooks/lineage_settings_not_configured_hook.go
+internal/sdk/internal/hooks/lineage_settings_not_configured_hook_test.go
 
 
 # Custom validators
@@ -25,6 +29,8 @@ internal/validators/stringvalidators/aws_credential_keys_validator.go
 internal/validators/stringvalidators/run_script_size_validator.go
 internal/validators/stringvalidators/fusion_version_validator.go
 internal/validators/stringvalidators/fusion_version_validator_test.go
+internal/validators/stringvalidators/lineage_manual_field_validator.go
+internal/validators/stringvalidators/lineage_manual_field_validator_test.go
 internal/validators/stringvalidators/google_credential_keys_validator.go
 internal/validators/stringvalidators/instance_type_size_validator.go
 internal/validators/stringvalidators/seqera_compute_region_validator.go
@@ -117,6 +123,7 @@ examples/resources/seqera_orgs/resource*.tf
 examples/resources/seqera_custom_role/resource.tf
 examples/resources/seqera_service_account/resource.tf
 examples/resources/seqera_agent/resource.tf
+examples/resources/seqera_workspace_lineage_settings/resource.tf
 examples/data-sources/seqera_service_account/data-source.tf
 examples/data-sources/seqera_agent/data-source.tf
 examples/resources/seqera_primary_compute_env/resource*.tf

@@ -187,6 +187,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewTowerAgentCredentialResource,
 		NewWorkflowsResource,
 		NewWorkspaceResource,
+		NewWorkspaceLineageSettingsResource,
 		workspace_participant.NewResource,
 		organization_member.NewResource,
 		team_member.NewResource,

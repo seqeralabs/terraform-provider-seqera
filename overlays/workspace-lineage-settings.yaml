@@ -1,0 +1,147 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Workspace Lineage Settings Overlay
+  version: 0.0.0
+
+# ==============================================================================
+# WORKSPACE LINEAGE SETTINGS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Binds /orgs/{orgId}/workspaces/{workspaceId}/settings/lineage to the
+# seqera_workspace_lineage_settings resource. The API is an upsert: a single
+# PUT (204, no body) both creates and updates the settings, GET reads them and
+# DELETE disables lineage for the workspace.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+# resource "seqera_workspace_lineage_settings" "main" {
+#   org_id         = seqera_orgs.main.org_id
+#   workspace_id   = seqera_workspace.main.id
+#   credentials_id = seqera_aws_credential.lineage.credentials_id
+#   region         = "us-east-1"
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # OPERATION BINDINGS
+  # ============================================================================
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].put
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource:
+          - WorkspaceLineageSettings#create
+          - WorkspaceLineageSettings#update
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceLineageSettings#read
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].delete
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceLineageSettings#delete
+
+  # ============================================================================
+  # PATH PARAMETERS: identity, replace on change
+  # ============================================================================
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].put.parameters[?(@.name=="orgId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].get.parameters[?(@.name=="orgId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].delete.parameters[?(@.name=="orgId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].put.parameters[?(@.name=="workspaceId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].get.parameters[?(@.name=="workspaceId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/lineage"].delete.parameters[?(@.name=="workspaceId")]
+    update:
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # ENTITY BINDING
+  # ============================================================================
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest
+    update:
+      x-speakeasy-entity: WorkspaceLineageSettings
+      required:
+        - credentialsId
+        - region
+
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse
+    update:
+      x-speakeasy-entity: WorkspaceLineageSettings
+      x-speakeasy-entity-description: |
+        Manage the lineage settings of a Seqera workspace.
+
+        Lineage records how data and runs relate to each other. In `AUTO` provisioning mode Platform creates the storage bucket, notification topic and subscription; in `MANUAL` mode you pre-create the bucket and topic and subscribe the `webhook_url` to the topic.
+
+        ~> **Note:** Destroying this resource disables lineage for the workspace. AWS infrastructure (bucket, topic, subscription) is left intact.
+
+  # wspId is the workspace id in the response; expose it as workspace_id.
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.wspId
+    update:
+      x-speakeasy-name-override: workspaceId
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.provisioningMode
+    update:
+      description: "How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself."
+      default: AUTO
+      x-speakeasy-param-computed: true
+
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.lineageDefault
+    update:
+      default: false
+
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.storeName
+    update:
+      description: Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: LineageManualFieldValidator
+
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.topicArn
+    update:
+      description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: LineageManualFieldValidator
+
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.webhookUrl
+    update:
+      x-speakeasy-param-sensitive: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # ============================================================================
+  # CLEANUP
+  # ============================================================================
+  # Deprecated SQS transport: rejected on input, only set on unmigrated workspaces.
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.queueArn
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.queueArn
+    update:
+      x-speakeasy-terraform-ignore: true
+  # Never returned by the settings endpoints.
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.storeUri
+    update:
+      x-speakeasy-terraform-ignore: true
+  # "provider" is a reserved root attribute name in Terraform, so it cannot be
+  # exposed in the schema.
+  - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.provider
+    update:
+      x-speakeasy-terraform-ignore: true

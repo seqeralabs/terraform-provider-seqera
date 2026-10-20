@@ -7385,6 +7385,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
         - name: workspaceId
           in: path
           description: Workspace numeric identifier
@@ -7392,6 +7393,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       responses:
         '204':
           description: OK - No content
@@ -7407,6 +7409,9 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceLineageSettings#delete
     get:
       operationId: FindLineageWorkspaceSettings
       summary: Get workspace lineage settings
@@ -7419,6 +7424,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
         - name: workspaceId
           in: path
           description: Workspace numeric identifier
@@ -7426,6 +7432,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       responses:
         '200':
           description: OK
@@ -7451,6 +7458,9 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceLineageSettings#read
     put:
       operationId: UpdateLineageWorkspaceSettings
       summary: Update workspace lineage settings
@@ -7463,6 +7473,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
         - name: workspaceId
           in: path
           description: Workspace numeric identifier
@@ -7470,6 +7481,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Lineage settings update request
         required: true
@@ -7498,6 +7510,11 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource:
+          - WorkspaceLineageSettings#create
+          - WorkspaceLineageSettings#update
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       operationId: FindDataStudiosWorkspaceSettings
@@ -24800,27 +24817,39 @@ components:
         lineageDefault:
           description: When true, the lineage toggle in the pipeline launch form defaults to enabled.
           type: boolean
+          default: false
         provisioningMode:
-          description: "Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted."
+          description: "How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself."
           allOf:
             - $ref: '#/components/schemas/LineageProvisioningMode'
           nullable: true
+          default: AUTO
+          x-speakeasy-param-computed: true
         queueArn:
           description: Deprecated. The SQS transport has been replaced by SNS push delivery; supply 'topicArn' instead. Sending this field is rejected.
           type: string
           deprecated: true
           nullable: true
+          x-speakeasy-terraform-ignore: true
         region:
           description: Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
           type: string
         storeName:
-          description: Bucket name for the lineage store. Ignored in AUTO mode (Platform always selects 'seqera-lineage-{workspaceId}'); required in MANUAL mode (must match the existing customer-managed bucket).
+          description: Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
           type: string
           nullable: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-validators: LineageManualFieldValidator
         topicArn:
-          description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode to identify the existing topic; ignored on input in AUTO mode.
+          description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
           type: string
           nullable: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-validators: LineageManualFieldValidator
+      x-speakeasy-entity: WorkspaceLineageSettings
+      required:
+        - credentialsId
+        - region
     LineageWorkspaceSettingsResponse:
       type: object
       properties:
@@ -24847,6 +24876,7 @@ components:
           description: Cloud provider of the lineage store (e.g. 'aws'). Null when lineage is not configured.
           type: string
           nullable: true
+          x-speakeasy-terraform-ignore: true
         provisioned:
           description: Whether the lineage infrastructure has been provisioned for the workspace.
           type: boolean
@@ -24859,6 +24889,7 @@ components:
           type: string
           deprecated: true
           nullable: true
+          x-speakeasy-terraform-ignore: true
         region:
           description: Cloud region of the lineage storage bucket.
           type: string
@@ -24875,6 +24906,7 @@ components:
           description: URI of the lineage store. Not returned by the settings endpoints.
           type: string
           nullable: true
+          x-speakeasy-terraform-ignore: true
         topicArn:
           description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications.
           type: string
@@ -24883,10 +24915,21 @@ components:
           description: Endpoint the cloud provider delivers object events to. In MANUAL mode, subscribe this URL to your topic.
           type: string
           nullable: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         wspId:
           description: Workspace numeric identifier.
           type: integer
           format: int64
+          x-speakeasy-name-override: workspaceId
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-entity: WorkspaceLineageSettings
+      x-speakeasy-entity-description: |
+        Manage the lineage settings of a Seqera workspace.
+
+        Lineage records how data and runs relate to each other. In `AUTO` provisioning mode Platform creates the storage bucket, notification topic and subscription; in `MANUAL` mode you pre-create the bucket and topic and subscribe the `webhook_url` to the topic.
+
+        ~> **Note:** Destroying this resource disables lineage for the workspace. AWS infrastructure (bucket, topic, subscription) is left intact.
     LinkVersionRequest:
       type: object
       properties:
@@ -30296,8 +30339,10 @@ components:
 
 
 
+
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
+
 
 
 
@@ -30588,8 +30633,10 @@ components:
 
 
 
+
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
+
 
 
 

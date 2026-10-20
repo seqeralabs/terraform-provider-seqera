@@ -28,6 +28,16 @@ func initHooks(h *Hooks) {
 	agentBindingConflictHook := &AgentBindingConflictHook{}
 	h.registerAfterSuccessHook(agentBindingConflictHook)
 
+	// Register lineage settings status hook to wait for AUTO provisioning to finish
+	// (status PENDING -> AVAILABLE/ERRORED) after the settings update
+	lineageSettingsStatusHook := &LineageSettingsStatusHook{}
+	h.registerAfterSuccessHook(lineageSettingsStatusHook)
+
+	// Register lineage settings not-configured hook to turn the 200-with-empty-fields
+	// response for a workspace without lineage into a 404 so Terraform drops the resource
+	lineageSettingsNotConfiguredHook := &LineageSettingsNotConfiguredHook{}
+	h.registerAfterSuccessHook(lineageSettingsNotConfiguredHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)

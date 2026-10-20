@@ -104,7 +104,7 @@ type LineageWorkspaceSettingsResponse struct {
 	// Endpoint the cloud provider delivers object events to. In MANUAL mode, subscribe this URL to your topic.
 	WebhookURL *string `json:"webhookUrl,omitempty"`
 	// Workspace numeric identifier.
-	WspID *int64 `json:"wspId,omitempty"`
+	WorkspaceID *int64 `json:"wspId,omitempty"`
 }
 
 func (l *LineageWorkspaceSettingsResponse) GetCredentialsID() *string {
@@ -212,9 +212,9 @@ func (l *LineageWorkspaceSettingsResponse) GetWebhookURL() *string {
 	return l.WebhookURL
 }
 
-func (l *LineageWorkspaceSettingsResponse) GetWspID() *int64 {
+func (l *LineageWorkspaceSettingsResponse) GetWorkspaceID() *int64 {
 	if l == nil {
 		return nil
 	}
-	return l.WspID
+	return l.WorkspaceID
 }

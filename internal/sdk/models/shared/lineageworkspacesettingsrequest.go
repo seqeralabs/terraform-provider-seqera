@@ -5,9 +5,10 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-// ProvisioningMode - Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted.
+// ProvisioningMode - How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself.
 type ProvisioningMode string
 
 const (
@@ -36,26 +37,37 @@ func (e *ProvisioningMode) UnmarshalJSON(data []byte) error {
 
 type LineageWorkspaceSettingsRequest struct {
 	// Credentials ID used to create and access the lineage storage bucket.
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	CredentialsID string `json:"credentialsId"`
 	// When true, the lineage toggle in the pipeline launch form defaults to enabled.
-	LineageDefault *bool `json:"lineageDefault,omitempty"`
-	// Provisioning mode: AUTO (Platform creates the bucket, notification topic and subscription, and updates pipeline credentials' IAM policies) or MANUAL (user pre-creates the bucket and topic; Platform only subscribes its webhook and reads). Defaults to AUTO when omitted.
-	ProvisioningMode *ProvisioningMode `json:"provisioningMode,omitempty"`
+	LineageDefault *bool `default:"false" json:"lineageDefault"`
+	// How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself.
+	ProvisioningMode *ProvisioningMode `default:"AUTO" json:"provisioningMode"`
 	// Deprecated. The SQS transport has been replaced by SNS push delivery; supply 'topicArn' instead. Sending this field is rejected.
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	QueueArn *string `json:"queueArn,omitempty"`
 	// Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
-	Region *string `json:"region,omitempty"`
-	// Bucket name for the lineage store. Ignored in AUTO mode (Platform always selects 'seqera-lineage-{workspaceId}'); required in MANUAL mode (must match the existing customer-managed bucket).
+	Region string `json:"region"`
+	// Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
 	StoreName *string `json:"storeName,omitempty"`
-	// AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode to identify the existing topic; ignored on input in AUTO mode.
+	// AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
 	TopicArn *string `json:"topicArn,omitempty"`
 }
 
-func (l *LineageWorkspaceSettingsRequest) GetCredentialsID() *string {
+func (l LineageWorkspaceSettingsRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LineageWorkspaceSettingsRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *LineageWorkspaceSettingsRequest) GetCredentialsID() string {
 	if l == nil {
-		return nil
+		return ""
 	}
 	return l.CredentialsID
 }
@@ -81,9 +93,9 @@ func (l *LineageWorkspaceSettingsRequest) GetQueueArn() *string {
 	return l.QueueArn
 }
 
-func (l *LineageWorkspaceSettingsRequest) GetRegion() *string {
+func (l *LineageWorkspaceSettingsRequest) GetRegion() string {
 	if l == nil {
-		return nil
+		return ""
 	}
 	return l.Region
 }
