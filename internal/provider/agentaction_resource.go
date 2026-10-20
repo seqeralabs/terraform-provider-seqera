@@ -232,8 +232,6 @@ func (r *AgentActionResource) Create(ctx context.Context, req resource.CreateReq
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateAgentActionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -331,8 +329,6 @@ func (r *AgentActionResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeAgentActionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -386,8 +382,6 @@ func (r *AgentActionResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateAgentActionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -476,8 +470,6 @@ func (r *AgentActionResource) Delete(ctx context.Context, req resource.DeleteReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAgentActionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
