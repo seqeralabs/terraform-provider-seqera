@@ -24838,11 +24838,13 @@ components:
           type: string
           nullable: true
           x-speakeasy-param-computed: true
+          x-speakeasy-plan-validators: LineageManualFieldValidator
         topicArn:
           description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
           type: string
           nullable: true
           x-speakeasy-param-computed: true
+          x-speakeasy-plan-validators: LineageManualFieldValidator
       x-speakeasy-entity: WorkspaceLineageSettings
       required:
         - credentialsId

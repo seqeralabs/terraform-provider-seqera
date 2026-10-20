@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -113,11 +114,17 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 				Computed:    true,
 				Optional:    true,
 				Description: `Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.`,
+				Validators: []validator.String{
+					custom_stringvalidators.LineageManualFieldValidator(),
+				},
 			},
 			"topic_arn": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
 				Description: `AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.`,
+				Validators: []validator.String{
+					custom_stringvalidators.LineageManualFieldValidator(),
+				},
 			},
 			"webhook_url": schema.StringAttribute{
 				Computed:    true,

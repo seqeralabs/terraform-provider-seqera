@@ -108,11 +108,13 @@ actions:
     update:
       description: Bucket name for the lineage store. Ignored in AUTO mode, where Platform selects the bucket; required in MANUAL mode and must match the existing bucket.
       x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: LineageManualFieldValidator
 
   - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.topicArn
     update:
       description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
       x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: LineageManualFieldValidator
 
   - target: $.components.schemas.LineageWorkspaceSettingsResponse.properties.webhookUrl
     update:
