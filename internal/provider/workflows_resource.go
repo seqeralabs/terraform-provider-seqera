@@ -447,8 +447,6 @@ func (r *WorkflowsResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateWorkflowLaunchRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -546,8 +544,6 @@ func (r *WorkflowsResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeWorkflowRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -625,8 +621,6 @@ func (r *WorkflowsResource) Delete(ctx context.Context, req resource.DeleteReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteWorkflowRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

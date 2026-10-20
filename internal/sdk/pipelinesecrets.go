@@ -312,6 +312,7 @@ func (s *PipelineSecrets) CreatePipelineSecret(ctx context.Context, request oper
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreatePipelineSecret")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1203,6 +1204,7 @@ func (s *PipelineSecrets) UpdatePipelineSecret(ctx context.Context, request oper
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdatePipelineSecret")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

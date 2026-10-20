@@ -141,8 +141,6 @@ func (r *LabelsResource) Create(ctx context.Context, req resource.CreateRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -235,8 +233,6 @@ func (r *LabelsResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsListLabelsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -285,8 +281,6 @@ func (r *LabelsResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -379,8 +373,6 @@ func (r *LabelsResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteLabelRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

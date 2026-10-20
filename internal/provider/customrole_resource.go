@@ -144,8 +144,6 @@ func (r *CustomRoleResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -250,8 +248,6 @@ func (r *CustomRoleResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -305,8 +301,6 @@ func (r *CustomRoleResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -395,8 +389,6 @@ func (r *CustomRoleResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteRoleRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

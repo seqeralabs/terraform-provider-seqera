@@ -6015,8 +6015,6 @@ func (r *ComputeEnvResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -6114,8 +6112,6 @@ func (r *ComputeEnvResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -6169,8 +6165,6 @@ func (r *ComputeEnvResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -6259,8 +6253,6 @@ func (r *ComputeEnvResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteComputeEnvRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

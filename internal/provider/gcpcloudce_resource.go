@@ -682,8 +682,6 @@ func (r *GCPCloudCEResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateGCPCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -788,8 +786,6 @@ func (r *GCPCloudCEResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeGCPCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -848,8 +844,6 @@ func (r *GCPCloudCEResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateGCPCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -938,8 +932,6 @@ func (r *GCPCloudCEResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteGCPCloudCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

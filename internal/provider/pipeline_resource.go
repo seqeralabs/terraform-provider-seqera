@@ -442,8 +442,6 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreatePipelineRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -585,8 +583,6 @@ func (r *PipelineResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribePipelineRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -675,8 +671,6 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdatePipelineRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -811,8 +805,6 @@ func (r *PipelineResource) Delete(ctx context.Context, req resource.DeleteReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePipelineRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

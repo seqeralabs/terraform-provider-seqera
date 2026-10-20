@@ -111,8 +111,6 @@ func (r *CredentialsDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsListCredentialsDataSourceRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

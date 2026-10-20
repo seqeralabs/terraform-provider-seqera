@@ -310,6 +310,7 @@ func (s *Tokens) CreateToken(ctx context.Context, request shared.CreateAccessTok
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateToken")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

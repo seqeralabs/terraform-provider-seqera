@@ -315,6 +315,7 @@ func (s *Credentials) CreateCredentials(ctx context.Context, request operations.
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -1456,6 +1457,7 @@ func (s *Credentials) UpdateCredentials(ctx context.Context, request operations.
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -2134,6 +2136,7 @@ func (s *Credentials) CreateAWSCredentials(ctx context.Context, request operatio
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateAWSCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -2368,6 +2371,7 @@ func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "DescribeAWSCredentials")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -2603,6 +2607,7 @@ func (s *Credentials) UpdateAWSCredentials(ctx context.Context, request operatio
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateAWSCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -3053,6 +3058,7 @@ func (s *Credentials) CreateAzureCredentials(ctx context.Context, request operat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateAzureCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -3522,6 +3528,7 @@ func (s *Credentials) UpdateAzureCredentials(ctx context.Context, request operat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateAzureCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -3972,6 +3979,7 @@ func (s *Credentials) CreateAzureEntraCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateAzureEntraCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -4441,6 +4449,7 @@ func (s *Credentials) UpdateAzureEntraCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateAzureEntraCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -4891,6 +4900,7 @@ func (s *Credentials) CreateAzureCloudCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateAzureCloudCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -5360,6 +5370,7 @@ func (s *Credentials) UpdateAzureCloudCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateAzureCloudCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -5810,6 +5821,7 @@ func (s *Credentials) CreateBitbucketCredentials(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateBitbucketCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -6279,6 +6291,7 @@ func (s *Credentials) UpdateBitbucketCredentials(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateBitbucketCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -6708,6 +6721,7 @@ func (s *Credentials) CreateCodecommitCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateCodecommitCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -7177,6 +7191,7 @@ func (s *Credentials) UpdateCodecommitCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateCodecommitCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -7606,6 +7621,7 @@ func (s *Credentials) CreateContainerRegistryCredentials(ctx context.Context, re
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateContainerRegistryCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -8075,6 +8091,7 @@ func (s *Credentials) UpdateContainerRegistryCredentials(ctx context.Context, re
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateContainerRegistryCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -8504,6 +8521,7 @@ func (s *Credentials) CreateGoogleCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateGoogleCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -8973,6 +8991,7 @@ func (s *Credentials) UpdateGoogleCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateGoogleCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -9423,6 +9442,7 @@ func (s *Credentials) CreateGiteaCredentials(ctx context.Context, request operat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateGiteaCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -9892,6 +9912,7 @@ func (s *Credentials) UpdateGiteaCredentials(ctx context.Context, request operat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateGiteaCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -10321,6 +10342,7 @@ func (s *Credentials) CreateGithubCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateGithubCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -10790,6 +10812,7 @@ func (s *Credentials) UpdateGithubCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateGithubCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -11219,6 +11242,7 @@ func (s *Credentials) CreateGithubAppCredentials(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateGithubAppCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -11688,6 +11712,7 @@ func (s *Credentials) UpdateGithubAppCredentials(ctx context.Context, request op
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateGithubAppCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -12117,6 +12142,7 @@ func (s *Credentials) CreateGitlabCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateGitlabCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -12586,6 +12612,7 @@ func (s *Credentials) UpdateGitlabCredentials(ctx context.Context, request opera
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateGitlabCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -13015,6 +13042,7 @@ func (s *Credentials) CreateKubernetesCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateKubernetesCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -13484,6 +13512,7 @@ func (s *Credentials) UpdateKubernetesCredentials(ctx context.Context, request o
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateKubernetesCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -13913,6 +13942,7 @@ func (s *Credentials) CreateSSHCredentials(ctx context.Context, request operatio
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "CreateSSHCredentials")
 	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -14382,6 +14412,7 @@ func (s *Credentials) UpdateSSHCredentials(ctx context.Context, request operatio
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "UpdateSSHCredentials")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

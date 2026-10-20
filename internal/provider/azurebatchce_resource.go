@@ -746,8 +746,6 @@ func (r *AzureBatchCEResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -852,8 +850,6 @@ func (r *AzureBatchCEResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -912,8 +908,6 @@ func (r *AzureBatchCEResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -1002,8 +996,6 @@ func (r *AzureBatchCEResource) Delete(ctx context.Context, req resource.DeleteRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAzureBatchCERequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

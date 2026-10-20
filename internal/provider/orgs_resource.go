@@ -150,8 +150,6 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToSharedCreateOrganizationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -219,8 +217,6 @@ func (r *OrgsResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDescribeOrganizationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -274,8 +270,6 @@ func (r *OrgsResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsUpdateOrganizationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -364,8 +358,6 @@ func (r *OrgsResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteOrganizationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
