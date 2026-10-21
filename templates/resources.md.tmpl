@@ -12,7 +12,7 @@ subcategory: "Data"
 subcategory: "Organization"
 {{- else if eq .Name "seqera_agent" }}
 subcategory: "Agents"
-{{- else if eq .Name "seqera_studios" }}
+{{- else if or (eq .Name "seqera_studios") (eq .Name "seqera_workspace_studios_settings") }}
 subcategory: "Studios"
 {{- else if or (eq .Name "seqera_tokens") (eq .Name "seqera_labels") }}
 subcategory: "Tokens & Labels"

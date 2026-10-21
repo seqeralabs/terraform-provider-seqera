@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 01d3b8777806a50e8462608e291c8943
+  docChecksum: 88889d3a58fa56bda35a48e843de1ee7
   docVersion: 1.244.0
   speakeasyVersion: 1.803.0
   generationVersion: 2.950.2
@@ -19,7 +19,6 @@ features:
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
-    getRequestBodies: 2.81.1
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
     groups: 2.81.3
@@ -238,6 +237,8 @@ trackedFiles:
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
   examples/resources/seqera_workspace_lineage_settings/import-by-string-id.tf: {}
   examples/resources/seqera_workspace_lineage_settings/import.sh: {}
+  examples/resources/seqera_workspace_studios_settings/import-by-string-id.tf: {}
+  examples/resources/seqera_workspace_studios_settings/import.sh: {}
   go.mod:
     id: c47645c391ad
     pristine_git_object: 0197aba33874c19d2d4a76f51d3c37929a4d811e
@@ -791,6 +792,8 @@ trackedFiles:
     pristine_git_object: ef08f3fe5d664b406cd4c6ef11d883cb611dfdb7
   internal/provider/workspacelineagesettings_resource.go: {}
   internal/provider/workspacelineagesettings_resource_sdk.go: {}
+  internal/provider/workspacestudiossettings_resource.go: {}
+  internal/provider/workspacestudiossettings_resource_sdk.go: {}
   internal/sdk/.gitattributes:
     id: 1ea4c4e0a39d
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
@@ -5132,7 +5135,7 @@ examples:
           orgId: 259152
           workspaceId: 513742
       requestBody:
-        application/json: {}
+        application/json: {"containerRepository": "cr.seqera.io/my-org/studios", "lifespanHours": 259152, "privateStudioByDefault": false}
       responses:
         "400":
           application/json: {"message": "<value>"}
