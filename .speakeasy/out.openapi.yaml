@@ -9398,9 +9398,10 @@ paths:
         - ssh-keys
   /studios:
     get:
-      operationId: ListDataStudios
+      operationId: ListStudiosDataSource
       summary: List Studios
-      description: Lists all available Studios in a user context. Append `?workspaceId` to list Studios in a workspace context.
+      description: |
+        Lists Studios in a workspace. Use `search` to filter by name or tool image.
       parameters:
         - name: workspaceId
           in: query
@@ -9413,50 +9414,50 @@ paths:
           description: 'Optional search criteria, allowing free text search on name and templateUrl and keywords: `userId`, `computeEnvId` and `status`.'
           schema:
             type: string
-        - name: max
+        - name: workspaceId
           in: query
-          description: Pagination max results
+          description: Workspace numeric identifier
+          required: true
+          x-speakeasy-param-optional: false
           schema:
             type: integer
-            format: int32
-        - name: offset
+            format: int64
+        - name: search
           in: query
-          description: Pagination offset
+          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. The keywords `userId`, `computeEnvId` and `status` filter on those fields.'
+          required: false
           schema:
-            type: integer
-            format: int32
-        - name: attributes
-          in: query
-          description: 'Optional attribute values to be included in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/DataStudioQueryAttribute'
+            type: string
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataStudioListResponse'
+                $ref: '#/components/schemas/ListStudiosDataSourceResponse'
         '400':
-          description: BadRequest
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: Operation not allowed.
+          description: Operation not allowed
         '404':
-          description: NotFound, when the workspace is not found or when the API is disabled for the workspace.
+          description: Workspace not found or Studios not enabled
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
+        - BearerAuth: []
       tags:
         - studios
+        - studios
+      x-speakeasy-entity-operation:
+        terraform-datasource: StudiosList#read
+      x-speakeasy-name-override: ListStudiosDataSource
     post:
       operationId: CreateDataStudio
       summary: Create Studio
@@ -21662,9 +21663,8 @@ components:
           format: int32
           minimum: 0
           nullable: true
-          description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
+          description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
           example: 2
-          default: 2
         environment:
           type: object
           additionalProperties:
@@ -21694,9 +21694,8 @@ components:
           format: int32
           minimum: 0
           nullable: true
-          description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
+          description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
           example: 4096
-          default: 8192
         mountData:
           type: array
           items:
@@ -21763,6 +21762,9 @@ components:
           nullable: true
         dataStudioToolUrl:
           type: string
+          description: Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+          x-speakeasy-xor-with:
+            - remoteConfig
           example: "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
         description:
           type: string
@@ -21785,6 +21787,14 @@ components:
           maxLength: 80
           minLength: 1
           example: "my-jupyter-studio"
+        remoteConfig:
+          allOf:
+            - $ref: '#/components/schemas/StudioRemoteConfiguration'
+          nullable: true
+          description: Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-xor-with:
+            - dataStudioToolUrl
         spot:
           type: boolean
           nullable: true
@@ -21802,7 +21812,6 @@ components:
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
       required:
         - computeEnvId
-        - dataStudioToolUrl
         - name
         - configuration
     DataStudioCreateResponse:
@@ -21818,6 +21827,11 @@ components:
           items:
             $ref: '#/components/schemas/UserInfo'
           nullable: true
+        baseImage:
+          type: string
+          nullable: true
+          description: Base container image the Studio is built from.
+          x-speakeasy-param-readonly: true
         configuration:
           $ref: '#/components/schemas/DataStudioConfiguration'
         customIcon:
@@ -21828,6 +21842,11 @@ components:
           description: Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
           type: string
           nullable: true
+        customImage:
+          type: boolean
+          nullable: true
+          description: Whether the Studio runs a custom image built by Wave.
+          x-speakeasy-param-readonly: true
         description:
           type: string
           nullable: true
@@ -21838,6 +21857,8 @@ components:
         name:
           type: string
           description: Display name for the Studio session
+        remoteConfig:
+          $ref: '#/components/schemas/StudioRemoteConfiguration'
         sessionId:
           type: string
           x-speakeasy-param-readonly: true
@@ -21852,6 +21873,11 @@ components:
           type: boolean
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        waveBuildUrl:
+          type: string
+          nullable: true
+          description: URL of the Wave build for this Studio's image, if one was built.
+          x-speakeasy-param-readonly: true
         workspaceId:
           type: integer
           format: int64
@@ -27480,11 +27506,16 @@ components:
         commitId:
           type: string
           nullable: true
+          description: Commit SHA the Studio was created from. Resolved by Platform.
+          x-speakeasy-param-optional: true
         repository:
           type: string
+          description: URL of the Git repository containing the Studio configuration.
         revision:
           type: string
           nullable: true
+          description: Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+          x-speakeasy-param-optional: true
       required:
         - repository
     StudioSshDetailsDto:
@@ -30343,8 +30374,10 @@ components:
 
 
 
+
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
+
 
 
 
@@ -30637,8 +30670,10 @@ components:
 
 
 
+
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
+
 
 
 
@@ -34181,6 +34216,61 @@ components:
         This data source returns all data links accessible to the authenticated user,
         with optional filtering by workspace. Use Terraform locals with for expressions
         to filter by provider type or name.
+    ListStudiosDataSourceResponse:
+      type: object
+      required:
+        - workspaceId
+        - studios
+      properties:
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace ID used for filtering
+        search:
+          type: string
+          description: Search criteria used for filtering
+        totalSize:
+          type: integer
+          format: int64
+          description: Total number of Studios matching the query. The platform returns at most 100 Studios per request, so if this exceeds the length of `studios`, narrow the query with `search`.
+        studios:
+          type: array
+          description: List of Studios
+          items:
+            type: object
+            properties:
+              sessionId:
+                type: string
+                description: Studio session identifier
+              name:
+                type: string
+                description: Studio name
+              description:
+                type: string
+                nullable: true
+                description: Studio description
+              workspaceId:
+                type: integer
+                format: int64
+                description: Workspace the Studio belongs to
+              isPrivate:
+                type: boolean
+                description: Whether the Studio is private to its creator
+              baseImage:
+                type: string
+                nullable: true
+                description: Base container image the Studio is built from
+              customImage:
+                type: boolean
+                description: Whether the Studio runs a custom image built by Wave
+      x-speakeasy-entity: StudiosList
+      x-speakeasy-entity-description: |
+        Data source for listing Studios in a Seqera Platform workspace.
+
+        Returns the Studios in a workspace, optionally filtered with `search`.
+        The platform returns at most 100 Studios per request; `total_size` reports
+        how many match so truncation can be detected. Use Terraform locals with
+        for expressions to look up a Studio by name.
   securitySchemes:
     BearerAuth:
       bearerFormat: jwt

@@ -155,7 +155,6 @@ actions:
     update:
       required:
         - computeEnvId
-        - dataStudioToolUrl
         - name
         - configuration
 
@@ -219,6 +218,28 @@ actions:
       description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
       maxItems: 1 # mirrors the platform cap; bump if the platform limit increases
       x-speakeasy-plan-validators: StudioAllowlistRequiresPrivateValidator
+  - target: $.components.schemas.DataStudioCreateRequest.properties.dataStudioToolUrl
+    update:
+      description: Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+      x-speakeasy-xor-with:
+        - remoteConfig
+  - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
+    update:
+      description: Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-xor-with:
+        - dataStudioToolUrl
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.repository
+    update:
+      description: URL of the Git repository containing the Studio configuration.
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.revision
+    update:
+      description: Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+      x-speakeasy-param-optional: true
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.commitId
+    update:
+      description: Commit SHA the Studio was created from. Resolved by Platform.
+      x-speakeasy-param-optional: true
   - target: $.components.schemas.DataStudioCreateRequest.properties.spot
     update:
       description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
@@ -226,14 +247,12 @@ actions:
   # DataStudioConfiguration field descriptions
   - target: $.components.schemas.DataStudioConfiguration.properties.memory
     update:
-      description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
+      description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
       example: 4096
-      default: 8192
   - target: $.components.schemas.DataStudioConfiguration.properties.cpu
     update:
-      description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
+      description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
       example: 2
-      default: 2
   - target: $.components.schemas.DataStudioConfiguration.properties.gpu
     update:
       description: Set to 0 to disable GPU or 1 to enable GPU.
@@ -312,15 +331,20 @@ actions:
   - target: $.components.schemas.DataStudioDto.properties.statusInfo
     remove: true
 
-  # Remove runtime build URL
+  # Expose image information as read-only attributes. For Studios built from a
+  # Git repository or conda environment these show what Wave produced.
   - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
-    remove: true
-
-  # Remove runtime image information
+    update:
+      description: URL of the Wave build for this Studio's image, if one was built.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioDto.properties.baseImage
-    remove: true
+    update:
+      description: Base container image the Studio is built from.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioDto.properties.customImage
-    remove: true
+    update:
+      description: Whether the Studio runs a custom image built by Wave.
+      x-speakeasy-param-readonly: true
 
   # Remove runtime mounted data links
   - target: $.components.schemas.DataStudioDto.properties.mountedDataLinks
@@ -332,12 +356,6 @@ actions:
 
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.DataStudioDto.properties.labels
-    remove: true
-
-  # Remove remoteConfig (not supported yet)
-  - target: $.components.schemas.DataStudioDto.properties.remoteConfig
-    remove: true
-  - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
     remove: true
 
   # `starred` is per-user UI state (whether the *calling* user has starred this
