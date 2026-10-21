@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -56,13 +57,16 @@ func (r *WorkspaceStudiosSettingsResource) Schema(ctx context.Context, req resou
 			"container_repository": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.`,
+				Description: `Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an ` + "`" + `http://` + "`" + ` or ` + "`" + `https://` + "`" + ` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.`,
+				Validators: []validator.String{
+					custom_stringvalidators.StudioContainerRepositoryValidator(),
+				},
 			},
 			"lifespan_hours": schema.Int32Attribute{
 				Required:    true,
-				Description: `Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.`,
+				Description: `Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).`,
 				Validators: []validator.Int32{
-					int32validator.AtLeast(0),
+					int32validator.Between(0, 120),
 				},
 			},
 			"name_strategy": schema.StringAttribute{
