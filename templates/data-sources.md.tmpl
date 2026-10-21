@@ -10,7 +10,7 @@ subcategory: "Pipelines"
 subcategory: "Agents"
 {{- else if eq .Name "seqera_data_links" }}
 subcategory: "Data"
-{{- else if eq .Name "seqera_studios_list" }}
+{{- else if or (eq .Name "seqera_studios_list") (eq .Name "seqera_studio_templates") }}
 subcategory: "Studios"
 {{- else }}
 subcategory: ""
