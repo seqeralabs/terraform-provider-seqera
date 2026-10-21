@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: c4006634f6ce712291ceec225c231a7c
+  docChecksum: 24d3c94e94e1b4d4c442502d55967f0e
   docVersion: 1.244.0
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -3257,6 +3257,8 @@ examples:
       parameters:
         path:
           actionId: "<id>"
+        query:
+          workspaceId: 959158
       responses:
         "200":
           application/json: {"action": {"launch": {"computeEnv": {"config": {"discriminator": "uge-platform", "workDir": "<value>"}, "credentialsId": "<id>", "name": "<value>", "platform": "eks-platform"}, "outputDir": "s3://my-bucket/results"}}}
@@ -3267,6 +3269,8 @@ examples:
       parameters:
         path:
           actionId: "<id>"
+        query:
+          workspaceId: 460029
       requestBody:
         application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "configProfiles": ["docker", "aws"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "entryName": "main.nf", "headJobCpus": 2, "headJobMemoryMb": 4096, "labelIds": [1001, 1002, 1003], "mainScript": "main.nf", "outputDir": "s3://my-bucket/results", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "pipeline": "https://github.com/nextflow-io/hello", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "pullLatest": true, "revision": "main", "runName": "nextflow-hello", "schemaName": "nextflow_schema.json", "stubRun": false, "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workDir": "s3://my-bucket/work", "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]}}
       responses:
@@ -3277,6 +3281,8 @@ examples:
       parameters:
         path:
           actionId: "<id>"
+        query:
+          workspaceId: 547298
       responses:
         "400":
           application/json: {"message": "<value>"}

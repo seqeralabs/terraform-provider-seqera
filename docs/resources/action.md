@@ -451,12 +451,15 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 ```terraform
 import {
   to = seqera_action.my_seqera_action
-  id = "..."
+  id = jsonencode({
+    action_id    = "..."
+    workspace_id = 0
+  })
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_action.my_seqera_action "..."
+terraform import seqera_action.my_seqera_action '{"action_id": "...", "workspace_id": 0}'
 ```

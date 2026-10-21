@@ -342,6 +342,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       responses:
         '204':
           description: OK - No content
@@ -377,6 +378,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: attributes
           in: query
           description: Additional attribute values to include in the response (`labels`, `lastTrigger`). Each attribute not requested is returned as `null`.
@@ -423,6 +425,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Action update request
         required: true

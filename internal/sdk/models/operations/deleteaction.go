@@ -11,7 +11,7 @@ type DeleteActionRequest struct {
 	// Action string identifier
 	ActionID string `pathParam:"style=simple,explode=false,name=actionId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (d *DeleteActionRequest) GetActionID() string {
@@ -21,9 +21,9 @@ func (d *DeleteActionRequest) GetActionID() string {
 	return d.ActionID
 }
 
-func (d *DeleteActionRequest) GetWorkspaceID() *int64 {
+func (d *DeleteActionRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }
