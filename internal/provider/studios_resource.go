@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -35,6 +36,7 @@ import (
 	custom_listvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/listvalidators"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -56,10 +58,12 @@ type StudiosResourceModel struct {
 	AllowedUserIds      []types.Int64                    `tfsdk:"allowed_user_ids"`
 	AllowedUsers        []tfTypes.UserInfo               `tfsdk:"allowed_users"`
 	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	BaseImage           types.String                     `tfsdk:"base_image"`
 	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
 	CustomIcon          types.String                     `tfsdk:"custom_icon"`
 	CustomIconID        types.String                     `tfsdk:"custom_icon_id"`
+	CustomImage         types.Bool                       `tfsdk:"custom_image"`
 	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
 	Description         types.String                     `tfsdk:"description"`
 	ID                  types.String                     `tfsdk:"id"`
@@ -67,9 +71,11 @@ type StudiosResourceModel struct {
 	IsPrivate           types.Bool                       `tfsdk:"is_private"`
 	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
 	Name                types.String                     `tfsdk:"name"`
+	RemoteConfig        *tfTypes.RemoteConfig            `tfsdk:"remote_config"`
 	SessionID           types.String                     `tfsdk:"session_id"`
 	Spot                types.Bool                       `tfsdk:"spot"`
 	SSHDetails          *tfTypes.SSHDetails              `tfsdk:"ssh_details"`
+	WaveBuildURL        types.String                     `tfsdk:"wave_build_url"`
 	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -119,6 +125,10 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 				Description: `Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.`,
 			},
+			"base_image": schema.StringAttribute{
+				Computed:    true,
+				Description: `Base container image the Studio is built from.`,
+			},
 			"compute_env_id": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -151,12 +161,11 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					"cpu": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
-						Default:  int32default.StaticInt32(2),
 						PlanModifiers: []planmodifier.Int32{
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.`,
+						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default. Requires replacement if changed.`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
@@ -202,12 +211,11 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					"memory": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
-						Default:  int32default.StaticInt32(8192),
 						PlanModifiers: []planmodifier.Int32{
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.`,
+						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default. Requires replacement if changed.`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
@@ -289,12 +297,21 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.UTF8LengthAtMost(22),
 				},
 			},
+			"custom_image": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether the Studio runs a custom image built by Wave.`,
+			},
 			"data_studio_tool_url": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Container image URL of the Studio tool. Exactly one of ` + "`" + `data_studio_tool_url` + "`" + ` or ` + "`" + `remote_config` + "`" + ` must be set. Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.ExactlyOneOf(path.Expressions{
+						path.MatchRelative().AtParent().AtName("remote_config"),
+					}...),
+				},
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -350,6 +367,52 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.UTF8LengthBetween(1, 80),
 				},
 			},
+			"remote_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Commit SHA the Studio was created from. Resolved by Platform. Requires replacement if changed.`,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `URL of the Git repository containing the Studio configuration. Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.`,
+					},
+				},
+				Description: `Build the Studio from a Git repository. Platform reads ` + "`" + `.seqera/studio-config.yaml` + "`" + ` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of ` + "`" + `data_studio_tool_url` + "`" + ` or ` + "`" + `remote_config` + "`" + ` must be set. Requires replacement if changed.`,
+				Validators: []validator.Object{
+					objectvalidator.ExactlyOneOf(path.Expressions{
+						path.MatchRelative().AtParent().AtName("data_studio_tool_url"),
+					}...),
+				},
+			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Studio session numeric identifier`,
@@ -382,6 +445,10 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					},
 				},
 				Description: `SSH connection details for a Studio session`,
+			},
+			"wave_build_url": schema.StringAttribute{
+				Computed:    true,
+				Description: `URL of the Wave build for this Studio's image, if one was built.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,

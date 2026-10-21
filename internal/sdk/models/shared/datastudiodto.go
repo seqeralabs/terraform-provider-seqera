@@ -50,21 +50,28 @@ func (s *SSHDetails) GetUser() string {
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
-	AllowedUsers  []*UserInfo              `json:"allowedUsers,omitempty"`
+	AllowedUsers []*UserInfo `json:"allowedUsers,omitempty"`
+	// Base container image the Studio is built from.
+	BaseImage     *string                  `json:"baseImage,omitempty"`
 	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
 	// Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 	CustomIcon *string `json:"customIcon,omitempty"`
 	// Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
 	CustomIconID *string `json:"customIconId,omitempty"`
+	// Whether the Studio runs a custom image built by Wave.
+	CustomImage *bool `json:"customImage,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
 	IsPrivate   *bool   `json:"isPrivate,omitempty"`
 	// Display name for the Studio session
-	Name *string `json:"name,omitempty"`
+	Name         *string                    `json:"name,omitempty"`
+	RemoteConfig *StudioRemoteConfiguration `json:"remoteConfig,omitempty"`
 	// Unique identifier for the Studio session
 	SessionID  *string     `json:"sessionId,omitempty"`
 	SSHDetails *SSHDetails `json:"sshDetails,omitempty"`
 	Starred    *bool       `json:"starred,omitempty"`
+	// URL of the Wave build for this Studio's image, if one was built.
+	WaveBuildURL *string `json:"waveBuildUrl,omitempty"`
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Alias of `session_id` for Terraform convention.
@@ -94,6 +101,13 @@ func (d *DataStudioDto) GetAllowedUsers() []*UserInfo {
 	return d.AllowedUsers
 }
 
+func (d *DataStudioDto) GetBaseImage() *string {
+	if d == nil {
+		return nil
+	}
+	return d.BaseImage
+}
+
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
 	if d == nil {
 		return nil
@@ -113,6 +127,13 @@ func (d *DataStudioDto) GetCustomIconID() *string {
 		return nil
 	}
 	return d.CustomIconID
+}
+
+func (d *DataStudioDto) GetCustomImage() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.CustomImage
 }
 
 func (d *DataStudioDto) GetDescription() *string {
@@ -136,6 +157,13 @@ func (d *DataStudioDto) GetName() *string {
 	return d.Name
 }
 
+func (d *DataStudioDto) GetRemoteConfig() *StudioRemoteConfiguration {
+	if d == nil {
+		return nil
+	}
+	return d.RemoteConfig
+}
+
 func (d *DataStudioDto) GetSessionID() *string {
 	if d == nil {
 		return nil
@@ -155,6 +183,13 @@ func (d *DataStudioDto) GetStarred() *bool {
 		return nil
 	}
 	return d.Starred
+}
+
+func (d *DataStudioDto) GetWaveBuildURL() *string {
+	if d == nil {
+		return nil
+	}
+	return d.WaveBuildURL
 }
 
 func (d *DataStudioDto) GetWorkspaceID() *int64 {

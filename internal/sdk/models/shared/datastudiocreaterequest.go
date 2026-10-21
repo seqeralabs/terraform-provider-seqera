@@ -2,20 +2,54 @@
 
 package shared
 
+// RemoteConfig - Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+type RemoteConfig struct {
+	// Commit SHA the Studio was created from. Resolved by Platform.
+	CommitID *string `json:"commitId,omitempty"`
+	// URL of the Git repository containing the Studio configuration.
+	Repository string `json:"repository"`
+	// Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+	Revision *string `json:"revision,omitempty"`
+}
+
+func (r *RemoteConfig) GetCommitID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CommitID
+}
+
+func (r *RemoteConfig) GetRepository() string {
+	if r == nil {
+		return ""
+	}
+	return r.Repository
+}
+
+func (r *RemoteConfig) GetRevision() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Revision
+}
+
 type DataStudioCreateRequest struct {
 	// IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
 	AllowedUserIds []int64                 `json:"allowedUserIds,omitempty"`
 	ComputeEnvID   string                  `json:"computeEnvId"`
 	Configuration  DataStudioConfiguration `json:"configuration"`
 	// Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.
-	CustomIconID        *string `json:"customIconId,omitempty"`
-	DataStudioToolURL   string  `json:"dataStudioToolUrl"`
+	CustomIconID *string `json:"customIconId,omitempty"`
+	// Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+	DataStudioToolURL   *string `json:"dataStudioToolUrl,omitempty"`
 	Description         *string `json:"description,omitempty"`
 	InitialCheckpointID *int64  `json:"initialCheckpointId,omitempty"`
 	IsPrivate           *bool   `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	Name     string  `json:"name"`
+	// Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+	RemoteConfig *RemoteConfig `json:"remoteConfig,omitempty"`
 	// Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
 	Spot *bool `json:"spot,omitempty"`
 }
@@ -48,9 +82,9 @@ func (d *DataStudioCreateRequest) GetCustomIconID() *string {
 	return d.CustomIconID
 }
 
-func (d *DataStudioCreateRequest) GetDataStudioToolURL() string {
+func (d *DataStudioCreateRequest) GetDataStudioToolURL() *string {
 	if d == nil {
-		return ""
+		return nil
 	}
 	return d.DataStudioToolURL
 }
@@ -88,6 +122,13 @@ func (d *DataStudioCreateRequest) GetName() string {
 		return ""
 	}
 	return d.Name
+}
+
+func (d *DataStudioCreateRequest) GetRemoteConfig() *RemoteConfig {
+	if d == nil {
+		return nil
+	}
+	return d.RemoteConfig
 }
 
 func (d *DataStudioCreateRequest) GetSpot() *bool {

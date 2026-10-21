@@ -2,8 +2,8 @@ speakeasyVersion: 1.802.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:0e30e65a8233bdaccb70b62273ef5f78f3f6383f294ac71d4909e2cda5dce9d4
-        sourceBlobDigest: sha256:fea701a8617eb8b663a1d66207fdfe12757c4b1dd3dae3c3a550ba8260d04e3c
+        sourceRevisionDigest: sha256:e8fedeeb04f6d3b233ef888b2bff4d90a08d0a9402ce521ad4b607cc36d83ebd
+        sourceBlobDigest: sha256:c6df3d6d388712b10adeb027a3e90396cac5a6590c5e98b0ce049f1045c257c7
         tags:
             - latest
             - 1.244.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:0e30e65a8233bdaccb70b62273ef5f78f3f6383f294ac71d4909e2cda5dce9d4
-        sourceBlobDigest: sha256:fea701a8617eb8b663a1d66207fdfe12757c4b1dd3dae3c3a550ba8260d04e3c
+        sourceRevisionDigest: sha256:e8fedeeb04f6d3b233ef888b2bff4d90a08d0a9402ce521ad4b607cc36d83ebd
+        sourceBlobDigest: sha256:c6df3d6d388712b10adeb027a3e90396cac5a6590c5e98b0ce049f1045c257c7
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.802.0
@@ -60,6 +60,7 @@ workflow:
                 - location: overlays/datasets.yaml
                 - location: overlays/datasource-credentials.yaml
                 - location: overlays/datasource-datalinks.yaml
+                - location: overlays/datasource-studios.yaml
                 - location: overlays/labels.yaml
                 - location: overlays/orgs.yaml
                 - location: overlays/pipeline-secrets.yaml

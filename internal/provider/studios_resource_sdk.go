@@ -47,6 +47,7 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		} else {
 			r.AllowedUsers = nil
 		}
+		r.BaseImage = types.StringPointerValue(resp.BaseImage)
 		if resp.Configuration != nil {
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
@@ -85,10 +86,19 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		}
 		r.CustomIcon = types.StringPointerValue(resp.CustomIcon)
 		r.CustomIconID = types.StringPointerValue(resp.CustomIconID)
+		r.CustomImage = types.BoolPointerValue(resp.CustomImage)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.RemoteConfig{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.SSHDetails == nil {
 			r.SSHDetails = nil
@@ -99,6 +109,7 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.SSHDetails.Port = types.Int32Value(int32(resp.SSHDetails.Port))
 			r.SSHDetails.User = types.StringValue(resp.SSHDetails.User)
 		}
+		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -281,9 +292,12 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		customIconID = nil
 	}
-	var dataStudioToolURL string
-	dataStudioToolURL = r.DataStudioToolURL.ValueString()
-
+	dataStudioToolURL := new(string)
+	if !r.DataStudioToolURL.IsUnknown() && !r.DataStudioToolURL.IsNull() {
+		*dataStudioToolURL = r.DataStudioToolURL.ValueString()
+	} else {
+		dataStudioToolURL = nil
+	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -312,6 +326,29 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	var name string
 	name = r.Name.ValueString()
 
+	var remoteConfig *shared.RemoteConfig
+	if r.RemoteConfig != nil {
+		commitID := new(string)
+		if !r.RemoteConfig.CommitID.IsUnknown() && !r.RemoteConfig.CommitID.IsNull() {
+			*commitID = r.RemoteConfig.CommitID.ValueString()
+		} else {
+			commitID = nil
+		}
+		var repository string
+		repository = r.RemoteConfig.Repository.ValueString()
+
+		revision := new(string)
+		if !r.RemoteConfig.Revision.IsUnknown() && !r.RemoteConfig.Revision.IsNull() {
+			*revision = r.RemoteConfig.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		remoteConfig = &shared.RemoteConfig{
+			CommitID:   commitID,
+			Repository: repository,
+			Revision:   revision,
+		}
+	}
 	spot := new(bool)
 	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
 		*spot = r.Spot.ValueBool()
@@ -329,6 +366,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		IsPrivate:           isPrivate,
 		LabelIds:            labelIds,
 		Name:                name,
+		RemoteConfig:        remoteConfig,
 		Spot:                spot,
 	}
 

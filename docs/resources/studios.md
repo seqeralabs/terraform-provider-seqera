@@ -185,6 +185,42 @@ resource "seqera_studios" "studio_with_env_vars" {
 }
 ```
 
+### Git Repository
+
+```terraform
+# Build a Studio from a Git repository.
+#
+# Platform reads `.seqera/studio-config.yaml` from the given revision and builds
+# the image with Wave on first start, so `data_studio_tool_url` must not be set:
+# exactly one of `data_studio_tool_url` or `remote_config` is required.
+#
+# Anything left unset (cpu, memory, lifespan_hours, ...) is taken from the
+# repository's Studio configuration, then from the compute environment or
+# workspace defaults. Values set here take precedence over the repository.
+resource "seqera_studios" "from_git" {
+  name           = "studio-from-git"
+  compute_env_id = seqera_compute_env.main.id
+  workspace_id   = seqera_workspace.main.id
+  auto_start     = false
+
+  remote_config = {
+    repository = "https://github.com/my-org/my-studio"
+    revision   = "main" # optional; defaults to the repository's default branch
+  }
+
+  configuration = {}
+}
+
+# Resolved by Platform and available after creation
+output "studio_commit_id" {
+  value = seqera_studios.from_git.remote_config.commit_id
+}
+
+output "studio_base_image" {
+  value = seqera_studios.from_git.base_image
+}
+```
+
 ### Rstudio Mounted Data
 
 ```terraform
@@ -261,7 +297,6 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 - `compute_env_id` (String) Requires replacement if changed.
 - `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
-- `data_studio_tool_url` (String) Requires replacement if changed.
 - `name` (String) Display name for the Studio session. Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
@@ -270,19 +305,24 @@ resource "seqera_studios" "rstudio_regional_data" {
 - `allowed_user_ids` (List of Number) IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
 - `custom_icon_id` (String) Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar. Requires replacement if changed.
+- `data_studio_tool_url` (String) Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.
+- `remote_config` (Attributes) Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set. Requires replacement if changed. (see [below for nested schema](#nestedatt--remote_config))
 - `spot` (Boolean) Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.
 
 ### Read-Only
 
 - `allowed_users` (Attributes List) (see [below for nested schema](#nestedatt--allowed_users))
+- `base_image` (String) Base container image the Studio is built from.
 - `custom_icon` (String) Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
+- `custom_image` (Boolean) Whether the Studio runs a custom image built by Wave.
 - `id` (String) Alias of `session_id` for Terraform convention.
 - `session_id` (String) Studio session numeric identifier
 - `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
+- `wave_build_url` (String) URL of the Wave build for this Studio's image, if one was built.
 
 <a id="nestedatt--configuration"></a>
 ### Nested Schema for `configuration`
@@ -290,11 +330,11 @@ resource "seqera_studios" "rstudio_regional_data" {
 Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.
+- `cpu` (Number) Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default. Requires replacement if changed.
 - `environment` (Map of String) Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number. Requires replacement if changed.
 - `gpu` (Number) Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.
 - `lifespan_hours` (Number) Maximum lifespan of the Studio session in hours. Requires replacement if changed.
-- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.
+- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default. Requires replacement if changed.
 - `mount_data` (List of String, Deprecated) Requires replacement if changed.
 - `mount_data_v2` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration--mount_data_v2))
 - `ssh_enabled` (Boolean) Requires replacement if changed.
@@ -307,6 +347,16 @@ Optional:
 - `data_link_id` (String) Requires replacement if changed.
 - `path` (String) Requires replacement if changed.
 
+
+
+<a id="nestedatt--remote_config"></a>
+### Nested Schema for `remote_config`
+
+Optional:
+
+- `commit_id` (String) Commit SHA the Studio was created from. Resolved by Platform. Requires replacement if changed.
+- `repository` (String) URL of the Git repository containing the Studio configuration. Not Null; Requires replacement if changed.
+- `revision` (String) Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.
 
 
 <a id="nestedatt--allowed_users"></a>
