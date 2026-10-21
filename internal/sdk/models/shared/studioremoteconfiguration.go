@@ -3,11 +3,11 @@
 package shared
 
 type StudioRemoteConfiguration struct {
-	// Commit SHA the Studio was created from. Resolved by Platform.
+	// Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
 	CommitID *string `json:"commitId,omitempty"`
 	// URL of the Git repository containing the Studio configuration.
 	Repository string `json:"repository"`
-	// Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+	// Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
 	Revision *string `json:"revision,omitempty"`
 }
 

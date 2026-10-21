@@ -37,7 +37,7 @@ actions:
             format: int64
         - name: search
           in: query
-          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. The keywords `userId`, `computeEnvId` and `status` filter on those fields.'
+          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. Keywords take the form `keyword:value`: `userName`, `computeEnvName`, `computeEnvType`, `status` (`starting`, `running`, `stopping`, `stopped`, `errored`, `building` or `buildFailed`), `label`, `collaborationMode`, `createdAfter`, `createdBefore`, `updatedAfter` and `updatedBefore`.'
           required: false
           schema:
             type: string

@@ -9428,7 +9428,7 @@ paths:
             format: int64
         - name: search
           in: query
-          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. The keywords `userId`, `computeEnvId` and `status` filter on those fields.'
+          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. Keywords take the form `keyword:value`: `userName`, `computeEnvName`, `computeEnvType`, `status` (`starting`, `running`, `stopping`, `stopped`, `errored`, `building` or `buildFailed`), `label`, `collaborationMode`, `createdAfter`, `createdBefore`, `updatedAfter` and `updatedBefore`.'
           required: false
           schema:
             type: string
@@ -27532,15 +27532,15 @@ components:
         commitId:
           type: string
           nullable: true
-          description: Commit SHA the Studio was created from. Resolved by Platform.
-          x-speakeasy-param-optional: true
+          description: Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
+          x-speakeasy-param-readonly: true
         repository:
           type: string
           description: URL of the Git repository containing the Studio configuration.
         revision:
           type: string
           nullable: true
-          description: Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+          description: Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
           x-speakeasy-param-optional: true
       required:
         - repository

@@ -4,11 +4,11 @@ package shared
 
 // RemoteConfig - Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
 type RemoteConfig struct {
-	// Commit SHA the Studio was created from. Resolved by Platform.
+	// Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
 	CommitID *string `json:"commitId,omitempty"`
 	// URL of the Git repository containing the Studio configuration.
 	Repository string `json:"repository"`
-	// Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+	// Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
 	Revision *string `json:"revision,omitempty"`
 }
 

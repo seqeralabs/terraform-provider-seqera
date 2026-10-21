@@ -22,10 +22,28 @@ resource "seqera_studios" "from_git" {
 }
 
 # Resolved by Platform and available after creation
-output "studio_commit_id" {
-  value = seqera_studios.from_git.remote_config.commit_id
+output "studio_revision" {
+  description = "Revision Platform resolved (the default branch when revision is unset)"
+  value       = seqera_studios.from_git.remote_config.revision
 }
 
+output "studio_commit_id" {
+  description = "Commit SHA the Studio was created from"
+  value       = seqera_studios.from_git.remote_config.commit_id
+}
+
+# Image attributes are read-only. For a Git-based Studio they show what Wave
+# built from the repository.
 output "studio_base_image" {
   value = seqera_studios.from_git.base_image
+}
+
+output "studio_custom_image" {
+  description = "True when the Studio runs a custom image built by Wave"
+  value       = seqera_studios.from_git.custom_image
+}
+
+output "studio_wave_build_url" {
+  description = "Wave build for the Studio image, if one was built"
+  value       = seqera_studios.from_git.wave_build_url
 }
