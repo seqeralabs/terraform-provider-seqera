@@ -35,21 +35,6 @@ actions:
   # ENTITY CONFIGURATION
   # ============================================================================
 
-  # Entity schema configuration for Studios
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]
-    update:
-      x-speakeasy-entity: Studios
-      x-speakeasy-entity-description: |
-        Studios is a unified platform where you can host a combination of
-        container images and compute environments for interactive analysis using
-        your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
-        or Xpra remote desktops. Each Studio session is an individual interactive
-        environment that encapsulates the live environment for dynamic data analysis.
-
-        Note:
-        On Seqera Cloud, the free tier permits only one running Studio session at a time.
-        To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
-
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
       x-speakeasy-entity: Studios
@@ -146,7 +131,12 @@ actions:
   # FIELD CONFIGURATION
   # ============================================================================
 
-  # Make configuration required (backend expects it)
+  # `configuration` is optional: the backend reads every field with a null-safe
+  # `request.configuration?.x`, falling back to the Git repository's Studio
+  # configuration and then to compute environment and workspace defaults. It must
+  # not be Required in the schema, because the generated refresh code only
+  # allocates optional nested objects, so importing a Studio (state holds just the
+  # IDs) would otherwise dereference a nil `configuration`.
   # First remove the existing required array to avoid duplicates
   - target: $.components.schemas.DataStudioCreateRequest.required
     remove: true
@@ -156,7 +146,18 @@ actions:
       required:
         - computeEnvId
         - name
-        - configuration
+
+  # Wrap the response's `configuration` in a nullable allOf, the shape the
+  # generator needs to allocate the nested object in the refresh code instead of
+  # assuming it already exists (see the note above on importing a Studio).
+  - target: $.components.schemas.DataStudioDto.properties.configuration
+    remove: true
+  - target: $.components.schemas.DataStudioDto.properties
+    update:
+      configuration:
+        allOf:
+          - $ref: "#/components/schemas/DataStudioConfiguration"
+        nullable: true
 
   # Make sessionId optional and configure as read-only
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
@@ -168,6 +169,32 @@ actions:
   - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
     update:
       x-speakeasy-param-optional: true
+
+  # Make workspaceId required on all Studio operations. Personal workspaces are
+  # not supported, and a required workspaceId on the read operation makes
+  # Speakeasy generate the composite import ID
+  # ({"session_id": "...", "workspace_id": N}). A bare-ID import would read
+  # without workspaceId, which cannot find a workspace Studio.
+  - target: $.paths["/studios"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/studios/{sessionId}"].get.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  # Name the path parameter `id` so the composite import ID is
+  # {"id": "...", "workspace_id": N}, consistent with the `id` attribute.
+  - target: $.paths["/studios/{sessionId}"].get.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
+  - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
 
   # Studios parameter configurations for GET and DELETE operations
   - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]

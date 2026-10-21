@@ -46,14 +46,105 @@ func (s *SSHDetails) GetUser() string {
 	return s.User
 }
 
+type DataStudioDtoConfiguration struct {
+	CondaEnvironment *string `json:"condaEnvironment,omitempty"`
+	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
+	CPU *int `json:"cpu,omitempty"`
+	// Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+	Environment map[string]string `json:"environment,omitempty"`
+	// Set to 0 to disable GPU or 1 to enable GPU.
+	Gpu *int `default:"0" json:"gpu"`
+	// Maximum lifespan of the Studio session in hours
+	LifespanHours *int `json:"lifespanHours,omitempty"`
+	// Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
+	Memory *int `json:"memory,omitempty"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	MountData   []string    `json:"mountData,omitempty"`
+	MountDataV2 []MountData `json:"mountDataV2,omitempty"`
+	SSHEnabled  *bool       `json:"sshEnabled,omitempty"`
+}
+
+func (d DataStudioDtoConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DataStudioDtoConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *DataStudioDtoConfiguration) GetCondaEnvironment() *string {
+	if d == nil {
+		return nil
+	}
+	return d.CondaEnvironment
+}
+
+func (d *DataStudioDtoConfiguration) GetCPU() *int {
+	if d == nil {
+		return nil
+	}
+	return d.CPU
+}
+
+func (d *DataStudioDtoConfiguration) GetEnvironment() map[string]string {
+	if d == nil {
+		return nil
+	}
+	return d.Environment
+}
+
+func (d *DataStudioDtoConfiguration) GetGpu() *int {
+	if d == nil {
+		return nil
+	}
+	return d.Gpu
+}
+
+func (d *DataStudioDtoConfiguration) GetLifespanHours() *int {
+	if d == nil {
+		return nil
+	}
+	return d.LifespanHours
+}
+
+func (d *DataStudioDtoConfiguration) GetMemory() *int {
+	if d == nil {
+		return nil
+	}
+	return d.Memory
+}
+
+func (d *DataStudioDtoConfiguration) GetMountData() []string {
+	if d == nil {
+		return nil
+	}
+	return d.MountData
+}
+
+func (d *DataStudioDtoConfiguration) GetMountDataV2() []MountData {
+	if d == nil {
+		return nil
+	}
+	return d.MountDataV2
+}
+
+func (d *DataStudioDtoConfiguration) GetSSHEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.SSHEnabled
+}
+
 // DataStudioDto - Represents a Studio session for interactive data analysis.
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
 	AllowedUsers []*UserInfo `json:"allowedUsers,omitempty"`
 	// Base container image the Studio is built from.
-	BaseImage     *string                  `json:"baseImage,omitempty"`
-	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
+	BaseImage *string `json:"baseImage,omitempty"`
 	// Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 	CustomIcon *string `json:"customIcon,omitempty"`
 	// Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
@@ -75,7 +166,8 @@ type DataStudioDto struct {
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Alias of `session_id` for Terraform convention.
-	ID *string `json:"id,omitempty"`
+	ID            *string                     `json:"id,omitempty"`
+	Configuration *DataStudioDtoConfiguration `json:"configuration,omitempty"`
 }
 
 func (d DataStudioDto) MarshalJSON() ([]byte, error) {
@@ -106,13 +198,6 @@ func (d *DataStudioDto) GetBaseImage() *string {
 		return nil
 	}
 	return d.BaseImage
-}
-
-func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
-	if d == nil {
-		return nil
-	}
-	return d.Configuration
 }
 
 func (d *DataStudioDto) GetCustomIcon() *string {
@@ -204,4 +289,11 @@ func (d *DataStudioDto) GetID() *string {
 		return nil
 	}
 	return d.ID
+}
+
+func (d *DataStudioDto) GetConfiguration() *DataStudioDtoConfiguration {
+	if d == nil {
+		return nil
+	}
+	return d.Configuration
 }

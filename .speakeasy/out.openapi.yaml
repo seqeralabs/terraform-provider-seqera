@@ -9473,6 +9473,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: autoStart
           in: query
           description: Optionally disable the Studio's automatic launch when it is created.
@@ -9664,10 +9665,11 @@ paths:
       parameters:
         - name: sessionId
           in: path
-          description: Studio session numeric identifier
+          description: Studio session identifier. Same value as `session_id`.
           required: true
           schema:
             type: string
+          x-speakeasy-name-override: id
           x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
@@ -9675,6 +9677,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       responses:
         '204':
           description: OK - No content
@@ -9709,10 +9712,11 @@ paths:
       parameters:
         - name: sessionId
           in: path
-          description: Studio session numeric identifier
+          description: Studio session identifier. Same value as `session_id`.
           required: true
           schema:
             type: string
+          x-speakeasy-name-override: id
           x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
@@ -9720,6 +9724,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       responses:
         '200':
           description: OK
@@ -21716,17 +21721,6 @@ components:
         sshEnabled:
           type: boolean
           nullable: true
-      x-speakeasy-entity: Studios
-      x-speakeasy-entity-description: |
-        Studios is a unified platform where you can host a combination of
-        container images and compute environments for interactive analysis using
-        your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
-        or Xpra remote desktops. Each Studio session is an individual interactive
-        environment that encapsulates the live environment for dynamic data analysis.
-
-        Note:
-        On Seqera Cloud, the free tier permits only one running Studio session at a time.
-        To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
     DataStudioConnectionImage:
       type: object
       properties:
@@ -21819,7 +21813,6 @@ components:
       required:
         - computeEnvId
         - name
-        - configuration
     DataStudioCreateResponse:
       type: object
       properties:
@@ -21838,8 +21831,6 @@ components:
           nullable: true
           description: Base container image the Studio is built from.
           x-speakeasy-param-readonly: true
-        configuration:
-          $ref: '#/components/schemas/DataStudioConfiguration'
         customIcon:
           description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
           type: string
@@ -21895,6 +21886,10 @@ components:
           description: Alias of `session_id` for Terraform convention.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
+        configuration:
+          allOf:
+            - $ref: "#/components/schemas/DataStudioConfiguration"
+          nullable: true
       x-speakeasy-entity: Studios
       x-speakeasy-transform-from-api:
         jq: '. + { id: .sessionId }'

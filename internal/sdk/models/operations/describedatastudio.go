@@ -8,22 +8,22 @@ import (
 )
 
 type DescribeDataStudioRequest struct {
-	// Studio session numeric identifier
-	SessionID string `pathParam:"style=simple,explode=false,name=sessionId"`
+	// Studio session identifier. Same value as `session_id`.
+	ID string `pathParam:"style=simple,explode=false,name=sessionId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DescribeDataStudioRequest) GetSessionID() string {
+func (d *DescribeDataStudioRequest) GetID() string {
 	if d == nil {
 		return ""
 	}
-	return d.SessionID
+	return d.ID
 }
 
-func (d *DescribeDataStudioRequest) GetWorkspaceID() *int64 {
+func (d *DescribeDataStudioRequest) GetWorkspaceID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.WorkspaceID
 }

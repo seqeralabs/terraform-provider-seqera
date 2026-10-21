@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: ad15a132d128296e89d76af482ec92e9
+  docChecksum: 69546d8a55ed856cc78ce54de8bde45f
   docVersion: 1.244.0
   speakeasyVersion: 1.803.0
   generationVersion: 2.950.2
@@ -5340,11 +5340,14 @@ examples:
           application/json: {"message": "<value>"}
   CreateDataStudio:
     speakeasy-default-create-data-studio:
+      parameters:
+        query:
+          workspaceId: 214416
       requestBody:
         application/json: {"computeEnvId": "compute-env-id", "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "description": "Jupyter studio for data analysis and visualization", "name": "my-jupyter-studio"}
       responses:
         "200":
-          application/json: {"studio": {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "uneven-wallaby.com", "port": 691829, "user": "Hope86"}}}
+          application/json: {"studio": {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "uneven-wallaby.com", "port": 691829, "user": "Hope86"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}}
         "400":
           application/json: {"message": "<value>"}
   ListMountedDataLinkIds:
@@ -5365,9 +5368,11 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 421910
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "dapper-sushi.net", "port": 406928, "user": "Monty40"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "dapper-sushi.net", "port": 406928, "user": "Monty40"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "404":
           application/json: {"message": "<value>"}
   DeleteDataStudio:
@@ -5375,6 +5380,8 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 268110
       responses:
         "404":
           application/json: {"message": "<value>"}
@@ -5419,7 +5426,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "pleasing-detective.net", "port": 718113, "user": "Westley_Cruickshank"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "pleasing-detective.net", "port": 718113, "user": "Westley_Cruickshank"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "400":
           application/json: {"message": "<value>"}
   StartDataStudio:
@@ -5995,7 +6002,7 @@ examples:
         application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "impolite-markup.name", "port": 602573, "user": "Jacklyn.Bogisich78"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "impolite-markup.name", "port": 602573, "user": "Jacklyn.Bogisich78"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "400":
           application/json: {"message": "<value>"}
   ResolveCronExpression:
