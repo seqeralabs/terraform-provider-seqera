@@ -80,6 +80,8 @@ BUG FIXES:
 
   Environments that were dropped from state by an earlier destroy are still present in the Platform and have to be removed there or re-imported.
 
+- **`seqera_action` can be imported again for workspace actions.** `workspace_id` was optional on the action operations, so the generated import took a bare action ID and read the action without a workspace, which the API rejects with 403 for workspace actions; the import failed with "Cannot import non-existent remote object". `workspace_id` is now required and the import ID is the composite `{"action_id": "...", "workspace_id": 0}`. Personal-workspace actions are not supported by the provider.
+
 NOTES:
 
 - **`dataset_id` and `filter` dropped from the `bucket` block of `seqera_action`.** The API no longer accepts them on bucket triggers, so they are gone from both the `bucket` argument block and the read-only `config.bucket`. Configurations that set either attribute must remove it. The bucket action type was never enabled in production, so no real state should hold them. No state migration is required.
