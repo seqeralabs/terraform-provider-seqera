@@ -9402,10 +9402,9 @@ paths:
         - ssh-keys
   /studios:
     get:
-      operationId: ListStudiosDataSource
+      operationId: ListDataStudios
       summary: List Studios
-      description: |
-        Lists Studios in a workspace. Use `search` to filter by name or tool image.
+      description: Lists all available Studios in a user context. Append `?workspaceId` to list Studios in a workspace context.
       parameters:
         - name: workspaceId
           in: query
@@ -9418,50 +9417,50 @@ paths:
           description: 'Optional search criteria, allowing free text search on name and templateUrl and keywords: `userId`, `computeEnvId` and `status`.'
           schema:
             type: string
-        - name: workspaceId
+        - name: max
           in: query
-          description: Workspace numeric identifier
-          required: true
-          x-speakeasy-param-optional: false
+          description: Pagination max results
           schema:
             type: integer
-            format: int64
-        - name: search
+            format: int32
+        - name: offset
           in: query
-          description: 'Optional search criteria. Free text matches the Studio name and tool image URL. Keywords take the form `keyword:value`: `userName`, `computeEnvName`, `computeEnvType`, `status` (`starting`, `running`, `stopping`, `stopped`, `errored`, `building` or `buildFailed`), `label`, `collaborationMode`, `createdAfter`, `createdBefore`, `updatedAfter` and `updatedBefore`.'
-          required: false
+          description: Pagination offset
           schema:
-            type: string
+            type: integer
+            format: int32
+        - name: attributes
+          in: query
+          description: 'Optional attribute values to be included in the response (`labels`). Returns an empty value (`labels: null`) if omitted.'
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/DataStudioQueryAttribute'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListStudiosDataSourceResponse'
+                $ref: '#/components/schemas/DataStudioListResponse'
         '400':
-          description: Bad request
+          description: BadRequest
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: Operation not allowed
+          description: Operation not allowed.
         '404':
-          description: Workspace not found or Studios not enabled
+          description: NotFound, when the workspace is not found or when the API is disabled for the workspace.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
-        - BearerAuth: []
       tags:
         - studios
-        - studios
-      x-speakeasy-entity-operation:
-        terraform-datasource: StudiosList#read
-      x-speakeasy-name-override: ListStudiosDataSource
     post:
       operationId: CreateDataStudio
       summary: Create Studio
@@ -30405,10 +30404,8 @@ components:
 
 
 
-
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
-
 
 
 
@@ -30705,10 +30702,8 @@ components:
 
 
 
-
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
-
 
 
 
@@ -34253,61 +34248,6 @@ components:
         This data source returns all data links accessible to the authenticated user,
         with optional filtering by workspace. Use Terraform locals with for expressions
         to filter by provider type or name.
-    ListStudiosDataSourceResponse:
-      type: object
-      required:
-        - workspaceId
-        - studios
-      properties:
-        workspaceId:
-          type: integer
-          format: int64
-          description: Workspace ID used for filtering
-        search:
-          type: string
-          description: Search criteria used for filtering
-        totalSize:
-          type: integer
-          format: int64
-          description: Total number of Studios matching the query. The platform returns at most 100 Studios per request, so if this exceeds the length of `studios`, narrow the query with `search`.
-        studios:
-          type: array
-          description: List of Studios
-          items:
-            type: object
-            properties:
-              sessionId:
-                type: string
-                description: Studio session identifier
-              name:
-                type: string
-                description: Studio name
-              description:
-                type: string
-                nullable: true
-                description: Studio description
-              workspaceId:
-                type: integer
-                format: int64
-                description: Workspace the Studio belongs to
-              isPrivate:
-                type: boolean
-                description: Whether the Studio is private to its creator
-              baseImage:
-                type: string
-                nullable: true
-                description: Base container image the Studio is built from
-              customImage:
-                type: boolean
-                description: Whether the Studio runs a custom image built by Wave
-      x-speakeasy-entity: StudiosList
-      x-speakeasy-entity-description: |
-        Data source for listing Studios in a Seqera Platform workspace.
-
-        Returns the Studios in a workspace, optionally filtered with `search`.
-        The platform returns at most 100 Studios per request; `total_size` reports
-        how many match so truncation can be detected. Use Terraform locals with
-        for expressions to look up a Studio by name.
     ListStudioTemplatesDataSourceResponse:
       type: object
       required:

@@ -134,7 +134,6 @@ Available configuration:
 * [seqera_data_links](docs/data-sources/data_links.md)
 * [seqera_gcp_credentials_federation_setup](docs/data-sources/gcp_credentials_federation_setup.md)
 * [seqera_studio_templates](docs/data-sources/studio_templates.md)
-* [seqera_studios_list](docs/data-sources/studios_list.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Examples [examples] -->

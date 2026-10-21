@@ -32,11 +32,9 @@ func newStudios(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks
 	}
 }
 
-// ListStudiosDataSource - List Studios
-// Lists Studios in a workspace. Use `search` to filter by name or tool image.
-//
-// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
-func (s *Studios) ListStudiosDataSource(ctx context.Context, request operations.ListStudiosDataSourceRequest, opts ...operations.Option) (*operations.ListStudiosDataSourceResponse, error) {
+// ListDataStudios - List Studios
+// Lists all available Studios in a user context. Append `?workspaceId` to list Studios in a workspace context.
+func (s *Studios) ListDataStudios(ctx context.Context, request operations.ListDataStudiosRequest, opts ...operations.Option) (*operations.ListDataStudiosResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -65,7 +63,7 @@ func (s *Studios) ListStudiosDataSource(ctx context.Context, request operations.
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "ListStudiosDataSource",
+		OperationID:      "ListDataStudios",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -92,7 +90,7 @@ func (s *Studios) ListStudiosDataSource(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
 
@@ -200,7 +198,7 @@ func (s *Studios) ListStudiosDataSource(ctx context.Context, request operations.
 		}
 	}
 
-	res := &operations.ListStudiosDataSourceResponse{
+	res := &operations.ListDataStudiosResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -215,12 +213,12 @@ func (s *Studios) ListStudiosDataSource(ctx context.Context, request operations.
 				return nil, err
 			}
 
-			var out shared.ListStudiosDataSourceResponse
+			var out shared.DataStudioListResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListStudiosDataSourceResponse = &out
+			res.DataStudioListResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

@@ -44,7 +44,6 @@ sources:
             - location: overlays/datasets.yaml
             - location: overlays/datasource-credentials.yaml
             - location: overlays/datasource-datalinks.yaml
-            - location: overlays/datasource-studios.yaml
             - location: overlays/datasource-studio-templates.yaml
             - location: overlays/labels.yaml
             - location: overlays/orgs.yaml

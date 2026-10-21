@@ -206,7 +206,6 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewDataLinksDataSource,
 		NewGCPCredentialsFederationSetupDataSource,
 		NewStudioTemplatesDataSource,
-		NewStudiosListDataSource,
 		custom_role_data.NewDataSource,
 		organization_data.NewDataSource,
 		organization_member_data.NewDataSource,

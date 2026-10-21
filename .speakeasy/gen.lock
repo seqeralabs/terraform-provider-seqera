@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 3452a4c68ab647120e9f612670ded4f8
+  docChecksum: 74c63f944671df9658cb1d09a59b4616
   docVersion: 1.244.0
   speakeasyVersion: 1.803.0
   generationVersion: 2.950.2
@@ -561,8 +561,6 @@ trackedFiles:
   internal/provider/studios_resource_sdk.go:
     id: 3f2ecca255e3
     pristine_git_object: 5bfc8970d75b9bf9e6a0729b69f9a3cd9ad0eaeb
-  internal/provider/studioslist_data_source.go: {}
-  internal/provider/studioslist_data_source_sdk.go: {}
   internal/provider/studiotemplates_data_source.go: {}
   internal/provider/studiotemplates_data_source_sdk.go: {}
   internal/provider/teams_resource.go:
@@ -766,7 +764,6 @@ trackedFiles:
     id: 1f4f9de1e711
     pristine_git_object: e304e804365ad9c8c0de1fdf5e6247299eba8a2b
   internal/provider/types/ssh_details.go: {}
-  internal/provider/types/studio.go: {}
   internal/provider/types/template.go: {}
   internal/provider/types/tower_agent_credentials.go:
     id: 0e460efd9daf
@@ -1483,6 +1480,7 @@ trackedFiles:
     id: 72992e5afa62
     pristine_git_object: 0684ca2f6f1d8645975c8457f0ece0f43a305a5a
   internal/sdk/models/operations/listdatastudiocompatiblecomputeenvs.go: {}
+  internal/sdk/models/operations/listdatastudios.go: {}
   internal/sdk/models/operations/listlabels.go:
     id: 3a8e187b93b0
     pristine_git_object: 4d72dcfee6a13b4e95767858eaeeccbde25eda54
@@ -1537,7 +1535,6 @@ trackedFiles:
   internal/sdk/models/operations/listroles.go: {}
   internal/sdk/models/operations/listserviceaccounts.go: {}
   internal/sdk/models/operations/listsshkeys.go: {}
-  internal/sdk/models/operations/liststudiosdatasource.go: {}
   internal/sdk/models/operations/liststudiotemplatesdatasource.go: {}
   internal/sdk/models/operations/listuserrolesinorganization.go: {}
   internal/sdk/models/operations/listworkflows.go:
@@ -2283,10 +2280,12 @@ trackedFiles:
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
     pristine_git_object: d8ced19804d75bccfa1010931fda452d4b6f3758
+  internal/sdk/models/shared/datastudiolistresponse.go: {}
   internal/sdk/models/shared/datastudiologresponse.go: {}
   internal/sdk/models/shared/datastudiomountedlinksresponse.go:
     id: ff90555e64b3
     pristine_git_object: b46041a54199a0af8a5cfae971358bf95fd8e867
+  internal/sdk/models/shared/datastudioqueryattribute.go: {}
   internal/sdk/models/shared/datastudiostartrequest.go:
     id: b85784e03a6b
     pristine_git_object: e375bdb5fe5a91b9eb237dc7a7206d475005ec74
@@ -2630,7 +2629,6 @@ trackedFiles:
   internal/sdk/models/shared/listrolesresponseroleinfo.go: {}
   internal/sdk/models/shared/listserviceaccountsresponse.go: {}
   internal/sdk/models/shared/listsshkeysresponse.go: {}
-  internal/sdk/models/shared/liststudiosdatasourceresponse.go: {}
   internal/sdk/models/shared/liststudiotemplatesdatasourceresponse.go: {}
   internal/sdk/models/shared/listtaskprocesssummaryresponse.go: {}
   internal/sdk/models/shared/listtasksresponse.go:
