@@ -49,6 +49,10 @@ actions:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 
+  - target: $["components"]["schemas"]["DataStudioUpdateRequest"]
+    update:
+      x-speakeasy-entity: Studios
+
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios
@@ -88,6 +92,20 @@ actions:
         terraform-datasource: null
 
         terraform-resource: Studios#read
+
+  # UPDATE - PUT /studios/{sessionId}
+  # Platform only updates Studios that are stopped, errored or build-failed, the
+  # same condition as deleting one, so an update fails exactly when a replace
+  # would. Updating in place keeps the Studio's checkpoints and session ID, which
+  # a replace destroys. Attributes the update request cannot carry stay
+  # RequiresReplace.
+  - target: $["paths"]["/studios/{sessionId}"]["put"]
+    update:
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Studios#update
 
   # DELETE - DELETE /studios/{sessionId}
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
@@ -129,6 +147,10 @@ actions:
           - 400
 
   # Add custom error mapping for better user experience
+  - target: $.paths["/studios/{sessionId}"].put.responses["400"]
+    update:
+      description: "Bad Request - Studio must be stopped, errored, or build failed before it can be updated"
+
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
@@ -189,6 +211,9 @@ actions:
   - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "workspaceId")]
     update:
       required: true
+  - target: $.paths["/studios/{sessionId}"].put.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
 
   # Name the path parameter `id` so the composite import ID is
   # {"id": "...", "workspace_id": N}, consistent with the `id` attribute.
@@ -197,6 +222,10 @@ actions:
       x-speakeasy-name-override: id
       description: Studio session identifier. Same value as `session_id`.
   - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
+  - target: $.paths["/studios/{sessionId}"].put.parameters[?(@.name == "sessionId")]
     update:
       x-speakeasy-name-override: id
       description: Studio session identifier. Same value as `session_id`.
@@ -213,6 +242,10 @@ actions:
       x-speakeasy-param-optional: true
 
   - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/studios/{sessionId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
 
@@ -250,7 +283,7 @@ actions:
   # DataStudioCreateRequest field descriptions
   - target: $.components.schemas.DataStudioCreateRequest.properties.labelIds
     update:
-      description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+      description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
   - target: $.components.schemas.DataStudioCreateRequest.properties.allowedUserIds
     update:
       description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
@@ -300,6 +333,22 @@ actions:
     update:
       description: Maximum lifespan of the Studio session in hours
       example: 2
+  # An empty mount list is never sent (the SDK omits empty slices) and Platform
+  # treats an omitted list as "unchanged", so removing the last mounted data link
+  # in place would silently do nothing and fail apply with an inconsistent result.
+  # Any change to the mounts therefore replaces the Studio.
+  - target: $.components.schemas.DataStudioConfiguration.properties.mountDataV2
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.DataStudioConfiguration.properties.mountData
+    update:
+      x-speakeasy-param-force-new: true
+
+  # Platform rejects changing the conda environment on update ("only when a
+  # Studio is created"), so it must replace the Studio.
+  - target: $.components.schemas.DataStudioConfiguration.properties.condaEnvironment
+    update:
+      x-speakeasy-param-force-new: true
   - target: $.components.schemas.DataStudioConfiguration.properties.environment
     update:
       description: Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.

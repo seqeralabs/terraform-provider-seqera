@@ -16,7 +16,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
@@ -27,7 +26,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
 	speakeasy_mapplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/mapplanmodifier"
@@ -129,22 +127,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Description: `Base container image the Studio is built from.`,
 			},
 			"compute_env_id": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Identifier of the compute environment the Studio runs on. Requires replacement if changed.`,
+				Required:    true,
+				Description: `Identifier of the compute environment the Studio runs on.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(1),
 				},
 			},
 			"configuration": schema.SingleNestedAttribute{
 				Required: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
 				Attributes: map[string]schema.Attribute{
 					"conda_environment": schema.StringAttribute{
 						Computed: true,
@@ -159,13 +149,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 					},
 					"cpu": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Int32{
-							int32planmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
-						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default. Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default.`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
@@ -184,38 +170,26 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 					},
 					"gpu": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						Default:  int32default.StaticInt32(0),
-						PlanModifiers: []planmodifier.Int32{
-							int32planmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
-						Description: `Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(0),
+						Description: `Set to 0 to disable GPU or 1 to enable GPU. Default: 0`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
 					},
 					"lifespan_hours": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Int32{
-							int32planmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
-						Description: `Maximum lifespan of the Studio session in hours. Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Description: `Maximum lifespan of the Studio session in hours`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
 					},
 					"memory": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Int32{
-							int32planmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
-						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default. Requires replacement if changed.`,
+						Computed:    true,
+						Optional:    true,
+						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if ` + "`" + `remote_config` + "`" + ` is set, otherwise the compute environment default.`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(0),
 						},
@@ -242,28 +216,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
 							},
-							PlanModifiers: []planmodifier.Object{
-								objectplanmodifier.RequiresReplaceIfConfigured(),
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
 								"data_link_id": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Requires replacement if changed.`,
 								},
 								"path": schema.StringAttribute{
 									Computed: true,
 									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										stringplanmodifier.RequiresReplaceIfConfigured(),
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
-									Description: `Requires replacement if changed.`,
 								},
 							},
 						},
@@ -272,27 +232,17 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					"ssh_enabled": schema.BoolAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Bool{
-							boolplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 				},
-				Description: `Requires replacement if changed.`,
 			},
 			"custom_icon": schema.StringAttribute{
 				Computed:    true,
 				Description: `Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.`,
 			},
 			"custom_icon_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(22),
 				},
@@ -314,13 +264,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Description of the Studio session's purpose. Requires replacement if changed.`,
+				Computed:    true,
+				Optional:    true,
+				Description: `Description of the Studio session's purpose`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
@@ -349,20 +295,13 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Description: `Requires replacement if changed.`,
 			},
 			"label_ids": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
+				Optional:    true,
 				ElementType: types.Int64Type,
-				Description: `List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.`,
+				Description: `List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Display name for the Studio session. Requires replacement if changed.`,
+				Required:    true,
+				Description: `Display name for the Studio session`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 80),
 				},
@@ -625,7 +564,43 @@ func (r *StudiosResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	// Not Implemented; all attributes marked as RequiresReplace
+	request, requestDiags := data.ToOperationsUpdateDataStudioRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Studios.UpdateDataStudio(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.DataStudioDto != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioDto)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)

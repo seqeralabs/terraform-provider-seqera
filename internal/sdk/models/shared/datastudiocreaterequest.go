@@ -45,7 +45,7 @@ type DataStudioCreateRequest struct {
 	Description         *string `json:"description,omitempty"`
 	InitialCheckpointID *int64  `json:"initialCheckpointId,omitempty"`
 	IsPrivate           *bool   `json:"isPrivate,omitempty"`
-	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	Name     string  `json:"name"`
 	// Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
