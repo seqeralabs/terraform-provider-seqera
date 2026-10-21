@@ -62,6 +62,7 @@ sources:
             - location: overlays/workflows.yaml
             - location: overlays/workspaces.yaml
             - location: overlays/workspace-lineage-settings.yaml
+            - location: overlays/workspace-studios-settings.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

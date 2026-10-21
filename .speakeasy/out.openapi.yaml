@@ -7531,7 +7531,7 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
         - name: workspaceId
           in: path
           description: Workspace numeric identifier
@@ -7539,12 +7539,7 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        description: Workspace update request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateWorkspaceRequest'
+          x-speakeasy-param-force-new: true
       responses:
         '200':
           description: OK
@@ -7570,6 +7565,9 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceStudiosSettings#read
     put:
       operationId: UpdateDataStudiosWorkspaceSettings
       summary: Update workspace Studios settings
@@ -7582,7 +7580,7 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-force-new: true
         - name: workspaceId
           in: path
           description: Workspace numeric identifier
@@ -7590,6 +7588,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Workspace update request
         required: true
@@ -7618,6 +7617,11 @@ paths:
         - BearerAuth: []
       tags:
         - workspaces
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource:
+          - WorkspaceStudiosSettings#create
+          - WorkspaceStudiosSettings#update
   /orgs/{orgId}/workspaces/{workspaceId}/users/{userId}:
     delete:
       operationId: DeleteWorkspaceUser
@@ -22244,10 +22248,12 @@ components:
           description: Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
           type: string
           nullable: true
+          example: cr.seqera.io/my-org/studios
         lifespanHours:
           description: Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
           type: integer
           format: int32
+          minimum: 0
         nameStrategy:
           description: Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
           type: string
@@ -22259,6 +22265,13 @@ components:
         privateStudioByDefault:
           description: When true, newly created Studio sessions are private by default and only accessible to their creator.
           type: boolean
+      x-speakeasy-entity: WorkspaceStudiosSettings
+      # The PUT replaces every setting, so lifespanHours and
+      # privateStudioByDefault must always be sent. Their platform defaults are
+      # deployment-specific, so no default is applied here.
+      required:
+        - lifespanHours
+        - privateStudioByDefault
     DataStudioWorkspaceSettingsResponse:
       type: object
       properties:
@@ -22279,6 +22292,17 @@ components:
         wspId:
           type: integer
           format: int64
+          x-speakeasy-name-override: workspaceId
+          x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-entity: WorkspaceStudiosSettings
+      x-speakeasy-entity-description: |
+        Manage the Studios settings of a Seqera workspace.
+
+        These settings apply to Studios created in the workspace: the maximum session lifespan, whether new Studios are private by default, and where Wave pushes the images it builds for Studios.
+
+        ~> **Note:** Platform has no way to delete these settings. Destroying this resource only removes it from Terraform state and leaves the workspace's current settings in place.
+
+        ~> **Note:** When `lifespan_hours` is not `0` (unlimited), Platform only accepts Studios in the workspace whose `configuration.lifespan_hours` equals this value.
     DatasetDto:
       type: object
       properties:
@@ -30375,8 +30399,10 @@ components:
 
 
 
+
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
+
 
 
 
@@ -30671,8 +30697,10 @@ components:
 
 
 
+
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
+
 
 
 
