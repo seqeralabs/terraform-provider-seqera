@@ -22259,15 +22259,17 @@ components:
       type: object
       properties:
         containerRepository:
-          description: Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+          description: Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
           type: string
           nullable: true
           example: cr.seqera.io/my-org/studios
+          x-speakeasy-plan-validators: StudioContainerRepositoryValidator
         lifespanHours:
-          description: Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
+          description: Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
           type: integer
           format: int32
           minimum: 0
+          maximum: 120
         nameStrategy:
           description: Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
           type: string

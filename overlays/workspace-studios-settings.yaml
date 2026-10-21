@@ -98,9 +98,16 @@ actions:
   # ============================================================================
   # FIELD CONFIGURATION
   # ============================================================================
+  # Platform rejects anything above 120 hours with a 400
+  # (WorkspaceController.updateDataStudioSettings).
   - target: $.components.schemas.DataStudioWorkspaceSettingsRequest.properties.lifespanHours
     update:
+      description: Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
       minimum: 0
+      maximum: 120
+  # Platform requires a bare registry path and rejects an http:// or https:// prefix.
   - target: $.components.schemas.DataStudioWorkspaceSettingsRequest.properties.containerRepository
     update:
+      description: Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
       example: cr.seqera.io/my-org/studios
+      x-speakeasy-plan-validators: StudioContainerRepositoryValidator

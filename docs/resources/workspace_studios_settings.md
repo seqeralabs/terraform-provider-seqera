@@ -132,14 +132,14 @@ resource "seqera_studios" "custom_lifespan" {
 
 ### Required
 
-- `lifespan_hours` (Number) Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
+- `lifespan_hours` (Number) Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
 - `org_id` (Number) Organization numeric identifier. Requires replacement if changed.
 - `private_studio_by_default` (Boolean) When true, newly created Studio sessions are private by default and only accessible to their creator.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
-- `container_repository` (String) Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+- `container_repository` (String) Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
 - `name_strategy` (String) Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used. must be one of ["none", "tagPrefix", "imageSuffix"]
 
 ## Import

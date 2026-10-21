@@ -38,9 +38,9 @@ func (e *NameStrategy) UnmarshalJSON(data []byte) error {
 }
 
 type DataStudioWorkspaceSettingsRequest struct {
-	// Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+	// Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
 	ContainerRepository *string `json:"containerRepository,omitempty"`
-	// Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
+	// Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
 	LifespanHours int `json:"lifespanHours"`
 	// Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
 	NameStrategy *NameStrategy `json:"nameStrategy,omitempty"`
