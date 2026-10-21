@@ -9479,6 +9479,7 @@ paths:
           description: Optionally disable the Studio's automatic launch when it is created.
           schema:
             type: boolean
+          x-speakeasy-param-force-new: false
       requestBody:
         description: Create Studio request
         required: true
@@ -21813,6 +21814,7 @@ components:
       required:
         - computeEnvId
         - name
+        - configuration
     DataStudioCreateResponse:
       type: object
       properties:
@@ -21886,13 +21888,19 @@ components:
           description: Alias of `session_id` for Terraform convention.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
+        # The response carries the compute environment as an object that is
+        # removed below. Surface its id so the attribute is populated on read,
+        # which makes it importable instead of forcing a replacement.
+        computeEnvId:
+          type: string
+          description: Identifier of the compute environment the Studio runs on.
         configuration:
           allOf:
             - $ref: "#/components/schemas/DataStudioConfiguration"
           nullable: true
       x-speakeasy-entity: Studios
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .sessionId }'
+        jq: '. + { id: .sessionId, computeEnvId: .computeEnv.id }'
       description: |
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based

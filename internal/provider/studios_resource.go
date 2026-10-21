@@ -121,11 +121,8 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"auto_start": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.`,
+				Optional:    true,
+				Description: `Optionally disable the Studio's automatic launch when it is created.`,
 			},
 			"base_image": schema.StringAttribute{
 				Computed:    true,
@@ -135,15 +132,15 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Identifier of the compute environment the Studio runs on. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(1),
 				},
 			},
 			"configuration": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Object{
 					objectplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),

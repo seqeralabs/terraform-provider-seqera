@@ -166,7 +166,9 @@ type DataStudioDto struct {
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Alias of `session_id` for Terraform convention.
-	ID            *string                     `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// Identifier of the compute environment the Studio runs on.
+	ComputeEnvID  *string                     `json:"computeEnvId,omitempty"`
 	Configuration *DataStudioDtoConfiguration `json:"configuration,omitempty"`
 }
 
@@ -175,7 +177,7 @@ func (d DataStudioDto) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
-	if out, err := utils.RunJQBytes(data, ". + { id: .sessionId }"); err != nil {
+	if out, err := utils.RunJQBytes(data, ". + { id: .sessionId, computeEnvId: .computeEnv.id }"); err != nil {
 		return err
 	} else {
 		data = out
@@ -289,6 +291,13 @@ func (d *DataStudioDto) GetID() *string {
 		return nil
 	}
 	return d.ID
+}
+
+func (d *DataStudioDto) GetComputeEnvID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ComputeEnvID
 }
 
 func (d *DataStudioDto) GetConfiguration() *DataStudioDtoConfiguration {

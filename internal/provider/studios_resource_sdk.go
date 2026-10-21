@@ -48,9 +48,8 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.AllowedUsers = nil
 		}
 		r.BaseImage = types.StringPointerValue(resp.BaseImage)
-		if resp.Configuration == nil {
-			r.Configuration = nil
-		} else {
+		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
+		if resp.Configuration != nil {
 			r.Configuration = &tfTypes.DataStudioConfiguration{}
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
@@ -194,94 +193,91 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
-	var configuration *shared.DataStudioConfiguration
-	if r.Configuration != nil {
-		condaEnvironment := new(string)
-		if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
-			*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
-		} else {
-			condaEnvironment = nil
-		}
-		cpu := new(int)
-		if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
-			*cpu = int(r.Configuration.CPU.ValueInt32())
-		} else {
-			cpu = nil
-		}
-		var environment map[string]string
-		if r.Configuration.Environment != nil {
-			environment = make(map[string]string)
-			for environmentKey := range r.Configuration.Environment {
-				var environmentInst string
-				environmentInst = r.Configuration.Environment[environmentKey].ValueString()
+	condaEnvironment := new(string)
+	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+		*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
+	} else {
+		condaEnvironment = nil
+	}
+	cpu := new(int)
+	if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+		*cpu = int(r.Configuration.CPU.ValueInt32())
+	} else {
+		cpu = nil
+	}
+	var environment map[string]string
+	if r.Configuration.Environment != nil {
+		environment = make(map[string]string)
+		for environmentKey := range r.Configuration.Environment {
+			var environmentInst string
+			environmentInst = r.Configuration.Environment[environmentKey].ValueString()
 
-				environment[environmentKey] = environmentInst
+			environment[environmentKey] = environmentInst
+		}
+	}
+	gpu := new(int)
+	if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
+		*gpu = int(r.Configuration.Gpu.ValueInt32())
+	} else {
+		gpu = nil
+	}
+	lifespanHours := new(int)
+	if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+		*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
+	} else {
+		lifespanHours = nil
+	}
+	memory := new(int)
+	if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
+		*memory = int(r.Configuration.Memory.ValueInt32())
+	} else {
+		memory = nil
+	}
+	var mountData []string
+	if r.Configuration.MountData != nil {
+		mountData = make([]string, 0, len(r.Configuration.MountData))
+		for mountDataIndex := range r.Configuration.MountData {
+			mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
+		}
+	}
+	var mountDataV2 []shared.MountData
+	if r.Configuration.MountDataV2 != nil {
+		mountDataV2 = make([]shared.MountData, 0, len(r.Configuration.MountDataV2))
+		for mountDataV2Index := range r.Configuration.MountDataV2 {
+			dataLinkID := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsNull() {
+				*dataLinkID = r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.ValueString()
+			} else {
+				dataLinkID = nil
 			}
-		}
-		gpu := new(int)
-		if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
-			*gpu = int(r.Configuration.Gpu.ValueInt32())
-		} else {
-			gpu = nil
-		}
-		lifespanHours := new(int)
-		if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
-			*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
-		} else {
-			lifespanHours = nil
-		}
-		memory := new(int)
-		if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
-			*memory = int(r.Configuration.Memory.ValueInt32())
-		} else {
-			memory = nil
-		}
-		var mountData []string
-		if r.Configuration.MountData != nil {
-			mountData = make([]string, 0, len(r.Configuration.MountData))
-			for mountDataIndex := range r.Configuration.MountData {
-				mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
+			path := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].Path.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].Path.IsNull() {
+				*path = r.Configuration.MountDataV2[mountDataV2Index].Path.ValueString()
+			} else {
+				path = nil
 			}
+			mountDataV2 = append(mountDataV2, shared.MountData{
+				DataLinkID: dataLinkID,
+				Path:       path,
+			})
 		}
-		var mountDataV2 []shared.MountData
-		if r.Configuration.MountDataV2 != nil {
-			mountDataV2 = make([]shared.MountData, 0, len(r.Configuration.MountDataV2))
-			for mountDataV2Index := range r.Configuration.MountDataV2 {
-				dataLinkID := new(string)
-				if !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsNull() {
-					*dataLinkID = r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.ValueString()
-				} else {
-					dataLinkID = nil
-				}
-				path := new(string)
-				if !r.Configuration.MountDataV2[mountDataV2Index].Path.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].Path.IsNull() {
-					*path = r.Configuration.MountDataV2[mountDataV2Index].Path.ValueString()
-				} else {
-					path = nil
-				}
-				mountDataV2 = append(mountDataV2, shared.MountData{
-					DataLinkID: dataLinkID,
-					Path:       path,
-				})
-			}
-		}
-		sshEnabled := new(bool)
-		if !r.Configuration.SSHEnabled.IsUnknown() && !r.Configuration.SSHEnabled.IsNull() {
-			*sshEnabled = r.Configuration.SSHEnabled.ValueBool()
-		} else {
-			sshEnabled = nil
-		}
-		configuration = &shared.DataStudioConfiguration{
-			CondaEnvironment: condaEnvironment,
-			CPU:              cpu,
-			Environment:      environment,
-			Gpu:              gpu,
-			LifespanHours:    lifespanHours,
-			Memory:           memory,
-			MountData:        mountData,
-			MountDataV2:      mountDataV2,
-			SSHEnabled:       sshEnabled,
-		}
+	}
+	sshEnabled := new(bool)
+	if !r.Configuration.SSHEnabled.IsUnknown() && !r.Configuration.SSHEnabled.IsNull() {
+		*sshEnabled = r.Configuration.SSHEnabled.ValueBool()
+	} else {
+		sshEnabled = nil
+	}
+	configuration := shared.DataStudioConfiguration{
+		CondaEnvironment: condaEnvironment,
+		CPU:              cpu,
+		Environment:      environment,
+		Gpu:              gpu,
+		LifespanHours:    lifespanHours,
+		Memory:           memory,
+		MountData:        mountData,
+		MountDataV2:      mountDataV2,
+		SSHEnabled:       sshEnabled,
 	}
 	customIconID := new(string)
 	if !r.CustomIconID.IsUnknown() && !r.CustomIconID.IsNull() {
