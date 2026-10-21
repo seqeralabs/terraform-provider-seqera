@@ -215,7 +215,7 @@ resource "seqera_studios" "rstudio_with_data" {
     ]
     # gpu defaults to 0 (disabled)
   }
-  data_studio_tool_url = "cr.seqera.io/public/data-studio-ride:2025.04.1-snapshot"
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-ride:2025.04.1-0.8"
   description          = "RStudio with mounted S3 data"
   is_private           = true
   name                 = "rstudio-with-data"
@@ -246,7 +246,7 @@ resource "seqera_studios" "rstudio_regional_data" {
     ]
     # gpu defaults to 0 (disabled)
   }
-  data_studio_tool_url = "cr.seqera.io/public/data-studio-ride:2025.04.1-snapshot"
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-ride:2025.04.1-0.8"
   description          = "RStudio with AWS us-east-1 data only"
   is_private           = true
   name                 = "rstudio-regional-data"
