@@ -35,9 +35,9 @@ func (r *RemoteConfig) GetRevision() *string {
 
 type DataStudioCreateRequest struct {
 	// IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
-	AllowedUserIds []int64                  `json:"allowedUserIds,omitempty"`
-	ComputeEnvID   string                   `json:"computeEnvId"`
-	Configuration  *DataStudioConfiguration `json:"configuration,omitempty"`
+	AllowedUserIds []int64                 `json:"allowedUserIds,omitempty"`
+	ComputeEnvID   string                  `json:"computeEnvId"`
+	Configuration  DataStudioConfiguration `json:"configuration"`
 	// Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar.
 	CustomIconID *string `json:"customIconId,omitempty"`
 	// Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
@@ -68,9 +68,9 @@ func (d *DataStudioCreateRequest) GetComputeEnvID() string {
 	return d.ComputeEnvID
 }
 
-func (d *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
+func (d *DataStudioCreateRequest) GetConfiguration() DataStudioConfiguration {
 	if d == nil {
-		return nil
+		return DataStudioConfiguration{}
 	}
 	return d.Configuration
 }

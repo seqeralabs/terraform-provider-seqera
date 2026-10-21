@@ -356,15 +356,15 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Required
 
-- `compute_env_id` (String) Requires replacement if changed.
+- `compute_env_id` (String) Identifier of the compute environment the Studio runs on. Requires replacement if changed.
+- `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `name` (String) Display name for the Studio session. Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
 - `allowed_user_ids` (List of Number) IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user. Requires replacement if changed.
-- `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
-- `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
+- `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created.
 - `custom_icon_id` (String) Avatar id (from POST /avatars) for the Studio session icon. Semantics on create: null = inherit from the parent checkpoint (if any); empty string = explicit clear (no icon, even if a parent checkpoint has one); non-empty = assign the referenced Avatar. Requires replacement if changed.
 - `data_studio_tool_url` (String) Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
