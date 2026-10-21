@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -140,7 +142,8 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"configuration": schema.SingleNestedAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Object{
 					objectplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
@@ -330,7 +333,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Alias of ` + "`" + `session_id` + "`" + ` for Terraform convention.`,
+				Description: `Studio session identifier. Same value as ` + "`" + `session_id` + "`" + `.`,
 			},
 			"initial_checkpoint_id": schema.Int64Attribute{
 				Optional: true,
@@ -413,7 +416,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Studio session numeric identifier`,
+				Description: `Unique identifier for the Studio session`,
 			},
 			"spot": schema.BoolAttribute{
 				Optional: true,
@@ -678,5 +681,22 @@ func (r *StudiosResource) Delete(ctx context.Context, req resource.DeleteRequest
 }
 
 func (r *StudiosResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("session_id"), req.ID)...)
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		ID          string `json:"id"`
+		WorkspaceID int64  `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"id": "...", "workspace_id": 0}': `+err.Error())
+		return
+	}
+
+	if len(data.ID) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field id is required but was not found in the json encoded ID.`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }
