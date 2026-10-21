@@ -9760,16 +9760,19 @@ paths:
       parameters:
         - name: sessionId
           in: path
-          description: Studio session numeric identifier
+          description: Studio session identifier. Same value as `session_id`.
           required: true
           schema:
             type: string
+          x-speakeasy-name-override: id
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Fields to update on the studio.
         required: true
@@ -9785,7 +9788,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataStudioDto'
         '400':
-          description: BadRequest
+          description: Bad Request - Studio must be stopped, errored, or build failed before it can be updated
           content:
             application/json:
               schema:
@@ -9808,6 +9811,9 @@ paths:
         - BearerAuth: []
       tags:
         - studios
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Studios#update
   /studios/{sessionId}/checkpoints:
     get:
       operationId: ListDataStudioCheckpoints
@@ -21669,6 +21675,7 @@ components:
           type: string
           maxLength: 2048
           nullable: true
+          x-speakeasy-param-force-new: true
         cpu:
           type: integer
           format: int32
@@ -21713,11 +21720,13 @@ components:
             type: string
           deprecated: true
           nullable: true
+          x-speakeasy-param-force-new: true
         mountDataV2:
           type: array
           items:
             $ref: '#/components/schemas/MountData'
           nullable: true
+          x-speakeasy-param-force-new: true
         sshEnabled:
           type: boolean
           nullable: true
@@ -21781,7 +21790,7 @@ components:
             format: int64
             type: integer
           nullable: true
-          description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+          description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
         name:
           type: string
           maxLength: 80
@@ -22232,6 +22241,7 @@ components:
           maxLength: 80
           minLength: 1
           nullable: true
+      x-speakeasy-entity: Studios
     DataStudioVersionStatus:
       type: string
       enum:

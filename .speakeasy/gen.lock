@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 74c63f944671df9658cb1d09a59b4616
+  docChecksum: 90e60556a16b3ab5a38770f5ac814e89
   docVersion: 1.244.0
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
@@ -5996,6 +5996,8 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 589812
       requestBody:
         application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
       responses:

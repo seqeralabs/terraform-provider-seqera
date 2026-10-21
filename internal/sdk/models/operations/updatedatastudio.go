@@ -8,24 +8,24 @@ import (
 )
 
 type UpdateDataStudioRequest struct {
-	// Studio session numeric identifier
-	SessionID string `pathParam:"style=simple,explode=false,name=sessionId"`
+	// Studio session identifier. Same value as `session_id`.
+	ID string `pathParam:"style=simple,explode=false,name=sessionId"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Fields to update on the studio.
 	DataStudioUpdateRequest shared.DataStudioUpdateRequest `request:"mediaType=application/json"`
 }
 
-func (u *UpdateDataStudioRequest) GetSessionID() string {
+func (u *UpdateDataStudioRequest) GetID() string {
 	if u == nil {
 		return ""
 	}
-	return u.SessionID
+	return u.ID
 }
 
-func (u *UpdateDataStudioRequest) GetWorkspaceID() *int64 {
+func (u *UpdateDataStudioRequest) GetWorkspaceID() int64 {
 	if u == nil {
-		return nil
+		return 0
 	}
 	return u.WorkspaceID
 }
@@ -46,7 +46,7 @@ type UpdateDataStudioResponse struct {
 	RawResponse *http.Response
 	// OK
 	DataStudioDto *shared.DataStudioDto
-	// BadRequest
+	// Bad Request - Studio must be stopped, errored, or build failed before it can be updated
 	ErrorResponse *shared.ErrorResponse
 }
 
