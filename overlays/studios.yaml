@@ -234,12 +234,12 @@ actions:
       description: URL of the Git repository containing the Studio configuration.
   - target: $.components.schemas.StudioRemoteConfiguration.properties.revision
     update:
-      description: Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+      description: Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
       x-speakeasy-param-optional: true
   - target: $.components.schemas.StudioRemoteConfiguration.properties.commitId
     update:
-      description: Commit SHA the Studio was created from. Resolved by Platform.
-      x-speakeasy-param-optional: true
+      description: Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioCreateRequest.properties.spot
     update:
       description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.

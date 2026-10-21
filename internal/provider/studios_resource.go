@@ -377,12 +377,10 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Attributes: map[string]schema.Attribute{
 					"commit_id": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
 						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Commit SHA the Studio was created from. Resolved by Platform. Requires replacement if changed.`,
+						Description: `Commit SHA the Studio was created from. Resolved by Platform from ` + "`" + `revision` + "`" + `; to pin a Studio to a commit, set ` + "`" + `revision` + "`" + ` to the full commit SHA.`,
 					},
 					"repository": schema.StringAttribute{
 						Computed: true,
@@ -403,7 +401,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.`,
+						Description: `Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.`,
 					},
 				},
 				Description: `Build the Studio from a Git repository. Platform reads ` + "`" + `.seqera/studio-config.yaml` + "`" + ` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of ` + "`" + `data_studio_tool_url` + "`" + ` or ` + "`" + `remote_config` + "`" + ` must be set. Requires replacement if changed.`,

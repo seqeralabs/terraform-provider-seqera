@@ -212,12 +212,73 @@ resource "seqera_studios" "from_git" {
 }
 
 # Resolved by Platform and available after creation
-output "studio_commit_id" {
-  value = seqera_studios.from_git.remote_config.commit_id
+output "studio_revision" {
+  description = "Revision Platform resolved (the default branch when revision is unset)"
+  value       = seqera_studios.from_git.remote_config.revision
 }
 
+output "studio_commit_id" {
+  description = "Commit SHA the Studio was created from"
+  value       = seqera_studios.from_git.remote_config.commit_id
+}
+
+# Image attributes are read-only. For a Git-based Studio they show what Wave
+# built from the repository.
 output "studio_base_image" {
   value = seqera_studios.from_git.base_image
+}
+
+output "studio_custom_image" {
+  description = "True when the Studio runs a custom image built by Wave"
+  value       = seqera_studios.from_git.custom_image
+}
+
+output "studio_wave_build_url" {
+  description = "Wave build for the Studio image, if one was built"
+  value       = seqera_studios.from_git.wave_build_url
+}
+```
+
+### Git Repository Pinned
+
+```terraform
+# Build a Studio from a Git repository, pinned to a commit, with some of the
+# repository's settings overridden.
+#
+# `revision` accepts a branch, a tag or a full 40-character commit SHA. Branches
+# and tags are resolved when the Studio is created, so the Studio keeps the
+# commit it was created from even if the branch later moves. A full SHA pins the
+# Studio explicitly. `remote_config.commit_id` is read-only and reports the
+# resolved commit.
+#
+# Changing `remote_config` forces the Studio to be replaced.
+resource "seqera_studios" "from_git_pinned" {
+  name           = "studio-from-git-pinned"
+  description    = "Studio built from a pinned commit"
+  compute_env_id = seqera_compute_env.main.id
+  workspace_id   = seqera_workspace.main.id
+  auto_start     = false
+
+  remote_config = {
+    repository = "https://github.com/my-org/my-studio"
+    revision   = "3f2b8c1d9e4a7b6c5d0e1f2a3b4c5d6e7f8a9b0c"
+  }
+
+  # Anything set here takes precedence over `.seqera/studio-config.yaml`.
+  # Anything left unset (cpu, memory, lifespan_hours, ...) is taken from the
+  # repository, then from the compute environment or workspace defaults.
+  is_private = true
+
+  configuration = {
+    cpu            = 4
+    memory         = 16384
+    lifespan_hours = 12
+    environment = {
+      STUDIO_ENV = "production"
+    }
+  }
+
+  label_ids = [seqera_labels.team_datascience.id]
 }
 ```
 
@@ -354,9 +415,12 @@ Optional:
 
 Optional:
 
-- `commit_id` (String) Commit SHA the Studio was created from. Resolved by Platform. Requires replacement if changed.
 - `repository` (String) URL of the Git repository containing the Studio configuration. Not Null; Requires replacement if changed.
-- `revision` (String) Branch, tag or commit to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.
+- `revision` (String) Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision. Requires replacement if changed.
+
+Read-Only:
+
+- `commit_id` (String) Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
 
 
 <a id="nestedatt--allowed_users"></a>

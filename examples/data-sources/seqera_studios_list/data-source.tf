@@ -4,7 +4,8 @@ data "seqera_studios_list" "all" {
 }
 
 # Narrow the result server-side. Free text matches the Studio name and tool
-# image URL; `userId`, `computeEnvId` and `status` keywords are also supported.
+# image URL. Keywords such as `status:running` are also supported; see
+# data-source_filters.tf.
 data "seqera_studios_list" "jupyter" {
   workspace_id = seqera_workspace.main.id
   search       = "jupyter"
