@@ -710,12 +710,9 @@ func (s *Studios) ListMountedDataLinkIds(ctx context.Context, request operations
 
 }
 
-// ListStudioTemplatesDataSource - List available Studio templates
-// Lists the Studio templates configured on the platform. Each template is a
-// tool container image that can be used as a Studio's `data_studio_tool_url`.
-//
-// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
-func (s *Studios) ListStudioTemplatesDataSource(ctx context.Context, request operations.ListStudioTemplatesDataSourceRequest, opts ...operations.Option) (*operations.ListStudioTemplatesDataSourceResponse, error) {
+// ListDataStudioTemplates - List available Studio templates
+// Returns the list of available, configured Studio templates.
+func (s *Studios) ListDataStudioTemplates(ctx context.Context, request operations.ListDataStudioTemplatesRequest, opts ...operations.Option) (*operations.ListDataStudioTemplatesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -744,7 +741,7 @@ func (s *Studios) ListStudioTemplatesDataSource(ctx context.Context, request ope
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "ListStudioTemplatesDataSource",
+		OperationID:      "ListDataStudioTemplates",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -771,7 +768,7 @@ func (s *Studios) ListStudioTemplatesDataSource(ctx context.Context, request ope
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
 
@@ -879,7 +876,7 @@ func (s *Studios) ListStudioTemplatesDataSource(ctx context.Context, request ope
 		}
 	}
 
-	res := &operations.ListStudioTemplatesDataSourceResponse{
+	res := &operations.ListDataStudioTemplatesResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -894,12 +891,12 @@ func (s *Studios) ListStudioTemplatesDataSource(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out shared.ListStudioTemplatesDataSourceResponse
+			var out shared.DataStudioTemplatesListResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListStudioTemplatesDataSourceResponse = &out
+			res.DataStudioTemplatesListResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
