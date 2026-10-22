@@ -9578,11 +9578,9 @@ paths:
         - studios
   /studios/templates:
     get:
-      operationId: ListStudioTemplatesDataSource
+      operationId: ListDataStudioTemplates
       summary: List available Studio templates
-      description: |
-        Lists the Studio templates configured on the platform. Each template is a
-        tool container image that can be used as a Studio's `data_studio_tool_url`.
+      description: Returns the list of available, configured Studio templates.
       parameters:
         - name: workspaceId
           in: query
@@ -9590,43 +9588,43 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: workspaceId
+        - name: max
           in: query
-          description: Workspace numeric identifier
-          required: false
+          description: Pagination max results
           schema:
             type: integer
-            format: int64
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int32
       responses:
         '200':
-          description: OK
+          description: Ok - paginated list of available Studio templates.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListStudioTemplatesDataSourceResponse'
+                $ref: '#/components/schemas/DataStudioTemplatesListResponse'
         '400':
-          description: Bad request
+          description: BadRequest
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: Operation not allowed
+          description: Operation not allowed.
         '404':
-          description: Studios not enabled
+          description: NotFound, when the API is disabled for the workspace.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
-        - BearerAuth: []
       tags:
         - studios
-        - studios
-      x-speakeasy-entity-operation:
-        terraform-datasource: StudioTemplates#read
-      x-speakeasy-name-override: ListStudioTemplatesDataSource
   /studios/validate:
     get:
       operationId: ValidateDataStudioName
@@ -30415,10 +30413,8 @@ components:
 
 
 
-
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
-
 
 
 
@@ -30713,10 +30709,8 @@ components:
 
 
 
-
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
-
 
 
 
@@ -34260,48 +34254,6 @@ components:
         This data source returns all data links accessible to the authenticated user,
         with optional filtering by workspace. Use Terraform locals with for expressions
         to filter by provider type or name.
-    ListStudioTemplatesDataSourceResponse:
-      type: object
-      required:
-        - templates
-      properties:
-        workspaceId:
-          type: integer
-          format: int64
-          description: Workspace ID used for the query
-        totalSize:
-          type: integer
-          format: int64
-          description: Total number of templates available. The platform returns at most 100 templates per request.
-        templates:
-          type: array
-          description: List of Studio templates
-          items:
-            type: object
-            properties:
-              tool:
-                type: string
-                description: Tool the template provides (for example `jupyter`, `ride`, `vscode` or `xpra`; `custom` when not set)
-              repository:
-                type: string
-                description: Container image URL of the template. Use as `data_studio_tool_url` when creating a Studio.
-              status:
-                type: string
-                description: Support status of the template. One of `recommended`, `deprecated`, `experimental` or `unsupported`.
-              icon:
-                type: string
-                nullable: true
-                description: Icon identifier for the tool
-      x-speakeasy-entity: StudioTemplates
-      x-speakeasy-entity-description: |
-        Data source for listing the Studio templates available on the Seqera Platform.
-
-        Each template is a tool container image that can be used as the
-        `data_studio_tool_url` of a `seqera_studios` resource. Use Terraform locals
-        with for expressions to select a template by tool and support status.
-
-        The available templates are configured per Platform deployment, so the list
-        differs between Seqera Cloud and self-hosted installations.
   securitySchemes:
     BearerAuth:
       bearerFormat: jwt
