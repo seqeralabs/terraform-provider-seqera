@@ -35,21 +35,6 @@ actions:
   # ENTITY CONFIGURATION
   # ============================================================================
 
-  # Entity schema configuration for Studios
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]
-    update:
-      x-speakeasy-entity: Studios
-      x-speakeasy-entity-description: |
-        Studios is a unified platform where you can host a combination of
-        container images and compute environments for interactive analysis using
-        your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
-        or Xpra remote desktops. Each Studio session is an individual interactive
-        environment that encapsulates the live environment for dynamic data analysis.
-
-        Note:
-        On Seqera Cloud, the free tier permits only one running Studio session at a time.
-        To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
-
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
       x-speakeasy-entity: Studios
@@ -64,17 +49,27 @@ actions:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 
+  - target: $["components"]["schemas"]["DataStudioUpdateRequest"]
+    update:
+      x-speakeasy-entity: Studios
+
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios
       x-speakeasy-transform-from-api:
-        jq: '. + { id: .sessionId }'
+        jq: '. + { id: .sessionId, computeEnvId: .computeEnv.id }'
       properties:
         id:
           type: string
           description: Alias of `session_id` for Terraform convention.
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
+        # The response carries the compute environment as an object that is
+        # removed below. Surface its id so the attribute is populated on read,
+        # which makes it importable instead of forcing a replacement.
+        computeEnvId:
+          type: string
+          description: Identifier of the compute environment the Studio runs on.
 
   # ============================================================================
   # ENTITY OPERATIONS (CRUD)
@@ -97,6 +92,20 @@ actions:
         terraform-datasource: null
 
         terraform-resource: Studios#read
+
+  # UPDATE - PUT /studios/{sessionId}
+  # Platform only updates Studios that are stopped, errored or build-failed, the
+  # same condition as deleting one, so an update fails exactly when a replace
+  # would. Updating in place keeps the Studio's checkpoints and session ID, which
+  # a replace destroys. Attributes the update request cannot carry stay
+  # RequiresReplace.
+  - target: $["paths"]["/studios/{sessionId}"]["put"]
+    update:
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Studios#update
 
   # DELETE - DELETE /studios/{sessionId}
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
@@ -138,6 +147,10 @@ actions:
           - 400
 
   # Add custom error mapping for better user experience
+  - target: $.paths["/studios/{sessionId}"].put.responses["400"]
+    update:
+      description: "Bad Request - Studio must be stopped, errored, or build failed before it can be updated"
+
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
@@ -146,7 +159,9 @@ actions:
   # FIELD CONFIGURATION
   # ============================================================================
 
-  # Make configuration required (backend expects it)
+  # `configuration` is required: the backend dereferences it without a null
+  # check when mapping mounted data links (StudioDataLinkMappingService), so a
+  # create without it fails with a NullPointerException.
   # First remove the existing required array to avoid duplicates
   - target: $.components.schemas.DataStudioCreateRequest.required
     remove: true
@@ -155,9 +170,21 @@ actions:
     update:
       required:
         - computeEnvId
-        - dataStudioToolUrl
         - name
         - configuration
+
+  # Wrap the response's `configuration` in a nullable allOf so the generated
+  # refresh code allocates the nested object instead of assuming it already
+  # exists. Without this, importing a Studio (state holds just the IDs)
+  # dereferences a nil configuration and crashes the provider.
+  - target: $.components.schemas.DataStudioDto.properties.configuration
+    remove: true
+  - target: $.components.schemas.DataStudioDto.properties
+    update:
+      configuration:
+        allOf:
+          - $ref: "#/components/schemas/DataStudioConfiguration"
+        nullable: true
 
   # Make sessionId optional and configure as read-only
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
@@ -170,12 +197,55 @@ actions:
     update:
       x-speakeasy-param-optional: true
 
+  # Make workspaceId required on all Studio operations. Personal workspaces are
+  # not supported, and a required workspaceId on the read operation makes
+  # Speakeasy generate the composite import ID
+  # ({"session_id": "...", "workspace_id": N}). A bare-ID import would read
+  # without workspaceId, which cannot find a workspace Studio.
+  - target: $.paths["/studios"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/studios/{sessionId}"].get.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+  - target: $.paths["/studios/{sessionId}"].put.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  # Name the path parameter `id` so the composite import ID is
+  # {"id": "...", "workspace_id": N}, consistent with the `id` attribute.
+  - target: $.paths["/studios/{sessionId}"].get.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
+  - target: $.paths["/studios/{sessionId}"].delete.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
+  - target: $.paths["/studios/{sessionId}"].put.parameters[?(@.name == "sessionId")]
+    update:
+      x-speakeasy-name-override: id
+      description: Studio session identifier. Same value as `session_id`.
+
+  # `autoStart` only controls whether the Studio starts when it is created and
+  # is never returned by the API. Changing it must not replace an existing Studio.
+  - target: $.paths["/studios"].post.parameters[?(@.name == "autoStart")]
+    update:
+      x-speakeasy-param-force-new: false
+
   # Studios parameter configurations for GET and DELETE operations
   - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
 
   - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/studios/{sessionId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
 
@@ -213,12 +283,34 @@ actions:
   # DataStudioCreateRequest field descriptions
   - target: $.components.schemas.DataStudioCreateRequest.properties.labelIds
     update:
-      description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+      description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
   - target: $.components.schemas.DataStudioCreateRequest.properties.allowedUserIds
     update:
       description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
       maxItems: 1 # mirrors the platform cap; bump if the platform limit increases
       x-speakeasy-plan-validators: StudioAllowlistRequiresPrivateValidator
+  - target: $.components.schemas.DataStudioCreateRequest.properties.dataStudioToolUrl
+    update:
+      description: Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+      x-speakeasy-xor-with:
+        - remoteConfig
+  - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
+    update:
+      description: Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-xor-with:
+        - dataStudioToolUrl
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.repository
+    update:
+      description: URL of the Git repository containing the Studio configuration.
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.revision
+    update:
+      description: Branch, tag or full commit SHA to read the Studio configuration from. When omitted, Platform resolves the repository's default branch and reports the resolved revision.
+      x-speakeasy-param-optional: true
+  - target: $.components.schemas.StudioRemoteConfiguration.properties.commitId
+    update:
+      description: Commit SHA the Studio was created from. Resolved by Platform from `revision`; to pin a Studio to a commit, set `revision` to the full commit SHA.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioCreateRequest.properties.spot
     update:
       description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
@@ -226,14 +318,12 @@ actions:
   # DataStudioConfiguration field descriptions
   - target: $.components.schemas.DataStudioConfiguration.properties.memory
     update:
-      description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
+      description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
       example: 4096
-      default: 8192
   - target: $.components.schemas.DataStudioConfiguration.properties.cpu
     update:
-      description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
+      description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
       example: 2
-      default: 2
   - target: $.components.schemas.DataStudioConfiguration.properties.gpu
     update:
       description: Set to 0 to disable GPU or 1 to enable GPU.
@@ -243,6 +333,22 @@ actions:
     update:
       description: Maximum lifespan of the Studio session in hours
       example: 2
+  # An empty mount list is never sent (the SDK omits empty slices) and Platform
+  # treats an omitted list as "unchanged", so removing the last mounted data link
+  # in place would silently do nothing and fail apply with an inconsistent result.
+  # Any change to the mounts therefore replaces the Studio.
+  - target: $.components.schemas.DataStudioConfiguration.properties.mountDataV2
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.components.schemas.DataStudioConfiguration.properties.mountData
+    update:
+      x-speakeasy-param-force-new: true
+
+  # Platform rejects changing the conda environment on update ("only when a
+  # Studio is created"), so it must replace the Studio.
+  - target: $.components.schemas.DataStudioConfiguration.properties.condaEnvironment
+    update:
+      x-speakeasy-param-force-new: true
   - target: $.components.schemas.DataStudioConfiguration.properties.environment
     update:
       description: Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
@@ -312,15 +418,20 @@ actions:
   - target: $.components.schemas.DataStudioDto.properties.statusInfo
     remove: true
 
-  # Remove runtime build URL
+  # Expose image information as read-only attributes. For Studios built from a
+  # Git repository or conda environment these show what Wave produced.
   - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
-    remove: true
-
-  # Remove runtime image information
+    update:
+      description: URL of the Wave build for this Studio's image, if one was built.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioDto.properties.baseImage
-    remove: true
+    update:
+      description: Base container image the Studio is built from.
+      x-speakeasy-param-readonly: true
   - target: $.components.schemas.DataStudioDto.properties.customImage
-    remove: true
+    update:
+      description: Whether the Studio runs a custom image built by Wave.
+      x-speakeasy-param-readonly: true
 
   # Remove runtime mounted data links
   - target: $.components.schemas.DataStudioDto.properties.mountedDataLinks
@@ -332,12 +443,6 @@ actions:
 
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.DataStudioDto.properties.labels
-    remove: true
-
-  # Remove remoteConfig (not supported yet)
-  - target: $.components.schemas.DataStudioDto.properties.remoteConfig
-    remove: true
-  - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
     remove: true
 
   # `starred` is per-user UI state (whether the *calling* user has starred this

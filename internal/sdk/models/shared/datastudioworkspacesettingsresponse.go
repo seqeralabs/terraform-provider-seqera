@@ -8,7 +8,7 @@ type DataStudioWorkspaceSettingsResponse struct {
 	NameStrategy           *string `json:"nameStrategy,omitempty"`
 	OrgID                  *int64  `json:"orgId,omitempty"`
 	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
-	WspID                  *int64  `json:"wspId,omitempty"`
+	WorkspaceID            *int64  `json:"wspId,omitempty"`
 }
 
 func (d *DataStudioWorkspaceSettingsResponse) GetContainerRepository() *string {
@@ -46,9 +46,9 @@ func (d *DataStudioWorkspaceSettingsResponse) GetPrivateStudioByDefault() *bool 
 	return d.PrivateStudioByDefault
 }
 
-func (d *DataStudioWorkspaceSettingsResponse) GetWspID() *int64 {
+func (d *DataStudioWorkspaceSettingsResponse) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
-	return d.WspID
+	return d.WorkspaceID
 }

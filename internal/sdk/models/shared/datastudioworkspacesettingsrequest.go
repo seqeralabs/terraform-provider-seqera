@@ -38,14 +38,14 @@ func (e *NameStrategy) UnmarshalJSON(data []byte) error {
 }
 
 type DataStudioWorkspaceSettingsRequest struct {
-	// Container repository where Wave pushes images built for Studios in this workspace (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+	// Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
 	ContainerRepository *string `json:"containerRepository,omitempty"`
-	// Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan.
-	LifespanHours *int `json:"lifespanHours,omitempty"`
+	// Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
+	LifespanHours int `json:"lifespanHours"`
 	// Wave image naming strategy applied to container images built for Studios in this workspace. When null, the platform default strategy is used.
 	NameStrategy *NameStrategy `json:"nameStrategy,omitempty"`
 	// When true, newly created Studio sessions are private by default and only accessible to their creator.
-	PrivateStudioByDefault *bool `json:"privateStudioByDefault,omitempty"`
+	PrivateStudioByDefault bool `json:"privateStudioByDefault"`
 }
 
 func (d *DataStudioWorkspaceSettingsRequest) GetContainerRepository() *string {
@@ -55,9 +55,9 @@ func (d *DataStudioWorkspaceSettingsRequest) GetContainerRepository() *string {
 	return d.ContainerRepository
 }
 
-func (d *DataStudioWorkspaceSettingsRequest) GetLifespanHours() *int {
+func (d *DataStudioWorkspaceSettingsRequest) GetLifespanHours() int {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.LifespanHours
 }
@@ -69,9 +69,9 @@ func (d *DataStudioWorkspaceSettingsRequest) GetNameStrategy() *NameStrategy {
 	return d.NameStrategy
 }
 
-func (d *DataStudioWorkspaceSettingsRequest) GetPrivateStudioByDefault() *bool {
+func (d *DataStudioWorkspaceSettingsRequest) GetPrivateStudioByDefault() bool {
 	if d == nil {
-		return nil
+		return false
 	}
 	return d.PrivateStudioByDefault
 }

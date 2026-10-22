@@ -47,7 +47,10 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		} else {
 			r.AllowedUsers = nil
 		}
+		r.BaseImage = types.StringPointerValue(resp.BaseImage)
+		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
 		if resp.Configuration != nil {
+			r.Configuration = &tfTypes.DataStudioConfiguration{}
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
 			if resp.Configuration.Environment != nil {
@@ -85,10 +88,19 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		}
 		r.CustomIcon = types.StringPointerValue(resp.CustomIcon)
 		r.CustomIconID = types.StringPointerValue(resp.CustomIconID)
+		r.CustomImage = types.BoolPointerValue(resp.CustomImage)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.RemoteConfig{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.SSHDetails == nil {
 			r.SSHDetails = nil
@@ -99,6 +111,7 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.SSHDetails.Port = types.Int32Value(int32(resp.SSHDetails.Port))
 			r.SSHDetails.User = types.StringValue(resp.SSHDetails.User)
 		}
+		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -108,12 +121,9 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 func (r *StudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx context.Context) (*operations.CreateDataStudioRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	autoStart := new(bool)
 	if !r.AutoStart.IsUnknown() && !r.AutoStart.IsNull() {
 		*autoStart = r.AutoStart.ValueBool()
@@ -139,17 +149,14 @@ func (r *StudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx context.C
 func (r *StudiosResourceModel) ToOperationsDeleteDataStudioRequest(ctx context.Context) (*operations.DeleteDataStudioRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var sessionID string
-	sessionID = r.SessionID.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DeleteDataStudioRequest{
-		SessionID:   sessionID,
+		ID:          id,
 		WorkspaceID: workspaceID,
 	}
 
@@ -159,18 +166,40 @@ func (r *StudiosResourceModel) ToOperationsDeleteDataStudioRequest(ctx context.C
 func (r *StudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var sessionID string
-	sessionID = r.SessionID.ValueString()
+	var id string
+	id = r.ID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	out := operations.DescribeDataStudioRequest{
-		SessionID:   sessionID,
+		ID:          id,
 		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *StudiosResourceModel) ToOperationsUpdateDataStudioRequest(ctx context.Context) (*operations.UpdateDataStudioRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var id string
+	id = r.ID.ValueString()
+
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
+	dataStudioUpdateRequest, dataStudioUpdateRequestDiags := r.ToSharedDataStudioUpdateRequest(ctx)
+	diags.Append(dataStudioUpdateRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateDataStudioRequest{
+		ID:                      id,
+		WorkspaceID:             workspaceID,
+		DataStudioUpdateRequest: *dataStudioUpdateRequest,
 	}
 
 	return &out, diags
@@ -281,9 +310,12 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		customIconID = nil
 	}
-	var dataStudioToolURL string
-	dataStudioToolURL = r.DataStudioToolURL.ValueString()
-
+	dataStudioToolURL := new(string)
+	if !r.DataStudioToolURL.IsUnknown() && !r.DataStudioToolURL.IsNull() {
+		*dataStudioToolURL = r.DataStudioToolURL.ValueString()
+	} else {
+		dataStudioToolURL = nil
+	}
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -312,6 +344,29 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	var name string
 	name = r.Name.ValueString()
 
+	var remoteConfig *shared.RemoteConfig
+	if r.RemoteConfig != nil {
+		commitID := new(string)
+		if !r.RemoteConfig.CommitID.IsUnknown() && !r.RemoteConfig.CommitID.IsNull() {
+			*commitID = r.RemoteConfig.CommitID.ValueString()
+		} else {
+			commitID = nil
+		}
+		var repository string
+		repository = r.RemoteConfig.Repository.ValueString()
+
+		revision := new(string)
+		if !r.RemoteConfig.Revision.IsUnknown() && !r.RemoteConfig.Revision.IsNull() {
+			*revision = r.RemoteConfig.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		remoteConfig = &shared.RemoteConfig{
+			CommitID:   commitID,
+			Repository: repository,
+			Revision:   revision,
+		}
+	}
 	spot := new(bool)
 	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
 		*spot = r.Spot.ValueBool()
@@ -329,7 +384,141 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		IsPrivate:           isPrivate,
 		LabelIds:            labelIds,
 		Name:                name,
+		RemoteConfig:        remoteConfig,
 		Spot:                spot,
+	}
+
+	return &out, diags
+}
+
+func (r *StudiosResourceModel) ToSharedDataStudioUpdateRequest(ctx context.Context) (*shared.DataStudioUpdateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	computeEnvID := new(string)
+	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
+		*computeEnvID = r.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
+	var configuration *shared.DataStudioUpdateRequestConfiguration
+	condaEnvironment := new(string)
+	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+		*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
+	} else {
+		condaEnvironment = nil
+	}
+	cpu := new(int)
+	if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+		*cpu = int(r.Configuration.CPU.ValueInt32())
+	} else {
+		cpu = nil
+	}
+	var environment map[string]string
+	if r.Configuration.Environment != nil {
+		environment = make(map[string]string)
+		for environmentKey := range r.Configuration.Environment {
+			var environmentInst string
+			environmentInst = r.Configuration.Environment[environmentKey].ValueString()
+
+			environment[environmentKey] = environmentInst
+		}
+	}
+	gpu := new(int)
+	if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
+		*gpu = int(r.Configuration.Gpu.ValueInt32())
+	} else {
+		gpu = nil
+	}
+	lifespanHours := new(int)
+	if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+		*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
+	} else {
+		lifespanHours = nil
+	}
+	memory := new(int)
+	if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
+		*memory = int(r.Configuration.Memory.ValueInt32())
+	} else {
+		memory = nil
+	}
+	var mountData []string
+	if r.Configuration.MountData != nil {
+		mountData = make([]string, 0, len(r.Configuration.MountData))
+		for mountDataIndex := range r.Configuration.MountData {
+			mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
+		}
+	}
+	var mountDataV2 []shared.MountData
+	if r.Configuration.MountDataV2 != nil {
+		mountDataV2 = make([]shared.MountData, 0, len(r.Configuration.MountDataV2))
+		for mountDataV2Index := range r.Configuration.MountDataV2 {
+			dataLinkID := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsNull() {
+				*dataLinkID = r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.ValueString()
+			} else {
+				dataLinkID = nil
+			}
+			path := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].Path.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].Path.IsNull() {
+				*path = r.Configuration.MountDataV2[mountDataV2Index].Path.ValueString()
+			} else {
+				path = nil
+			}
+			mountDataV2 = append(mountDataV2, shared.MountData{
+				DataLinkID: dataLinkID,
+				Path:       path,
+			})
+		}
+	}
+	sshEnabled := new(bool)
+	if !r.Configuration.SSHEnabled.IsUnknown() && !r.Configuration.SSHEnabled.IsNull() {
+		*sshEnabled = r.Configuration.SSHEnabled.ValueBool()
+	} else {
+		sshEnabled = nil
+	}
+	configuration = &shared.DataStudioUpdateRequestConfiguration{
+		CondaEnvironment: condaEnvironment,
+		CPU:              cpu,
+		Environment:      environment,
+		Gpu:              gpu,
+		LifespanHours:    lifespanHours,
+		Memory:           memory,
+		MountData:        mountData,
+		MountDataV2:      mountDataV2,
+		SSHEnabled:       sshEnabled,
+	}
+	customIconID := new(string)
+	if !r.CustomIconID.IsUnknown() && !r.CustomIconID.IsNull() {
+		*customIconID = r.CustomIconID.ValueString()
+	} else {
+		customIconID = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	var labelIds []int64
+	if r.LabelIds != nil {
+		labelIds = make([]int64, 0, len(r.LabelIds))
+		for labelIdsIndex := range r.LabelIds {
+			labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
+		}
+	}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.DataStudioUpdateRequest{
+		ComputeEnvID:  computeEnvID,
+		Configuration: configuration,
+		CustomIconID:  customIconID,
+		Description:   description,
+		LabelIds:      labelIds,
+		Name:          name,
 	}
 
 	return &out, diags

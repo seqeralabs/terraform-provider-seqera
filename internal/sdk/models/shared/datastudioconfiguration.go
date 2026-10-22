@@ -8,16 +8,16 @@ import (
 
 type DataStudioConfiguration struct {
 	CondaEnvironment *string `json:"condaEnvironment,omitempty"`
-	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
-	CPU *int `default:"2" json:"cpu"`
+	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
+	CPU *int `json:"cpu,omitempty"`
 	// Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
 	Environment map[string]string `json:"environment,omitempty"`
 	// Set to 0 to disable GPU or 1 to enable GPU.
 	Gpu *int `default:"0" json:"gpu"`
 	// Maximum lifespan of the Studio session in hours
 	LifespanHours *int `json:"lifespanHours,omitempty"`
-	// Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
-	Memory *int `default:"8192" json:"memory"`
+	// Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. When omitted, the value from the Git repository's Studio configuration is used if `remote_config` is set, otherwise the compute environment default.
+	Memory *int `json:"memory,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	MountData   []string    `json:"mountData,omitempty"`
 	MountDataV2 []MountData `json:"mountDataV2,omitempty"`
