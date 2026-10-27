@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 24d3c94e94e1b4d4c442502d55967f0e
+  docChecksum: 1309134bb92bcae55e2e81e922e0bfd4
   docVersion: 1.244.0
   speakeasyVersion: 1.803.0
   generationVersion: 2.950.2
@@ -19,7 +19,6 @@ features:
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
-    getRequestBodies: 2.81.1
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
     groups: 2.81.3
@@ -238,6 +237,8 @@ trackedFiles:
     pristine_git_object: 6cdb08cff8d5e98c92183f577fc8fbe059d61ff7
   examples/resources/seqera_workspace_lineage_settings/import-by-string-id.tf: {}
   examples/resources/seqera_workspace_lineage_settings/import.sh: {}
+  examples/resources/seqera_workspace_studios_settings/import-by-string-id.tf: {}
+  examples/resources/seqera_workspace_studios_settings/import.sh: {}
   go.mod:
     id: c47645c391ad
     pristine_git_object: 0197aba33874c19d2d4a76f51d3c37929a4d811e
@@ -739,6 +740,7 @@ trackedFiles:
   internal/provider/types/pipeline_min_info_response_pipeline_version_min_info_response.go: {}
   internal/provider/types/pipeline_status_action_config.go: {}
   internal/provider/types/pipeline_status_action_request.go: {}
+  internal/provider/types/remote_config.go: {}
   internal/provider/types/s3_compatible_credentials.go:
     id: 94157ae642fe
     pristine_git_object: f79e0fa2b63cf39d5acad38ff304d48fbbfb3474
@@ -787,6 +789,8 @@ trackedFiles:
     pristine_git_object: ef08f3fe5d664b406cd4c6ef11d883cb611dfdb7
   internal/provider/workspacelineagesettings_resource.go: {}
   internal/provider/workspacelineagesettings_resource_sdk.go: {}
+  internal/provider/workspacestudiossettings_resource.go: {}
+  internal/provider/workspacestudiossettings_resource_sdk.go: {}
   internal/sdk/.gitattributes:
     id: 1ea4c4e0a39d
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
@@ -1473,12 +1477,8 @@ trackedFiles:
     id: 72992e5afa62
     pristine_git_object: 0684ca2f6f1d8645975c8457f0ece0f43a305a5a
   internal/sdk/models/operations/listdatastudiocompatiblecomputeenvs.go: {}
-  internal/sdk/models/operations/listdatastudios.go:
-    id: e12f2928c4e6
-    pristine_git_object: 7141d4cea687af606c76a9ed5b6d983bb92405db
-  internal/sdk/models/operations/listdatastudiotemplates.go:
-    id: 6a9827780c82
-    pristine_git_object: 791a70e3a33a9d4e2765923848d75227e9e99128
+  internal/sdk/models/operations/listdatastudios.go: {}
+  internal/sdk/models/operations/listdatastudiotemplates.go: {}
   internal/sdk/models/operations/listlabels.go:
     id: 3a8e187b93b0
     pristine_git_object: 4d72dcfee6a13b4e95767858eaeeccbde25eda54
@@ -2277,16 +2277,12 @@ trackedFiles:
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
     pristine_git_object: d8ced19804d75bccfa1010931fda452d4b6f3758
-  internal/sdk/models/shared/datastudiolistresponse.go:
-    id: b92abaffc65c
-    pristine_git_object: 5d5992d84b3fe1b8cb06bec38b88fc32531a73b9
+  internal/sdk/models/shared/datastudiolistresponse.go: {}
   internal/sdk/models/shared/datastudiologresponse.go: {}
   internal/sdk/models/shared/datastudiomountedlinksresponse.go:
     id: ff90555e64b3
     pristine_git_object: b46041a54199a0af8a5cfae971358bf95fd8e867
-  internal/sdk/models/shared/datastudioqueryattribute.go:
-    id: 3a013062da57
-    pristine_git_object: 3104ed27b944f32f90731e9cd17879d45737ebdb
+  internal/sdk/models/shared/datastudioqueryattribute.go: {}
   internal/sdk/models/shared/datastudiostartrequest.go:
     id: b85784e03a6b
     pristine_git_object: e375bdb5fe5a91b9eb237dc7a7206d475005ec74
@@ -2302,16 +2298,10 @@ trackedFiles:
   internal/sdk/models/shared/datastudiostopresponse.go:
     id: 479eccdf6c23
     pristine_git_object: a1f288cd99b5142ec5671be21b90d9dc6518ecae
-  internal/sdk/models/shared/datastudiotemplate.go:
-    id: ef4d0ab26db3
-    pristine_git_object: ec2bc5a9f65f4640b2469c2a5d1df28b62c87970
-  internal/sdk/models/shared/datastudiotemplateslistresponse.go:
-    id: 4349933d6e2b
-    pristine_git_object: 251edc9e8feb883f0826e0275ea45e7005d0bb43
+  internal/sdk/models/shared/datastudiotemplate.go: {}
+  internal/sdk/models/shared/datastudiotemplateslistresponse.go: {}
   internal/sdk/models/shared/datastudioupdaterequest.go: {}
-  internal/sdk/models/shared/datastudioversionstatus.go:
-    id: 138d7204dd92
-    pristine_git_object: dca98697457896ff486268fad3d1504f50ba18ff
+  internal/sdk/models/shared/datastudioversionstatus.go: {}
   internal/sdk/models/shared/datastudioworkspacesettingsrequest.go: {}
   internal/sdk/models/shared/datastudioworkspacesettingsresponse.go:
     id: 62bb5fd9d1a5
@@ -2845,6 +2835,7 @@ trackedFiles:
   internal/sdk/models/shared/studiocheckpointstatus.go:
     id: 9c451637265e
     pristine_git_object: e89a32e94505a1a8c19a8da814c7120319e1716a
+  internal/sdk/models/shared/studioremoteconfiguration.go: {}
   internal/sdk/models/shared/submitworkflowlaunchrequest.go:
     id: a88f0bc5be47
     pristine_git_object: f19fe72bd54181f07f5c691e10297908bdf4f749
@@ -5134,7 +5125,7 @@ examples:
           orgId: 259152
           workspaceId: 513742
       requestBody:
-        application/json: {}
+        application/json: {"containerRepository": "cr.seqera.io/my-org/studios", "lifespanHours": 259152, "privateStudioByDefault": false}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5346,11 +5337,14 @@ examples:
           application/json: {"message": "<value>"}
   CreateDataStudio:
     speakeasy-default-create-data-studio:
+      parameters:
+        query:
+          workspaceId: 214416
       requestBody:
         application/json: {"computeEnvId": "compute-env-id", "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "description": "Jupyter studio for data analysis and visualization", "name": "my-jupyter-studio"}
       responses:
         "200":
-          application/json: {"studio": {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "uneven-wallaby.com", "port": 691829, "user": "Hope86"}}}
+          application/json: {"studio": {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "uneven-wallaby.com", "port": 691829, "user": "Hope86"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}}
         "400":
           application/json: {"message": "<value>"}
   ListMountedDataLinkIds:
@@ -5371,9 +5365,11 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 421910
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "dapper-sushi.net", "port": 406928, "user": "Monty40"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "dapper-sushi.net", "port": 406928, "user": "Monty40"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "404":
           application/json: {"message": "<value>"}
   DeleteDataStudio:
@@ -5381,6 +5377,8 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 268110
       responses:
         "404":
           application/json: {"message": "<value>"}
@@ -5425,7 +5423,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "pleasing-detective.net", "port": 718113, "user": "Westley_Cruickshank"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "pleasing-detective.net", "port": 718113, "user": "Westley_Cruickshank"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "400":
           application/json: {"message": "<value>"}
   StartDataStudio:
@@ -5997,11 +5995,13 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          workspaceId: 589812
       requestBody:
         application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
       responses:
         "200":
-          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "impolite-markup.name", "port": 602573, "user": "Jacklyn.Bogisich78"}}
+          application/json: {"sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "impolite-markup.name", "port": 602573, "user": "Jacklyn.Bogisich78"}, "configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
         "400":
           application/json: {"message": "<value>"}
   ResolveCronExpression:
@@ -7048,6 +7048,20 @@ examples:
       requestBody:
         application/json: {"credentialsId": "<id>", "lineageDefault": false, "provisioningMode": "AUTO", "region": "<value>"}
       responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListStudiosDataSource:
+    speakeasy-default-list-studios-data-source:
+      responses:
+        "200":
+          application/json: {"workspaceId": 686200, "studios": [{}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListStudioTemplatesDataSource:
+    speakeasy-default-list-studio-templates-data-source:
+      responses:
+        "200":
+          application/json: {"templates": []}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

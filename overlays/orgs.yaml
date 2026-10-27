@@ -426,14 +426,6 @@ actions:
     update:
       x-speakeasy-param-optional: true
 
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
   # ============================================================================
   # CLEANUP - Remove unmanageable and internal fields
   # ============================================================================

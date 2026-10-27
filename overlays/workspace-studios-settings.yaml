@@ -1,0 +1,113 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Workspace Studios Settings Overlay
+  version: 0.0.0
+
+# ==============================================================================
+# WORKSPACE STUDIOS SETTINGS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Binds /orgs/{orgId}/workspaces/{workspaceId}/settings/studios to the
+# seqera_workspace_studios_settings resource. The API is an upsert: a single
+# PUT (204, no body) replaces all four settings, and GET reads them back. When
+# no settings are stored GET returns the platform defaults. There is no DELETE
+# endpoint, so destroying the resource only removes it from Terraform state.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+# resource "seqera_workspace_studios_settings" "main" {
+#   org_id                    = seqera_orgs.main.org_id
+#   workspace_id              = seqera_workspace.main.id
+#   lifespan_hours            = 8
+#   private_studio_by_default = true
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # OPERATION BINDINGS
+  # ============================================================================
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].put
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource:
+          - WorkspaceStudiosSettings#create
+          - WorkspaceStudiosSettings#update
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: WorkspaceStudiosSettings#read
+
+  # The spec declares a request body on this GET, which would make the SDK send
+  # one. It is a copy/paste error upstream.
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get.requestBody
+    remove: true
+
+  # ============================================================================
+  # PATH PARAMETERS: identity, replace on change
+  # ============================================================================
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].put.parameters[?(@.name=="orgId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get.parameters[?(@.name=="orgId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].put.parameters[?(@.name=="workspaceId")]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get.parameters[?(@.name=="workspaceId")]
+    update:
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # ENTITY BINDING
+  # ============================================================================
+  - target: $.components.schemas.DataStudioWorkspaceSettingsRequest
+    update:
+      x-speakeasy-entity: WorkspaceStudiosSettings
+      # The PUT replaces every setting, so lifespanHours and
+      # privateStudioByDefault must always be sent. Their platform defaults are
+      # deployment-specific, so no default is applied here.
+      required:
+        - lifespanHours
+        - privateStudioByDefault
+
+  - target: $.components.schemas.DataStudioWorkspaceSettingsResponse
+    update:
+      x-speakeasy-entity: WorkspaceStudiosSettings
+      x-speakeasy-entity-description: |
+        Manage the Studios settings of a Seqera workspace.
+
+        These settings apply to Studios created in the workspace: the maximum session lifespan, whether new Studios are private by default, and where Wave pushes the images it builds for Studios.
+
+        ~> **Note:** Platform has no way to delete these settings. Destroying this resource only removes it from Terraform state and leaves the workspace's current settings in place.
+
+        ~> **Note:** When `lifespan_hours` is not `0` (unlimited), Platform only accepts Studios in the workspace whose `configuration.lifespan_hours` equals this value.
+
+  # wspId is the workspace id in the response; expose it as workspace_id.
+  - target: $.components.schemas.DataStudioWorkspaceSettingsResponse.properties.wspId
+    update:
+      x-speakeasy-name-override: workspaceId
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+  # Platform rejects anything above 120 hours with a 400
+  # (WorkspaceController.updateDataStudioSettings).
+  - target: $.components.schemas.DataStudioWorkspaceSettingsRequest.properties.lifespanHours
+    update:
+      description: Maximum number of hours a Studio session may run before it is automatically stopped. Use 0 for unlimited lifespan, otherwise a value up to 120 (the limit enforced by Platform).
+      minimum: 0
+      maximum: 120
+  # Platform requires a bare registry path and rejects an http:// or https:// prefix.
+  - target: $.components.schemas.DataStudioWorkspaceSettingsRequest.properties.containerRepository
+    update:
+      description: Container repository where Wave pushes images built for Studios in this workspace, as a registry path without an `http://` or `https://` prefix (e.g. 'cr.seqera.io/my-org/studios'). When null, the platform default is used.
+      example: cr.seqera.io/my-org/studios
+      x-speakeasy-plan-validators: StudioContainerRepositoryValidator

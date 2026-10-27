@@ -9,16 +9,16 @@ import (
 
 type CreateDataStudioRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Optionally disable the Studio's automatic launch when it is created.
 	AutoStart *bool `queryParam:"style=form,explode=true,name=autoStart"`
 	// Create Studio request
 	DataStudioCreateRequest shared.DataStudioCreateRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateDataStudioRequest) GetWorkspaceID() *int64 {
+func (c *CreateDataStudioRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }
