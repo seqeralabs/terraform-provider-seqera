@@ -33,7 +33,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.43.0-RC4
+  version: 0.43.0-RC5
   additionalActions: []
   additionalDataSources:
     - datasource: custom_role_data.NewDataSource
