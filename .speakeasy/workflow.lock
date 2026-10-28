@@ -1,4 +1,4 @@
-speakeasyVersion: 1.803.0
+speakeasyVersion: 1.803.1
 sources:
     Seqera API:
         sourceNamespace: seqera-api
@@ -15,7 +15,7 @@ targets:
         sourceBlobDigest: sha256:50dea17e5fd49fd7e9aeb73419338e8bd6d01a65918d881bc33cb99940032588
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.803.0
+    speakeasyVersion: 1.803.1
     sources:
         Seqera API:
             inputs:
