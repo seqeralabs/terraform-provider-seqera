@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: c397087d887beb22a7a9b92b81e3e1cc
+  docChecksum: 663021a9e9753bc0ded6ace7b602e8d6
   docVersion: 1.257.0
   speakeasyVersion: 1.805.0
   generationVersion: 2.954.8
@@ -647,7 +647,6 @@ trackedFiles:
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
   internal/provider/types/bucket_action_config.go: {}
   internal/provider/types/bucket_action_request.go: {}
-  internal/provider/types/checkpoint_recovery.go: {}
   internal/provider/types/client_credentials.go: {}
   internal/provider/types/compute_config.go: {}
   internal/provider/types/compute_env_compute_config.go:
@@ -684,7 +683,6 @@ trackedFiles:
   internal/provider/types/data_studio_configuration.go:
     id: 25a48f67c4fb
     pristine_git_object: 5d2f7ae2dd4a0505cb1dbb535e1e664771fcc9ed
-  internal/provider/types/data_studio_dto_incomplete_checkpoint.go: {}
   internal/provider/types/describe_workflow_response_pipeline_info.go: {}
   internal/provider/types/forge_config.go:
     id: 59cc8ac25831
@@ -772,7 +770,6 @@ trackedFiles:
     id: 1bff7795c6ea
     pristine_git_object: 4103cca9f88b2e8e142ba6023efb0383d00b211a
   internal/provider/types/user_info.go: {}
-  internal/provider/types/verified_checkpoint.go: {}
   internal/provider/types/workflow_launch_request.go:
     id: af36165a8643
     pristine_git_object: 11b31ac54b41f1ff6655e5775689da9baec929f7
@@ -2288,7 +2285,6 @@ trackedFiles:
   internal/sdk/models/shared/datastudiodto.go:
     id: e7da86830815
     pristine_git_object: 31d366345ef0f16a13e69c4a39d3516b82279009
-  internal/sdk/models/shared/datastudiodtoincompletecheckpoint.go: {}
   internal/sdk/models/shared/datastudioimage.go: {}
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399

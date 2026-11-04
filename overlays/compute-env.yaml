@@ -1393,3 +1393,53 @@ actions:
     update:
       description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
       x-speakeasy-plan-validators: FusionVersionValidator
+
+  # ============================================================================
+  # NEXTFLOW GLOBAL CACHE - the Platform treats global_cache_enabled and
+  # global_cache_path as a single unit (each requires the other), requires the
+  # object storage scheme of the CE platform, and stores the path in canonical
+  # form (no repeated/trailing slashes). Reject violations at plan time so a
+  # non-canonical path cannot cause an inconsistent result after apply.
+  # ============================================================================
+  - target: $.components.schemas.AwsBatchConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AwsBatchConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.AwsCloudConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AwsCloudConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.AzBatchConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AzBatchConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathAzValidator
+  - target: $.components.schemas.AzCloudConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AzCloudConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathAzValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathGsValidator
+  - target: $.components.schemas.GoogleCloudConfig.properties.globalCacheEnabled
+    update:
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.GoogleCloudConfig.properties.globalCachePath
+    update:
+      x-speakeasy-plan-validators: GlobalCachePathGsValidator

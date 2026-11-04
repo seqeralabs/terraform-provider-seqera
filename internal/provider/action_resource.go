@@ -312,9 +312,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional:    true,
 						Description: `Fusion version to run this workflow with; must exist in the system catalog and be compatible with the deployed services. Applies only when the compute environment enables Wave and Fusion v2 and overrideNextflowFusionVersion is enabled. When null or empty, inherits the source pipeline or run, then the compute environment, then the catalog default.`,
 					},
-					"global_cache_path": schema.StringAttribute{
-						Computed: true,
-					},
 					"head_job_cpus": schema.Int32Attribute{
 						Optional:    true,
 						Description: `Head job CPU allocation`,

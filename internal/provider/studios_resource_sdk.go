@@ -31,7 +31,6 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.AllowedToConnect = types.BoolPointerValue(resp.AllowedToConnect)
 		if resp.AllowedUsers != nil {
 			r.AllowedUsers = []tfTypes.UserInfo{}
 
@@ -49,32 +48,6 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.AllowedUsers = nil
 		}
 		r.BaseImage = types.StringPointerValue(resp.BaseImage)
-		if resp.CheckpointRecovery == nil {
-			r.CheckpointRecovery = nil
-		} else {
-			r.CheckpointRecovery = &tfTypes.CheckpointRecovery{}
-			if resp.CheckpointRecovery.IncompleteCheckpoint == nil {
-				r.CheckpointRecovery.IncompleteCheckpoint = nil
-			} else {
-				r.CheckpointRecovery.IncompleteCheckpoint = &tfTypes.DataStudioDtoIncompleteCheckpoint{}
-				r.CheckpointRecovery.IncompleteCheckpoint.DateSaved = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CheckpointRecovery.IncompleteCheckpoint.DateSaved))
-				r.CheckpointRecovery.IncompleteCheckpoint.ID = types.Int64PointerValue(resp.CheckpointRecovery.IncompleteCheckpoint.ID)
-				r.CheckpointRecovery.IncompleteCheckpoint.Name = types.StringPointerValue(resp.CheckpointRecovery.IncompleteCheckpoint.Name)
-				if resp.CheckpointRecovery.IncompleteCheckpoint.Status != nil {
-					r.CheckpointRecovery.IncompleteCheckpoint.Status = types.StringValue(string(*resp.CheckpointRecovery.IncompleteCheckpoint.Status))
-				} else {
-					r.CheckpointRecovery.IncompleteCheckpoint.Status = types.StringNull()
-				}
-			}
-			if resp.CheckpointRecovery.VerifiedCheckpoint == nil {
-				r.CheckpointRecovery.VerifiedCheckpoint = nil
-			} else {
-				r.CheckpointRecovery.VerifiedCheckpoint = &tfTypes.VerifiedCheckpoint{}
-				r.CheckpointRecovery.VerifiedCheckpoint.DateSaved = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CheckpointRecovery.VerifiedCheckpoint.DateSaved))
-				r.CheckpointRecovery.VerifiedCheckpoint.ID = types.Int64PointerValue(resp.CheckpointRecovery.VerifiedCheckpoint.ID)
-				r.CheckpointRecovery.VerifiedCheckpoint.Name = types.StringPointerValue(resp.CheckpointRecovery.VerifiedCheckpoint.Name)
-			}
-		}
 		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
 		if resp.Configuration != nil {
 			r.Configuration = &tfTypes.DataStudioConfiguration{}

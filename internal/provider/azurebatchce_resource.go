@@ -474,6 +474,9 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
 						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.GlobalCacheEnabledValidator(),
+						},
 					},
 					"global_cache_path": schema.StringAttribute{
 						Computed: true,
@@ -486,6 +489,7 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthBetween(1, 255),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+							custom_stringvalidators.GlobalCachePathAzValidator(),
 						},
 					},
 					"head_job_cpus": schema.Int32Attribute{

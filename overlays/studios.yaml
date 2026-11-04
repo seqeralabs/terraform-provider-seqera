@@ -441,6 +441,17 @@ actions:
   - target: $.components.schemas.DataStudioDto.properties.progress
     remove: true
 
+  # Remove caller-dependent connect permission: the value depends on the user
+  # running Terraform (allow list membership), not on the studio itself
+  - target: $.components.schemas.DataStudioDto.properties.allowedToConnect
+    remove: true
+
+  # Remove runtime checkpoint recovery state: present only while the latest
+  # checkpoint is incomplete and changed by the recover/revert-recovery
+  # endpoints, which Terraform does not manage
+  - target: $.components.schemas.DataStudioDto.properties.checkpointRecovery
+    remove: true
+
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.DataStudioDto.properties.labels
     remove: true

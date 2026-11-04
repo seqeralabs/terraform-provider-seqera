@@ -367,8 +367,7 @@ type LaunchDbDto struct {
 	// Whether to enable Fusion snapshots, overriding the compute environment setting; null inherits the compute environment setting. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances.
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
-	FusionVersion   *string `json:"fusionVersion,omitempty"`
-	GlobalCachePath *string `json:"globalCachePath,omitempty"`
+	FusionVersion *string `json:"fusionVersion,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
@@ -460,13 +459,6 @@ func (l *LaunchDbDto) GetFusionVersion() *string {
 		return nil
 	}
 	return l.FusionVersion
-}
-
-func (l *LaunchDbDto) GetGlobalCachePath() *string {
-	if l == nil {
-		return nil
-	}
-	return l.GlobalCachePath
 }
 
 func (l *LaunchDbDto) GetHeadJobCpus() *int {
