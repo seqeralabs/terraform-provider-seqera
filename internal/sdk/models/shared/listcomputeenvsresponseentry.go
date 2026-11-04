@@ -67,6 +67,8 @@ func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
 }
 
 type ListComputeEnvsResponseEntry struct {
+	// Allowed S3 buckets (s3://bucket[/path]) configured on the compute environment. AWS-based compute environments only.
+	AllowBuckets   []string                               `json:"allowBuckets,omitempty"`
 	CredentialsID  *string                                `json:"credentialsId,omitempty"`
 	Description    *string                                `json:"description,omitempty"`
 	Fusion2Enabled *bool                                  `json:"fusion2Enabled,omitempty"`
@@ -96,6 +98,13 @@ func (l *ListComputeEnvsResponseEntry) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (l *ListComputeEnvsResponseEntry) GetAllowBuckets() []string {
+	if l == nil {
+		return nil
+	}
+	return l.AllowBuckets
 }
 
 func (l *ListComputeEnvsResponseEntry) GetCredentialsID() *string {

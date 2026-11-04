@@ -99,14 +99,17 @@ func (d *DataStudioStartRequestConfiguration) GetSSHEnabled() *bool {
 }
 
 type DataStudioStartRequest struct {
+	// Optional override of the users allowed to connect to this private studio. Users in it replace the existing allow list; an empty or omitted set leaves it untouched. The creator is included only if listed. Only the creator may change it, and only for a private studio, as privacy is set when the studio is created. Applied only if the studio actually starts, but an invalid list is rejected even when it does not.
 	AllowedUserIds []int64                              `json:"allowedUserIds,omitempty"`
 	Configuration  *DataStudioStartRequestConfiguration `json:"configuration,omitempty"`
 	// Avatar id (from POST /avatars) for the Studio session icon. Semantics on start: null = leave the existing icon unchanged (so a no-arg start from the connect/loading dialog doesn't touch it); empty string = clear the icon and delete the previous Avatar; non-empty = assign the referenced Avatar and delete the previous one.
 	CustomIconID *string `json:"customIconId,omitempty"`
 	Description  *string `json:"description,omitempty"`
-	LabelIds     []int64 `json:"labelIds,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	Spot         *bool   `json:"spot,omitempty"`
+	// When true, fails with 409 Conflict instead of skipping an incomplete latest checkpoint. Default: false.
+	FailOnIncompleteCheckpoint *bool   `json:"failOnIncompleteCheckpoint,omitempty"`
+	LabelIds                   []int64 `json:"labelIds,omitempty"`
+	Name                       *string `json:"name,omitempty"`
+	Spot                       *bool   `json:"spot,omitempty"`
 }
 
 func (d *DataStudioStartRequest) GetAllowedUserIds() []int64 {
@@ -135,6 +138,13 @@ func (d *DataStudioStartRequest) GetDescription() *string {
 		return nil
 	}
 	return d.Description
+}
+
+func (d *DataStudioStartRequest) GetFailOnIncompleteCheckpoint() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.FailOnIncompleteCheckpoint
 }
 
 func (d *DataStudioStartRequest) GetLabelIds() []int64 {

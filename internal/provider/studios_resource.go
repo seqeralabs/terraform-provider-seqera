@@ -55,10 +55,12 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
+	AllowedToConnect    types.Bool                       `tfsdk:"allowed_to_connect"`
 	AllowedUserIds      []types.Int64                    `tfsdk:"allowed_user_ids"`
 	AllowedUsers        []tfTypes.UserInfo               `tfsdk:"allowed_users"`
 	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
 	BaseImage           types.String                     `tfsdk:"base_image"`
+	CheckpointRecovery  *tfTypes.CheckpointRecovery      `tfsdk:"checkpoint_recovery"`
 	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
 	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
 	CustomIcon          types.String                     `tfsdk:"custom_icon"`
@@ -87,6 +89,10 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 		Attributes: map[string]schema.Attribute{
+			"allowed_to_connect": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Whether the current user may connect to this studio: always for a non-private studio, and only if they are on its allow list for a private one. Their workspace role must still allow connecting.`,
+			},
 			"allowed_user_ids": schema.ListAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
@@ -117,6 +123,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 					},
 				},
+				Description: `Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.`,
 			},
 			"auto_start": schema.BoolAttribute{
 				Optional:    true,
@@ -125,6 +132,45 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"base_image": schema.StringAttribute{
 				Computed:    true,
 				Description: `Base container image the Studio is built from.`,
+			},
+			"checkpoint_recovery": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"incomplete_checkpoint": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"date_saved": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"name": schema.StringAttribute{
+								Computed: true,
+							},
+							"status": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+						Description: `Incomplete latest checkpoint.`,
+					},
+					"verified_checkpoint": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"date_saved": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+						Description: `Latest finalized checkpoint, restored when ` + "`" + `incompleteCheckpoint` + "`" + ` is not recovered. Null when there is none.`,
+					},
+				},
+				Description: `Set when the latest checkpoint is incomplete and can be recovered before the next start.`,
 			},
 			"compute_env_id": schema.StringAttribute{
 				Required:    true,
@@ -292,7 +338,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Flag to denote if the studio is private to the users listed in 'allowedUserIds'. If 'true' and 'allowedUserIds' is empty or omitted, the studio is private to its creator. If omitted, the studio config and then the workspace default decide. 'false' with user ids in 'allowedUserIds' is rejected. Requires replacement if changed.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional:    true,

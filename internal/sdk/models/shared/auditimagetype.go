@@ -32,6 +32,8 @@ const (
 	AuditImageTypeDataLinkFile         AuditImageType = "data_link_file"
 	AuditImageTypeAction               AuditImageType = "action"
 	AuditImageTypeAgent                AuditImageType = "agent"
+	AuditImageTypeAgentRun             AuditImageType = "agent_run"
+	AuditImageTypeAiChatThread         AuditImageType = "ai_chat_thread"
 	AuditImageTypeWorkflow             AuditImageType = "workflow"
 	AuditImageTypeDataset              AuditImageType = "dataset"
 	AuditImageTypeDatasetVersion       AuditImageType = "dataset_version"
@@ -100,6 +102,10 @@ func (e *AuditImageType) UnmarshalJSON(data []byte) error {
 	case "action":
 		fallthrough
 	case "agent":
+		fallthrough
+	case "agent_run":
+		fallthrough
+	case "ai_chat_thread":
 		fallthrough
 	case "workflow":
 		fallthrough

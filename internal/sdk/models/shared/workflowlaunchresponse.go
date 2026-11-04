@@ -45,7 +45,9 @@ type WorkflowLaunchResponse struct {
 	// Fusion snapshots override this workflow was launched with; null means the compute environment setting applies. Used to pre-select the same value on relaunch/resume.
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
-	FusionVersion   *string `json:"fusionVersion,omitempty"`
+	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Nextflow Global Cache location this run was instrumented with. Null when the run was not instrumented, for any reason.
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
 	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
 	ID              *string `json:"id,omitempty"`
@@ -146,6 +148,13 @@ func (w *WorkflowLaunchResponse) GetFusionVersion() *string {
 		return nil
 	}
 	return w.FusionVersion
+}
+
+func (w *WorkflowLaunchResponse) GetGlobalCachePath() *string {
+	if w == nil {
+		return nil
+	}
+	return w.GlobalCachePath
 }
 
 func (w *WorkflowLaunchResponse) GetHeadJobCpus() *int {

@@ -13,6 +13,7 @@ type ActionLaunchRequest struct {
 	EntryName                     types.String   `tfsdk:"entry_name"`
 	FusionSnapshots               types.Bool     `tfsdk:"fusion_snapshots"`
 	FusionVersion                 types.String   `tfsdk:"fusion_version"`
+	GlobalCachePath               types.String   `tfsdk:"global_cache_path"`
 	HeadJobCpus                   types.Int32    `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb               types.Int32    `tfsdk:"head_job_memory_mb"`
 	ID                            types.String   `tfsdk:"id"`

@@ -8,6 +8,7 @@ import (
 
 type ComputeEnvComputeConfig struct {
 	AwsAccountID                   types.String                    `tfsdk:"aws_account_id"`
+	BucketPolicies                 map[string]types.String         `tfsdk:"bucket_policies"`
 	ComputeEnvID                   types.String                    `tfsdk:"compute_env_id"`
 	Config                         *ComputeConfig                  `tfsdk:"config"`
 	CredentialsID                  types.String                    `tfsdk:"credentials_id"`

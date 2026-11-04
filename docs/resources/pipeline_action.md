@@ -320,6 +320,7 @@ Nextflow 24.10.0 or later and the workflow outputs syntax.
 
 Read-Only:
 
+- `global_cache_path` (String)
 - `id` (String) Server-generated launch identifier; echoed back on Update.
 - `launch_container` (String)
 - `optimization_id` (String) Optimization profile ID

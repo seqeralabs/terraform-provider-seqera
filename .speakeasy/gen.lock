@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 16304f41acc33d95b947a08350786124
-  docVersion: 1.244.0
+  docChecksum: c13b9a738aa5bb1d238338659bb5149d
+  docVersion: 1.257.0
   speakeasyVersion: 1.805.0
   generationVersion: 2.954.8
   releaseVersion: 0.43.0
@@ -647,6 +647,8 @@ trackedFiles:
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
   internal/provider/types/bucket_action_config.go: {}
   internal/provider/types/bucket_action_request.go: {}
+  internal/provider/types/checkpoint_recovery.go: {}
+  internal/provider/types/client_credentials.go: {}
   internal/provider/types/compute_config.go: {}
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
@@ -682,6 +684,7 @@ trackedFiles:
   internal/provider/types/data_studio_configuration.go:
     id: 25a48f67c4fb
     pristine_git_object: 5d2f7ae2dd4a0505cb1dbb535e1e664771fcc9ed
+  internal/provider/types/data_studio_dto_incomplete_checkpoint.go: {}
   internal/provider/types/describe_workflow_response_pipeline_info.go: {}
   internal/provider/types/forge_config.go:
     id: 59cc8ac25831
@@ -769,6 +772,7 @@ trackedFiles:
     id: 1bff7795c6ea
     pristine_git_object: 4103cca9f88b2e8e142ba6023efb0383d00b211a
   internal/provider/types/user_info.go: {}
+  internal/provider/types/verified_checkpoint.go: {}
   internal/provider/types/workflow_launch_request.go:
     id: af36165a8643
     pristine_git_object: 11b31ac54b41f1ff6655e5775689da9baec929f7
@@ -953,6 +957,7 @@ trackedFiles:
   internal/sdk/models/operations/createcustomdatalink.go:
     id: 813b0db514bf
     pristine_git_object: 318791acec50191f33c3ebe519825e5b856e7acc
+  internal/sdk/models/operations/createdatalinkfolder.go: {}
   internal/sdk/models/operations/createdataset.go:
     id: 50e691a2dd23
     pristine_git_object: 3320f7853008313a78441546409fb3016ea03ebb
@@ -1155,6 +1160,7 @@ trackedFiles:
     pristine_git_object: 8171786108b1cd0aae18b59bf45ba2f54b097f6c
   internal/sdk/models/operations/deleterole.go: {}
   internal/sdk/models/operations/deleteserviceaccount.go: {}
+  internal/sdk/models/operations/deleteserviceaccountsshkey.go: {}
   internal/sdk/models/operations/deleteslurmce.go: {}
   internal/sdk/models/operations/deletesshcredentials.go:
     id: 0e155693ad42
@@ -1297,6 +1303,7 @@ trackedFiles:
     pristine_git_object: aa8639c7f649618febf4911e27d6e88b47376523
   internal/sdk/models/operations/describerole.go: {}
   internal/sdk/models/operations/describeserviceaccount.go: {}
+  internal/sdk/models/operations/describeserviceaccountsshkey.go: {}
   internal/sdk/models/operations/describeslurmce.go: {}
   internal/sdk/models/operations/describesshcredentials.go:
     id: a85ddc2ebbb2
@@ -1532,6 +1539,7 @@ trackedFiles:
   internal/sdk/models/operations/listrolepermissions.go: {}
   internal/sdk/models/operations/listroles.go: {}
   internal/sdk/models/operations/listserviceaccounts.go: {}
+  internal/sdk/models/operations/listserviceaccountsshkeys.go: {}
   internal/sdk/models/operations/listsshkeys.go: {}
   internal/sdk/models/operations/listuserrolesinorganization.go: {}
   internal/sdk/models/operations/listworkflows.go:
@@ -1568,6 +1576,7 @@ trackedFiles:
     pristine_git_object: d4edf6d8df286f6c314cab6d3453ff496ee9594b
   internal/sdk/models/operations/previewdataseturl.go: {}
   internal/sdk/models/operations/previewdatasetversion.go: {}
+  internal/sdk/models/operations/recoverdatastudiocheckpoint.go: {}
   internal/sdk/models/operations/refreshdatalinkcache.go:
     id: e2f0dd1e535d
     pristine_git_object: 5cf52ad86ca4262832f08f29635b8b52cb01ca72
@@ -1585,6 +1594,7 @@ trackedFiles:
     pristine_git_object: 2821276f9c80af8b6de0127c78c1eefccab887d7
   internal/sdk/models/operations/resolvecronexpression.go: {}
   internal/sdk/models/operations/resolvelineage.go: {}
+  internal/sdk/models/operations/revertdatastudiocheckpointrecovery.go: {}
   internal/sdk/models/operations/revokeorganizationscimtoken.go: {}
   internal/sdk/models/operations/rotateorganizationscimtoken.go: {}
   internal/sdk/models/operations/searchlineage.go: {}
@@ -1834,9 +1844,12 @@ trackedFiles:
   internal/sdk/models/shared/agentaction.go: {}
   internal/sdk/models/shared/agentactionrequest.go: {}
   internal/sdk/models/shared/agentdbdto.go: {}
+  internal/sdk/models/shared/agentimage.go: {}
   internal/sdk/models/shared/agentrundbdto.go: {}
+  internal/sdk/models/shared/agentrunimage.go: {}
   internal/sdk/models/shared/agentrunstatus.go: {}
   internal/sdk/models/shared/agentrunstatusresponse.go: {}
+  internal/sdk/models/shared/aichatthreadimage.go: {}
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -1920,6 +1933,7 @@ trackedFiles:
     id: 32a641528840
     pristine_git_object: ae25e05275b2d663fd39d3ae8c4c5eea0a4ab9c3
   internal/sdk/models/shared/changestatus.go: {}
+  internal/sdk/models/shared/clientcredentialsstatus.go: {}
   internal/sdk/models/shared/cloudpricemodel.go:
     id: 8e761866be31
     pristine_git_object: cc8547dd4b50e53073c00a2e2f3181a9fd23786a
@@ -2186,6 +2200,7 @@ trackedFiles:
   internal/sdk/models/shared/datalinkcontenttreelistresponse.go:
     id: fbc2b3100d55
     pristine_git_object: c175e1c31e9a4fa1c3ded2d1c633a8963bae645c
+  internal/sdk/models/shared/datalinkcreatefolderrequest.go: {}
   internal/sdk/models/shared/datalinkcreaterequest.go:
     id: b0cfaa0899cd
     pristine_git_object: e1bb14db818fe0e2ff79da687b26314663285d66
@@ -2273,6 +2288,7 @@ trackedFiles:
   internal/sdk/models/shared/datastudiodto.go:
     id: e7da86830815
     pristine_git_object: 31d366345ef0f16a13e69c4a39d3516b82279009
+  internal/sdk/models/shared/datastudiodtoincompletecheckpoint.go: {}
   internal/sdk/models/shared/datastudioimage.go: {}
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
@@ -2835,6 +2851,7 @@ trackedFiles:
   internal/sdk/models/shared/studiocheckpointstatus.go:
     id: 9c451637265e
     pristine_git_object: e89a32e94505a1a8c19a8da814c7120319e1716a
+  internal/sdk/models/shared/studiocheckpointstatusreason.go: {}
   internal/sdk/models/shared/studioremoteconfiguration.go: {}
   internal/sdk/models/shared/submitworkflowlaunchrequest.go:
     id: a88f0bc5be47
@@ -3046,6 +3063,9 @@ trackedFiles:
     id: 85e50271aee7
     pristine_git_object: f43f1d0001435091a6c4b982fce923c16604d4f5
   internal/sdk/models/shared/wfwavemeta.go: {}
+  internal/sdk/models/shared/workflowdaginput.go: {}
+  internal/sdk/models/shared/workflowdaginputedge.go: {}
+  internal/sdk/models/shared/workflowdaginputvertex.go: {}
   internal/sdk/models/shared/workflowdbdto.go:
     id: e47bdf72a96a
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
@@ -3323,6 +3343,9 @@ examples:
         application/json: {}
   ListLabels:
     speakeasy-default-list-labels:
+      parameters:
+        query:
+          search: "environment=production"
       responses:
         "200":
           application/json: {}
@@ -4377,6 +4400,9 @@ examples:
           application/json: {"message": "<value>"}
   ListDatasetsV2:
     speakeasy-default-list-datasets-v2:
+      parameters:
+        query:
+          search: "createdAfter:2026-01-01 label:production"
       responses:
         "200":
           application/json: {}
@@ -4419,6 +4445,9 @@ examples:
           application/json: {"message": "<value>"}
   ListLatestDatasetVersionsV2:
     speakeasy-default-list-latest-dataset-versions-v2:
+      parameters:
+        query:
+          search: "userName:alice updatedAfter:2026-01-01"
       responses:
         "200":
           application/json: {}
@@ -4662,6 +4691,9 @@ examples:
           application/json: {}
   ListManagedIdentities:
     speakeasy-default-list-managed-identities:
+      parameters:
+        query:
+          search: "platform:slurm-platform"
       responses:
         "200":
           application/json: {}
@@ -4884,6 +4916,8 @@ examples:
       parameters:
         path:
           orgId: 544458
+        query:
+          search: "userName:alice"
       responses:
         "200":
           application/json: {}
@@ -5330,6 +5364,9 @@ examples:
           application/json: {"message": "<value>"}
   ListDataStudios:
     speakeasy-default-list-data-studios:
+      parameters:
+        query:
+          search: "status:running label:production"
       responses:
         "200":
           application/json: {"studios": [{"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}], "totalSize": 186382}
@@ -5387,6 +5424,8 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          search: "status:finalized after:2026-01-01"
       responses:
         "200":
           application/json: {"checkpoints": [], "totalSize": 321212}
@@ -5437,6 +5476,8 @@ examples:
         "200":
           application/json: {"jobSubmitted": true, "sessionId": "<id>", "statusInfo": {}}
         "404":
+          application/json: {"message": "<value>"}
+        "400":
           application/json: {"message": "<value>"}
   StopDataStudio:
     speakeasy-default-stop-data-studio:
@@ -5576,6 +5617,12 @@ examples:
           application/json: {"message": "<value>"}
   ListWorkflows:
     speakeasy-default-list-workflows:
+      parameters:
+        query:
+          max: 50
+          offset: 0
+          search: "status:RUNNING after:2026-08-01 label:production"
+          includeTotalSize: true
       responses:
         "200":
           application/json: {}
@@ -5726,6 +5773,8 @@ examples:
       parameters:
         path:
           workflowId: "<id>"
+        query:
+          search: "COMPLETED"
       responses:
         "200":
           application/json: {}
@@ -5797,6 +5846,8 @@ examples:
       parameters:
         path:
           pipelineId: 328044
+        query:
+          search: "versionName:release-1"
       responses:
         "200":
           application/json: {}
@@ -6684,6 +6735,9 @@ examples:
           application/json: {"message": "<value>"}
   ListAgentRuns:
     speakeasy-default-list-agent-runs:
+      parameters:
+        query:
+          search: "status:running"
       responses:
         "200":
           application/json: {}
@@ -7062,6 +7116,71 @@ examples:
       responses:
         "200":
           application/json: {"templates": []}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateDataLinkFolder:
+    speakeasy-default-create-data-link-folder:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {"folderName": "<value>"}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListServiceAccountSshKeys:
+    speakeasy-default-list-service-account-ssh-keys:
+      parameters:
+        path:
+          orgId: 566413
+          saId: 528234
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteServiceAccountSshKey:
+    speakeasy-default-delete-service-account-ssh-key:
+      parameters:
+        path:
+          orgId: 168920
+          saId: 221686
+          keyId: 31569
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeServiceAccountSshKey:
+    speakeasy-default-describe-service-account-ssh-key:
+      parameters:
+        path:
+          orgId: 808540
+          saId: 256378
+          keyId: 386544
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  RecoverDataStudioCheckpoint:
+    speakeasy-default-recover-data-studio-checkpoint:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 652793
+      responses:
+        "200":
+          application/json: {"author": {}, "dateCreated": "2025-11-17T16:14:09.147Z", "dateSaved": "2025-01-20T05:02:35.136Z", "id": 928503, "name": "<value>", "path": "/opt/include", "status": "finalized"}
+        "400":
+          application/json: {"message": "<value>"}
+  RevertDataStudioCheckpointRecovery:
+    speakeasy-default-revert-data-studio-checkpoint-recovery:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 359264
+      responses:
+        "200":
+          application/json: {"author": {}, "dateCreated": "2026-06-29T20:51:07.326Z", "dateSaved": "2024-05-23T19:50:55.019Z", "id": 104874, "name": "<value>", "path": "/lost+found", "status": "empty"}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

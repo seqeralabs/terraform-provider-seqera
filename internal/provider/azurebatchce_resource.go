@@ -341,6 +341,15 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 											int32validator.Between(50, 4095),
 										},
 									},
+									"low_priority": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.`,
+									},
 									"vm_count": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -412,6 +421,15 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 											int32validator.Between(50, 4095),
 										},
 									},
+									"low_priority": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.`,
+									},
 									"vm_count": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -446,6 +464,28 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 						Validators: []validator.String{
 							custom_stringvalidators.FusionVersionValidator(),
+						},
+					},
+					"global_cache_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+					},
+					"global_cache_path": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthBetween(1, 255),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
 						},
 					},
 					"head_job_cpus": schema.Int32Attribute{
