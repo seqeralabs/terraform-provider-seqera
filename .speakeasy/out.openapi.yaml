@@ -19214,6 +19214,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -19222,6 +19223,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathS3Validator
         headJobCpus:
           type: integer
@@ -19476,6 +19478,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -19484,6 +19487,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathS3Validator
         gpuEnabled:
           type: boolean
@@ -19771,6 +19775,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -19779,6 +19784,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "az://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathAzValidator
         headJobCpus:
           description: Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
@@ -20007,6 +20013,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -20015,6 +20022,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "az://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathAzValidator
         instanceType:
           type: string
@@ -24208,6 +24216,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -24216,6 +24225,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "gs://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathGsValidator
         headJobCpus:
           type: integer
@@ -24422,6 +24432,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -24430,6 +24441,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "gs://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathGsValidator
         gpuEnabled:
           type: boolean
@@ -27851,6 +27863,7 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
           x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
@@ -27859,6 +27872,7 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
           x-speakeasy-plan-validators: GlobalCachePathS3Validator
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
