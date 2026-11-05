@@ -14,7 +14,7 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
-      backend_strategy   = "ECS"       # ECS (default) | EC2 | VM
+      backend_strategy   = "VM"        # VM only; ECS and EC2 are deprecated
       fusion_snapshots   = true        # resume interrupted tasks from a snapshot
       prediction_model   = "none"      # none | qr/v1 | qr/v2
 

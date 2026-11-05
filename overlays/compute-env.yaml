@@ -546,9 +546,12 @@ actions:
   # only by the Google backend. Same family of exception as backend_strategy /
   # fusion_snapshots: the shared SchedConfig can't drop a field for one
   # platform, so reject it at plan time on Seqera Compute too.
+  # The ECS and EC2 backends are deprecated, so only VM is accepted here too.
   - target: $.components.schemas.LocalComputeConfig
     update:
-      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
+      x-speakeasy-plan-validators:
+        - BackendStrategyVmOnlyValidator
+        - BillingExportTableGoogleOnlyValidator
 
   # ============================================================================
   # FIELD IGNORE - Cloud compute environments require fusion2 and wave to be
