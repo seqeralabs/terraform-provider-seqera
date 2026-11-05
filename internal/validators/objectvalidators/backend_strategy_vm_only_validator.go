@@ -47,7 +47,9 @@ func (v ObjectBackendStrategyVMOnlyValidator) ValidateObject(ctx context.Context
 			strategyPath,
 			"Unsupported backend_strategy",
 			"Intelligent Compute only supports the `VM` backend. The `ECS` and `EC2` backends are deprecated. "+
-				"Set `backend_strategy = \"VM\"` or omit it. Omitting it does not replace an existing compute environment.",
+				"Remove `backend_strategy` from the configuration. For an existing compute environment that uses `ECS` or `EC2`, "+
+				"removing it keeps the compute environment, but setting it to `\"VM\"` replaces it. "+
+				"A new compute environment can omit it or set `backend_strategy = \"VM\"`.",
 		)
 	}
 }

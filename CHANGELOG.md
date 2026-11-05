@@ -2,7 +2,7 @@
 
 BREAKING CHANGES:
 
-- **Intelligent Compute only accepts the `VM` backend.** The `ECS` and `EC2` backends are deprecated, and the API now accepts only `VM` (the default) when creating a compute environment. `seqera_aws_cloud_ce` and the `aws_cloud` and `local_platform` blocks of `seqera_compute_env` now reject any `intelligent_compute_config.backend_strategy` other than `VM` at plan time, as Azure and Google Cloud already did. Configurations that set `backend_strategy = "ECS"` or `"EC2"` must remove the attribute or set it to `"VM"`. Removing it does not replace an existing compute environment, because the attribute is computed and an unset value never forces replacement. The documentation and the Intelligent Compute example no longer present `ECS` as the default.
+- **Intelligent Compute only accepts the `VM` backend.** The `ECS` and `EC2` backends are deprecated, and the API now accepts only `VM` (the default) when creating a compute environment. `seqera_aws_cloud_ce` and the `aws_cloud` and `local_platform` blocks of `seqera_compute_env` now reject any `intelligent_compute_config.backend_strategy` other than `VM` at plan time, as Azure and Google Cloud already did. Configurations that set `backend_strategy = "ECS"` or `"EC2"` must remove the attribute. Removing it does not replace an existing compute environment, because the attribute is computed and an unset value never forces replacement. Setting it to `"VM"` on an existing `ECS` or `EC2` compute environment forces replacement, so only set `"VM"` explicitly on new compute environments. The documentation and the Intelligent Compute example no longer present `ECS` as the default.
 
 # v0.43.0
 
