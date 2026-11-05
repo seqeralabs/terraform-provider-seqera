@@ -1,0 +1,47 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Auth Overlay
+  version: 0.0.0
+
+# ==============================================================================
+# PROVIDER AUTHENTICATION OVERLAY
+# ==============================================================================
+#
+# Adds OAuth2 client credentials as an alternative to the personal access token
+# (BearerAuth) scheme, so the provider can authenticate as a service account.
+#
+# The platform's token endpoint (POST {server_url}/token) is hidden from the
+# published spec, so the scheme is declared here rather than upstream.
+#
+# TOKEN EXCHANGE:
+# - grant_type=client_credentials, client authenticated with HTTP Basic
+#   (service account clients are registered as client_secret_basic)
+# - Returns a JWT access token (expires_in: 3600, no refresh token), sent as
+#   `Authorization: Bearer` exactly like a personal access token
+#
+# ORDERING: keep this overlay LAST in .speakeasy/workflow.yaml. The wildcard
+# below only reaches operations that exist when it runs, so overlays that add
+# paths must be applied first.
+#
+# ==============================================================================
+
+actions:
+  - target: $.components.securitySchemes
+    update:
+      ClientCredentials:
+        type: oauth2
+        description: Service account client credentials, exchanged for a short-lived access token.
+        x-speakeasy-token-endpoint-authentication: client_secret_basic
+        flows:
+          clientCredentials:
+            tokenUrl: /token
+            scopes: {}
+
+  # Security is declared per operation, which overrides any root-level
+  # `security`. Append the alternative to every operation so each requirement
+  # list becomes [{BearerAuth: []}, {ClientCredentials: []}] (either satisfies
+  # it) and all stay identical for hoistGlobalSecurity.
+  - target: $.paths.*.*.security
+    update:
+      - ClientCredentials: []
