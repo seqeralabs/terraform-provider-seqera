@@ -19214,6 +19214,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -19221,6 +19223,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathS3Validator
         headJobCpus:
           type: integer
           format: int32
@@ -19474,6 +19478,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -19481,6 +19487,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathS3Validator
         gpuEnabled:
           type: boolean
           description: |
@@ -19767,6 +19775,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -19774,6 +19784,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "az://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathAzValidator
         headJobCpus:
           description: Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
           type: integer
@@ -20001,6 +20013,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -20008,6 +20022,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "az://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathAzValidator
         instanceType:
           type: string
           description: |
@@ -22332,9 +22348,6 @@ components:
     DataStudioDto:
       type: object
       properties:
-        allowedToConnect:
-          description: 'Whether the current user may connect to this studio: always for a non-private studio, and only if they are on its allow list for a private one. Their workspace role must still allow connecting.'
-          type: boolean
         allowedUsers:
           description: Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.
           type: array
@@ -22346,11 +22359,6 @@ components:
           nullable: true
           description: Base container image the Studio is built from.
           x-speakeasy-param-readonly: true
-        checkpointRecovery:
-          description: Set when the latest checkpoint is incomplete and can be recovered before the next start.
-          allOf:
-            - $ref: '#/components/schemas/DataStudioDto.CheckpointRecovery'
-          nullable: true
         customIcon:
           description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
           type: string
@@ -24208,6 +24216,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -24215,6 +24225,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "gs://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathGsValidator
         headJobCpus:
           type: integer
           format: int32
@@ -24420,6 +24432,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -24427,6 +24441,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "gs://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathGsValidator
         gpuEnabled:
           type: boolean
           description: |
@@ -25198,8 +25214,6 @@ components:
           description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
           type: string
           nullable: true
-        globalCachePath:
-          type: string
         headJobCpus:
           type: integer
           format: int32
@@ -27849,6 +27863,8 @@ components:
           description: Whether the Nextflow Global Cache is enabled for this compute environment
           type: boolean
           nullable: true
+          example: true
+          x-speakeasy-plan-validators: GlobalCacheEnabledValidator
         globalCachePath:
           description: Object storage folder used as the Nextflow Global Cache location
           type: string
@@ -27856,6 +27872,8 @@ components:
           minLength: 1
           nullable: true
           pattern: ^[A-Za-z0-9._~:/\-]+$
+          example: "s3://my-nextflow-bucket/cache"
+          x-speakeasy-plan-validators: GlobalCachePathS3Validator
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:

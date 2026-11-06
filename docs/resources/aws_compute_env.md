@@ -99,8 +99,8 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     }
     fusion_snapshots                 = false
     fusion_version                   = "...my_fusion_version..."
-    global_cache_enabled             = false
-    global_cache_path                = "...my_global_cache_path..."
+    global_cache_enabled             = true
+    global_cache_path                = "s3://my-nextflow-bucket/cache"
     head_job_cpus                    = 4
     head_job_memory_mb               = 8192
     head_job_role                    = "arn:aws:iam::123456789012:role/BatchHeadJobRole"

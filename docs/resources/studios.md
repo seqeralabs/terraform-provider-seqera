@@ -376,10 +376,8 @@ resource "seqera_studios" "rstudio_regional_data" {
 
 ### Read-Only
 
-- `allowed_to_connect` (Boolean) Whether the current user may connect to this studio: always for a non-private studio, and only if they are on its allow list for a private one. Their workspace role must still allow connecting.
 - `allowed_users` (Attributes List) Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio. (see [below for nested schema](#nestedatt--allowed_users))
 - `base_image` (String) Base container image the Studio is built from.
-- `checkpoint_recovery` (Attributes) Set when the latest checkpoint is incomplete and can be recovered before the next start. (see [below for nested schema](#nestedatt--checkpoint_recovery))
 - `custom_icon` (String) Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 - `custom_image` (Boolean) Whether the Studio runs a custom image built by Wave.
 - `id` (String) Studio session identifier. Same value as `session_id`.
@@ -434,36 +432,6 @@ Read-Only:
 - `email` (String)
 - `id` (Number)
 - `user_name` (String)
-
-
-<a id="nestedatt--checkpoint_recovery"></a>
-### Nested Schema for `checkpoint_recovery`
-
-Read-Only:
-
-- `incomplete_checkpoint` (Attributes) Incomplete latest checkpoint. (see [below for nested schema](#nestedatt--checkpoint_recovery--incomplete_checkpoint))
-- `verified_checkpoint` (Attributes) Latest finalized checkpoint, restored when `incompleteCheckpoint` is not recovered. Null when there is none. (see [below for nested schema](#nestedatt--checkpoint_recovery--verified_checkpoint))
-
-<a id="nestedatt--checkpoint_recovery--incomplete_checkpoint"></a>
-### Nested Schema for `checkpoint_recovery.incomplete_checkpoint`
-
-Read-Only:
-
-- `date_saved` (String)
-- `id` (Number)
-- `name` (String)
-- `status` (String)
-
-
-<a id="nestedatt--checkpoint_recovery--verified_checkpoint"></a>
-### Nested Schema for `checkpoint_recovery.verified_checkpoint`
-
-Read-Only:
-
-- `date_saved` (String)
-- `id` (Number)
-- `name` (String)
-
 
 
 <a id="nestedatt--ssh_details"></a>

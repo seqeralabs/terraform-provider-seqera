@@ -33,6 +33,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -211,6 +212,9 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
 						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.GlobalCacheEnabledValidator(),
+						},
 					},
 					"global_cache_path": schema.StringAttribute{
 						Computed: true,
@@ -223,6 +227,7 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthBetween(1, 255),
 							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+							custom_stringvalidators.GlobalCachePathAzValidator(),
 						},
 					},
 					"instance_type": schema.StringAttribute{
