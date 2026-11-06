@@ -1508,11 +1508,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										MarkdownDescription: `Subnets to launch compute instances into. The first subnet is used for` + "\n" +
-											`basic placement; Seqera Intelligent Compute may use all of them. Replaces` + "\n" +
+										MarkdownDescription: `Subnets to launch compute instances into. The Nextflow head instance tries` + "\n" +
+											`them in order, moving to the next one when a subnet or its Availability Zone` + "\n" +
+											`has no capacity, so list subnets in different zones for resilience. With` + "\n" +
+											`Seqera Intelligent Compute, task instances can use any of them. Replaces` + "\n" +
 											`the deprecated single-value ` + "`" + `subnet_id` + "`" + `, and is mutually exclusive with it.` + "\n" +
-											`All subnets must be in the VPC given by ` + "`" + `vpc_id` + "`" + ` (when set) and in the same` + "\n" +
-											`region as the compute environment.` + "\n" +
+											`All subnets must be in one VPC (the one given by ` + "`" + `vpc_id` + "`" + `, when set) and in` + "\n" +
+											`the same region as the compute environment.` + "\n" +
 											`Requires replacement if changed.`,
 									},
 									"vpc_id": schema.StringAttribute{

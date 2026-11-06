@@ -93,11 +93,13 @@ type AwsCloudConfig struct {
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	SubnetID *string `json:"subnetId,omitempty"`
-	// Subnets to launch compute instances into. The first subnet is used for
-	// basic placement; Seqera Intelligent Compute may use all of them. Replaces
+	// Subnets to launch compute instances into. The Nextflow head instance tries
+	// them in order, moving to the next one when a subnet or its Availability Zone
+	// has no capacity, so list subnets in different zones for resilience. With
+	// Seqera Intelligent Compute, task instances can use any of them. Replaces
 	// the deprecated single-value `subnet_id`, and is mutually exclusive with it.
-	// All subnets must be in the VPC given by `vpc_id` (when set) and in the same
-	// region as the compute environment.
+	// All subnets must be in one VPC (the one given by `vpc_id`, when set) and in
+	// the same region as the compute environment.
 	//
 	SubnetIds []string `json:"subnetIds,omitempty"`
 	// VPC used to scope subnet and security-group selection. Determines the
