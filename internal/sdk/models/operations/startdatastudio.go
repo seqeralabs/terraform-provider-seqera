@@ -46,7 +46,7 @@ type StartDataStudioResponse struct {
 	RawResponse *http.Response
 	// OK
 	DataStudioStartResponse *shared.DataStudioStartResponse
-	// NotFound, when the Studio is not found or when the API is disabled for the workspace.
+	// BadRequest, e.g. when the requested allow list is invalid or is changed by someone other than the creator.
 	ErrorResponse *shared.ErrorResponse
 }
 

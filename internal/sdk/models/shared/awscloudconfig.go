@@ -34,6 +34,10 @@ type AwsCloudConfig struct {
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -182,6 +186,20 @@ func (a *AwsCloudConfig) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AwsCloudConfig) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AwsCloudConfig) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AwsCloudConfig) GetGpuEnabled() *bool {

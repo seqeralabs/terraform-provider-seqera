@@ -16,7 +16,7 @@ type ListPipelineVersionsRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Filter search parameter
+	// Optional pipeline-version search query. Free text matches the version name. Supports the `versionId`, `versionName`, and `versionHash` keywords.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Set to true to retrieve published versions, false to fetch draft versions
 	IsPublished *bool `queryParam:"style=form,explode=true,name=isPublished"`

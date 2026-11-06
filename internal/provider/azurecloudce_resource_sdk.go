@@ -39,6 +39,8 @@ func (r *AzureCloudCEResourceModel) RefreshFromSharedAzureCloudCEComputeConfig(c
 			r.Config.Environment = nil
 		}
 		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
+		r.Config.GlobalCacheEnabled = types.BoolPointerValue(resp.Config.GlobalCacheEnabled)
+		r.Config.GlobalCachePath = types.StringPointerValue(resp.Config.GlobalCachePath)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
 		if resp.Config.IntelligentComputeConfig == nil {
 			r.Config.IntelligentComputeConfig = nil
@@ -350,6 +352,18 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 	} else {
 		fusionVersion = nil
 	}
+	globalCacheEnabled := new(bool)
+	if !r.Config.GlobalCacheEnabled.IsUnknown() && !r.Config.GlobalCacheEnabled.IsNull() {
+		*globalCacheEnabled = r.Config.GlobalCacheEnabled.ValueBool()
+	} else {
+		globalCacheEnabled = nil
+	}
+	globalCachePath := new(string)
+	if !r.Config.GlobalCachePath.IsUnknown() && !r.Config.GlobalCachePath.IsNull() {
+		*globalCachePath = r.Config.GlobalCachePath.ValueString()
+	} else {
+		globalCachePath = nil
+	}
 	instanceType := new(string)
 	if !r.Config.InstanceType.IsUnknown() && !r.Config.InstanceType.IsNull() {
 		*instanceType = r.Config.InstanceType.ValueString()
@@ -549,6 +563,8 @@ func (r *AzureCloudCEResourceModel) ToSharedAzureCloudCEComputeConfigInput(ctx c
 		DataCollectionRuleID:          dataCollectionRuleID,
 		Environment:                   environment,
 		FusionVersion:                 fusionVersion,
+		GlobalCacheEnabled:            globalCacheEnabled,
+		GlobalCachePath:               globalCachePath,
 		InstanceType:                  instanceType,
 		KeyVaultURL:                   keyVaultURL,
 		LogTableName:                  logTableName,

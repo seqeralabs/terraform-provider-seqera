@@ -65,6 +65,7 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 				r.Config.Forge.HeadPool = &tfTypes.AzBatchPoolConfig{}
 				r.Config.Forge.HeadPool.AutoScale = types.BoolPointerValue(resp.Config.Forge.HeadPool.AutoScale)
 				r.Config.Forge.HeadPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.HeadPool.BootDiskSizeGB))
+				r.Config.Forge.HeadPool.LowPriority = types.BoolPointerValue(resp.Config.Forge.HeadPool.LowPriority)
 				r.Config.Forge.HeadPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.HeadPool.VMCount))
 				r.Config.Forge.HeadPool.VMType = types.StringPointerValue(resp.Config.Forge.HeadPool.VMType)
 			}
@@ -76,11 +77,14 @@ func (r *AzureBatchCEResourceModel) RefreshFromSharedAzureBatchCEComputeConfig(c
 				r.Config.Forge.WorkerPool = &tfTypes.AzBatchPoolConfig{}
 				r.Config.Forge.WorkerPool.AutoScale = types.BoolPointerValue(resp.Config.Forge.WorkerPool.AutoScale)
 				r.Config.Forge.WorkerPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.WorkerPool.BootDiskSizeGB))
+				r.Config.Forge.WorkerPool.LowPriority = types.BoolPointerValue(resp.Config.Forge.WorkerPool.LowPriority)
 				r.Config.Forge.WorkerPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.WorkerPool.VMCount))
 				r.Config.Forge.WorkerPool.VMType = types.StringPointerValue(resp.Config.Forge.WorkerPool.VMType)
 			}
 		}
 		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
+		r.Config.GlobalCacheEnabled = types.BoolPointerValue(resp.Config.GlobalCacheEnabled)
+		r.Config.GlobalCachePath = types.StringPointerValue(resp.Config.GlobalCachePath)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
 		r.Config.HeadPool = types.StringPointerValue(resp.Config.HeadPool)
@@ -407,6 +411,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			} else {
 				bootDiskSizeGb1 = nil
 			}
+			lowPriority := new(bool)
+			if !r.Config.Forge.HeadPool.LowPriority.IsUnknown() && !r.Config.Forge.HeadPool.LowPriority.IsNull() {
+				*lowPriority = r.Config.Forge.HeadPool.LowPriority.ValueBool()
+			} else {
+				lowPriority = nil
+			}
 			vmCount := new(int)
 			if !r.Config.Forge.HeadPool.VMCount.IsUnknown() && !r.Config.Forge.HeadPool.VMCount.IsNull() {
 				*vmCount = int(r.Config.Forge.HeadPool.VMCount.ValueInt32())
@@ -422,6 +432,7 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			headPool = &shared.AzBatchPoolConfig{
 				AutoScale:      autoScale1,
 				BootDiskSizeGB: bootDiskSizeGb1,
+				LowPriority:    lowPriority,
 				VMCount:        vmCount,
 				VMType:         vmType,
 			}
@@ -449,6 +460,12 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			} else {
 				bootDiskSizeGb2 = nil
 			}
+			lowPriority1 := new(bool)
+			if !r.Config.Forge.WorkerPool.LowPriority.IsUnknown() && !r.Config.Forge.WorkerPool.LowPriority.IsNull() {
+				*lowPriority1 = r.Config.Forge.WorkerPool.LowPriority.ValueBool()
+			} else {
+				lowPriority1 = nil
+			}
 			vmCount2 := new(int)
 			if !r.Config.Forge.WorkerPool.VMCount.IsUnknown() && !r.Config.Forge.WorkerPool.VMCount.IsNull() {
 				*vmCount2 = int(r.Config.Forge.WorkerPool.VMCount.ValueInt32())
@@ -464,6 +481,7 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 			workerPool = &shared.AzBatchPoolConfig{
 				AutoScale:      autoScale2,
 				BootDiskSizeGB: bootDiskSizeGb2,
+				LowPriority:    lowPriority1,
 				VMCount:        vmCount2,
 				VMType:         vmType2,
 			}
@@ -491,6 +509,18 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		*fusionVersion = r.Config.FusionVersion.ValueString()
 	} else {
 		fusionVersion = nil
+	}
+	globalCacheEnabled := new(bool)
+	if !r.Config.GlobalCacheEnabled.IsUnknown() && !r.Config.GlobalCacheEnabled.IsNull() {
+		*globalCacheEnabled = r.Config.GlobalCacheEnabled.ValueBool()
+	} else {
+		globalCacheEnabled = nil
+	}
+	globalCachePath := new(string)
+	if !r.Config.GlobalCachePath.IsUnknown() && !r.Config.GlobalCachePath.IsNull() {
+		*globalCachePath = r.Config.GlobalCachePath.ValueString()
+	} else {
+		globalCachePath = nil
 	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
@@ -619,6 +649,8 @@ func (r *AzureBatchCEResourceModel) ToSharedAzureBatchCEComputeConfigInput(ctx c
 		Forge:                         forge,
 		EnableFusion:                  enableFusion,
 		FusionVersion:                 fusionVersion,
+		GlobalCacheEnabled:            globalCacheEnabled,
+		GlobalCachePath:               globalCachePath,
 		HeadJobCpus:                   headJobCpus,
 		HeadJobMemoryMb:               headJobMemoryMb,
 		HeadPool:                      headPool1,

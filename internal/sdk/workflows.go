@@ -33,7 +33,7 @@ func newWorkflows(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hoo
 }
 
 // ListWorkflows - List workflows
-// Lists all workflow records, enriched with `attributes`. Append `?workspaceId` to list workflow records in a workspace context.
+// Lists workflow records in a user context, enriched with `attributes`. Append `?workspaceId` to list workflow records in a workspace context. Results are paginated; use `max` and `offset` to retrieve additional pages.
 func (s *Workflows) ListWorkflows(ctx context.Context, request operations.ListWorkflowsRequest, opts ...operations.Option) (*operations.ListWorkflowsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

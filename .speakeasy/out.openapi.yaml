@@ -6,7 +6,7 @@ info:
   description: |
     The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
   title: Seqera API
-  version: 1.244.0
+  version: 1.257.0
 tags:
   - name: actions
     description: Pipeline actions
@@ -818,7 +818,7 @@ paths:
             format: int64
         - name: search
           in: query
-          description: Filter by agent name
+          description: Optional search of agent names.
           schema:
             type: string
         - name: max
@@ -982,9 +982,10 @@ paths:
             format: int64
         - name: search
           in: query
-          description: Optional search criteria, allowing the keywords `status` (`pending`, `running`, `completed`, `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId` and `serviceAccountName`. Free text is not supported.
+          description: Optional agent-run search query. Supports the `status` (`pending`, `running`, `completed`, or `failed`), `agentConfigId`, `workflowId`, `sourcePipelineId`, `serviceAccountId`, and `serviceAccountName` keywords. Free text is not supported.
           schema:
             type: string
+            example: status:running
         - name: max
           in: query
           description: Pagination max results
@@ -2639,7 +2640,7 @@ paths:
             type: string
         - name: search
           in: query
-          description: Prefix search of data-link content
+          description: Optional prefix search of data-link content.
           schema:
             type: string
         - name: nextPageToken
@@ -2709,7 +2710,7 @@ paths:
             type: string
         - name: search
           in: query
-          description: Prefix search of data-link content
+          description: Optional prefix search of data-link content.
           schema:
             type: string
         - name: nextPageToken
@@ -2904,6 +2905,56 @@ paths:
           description: Operation not allowed
         '404':
           description: NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - data-links
+  /data-links/{dataLinkId}/folder:
+    post:
+      operationId: CreateDataLinkFolder
+      summary: Create data-link folder
+      description: Creates an empty folder named `folderName` inside `dirPath` (or the root) of the data-link associated with the given `dataLinkId`. Creating a folder that already exists has no effect.
+      parameters:
+        - name: dataLinkId
+          in: path
+          description: Data-link string identifier
+          required: true
+          schema:
+            type: string
+        - name: credentialsId
+          in: query
+          description: Credentials string identifier
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataLinkCreateFolderRequest'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: BadRequest — invalid folder name, public data-link, or credentials without write access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found
           content:
             application/json:
               schema:
@@ -3351,9 +3402,10 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Search query
+          description: Optional dataset search query. Free text matches the dataset name. Supports the `userName`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `usedAfter`, `usedBefore`, `label`, and `visibility` keywords. A `visibility` search keyword takes precedence over the separate `visibility` query parameter.
           schema:
             type: string
+            example: createdAfter:2026-01-01 label:production
         - name: sortBy
           in: query
           description: Sort field supports (`name`, `modified`), defaults to `name`
@@ -3706,9 +3758,10 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Search query
+          description: Optional dataset-version search query. Free text matches the dataset name. Supports the `userName`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `usedAfter`, and `usedBefore` keywords. The `label` and `visibility` keywords supported by dataset search are not supported for dataset versions.
           schema:
             type: string
+            example: userName:alice updatedAfter:2026-01-01
       responses:
         '200':
           description: OK
@@ -4381,9 +4434,10 @@ paths:
             format: int64
         - name: search
           in: query
-          description: 'Optional search criteria, allowing free text search on name and keywords: `platform:`'
+          description: Optional managed-identity search query. Free text matches the identity name. Supports the `platform` keyword.
           schema:
             type: string
+            example: platform:slurm-platform
             nullable: true
         - name: max
           in: query
@@ -4817,9 +4871,10 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional case-insensitive search of label names. Use `name=value` to match the name exactly and the value partially. Explicit wildcards are supported in either part.
           schema:
             type: string
+            example: environment=production
         - name: type
           in: query
           description: Label type
@@ -5523,7 +5578,7 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional case-insensitive search of collaborator names and email addresses.
           schema:
             type: string
       responses:
@@ -5683,7 +5738,7 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional case-insensitive search of organization member names and email addresses.
           schema:
             type: string
       responses:
@@ -6268,6 +6323,139 @@ paths:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: ServiceAccount#update
+  /orgs/{orgId}/service-accounts/{saId}/ssh-keys:
+    get:
+      operationId: ListServiceAccountSshKeys
+      summary: List the SSH keys of a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSshKeysResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+  /orgs/{orgId}/service-accounts/{saId}/ssh-keys/{keyId}:
+    delete:
+      operationId: DeleteServiceAccountSshKey
+      summary: Delete an SSH key of a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    get:
+      operationId: DescribeServiceAccountSshKey
+      summary: Describe an SSH key of a service account
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeSshKeyResponse'
+        '400':
+          description: 'Bad request: the SSH key does not exist or does not belong to the service account'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service accounts are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/teams:
     get:
       operationId: ListOrganizationTeams
@@ -6296,9 +6484,10 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional team search query. Free text matches team names and descriptions. Supports the `userName` keyword.
           schema:
             type: string
+            example: userName:alice
       responses:
         '200':
           description: OK
@@ -6572,6 +6761,7 @@ paths:
             format: int32
         - name: search
           in: query
+          description: Optional case-insensitive search of team member names and email addresses.
           schema:
             type: string
             nullable: true
@@ -6721,7 +6911,7 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Search criteria
+          description: Optional case-insensitive search of workspace names and full names.
           schema:
             type: string
       responses:
@@ -7139,7 +7329,7 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional case-insensitive search of participant usernames, display names, full names, email addresses, and team names.
           schema:
             type: string
       responses:
@@ -7991,7 +8181,7 @@ paths:
             $ref: '#/components/schemas/PipelineListParams.SortDir'
         - name: search
           in: query
-          description: Optional search criteria, allowing free text search on name and description. Use double quotes for an exact match and `*` as a wildcard.
+          description: Optional case-insensitive search of pipeline names and descriptions. Use double quotes for an exact match and `*` as a wildcard.
           schema:
             type: string
         - name: visibility
@@ -8573,9 +8763,10 @@ paths:
             format: int32
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional pipeline-version search query. Free text matches the version name. Supports the `versionId`, `versionName`, and `versionHash` keywords.
           schema:
             type: string
+            example: versionName:release-1
         - name: isPublished
           in: query
           description: Set to true to retrieve published versions, false to fetch draft versions
@@ -9414,9 +9605,10 @@ paths:
             format: int64
         - name: search
           in: query
-          description: 'Optional search criteria, allowing free text search on name and templateUrl and keywords: `userId`, `computeEnvId` and `status`.'
+          description: Optional Studio search query. Free text matches the Studio name and template URL. Supports `is:starred` and the `userName`, `computeEnvName`, `status`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `label`, `collaborationMode`, and `computeEnvType` keywords.
           schema:
             type: string
+            example: status:running label:production
         - name: max
           in: query
           description: Pagination max results
@@ -9832,9 +10024,10 @@ paths:
             format: int64
         - name: search
           in: query
-          description: 'Optional search criteria, allowing free text search on name and keywords: `status`, `before` and `after` for saved date'
+          description: Optional Studio checkpoint search query. Free text matches the checkpoint name. Supports the `status`, `before`, `after`, and `author` keywords.
           schema:
             type: string
+            example: status:finalized after:2026-01-01
         - name: max
           in: query
           description: Pagination max results
@@ -9975,6 +10168,106 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Conflict, when the checkpoint name conflicts with an existing checkpoint for the same Studio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+  /studios/{sessionId}/checkpoints/{checkpointId}/recover:
+    put:
+      operationId: RecoverDataStudioCheckpoint
+      summary: Recover Studio checkpoint
+      description: Recovers the latest checkpoint, which was not saved completely, so the next start restores it. The restored data may be incomplete. The Studio must be stopped.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session numeric identifier
+          required: true
+          schema:
+            type: string
+        - name: checkpointId
+          in: path
+          description: Numeric identifier of the checkpoint.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStudioCheckpointDto'
+        '400':
+          description: BadRequest, when the Studio is not stopped or the checkpoint can't be recovered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed.
+        '404':
+          description: NotFound, when the studio or the checkpoint is not found or when the API is disabled for the workspace
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - studios
+  /studios/{sessionId}/checkpoints/{checkpointId}/revert-recovery:
+    put:
+      operationId: RevertDataStudioCheckpointRecovery
+      summary: Undo Studio checkpoint recovery
+      description: Undoes the most recent checkpoint recovery. Later checkpoints are invalidated. The Studio must be stopped.
+      parameters:
+        - name: sessionId
+          in: path
+          description: Studio session numeric identifier
+          required: true
+          schema:
+            type: string
+        - name: checkpointId
+          in: path
+          description: Numeric identifier of the checkpoint.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStudioCheckpointDto'
+        '400':
+          description: BadRequest, when the Studio is not stopped or the checkpoint has no recovery to undo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed.
+        '404':
+          description: NotFound, when the studio or the checkpoint is not found or when the API is disabled for the workspace
           content:
             application/json:
               schema:
@@ -10225,10 +10518,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataStudioStartResponse'
+        '400':
+          description: BadRequest, e.g. when the requested allow list is invalid or is changed by someone other than the creator.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed.
         '404':
           description: NotFound, when the Studio is not found or when the API is disabled for the workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict, when `failOnIncompleteCheckpoint` is true and the latest checkpoint is incomplete.
           content:
             application/json:
               schema:
@@ -10790,7 +11095,7 @@ paths:
     get:
       operationId: ListWorkflows
       summary: List workflows
-      description: Lists all workflow records, enriched with `attributes`. Append `?workspaceId` to list workflow records in a workspace context.
+      description: Lists workflow records in a user context, enriched with `attributes`. Append `?workspaceId` to list workflow records in a workspace context. Results are paginated; use `max` and `offset` to retrieve additional pages.
       parameters:
         - name: attributes
           in: query
@@ -10802,32 +11107,36 @@ paths:
           explode: false
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier.
           schema:
             type: integer
             format: int64
         - name: max
           in: query
-          description: Pagination max results
+          description: 'Maximum number of workflow records to return. Default: `50`. The installation maximum is configurable and defaults to `100`.'
           schema:
             type: integer
             format: int32
+            default: 50
         - name: offset
           in: query
-          description: Pagination offset
+          description: 'Number of workflow records to skip for pagination. Default: `0`.'
           schema:
             type: integer
             format: int32
+            default: 0
         - name: search
           in: query
-          description: Filter search parameter
+          description: Optional workflow search query. Free text matches project name, run name, session ID, and pipeline manifest name. Supports `is:starred` and the `workflowId`, `runName`, `projectName`, `sessionId`, `userName`, `status`, `before`, `after`, `label`, `pipelineId`, and `datasetId` keywords. Use the separate `workspaceId` query parameter to select a workspace.
           schema:
             type: string
+            example: status:RUNNING after:2026-08-01 label:production
         - name: includeTotalSize
           in: query
-          description: Include total size in the response
+          description: 'Whether to calculate `totalSize`. Default: `true`. When `false`, `totalSize` is returned as `-1` (not calculated); use `hasMore` to detect additional pages. `hasMore` is returned in both modes.'
           schema:
             type: boolean
+            default: true
       responses:
         '200':
           description: OK
@@ -11780,9 +12089,10 @@ paths:
             type: string
         - name: search
           in: query
-          description: Search tasks by name
+          description: Optional case-insensitive partial search of task process names, tags, hashes, and statuses.
           schema:
             type: string
+            example: COMPLETED
         - name: process
           in: query
           description: Exact process name filter
@@ -17797,6 +18107,27 @@ components:
         Deleting an agent pauses every action that targets it. Agents are
         created active; enabling and disabling is not managed by this
         resource, and `status` reports the current state.
+    AgentImage:
+      type: object
+      properties:
+        agentInstructionsTemplateId:
+          type: string
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        description:
+          type: string
+        githubAppCredentialId:
+          type: string
+        name:
+          type: string
+        serviceAccountId:
+          type: integer
+          format: int64
+        status:
+          type: string
+      required:
+        - auditImageType
+      title: Agent audit image
     AgentRun.Status:
       type: string
       enum:
@@ -17863,6 +18194,20 @@ components:
         workspaceId:
           type: integer
           format: int64
+    AgentRunImage:
+      type: object
+      properties:
+        agentId:
+          type: string
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        triggerEntityId:
+          type: string
+        triggerType:
+          type: string
+      required:
+        - auditImageType
+      title: Agent run audit image
     AgentRunStatusResponse:
       type: object
       properties:
@@ -17890,6 +18235,16 @@ components:
         workDir:
           type: string
       title: Tower Agent credentials
+    AiChatThreadImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        parentThreadId:
+          type: string
+      required:
+        - auditImageType
+      title: AI chat thread audit image
     AltairPbsComputeConfig:
       type: object
       properties:
@@ -18044,6 +18399,12 @@ components:
         - agent_enabled
         - agent_disabled
         - agent_deleted
+        - agent_run_launched
+        - ai_chat_thread_created
+        - ai_chat_message_sent
+        - ai_chat_thread_cancelled
+        - ai_chat_thread_deleted
+        - ai_chat_sandbox_downloaded
         - organization_created
         - organization_updated
         - organization_deleted
@@ -18242,6 +18603,12 @@ components:
         - agent_enabled
         - agent_disabled
         - agent_deleted
+        - agent_run_launched
+        - ai_chat_thread_created
+        - ai_chat_message_sent
+        - ai_chat_thread_cancelled
+        - ai_chat_thread_deleted
+        - ai_chat_sandbox_downloaded
         - organization_created
         - organization_updated
         - organization_deleted
@@ -18399,6 +18766,8 @@ components:
         - data_link_file
         - action
         - agent
+        - agent_run
+        - ai_chat_thread
         - workflow
         - dataset
         - dataset_version
@@ -18436,6 +18805,8 @@ components:
         - data_link_file
         - action
         - agent
+        - agent_run
+        - ai_chat_thread
         - workflow
         - dataset
         - dataset_version
@@ -18462,6 +18833,9 @@ components:
                 mapping:
                   access_token: '#/components/schemas/AccessTokenImage'
                   action: '#/components/schemas/ActionImage'
+                  agent: '#/components/schemas/AgentImage'
+                  agent_run: '#/components/schemas/AgentRunImage'
+                  ai_chat_thread: '#/components/schemas/AiChatThreadImage'
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
@@ -18500,6 +18874,9 @@ components:
           oneOf:
             - $ref: '#/components/schemas/AccessTokenImage'
             - $ref: '#/components/schemas/ActionImage'
+            - $ref: '#/components/schemas/AgentImage'
+            - $ref: '#/components/schemas/AgentRunImage'
+            - $ref: '#/components/schemas/AiChatThreadImage'
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
@@ -18540,6 +18917,9 @@ components:
                 mapping:
                   access_token: '#/components/schemas/AccessTokenImage'
                   action: '#/components/schemas/ActionImage'
+                  agent: '#/components/schemas/AgentImage'
+                  agent_run: '#/components/schemas/AgentRunImage'
+                  ai_chat_thread: '#/components/schemas/AiChatThreadImage'
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
@@ -18578,6 +18958,9 @@ components:
           oneOf:
             - $ref: '#/components/schemas/AccessTokenImage'
             - $ref: '#/components/schemas/ActionImage'
+            - $ref: '#/components/schemas/AgentImage'
+            - $ref: '#/components/schemas/AgentRunImage'
+            - $ref: '#/components/schemas/AiChatThreadImage'
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
@@ -18827,6 +19210,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         headJobCpus:
           type: integer
           format: int32
@@ -18913,6 +19307,7 @@ components:
         secretsKmsKeyId:
           description: Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
           type: string
+          nullable: true
         storageType:
           type: string
           deprecated: true
@@ -19075,6 +19470,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         gpuEnabled:
           type: boolean
           description: |
@@ -19168,6 +19574,7 @@ components:
         secretsKmsKeyId:
           description: Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
           type: string
+          nullable: true
         securityGroups:
           type: array
           items:
@@ -19356,6 +19763,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         headJobCpus:
           description: Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
           type: integer
@@ -19528,6 +19946,10 @@ components:
           maximum: 4095
           minimum: 50
           nullable: true
+        lowPriority:
+          description: When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs.
+          type: boolean
+          nullable: true
         vmCount:
           type: integer
           format: int32
@@ -19575,6 +19997,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         instanceType:
           type: string
           description: |
@@ -19763,7 +20196,9 @@ components:
           type: string
           writeOnly: true
         batchName:
+          description: Azure Batch account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
         clientId:
           type: string
         clientSecret:
@@ -19775,7 +20210,9 @@ components:
           type: string
           writeOnly: true
         storageName:
+          description: Azure Storage account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
         subscriptionId:
           type: string
         tenantId:
@@ -19788,7 +20225,9 @@ components:
           type: string
           writeOnly: true
         batchName:
+          description: Azure Batch account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
         clientId:
           type: string
         clientSecret:
@@ -19800,7 +20239,9 @@ components:
           type: string
           writeOnly: true
         storageName:
+          description: Azure Storage account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
         tenantId:
           type: string
       title: Azure Entra credentials
@@ -19829,7 +20270,9 @@ components:
           writeOnly: true
           nullable: true
         batchName:
+          description: Azure Batch account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
           nullable: true
         discriminator:
           type: string
@@ -19839,7 +20282,9 @@ components:
           writeOnly: true
           nullable: true
         storageName:
+          description: Azure Storage account name (3 to 24 letters or digits, case-insensitive)
           type: string
+          pattern: ^[a-zA-Z0-9]{3,24}$
           nullable: true
       title: Azure credentials
     BitBucketSecurityKeys:
@@ -19995,6 +20440,33 @@ components:
         - CHANGED
         - UNKNOWN
         - UNAVAILABLE
+    ClientCredentialsStatus:
+      type: string
+      enum:
+        - NONE
+        - ACTIVE
+        - EXPIRING
+        - EXPIRED
+        - REVOKED
+    ClientCredentialsSummary:
+      description: Client credential identity and status of a service account
+      type: object
+      properties:
+        clientId:
+          description: OAuth client ID of the service account. Null when no client exists yet.
+          type: string
+          nullable: true
+        expiresAt:
+          description: Latest expiry of a live secret when ACTIVE or EXPIRING, or when the last secret expired when EXPIRED. Null otherwise.
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          description: Status of the service account's client credentials
+          allOf:
+            - $ref: '#/components/schemas/ClientCredentialsStatus'
+      required:
+        - status
     CloudPriceModel:
       type: string
       enum:
@@ -20196,6 +20668,13 @@ components:
         awsAccountId:
           type: string
           nullable: true
+        bucketPolicies:
+          description: Seqera Compute only. Bucket policy to apply to each allowed S3 bucket, keyed by bucket (s3://bucket), granting the compute environment's roles access to it. Omitted until the compute environment resources are created.
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+          readOnly: true
         config:
           $ref: '#/components/schemas/ComputeConfig'
         credentialsId:
@@ -21302,6 +21781,17 @@ components:
             $ref: '#/components/schemas/DataLinkSimpleItem'
       required:
         - items
+    DataLinkCreateFolderRequest:
+      type: object
+      properties:
+        dirPath:
+          description: Path of the parent directory, relative to the data-link root. Omit to create the folder at the root. Must not contain `.` or `..` segments.
+          type: string
+        folderName:
+          description: Name of the folder to create, at most 255 bytes in UTF-8. Must not be blank, contain `/`, or be `.` or `..`.
+          type: string
+      required:
+        - folderName
     DataLinkCreateRequest:
       type: object
       properties:
@@ -21644,6 +22134,10 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/StudioCheckpointStatus'
+        statusReason:
+          description: Set when the status comes from a recovery or its undo. Null after a normal save.
+          allOf:
+            - $ref: '#/components/schemas/StudioCheckpointStatusReason'
       required:
         - author
         - dateCreated
@@ -21662,6 +22156,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/ComputeEnvDbDto'
         - properties:
+            allowBuckets:
+              description: Allowed S3 buckets (s3://bucket[/path]) configured on the compute environment. AWS-based compute environments only.
+              type: array
+              items:
+                type: string
+              nullable: true
             credentialsId:
               type: string
             workDir:
@@ -21750,12 +22250,12 @@ components:
       type: object
       properties:
         allowedUserIds:
+          description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
           type: array
           items:
             format: int64
             type: integer
           nullable: true
-          description: IDs of users, besides the creator, allowed to connect to and start this Studio when it is private. Only applies to private Studios; currently limited to a single user.
           maxItems: 1 # mirrors the platform cap; bump if the platform limit increases
           x-speakeasy-plan-validators: StudioAllowlistRequiresPrivateValidator
         computeEnvId:
@@ -21783,6 +22283,7 @@ components:
           type: integer
           format: int64
         isPrivate:
+          description: Flag to denote if the studio is private to the users listed in 'allowedUserIds'. If 'true' and 'allowedUserIds' is empty or omitted, the studio is private to its creator. If omitted, the studio config and then the workspace default decide. 'false' with user ids in 'allowedUserIds' is rejected.
           type: boolean
         labelIds:
           type: array
@@ -21831,7 +22332,11 @@ components:
     DataStudioDto:
       type: object
       properties:
+        allowedToConnect:
+          description: 'Whether the current user may connect to this studio: always for a non-private studio, and only if they are on its allow list for a private one. Their workspace role must still allow connecting.'
+          type: boolean
         allowedUsers:
+          description: Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.
           type: array
           items:
             $ref: '#/components/schemas/UserInfo'
@@ -21841,6 +22346,11 @@ components:
           nullable: true
           description: Base container image the Studio is built from.
           x-speakeasy-param-readonly: true
+        checkpointRecovery:
+          description: Set when the latest checkpoint is incomplete and can be recovered before the next start.
+          allOf:
+            - $ref: '#/components/schemas/DataStudioDto.CheckpointRecovery'
+          nullable: true
         customIcon:
           description: Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
           type: string
@@ -21859,6 +22369,7 @@ components:
           nullable: true
           description: Description of the Studio session's purpose
         isPrivate:
+          description: Whether the studio is private, so that only the users in 'allowedUsers' can connect to it.
           type: boolean
           nullable: true
         name:
@@ -21913,6 +22424,32 @@ components:
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based
         computational environments.
+    DataStudioDto.CheckpointRecovery:
+      type: object
+      properties:
+        incompleteCheckpoint:
+          description: Incomplete latest checkpoint.
+          allOf:
+            - $ref: '#/components/schemas/DataStudioDto.IncompleteCheckpoint'
+        verifiedCheckpoint:
+          description: Latest finalized checkpoint, restored when `incompleteCheckpoint` is not recovered. Null when there is none.
+          allOf:
+            - $ref: '#/components/schemas/DataStudioDto.VerifiedCheckpoint'
+          nullable: true
+    DataStudioDto.IncompleteCheckpoint:
+      type: object
+      properties:
+        dateSaved:
+          type: string
+          format: date-time
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/StudioCheckpointStatus'
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -21930,6 +22467,18 @@ components:
           type: string
           nullable: true
       nullable: true
+    DataStudioDto.VerifiedCheckpoint:
+      type: object
+      properties:
+        dateSaved:
+          type: string
+          format: date-time
+          nullable: true
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
     DataStudioImage:
       type: object
       properties:
@@ -22085,6 +22634,7 @@ components:
       type: object
       properties:
         allowedUserIds:
+          description: Optional override of the users allowed to connect to this private studio. Users in it replace the existing allow list; an empty or omitted set leaves it untouched. The creator is included only if listed. Only the creator may change it, and only for a private studio, as privacy is set when the studio is created. Applied only if the studio actually starts, but an invalid list is rejected even when it does not.
           type: array
           items:
             format: int64
@@ -22101,6 +22651,10 @@ components:
           nullable: true
         description:
           type: string
+          nullable: true
+        failOnIncompleteCheckpoint:
+          description: 'When true, fails with 409 Conflict instead of skipping an incomplete latest checkpoint. Default: false.'
+          type: boolean
           nullable: true
         labelIds:
           type: array
@@ -22994,6 +23548,7 @@ components:
             valueType: basetypes.ListValue
         arm64Enabled:
           type: boolean
+          nullable: true
           description: |
             Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
             compute jobs.
@@ -23138,6 +23693,7 @@ components:
           x-speakeasy-param-force-new: true
         fargateHeadEnabled:
           type: boolean
+          nullable: true
           description: |
             Run the Nextflow head job using the Fargate container service. This speeds up the launch
             of your pipeline execution.
@@ -23648,6 +24204,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         headJobCpus:
           type: integer
           format: int32
@@ -23849,6 +24416,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         gpuEnabled:
           type: boolean
           description: |
@@ -24620,6 +25198,8 @@ components:
           description: Fusion version to run this workflow with; must exist in the system catalog. Applies only when the compute environment enables Fusion v2.
           type: string
           nullable: true
+        globalCachePath:
+          type: string
         headJobCpus:
           type: integer
           format: int32
@@ -25135,6 +25715,12 @@ components:
     ListComputeEnvsResponse.Entry:
       type: object
       properties:
+        allowBuckets:
+          description: Allowed S3 buckets (s3://bucket[/path]) configured on the compute environment. AWS-based compute environments only.
+          type: array
+          items:
+            type: string
+          nullable: true
         credentialsId:
           type: string
         description:
@@ -27235,6 +27821,15 @@ components:
     SeqeraComputeConfig:
       type: object
       properties:
+        allowBuckets:
+          description: S3 buckets in your own AWS account the compute environment can read and write (s3://bucket[/path]). Duplicates are ignored. The bucket policy must also grant access to the compute environment. Cannot be changed after creation.
+          type: array
+          items:
+            example: s3://my-bucket/data
+            maxLength: 128
+            pattern: ^s3://[a-z0-9][a-z0-9.-]{1,61}[a-z0-9](/[A-Za-z0-9!_.()/=+@,-]*)?$
+            type: string
+          maxItems: 10
         defaultDataRetentionPolicy:
           type: boolean
         discriminator:
@@ -27250,6 +27845,17 @@ components:
           type: string
           nullable: true
           x-speakeasy-plan-validators: FusionVersionValidator
+        globalCacheEnabled:
+          description: Whether the Nextflow Global Cache is enabled for this compute environment
+          type: boolean
+          nullable: true
+        globalCachePath:
+          description: Object storage folder used as the Nextflow Global Cache location
+          type: string
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          pattern: ^[A-Za-z0-9._~:/\-]+$
         instanceTypeSize:
           description: Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
           allOf:
@@ -27305,6 +27911,11 @@ components:
     ServiceAccountDto:
       type: object
       properties:
+        clientCredentials:
+          description: Client credentials of this service account. Null when service account client credentials are not enabled for the organization.
+          allOf:
+            - $ref: '#/components/schemas/ClientCredentialsSummary'
+          nullable: true
         createdAt:
           type: string
           format: date-time
@@ -27540,6 +28151,16 @@ components:
         - finalized
         - invalid
       nullable: true
+    StudioCheckpointStatusReason:
+      type: string
+      enum:
+        - recovered
+        - recovery_reverted
+        - recovered_as_new
+      x-enum-varnames:
+        - recovered
+        - recovery_reverted
+        - recovered_as_new
     StudioRemoteConfiguration:
       type: object
       properties:
@@ -28001,6 +28622,8 @@ components:
     TraceBeginRequest:
       type: object
       properties:
+        dag:
+          $ref: '#/components/schemas/WorkflowDagInput'
         launchId:
           type: string
           deprecated: true
@@ -29281,6 +29904,47 @@ components:
         - submit
         - userName
         - workDir
+    WorkflowDagInput:
+      type: object
+      properties:
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowDagInput.Edge'
+        vertices:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowDagInput.Vertex'
+    WorkflowDagInput.Edge:
+      type: object
+      properties:
+        label:
+          description: Channel name, when Nextflow reports one
+          type: string
+          nullable: true
+        source:
+          description: ID of the vertex the edge starts at
+          type: string
+        target:
+          description: ID of the vertex the edge ends at
+          type: string
+    WorkflowDagInput.Vertex:
+      type: object
+      properties:
+        id:
+          description: Payload-scoped ID, only meaningful to join edges within the same payload
+          type: string
+        label:
+          description: Fully-qualified process name; only PROCESS vertices carry one
+          type: string
+          nullable: true
+        scope:
+          description: Enclosing (sub)workflow name, null at the root
+          type: string
+          nullable: true
+        type:
+          description: One of PROCESS, OPERATOR, ORIGIN, NODE
+          type: string
     WorkflowDbDto:
       type: object
       properties:
@@ -29742,6 +30406,10 @@ components:
           description: Fusion version this workflow was launched with; used to pre-select the same version on relaunch/resume.
           type: string
           nullable: true
+        globalCachePath:
+          description: Nextflow Global Cache location this run was instrumented with. Null when the run was not instrumented, for any reason.
+          type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
@@ -30011,6 +30679,9 @@ components:
                 - $ref: '#/components/schemas/WfFusionMeta'
               nullable: true
             fusionVersion:
+              type: string
+              nullable: true
+            globalCachePath:
               type: string
               nullable: true
             logFile:

@@ -14,7 +14,7 @@ type ListDatasetsV2Request struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Search query
+	// Optional dataset search query. Free text matches the dataset name. Supports the `userName`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `usedAfter`, `usedBefore`, `label`, and `visibility` keywords. A `visibility` search keyword takes precedence over the separate `visibility` query parameter.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Sort field supports (`name`, `modified`), defaults to `name`
 	SortBy *string `queryParam:"style=form,explode=true,name=sortBy"`

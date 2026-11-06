@@ -4,7 +4,69 @@ package shared
 
 import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
 )
+
+// VerifiedCheckpoint - Latest finalized checkpoint, restored when `incompleteCheckpoint` is not recovered. Null when there is none.
+type VerifiedCheckpoint struct {
+	DateSaved *time.Time `json:"dateSaved,omitempty"`
+	ID        *int64     `json:"id,omitempty"`
+	Name      *string    `json:"name,omitempty"`
+}
+
+func (v VerifiedCheckpoint) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(v, "", false)
+}
+
+func (v *VerifiedCheckpoint) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (v *VerifiedCheckpoint) GetDateSaved() *time.Time {
+	if v == nil {
+		return nil
+	}
+	return v.DateSaved
+}
+
+func (v *VerifiedCheckpoint) GetID() *int64 {
+	if v == nil {
+		return nil
+	}
+	return v.ID
+}
+
+func (v *VerifiedCheckpoint) GetName() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Name
+}
+
+// CheckpointRecovery - Set when the latest checkpoint is incomplete and can be recovered before the next start.
+type CheckpointRecovery struct {
+	// Incomplete latest checkpoint.
+	IncompleteCheckpoint *DataStudioDtoIncompleteCheckpoint `json:"incompleteCheckpoint,omitempty"`
+	// Latest finalized checkpoint, restored when `incompleteCheckpoint` is not recovered. Null when there is none.
+	VerifiedCheckpoint *VerifiedCheckpoint `json:"verifiedCheckpoint,omitempty"`
+}
+
+func (c *CheckpointRecovery) GetIncompleteCheckpoint() *DataStudioDtoIncompleteCheckpoint {
+	if c == nil {
+		return nil
+	}
+	return c.IncompleteCheckpoint
+}
+
+func (c *CheckpointRecovery) GetVerifiedCheckpoint() *VerifiedCheckpoint {
+	if c == nil {
+		return nil
+	}
+	return c.VerifiedCheckpoint
+}
 
 // SSHDetails - SSH connection details for a Studio session
 type SSHDetails struct {
@@ -142,9 +204,14 @@ func (d *DataStudioDtoConfiguration) GetSSHEnabled() *bool {
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
+	// Whether the current user may connect to this studio: always for a non-private studio, and only if they are on its allow list for a private one. Their workspace role must still allow connecting.
+	AllowedToConnect *bool `json:"allowedToConnect,omitempty"`
+	// Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.
 	AllowedUsers []*UserInfo `json:"allowedUsers,omitempty"`
 	// Base container image the Studio is built from.
 	BaseImage *string `json:"baseImage,omitempty"`
+	// Set when the latest checkpoint is incomplete and can be recovered before the next start.
+	CheckpointRecovery *CheckpointRecovery `json:"checkpointRecovery,omitempty"`
 	// Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 	CustomIcon *string `json:"customIcon,omitempty"`
 	// Avatar id backing customIcon. Exposed so clients can round-trip an unchanged icon back to the server on create/update/start without re-parsing the URL. Null when unset.
@@ -153,7 +220,8 @@ type DataStudioDto struct {
 	CustomImage *bool `json:"customImage,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
-	IsPrivate   *bool   `json:"isPrivate,omitempty"`
+	// Whether the studio is private, so that only the users in 'allowedUsers' can connect to it.
+	IsPrivate *bool `json:"isPrivate,omitempty"`
 	// Display name for the Studio session
 	Name         *string                    `json:"name,omitempty"`
 	RemoteConfig *StudioRemoteConfiguration `json:"remoteConfig,omitempty"`
@@ -188,6 +256,13 @@ func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (d *DataStudioDto) GetAllowedToConnect() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.AllowedToConnect
+}
+
 func (d *DataStudioDto) GetAllowedUsers() []*UserInfo {
 	if d == nil {
 		return nil
@@ -200,6 +275,13 @@ func (d *DataStudioDto) GetBaseImage() *string {
 		return nil
 	}
 	return d.BaseImage
+}
+
+func (d *DataStudioDto) GetCheckpointRecovery() *CheckpointRecovery {
+	if d == nil {
+		return nil
+	}
+	return d.CheckpointRecovery
 }
 
 func (d *DataStudioDto) GetCustomIcon() *string {

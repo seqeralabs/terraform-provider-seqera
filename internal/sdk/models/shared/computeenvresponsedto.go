@@ -141,6 +141,8 @@ func (c *ComputeEnvResponseDtoResources) GetMemory() *int {
 
 type ComputeEnvResponseDto struct {
 	AwsAccountID *string `json:"awsAccountId,omitempty"`
+	// Seqera Compute only. Bucket policy to apply to each allowed S3 bucket, keyed by bucket (s3://bucket), granting the compute environment's roles access to it. Omitted until the compute environment resources are created.
+	BucketPolicies map[string]string `json:"bucketPolicies,omitempty"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
@@ -188,6 +190,13 @@ func (c *ComputeEnvResponseDto) GetAwsAccountID() *string {
 		return nil
 	}
 	return c.AwsAccountID
+}
+
+func (c *ComputeEnvResponseDto) GetBucketPolicies() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.BucketPolicies
 }
 
 func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {

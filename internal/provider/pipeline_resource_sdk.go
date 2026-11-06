@@ -42,6 +42,7 @@ func (r *PipelineResourceModel) RefreshFromSharedDescribeLaunchResponse(ctx cont
 			r.Launch.EntryName = types.StringPointerValue(resp.Launch.EntryName)
 			r.Launch.FusionSnapshots = types.BoolPointerValue(resp.Launch.FusionSnapshots)
 			r.Launch.FusionVersion = types.StringPointerValue(resp.Launch.FusionVersion)
+			r.Launch.GlobalCachePath = types.StringPointerValue(resp.Launch.GlobalCachePath)
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
