@@ -161,7 +161,7 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
-      backend_strategy   = "ECS"       # ECS (default) | EC2 | VM
+      backend_strategy   = "VM"        # VM only; ECS and EC2 are deprecated
       fusion_snapshots   = true        # resume interrupted tasks from a snapshot
       prediction_model   = "none"      # none | qr/v1 | qr/v2
 
@@ -317,12 +317,11 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
-- `ECS` (default, AWS only): delegate task execution to AWS ECS.
-- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-- `VM` (provider-agnostic): run tasks on cloud VMs.
+- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks. Only `VM` (the default)
+is supported: it runs tasks on cloud VMs. Omit this attribute or set it to `VM`.
 
-Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+`ECS` and `EC2` (AWS only) are deprecated. The API reports them only for
+compute environments created before the deprecation and rejects them on create.
 must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
 - `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to

@@ -36,12 +36,11 @@ func (d *DescribeWorkflowResponsePipelineInfo) GetWorkspaceID() *int64 {
 	return d.WorkspaceID
 }
 
-// DescribeWorkflowResponseBackendStrategy - Backend used by Intelligent Compute to run tasks:
-// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
-// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-// - `VM` (provider-agnostic): run tasks on cloud VMs.
+// DescribeWorkflowResponseBackendStrategy - Backend used by Intelligent Compute to run tasks. Only `VM` (the default)
+// is supported: it runs tasks on cloud VMs. Omit this attribute or set it to `VM`.
 //
-// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+// `ECS` and `EC2` (AWS only) are deprecated. The API reports them only for
+// compute environments created before the deprecation and rejects them on create.
 type DescribeWorkflowResponseBackendStrategy string
 
 const (
@@ -140,12 +139,11 @@ func (e *DescribeWorkflowResponseProvisioningModel) UnmarshalJSON(data []byte) e
 }
 
 type DescribeWorkflowResponseSchedConfig struct {
-	// Backend used by Intelligent Compute to run tasks:
-	// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
-	// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-	// - `VM` (provider-agnostic): run tasks on cloud VMs.
+	// Backend used by Intelligent Compute to run tasks. Only `VM` (the default)
+	// is supported: it runs tasks on cloud VMs. Omit this attribute or set it to `VM`.
 	//
-	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
+	// `ECS` and `EC2` (AWS only) are deprecated. The API reports them only for
+	// compute environments created before the deprecation and rejects them on create.
 	//
 	BackendStrategy *DescribeWorkflowResponseBackendStrategy `json:"backendStrategy,omitempty"`
 	// Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.

@@ -10,15 +10,15 @@ import (
 var _ validator.Object = ObjectBackendStrategyVMOnlyValidator{}
 
 // ObjectBackendStrategyVMOnlyValidator enforces that
-// intelligent_compute_config.backend_strategy is "VM" (or unset) on cloud
-// platforms where the backend only supports the VM backend. On Azure and
-// Google the backend ignores backend_strategy and hardcodes VM (the ECS/EC2
-// backends are AWS-only), so any other value is rejected at plan time rather
-// than being silently ignored.
+// intelligent_compute_config.backend_strategy is "VM" (or unset). VM is the
+// only backend the API accepts when creating a compute environment: the
+// AWS-only ECS and EC2 backends are deprecated, and Azure and Google never
+// supported them. Any other value is rejected at plan time instead of failing
+// on apply.
 type ObjectBackendStrategyVMOnlyValidator struct{}
 
 func (v ObjectBackendStrategyVMOnlyValidator) Description(_ context.Context) string {
-	return "Validates that intelligent_compute_config.backend_strategy is \"VM\" (or unset) on platforms that only support the VM backend."
+	return "Validates that intelligent_compute_config.backend_strategy is \"VM\" (or unset)."
 }
 
 func (v ObjectBackendStrategyVMOnlyValidator) MarkdownDescription(ctx context.Context) string {
@@ -46,8 +46,10 @@ func (v ObjectBackendStrategyVMOnlyValidator) ValidateObject(ctx context.Context
 		resp.Diagnostics.AddAttributeError(
 			strategyPath,
 			"Unsupported backend_strategy",
-			"This compute environment only supports the `VM` backend for Intelligent Compute. "+
-				"Set `backend_strategy = \"VM\"` or omit it (the ECS/EC2 backends are AWS-only).",
+			"Intelligent Compute only supports the `VM` backend. The `ECS` and `EC2` backends are deprecated. "+
+				"Remove `backend_strategy` from the configuration. For an existing compute environment that uses `ECS` or `EC2`, "+
+				"removing it keeps the compute environment, but setting it to `\"VM\"` replaces it. "+
+				"A new compute environment can omit it or set `backend_strategy = \"VM\"`.",
 		)
 	}
 }

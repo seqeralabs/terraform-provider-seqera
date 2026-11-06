@@ -1283,12 +1283,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
-													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
-													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
-													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
+													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
 													`` + "\n" +
-													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
+													`compute environments created before the deprecation and rejects them on create.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1618,6 +1617,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
+									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
@@ -2324,12 +2324,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
-													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
-													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
-													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
+													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
 													`` + "\n" +
-													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
+													`compute environments created before the deprecation and rejects them on create.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -3866,12 +3865,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
-													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
-													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
-													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
+													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
 													`` + "\n" +
-													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
+													`compute environments created before the deprecation and rejects them on create.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -4809,12 +4807,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
-													`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
-													`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
-													`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
+												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
+													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
 													`` + "\n" +
-													`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
+													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
+													`compute environments created before the deprecation and rejects them on create.` + "\n" +
 													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -5053,6 +5050,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
+									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
