@@ -34,6 +34,10 @@ type AwsCloudConfig struct {
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -93,11 +97,13 @@ type AwsCloudConfig struct {
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	SubnetID *string `json:"subnetId,omitempty"`
-	// Subnets to launch compute instances into. The first subnet is used for
-	// basic placement; Seqera Intelligent Compute may use all of them. Replaces
+	// Subnets to launch compute instances into. The Nextflow head instance tries
+	// them in order, moving to the next one when a subnet or its Availability Zone
+	// has no capacity, so list subnets in different zones for resilience. With
+	// Seqera Intelligent Compute, task instances can use any of them. Replaces
 	// the deprecated single-value `subnet_id`, and is mutually exclusive with it.
-	// All subnets must be in the VPC given by `vpc_id` (when set) and in the same
-	// region as the compute environment.
+	// All subnets must be in one VPC (the one given by `vpc_id`, when set) and in
+	// the same region as the compute environment.
 	//
 	SubnetIds []string `json:"subnetIds,omitempty"`
 	// VPC used to scope subnet and security-group selection. Determines the
@@ -180,6 +186,20 @@ func (a *AwsCloudConfig) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AwsCloudConfig) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AwsCloudConfig) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AwsCloudConfig) GetGpuEnabled() *bool {

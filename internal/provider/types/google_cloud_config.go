@@ -11,6 +11,8 @@ type GoogleCloudConfig struct {
 	BootDiskSizeGb                types.Int32         `tfsdk:"boot_disk_size_gb"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	GpuEnabled                    types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID                       types.String        `tfsdk:"image_id"`
 	InstanceType                  types.String        `tfsdk:"instance_type"`

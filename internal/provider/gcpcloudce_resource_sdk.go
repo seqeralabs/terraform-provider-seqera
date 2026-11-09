@@ -64,6 +64,8 @@ func (r *GCPCloudCEResourceModel) RefreshFromSharedGCPCloudCEComputeConfig(ctx c
 			r.Config.Environment = nil
 		}
 		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
+		r.Config.GlobalCacheEnabled = types.BoolPointerValue(resp.Config.GlobalCacheEnabled)
+		r.Config.GlobalCachePath = types.StringPointerValue(resp.Config.GlobalCachePath)
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceType = types.StringPointerValue(resp.Config.InstanceType)
@@ -376,6 +378,18 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 	} else {
 		fusionVersion = nil
 	}
+	globalCacheEnabled := new(bool)
+	if !r.Config.GlobalCacheEnabled.IsUnknown() && !r.Config.GlobalCacheEnabled.IsNull() {
+		*globalCacheEnabled = r.Config.GlobalCacheEnabled.ValueBool()
+	} else {
+		globalCacheEnabled = nil
+	}
+	globalCachePath := new(string)
+	if !r.Config.GlobalCachePath.IsUnknown() && !r.Config.GlobalCachePath.IsNull() {
+		*globalCachePath = r.Config.GlobalCachePath.ValueString()
+	} else {
+		globalCachePath = nil
+	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -578,6 +592,8 @@ func (r *GCPCloudCEResourceModel) ToSharedGCPCloudCEComputeConfigInput(ctx conte
 		BootDiskSizeGb:                bootDiskSizeGb,
 		Environment:                   environment,
 		FusionVersion:                 fusionVersion,
+		GlobalCacheEnabled:            globalCacheEnabled,
+		GlobalCachePath:               globalCachePath,
 		GpuEnabled:                    gpuEnabled,
 		ImageID:                       imageID,
 		InstanceType:                  instanceType,

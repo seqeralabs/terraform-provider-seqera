@@ -369,14 +369,14 @@ resource "seqera_studios" "rstudio_regional_data" {
 - `data_studio_tool_url` (String) Container image URL of the Studio tool. Exactly one of `data_studio_tool_url` or `remote_config` must be set. Requires replacement if changed.
 - `description` (String) Description of the Studio session's purpose
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
-- `is_private` (Boolean) Requires replacement if changed.
+- `is_private` (Boolean) Flag to denote if the studio is private to the users listed in 'allowedUserIds'. If 'true' and 'allowedUserIds' is empty or omitted, the studio is private to its creator. If omitted, the studio config and then the workspace default decide. 'false' with user ids in 'allowedUserIds' is rejected. Requires replacement if changed.
 - `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
 - `remote_config` (Attributes) Build the Studio from a Git repository. Platform reads `.seqera/studio-config.yaml` from the repository and builds the image with Wave on first start. Values set explicitly on the Studio take precedence over the repository configuration. Exactly one of `data_studio_tool_url` or `remote_config` must be set. Requires replacement if changed. (see [below for nested schema](#nestedatt--remote_config))
 - `spot` (Boolean) Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.
 
 ### Read-Only
 
-- `allowed_users` (Attributes List) (see [below for nested schema](#nestedatt--allowed_users))
+- `allowed_users` (Attributes List) Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio. (see [below for nested schema](#nestedatt--allowed_users))
 - `base_image` (String) Base container image the Studio is built from.
 - `custom_icon` (String) Resolved URL for the Studio's user-uploaded icon. Server-derived at read time from the underlying Avatar FK against the current towerPublicEndpoint, so it always reflects the installation's public URL (survives Enterprise domain changes / DB restores). Null when unset — frontends should fall back to the template tool logo.
 - `custom_image` (Boolean) Whether the Studio runs a custom image built by Wave.

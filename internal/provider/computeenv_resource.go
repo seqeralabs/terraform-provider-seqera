@@ -31,6 +31,7 @@ import (
 	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
@@ -45,6 +46,7 @@ import (
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -92,6 +94,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
+					},
+					"bucket_policies": schema.MapAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.Map{
+							speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Seqera Compute only. Bucket policy to apply to each allowed S3 bucket, keyed by bucket (s3://bucket), granting the compute environment's roles access to it. Omitted until the compute environment resources are created.`,
 					},
 					"compute_env_id": schema.StringAttribute{
 						Computed: true,
@@ -850,6 +860,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											custom_stringvalidators.FusionVersionValidator(),
 										},
 									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathS3Validator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -1172,6 +1206,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 										Validators: []validator.String{
 											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathS3Validator(),
 										},
 									},
 									"gpu_enabled": schema.BoolAttribute{
@@ -1507,11 +1565,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										MarkdownDescription: `Subnets to launch compute instances into. The first subnet is used for` + "\n" +
-											`basic placement; Seqera Intelligent Compute may use all of them. Replaces` + "\n" +
+										MarkdownDescription: `Subnets to launch compute instances into. The Nextflow head instance tries` + "\n" +
+											`them in order, moving to the next one when a subnet or its Availability Zone` + "\n" +
+											`has no capacity, so list subnets in different zones for resilience. With` + "\n" +
+											`Seqera Intelligent Compute, task instances can use any of them. Replaces` + "\n" +
 											`the deprecated single-value ` + "`" + `subnet_id` + "`" + `, and is mutually exclusive with it.` + "\n" +
-											`All subnets must be in the VPC given by ` + "`" + `vpc_id` + "`" + ` (when set) and in the same` + "\n" +
-											`region as the compute environment.` + "\n" +
+											`All subnets must be in one VPC (the one given by ` + "`" + `vpc_id` + "`" + `, when set) and in` + "\n" +
+											`the same region as the compute environment.` + "\n" +
 											`Requires replacement if changed.`,
 									},
 									"vpc_id": schema.StringAttribute{
@@ -1789,6 +1849,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															int32validator.Between(50, 4095),
 														},
 													},
+													"low_priority": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.`,
+													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,
 														Optional: true,
@@ -1853,6 +1921,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 															int32validator.Between(50, 4095),
 														},
 													},
+													"low_priority": schema.BoolAttribute{
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.Bool{
+															boolplanmodifier.RequiresReplaceIfConfigured(),
+														},
+														Description: `When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.`,
+													},
 													"vm_count": schema.Int32Attribute{
 														Computed: true,
 														Optional: true,
@@ -1884,6 +1960,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 										Validators: []validator.String{
 											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathAzValidator(),
 										},
 									},
 									"head_job_cpus": schema.Int32Attribute{
@@ -2177,6 +2277,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 										Validators: []validator.String{
 											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathAzValidator(),
 										},
 									},
 									"instance_type": schema.StringAttribute{
@@ -3324,6 +3448,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											custom_stringvalidators.FusionVersionValidator(),
 										},
 									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathGsValidator(),
+										},
+									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -3650,6 +3798,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 										Validators: []validator.String{
 											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathGsValidator(),
 										},
 									},
 									"gpu_enabled": schema.BoolAttribute{
@@ -5314,6 +5486,18 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									objectplanmodifier.RequiresReplaceIfConfigured(),
 								},
 								Attributes: map[string]schema.Attribute{
+									"allow_buckets": schema.ListAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										ElementType: types.StringType,
+										Description: `S3 buckets in your own AWS account the compute environment can read and write (s3://bucket[/path]). Duplicates are ignored. The bucket policy must also grant access to the compute environment. Cannot be changed after creation. Requires replacement if changed.`,
+										Validators: []validator.List{
+											listvalidator.SizeAtMost(10),
+										},
+									},
 									"default_data_retention_policy": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
@@ -5390,6 +5574,30 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 										Validators: []validator.String{
 											custom_stringvalidators.FusionVersionValidator(),
+										},
+									},
+									"global_cache_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.GlobalCacheEnabledValidator(),
+										},
+									},
+									"global_cache_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.UTF8LengthBetween(1, 255),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+											custom_stringvalidators.GlobalCachePathS3Validator(),
 										},
 									},
 									"instance_type_size": schema.StringAttribute{

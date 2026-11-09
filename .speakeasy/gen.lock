@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 1309134bb92bcae55e2e81e922e0bfd4
-  docVersion: 1.244.0
-  speakeasyVersion: 1.805.0
-  generationVersion: 2.954.8
+  docChecksum: fe950155651b003d0b404651038548ce
+  docVersion: 1.257.0
+  speakeasyVersion: 1.806.0
+  generationVersion: 2.956.1
   releaseVersion: 0.43.0
   configChecksum: 479366cbd182c83b69b3930e79a3285a
 persistentEdits:
@@ -647,6 +647,7 @@ trackedFiles:
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
   internal/provider/types/bucket_action_config.go: {}
   internal/provider/types/bucket_action_request.go: {}
+  internal/provider/types/client_credentials.go: {}
   internal/provider/types/compute_config.go: {}
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
@@ -953,6 +954,7 @@ trackedFiles:
   internal/sdk/models/operations/createcustomdatalink.go:
     id: 813b0db514bf
     pristine_git_object: 318791acec50191f33c3ebe519825e5b856e7acc
+  internal/sdk/models/operations/createdatalinkfolder.go: {}
   internal/sdk/models/operations/createdataset.go:
     id: 50e691a2dd23
     pristine_git_object: 3320f7853008313a78441546409fb3016ea03ebb
@@ -1155,6 +1157,7 @@ trackedFiles:
     pristine_git_object: 8171786108b1cd0aae18b59bf45ba2f54b097f6c
   internal/sdk/models/operations/deleterole.go: {}
   internal/sdk/models/operations/deleteserviceaccount.go: {}
+  internal/sdk/models/operations/deleteserviceaccountsshkey.go: {}
   internal/sdk/models/operations/deleteslurmce.go: {}
   internal/sdk/models/operations/deletesshcredentials.go:
     id: 0e155693ad42
@@ -1297,6 +1300,7 @@ trackedFiles:
     pristine_git_object: aa8639c7f649618febf4911e27d6e88b47376523
   internal/sdk/models/operations/describerole.go: {}
   internal/sdk/models/operations/describeserviceaccount.go: {}
+  internal/sdk/models/operations/describeserviceaccountsshkey.go: {}
   internal/sdk/models/operations/describeslurmce.go: {}
   internal/sdk/models/operations/describesshcredentials.go:
     id: a85ddc2ebbb2
@@ -1532,6 +1536,7 @@ trackedFiles:
   internal/sdk/models/operations/listrolepermissions.go: {}
   internal/sdk/models/operations/listroles.go: {}
   internal/sdk/models/operations/listserviceaccounts.go: {}
+  internal/sdk/models/operations/listserviceaccountsshkeys.go: {}
   internal/sdk/models/operations/listsshkeys.go: {}
   internal/sdk/models/operations/listuserrolesinorganization.go: {}
   internal/sdk/models/operations/listworkflows.go:
@@ -1568,6 +1573,7 @@ trackedFiles:
     pristine_git_object: d4edf6d8df286f6c314cab6d3453ff496ee9594b
   internal/sdk/models/operations/previewdataseturl.go: {}
   internal/sdk/models/operations/previewdatasetversion.go: {}
+  internal/sdk/models/operations/recoverdatastudiocheckpoint.go: {}
   internal/sdk/models/operations/refreshdatalinkcache.go:
     id: e2f0dd1e535d
     pristine_git_object: 5cf52ad86ca4262832f08f29635b8b52cb01ca72
@@ -1585,6 +1591,7 @@ trackedFiles:
     pristine_git_object: 2821276f9c80af8b6de0127c78c1eefccab887d7
   internal/sdk/models/operations/resolvecronexpression.go: {}
   internal/sdk/models/operations/resolvelineage.go: {}
+  internal/sdk/models/operations/revertdatastudiocheckpointrecovery.go: {}
   internal/sdk/models/operations/revokeorganizationscimtoken.go: {}
   internal/sdk/models/operations/rotateorganizationscimtoken.go: {}
   internal/sdk/models/operations/searchlineage.go: {}
@@ -1834,9 +1841,12 @@ trackedFiles:
   internal/sdk/models/shared/agentaction.go: {}
   internal/sdk/models/shared/agentactionrequest.go: {}
   internal/sdk/models/shared/agentdbdto.go: {}
+  internal/sdk/models/shared/agentimage.go: {}
   internal/sdk/models/shared/agentrundbdto.go: {}
+  internal/sdk/models/shared/agentrunimage.go: {}
   internal/sdk/models/shared/agentrunstatus.go: {}
   internal/sdk/models/shared/agentrunstatusresponse.go: {}
+  internal/sdk/models/shared/aichatthreadimage.go: {}
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -1920,6 +1930,7 @@ trackedFiles:
     id: 32a641528840
     pristine_git_object: ae25e05275b2d663fd39d3ae8c4c5eea0a4ab9c3
   internal/sdk/models/shared/changestatus.go: {}
+  internal/sdk/models/shared/clientcredentialsstatus.go: {}
   internal/sdk/models/shared/cloudpricemodel.go:
     id: 8e761866be31
     pristine_git_object: cc8547dd4b50e53073c00a2e2f3181a9fd23786a
@@ -2186,6 +2197,7 @@ trackedFiles:
   internal/sdk/models/shared/datalinkcontenttreelistresponse.go:
     id: fbc2b3100d55
     pristine_git_object: c175e1c31e9a4fa1c3ded2d1c633a8963bae645c
+  internal/sdk/models/shared/datalinkcreatefolderrequest.go: {}
   internal/sdk/models/shared/datalinkcreaterequest.go:
     id: b0cfaa0899cd
     pristine_git_object: e1bb14db818fe0e2ff79da687b26314663285d66
@@ -2835,6 +2847,7 @@ trackedFiles:
   internal/sdk/models/shared/studiocheckpointstatus.go:
     id: 9c451637265e
     pristine_git_object: e89a32e94505a1a8c19a8da814c7120319e1716a
+  internal/sdk/models/shared/studiocheckpointstatusreason.go: {}
   internal/sdk/models/shared/studioremoteconfiguration.go: {}
   internal/sdk/models/shared/submitworkflowlaunchrequest.go:
     id: a88f0bc5be47
@@ -3046,6 +3059,9 @@ trackedFiles:
     id: 85e50271aee7
     pristine_git_object: f43f1d0001435091a6c4b982fce923c16604d4f5
   internal/sdk/models/shared/wfwavemeta.go: {}
+  internal/sdk/models/shared/workflowdaginput.go: {}
+  internal/sdk/models/shared/workflowdaginputedge.go: {}
+  internal/sdk/models/shared/workflowdaginputvertex.go: {}
   internal/sdk/models/shared/workflowdbdto.go:
     id: e47bdf72a96a
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
@@ -3323,6 +3339,9 @@ examples:
         application/json: {}
   ListLabels:
     speakeasy-default-list-labels:
+      parameters:
+        query:
+          search: "environment=production"
       responses:
         "200":
           application/json: {}
@@ -3491,7 +3510,7 @@ examples:
         query:
           workspaceId: 814681
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -3506,7 +3525,7 @@ examples:
           workspaceId: 757884
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAWSComputeEnv:
@@ -3525,7 +3544,7 @@ examples:
         query:
           workspaceId: 890311
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -3540,7 +3559,7 @@ examples:
           workspaceId: 651683
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"cliPath": "/home/ec2-user/miniconda/bin/aws", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "forge": {"allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "arm64Enabled": false, "bidPercentage": 20, "disposeOnDeletion": true, "dragenEnabled": false, "ebsBootSize": 100, "ec2KeyPair": "my-keypair", "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false, "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "maxCpus": 256, "minCpus": 0, "securityGroups": ["sg-12345678", "sg-12345678"], "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "type": "SPOT", "vpcId": "vpc-1234567890abcdef0"}, "fusionSnapshots": false, "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "logGroup": "/aws/batch/seqera", "nvnmeStorageEnabled": true, "region": "us-east-1", "workDir": "s3://my-nextflow-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAWSBatchCE:
@@ -4377,6 +4396,9 @@ examples:
           application/json: {"message": "<value>"}
   ListDatasetsV2:
     speakeasy-default-list-datasets-v2:
+      parameters:
+        query:
+          search: "createdAfter:2026-01-01 label:production"
       responses:
         "200":
           application/json: {}
@@ -4419,6 +4441,9 @@ examples:
           application/json: {"message": "<value>"}
   ListLatestDatasetVersionsV2:
     speakeasy-default-list-latest-dataset-versions-v2:
+      parameters:
+        query:
+          search: "userName:alice updatedAfter:2026-01-01"
       responses:
         "200":
           application/json: {}
@@ -4662,6 +4687,9 @@ examples:
           application/json: {}
   ListManagedIdentities:
     speakeasy-default-list-managed-identities:
+      parameters:
+        query:
+          search: "platform:slurm-platform"
       responses:
         "200":
           application/json: {}
@@ -4884,6 +4912,8 @@ examples:
       parameters:
         path:
           orgId: 544458
+        query:
+          search: "userName:alice"
       responses:
         "200":
           application/json: {}
@@ -5330,6 +5360,9 @@ examples:
           application/json: {"message": "<value>"}
   ListDataStudios:
     speakeasy-default-list-data-studios:
+      parameters:
+        query:
+          search: "status:running label:production"
       responses:
         "200":
           application/json: {"studios": [{"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}], "totalSize": 186382}
@@ -5387,6 +5420,8 @@ examples:
       parameters:
         path:
           sessionId: "<id>"
+        query:
+          search: "status:finalized after:2026-01-01"
       responses:
         "200":
           application/json: {"checkpoints": [], "totalSize": 321212}
@@ -5437,6 +5472,8 @@ examples:
         "200":
           application/json: {"jobSubmitted": true, "sessionId": "<id>", "statusInfo": {}}
         "404":
+          application/json: {"message": "<value>"}
+        "400":
           application/json: {"message": "<value>"}
   StopDataStudio:
     speakeasy-default-stop-data-studio:
@@ -5576,6 +5613,12 @@ examples:
           application/json: {"message": "<value>"}
   ListWorkflows:
     speakeasy-default-list-workflows:
+      parameters:
+        query:
+          max: 50
+          offset: 0
+          search: "status:RUNNING after:2026-08-01 label:production"
+          includeTotalSize: true
       responses:
         "200":
           application/json: {}
@@ -5726,6 +5769,8 @@ examples:
       parameters:
         path:
           workflowId: "<id>"
+        query:
+          search: "COMPLETED"
       responses:
         "200":
           application/json: {}
@@ -5797,6 +5842,8 @@ examples:
       parameters:
         path:
           pipelineId: 328044
+        query:
+          search: "versionName:release-1"
       responses:
         "200":
           application/json: {}
@@ -6019,7 +6066,7 @@ examples:
         query:
           workspaceId: 407920
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 407920, "workerPool": {"bootDiskSizeGB": 100}}, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6034,7 +6081,7 @@ examples:
           workspaceId: 501081
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-batch", "config": {"forge": {"bootDiskSizeGB": 100, "containerRegIds": ["2dzgMSW1UqQHFhZqGQZ99X"], "headPool": {"bootDiskSizeGB": 100}, "vmCount": 501081, "workerPool": {"bootDiskSizeGB": 100}}, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "headJobCpus": 1, "headJobMemoryMb": 4096, "jobMaxWallClockTime": "7d", "region": "<value>", "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRg/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureBatchCE:
@@ -6053,7 +6100,7 @@ examples:
         query:
           workspaceId: 892944
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6068,7 +6115,7 @@ examples:
           workspaceId: 366403
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureCloudCE:
@@ -6087,7 +6134,7 @@ examples:
         query:
           workspaceId: 897294
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"bootDiskSizeGb": 50, "debugMode": 0, "headJobCpus": 4, "headJobMemoryMb": 8192, "location": "us-central1", "machineType": "n1-standard-4", "network": "default", "nfsMount": "/mnt/nfs", "serviceAccount": "my-sa@my-project.iam.gserviceaccount.com", "spot": false, "sshDaemon": false, "usePrivateAddress": false, "workDir": "gs://my-nextflow-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"bootDiskSizeGb": 50, "debugMode": 0, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "location": "us-central1", "machineType": "n1-standard-4", "network": "default", "nfsMount": "/mnt/nfs", "serviceAccount": "my-sa@my-project.iam.gserviceaccount.com", "spot": false, "sshDaemon": false, "usePrivateAddress": false, "workDir": "gs://my-nextflow-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6102,7 +6149,7 @@ examples:
           workspaceId: 260603
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"bootDiskSizeGb": 50, "debugMode": 0, "headJobCpus": 4, "headJobMemoryMb": 8192, "location": "us-central1", "machineType": "n1-standard-4", "network": "default", "nfsMount": "/mnt/nfs", "serviceAccount": "my-sa@my-project.iam.gserviceaccount.com", "spot": false, "sshDaemon": false, "usePrivateAddress": false, "workDir": "gs://my-nextflow-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"bootDiskSizeGb": 50, "debugMode": 0, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "headJobCpus": 4, "headJobMemoryMb": 8192, "location": "us-central1", "machineType": "n1-standard-4", "network": "default", "nfsMount": "/mnt/nfs", "serviceAccount": "my-sa@my-project.iam.gserviceaccount.com", "spot": false, "sshDaemon": false, "usePrivateAddress": false, "workDir": "gs://my-nextflow-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteGCPBatchCE:
@@ -6121,7 +6168,7 @@ examples:
         query:
           workspaceId: 341971
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
       responses:
         "200":
           application/json: {}
@@ -6136,7 +6183,7 @@ examples:
           workspaceId: 19060
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteGCPCloudCE:
@@ -6165,7 +6212,7 @@ examples:
         query:
           workspaceId: 442912
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6180,7 +6227,7 @@ examples:
           workspaceId: 562518
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"backendStrategy": "ECS", "diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAwsCloudCE:
@@ -6684,6 +6731,9 @@ examples:
           application/json: {"message": "<value>"}
   ListAgentRuns:
     speakeasy-default-list-agent-runs:
+      parameters:
+        query:
+          search: "status:running"
       responses:
         "200":
           application/json: {}
@@ -7062,6 +7112,71 @@ examples:
       responses:
         "200":
           application/json: {"templates": []}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateDataLinkFolder:
+    speakeasy-default-create-data-link-folder:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {"folderName": "<value>"}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListServiceAccountSshKeys:
+    speakeasy-default-list-service-account-ssh-keys:
+      parameters:
+        path:
+          orgId: 566413
+          saId: 528234
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteServiceAccountSshKey:
+    speakeasy-default-delete-service-account-ssh-key:
+      parameters:
+        path:
+          orgId: 168920
+          saId: 221686
+          keyId: 31569
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeServiceAccountSshKey:
+    speakeasy-default-describe-service-account-ssh-key:
+      parameters:
+        path:
+          orgId: 808540
+          saId: 256378
+          keyId: 386544
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  RecoverDataStudioCheckpoint:
+    speakeasy-default-recover-data-studio-checkpoint:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 652793
+      responses:
+        "200":
+          application/json: {"author": {}, "dateCreated": "2025-11-17T16:14:09.147Z", "dateSaved": "2025-01-20T05:02:35.136Z", "id": 928503, "name": "<value>", "path": "/opt/include", "status": "finalized"}
+        "400":
+          application/json: {"message": "<value>"}
+  RevertDataStudioCheckpointRecovery:
+    speakeasy-default-revert-data-studio-checkpoint-recovery:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 359264
+      responses:
+        "200":
+          application/json: {"author": {}, "dateCreated": "2026-06-29T20:51:07.326Z", "dateSaved": "2024-05-23T19:50:55.019Z", "id": 104874, "name": "<value>", "path": "/lost+found", "status": "empty"}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

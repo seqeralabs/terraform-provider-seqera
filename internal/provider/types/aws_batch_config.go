@@ -19,6 +19,8 @@ type AwsBatchConfig struct {
 	Forge                         *ForgeConfig        `tfsdk:"forge"`
 	FusionSnapshots               types.Bool          `tfsdk:"fusion_snapshots"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	HeadJobCpus                   types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb               types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadJobRole                   types.String        `tfsdk:"head_job_role"`

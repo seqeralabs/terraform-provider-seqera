@@ -677,11 +677,13 @@ actions:
   - target: $.components.schemas.AwsCloudConfig.properties.subnetIds
     update:
       description: |
-        Subnets to launch compute instances into. The first subnet is used for
-        basic placement; Seqera Intelligent Compute may use all of them. Replaces
+        Subnets to launch compute instances into. The Nextflow head instance tries
+        them in order, moving to the next one when a subnet or its Availability Zone
+        has no capacity, so list subnets in different zones for resilience. With
+        Seqera Intelligent Compute, task instances can use any of them. Replaces
         the deprecated single-value `subnet_id`, and is mutually exclusive with it.
-        All subnets must be in the VPC given by `vpc_id` (when set) and in the same
-        region as the compute environment.
+        All subnets must be in one VPC (the one given by `vpc_id`, when set) and in
+        the same region as the compute environment.
       example: ["subnet-12345678", "subnet-87654321"]
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
@@ -1394,3 +1396,67 @@ actions:
     update:
       description: Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
       x-speakeasy-plan-validators: FusionVersionValidator
+
+  # ============================================================================
+  # NEXTFLOW GLOBAL CACHE - the Platform treats global_cache_enabled and
+  # global_cache_path as a single unit (each requires the other), requires the
+  # object storage scheme of the CE platform, and stores the path in canonical
+  # form (no repeated/trailing slashes). Reject violations at plan time so a
+  # non-canonical path cannot cause an inconsistent result after apply.
+  # ============================================================================
+  - target: $.components.schemas.AwsBatchConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AwsBatchConfig.properties.globalCachePath
+    update:
+      example: "s3://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.AwsCloudConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AwsCloudConfig.properties.globalCachePath
+    update:
+      example: "s3://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.globalCachePath
+    update:
+      example: "s3://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathS3Validator
+  - target: $.components.schemas.AzBatchConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AzBatchConfig.properties.globalCachePath
+    update:
+      example: "az://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathAzValidator
+  - target: $.components.schemas.AzCloudConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.AzCloudConfig.properties.globalCachePath
+    update:
+      example: "az://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathAzValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.globalCachePath
+    update:
+      example: "gs://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathGsValidator
+  - target: $.components.schemas.GoogleCloudConfig.properties.globalCacheEnabled
+    update:
+      example: true
+      x-speakeasy-plan-validators: GlobalCacheEnabledValidator
+  - target: $.components.schemas.GoogleCloudConfig.properties.globalCachePath
+    update:
+      example: "gs://my-nextflow-bucket/cache"
+      x-speakeasy-plan-validators: GlobalCachePathGsValidator

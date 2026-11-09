@@ -19,6 +19,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -138,15 +139,23 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Batch account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 							"storage_key": schema.StringAttribute{
 								Optional: true,
 							},
 							"storage_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Storage account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 						},
 						Validators: []validator.Object{
@@ -179,8 +188,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Batch account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 							"client_id": schema.StringAttribute{
 								Computed: true,
@@ -193,8 +206,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"storage_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Storage account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 							"subscription_id": schema.StringAttribute{
 								Computed: true,
@@ -235,8 +252,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Batch account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 							"client_id": schema.StringAttribute{
 								Computed: true,
@@ -249,8 +270,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"storage_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure Storage account name (3 to 24 letters or digits, case-insensitive)`,
+								Validators: []validator.String{
+									stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]{3,24}$`).String()),
+								},
 							},
 							"tenant_id": schema.StringAttribute{
 								Computed: true,

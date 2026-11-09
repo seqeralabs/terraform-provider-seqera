@@ -7,7 +7,51 @@ import (
 	"time"
 )
 
+// ClientCredentials - Client credentials of this service account. Null when service account client credentials are not enabled for the organization.
+type ClientCredentials struct {
+	// OAuth client ID of the service account. Null when no client exists yet.
+	ClientID *string `json:"clientId,omitempty"`
+	// Latest expiry of a live secret when ACTIVE or EXPIRING, or when the last secret expired when EXPIRED. Null otherwise.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+	// Status of the service account's client credentials
+	Status ClientCredentialsStatus `json:"status"`
+}
+
+func (c ClientCredentials) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ClientCredentials) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *ClientCredentials) GetClientID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ClientID
+}
+
+func (c *ClientCredentials) GetExpiresAt() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.ExpiresAt
+}
+
+func (c *ClientCredentials) GetStatus() ClientCredentialsStatus {
+	if c == nil {
+		return ClientCredentialsStatus("")
+	}
+	return c.Status
+}
+
 type ServiceAccountDto struct {
+	// Client credentials of this service account. Null when service account client credentials are not enabled for the organization.
+	ClientCredentials *ClientCredentials `json:"clientCredentials,omitempty"`
 	// Creation timestamp.
 	CreatedAt   *time.Time `json:"createdAt,omitempty"`
 	Description *string    `default:"" json:"description"`
@@ -27,6 +71,13 @@ func (s *ServiceAccountDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (s *ServiceAccountDto) GetClientCredentials() *ClientCredentials {
+	if s == nil {
+		return nil
+	}
+	return s.ClientCredentials
 }
 
 func (s *ServiceAccountDto) GetCreatedAt() *time.Time {

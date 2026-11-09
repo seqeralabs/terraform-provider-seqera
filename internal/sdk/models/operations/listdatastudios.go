@@ -10,7 +10,7 @@ import (
 type ListDataStudiosRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Optional search criteria, allowing free text search on name and templateUrl and keywords: `userId`, `computeEnvId` and `status`.
+	// Optional Studio search query. Free text matches the Studio name and template URL. Supports `is:starred` and the `userName`, `computeEnvName`, `status`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `label`, `collaborationMode`, and `computeEnvType` keywords.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

@@ -32,6 +32,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -241,6 +242,32 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Description: `Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires ` + "`" + `override_nextflow_fusion_version = true` + "`" + `. Requires replacement if changed.`,
 						Validators: []validator.String{
 							custom_stringvalidators.FusionVersionValidator(),
+						},
+					},
+					"global_cache_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.GlobalCacheEnabledValidator(),
+						},
+					},
+					"global_cache_path": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthBetween(1, 255),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+							custom_stringvalidators.GlobalCachePathS3Validator(),
 						},
 					},
 					"gpu_enabled": schema.BoolAttribute{
@@ -601,11 +628,13 @@ func (r *AwsCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 						},
 						ElementType: types.StringType,
-						MarkdownDescription: `Subnets to launch compute instances into. The first subnet is used for` + "\n" +
-							`basic placement; Seqera Intelligent Compute may use all of them. Replaces` + "\n" +
+						MarkdownDescription: `Subnets to launch compute instances into. The Nextflow head instance tries` + "\n" +
+							`them in order, moving to the next one when a subnet or its Availability Zone` + "\n" +
+							`has no capacity, so list subnets in different zones for resilience. With` + "\n" +
+							`Seqera Intelligent Compute, task instances can use any of them. Replaces` + "\n" +
 							`the deprecated single-value ` + "`" + `subnet_id` + "`" + `, and is mutually exclusive with it.` + "\n" +
-							`All subnets must be in the VPC given by ` + "`" + `vpc_id` + "`" + ` (when set) and in the same` + "\n" +
-							`region as the compute environment.` + "\n" +
+							`All subnets must be in one VPC (the one given by ` + "`" + `vpc_id` + "`" + `, when set) and in` + "\n" +
+							`the same region as the compute environment.` + "\n" +
 							`Requires replacement if changed.`,
 					},
 					"vpc_id": schema.StringAttribute{

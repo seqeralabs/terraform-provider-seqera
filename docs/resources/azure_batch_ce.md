@@ -227,6 +227,8 @@ Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--forge))
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
+- `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
+- `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
@@ -284,6 +286,7 @@ Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
+- `low_priority` (Boolean) When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 
@@ -295,6 +298,7 @@ Optional:
 
 - `auto_scale` (Boolean) Requires replacement if changed.
 - `boot_disk_size_gb` (Number) Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default. Requires replacement if changed.
+- `low_priority` (Boolean) When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs. Requires replacement if changed.
 - `vm_count` (Number) Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 

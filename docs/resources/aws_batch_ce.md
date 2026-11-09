@@ -183,6 +183,8 @@ when it is interrupted by a spot reclamation.
 Requires `enable_fusion = true`.
 Requires replacement if changed.
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
+- `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
+- `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.

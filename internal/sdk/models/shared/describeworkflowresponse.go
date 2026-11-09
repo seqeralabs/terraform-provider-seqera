@@ -367,6 +367,7 @@ type DescribeWorkflowResponseWorkflow struct {
 	ConfigProfiles  []string `json:"configProfiles,omitempty"`
 	Fusion          *Fusion  `json:"fusion,omitempty"`
 	FusionVersion   *string  `json:"fusionVersion,omitempty"`
+	GlobalCachePath *string  `json:"globalCachePath,omitempty"`
 	LogFile         *string  `json:"logFile,omitempty"`
 	NextflowConfig  *string  `json:"nextflowConfig,omitempty"`
 	NextflowVersion *string  `json:"nextflowVersion,omitempty"`
@@ -577,6 +578,13 @@ func (d *DescribeWorkflowResponseWorkflow) GetFusionVersion() *string {
 		return nil
 	}
 	return d.FusionVersion
+}
+
+func (d *DescribeWorkflowResponseWorkflow) GetGlobalCachePath() *string {
+	if d == nil {
+		return nil
+	}
+	return d.GlobalCachePath
 }
 
 func (d *DescribeWorkflowResponseWorkflow) GetLogFile() *string {

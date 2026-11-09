@@ -20,7 +20,7 @@ type ListWorkflowTasksRequest struct {
 	SortBy *string `queryParam:"style=form,explode=true,name=sortBy"`
 	// Sorting direction (asc|desc)
 	SortDir *string `queryParam:"style=form,explode=true,name=sortDir"`
-	// Search tasks by name
+	// Optional case-insensitive partial search of task process names, tags, hashes, and statuses.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Exact process name filter
 	Process *string `queryParam:"style=form,explode=true,name=process"`

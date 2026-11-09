@@ -3,11 +3,19 @@
 package shared
 
 type TraceBeginRequest struct {
+	Dag *WorkflowDagInput `json:"dag,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LaunchID     *string        `json:"launchId,omitempty"`
 	ProcessNames []string       `json:"processNames,omitempty"`
 	TowerLaunch  *bool          `json:"towerLaunch,omitempty"`
 	Workflow     *WorkflowInput `json:"workflow,omitempty"`
+}
+
+func (t *TraceBeginRequest) GetDag() *WorkflowDagInput {
+	if t == nil {
+		return nil
+	}
+	return t.Dag
 }
 
 func (t *TraceBeginRequest) GetLaunchID() *string {

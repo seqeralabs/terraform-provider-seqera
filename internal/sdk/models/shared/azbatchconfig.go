@@ -71,6 +71,10 @@ type AzBatchConfig struct {
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
@@ -175,6 +179,20 @@ func (a *AzBatchConfig) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AzBatchConfig) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AzBatchConfig) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AzBatchConfig) GetHeadJobCpus() *int {

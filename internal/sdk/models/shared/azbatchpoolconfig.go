@@ -10,9 +10,11 @@ import (
 type AzBatchPoolConfig struct {
 	AutoScale *bool `json:"autoScale,omitempty"`
 	// Boot disk size in GB for this pool's nodes. Overrides the forge-level bootDiskSizeGB. When omitted, falls back to the forge-level value or Azure's default.
-	BootDiskSizeGB *int    `json:"bootDiskSizeGB,omitempty"`
-	VMCount        *int    `json:"vmCount,omitempty"`
-	VMType         *string `json:"vmType,omitempty"`
+	BootDiskSizeGB *int `json:"bootDiskSizeGB,omitempty"`
+	// When true, the pool runs on Spot (low-priority) VMs, which can be evicted at any time; Azure Batch requeues the tasks of evicted nodes. Only allowed on the worker pool, in dual-pool mode, so the head job always runs on dedicated VMs.
+	LowPriority *bool   `json:"lowPriority,omitempty"`
+	VMCount     *int    `json:"vmCount,omitempty"`
+	VMType      *string `json:"vmType,omitempty"`
 }
 
 func (a AzBatchPoolConfig) MarshalJSON() ([]byte, error) {
@@ -38,6 +40,13 @@ func (a *AzBatchPoolConfig) GetBootDiskSizeGB() *int {
 		return nil
 	}
 	return a.BootDiskSizeGB
+}
+
+func (a *AzBatchPoolConfig) GetLowPriority() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.LowPriority
 }
 
 func (a *AzBatchPoolConfig) GetVMCount() *int {

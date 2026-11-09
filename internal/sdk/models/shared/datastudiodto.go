@@ -142,6 +142,7 @@ func (d *DataStudioDtoConfiguration) GetSSHEnabled() *bool {
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
+	// Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.
 	AllowedUsers []*UserInfo `json:"allowedUsers,omitempty"`
 	// Base container image the Studio is built from.
 	BaseImage *string `json:"baseImage,omitempty"`
@@ -153,7 +154,8 @@ type DataStudioDto struct {
 	CustomImage *bool `json:"customImage,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
-	IsPrivate   *bool   `json:"isPrivate,omitempty"`
+	// Whether the studio is private, so that only the users in 'allowedUsers' can connect to it.
+	IsPrivate *bool `json:"isPrivate,omitempty"`
 	// Display name for the Studio session
 	Name         *string                    `json:"name,omitempty"`
 	RemoteConfig *StudioRemoteConfiguration `json:"remoteConfig,omitempty"`
