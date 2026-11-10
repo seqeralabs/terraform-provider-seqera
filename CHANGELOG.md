@@ -1,8 +1,26 @@
-# Unreleased
+# v0.44.0
 
 BREAKING CHANGES:
 
 - **`intelligent_compute_config.backend_strategy` removed.** The `ECS` and `EC2` Intelligent Compute backends are deprecated, and the API accepts only `VM` (its default) when creating a compute environment, so the attribute no longer has a meaningful choice. It is removed from `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `aws_cloud`, `azure_cloud`, `google_cloud` and `local_platform` blocks of `seqera_compute_env`. The provider no longer sends it, so new compute environments use `VM`. Remove `backend_strategy` from your configurations. Existing state upgrades without a diff and existing compute environments are not replaced, including ones created with `ECS` or `EC2`, which keep their backend. The `backend_strategy` plan-time validator is removed along with the attribute.
+
+FEATURES:
+
+- **Nextflow Global Cache on compute environments.** New `config.global_cache_enabled` and `config.global_cache_path` on `seqera_aws_batch_ce`, `seqera_aws_cloud_ce`, `seqera_aws_compute_env`, `seqera_azure_batch_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_batch_ce`, `seqera_gcp_cloud_ce` and the `aws_batch`, `aws_cloud`, `azure_batch`, `azure_cloud`, `google_batch`, `google_cloud` and `seqeracompute_platform` blocks of `seqera_compute_env`. `global_cache_path` is the object storage folder Nextflow uses as its Global Cache. The settings are checked at plan time with the rules the Platform applies: `global_cache_enabled = true` and `global_cache_path` must be set together, and the path must use the storage scheme of the compute environment's platform (`s3://`, `gs://` or `az://`), name a bucket, and be in canonical form (no repeated or trailing slashes), which also avoids an inconsistent result after apply. Changing either forces replacement.
+
+- **Spot VMs on Azure Batch Forge pools.** New `low_priority` on `config.forge.head_pool` and `config.forge.worker_pool` of `seqera_azure_batch_ce` and the `azure_batch` block of `seqera_compute_env`. When true, the pool runs on Spot (low-priority) VMs, which Azure can evict at any time; Azure Batch requeues the tasks of evicted nodes. The Platform allows it only on the worker pool in dual-pool mode, so the head job always runs on dedicated VMs. Changing it forces replacement.
+
+- **Bucket access on Seqera Compute.** New `allow_buckets` on the `seqeracompute_platform` block of `seqera_compute_env`: S3 buckets in your own AWS account (`s3://bucket[/path]`) the compute environment can read and write. It cannot be changed after creation, so changing it forces replacement. The bucket policy that grants the compute environment's roles access to each bucket is exposed read-only as `compute_env.bucket_policies`, keyed by bucket, once the compute environment resources are created.
+
+- **Client credentials status on `seqera_service_account`.** New read-only `client_credentials` block with the OAuth `client_id`, the `status` of the client credentials and `expires_at`. It is null when service account client credentials are not enabled for the organization.
+
+NOTES:
+
+- **Seqera Platform API spec updated to 1.257.0.**
+
+- **AWS Cloud subnet failover documented.** The `subnet_ids` description on `seqera_aws_cloud_ce` and the `aws_cloud` block of `seqera_compute_env` said only the first subnet was used outside Intelligent Compute. The Nextflow head instance now tries the subnets in order and moves to the next one when a subnet or its Availability Zone has no capacity, so list subnets in different zones. All subnets must be in one VPC. The provider already sent the whole list, so behaviour is unchanged.
+
+- **Documentation filled in for Studio privacy and Azure credentials.** `is_private` and `allowed_users` on `seqera_studios`, and `batch_name` and `storage_name` on the Azure keys of `seqera_credential`, now describe what they do.
 
 # v0.43.0
 
