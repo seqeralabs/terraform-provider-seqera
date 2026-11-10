@@ -19649,7 +19649,6 @@ components:
       title: AWS Cloud configuration
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
         - BillingExportTableGoogleOnlyValidator
       required:
         - region
@@ -20156,7 +20155,6 @@ components:
       title: Azure Cloud configuration
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
         - FusionSnapshotsUnsupportedValidator
         - BillingExportTableGoogleOnlyValidator
     AzCloudPlatformMetaInfo:
@@ -24575,7 +24573,6 @@ components:
       title: Google Cloud configuration
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
     GoogleCloudPlatformMetaInfo:
       type: object
       properties:
@@ -26164,9 +26161,7 @@ components:
           description: Compute environment working directory
           type: string
       title: Local execution configuration
-      x-speakeasy-plan-validators:
-        - BackendStrategyVmOnlyValidator
-        - BillingExportTableGoogleOnlyValidator
+      x-speakeasy-plan-validators: BillingExportTableGoogleOnlyValidator
       required:
         - workDir
     LocalPlatformMetainfo:
@@ -27629,20 +27624,6 @@ components:
     SchedConfig:
       type: object
       properties:
-        backendStrategy:
-          description: |
-            Backend used by Intelligent Compute to run tasks. Only `VM` (the default)
-            is supported: it runs tasks on cloud VMs. Omit this attribute or set it to `VM`.
-
-            `ECS` and `EC2` (AWS only) are deprecated. The API reports them only for
-            compute environments created before the deprecation and rejects them on create.
-          type: string
-          enum:
-            - ECS
-            - EC2
-            - VM
-          example: "VM"
-          x-speakeasy-param-force-new: true
         billingExportTable:
           description: Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
           type: string

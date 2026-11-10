@@ -2,7 +2,7 @@
 
 BREAKING CHANGES:
 
-- **Intelligent Compute only accepts the `VM` backend.** The `ECS` and `EC2` backends are deprecated, and the API now accepts only `VM` (the default) when creating a compute environment. `seqera_aws_cloud_ce` and the `aws_cloud` and `local_platform` blocks of `seqera_compute_env` now reject any `intelligent_compute_config.backend_strategy` other than `VM` at plan time, as Azure and Google Cloud already did. Configurations that set `backend_strategy = "ECS"` or `"EC2"` must remove the attribute. Removing it does not replace an existing compute environment, because the attribute is computed and an unset value never forces replacement. Setting it to `"VM"` on an existing `ECS` or `EC2` compute environment forces replacement, so only set `"VM"` explicitly on new compute environments. The documentation and the Intelligent Compute example no longer present `ECS` as the default.
+- **`intelligent_compute_config.backend_strategy` removed.** The `ECS` and `EC2` Intelligent Compute backends are deprecated, and the API accepts only `VM` (its default) when creating a compute environment, so the attribute no longer has a meaningful choice. It is removed from `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `aws_cloud`, `azure_cloud`, `google_cloud` and `local_platform` blocks of `seqera_compute_env`. The provider no longer sends it, so new compute environments use `VM`. Remove `backend_strategy` from your configurations. Existing state upgrades without a diff and existing compute environments are not replaced, including ones created with `ECS` or `EC2`, which keep their backend. The `backend_strategy` plan-time validator is removed along with the attribute.
 
 # v0.43.0
 

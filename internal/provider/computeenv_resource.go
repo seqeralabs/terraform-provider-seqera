@@ -1277,26 +1277,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
-											"backend_strategy": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
-													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
-													`` + "\n" +
-													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
-													`compute environments created before the deprecation and rejects them on create.` + "\n" +
-													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"ECS",
-														"EC2",
-														"VM",
-													),
-												},
-											},
 											"billing_export_table": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -1617,7 +1597,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
-									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},
@@ -2318,26 +2297,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
-											"backend_strategy": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
-													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
-													`` + "\n" +
-													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
-													`compute environments created before the deprecation and rejects them on create.` + "\n" +
-													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"ECS",
-														"EC2",
-														"VM",
-													),
-												},
-											},
 											"billing_export_table": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -2659,7 +2618,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
-									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
@@ -3859,26 +3817,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
-											"backend_strategy": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
-													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
-													`` + "\n" +
-													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
-													`compute environments created before the deprecation and rejects them on create.` + "\n" +
-													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"ECS",
-														"EC2",
-														"VM",
-													),
-												},
-											},
 											"billing_export_table": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -4187,7 +4125,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
 									custom_objectvalidators.SchedConfigConsistencyValidator(),
-									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 								},
 							},
 							"google_lifesciences": schema.SingleNestedAttribute{
@@ -4801,26 +4738,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											objectplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Attributes: map[string]schema.Attribute{
-											"backend_strategy": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.String{
-													stringplanmodifier.RequiresReplaceIfConfigured(),
-												},
-												MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
-													`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
-													`` + "\n" +
-													`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
-													`compute environments created before the deprecation and rejects them on create.` + "\n" +
-													`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"ECS",
-														"EC2",
-														"VM",
-													),
-												},
-											},
 											"billing_export_table": schema.StringAttribute{
 												Computed: true,
 												Optional: true,
@@ -5050,7 +4967,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
 									}...),
-									custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 									custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 								},
 							},

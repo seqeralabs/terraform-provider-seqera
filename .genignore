@@ -56,8 +56,6 @@ internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/objectvalidators/sched_config_consistency_validator.go
 internal/validators/objectvalidators/billing_export_table_google_only_validator.go
 internal/validators/objectvalidators/billing_export_table_google_only_validator_test.go
-internal/validators/objectvalidators/backend_strategy_vm_only_validator.go
-internal/validators/objectvalidators/backend_strategy_vm_only_validator_test.go
 internal/validators/objectvalidators/action_outcome_validator.go
 internal/validators/objectvalidators/action_outcome_validator_test.go
 internal/validators/stringvalidators/action_trigger_source_validator.go
@@ -113,6 +111,7 @@ internal/provider/stateupgrader_schemas.go
 internal/provider/computeenv_upgrade_decode_test.go
 internal/provider/stateupgrader_all_test.go
 internal/provider/cloudce_sched_enabled_upgrade_test.go
+internal/provider/backend_strategy_removal_upgrade_test.go
 internal/provider/agent_service_account_schema_test.go
 internal/provider/agent_service_account_plan_test.go
 internal/provider/awscredential_resource_modify_plan.go
