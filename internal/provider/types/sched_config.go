@@ -8,7 +8,6 @@ import (
 )
 
 type SchedConfig struct {
-	BackendStrategy    types.String        `tfsdk:"backend_strategy"`
 	BillingExportTable types.String        `tfsdk:"billing_export_table"`
 	DiskAllocation     types.String        `tfsdk:"disk_allocation"`
 	FusionSnapshots    types.Bool          `tfsdk:"fusion_snapshots"`

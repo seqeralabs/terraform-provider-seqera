@@ -404,19 +404,13 @@ actions:
   # at plan time, before the API rejects apply.
   #
   # billing_export_table names a BigQuery Cloud Billing export and is consumed
-  # only by the Google backend. Like backend_strategy and fusion_snapshots it
-  # lives on the shared SchedConfig schema, which cannot drop a field for one
-  # platform, so it is rejected at plan time here instead of being silently
-  # ignored on apply.
-  #
-  # The ECS and EC2 Intelligent Compute backends are deprecated: the API only
-  # accepts VM when creating a compute environment, so reject other values at
-  # plan time, like on Azure and Google.
+  # only by the Google backend. Like fusion_snapshots it lives on the shared
+  # SchedConfig schema, which cannot drop a field for one platform, so it is
+  # rejected at plan time here instead of being silently ignored on apply.
   - target: $.components.schemas.AwsCloudConfig
     update:
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
         - BillingExportTableGoogleOnlyValidator
 
   - target: $.components.schemas.AwsCloudConfig.properties.schedEnabled
@@ -509,16 +503,14 @@ actions:
 
   # Intelligent Compute (sched_config) advanced fields. Shared SchedConfig
   # schema, so these descriptions/examples apply across AWS/Azure/GCP cloud CEs.
+  #
+  # backendStrategy is hidden: VM (the API default) is the only value the API
+  # accepts on create, and the AWS-only ECS and EC2 backends are deprecated and
+  # only reported for compute environments created before the deprecation.
+  # Exposing a single-valued attribute only invites mistakes, so the provider
+  # never sends it and the API applies VM.
   - target: $.components.schemas.SchedConfig.properties.backendStrategy
-    update:
-      description: |
-        Backend used by Intelligent Compute to run tasks. Only `VM` (the default)
-        is supported: it runs tasks on cloud VMs. Omit this attribute or set it to `VM`.
-
-        `ECS` and `EC2` (AWS only) are deprecated. The API reports them only for
-        compute environments created before the deprecation and rejects them on create.
-      example: "VM"
-      x-speakeasy-param-force-new: true
+    remove: true
   - target: $.components.schemas.SchedConfig.properties.maxSpotAttempts
     update:
       description: |

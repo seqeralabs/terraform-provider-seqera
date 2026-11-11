@@ -434,18 +434,12 @@ actions:
         Must be omitted (or null) when `intelligent_compute_enabled = false`.
       x-speakeasy-param-force-new: true
 
-  # Google only supports the VM backend for Intelligent Compute; the backend
-  # ignores backend_strategy here and hardcodes VM. Reject other values at plan
-  # time (the shared SchedConfig can't drop the field for one platform, so this
-  # validator constrains it instead). PR #231 review.
-  #
   # schedConfigConsistencyValidator rejects intelligent_compute_config when
   # intelligent_compute_enabled is false, matching AWS Cloud.
   - target: $.components.schemas.GoogleCloudConfig
     update:
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
 
   # Plan-time soft-warn when pre/post-run scripts exceed Platform Cloud's
   # 1024-byte limit. Enterprise installs can raise the limit via platform

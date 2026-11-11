@@ -258,27 +258,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 						},
 						Attributes: map[string]schema.Attribute{
-							"backend_strategy": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									stringplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
-								MarkdownDescription: `Backend used by Intelligent Compute to run tasks. Only ` + "`" + `VM` + "`" + ` (the default)` + "\n" +
-									`is supported: it runs tasks on cloud VMs. Omit this attribute or set it to ` + "`" + `VM` + "`" + `.` + "\n" +
-									`` + "\n" +
-									`` + "`" + `ECS` + "`" + ` and ` + "`" + `EC2` + "`" + ` (AWS only) are deprecated. The API reports them only for` + "\n" +
-									`compute environments created before the deprecation and rejects them on create.` + "\n" +
-									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"ECS",
-										"EC2",
-										"VM",
-									),
-								},
-							},
 							"billing_export_table": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -595,7 +574,6 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
-					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{

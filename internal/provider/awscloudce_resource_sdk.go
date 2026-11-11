@@ -56,11 +56,6 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			r.Config.IntelligentComputeConfig = nil
 		} else {
 			r.Config.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-			if resp.Config.IntelligentComputeConfig.BackendStrategy != nil {
-				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.Config.IntelligentComputeConfig.BackendStrategy))
-			} else {
-				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-			}
 			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
@@ -451,12 +446,6 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 
 	var intelligentComputeConfig *shared.SchedConfig
 	if r.Config.IntelligentComputeConfig != nil {
-		backendStrategy := new(shared.SchedConfigBackendStrategy)
-		if !r.Config.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.Config.IntelligentComputeConfig.BackendStrategy.IsNull() {
-			*backendStrategy = shared.SchedConfigBackendStrategy(r.Config.IntelligentComputeConfig.BackendStrategy.ValueString())
-		} else {
-			backendStrategy = nil
-		}
 		billingExportTable := new(string)
 		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
 			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -530,7 +519,6 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:    backendStrategy,
 			BillingExportTable: billingExportTable,
 			DiskAllocation:     diskAllocation,
 			FusionSnapshots:    fusionSnapshots,
