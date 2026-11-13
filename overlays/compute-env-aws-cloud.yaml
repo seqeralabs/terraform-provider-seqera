@@ -466,10 +466,13 @@ actions:
       example: 100
       x-speakeasy-param-force-new: true
 
+  # SchedConfig is shared by the AWS, Azure and Google Cloud compute
+  # environments (and the generic seqera_compute_env resource), so these two
+  # descriptions must stay provider-neutral: no "EC2" here.
   - target: $.components.schemas.SchedConfig.properties.provisioningModel
     update:
       description: |
-        EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+        Provisioning strategy for Seqera Intelligent Compute nodes.
         Case-sensitive — must be one of:
         - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
         - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
@@ -488,7 +491,7 @@ actions:
   - target: $.components.schemas.SchedConfig.properties.machineTypes
     update:
       description: |
-        EC2 instance types eligible for Seqera Intelligent Compute nodes.
+        Instance types eligible for Seqera Intelligent Compute nodes.
         Leave empty (`[]`) to let the scheduler pick the most cost-optimal
         types per task. When populated, the scheduler is restricted to this
         whitelist; types outside the platform's filtered catalog for the
