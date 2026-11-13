@@ -206,7 +206,7 @@ Requires replacement if changed.
 resume from a snapshot instead of restarting from scratch. Not supported
 on Azure compute environments.
 Requires replacement if changed.
-- `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
+- `machine_types` (List of String) Instance types eligible for Seqera Intelligent Compute nodes.
 Leave empty (`[]`) to let the scheduler pick the most cost-optimal
 types per task. When populated, the scheduler is restricted to this
 whitelist; types outside the platform's filtered catalog for the
@@ -227,7 +227,7 @@ Requires replacement if changed. (see [below for nested schema](#nestedatt--conf
 Suggested values: `none` (default), `qr/v1`, `qr/v2`, `qr/v3`. Any other
 string is accepted.
 Requires replacement if changed.
-- `provisioning_model` (String) EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+- `provisioning_model` (String) Provisioning strategy for Seqera Intelligent Compute nodes.
 Case-sensitive — must be one of:
 - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
 - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
