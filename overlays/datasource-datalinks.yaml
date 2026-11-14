@@ -54,8 +54,6 @@ actions:
           description: Bad request
         "403":
           description: Operation not allowed
-      security:
-        - BearerAuth: []
 
   # ListDataLinksDataSourceResponse schema
   - target: $.components.schemas

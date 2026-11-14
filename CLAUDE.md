@@ -136,10 +136,9 @@ See `docs/resources/` for the full list. Main families:
 - Verify provider behavior with `terraform plan`
 
 ### Authentication
-Provider supports multiple authentication methods configured through:
-- Environment variables
-- Provider configuration block
-- OAuth2 client credentials and password flows
+Provider supports two authentication methods, each configurable through the provider block or environment variables:
+- Personal access token: `bearer_auth` / `TOWER_ACCESS_TOKEN`
+- Service account OAuth2 client credentials: `client_id` / `TOWER_CLIENT_ID` and `client_secret` / `TOWER_CLIENT_SECRET`, exchanged at `{server_url}/token`. The scheme is declared in `overlays/auth.yaml` because the platform hides the token endpoint from its published spec.
 
 ## Important Notes
 
