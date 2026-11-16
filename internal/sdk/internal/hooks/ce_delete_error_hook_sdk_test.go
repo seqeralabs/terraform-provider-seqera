@@ -40,7 +40,7 @@ func TestCEDeleteRejectionFailsSDKCall(t *testing.T) {
 			}))
 			defer srv.Close()
 
-			client := sdk.New(sdk.WithServerURL(srv.URL), sdk.WithSecurity(shared.Security{BearerAuth: "token"}))
+			client := sdk.New(sdk.WithServerURL(srv.URL), sdk.WithSecurity(shared.Security{BearerAuth: sdk.Pointer("token")}))
 			ws := int64(1)
 			res, err := client.ComputeEnvs.DeleteAzureBatchCE(context.Background(), operations.DeleteAzureBatchCERequest{ComputeEnvID: "ce1", WorkspaceID: ws})
 

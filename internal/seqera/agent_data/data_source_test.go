@@ -78,7 +78,7 @@ func TestFind(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			srv := newServer(t, tc.agents, tc.status)
 			defer srv.Close()
-			client := sdk.New(sdk.WithServerURL(srv.URL), sdk.WithSecurity(shared.Security{BearerAuth: "test"}))
+			client := sdk.New(sdk.WithServerURL(srv.URL), sdk.WithSecurity(shared.Security{BearerAuth: sdk.Pointer("test")}))
 
 			got, err := find(context.Background(), client, 5, tc.lookup)
 
