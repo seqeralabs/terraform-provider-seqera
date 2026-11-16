@@ -35,8 +35,6 @@ func newCredentials(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 // ListCredentials - List credentials
 // Lists all credentials accessible to the authenticated user.
 // Use `workspace_id` to filter credentials in a specific workspace context.
-//
-// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
 func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsDataSourceRequest, opts ...operations.Option) (*operations.ListCredentialsDataSourceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -67,7 +65,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListCredentialsDataSource",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -93,7 +91,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
 
@@ -296,7 +294,7 @@ func (s *Credentials) CreateCredentials(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -533,7 +531,7 @@ func (s *Credentials) DescribeCredentialsSetup(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeCredentialsSetup",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -762,7 +760,7 @@ func (s *Credentials) ValidateCredentialsName(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateCredentialsName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -974,7 +972,7 @@ func (s *Credentials) DeleteCredentials(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1207,7 +1205,7 @@ func (s *Credentials) DescribeCredentials(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1438,7 +1436,7 @@ func (s *Credentials) UpdateCredentials(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -1656,7 +1654,7 @@ func (s *Credentials) GetEncryptedCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetEncryptedCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1884,7 +1882,7 @@ func (s *Credentials) ValidateCredentials(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2117,7 +2115,7 @@ func (s *Credentials) CreateAWSCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAWSCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAWSCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -2356,7 +2354,7 @@ func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAWSCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2588,7 +2586,7 @@ func (s *Credentials) UpdateAWSCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAWSCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAWSCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -2806,7 +2804,7 @@ func (s *Credentials) DeleteAWSCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAWSCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3039,7 +3037,7 @@ func (s *Credentials) CreateAzureCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAzureCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAzureCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -3278,7 +3276,7 @@ func (s *Credentials) DescribeAzureCredentials(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAzureCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3509,7 +3507,7 @@ func (s *Credentials) UpdateAzureCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAzureCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAzureCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -3727,7 +3725,7 @@ func (s *Credentials) DeleteAzureCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAzureCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3960,7 +3958,7 @@ func (s *Credentials) CreateAzureEntraCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAzureEntraCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAzureEntraCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -4199,7 +4197,7 @@ func (s *Credentials) DescribeAzureEntraCredentials(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAzureEntraCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4430,7 +4428,7 @@ func (s *Credentials) UpdateAzureEntraCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAzureEntraCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAzureEntraCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -4648,7 +4646,7 @@ func (s *Credentials) DeleteAzureEntraCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAzureEntraCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4881,7 +4879,7 @@ func (s *Credentials) CreateAzureCloudCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAzureCloudCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAzureCloudCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -5120,7 +5118,7 @@ func (s *Credentials) DescribeAzureCloudCredentials(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAzureCloudCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5351,7 +5349,7 @@ func (s *Credentials) UpdateAzureCloudCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAzureCloudCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAzureCloudCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -5569,7 +5567,7 @@ func (s *Credentials) DeleteAzureCloudCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAzureCloudCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5802,7 +5800,7 @@ func (s *Credentials) CreateBitbucketCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateBitbucketCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateBitbucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -6041,7 +6039,7 @@ func (s *Credentials) DescribeBitbucketCredentials(ctx context.Context, request 
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeBitbucketCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -6272,7 +6270,7 @@ func (s *Credentials) UpdateBitbucketCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateBitbucketCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateBitbucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -6490,7 +6488,7 @@ func (s *Credentials) DeleteBitbucketCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteBitbucketCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -6702,7 +6700,7 @@ func (s *Credentials) CreateCodecommitCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateCodecommitCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateCodecommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -6941,7 +6939,7 @@ func (s *Credentials) DescribeCodecommitCredentials(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeCodecommitCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -7172,7 +7170,7 @@ func (s *Credentials) UpdateCodecommitCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateCodecommitCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateCodecommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -7390,7 +7388,7 @@ func (s *Credentials) DeleteCodecommitCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteCodecommitCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -7602,7 +7600,7 @@ func (s *Credentials) CreateContainerRegistryCredentials(ctx context.Context, re
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateContainerRegistryCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateContainerRegistryCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -7841,7 +7839,7 @@ func (s *Credentials) DescribeContainerRegistryCredentials(ctx context.Context, 
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeContainerRegistryCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -8072,7 +8070,7 @@ func (s *Credentials) UpdateContainerRegistryCredentials(ctx context.Context, re
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateContainerRegistryCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateContainerRegistryCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -8290,7 +8288,7 @@ func (s *Credentials) DeleteContainerRegistryCredentials(ctx context.Context, re
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteContainerRegistryCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -8502,7 +8500,7 @@ func (s *Credentials) CreateGoogleCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGoogleCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGoogleCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -8741,7 +8739,7 @@ func (s *Credentials) DescribeGoogleCredentials(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGoogleCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -8972,7 +8970,7 @@ func (s *Credentials) UpdateGoogleCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGoogleCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGoogleCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -9190,7 +9188,7 @@ func (s *Credentials) DeleteGoogleCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGoogleCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -9423,7 +9421,7 @@ func (s *Credentials) CreateGiteaCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGiteaCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGiteaCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -9662,7 +9660,7 @@ func (s *Credentials) DescribeGiteaCredentials(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGiteaCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -9893,7 +9891,7 @@ func (s *Credentials) UpdateGiteaCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGiteaCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGiteaCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -10111,7 +10109,7 @@ func (s *Credentials) DeleteGiteaCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGiteaCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -10323,7 +10321,7 @@ func (s *Credentials) CreateGithubCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGithubCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGithubCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -10562,7 +10560,7 @@ func (s *Credentials) DescribeGithubCredentials(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGithubCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -10793,7 +10791,7 @@ func (s *Credentials) UpdateGithubCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGithubCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGithubCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -11011,7 +11009,7 @@ func (s *Credentials) DeleteGithubCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGithubCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -11223,7 +11221,7 @@ func (s *Credentials) CreateGithubAppCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGithubAppCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGithubAppCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -11462,7 +11460,7 @@ func (s *Credentials) DescribeGithubAppCredentials(ctx context.Context, request 
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGithubAppCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -11693,7 +11691,7 @@ func (s *Credentials) UpdateGithubAppCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGithubAppCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGithubAppCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -11911,7 +11909,7 @@ func (s *Credentials) DeleteGithubAppCredentials(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGithubAppCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -12123,7 +12121,7 @@ func (s *Credentials) CreateGitlabCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGitlabCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGitlabCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -12362,7 +12360,7 @@ func (s *Credentials) DescribeGitlabCredentials(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGitlabCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -12593,7 +12591,7 @@ func (s *Credentials) UpdateGitlabCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGitlabCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGitlabCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -12811,7 +12809,7 @@ func (s *Credentials) DeleteGitlabCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGitlabCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -13023,7 +13021,7 @@ func (s *Credentials) CreateKubernetesCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateKubernetesCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateKubernetesCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -13262,7 +13260,7 @@ func (s *Credentials) DescribeKubernetesCredentials(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeKubernetesCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -13493,7 +13491,7 @@ func (s *Credentials) UpdateKubernetesCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateKubernetesCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateKubernetesCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -13711,7 +13709,7 @@ func (s *Credentials) DeleteKubernetesCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteKubernetesCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -13923,7 +13921,7 @@ func (s *Credentials) CreateSSHCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateSSHCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateSSHCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -14162,7 +14160,7 @@ func (s *Credentials) DescribeSSHCredentials(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeSSHCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -14393,7 +14391,7 @@ func (s *Credentials) UpdateSSHCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateSSHCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateSSHCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -14611,7 +14609,7 @@ func (s *Credentials) DeleteSSHCredentials(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteSSHCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -14823,7 +14821,7 @@ func (s *Credentials) CreateTowerAgentCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateTowerAgentCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateTowerAgentCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -15061,7 +15059,7 @@ func (s *Credentials) DescribeTowerAgentCredentials(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeTowerAgentCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -15292,7 +15290,7 @@ func (s *Credentials) UpdateTowerAgentCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateTowerAgentCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateTowerAgentCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -15509,7 +15507,7 @@ func (s *Credentials) DeleteTowerAgentCredentials(ctx context.Context, request o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteTowerAgentCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -15727,7 +15725,7 @@ func (s *Credentials) DescribeAWSCredentialsFederationSetup(ctx context.Context,
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAWSCredentialsFederationSetup",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -15963,7 +15961,7 @@ func (s *Credentials) DescribeGCPCredentialsFederationSetup(ctx context.Context,
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGCPCredentialsFederationSetup",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

@@ -63,7 +63,7 @@ func (s *Agents) ListAgents(ctx context.Context, request operations.ListAgentsRe
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListAgents",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -294,7 +294,7 @@ func (s *Agents) CreateAgent(ctx context.Context, request operations.CreateAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAgentRequest", "json", `request:"mediaType=application/json"`)
@@ -534,7 +534,7 @@ func (s *Agents) LaunchAgent(ctx context.Context, request operations.LaunchAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "LaunchAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "LaunchAgentRequest", "json", `request:"mediaType=application/json"`)
@@ -776,7 +776,7 @@ func (s *Agents) ListAgentRuns(ctx context.Context, request operations.ListAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListAgentRuns",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1007,7 +1007,7 @@ func (s *Agents) GetAgentRunStatus(ctx context.Context, request operations.GetAg
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetAgentRunStatus",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1238,7 +1238,7 @@ func (s *Agents) DeleteAgent(ctx context.Context, request operations.DeleteAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1450,7 +1450,7 @@ func (s *Agents) DescribeAgent(ctx context.Context, request operations.DescribeA
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1681,7 +1681,7 @@ func (s *Agents) UpdateAgent(ctx context.Context, request operations.UpdateAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAgentRequest", "json", `request:"mediaType=application/json"`)
@@ -1921,7 +1921,7 @@ func (s *Agents) DisableAgent(ctx context.Context, request operations.DisableAge
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DisableAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2152,7 +2152,7 @@ func (s *Agents) EnableAgent(ctx context.Context, request operations.EnableAgent
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "EnableAgent",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

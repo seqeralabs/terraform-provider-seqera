@@ -64,7 +64,7 @@ func (s *Trace) CreateTrace(ctx context.Context, request operations.CreateTraceR
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateTrace",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "TraceCreateRequest", "json", `request:"mediaType=application/json"`)
@@ -300,7 +300,7 @@ func (s *Trace) UpdateTraceBegin(ctx context.Context, request operations.UpdateT
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateTraceBegin",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "TraceBeginRequest", "json", `request:"mediaType=application/json"`)
@@ -536,7 +536,7 @@ func (s *Trace) UpdateTraceComplete(ctx context.Context, request operations.Upda
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateTraceComplete",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "TraceCompleteRequest", "json", `request:"mediaType=application/json"`)
@@ -772,7 +772,7 @@ func (s *Trace) UpdateTraceHeartbeat(ctx context.Context, request operations.Upd
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateTraceHeartbeat",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "TraceHeartbeatRequest", "json", `request:"mediaType=application/json"`)
@@ -1008,7 +1008,7 @@ func (s *Trace) UpdateTraceProgress(ctx context.Context, request operations.Upda
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateTraceProgress",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "TraceProgressRequest", "json", `request:"mediaType=application/json"`)

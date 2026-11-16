@@ -62,7 +62,7 @@ func (s *PipelineVersions) ListPipelineVersions(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListPipelineVersions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -291,7 +291,7 @@ func (s *PipelineVersions) ValidatePipelineVersionName(ctx context.Context, requ
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidatePipelineVersionName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -507,7 +507,7 @@ func (s *PipelineVersions) UpdatePipelineVersion(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdatePipelineVersion",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdatePipelineRequest", "json", `request:"mediaType=application/json"`)
@@ -748,7 +748,7 @@ func (s *PipelineVersions) ManagePipelineVersion(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ManagePipelineVersion",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "PipelineVersionManageRequest", "json", `request:"mediaType=application/json"`)
