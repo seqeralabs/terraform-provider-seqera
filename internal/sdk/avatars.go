@@ -63,7 +63,7 @@ func (s *Avatars) CreateAvatar(ctx context.Context, request *operations.CreateAv
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAvatar",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Request", "multipart", `request:"mediaType=multipart/form-data"`)
@@ -295,7 +295,7 @@ func (s *Avatars) DownloadAvatar(ctx context.Context, request operations.Downloa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadAvatar",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

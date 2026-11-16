@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 1309134bb92bcae55e2e81e922e0bfd4
+  docChecksum: aeb120fd55ccc7e40f6b1c5a4a7efcf6
   docVersion: 1.244.0
   speakeasyVersion: 1.805.0
   generationVersion: 2.954.8
   releaseVersion: 0.43.0
-  configChecksum: 479366cbd182c83b69b3930e79a3285a
+  configChecksum: 875578e8a73bb6e1176dd89fde86c26a
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -25,6 +25,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
     nullables: 0.0.0
+    oauth2ClientCredentials: 0.3.5
     retries: 2.81.7
     transformJq: 0.0.1
     unions: 2.82.20
@@ -827,6 +828,7 @@ trackedFiles:
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     pristine_git_object: 2d5adcb96f90399884d1b3bb127a92c0ef8dc470
+  internal/sdk/internal/hooks/clientcredentials.go: {}
   internal/sdk/internal/hooks/hooks.go:
     id: 4e88208e997f
     pristine_git_object: 7f5895d3e8519d2320ac8f04f67fd94780760fcf
@@ -846,6 +848,8 @@ trackedFiles:
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
     pristine_git_object: 892eb1b4ad3c029cddbd9aa0e63f639e1b24d6c5
+  internal/sdk/internal/utils/oauth2_credentials.go: {}
+  internal/sdk/internal/utils/oauth2_sessions.go: {}
   internal/sdk/internal/utils/pathparams.go:
     id: e7fec2afe4a6
     pristine_git_object: cef345d4cfe71dc6185f457cc2a03ba16e1c9730
@@ -2803,6 +2807,7 @@ trackedFiles:
     id: e2f3cbb7ae20
     pristine_git_object: d4ae89cfca8f1a8d235ef8339bc449e64e31d3f3
   internal/sdk/models/shared/schedconfig.go: {}
+  internal/sdk/models/shared/schemeclientcredentials.go: {}
   internal/sdk/models/shared/scimtokenimage.go: {}
   internal/sdk/models/shared/searchresult.go: {}
   internal/sdk/models/shared/security.go:

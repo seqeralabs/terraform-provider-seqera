@@ -3,12 +3,20 @@
 package shared
 
 type Security struct {
-	BearerAuth string `security:"scheme,type=http,subtype=bearer,name=Authorization"`
+	BearerAuth        *string                  `security:"scheme,type=http,subtype=bearer,name=Authorization"`
+	ClientCredentials *SchemeClientCredentials `security:"scheme,type=oauth2,subtype=client_credentials"`
 }
 
-func (s *Security) GetBearerAuth() string {
+func (s *Security) GetBearerAuth() *string {
 	if s == nil {
-		return ""
+		return nil
 	}
 	return s.BearerAuth
+}
+
+func (s *Security) GetClientCredentials() *SchemeClientCredentials {
+	if s == nil {
+		return nil
+	}
+	return s.ClientCredentials
 }

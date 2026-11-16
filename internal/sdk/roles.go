@@ -62,7 +62,7 @@ func (s *Roles) ListRoles(ctx context.Context, request operations.ListRolesReque
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListRoles",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -290,7 +290,7 @@ func (s *Roles) CreateRole(ctx context.Context, request operations.CreateRoleReq
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateRole",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateRoleRequest", "json", `request:"mediaType=application/json"`)
@@ -527,7 +527,7 @@ func (s *Roles) ListRolePermissions(ctx context.Context, request operations.List
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListRolePermissions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -757,7 +757,7 @@ func (s *Roles) ValidateRoleName(ctx context.Context, request operations.Validat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateRoleName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -968,7 +968,7 @@ func (s *Roles) DeleteRole(ctx context.Context, request operations.DeleteRoleReq
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteRole",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1179,7 +1179,7 @@ func (s *Roles) DescribeRole(ctx context.Context, request operations.DescribeRol
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeRole",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1409,7 +1409,7 @@ func (s *Roles) UpdateRole(ctx context.Context, request operations.UpdateRoleReq
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateRole",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateRoleRequest", "json", `request:"mediaType=application/json"`)
