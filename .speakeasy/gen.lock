@@ -3223,9 +3223,6 @@ trackedFiles:
   internal/validators/stringvalidators/not_null.go:
     id: 80be7ffedf6c
     pristine_git_object: 1e40ac1b6ce68540327e01910f0dc91a60b62607
-  main.go:
-    id: 0607f785dfa3
-    pristine_git_object: 3b8f5967920ee401cbd21a5a4df07dfaa11903f8
   terraform-registry-manifest.json:
     id: fc3d63fd06e1
     pristine_git_object: fec2a5691e493a1941bd79b312b3925403a91aa6
