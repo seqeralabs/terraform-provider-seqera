@@ -8,41 +8,6 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-// SchedConfigBackendStrategy - Backend used by Intelligent Compute to run tasks:
-// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
-// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-// - `VM` (provider-agnostic): run tasks on cloud VMs.
-//
-// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
-type SchedConfigBackendStrategy string
-
-const (
-	SchedConfigBackendStrategyEcs SchedConfigBackendStrategy = "ECS"
-	SchedConfigBackendStrategyEc2 SchedConfigBackendStrategy = "EC2"
-	SchedConfigBackendStrategyVM  SchedConfigBackendStrategy = "VM"
-)
-
-func (e SchedConfigBackendStrategy) ToPointer() *SchedConfigBackendStrategy {
-	return &e
-}
-func (e *SchedConfigBackendStrategy) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "ECS":
-		fallthrough
-	case "EC2":
-		fallthrough
-	case "VM":
-		*e = SchedConfigBackendStrategy(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for SchedConfigBackendStrategy: %v", v)
-	}
-}
-
 // SchedConfigPool - Warm-pool configuration. When present and enabled, the scheduler keeps a
 // pool of idle VMs ready to absorb incoming tasks with sub-5s start latency.
 type SchedConfigPool struct {
@@ -123,14 +88,6 @@ func (e *SchedConfigProvisioningModel) UnmarshalJSON(data []byte) error {
 }
 
 type SchedConfig struct {
-	// Backend used by Intelligent Compute to run tasks:
-	// - `ECS` (default, AWS only): delegate task execution to AWS ECS.
-	// - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-	// - `VM` (provider-agnostic): run tasks on cloud VMs.
-	//
-	// Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
-	//
-	BackendStrategy *SchedConfigBackendStrategy `json:"backendStrategy,omitempty"`
 	// Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable.
 	BillingExportTable *string `json:"billingExportTable,omitempty"`
 	// Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
@@ -191,13 +148,6 @@ func (s *SchedConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (s *SchedConfig) GetBackendStrategy() *SchedConfigBackendStrategy {
-	if s == nil {
-		return nil
-	}
-	return s.BackendStrategy
 }
 
 func (s *SchedConfig) GetBillingExportTable() *string {

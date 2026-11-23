@@ -107,6 +107,8 @@ resource "seqera_aws_cloud_ce" "networked" {
     work_dir = "s3://my-bucket/work"
 
     # Networking. Use subnet_ids (a list) rather than the deprecated subnet_id.
+    # The head instance tries the subnets in order, so list subnets in
+    # different Availability Zones to fail over when one has no capacity.
     vpc_id     = "vpc-12345678"
     subnet_ids = ["subnet-12345678", "subnet-87654321"]
 
@@ -159,7 +161,6 @@ resource "seqera_aws_cloud_ce" "intelligent" {
     intelligent_compute_config = {
       provisioning_model = "spotFirst" # spot | spotFirst | ondemand
       machine_types      = []          # empty = scheduler picks cost-optimal
-      backend_strategy   = "ECS"       # ECS (default) | EC2 | VM
       fusion_snapshots   = true        # resume interrupted tasks from a snapshot
       prediction_model   = "none"      # none | qr/v1 | qr/v2
 
@@ -239,6 +240,8 @@ Key pair must exist in the specified region.
 Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
+- `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
+- `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
 Requires replacement if changed.
@@ -279,11 +282,13 @@ Requires replacement if changed.
 Must be in the same VPC and region as the compute environment.
 Deprecated: use subnet_ids instead. Mutually exclusive with subnet_ids.
 Requires replacement if changed.
-- `subnet_ids` (List of String) Subnets to launch compute instances into. The first subnet is used for
-basic placement; Seqera Intelligent Compute may use all of them. Replaces
+- `subnet_ids` (List of String) Subnets to launch compute instances into. The Nextflow head instance tries
+them in order, moving to the next one when a subnet or its Availability Zone
+has no capacity, so list subnets in different zones for resilience. With
+Seqera Intelligent Compute, task instances can use any of them. Replaces
 the deprecated single-value `subnet_id`, and is mutually exclusive with it.
-All subnets must be in the VPC given by `vpc_id` (when set) and in the same
-region as the compute environment.
+All subnets must be in one VPC (the one given by `vpc_id`, when set) and in
+the same region as the compute environment.
 Requires replacement if changed.
 - `vpc_id` (String) VPC used to scope subnet and security-group selection. Determines the
 network in which EC2 instances are launched.
@@ -311,13 +316,6 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
-- `ECS` (default, AWS only): delegate task execution to AWS ECS.
-- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-- `VM` (provider-agnostic): run tasks on cloud VMs.
-
-Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
-must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
 - `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave

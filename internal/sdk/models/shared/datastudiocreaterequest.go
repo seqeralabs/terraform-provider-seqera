@@ -44,7 +44,8 @@ type DataStudioCreateRequest struct {
 	DataStudioToolURL   *string `json:"dataStudioToolUrl,omitempty"`
 	Description         *string `json:"description,omitempty"`
 	InitialCheckpointID *int64  `json:"initialCheckpointId,omitempty"`
-	IsPrivate           *bool   `json:"isPrivate,omitempty"`
+	// Flag to denote if the studio is private to the users listed in 'allowedUserIds'. If 'true' and 'allowedUserIds' is empty or omitted, the studio is private to its creator. If omitted, the studio config and then the workspace default decide. 'false' with user ids in 'allowedUserIds' is rejected.
+	IsPrivate *bool `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Labels can be changed on an existing Studio in place, but Platform does not clear labels when an update omits them, so removing all labels from a Studio has no effect; recreate the Studio to do that.
 	LabelIds []int64 `json:"labelIds,omitempty"`
 	Name     string  `json:"name"`

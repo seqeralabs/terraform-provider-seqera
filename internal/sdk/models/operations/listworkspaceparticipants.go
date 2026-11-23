@@ -16,7 +16,7 @@ type ListWorkspaceParticipantsRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Filter search parameter
+	// Optional case-insensitive search of participant usernames, display names, full names, email addresses, and team names.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 

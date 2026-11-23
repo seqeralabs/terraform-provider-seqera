@@ -30,6 +30,12 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 	if resp != nil {
 		if resp.ComputeEnv != nil {
 			r.ComputeEnv.AwsAccountID = types.StringPointerValue(resp.ComputeEnv.AwsAccountID)
+			if resp.ComputeEnv.BucketPolicies != nil {
+				r.ComputeEnv.BucketPolicies = make(map[string]types.String, len(resp.ComputeEnv.BucketPolicies))
+				for key, value := range resp.ComputeEnv.BucketPolicies {
+					r.ComputeEnv.BucketPolicies[key] = types.StringValue(value)
+				}
+			}
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
 			if resp.ComputeEnv.Config != nil {
 				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
@@ -115,6 +121,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					}
 					r.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
 					r.ComputeEnv.Config.AwsBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionVersion)
+					r.ComputeEnv.Config.AwsBatch.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.AwsBatch.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobRole)
@@ -164,6 +172,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsCloud.Environment = nil
 					}
 					r.ComputeEnv.Config.AwsCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.FusionVersion)
+					r.ComputeEnv.Config.AwsCloud.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.AwsCloud.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
@@ -172,11 +182,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-						if resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
-							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
-						} else {
-							r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-						}
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.BillingExportTable)
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
 						r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
@@ -349,6 +354,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool = &tfTypes.AzBatchPoolConfig{}
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.AutoScale)
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.BootDiskSizeGB))
+							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.LowPriority = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.LowPriority)
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMCount))
 							r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.HeadPool.VMType)
 						}
@@ -360,11 +366,14 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool = &tfTypes.AzBatchPoolConfig{}
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.AutoScale)
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.BootDiskSizeGB = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.BootDiskSizeGB))
+							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.LowPriority = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.LowPriority)
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMCount))
 							r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.WorkerPool.VMType)
 						}
 					}
 					r.ComputeEnv.Config.AzureBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.FusionVersion)
+					r.ComputeEnv.Config.AzureBatch.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.AzureBatch.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.AzureBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.AzureBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadJobMemoryMb))
 					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
@@ -407,16 +416,13 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AzureCloud.Environment = nil
 					}
 					r.ComputeEnv.Config.AzureCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.FusionVersion)
+					r.ComputeEnv.Config.AzureCloud.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.AzureCloud.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.AzureCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.InstanceType)
 					if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig == nil {
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-						if resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
-							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
-						} else {
-							r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-						}
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.BillingExportTable)
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
 						r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
@@ -495,13 +501,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					}
 					r.ComputeEnv.Config.GoogleBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.FusionSnapshots)
 					r.ComputeEnv.Config.GoogleBatch.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.FusionVersion)
+					r.ComputeEnv.Config.GoogleBatch.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.GoogleBatch.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
 					if len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels) > 0 {
 						r.ComputeEnv.Config.GoogleBatch.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels))
-						for key, value := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels {
-							r.ComputeEnv.Config.GoogleBatch.Labels[key] = types.StringValue(value)
+						for key1, value1 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels {
+							r.ComputeEnv.Config.GoogleBatch.Labels[key1] = types.StringValue(value1)
 						}
 					}
 					r.ComputeEnv.Config.GoogleBatch.Location = types.StringValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
@@ -548,6 +556,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.GoogleCloud.Environment = nil
 					}
 					r.ComputeEnv.Config.GoogleCloud.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.FusionVersion)
+					r.ComputeEnv.Config.GoogleCloud.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.GoogleCloud.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GlobalCachePath)
 					r.ComputeEnv.Config.GoogleCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.GoogleCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.ImageID)
 					r.ComputeEnv.Config.GoogleCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.InstanceType)
@@ -555,11 +565,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-						if resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
-							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.BackendStrategy))
-						} else {
-							r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-						}
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.BillingExportTable)
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.DiskAllocation)
 						r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleCloudConfiguration.IntelligentComputeConfig.FusionSnapshots)
@@ -684,8 +689,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.HeadJobMemoryMb))
 					if len(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels) > 0 {
 						r.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels))
-						for key1, value1 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels {
-							r.ComputeEnv.Config.GoogleLifesciences.Labels[key1] = types.StringValue(value1)
+						for key2, value2 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Labels {
+							r.ComputeEnv.Config.GoogleLifesciences.Labels[key2] = types.StringValue(value2)
 						}
 					}
 					r.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfigurationRetired.Location)
@@ -804,11 +809,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = nil
 					} else {
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-						if resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.BackendStrategy != nil {
-							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.BackendStrategy))
-						} else {
-							r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-						}
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.BillingExportTable)
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.DiskAllocation)
 						r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.LocalExecutionConfiguration.IntelligentComputeConfig.FusionSnapshots)
@@ -876,6 +876,10 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 				}
 				if resp.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
 					r.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.SeqeraComputeConfiguration{}
+					r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.AllowBuckets))
+					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.AllowBuckets {
+						r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets = append(r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets, types.StringValue(v))
+					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DefaultDataRetentionPolicy)
 					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment != nil {
 						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
@@ -894,6 +898,8 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = nil
 					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.FusionVersion = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.FusionVersion)
+					r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCacheEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.GlobalCacheEnabled)
+					r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCachePath = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.GlobalCachePath)
 					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize != nil {
 						r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize))
 					} else {
@@ -1408,6 +1414,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionVersion = nil
 		}
+		globalCacheEnabled := new(bool)
+		if !r.ComputeEnv.Config.AwsBatch.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled = r.ComputeEnv.Config.AwsBatch.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled = nil
+		}
+		globalCachePath := new(string)
+		if !r.ComputeEnv.Config.AwsBatch.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.GlobalCachePath.IsNull() {
+			*globalCachePath = r.ComputeEnv.Config.AwsBatch.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath = nil
+		}
 		headJobCpus := new(int)
 		if !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsNull() {
 			*headJobCpus = int(r.ComputeEnv.Config.AwsBatch.HeadJobCpus.ValueInt32())
@@ -1517,6 +1535,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			EnableFusion:                  enableFusion,
 			FusionSnapshots:               fusionSnapshots,
 			FusionVersion:                 fusionVersion,
+			GlobalCacheEnabled:            globalCacheEnabled,
+			GlobalCachePath:               globalCachePath,
 			HeadJobCpus:                   headJobCpus,
 			HeadJobMemoryMb:               headJobMemoryMb,
 			HeadJobRole:                   headJobRole,
@@ -1619,6 +1639,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionVersion1 = nil
 		}
+		globalCacheEnabled1 := new(bool)
+		if !r.ComputeEnv.Config.AwsCloud.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled1 = r.ComputeEnv.Config.AwsCloud.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled1 = nil
+		}
+		globalCachePath1 := new(string)
+		if !r.ComputeEnv.Config.AwsCloud.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GlobalCachePath.IsNull() {
+			*globalCachePath1 = r.ComputeEnv.Config.AwsCloud.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath1 = nil
+		}
 		gpuEnabled1 := new(bool)
 		if !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsNull() {
 			*gpuEnabled1 = r.ComputeEnv.Config.AwsCloud.GpuEnabled.ValueBool()
@@ -1678,12 +1710,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 		var intelligentComputeConfig *shared.SchedConfig
 		if r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig != nil {
-			backendStrategy := new(shared.SchedConfigBackendStrategy)
-			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
-				*backendStrategy = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
-			} else {
-				backendStrategy = nil
-			}
 			billingExportTable := new(string)
 			if !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BillingExportTable.IsNull() {
 				*billingExportTable = r.ComputeEnv.Config.AwsCloud.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -1757,7 +1783,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel = nil
 			}
 			intelligentComputeConfig = &shared.SchedConfig{
-				BackendStrategy:    backendStrategy,
 				BillingExportTable: billingExportTable,
 				DiskAllocation:     diskAllocation,
 				FusionSnapshots:    fusionSnapshots1,
@@ -1816,6 +1841,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Ec2KeyPair:                    ec2KeyPair1,
 			Environment:                   environment1,
 			FusionVersion:                 fusionVersion1,
+			GlobalCacheEnabled:            globalCacheEnabled1,
+			GlobalCachePath:               globalCachePath1,
 			GpuEnabled:                    gpuEnabled1,
 			ImageID:                       imageId1,
 			InstanceProfileArn:            instanceProfileArn,
@@ -1843,6 +1870,10 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	}
 	var seqeraComputeConfiguration *shared.SeqeraComputeConfiguration
 	if r.ComputeEnv.Config.SeqeracomputePlatform != nil {
+		allowBuckets2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets))
+		for allowBucketsIndex := range r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets {
+			allowBuckets2 = append(allowBuckets2, r.ComputeEnv.Config.SeqeracomputePlatform.AllowBuckets[allowBucketsIndex].ValueString())
+		}
 		defaultDataRetentionPolicy := new(bool)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.IsNull() {
 			*defaultDataRetentionPolicy = r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.ValueBool()
@@ -1891,6 +1922,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionVersion2 = nil
 		}
+		globalCacheEnabled2 := new(bool)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled2 = nil
+		}
+		globalCachePath2 := new(string)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCachePath.IsNull() {
+			*globalCachePath2 = r.ComputeEnv.Config.SeqeracomputePlatform.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath2 = nil
+		}
 		instanceTypeSize := new(shared.SeqeraComputeCloudInstanceTypeSize)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsNull() {
 			*instanceTypeSize = shared.SeqeraComputeCloudInstanceTypeSize(r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.ValueString())
@@ -1931,9 +1974,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			workDir2 = nil
 		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
+			AllowBuckets:                  allowBuckets2,
 			DefaultDataRetentionPolicy:    defaultDataRetentionPolicy,
 			Environment:                   environment2,
 			FusionVersion:                 fusionVersion2,
+			GlobalCacheEnabled:            globalCacheEnabled2,
+			GlobalCachePath:               globalCachePath2,
 			InstanceTypeSize:              instanceTypeSize,
 			NextflowConfig:                nextflowConfig2,
 			OverrideNextflowFusionVersion: overrideNextflowFusionVersion2,
@@ -2043,6 +2089,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*fusionVersion3 = r.ComputeEnv.Config.GoogleBatch.FusionVersion.ValueString()
 		} else {
 			fusionVersion3 = nil
+		}
+		globalCacheEnabled3 := new(bool)
+		if !r.ComputeEnv.Config.GoogleBatch.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled3 = r.ComputeEnv.Config.GoogleBatch.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled3 = nil
+		}
+		globalCachePath3 := new(string)
+		if !r.ComputeEnv.Config.GoogleBatch.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.GlobalCachePath.IsNull() {
+			*globalCachePath3 = r.ComputeEnv.Config.GoogleBatch.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath3 = nil
 		}
 		headJobCpus1 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
@@ -2190,6 +2248,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			EnableFusion:                  enableFusion1,
 			FusionSnapshots:               fusionSnapshots2,
 			FusionVersion:                 fusionVersion3,
+			GlobalCacheEnabled:            globalCacheEnabled3,
+			GlobalCachePath:               globalCachePath3,
 			HeadJobCpus:                   headJobCpus1,
 			HeadJobInstanceTemplate:       headJobInstanceTemplate,
 			HeadJobMemoryMb:               headJobMemoryMb1,
@@ -2276,6 +2336,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionVersion4 = nil
 		}
+		globalCacheEnabled4 := new(bool)
+		if !r.ComputeEnv.Config.GoogleCloud.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled4 = r.ComputeEnv.Config.GoogleCloud.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled4 = nil
+		}
+		globalCachePath4 := new(string)
+		if !r.ComputeEnv.Config.GoogleCloud.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GlobalCachePath.IsNull() {
+			*globalCachePath4 = r.ComputeEnv.Config.GoogleCloud.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath4 = nil
+		}
 		gpuEnabled2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsNull() {
 			*gpuEnabled2 = r.ComputeEnv.Config.GoogleCloud.GpuEnabled.ValueBool()
@@ -2345,12 +2417,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 		var intelligentComputeConfig1 *shared.SchedConfig
 		if r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig != nil {
-			backendStrategy1 := new(shared.SchedConfigBackendStrategy)
-			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
-				*backendStrategy1 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
-			} else {
-				backendStrategy1 = nil
-			}
 			billingExportTable1 := new(string)
 			if !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BillingExportTable.IsNull() {
 				*billingExportTable1 = r.ComputeEnv.Config.GoogleCloud.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -2424,7 +2490,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel1 = nil
 			}
 			intelligentComputeConfig1 = &shared.SchedConfig{
-				BackendStrategy:    backendStrategy1,
 				BillingExportTable: billingExportTable1,
 				DiskAllocation:     diskAllocation1,
 				FusionSnapshots:    fusionSnapshots3,
@@ -2478,6 +2543,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			BootDiskSizeGb:                bootDiskSizeGb1,
 			Environment:                   environment4,
 			FusionVersion:                 fusionVersion4,
+			GlobalCacheEnabled:            globalCacheEnabled4,
+			GlobalCachePath:               globalCachePath4,
 			GpuEnabled:                    gpuEnabled2,
 			ImageID:                       imageId2,
 			InstanceType:                  instanceType1,
@@ -2615,6 +2682,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				} else {
 					bootDiskSizeGb2 = nil
 				}
+				lowPriority := new(bool)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.LowPriority.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.LowPriority.IsNull() {
+					*lowPriority = r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.LowPriority.ValueBool()
+				} else {
+					lowPriority = nil
+				}
 				vmCount := new(int)
 				if !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.IsNull() {
 					*vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.HeadPool.VMCount.ValueInt32())
@@ -2630,6 +2703,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				headPool = &shared.AzBatchPoolConfig{
 					AutoScale:      autoScale1,
 					BootDiskSizeGB: bootDiskSizeGb2,
+					LowPriority:    lowPriority,
 					VMCount:        vmCount,
 					VMType:         vmType,
 				}
@@ -2657,6 +2731,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				} else {
 					bootDiskSizeGb3 = nil
 				}
+				lowPriority1 := new(bool)
+				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.LowPriority.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.LowPriority.IsNull() {
+					*lowPriority1 = r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.LowPriority.ValueBool()
+				} else {
+					lowPriority1 = nil
+				}
 				vmCount2 := new(int)
 				if !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.IsNull() {
 					*vmCount2 = int(r.ComputeEnv.Config.AzureBatch.Forge.WorkerPool.VMCount.ValueInt32())
@@ -2672,6 +2752,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				workerPool = &shared.AzBatchPoolConfig{
 					AutoScale:      autoScale2,
 					BootDiskSizeGB: bootDiskSizeGb3,
+					LowPriority:    lowPriority1,
 					VMCount:        vmCount2,
 					VMType:         vmType2,
 				}
@@ -2699,6 +2780,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*fusionVersion5 = r.ComputeEnv.Config.AzureBatch.FusionVersion.ValueString()
 		} else {
 			fusionVersion5 = nil
+		}
+		globalCacheEnabled5 := new(bool)
+		if !r.ComputeEnv.Config.AzureBatch.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled5 = r.ComputeEnv.Config.AzureBatch.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled5 = nil
+		}
+		globalCachePath5 := new(string)
+		if !r.ComputeEnv.Config.AzureBatch.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.GlobalCachePath.IsNull() {
+			*globalCachePath5 = r.ComputeEnv.Config.AzureBatch.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath5 = nil
 		}
 		headJobCpus2 := new(int)
 		if !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadJobCpus.IsNull() {
@@ -2827,6 +2920,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Forge:                         forge1,
 			EnableFusion:                  enableFusion2,
 			FusionVersion:                 fusionVersion5,
+			GlobalCacheEnabled:            globalCacheEnabled5,
+			GlobalCachePath:               globalCachePath5,
 			HeadJobCpus:                   headJobCpus2,
 			HeadJobMemoryMb:               headJobMemoryMb2,
 			HeadPool:                      headPool1,
@@ -2916,6 +3011,18 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionVersion6 = nil
 		}
+		globalCacheEnabled6 := new(bool)
+		if !r.ComputeEnv.Config.AzureCloud.GlobalCacheEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.GlobalCacheEnabled.IsNull() {
+			*globalCacheEnabled6 = r.ComputeEnv.Config.AzureCloud.GlobalCacheEnabled.ValueBool()
+		} else {
+			globalCacheEnabled6 = nil
+		}
+		globalCachePath6 := new(string)
+		if !r.ComputeEnv.Config.AzureCloud.GlobalCachePath.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.GlobalCachePath.IsNull() {
+			*globalCachePath6 = r.ComputeEnv.Config.AzureCloud.GlobalCachePath.ValueString()
+		} else {
+			globalCachePath6 = nil
+		}
 		instanceType2 := new(string)
 		if !r.ComputeEnv.Config.AzureCloud.InstanceType.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.InstanceType.IsNull() {
 			*instanceType2 = r.ComputeEnv.Config.AzureCloud.InstanceType.ValueString()
@@ -2996,12 +3103,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 		var intelligentComputeConfig2 *shared.SchedConfig
 		if r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig != nil {
-			backendStrategy2 := new(shared.SchedConfigBackendStrategy)
-			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.IsNull() {
-				*backendStrategy2 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BackendStrategy.ValueString())
-			} else {
-				backendStrategy2 = nil
-			}
 			billingExportTable2 := new(string)
 			if !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BillingExportTable.IsNull() {
 				*billingExportTable2 = r.ComputeEnv.Config.AzureCloud.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -3075,7 +3176,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel2 = nil
 			}
 			intelligentComputeConfig2 = &shared.SchedConfig{
-				BackendStrategy:    backendStrategy2,
 				BillingExportTable: billingExportTable2,
 				DiskAllocation:     diskAllocation2,
 				FusionSnapshots:    fusionSnapshots4,
@@ -3115,6 +3215,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			DataCollectionRuleID:          dataCollectionRuleID,
 			Environment:                   environment6,
 			FusionVersion:                 fusionVersion6,
+			GlobalCacheEnabled:            globalCacheEnabled6,
+			GlobalCachePath:               globalCachePath6,
 			InstanceType:                  instanceType2,
 			KeyVaultURL:                   keyVaultURL,
 			LogTableName:                  logTableName,
@@ -4446,12 +4548,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 		var intelligentComputeConfig3 *shared.SchedConfig
 		if r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig != nil {
-			backendStrategy3 := new(shared.SchedConfigBackendStrategy)
-			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.IsNull() {
-				*backendStrategy3 = shared.SchedConfigBackendStrategy(r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BackendStrategy.ValueString())
-			} else {
-				backendStrategy3 = nil
-			}
 			billingExportTable3 := new(string)
 			if !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BillingExportTable.IsNull() {
 				*billingExportTable3 = r.ComputeEnv.Config.LocalPlatform.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -4525,7 +4621,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				provisioningModel3 = nil
 			}
 			intelligentComputeConfig3 = &shared.SchedConfig{
-				BackendStrategy:    backendStrategy3,
 				BillingExportTable: billingExportTable3,
 				DiskAllocation:     diskAllocation3,
 				FusionSnapshots:    fusionSnapshots5,

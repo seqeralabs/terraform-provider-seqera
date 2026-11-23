@@ -76,6 +76,8 @@ func (r *GCPBatchCEResourceModel) RefreshFromSharedGCPBatchCEComputeConfig(ctx c
 		}
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
 		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
+		r.Config.GlobalCacheEnabled = types.BoolPointerValue(resp.Config.GlobalCacheEnabled)
+		r.Config.GlobalCachePath = types.StringPointerValue(resp.Config.GlobalCachePath)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobInstanceTemplate = types.StringPointerValue(resp.Config.HeadJobInstanceTemplate)
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
@@ -394,6 +396,18 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 	} else {
 		fusionVersion = nil
 	}
+	globalCacheEnabled := new(bool)
+	if !r.Config.GlobalCacheEnabled.IsUnknown() && !r.Config.GlobalCacheEnabled.IsNull() {
+		*globalCacheEnabled = r.Config.GlobalCacheEnabled.ValueBool()
+	} else {
+		globalCacheEnabled = nil
+	}
+	globalCachePath := new(string)
+	if !r.Config.GlobalCachePath.IsUnknown() && !r.Config.GlobalCachePath.IsNull() {
+		*globalCachePath = r.Config.GlobalCachePath.ValueString()
+	} else {
+		globalCachePath = nil
+	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
@@ -540,6 +554,8 @@ func (r *GCPBatchCEResourceModel) ToSharedGCPBatchCEComputeConfigInput(ctx conte
 		EnableFusion:                  enableFusion,
 		FusionSnapshots:               fusionSnapshots,
 		FusionVersion:                 fusionVersion,
+		GlobalCacheEnabled:            globalCacheEnabled,
+		GlobalCachePath:               globalCachePath,
 		HeadJobCpus:                   headJobCpus,
 		HeadJobInstanceTemplate:       headJobInstanceTemplate,
 		HeadJobMemoryMb:               headJobMemoryMb,

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -45,6 +46,14 @@ func (r *ServiceAccountResourceModel) RefreshFromSharedServiceAccountDto(ctx con
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.ClientCredentials == nil {
+			r.ClientCredentials = nil
+		} else {
+			r.ClientCredentials = &tfTypes.ClientCredentials{}
+			r.ClientCredentials.ClientID = types.StringPointerValue(resp.ClientCredentials.ClientID)
+			r.ClientCredentials.ExpiresAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ClientCredentials.ExpiresAt))
+			r.ClientCredentials.Status = types.StringValue(string(resp.ClientCredentials.Status))
+		}
 		r.CreatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.CreatedAt))
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.Int64PointerValue(resp.ID)

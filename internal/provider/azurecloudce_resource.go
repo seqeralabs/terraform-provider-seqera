@@ -33,6 +33,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -203,6 +204,32 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							custom_stringvalidators.FusionVersionValidator(),
 						},
 					},
+					"global_cache_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.GlobalCacheEnabledValidator(),
+						},
+					},
+					"global_cache_path": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthBetween(1, 255),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+							custom_stringvalidators.GlobalCachePathAzValidator(),
+						},
+					},
 					"instance_type": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
@@ -220,28 +247,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 						},
 						Attributes: map[string]schema.Attribute{
-							"backend_strategy": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									stringplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
-								MarkdownDescription: `Backend used by Intelligent Compute to run tasks:` + "\n" +
-									`- ` + "`" + `ECS` + "`" + ` (default, AWS only): delegate task execution to AWS ECS.` + "\n" +
-									`- ` + "`" + `EC2` + "`" + ` (AWS only): run tasks directly on AWS EC2 instances.` + "\n" +
-									`- ` + "`" + `VM` + "`" + ` (provider-agnostic): run tasks on cloud VMs.` + "\n" +
-									`` + "\n" +
-									`Azure and Google support ` + "`" + `VM` + "`" + ` only; ` + "`" + `ECS` + "`" + `/` + "`" + `EC2` + "`" + ` are AWS-only.` + "\n" +
-									`must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"ECS",
-										"EC2",
-										"VM",
-									),
-								},
-							},
 							"billing_export_table": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -574,7 +579,6 @@ func (r *AzureCloudCEResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.Object{
 					custom_objectvalidators.SchedConfigConsistencyValidator(),
-					custom_objectvalidators.BackendStrategyVMOnlyValidator(),
 					custom_objectvalidators.FusionSnapshotsUnsupportedValidator(),
 					custom_objectvalidators.BillingExportTableGoogleOnlyValidator(),
 				},

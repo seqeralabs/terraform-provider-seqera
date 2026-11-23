@@ -1745,6 +1745,10 @@ type AzureCloudConfiguration struct {
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
@@ -1863,6 +1867,20 @@ func (a *AzureCloudConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AzureCloudConfiguration) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AzureCloudConfiguration) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AzureCloudConfiguration) GetInstanceType() *string {
@@ -2063,6 +2081,10 @@ type AzureBatchConfiguration struct {
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
@@ -2179,6 +2201,20 @@ func (a *AzureBatchConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AzureBatchConfiguration) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AzureBatchConfiguration) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AzureBatchConfiguration) GetHeadJobCpus() *int {
@@ -2336,6 +2372,10 @@ type GoogleCloudConfiguration struct {
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable machine types will be selected.
 	//
@@ -2445,6 +2485,20 @@ func (g *GoogleCloudConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return g.FusionVersion
+}
+
+func (g *GoogleCloudConfiguration) GetGlobalCacheEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCacheEnabled
+}
+
+func (g *GoogleCloudConfiguration) GetGlobalCachePath() *string {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCachePath
 }
 
 func (g *GoogleCloudConfiguration) GetGpuEnabled() *bool {
@@ -2617,6 +2671,10 @@ type GoogleBatchServiceConfiguration struct {
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPUs allocated for the Nextflow head job.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -2793,6 +2851,20 @@ func (g *GoogleBatchServiceConfiguration) GetFusionVersion() *string {
 	return g.FusionVersion
 }
 
+func (g *GoogleBatchServiceConfiguration) GetGlobalCacheEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCacheEnabled
+}
+
+func (g *GoogleBatchServiceConfiguration) GetGlobalCachePath() *string {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCachePath
+}
+
 func (g *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -2955,13 +3027,19 @@ func (g *GoogleBatchServiceConfiguration) GetWorkDir() *string {
 }
 
 type SeqeraComputeConfiguration struct {
-	DefaultDataRetentionPolicy *bool `json:"defaultDataRetentionPolicy,omitempty"`
+	// S3 buckets in your own AWS account the compute environment can read and write (s3://bucket[/path]). Duplicates are ignored. The bucket policy must also grant access to the compute environment. Cannot be changed after creation.
+	AllowBuckets               []string `json:"allowBuckets,omitempty"`
+	DefaultDataRetentionPolicy *bool    `json:"defaultDataRetentionPolicy,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
 	InstanceTypeSize *SeqeraComputeCloudInstanceTypeSize `json:"instanceTypeSize,omitempty"`
 	// Nextflow configuration settings and parameters
@@ -2986,6 +3064,13 @@ func (s *SeqeraComputeConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (s *SeqeraComputeConfiguration) GetAllowBuckets() []string {
+	if s == nil {
+		return nil
+	}
+	return s.AllowBuckets
 }
 
 func (s *SeqeraComputeConfiguration) GetDefaultDataRetentionPolicy() *bool {
@@ -3014,6 +3099,20 @@ func (s *SeqeraComputeConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return s.FusionVersion
+}
+
+func (s *SeqeraComputeConfiguration) GetGlobalCacheEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.GlobalCacheEnabled
+}
+
+func (s *SeqeraComputeConfiguration) GetGlobalCachePath() *string {
+	if s == nil {
+		return nil
+	}
+	return s.GlobalCachePath
 }
 
 func (s *SeqeraComputeConfiguration) GetInstanceTypeSize() *SeqeraComputeCloudInstanceTypeSize {
@@ -3098,6 +3197,10 @@ type AWSCloudConfiguration struct {
 	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Enable GPU support for compute instances.
 	// When enabled, GPU-capable instance types will be selected.
 	//
@@ -3158,11 +3261,13 @@ type AWSCloudConfiguration struct {
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	SubnetID *string `json:"subnetId,omitempty"`
-	// Subnets to launch compute instances into. The first subnet is used for
-	// basic placement; Seqera Intelligent Compute may use all of them. Replaces
+	// Subnets to launch compute instances into. The Nextflow head instance tries
+	// them in order, moving to the next one when a subnet or its Availability Zone
+	// has no capacity, so list subnets in different zones for resilience. With
+	// Seqera Intelligent Compute, task instances can use any of them. Replaces
 	// the deprecated single-value `subnet_id`, and is mutually exclusive with it.
-	// All subnets must be in the VPC given by `vpc_id` (when set) and in the same
-	// region as the compute environment.
+	// All subnets must be in one VPC (the one given by `vpc_id`, when set) and in
+	// the same region as the compute environment.
 	//
 	SubnetIds []string `json:"subnetIds,omitempty"`
 	// VPC used to scope subnet and security-group selection. Determines the
@@ -3253,6 +3358,20 @@ func (a *AWSCloudConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AWSCloudConfiguration) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AWSCloudConfiguration) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AWSCloudConfiguration) GetGpuEnabled() *bool {
@@ -3431,6 +3550,10 @@ type AWSBatchConfiguration struct {
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
@@ -3575,6 +3698,20 @@ func (a *AWSBatchConfiguration) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AWSBatchConfiguration) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AWSBatchConfiguration) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AWSBatchConfiguration) GetHeadJobCpus() *int {

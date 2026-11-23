@@ -10,7 +10,7 @@ import (
 type ListAgentsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Filter by agent name
+	// Optional search of agent names.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

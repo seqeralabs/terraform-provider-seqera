@@ -67,9 +67,19 @@ resource "seqera_workspace_participant" "ci" {
 
 ### Read-Only
 
+- `client_credentials` (Attributes) Client credentials of this service account. Null when service account client credentials are not enabled for the organization. (see [below for nested schema](#nestedatt--client_credentials))
 - `created_at` (String) Creation timestamp.
 - `id` (Number) Service account numeric identifier (the account's user id). Use it as `seqera_agent.service_account_id`.
 - `member_id` (Number) Organization membership identifier of the service account. Use it as `seqera_workspace_participant.member_id` to add the account to a workspace.
+
+<a id="nestedatt--client_credentials"></a>
+### Nested Schema for `client_credentials`
+
+Read-Only:
+
+- `client_id` (String) OAuth client ID of the service account. Null when no client exists yet.
+- `expires_at` (String) Latest expiry of a live secret when ACTIVE or EXPIRING, or when the last secret expired when EXPIRED. Null otherwise.
+- `status` (String) Status of the service account's client credentials
 
 ## Import
 

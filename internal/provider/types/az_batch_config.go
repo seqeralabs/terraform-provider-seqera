@@ -17,6 +17,8 @@ type AzBatchConfig struct {
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	Forge                         *AzBatchForgeConfig `tfsdk:"forge"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	HeadJobCpus                   types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb               types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadPool                      types.String        `tfsdk:"head_pool"`

@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
@@ -10,16 +11,27 @@ import (
 type ListWorkflowsRequest struct {
 	// Additional attribute values to include in the response (`labels`, `optimized` status). Returns an empty value (`labels: null`) if omitted.
 	Attributes []shared.WorkflowQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
-	// Workspace numeric identifier
+	// Workspace numeric identifier.
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Pagination max results
-	Max *int `queryParam:"style=form,explode=true,name=max"`
-	// Pagination offset
-	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Filter search parameter
+	// Maximum number of workflow records to return. Default: `50`. The installation maximum is configurable and defaults to `100`.
+	Max *int `default:"50" queryParam:"style=form,explode=true,name=max"`
+	// Number of workflow records to skip for pagination. Default: `0`.
+	Offset *int `default:"0" queryParam:"style=form,explode=true,name=offset"`
+	// Optional workflow search query. Free text matches project name, run name, session ID, and pipeline manifest name. Supports `is:starred` and the `workflowId`, `runName`, `projectName`, `sessionId`, `userName`, `status`, `before`, `after`, `label`, `pipelineId`, and `datasetId` keywords. Use the separate `workspaceId` query parameter to select a workspace.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
-	// Include total size in the response
-	IncludeTotalSize *bool `queryParam:"style=form,explode=true,name=includeTotalSize"`
+	// Whether to calculate `totalSize`. Default: `true`. When `false`, `totalSize` is returned as `-1` (not calculated); use `hasMore` to detect additional pages. `hasMore` is returned in both modes.
+	IncludeTotalSize *bool `default:"true" queryParam:"style=form,explode=true,name=includeTotalSize"`
+}
+
+func (l ListWorkflowsRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *ListWorkflowsRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (l *ListWorkflowsRequest) GetAttributes() []shared.WorkflowQueryAttribute {

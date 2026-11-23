@@ -18,7 +18,9 @@
       "additionalBranchPrefix": "speakeasy-update-",
       "branchTopic": "v{{{newValue}}}",
       "rebaseWhen": "conflicted",
-      "commitMessagePrefix": "chore:"
+      "commitMessagePrefix": "chore:",
+      "minimumReleaseAge": null,
+      "schedule": ["before 6pm on monday"]
     }
   ]
 }

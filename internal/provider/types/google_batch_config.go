@@ -20,6 +20,8 @@ type GoogleBatchConfig struct {
 	Environment                   []ConfigEnvVariable     `tfsdk:"environment"`
 	FusionSnapshots               types.Bool              `tfsdk:"fusion_snapshots"`
 	FusionVersion                 types.String            `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool              `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String            `tfsdk:"global_cache_path"`
 	HeadJobCpus                   types.Int32             `tfsdk:"head_job_cpus"`
 	HeadJobInstanceTemplate       types.String            `tfsdk:"head_job_instance_template"`
 	HeadJobMemoryMb               types.Int32             `tfsdk:"head_job_memory_mb"`

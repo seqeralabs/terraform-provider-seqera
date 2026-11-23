@@ -14,7 +14,7 @@ type ListOrganizationTeamsRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Filter search parameter
+	// Optional team search query. Free text matches team names and descriptions. Supports the `userName` keyword.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 

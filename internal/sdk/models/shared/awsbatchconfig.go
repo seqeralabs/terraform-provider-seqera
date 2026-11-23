@@ -47,6 +47,10 @@ type AwsBatchConfig struct {
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
@@ -188,6 +192,20 @@ func (a *AwsBatchConfig) GetFusionVersion() *string {
 		return nil
 	}
 	return a.FusionVersion
+}
+
+func (a *AwsBatchConfig) GetGlobalCacheEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCacheEnabled
+}
+
+func (a *AwsBatchConfig) GetGlobalCachePath() *string {
+	if a == nil {
+		return nil
+	}
+	return a.GlobalCachePath
 }
 
 func (a *AwsBatchConfig) GetHeadJobCpus() *int {

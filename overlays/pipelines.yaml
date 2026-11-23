@@ -401,6 +401,13 @@ actions:
       x-speakeasy-param-readonly: true
       x-speakeasy-param-suppress-computed-diff: true
 
+  # Remove run-specific global cache location: recorded on a launch only when a
+  # run was instrumented with the Nextflow Global Cache (null on a pipeline's
+  # template launch). The setting itself is managed on the compute environment.
+  # Affects seqera_pipeline and seqera_action (both read via LaunchDbDto).
+  - target: $.components.schemas.LaunchDbDto.properties.globalCachePath
+    remove: true
+
   # Run-specific / server-managed launch fields that are always null or
   # immutable on a TEMPLATE launch: keep them from flipping to
   # "(known after apply)" on every in-place update.

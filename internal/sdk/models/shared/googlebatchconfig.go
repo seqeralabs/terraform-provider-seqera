@@ -38,6 +38,10 @@ type GoogleBatchConfig struct {
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`.
 	FusionVersion *string `json:"fusionVersion,omitempty"`
+	// Whether the Nextflow Global Cache is enabled for this compute environment
+	GlobalCacheEnabled *bool `json:"globalCacheEnabled,omitempty"`
+	// Object storage folder used as the Nextflow Global Cache location
+	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPUs allocated for the Nextflow head job.
 	//
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
@@ -203,6 +207,20 @@ func (g *GoogleBatchConfig) GetFusionVersion() *string {
 		return nil
 	}
 	return g.FusionVersion
+}
+
+func (g *GoogleBatchConfig) GetGlobalCacheEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCacheEnabled
+}
+
+func (g *GoogleBatchConfig) GetGlobalCachePath() *string {
+	if g == nil {
+		return nil
+	}
+	return g.GlobalCachePath
 }
 
 func (g *GoogleBatchConfig) GetHeadJobCpus() *int {

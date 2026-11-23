@@ -7,9 +7,12 @@ import (
 )
 
 type SeqeraComputeConfiguration struct {
+	AllowBuckets                  []types.String      `tfsdk:"allow_buckets"`
 	DefaultDataRetentionPolicy    types.Bool          `tfsdk:"default_data_retention_policy"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	InstanceTypeSize              types.String        `tfsdk:"instance_type_size"`
 	NextflowConfig                types.String        `tfsdk:"nextflow_config"`
 	OverrideNextflowFusionVersion types.Bool          `tfsdk:"override_nextflow_fusion_version"`

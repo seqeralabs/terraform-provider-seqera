@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -39,12 +40,13 @@ type ServiceAccountResource struct {
 
 // ServiceAccountResourceModel describes the resource data model.
 type ServiceAccountResourceModel struct {
-	CreatedAt   types.String `tfsdk:"created_at"`
-	Description types.String `tfsdk:"description"`
-	ID          types.Int64  `tfsdk:"id"`
-	MemberID    types.Int64  `tfsdk:"member_id"`
-	Name        types.String `tfsdk:"name"`
-	OrgID       types.Int64  `tfsdk:"org_id"`
+	ClientCredentials *tfTypes.ClientCredentials `tfsdk:"client_credentials"`
+	CreatedAt         types.String               `tfsdk:"created_at"`
+	Description       types.String               `tfsdk:"description"`
+	ID                types.Int64                `tfsdk:"id"`
+	MemberID          types.Int64                `tfsdk:"member_id"`
+	Name              types.String               `tfsdk:"name"`
+	OrgID             types.Int64                `tfsdk:"org_id"`
 }
 
 func (r *ServiceAccountResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -55,6 +57,24 @@ func (r *ServiceAccountResource) Schema(ctx context.Context, req resource.Schema
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage a service account in a Seqera organization. A service account\nis a non-human identity that agents run as.\n\nTo use it, add it to a workspace with `seqera_workspace_participant`\n(`member_id = seqera_service_account.x.member_id`) using a role that\nallows launching agents, then bind it to an agent with\n`seqera_agent.service_account_id = seqera_service_account.x.id`.\n\nDeleting a service account removes it from every workspace. The\nplatform then disables every agent bound to it and pauses every action\nthat targets those agents. Terraform does not show these side effects\nin a plan.\n\nRequires service accounts to be enabled on the Platform instance.\n",
 		Attributes: map[string]schema.Attribute{
+			"client_credentials": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"client_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `OAuth client ID of the service account. Null when no client exists yet.`,
+					},
+					"expires_at": schema.StringAttribute{
+						Computed:    true,
+						Description: `Latest expiry of a live secret when ACTIVE or EXPIRING, or when the last secret expired when EXPIRED. Null otherwise.`,
+					},
+					"status": schema.StringAttribute{
+						Computed:    true,
+						Description: `Status of the service account's client credentials`,
+					},
+				},
+				Description: `Client credentials of this service account. Null when service account client credentials are not enabled for the organization.`,
+			},
 			"created_at": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{

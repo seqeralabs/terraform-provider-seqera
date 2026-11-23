@@ -41,6 +41,12 @@ const (
 	AuditEventTypeAgentEnabled                      AuditEventType = "agent_enabled"
 	AuditEventTypeAgentDisabled                     AuditEventType = "agent_disabled"
 	AuditEventTypeAgentDeleted                      AuditEventType = "agent_deleted"
+	AuditEventTypeAgentRunLaunched                  AuditEventType = "agent_run_launched"
+	AuditEventTypeAiChatThreadCreated               AuditEventType = "ai_chat_thread_created"
+	AuditEventTypeAiChatMessageSent                 AuditEventType = "ai_chat_message_sent"
+	AuditEventTypeAiChatThreadCancelled             AuditEventType = "ai_chat_thread_cancelled"
+	AuditEventTypeAiChatThreadDeleted               AuditEventType = "ai_chat_thread_deleted"
+	AuditEventTypeAiChatSandboxDownloaded           AuditEventType = "ai_chat_sandbox_downloaded"
 	AuditEventTypeOrganizationCreated               AuditEventType = "organization_created"
 	AuditEventTypeOrganizationUpdated               AuditEventType = "organization_updated"
 	AuditEventTypeOrganizationDeleted               AuditEventType = "organization_deleted"
@@ -240,6 +246,18 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "agent_disabled":
 		fallthrough
 	case "agent_deleted":
+		fallthrough
+	case "agent_run_launched":
+		fallthrough
+	case "ai_chat_thread_created":
+		fallthrough
+	case "ai_chat_message_sent":
+		fallthrough
+	case "ai_chat_thread_cancelled":
+		fallthrough
+	case "ai_chat_thread_deleted":
+		fallthrough
+	case "ai_chat_sandbox_downloaded":
 		fallthrough
 	case "organization_created":
 		fallthrough

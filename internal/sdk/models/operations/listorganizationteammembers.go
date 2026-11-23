@@ -15,7 +15,8 @@ type ListOrganizationTeamMembersRequest struct {
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
-	Offset *int    `queryParam:"style=form,explode=true,name=offset"`
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Optional case-insensitive search of team member names and email addresses.
 	Search *string `queryParam:"style=form,explode=false,name=search"`
 }
 

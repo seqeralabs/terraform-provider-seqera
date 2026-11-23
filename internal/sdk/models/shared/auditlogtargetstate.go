@@ -14,6 +14,9 @@ type NewStateType string
 const (
 	NewStateTypeAccessToken          NewStateType = "access_token"
 	NewStateTypeAction               NewStateType = "action"
+	NewStateTypeAgent                NewStateType = "agent"
+	NewStateTypeAgentRun             NewStateType = "agent_run"
+	NewStateTypeAiChatThread         NewStateType = "ai_chat_thread"
 	NewStateTypeComputeEnv           NewStateType = "compute_env"
 	NewStateTypeCredentials          NewStateType = "credentials"
 	NewStateTypeCreditInfo           NewStateType = "credit_info"
@@ -52,6 +55,9 @@ const (
 type NewState struct {
 	AccessTokenImage          *AccessTokenImage          `queryParam:"inline" union:"member"`
 	ActionImage               *ActionImage               `queryParam:"inline" union:"member"`
+	AgentImage                *AgentImage                `queryParam:"inline" union:"member"`
+	AgentRunImage             *AgentRunImage             `queryParam:"inline" union:"member"`
+	AiChatThreadImage         *AiChatThreadImage         `queryParam:"inline" union:"member"`
 	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
 	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
 	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
@@ -110,6 +116,42 @@ func CreateNewStateAction(action ActionImage) NewState {
 	return NewState{
 		ActionImage: &action,
 		Type:        typ,
+	}
+}
+
+func CreateNewStateAgent(agent AgentImage) NewState {
+	typ := NewStateTypeAgent
+
+	typStr := AuditImageType(typ)
+	agent.AuditImageType = typStr
+
+	return NewState{
+		AgentImage: &agent,
+		Type:       typ,
+	}
+}
+
+func CreateNewStateAgentRun(agentRun AgentRunImage) NewState {
+	typ := NewStateTypeAgentRun
+
+	typStr := AuditImageType(typ)
+	agentRun.AuditImageType = typStr
+
+	return NewState{
+		AgentRunImage: &agentRun,
+		Type:          typ,
+	}
+}
+
+func CreateNewStateAiChatThread(aiChatThread AiChatThreadImage) NewState {
+	typ := NewStateTypeAiChatThread
+
+	typStr := AuditImageType(typ)
+	aiChatThread.AuditImageType = typStr
+
+	return NewState{
+		AiChatThreadImage: &aiChatThread,
+		Type:              typ,
 	}
 }
 
@@ -546,6 +588,33 @@ func (u *NewState) UnmarshalJSON(data []byte) (err error) {
 		u.ActionImage = actionImage
 		u.Type = NewStateTypeAction
 		return nil
+	case "agent":
+		agentImage := new(AgentImage)
+		if err := utils.UnmarshalJSON(data, &agentImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type AgentImage within NewState: %w", string(data), err)
+		}
+
+		u.AgentImage = agentImage
+		u.Type = NewStateTypeAgent
+		return nil
+	case "agent_run":
+		agentRunImage := new(AgentRunImage)
+		if err := utils.UnmarshalJSON(data, &agentRunImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type AgentRunImage within NewState: %w", string(data), err)
+		}
+
+		u.AgentRunImage = agentRunImage
+		u.Type = NewStateTypeAgentRun
+		return nil
+	case "ai_chat_thread":
+		aiChatThreadImage := new(AiChatThreadImage)
+		if err := utils.UnmarshalJSON(data, &aiChatThreadImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type AiChatThreadImage within NewState: %w", string(data), err)
+		}
+
+		u.AiChatThreadImage = aiChatThreadImage
+		u.Type = NewStateTypeAiChatThread
+		return nil
 	case "compute_env":
 		computeEnvImage := new(ComputeEnvImage)
 		if err := utils.UnmarshalJSON(data, &computeEnvImage, "", true, nil); err != nil {
@@ -857,6 +926,18 @@ func (u NewState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.ActionImage, "", true)
 	}
 
+	if u.AgentImage != nil {
+		return utils.MarshalJSON(u.AgentImage, "", true)
+	}
+
+	if u.AgentRunImage != nil {
+		return utils.MarshalJSON(u.AgentRunImage, "", true)
+	}
+
+	if u.AiChatThreadImage != nil {
+		return utils.MarshalJSON(u.AiChatThreadImage, "", true)
+	}
+
 	if u.ComputeEnvImage != nil {
 		return utils.MarshalJSON(u.ComputeEnvImage, "", true)
 	}
@@ -997,6 +1078,9 @@ type PreviousStateType string
 const (
 	PreviousStateTypeAccessToken          PreviousStateType = "access_token"
 	PreviousStateTypeAction               PreviousStateType = "action"
+	PreviousStateTypeAgent                PreviousStateType = "agent"
+	PreviousStateTypeAgentRun             PreviousStateType = "agent_run"
+	PreviousStateTypeAiChatThread         PreviousStateType = "ai_chat_thread"
 	PreviousStateTypeComputeEnv           PreviousStateType = "compute_env"
 	PreviousStateTypeCredentials          PreviousStateType = "credentials"
 	PreviousStateTypeCreditInfo           PreviousStateType = "credit_info"
@@ -1035,6 +1119,9 @@ const (
 type PreviousState struct {
 	AccessTokenImage          *AccessTokenImage          `queryParam:"inline" union:"member"`
 	ActionImage               *ActionImage               `queryParam:"inline" union:"member"`
+	AgentImage                *AgentImage                `queryParam:"inline" union:"member"`
+	AgentRunImage             *AgentRunImage             `queryParam:"inline" union:"member"`
+	AiChatThreadImage         *AiChatThreadImage         `queryParam:"inline" union:"member"`
 	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
 	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
 	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
@@ -1093,6 +1180,42 @@ func CreatePreviousStateAction(action ActionImage) PreviousState {
 	return PreviousState{
 		ActionImage: &action,
 		Type:        typ,
+	}
+}
+
+func CreatePreviousStateAgent(agent AgentImage) PreviousState {
+	typ := PreviousStateTypeAgent
+
+	typStr := AuditImageType(typ)
+	agent.AuditImageType = typStr
+
+	return PreviousState{
+		AgentImage: &agent,
+		Type:       typ,
+	}
+}
+
+func CreatePreviousStateAgentRun(agentRun AgentRunImage) PreviousState {
+	typ := PreviousStateTypeAgentRun
+
+	typStr := AuditImageType(typ)
+	agentRun.AuditImageType = typStr
+
+	return PreviousState{
+		AgentRunImage: &agentRun,
+		Type:          typ,
+	}
+}
+
+func CreatePreviousStateAiChatThread(aiChatThread AiChatThreadImage) PreviousState {
+	typ := PreviousStateTypeAiChatThread
+
+	typStr := AuditImageType(typ)
+	aiChatThread.AuditImageType = typStr
+
+	return PreviousState{
+		AiChatThreadImage: &aiChatThread,
+		Type:              typ,
 	}
 }
 
@@ -1529,6 +1652,33 @@ func (u *PreviousState) UnmarshalJSON(data []byte) (err error) {
 		u.ActionImage = actionImage
 		u.Type = PreviousStateTypeAction
 		return nil
+	case "agent":
+		agentImage := new(AgentImage)
+		if err := utils.UnmarshalJSON(data, &agentImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type AgentImage within PreviousState: %w", string(data), err)
+		}
+
+		u.AgentImage = agentImage
+		u.Type = PreviousStateTypeAgent
+		return nil
+	case "agent_run":
+		agentRunImage := new(AgentRunImage)
+		if err := utils.UnmarshalJSON(data, &agentRunImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type AgentRunImage within PreviousState: %w", string(data), err)
+		}
+
+		u.AgentRunImage = agentRunImage
+		u.Type = PreviousStateTypeAgentRun
+		return nil
+	case "ai_chat_thread":
+		aiChatThreadImage := new(AiChatThreadImage)
+		if err := utils.UnmarshalJSON(data, &aiChatThreadImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type AiChatThreadImage within PreviousState: %w", string(data), err)
+		}
+
+		u.AiChatThreadImage = aiChatThreadImage
+		u.Type = PreviousStateTypeAiChatThread
+		return nil
 	case "compute_env":
 		computeEnvImage := new(ComputeEnvImage)
 		if err := utils.UnmarshalJSON(data, &computeEnvImage, "", true, nil); err != nil {
@@ -1840,6 +1990,18 @@ func (u PreviousState) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.ActionImage, "", true)
 	}
 
+	if u.AgentImage != nil {
+		return utils.MarshalJSON(u.AgentImage, "", true)
+	}
+
+	if u.AgentRunImage != nil {
+		return utils.MarshalJSON(u.AgentRunImage, "", true)
+	}
+
+	if u.AiChatThreadImage != nil {
+		return utils.MarshalJSON(u.AiChatThreadImage, "", true)
+	}
+
 	if u.ComputeEnvImage != nil {
 		return utils.MarshalJSON(u.ComputeEnvImage, "", true)
 	}
@@ -2005,6 +2167,27 @@ func (a *AuditLogTargetState) GetNewStateAccessToken() *AccessTokenImage {
 func (a *AuditLogTargetState) GetNewStateAction() *ActionImage {
 	if v := a.GetNewState(); v != nil {
 		return v.ActionImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateAgent() *AgentImage {
+	if v := a.GetNewState(); v != nil {
+		return v.AgentImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateAgentRun() *AgentRunImage {
+	if v := a.GetNewState(); v != nil {
+		return v.AgentRunImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateAiChatThread() *AiChatThreadImage {
+	if v := a.GetNewState(); v != nil {
+		return v.AiChatThreadImage
 	}
 	return nil
 }
@@ -2257,6 +2440,27 @@ func (a *AuditLogTargetState) GetPreviousStateAccessToken() *AccessTokenImage {
 func (a *AuditLogTargetState) GetPreviousStateAction() *ActionImage {
 	if v := a.GetPreviousState(); v != nil {
 		return v.ActionImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateAgent() *AgentImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.AgentImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateAgentRun() *AgentRunImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.AgentRunImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateAiChatThread() *AiChatThreadImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.AiChatThreadImage
 	}
 	return nil
 }

@@ -111,11 +111,13 @@ func (s *SeqeraComputeCredentialsOutput) GetDiscriminator() *string {
 }
 
 type AzureEntraCredentialsOutput struct {
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 	BatchName     *string `json:"batchName,omitempty"`
 	ClientID      *string `json:"clientId,omitempty"`
 	Discriminator *string `json:"discriminator,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
-	TenantID      *string `json:"tenantId,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
+	StorageName *string `json:"storageName,omitempty"`
+	TenantID    *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureEntraCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -317,9 +319,11 @@ func (a *AzureReposCredentialsOutput) GetUsername() *string {
 }
 
 type AzureCloudCredentialsOutput struct {
-	BatchName      *string `json:"batchName,omitempty"`
-	ClientID       *string `json:"clientId,omitempty"`
-	Discriminator  *string `json:"discriminator,omitempty"`
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
+	BatchName     *string `json:"batchName,omitempty"`
+	ClientID      *string `json:"clientId,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName    *string `json:"storageName,omitempty"`
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
 	TenantID       *string `json:"tenantId,omitempty"`
@@ -379,9 +383,11 @@ func (a *AzureCloudCredentialsOutput) GetTenantID() *string {
 }
 
 type AzureCredentialsOutput struct {
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 	BatchName     *string `json:"batchName,omitempty"`
 	Discriminator *string `json:"discriminator,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
+	StorageName *string `json:"storageName,omitempty"`
 }
 
 func (a AzureCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -1387,14 +1393,16 @@ func (s *SeqeraComputeCredentials) GetSecretKey() *string {
 }
 
 type AzureEntraCredentials struct {
-	BatchKey      *string `json:"batchKey,omitempty"`
+	BatchKey *string `json:"batchKey,omitempty"`
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 	BatchName     *string `json:"batchName,omitempty"`
 	ClientID      *string `json:"clientId,omitempty"`
 	ClientSecret  *string `json:"clientSecret,omitempty"`
 	Discriminator *string `json:"discriminator,omitempty"`
 	StorageKey    *string `json:"storageKey,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
-	TenantID      *string `json:"tenantId,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
+	StorageName *string `json:"storageName,omitempty"`
+	TenantID    *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureEntraCredentials) MarshalJSON() ([]byte, error) {
@@ -1603,12 +1611,14 @@ func (a *AzureReposCredentials) GetUsername() *string {
 }
 
 type AzureCloudCredentials struct {
-	BatchKey       *string `json:"batchKey,omitempty"`
-	BatchName      *string `json:"batchName,omitempty"`
-	ClientID       *string `json:"clientId,omitempty"`
-	ClientSecret   *string `json:"clientSecret,omitempty"`
-	Discriminator  *string `json:"discriminator,omitempty"`
-	StorageKey     *string `json:"storageKey,omitempty"`
+	BatchKey *string `json:"batchKey,omitempty"`
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
+	BatchName     *string `json:"batchName,omitempty"`
+	ClientID      *string `json:"clientId,omitempty"`
+	ClientSecret  *string `json:"clientSecret,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	StorageKey    *string `json:"storageKey,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName    *string `json:"storageName,omitempty"`
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
 	TenantID       *string `json:"tenantId,omitempty"`
@@ -1689,11 +1699,13 @@ func (a *AzureCloudCredentials) GetTenantID() *string {
 }
 
 type AzureCredentials struct {
-	BatchKey      *string `json:"batchKey,omitempty"`
+	BatchKey *string `json:"batchKey,omitempty"`
+	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 	BatchName     *string `json:"batchName,omitempty"`
 	Discriminator *string `json:"discriminator,omitempty"`
 	StorageKey    *string `json:"storageKey,omitempty"`
-	StorageName   *string `json:"storageName,omitempty"`
+	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
+	StorageName *string `json:"storageName,omitempty"`
 }
 
 func (a AzureCredentials) MarshalJSON() ([]byte, error) {

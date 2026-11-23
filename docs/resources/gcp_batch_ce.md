@@ -149,6 +149,8 @@ Requires replacement if changed.
 - `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `fusion_snapshots` (Boolean) Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job when it is interrupted by a spot reclamation. Requires `enable_fusion = true`. Requires replacement if changed.
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
+- `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
+- `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.

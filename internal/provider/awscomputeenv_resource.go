@@ -680,6 +680,32 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							custom_stringvalidators.FusionVersionValidator(),
 						},
 					},
+					"global_cache_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+						Description: `Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							custom_boolvalidators.GlobalCacheEnabledValidator(),
+						},
+					},
+					"global_cache_path": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthBetween(1, 255),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9._~:/\-]+$`).String()),
+							custom_stringvalidators.GlobalCachePathS3Validator(),
+						},
+					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,

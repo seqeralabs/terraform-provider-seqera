@@ -9,6 +9,7 @@ import (
 type AzBatchPoolConfig struct {
 	AutoScale      types.Bool   `tfsdk:"auto_scale"`
 	BootDiskSizeGB types.Int32  `tfsdk:"boot_disk_size_gb"`
+	LowPriority    types.Bool   `tfsdk:"low_priority"`
 	VMCount        types.Int32  `tfsdk:"vm_count"`
 	VMType         types.String `tfsdk:"vm_type"`
 }

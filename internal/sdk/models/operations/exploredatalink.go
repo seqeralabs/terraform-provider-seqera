@@ -14,7 +14,7 @@ type ExploreDataLinkRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
-	// Prefix search of data-link content
+	// Optional prefix search of data-link content.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Token used to fetch the next page of items
 	NextPageToken *string `queryParam:"style=form,explode=true,name=nextPageToken"`

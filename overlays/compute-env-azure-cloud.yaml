@@ -436,11 +436,10 @@ actions:
         Must be omitted (or null) when `intelligent_compute_enabled = false`.
       x-speakeasy-param-force-new: true
 
-  # Azure only supports the VM backend for Intelligent Compute, does not support
-  # Fusion snapshots, and has no use for billing_export_table (a BigQuery Cloud
-  # Billing export, consumed only by the Google backend). The backend ignores
-  # backend_strategy (hardcodes VM), fusion_snapshots and billing_export_table
-  # here. The shared SchedConfig can't drop those fields for one platform, so
+  # Azure does not support Fusion snapshots, and has no use for
+  # billing_export_table (a BigQuery Cloud Billing export, consumed only by the
+  # Google backend). The backend ignores fusion_snapshots and
+  # billing_export_table here. The shared SchedConfig can't drop those fields for one platform, so
   # object validators reject unsupported values at plan time instead.
   # PR #231 review.
   #
@@ -450,7 +449,6 @@ actions:
     update:
       x-speakeasy-plan-validators:
         - schedConfigConsistencyValidator
-        - BackendStrategyVmOnlyValidator
         - FusionSnapshotsUnsupportedValidator
         - BillingExportTableGoogleOnlyValidator
 

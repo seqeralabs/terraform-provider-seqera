@@ -16,7 +16,7 @@ type ListLatestDatasetVersionsV2Request struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Search query
+	// Optional dataset-version search query. Free text matches the dataset name. Supports the `userName`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `usedAfter`, and `usedBefore` keywords. The `label` and `visibility` keywords supported by dataset search are not supported for dataset versions.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 

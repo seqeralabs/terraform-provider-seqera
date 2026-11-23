@@ -132,6 +132,8 @@ Optional:
 Each variable can target the head node, compute nodes, or both.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
+- `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
+- `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `instance_type` (String) Azure VM size for compute instances (e.g., Standard_D4s_v3, Standard_F8s_v2). Requires replacement if changed.
 - `intelligent_compute_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--intelligent_compute_config))
 - `intelligent_compute_enabled` (Boolean) Enable Seqera Intelligent Compute (Preview).
@@ -190,13 +192,6 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `backend_strategy` (String) Backend used by Intelligent Compute to run tasks:
-- `ECS` (default, AWS only): delegate task execution to AWS ECS.
-- `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-- `VM` (provider-agnostic): run tasks on cloud VMs.
-
-Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
-must be one of ["ECS", "EC2", "VM"]; Requires replacement if changed.
 - `billing_export_table` (String) Fully-qualified BigQuery table holding the Cloud Billing export, as 'project.dataset.table'. Enables billed-cost retrieval for runs on this compute environment. Google Cloud only. The export is not retroactive, so cost is unavailable for runs that predate it. null means cost retrieval is unavailable. Requires replacement if changed.
 - `disk_allocation` (String) Disk-allocation strategy for Intelligent Compute nodes. Set to `nvme` to
 restrict to instance types that provide local SSD (NVMe) storage. Leave

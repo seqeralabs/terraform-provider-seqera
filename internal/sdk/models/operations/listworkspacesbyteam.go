@@ -16,7 +16,7 @@ type ListWorkspacesByTeamRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Search criteria
+	// Optional case-insensitive search of workspace names and full names.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 

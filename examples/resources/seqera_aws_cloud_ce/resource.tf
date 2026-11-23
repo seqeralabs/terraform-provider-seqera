@@ -37,6 +37,8 @@ resource "seqera_aws_cloud_ce" "networked" {
     work_dir = "s3://my-bucket/work"
 
     # Networking. Use subnet_ids (a list) rather than the deprecated subnet_id.
+    # The head instance tries the subnets in order, so list subnets in
+    # different Availability Zones to fail over when one has no capacity.
     vpc_id     = "vpc-12345678"
     subnet_ids = ["subnet-12345678", "subnet-87654321"]
 

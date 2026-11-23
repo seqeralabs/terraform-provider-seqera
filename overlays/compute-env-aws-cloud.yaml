@@ -404,10 +404,9 @@ actions:
   # at plan time, before the API rejects apply.
   #
   # billing_export_table names a BigQuery Cloud Billing export and is consumed
-  # only by the Google backend. Like backend_strategy and fusion_snapshots it
-  # lives on the shared SchedConfig schema, which cannot drop a field for one
-  # platform, so it is rejected at plan time here instead of being silently
-  # ignored on apply.
+  # only by the Google backend. Like fusion_snapshots it lives on the shared
+  # SchedConfig schema, which cannot drop a field for one platform, so it is
+  # rejected at plan time here instead of being silently ignored on apply.
   - target: $.components.schemas.AwsCloudConfig
     update:
       x-speakeasy-plan-validators:
@@ -504,17 +503,14 @@ actions:
 
   # Intelligent Compute (sched_config) advanced fields. Shared SchedConfig
   # schema, so these descriptions/examples apply across AWS/Azure/GCP cloud CEs.
+  #
+  # backendStrategy is hidden: VM (the API default) is the only value the API
+  # accepts on create, and the AWS-only ECS and EC2 backends are deprecated and
+  # only reported for compute environments created before the deprecation.
+  # Exposing a single-valued attribute only invites mistakes, so the provider
+  # never sends it and the API applies VM.
   - target: $.components.schemas.SchedConfig.properties.backendStrategy
-    update:
-      description: |
-        Backend used by Intelligent Compute to run tasks:
-        - `ECS` (default, AWS only): delegate task execution to AWS ECS.
-        - `EC2` (AWS only): run tasks directly on AWS EC2 instances.
-        - `VM` (provider-agnostic): run tasks on cloud VMs.
-
-        Azure and Google support `VM` only; `ECS`/`EC2` are AWS-only.
-      example: "ECS"
-      x-speakeasy-param-force-new: true
+    remove: true
   - target: $.components.schemas.SchedConfig.properties.maxSpotAttempts
     update:
       description: |

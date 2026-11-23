@@ -14,7 +14,7 @@ type ListLabelsRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
-	// Filter search parameter
+	// Optional case-insensitive search of label names. Use `name=value` to match the name exactly and the value partially. Explicit wildcards are supported in either part.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Label type
 	Type *shared.LabelType `queryParam:"style=form,explode=true,name=type"`

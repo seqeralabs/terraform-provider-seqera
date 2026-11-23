@@ -12,6 +12,8 @@ type AzCloudConfig struct {
 	DataCollectionRuleID          types.String        `tfsdk:"data_collection_rule_id"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	InstanceType                  types.String        `tfsdk:"instance_type"`
 	IntelligentComputeConfig      *SchedConfig        `tfsdk:"intelligent_compute_config"`
 	IntelligentComputeEnabled     types.Bool          `tfsdk:"intelligent_compute_enabled"`

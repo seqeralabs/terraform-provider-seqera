@@ -117,6 +117,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 					},
 				},
+				Description: `Users allowed to connect to this studio when it is private. The creator is included only if listed. Omitted for a non-private studio.`,
 			},
 			"auto_start": schema.BoolAttribute{
 				Optional:    true,
@@ -292,7 +293,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Flag to denote if the studio is private to the users listed in 'allowedUserIds'. If 'true' and 'allowedUserIds' is empty or omitted, the studio is private to its creator. If omitted, the studio config and then the workspace default decide. 'false' with user ids in 'allowedUserIds' is rejected. Requires replacement if changed.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional:    true,

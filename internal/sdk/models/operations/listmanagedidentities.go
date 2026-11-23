@@ -10,7 +10,7 @@ import (
 type ListManagedIdentitiesRequest struct {
 	// Organization numeric identifier
 	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
-	// Optional search criteria, allowing free text search on name and keywords: `platform:`
+	// Optional managed-identity search query. Free text matches the identity name. Supports the `platform` keyword.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

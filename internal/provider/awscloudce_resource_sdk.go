@@ -46,6 +46,8 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			r.Config.Environment = nil
 		}
 		r.Config.FusionVersion = types.StringPointerValue(resp.Config.FusionVersion)
+		r.Config.GlobalCacheEnabled = types.BoolPointerValue(resp.Config.GlobalCacheEnabled)
+		r.Config.GlobalCachePath = types.StringPointerValue(resp.Config.GlobalCachePath)
 		r.Config.GpuEnabled = types.BoolPointerValue(resp.Config.GpuEnabled)
 		r.Config.ImageID = types.StringPointerValue(resp.Config.ImageID)
 		r.Config.InstanceProfileArn = types.StringPointerValue(resp.Config.InstanceProfileArn)
@@ -54,11 +56,6 @@ func (r *AwsCloudCEResourceModel) RefreshFromSharedAwsCloudCEComputeConfig(ctx c
 			r.Config.IntelligentComputeConfig = nil
 		} else {
 			r.Config.IntelligentComputeConfig = &tfTypes.SchedConfig{}
-			if resp.Config.IntelligentComputeConfig.BackendStrategy != nil {
-				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringValue(string(*resp.Config.IntelligentComputeConfig.BackendStrategy))
-			} else {
-				r.Config.IntelligentComputeConfig.BackendStrategy = types.StringNull()
-			}
 			r.Config.IntelligentComputeConfig.BillingExportTable = types.StringPointerValue(resp.Config.IntelligentComputeConfig.BillingExportTable)
 			r.Config.IntelligentComputeConfig.DiskAllocation = types.StringPointerValue(resp.Config.IntelligentComputeConfig.DiskAllocation)
 			r.Config.IntelligentComputeConfig.FusionSnapshots = types.BoolPointerValue(resp.Config.IntelligentComputeConfig.FusionSnapshots)
@@ -378,6 +375,18 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 	} else {
 		fusionVersion = nil
 	}
+	globalCacheEnabled := new(bool)
+	if !r.Config.GlobalCacheEnabled.IsUnknown() && !r.Config.GlobalCacheEnabled.IsNull() {
+		*globalCacheEnabled = r.Config.GlobalCacheEnabled.ValueBool()
+	} else {
+		globalCacheEnabled = nil
+	}
+	globalCachePath := new(string)
+	if !r.Config.GlobalCachePath.IsUnknown() && !r.Config.GlobalCachePath.IsNull() {
+		*globalCachePath = r.Config.GlobalCachePath.ValueString()
+	} else {
+		globalCachePath = nil
+	}
 	gpuEnabled := new(bool)
 	if !r.Config.GpuEnabled.IsUnknown() && !r.Config.GpuEnabled.IsNull() {
 		*gpuEnabled = r.Config.GpuEnabled.ValueBool()
@@ -437,12 +446,6 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 
 	var intelligentComputeConfig *shared.SchedConfig
 	if r.Config.IntelligentComputeConfig != nil {
-		backendStrategy := new(shared.SchedConfigBackendStrategy)
-		if !r.Config.IntelligentComputeConfig.BackendStrategy.IsUnknown() && !r.Config.IntelligentComputeConfig.BackendStrategy.IsNull() {
-			*backendStrategy = shared.SchedConfigBackendStrategy(r.Config.IntelligentComputeConfig.BackendStrategy.ValueString())
-		} else {
-			backendStrategy = nil
-		}
 		billingExportTable := new(string)
 		if !r.Config.IntelligentComputeConfig.BillingExportTable.IsUnknown() && !r.Config.IntelligentComputeConfig.BillingExportTable.IsNull() {
 			*billingExportTable = r.Config.IntelligentComputeConfig.BillingExportTable.ValueString()
@@ -516,7 +519,6 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 			provisioningModel = nil
 		}
 		intelligentComputeConfig = &shared.SchedConfig{
-			BackendStrategy:    backendStrategy,
 			BillingExportTable: billingExportTable,
 			DiskAllocation:     diskAllocation,
 			FusionSnapshots:    fusionSnapshots,
@@ -575,6 +577,8 @@ func (r *AwsCloudCEResourceModel) ToSharedAwsCloudCEComputeConfigInput(ctx conte
 		Ec2KeyPair:                    ec2KeyPair,
 		Environment:                   environment,
 		FusionVersion:                 fusionVersion,
+		GlobalCacheEnabled:            globalCacheEnabled,
+		GlobalCachePath:               globalCachePath,
 		GpuEnabled:                    gpuEnabled,
 		ImageID:                       imageID,
 		InstanceProfileArn:            instanceProfileArn,

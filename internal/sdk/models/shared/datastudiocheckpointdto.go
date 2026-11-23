@@ -16,6 +16,8 @@ type DataStudioCheckpointDto struct {
 	Name      string                  `json:"name"`
 	Path      string                  `json:"path"`
 	Status    *StudioCheckpointStatus `json:"status"`
+	// Set when the status comes from a recovery or its undo. Null after a normal save.
+	StatusReason *StudioCheckpointStatusReason `json:"statusReason,omitempty"`
 }
 
 func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
@@ -76,4 +78,11 @@ func (d *DataStudioCheckpointDto) GetStatus() *StudioCheckpointStatus {
 		return nil
 	}
 	return d.Status
+}
+
+func (d *DataStudioCheckpointDto) GetStatusReason() *StudioCheckpointStatusReason {
+	if d == nil {
+		return nil
+	}
+	return d.StatusReason
 }

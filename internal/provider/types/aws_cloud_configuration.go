@@ -16,6 +16,8 @@ type AWSCloudConfiguration struct {
 	Ec2KeyPair                    types.String        `tfsdk:"ec2_key_pair"`
 	Environment                   []ConfigEnvVariable `tfsdk:"environment"`
 	FusionVersion                 types.String        `tfsdk:"fusion_version"`
+	GlobalCacheEnabled            types.Bool          `tfsdk:"global_cache_enabled"`
+	GlobalCachePath               types.String        `tfsdk:"global_cache_path"`
 	GpuEnabled                    types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID                       types.String        `tfsdk:"image_id"`
 	InstanceProfileArn            types.String        `tfsdk:"instance_profile_arn"`

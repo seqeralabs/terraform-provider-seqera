@@ -161,9 +161,9 @@ Optional:
 Optional:
 
 - `batch_key` (String)
-- `batch_name` (String)
+- `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 - `storage_key` (String)
-- `storage_name` (String)
+- `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 
 
 <a id="nestedatt--keys--azure_cloud"></a>
@@ -172,11 +172,11 @@ Optional:
 Optional:
 
 - `batch_key` (String)
-- `batch_name` (String)
+- `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 - `client_id` (String)
 - `client_secret` (String)
 - `storage_key` (String)
-- `storage_name` (String)
+- `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 - `subscription_id` (String)
 - `tenant_id` (String)
 
@@ -187,11 +187,11 @@ Optional:
 Optional:
 
 - `batch_key` (String)
-- `batch_name` (String)
+- `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
 - `client_id` (String)
 - `client_secret` (String)
 - `storage_key` (String)
-- `storage_name` (String)
+- `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 - `tenant_id` (String)
 
 
