@@ -63,7 +63,7 @@ func (s *PipelineSchemas) CreatePipelineSchema(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreatePipelineSchema",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreatePipelineSchemaRequest", "json", `request:"mediaType=application/json"`)

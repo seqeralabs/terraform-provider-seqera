@@ -64,7 +64,7 @@ func (s *Datasets) DeleteDatasets(ctx context.Context, request operations.Delete
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDatasets",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DeleteDatasetsRequest", "json", `request:"mediaType=application/json"`)
@@ -302,7 +302,7 @@ func (s *Datasets) ListDatasetsV2(ctx context.Context, request operations.ListDa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDatasetsV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -531,7 +531,7 @@ func (s *Datasets) CreateDatasetV2(ctx context.Context, request operations.Creat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateDatasetRequest", "json", `request:"mediaType=application/json"`)
@@ -769,7 +769,7 @@ func (s *Datasets) HideDatasets(ctx context.Context, request operations.HideData
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "HideDatasets",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "ChangeDatasetVisibilityRequest", "json", `request:"mediaType=application/json"`)
@@ -986,7 +986,7 @@ func (s *Datasets) PreviewDatasetURL(ctx context.Context, request operations.Pre
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "PreviewDatasetUrl",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "ValidateURLRequest", "json", `request:"mediaType=application/json"`)
@@ -1222,7 +1222,7 @@ func (s *Datasets) ShowDatasets(ctx context.Context, request operations.ShowData
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ShowDatasets",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "ChangeDatasetVisibilityRequest", "json", `request:"mediaType=application/json"`)
@@ -1439,7 +1439,7 @@ func (s *Datasets) ValidateDatasetURL(ctx context.Context, request operations.Va
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateDatasetUrl",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "ValidateURLRequest", "json", `request:"mediaType=application/json"`)
@@ -1675,7 +1675,7 @@ func (s *Datasets) ListLatestDatasetVersionsV2(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListLatestDatasetVersionsV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1904,7 +1904,7 @@ func (s *Datasets) DeleteDatasetV2(ctx context.Context, request operations.Delet
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2116,7 +2116,7 @@ func (s *Datasets) UpdateDatasetV2(ctx context.Context, request operations.Updat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateDatasetRequest", "json", `request:"mediaType=application/json"`)
@@ -2335,7 +2335,7 @@ func (s *Datasets) LinkDatasetVersion(ctx context.Context, request operations.Li
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "LinkDatasetVersion",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "LinkVersionRequest", "json", `request:"mediaType=application/json"`)
@@ -2573,7 +2573,7 @@ func (s *Datasets) DescribeDatasetV2(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2804,7 +2804,7 @@ func (s *Datasets) UploadDatasetV2(ctx context.Context, request operations.Uploa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UploadDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "MultiRequestFileSchema", "multipart", `request:"mediaType=multipart/form-data"`)
@@ -3041,7 +3041,7 @@ func (s *Datasets) DownloadDatasetV2(ctx context.Context, request operations.Dow
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadDatasetV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3288,7 +3288,7 @@ func (s *Datasets) PreviewDatasetVersion(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "PreviewDatasetVersion",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3519,7 +3519,7 @@ func (s *Datasets) ListDatasetVersionsV2(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDatasetVersionsV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3748,7 +3748,7 @@ func (s *Datasets) DisableDatasetVersion(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DisableDatasetVersion",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3960,7 +3960,7 @@ func (s *Datasets) ListLaunchDatasetVersions(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListLaunchDatasetVersions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4170,7 +4170,7 @@ func (s *Datasets) ListDatasets(ctx context.Context, request operations.ListData
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDatasets",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4397,7 +4397,7 @@ func (s *Datasets) CreateDataset(ctx context.Context, request operations.CreateD
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateDataset",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateDatasetRequest", "json", `request:"mediaType=application/json"`)
@@ -4633,7 +4633,7 @@ func (s *Datasets) ListWorkspaceDatasetVersions(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkspaceDatasetVersions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4864,7 +4864,7 @@ func (s *Datasets) DeleteDataset(ctx context.Context, request operations.DeleteD
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDataset",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5072,7 +5072,7 @@ func (s *Datasets) UpdateDataset(ctx context.Context, request operations.UpdateD
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateDataset",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateDatasetRequest", "json", `request:"mediaType=application/json"`)
@@ -5289,7 +5289,7 @@ func (s *Datasets) DescribeDataset(ctx context.Context, request operations.Descr
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeDataset",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5520,7 +5520,7 @@ func (s *Datasets) UploadDataset(ctx context.Context, request operations.UploadD
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UploadDataset",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "MultiRequestFileSchema", "multipart", `request:"mediaType=multipart/form-data"`)
@@ -5758,7 +5758,7 @@ func (s *Datasets) ListDatasetVersions(ctx context.Context, request operations.L
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDatasetVersions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

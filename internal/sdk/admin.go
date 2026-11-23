@@ -63,7 +63,7 @@ func (s *Admin) ListAuditLogsV2(ctx context.Context, request operations.ListAudi
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListAuditLogsV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -293,7 +293,7 @@ func (s *Admin) ExportAuditLogsV2Csv(ctx context.Context, request operations.Exp
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExportAuditLogsV2Csv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -522,7 +522,7 @@ func (s *Admin) DescribeAuditLogV2(ctx context.Context, request operations.Descr
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAuditLogV2",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

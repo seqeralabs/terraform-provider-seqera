@@ -63,7 +63,7 @@ func (s *Teams) ListOrganizationTeams(ctx context.Context, request operations.Li
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListOrganizationTeams",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -292,7 +292,7 @@ func (s *Teams) CreateOrganizationTeam(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateOrganizationTeam",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateTeamRequest", "json", `request:"mediaType=application/json"`)
@@ -526,7 +526,7 @@ func (s *Teams) ValidateTeamName(ctx context.Context, request operations.Validat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateTeamName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -736,7 +736,7 @@ func (s *Teams) DeleteOrganizationTeam(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteOrganizationTeam",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -944,7 +944,7 @@ func (s *Teams) DescribeOrganizationTeam(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeOrganizationTeam",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1171,7 +1171,7 @@ func (s *Teams) UpdateOrganizationTeam(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateOrganizationTeam",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateTeamRequest", "json", `request:"mediaType=application/json"`)
@@ -1388,7 +1388,7 @@ func (s *Teams) ListOrganizationTeamMembers(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListOrganizationTeamMembers",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1617,7 +1617,7 @@ func (s *Teams) CreateOrganizationTeamMember(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateOrganizationTeamMember",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateTeamMemberRequest", "json", `request:"mediaType=application/json"`)
@@ -1849,7 +1849,7 @@ func (s *Teams) DeleteOrganizationTeamMember(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteOrganizationTeamMember",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2055,7 +2055,7 @@ func (s *Teams) ListWorkspacesByTeam(ctx context.Context, request operations.Lis
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkspacesByTeam",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

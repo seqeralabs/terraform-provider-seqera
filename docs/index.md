@@ -66,9 +66,9 @@ resource "seqera_aws_batch_ce" "main" {
 
 ## Authentication
 
-The provider authenticates to the Seqera Platform with a personal access token (PAT). You can generate one from the **Tokens** page in the Seqera UI under your user menu.
+The provider authenticates to the Seqera Platform with either a personal access token (PAT) or a service account's client credentials (see below). You can generate a PAT from the **Tokens** page in the Seqera UI under your user menu.
 
-The token can be supplied to the provider in one of two ways, in order of precedence:
+A PAT can be supplied to the provider in one of two ways, in order of precedence:
 
 1. **Provider block** — `bearer_auth` attribute on the `seqera` provider block.
 2. **Environment variable** — `TOWER_ACCESS_TOKEN`.
@@ -94,6 +94,33 @@ provider "seqera" {}
 % terraform plan
 ```
 
+### Service account client credentials
+
+For automation such as CI pipelines, the provider can authenticate as a [service account](resources/service_account.md) instead of a person. Supply the service account's client ID and secret, and the provider exchanges them for a short-lived access token, refreshing it as needed during long runs.
+
+```terraform
+provider "seqera" {}
+```
+
+```console
+% export TOWER_CLIENT_ID="sa_..."
+% export TOWER_CLIENT_SECRET="..."
+% terraform plan
+```
+
+The equivalent provider block attributes are `client_id` and `client_secret`. Configure either a personal access token or client credentials, not both.
+
+```terraform
+provider "seqera" {
+  client_id     = var.seqera_client_id
+  client_secret = var.seqera_client_secret
+}
+```
+
+-> **Note:** An organization owner issues client secrets from the service account's page in the Seqera UI. The secret is shown only once. Service accounts act with their own permissions: they only reach workspaces they've been added to, and they can't hold an organization role above Member, so organization-level resources such as `seqera_orgs`, `seqera_teams`, and workspace creation require a personal access token.
+
+~> **Availability:** Service account client credentials must be enabled for your organization. If they aren't, the token exchange fails with an `unauthorized_client` error; use a personal access token instead.
+
 ### Self-hosted Seqera Platform
 
 Point `server_url` at your deployment's API endpoint. The path must include `/api`.
@@ -112,7 +139,10 @@ The default `server_url` is `https://api.cloud.seqera.io` (Seqera Cloud).
 ### Optional
 
 - `bearer_auth` (String, Sensitive) HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`.
+- `client_id` (String, Sensitive) Service account client credentials, exchanged for a short-lived access token. client identifier. Configurable via environment variable `TOWER_CLIENT_ID`.
+- `client_secret` (String, Sensitive) Service account client credentials, exchanged for a short-lived access token. client secret. Configurable via environment variable `TOWER_CLIENT_SECRET`.
 - `server_url` (String) Server URL (defaults to https://api.cloud.seqera.io)
+- `token_url` (String, Sensitive) Service account client credentials, exchanged for a short-lived access token. token URL.
 
 ## Resource & data-source documentation
 

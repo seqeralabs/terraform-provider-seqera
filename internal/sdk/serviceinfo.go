@@ -63,7 +63,7 @@ func (s *ServiceInfo) Info(ctx context.Context, opts ...operations.Option) (*ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Info",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

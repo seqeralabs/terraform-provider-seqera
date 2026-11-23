@@ -12,6 +12,7 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.11.0
 	github.com/itchyny/gojq v0.12.17
 	github.com/stretchr/testify v1.10.0
+	golang.org/x/sync v0.23.0
 )
 
 require (

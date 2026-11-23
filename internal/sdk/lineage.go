@@ -63,7 +63,7 @@ func (s *Lineage) ResolveLineage(ctx context.Context, request operations.Resolve
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ResolveLineage",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -284,7 +284,7 @@ func (s *Lineage) SearchLineage(ctx context.Context, request operations.SearchLi
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "SearchLineage",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -494,7 +494,7 @@ func (s *Lineage) GetLineageRecord(ctx context.Context, request operations.GetLi
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetLineageRecord",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -704,7 +704,7 @@ func (s *Lineage) NavigateLineageDownstream(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "NavigateLineageDownstream",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -912,7 +912,7 @@ func (s *Lineage) GetLineageSummary(ctx context.Context, request operations.GetL
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetLineageSummary",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1120,7 +1120,7 @@ func (s *Lineage) NavigateLineageUpstream(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "NavigateLineageUpstream",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
