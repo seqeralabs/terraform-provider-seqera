@@ -117,6 +117,8 @@ terraform:
       providerAttribute: client_id
     - env: TOWER_CLIENT_SECRET
       providerAttribute: client_secret
+    - env: TOWER_TOKEN_URL
+      providerAttribute: token_url
   excludeEmptyObjectSchemas: false
   fixFlags:
     encodePathParams: false

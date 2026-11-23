@@ -75,7 +75,7 @@ Available configuration:
 | `bearer_auth` | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
 | `client_id` | Service account client credentials, exchanged for a short-lived access token. client identifier. Configurable via environment variable `TOWER_CLIENT_ID`. |
 | `client_secret` | Service account client credentials, exchanged for a short-lived access token. client secret. Configurable via environment variable `TOWER_CLIENT_SECRET`. |
-| `token_url` | Service account client credentials, exchanged for a short-lived access token. token URL. |
+| `token_url` | Service account client credentials, exchanged for a short-lived access token. token URL. Configurable via environment variable `TOWER_TOKEN_URL`. |
 <!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->

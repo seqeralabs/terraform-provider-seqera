@@ -88,7 +88,7 @@ func (p *SeqeraProvider) Schema(ctx context.Context, req provider.SchemaRequest,
 				Optional:    true,
 			},
 			"token_url": schema.StringAttribute{
-				MarkdownDescription: `Service account client credentials, exchanged for a short-lived access token. token URL.`,
+				MarkdownDescription: `Service account client credentials, exchanged for a short-lived access token. token URL. Configurable via environment variable ` + "`" + `TOWER_TOKEN_URL` + "`" + `.`,
 				Optional:            true,
 				Sensitive:           true,
 			},
@@ -142,6 +142,10 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 
 	if !data.TokenURL.IsUnknown() {
 		clientCredentials.TokenURL = data.TokenURL.ValueString()
+	}
+
+	if tokenURLEnvVar := os.Getenv("TOWER_TOKEN_URL"); clientCredentials.TokenURL == "" && tokenURLEnvVar != "" {
+		clientCredentials.TokenURL = tokenURLEnvVar
 	}
 
 	if clientCredentials.ClientID != "" && clientCredentials.ClientSecret != "" {
