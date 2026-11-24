@@ -4,6 +4,8 @@ package shared
 
 type ListComputeEnvsResponse struct {
 	ComputeEnvs []ListComputeEnvsResponseEntry `json:"computeEnvs,omitempty"`
+	// Total number of compute environments that match the request, across all pages.
+	TotalSize *int64 `json:"totalSize,omitempty"`
 }
 
 func (l *ListComputeEnvsResponse) GetComputeEnvs() []ListComputeEnvsResponseEntry {
@@ -11,4 +13,11 @@ func (l *ListComputeEnvsResponse) GetComputeEnvs() []ListComputeEnvsResponseEntr
 		return nil
 	}
 	return l.ComputeEnvs
+}
+
+func (l *ListComputeEnvsResponse) GetTotalSize() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.TotalSize
 }

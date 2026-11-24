@@ -35,6 +35,7 @@ func (r *WorkspaceLineageSettingsResourceModel) RefreshFromSharedLineageWorkspac
 		} else {
 			r.Status = types.StringNull()
 		}
+		r.StoreLocation = types.StringPointerValue(resp.StoreLocation)
 		r.StoreName = types.StringPointerValue(resp.StoreName)
 		r.TopicArn = types.StringPointerValue(resp.TopicArn)
 		r.WebhookURL = types.StringPointerValue(resp.WebhookURL)
@@ -124,6 +125,12 @@ func (r *WorkspaceLineageSettingsResourceModel) ToSharedLineageWorkspaceSettings
 	var region string
 	region = r.Region.ValueString()
 
+	storeLocation := new(string)
+	if !r.StoreLocation.IsUnknown() && !r.StoreLocation.IsNull() {
+		*storeLocation = r.StoreLocation.ValueString()
+	} else {
+		storeLocation = nil
+	}
 	storeName := new(string)
 	if !r.StoreName.IsUnknown() && !r.StoreName.IsNull() {
 		*storeName = r.StoreName.ValueString()
@@ -141,6 +148,7 @@ func (r *WorkspaceLineageSettingsResourceModel) ToSharedLineageWorkspaceSettings
 		LineageDefault:   lineageDefault,
 		ProvisioningMode: provisioningMode,
 		Region:           region,
+		StoreLocation:    storeLocation,
 		StoreName:        storeName,
 		TopicArn:         topicArn,
 	}

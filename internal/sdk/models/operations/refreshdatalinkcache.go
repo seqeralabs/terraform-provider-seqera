@@ -3,6 +3,7 @@
 package operations
 
 import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
 
@@ -34,6 +35,8 @@ type RefreshDataLinkCacheResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
+	// Credentials not found
+	ErrorResponse *shared.ErrorResponse
 }
 
 func (r *RefreshDataLinkCacheResponse) GetContentType() string {
@@ -55,4 +58,11 @@ func (r *RefreshDataLinkCacheResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return r.RawResponse
+}
+
+func (r *RefreshDataLinkCacheResponse) GetErrorResponse() *shared.ErrorResponse {
+	if r == nil {
+		return nil
+	}
+	return r.ErrorResponse
 }

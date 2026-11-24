@@ -2,12 +2,43 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type SourceTeamType string
+
+const (
+	SourceTeamTypeRegular      SourceTeamType = "regular"
+	SourceTeamTypeSystemOwners SourceTeamType = "system_owners"
+)
+
+func (e SourceTeamType) ToPointer() *SourceTeamType {
+	return &e
+}
+func (e *SourceTeamType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "regular":
+		fallthrough
+	case "system_owners":
+		*e = SourceTeamType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for SourceTeamType: %v", v)
+	}
+}
+
 type UserWorkspaceRoleDto struct {
 	Role           *string            `json:"role,omitempty"`
 	RoleSourceType *WspRoleSourceType `json:"roleSourceType,omitempty"`
 	SourceTeamID   *int64             `json:"sourceTeamId,omitempty"`
 	SourceTeamName *string            `json:"sourceTeamName,omitempty"`
-	SourceTeamType *TeamType          `json:"sourceTeamType,omitempty"`
+	SourceTeamType *SourceTeamType    `json:"sourceTeamType,omitempty"`
 }
 
 func (u *UserWorkspaceRoleDto) GetRole() *string {
@@ -38,7 +69,7 @@ func (u *UserWorkspaceRoleDto) GetSourceTeamName() *string {
 	return u.SourceTeamName
 }
 
-func (u *UserWorkspaceRoleDto) GetSourceTeamType() *TeamType {
+func (u *UserWorkspaceRoleDto) GetSourceTeamType() *SourceTeamType {
 	if u == nil {
 		return nil
 	}

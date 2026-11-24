@@ -72,7 +72,7 @@ type ListWorkflowsResponseListWorkflowsElement struct {
 	// Contains execution status, metadata, and results from pipeline
 	// runs including logs and performance metrics.
 	//
-	Workflow *WorkflowDbDto `json:"workflow,omitempty"`
+	Workflow *WorkflowListResponseDto `json:"workflow,omitempty"`
 	// Workspace ID
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Workspace name
@@ -128,7 +128,7 @@ func (l *ListWorkflowsResponseListWorkflowsElement) GetStarred() *bool {
 	return l.Starred
 }
 
-func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowListResponseDto {
 	if l == nil {
 		return nil
 	}

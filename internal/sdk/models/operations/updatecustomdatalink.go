@@ -46,7 +46,7 @@ type UpdateCustomDataLinkResponse struct {
 	RawResponse *http.Response
 	// Success — Data-link updated
 	DataLinkDto *shared.DataLinkDto
-	// BadRequest
+	// BadRequest — invalid request, or credentials not found
 	ErrorResponse *shared.ErrorResponse
 }
 

@@ -2942,7 +2942,7 @@ func (s *Workspaces) FindLineageWorkspaceSettings(ctx context.Context, request o
 }
 
 // UpdateLineageWorkspaceSettings - Update workspace lineage settings
-// Updates the lineage settings of the workspace identified by the given `workspaceId`. `credentialsId` and `region` are always required. In `MANUAL` provisioning mode, `storeName` and `topicArn` are also required.
+// Updates the lineage settings of the workspace identified by the given `workspaceId`. `credentialsId` and `region` are always required. In `MANUAL` provisioning mode, `storeLocation` and `topicArn` are also required.
 func (s *Workspaces) UpdateLineageWorkspaceSettings(ctx context.Context, request operations.UpdateLineageWorkspaceSettingsRequest, opts ...operations.Option) (*operations.UpdateLineageWorkspaceSettingsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

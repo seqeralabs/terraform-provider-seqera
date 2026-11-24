@@ -24,7 +24,7 @@ Lineage records how data and runs relate to each other. In `AUTO` provisioning m
 # var.* and seqera_aws_credential.main are placeholders for your own values.
 #
 # AUTO provisioning (default): Platform creates the lineage bucket, the
-# notification topic and the subscription. Do not set store_name or topic_arn.
+# notification topic and the subscription. Do not set store_location or topic_arn.
 #
 # credentials_id and region are locked once AUTO provisioning has completed; changing
 # them afterwards is rejected by the Platform.
@@ -42,7 +42,8 @@ resource "seqera_workspace_lineage_settings" "auto" {
 }
 
 # MANUAL provisioning: you create the bucket and the SNS topic, and subscribe
-# the Platform webhook to the topic. store_name and topic_arn are required.
+# the Platform webhook to the topic. store_location and topic_arn are required;
+# store_location must be within the existing bucket.
 resource "aws_sns_topic" "lineage" {
   name = "seqera-lineage-events"
 }
@@ -54,7 +55,7 @@ resource "seqera_workspace_lineage_settings" "manual" {
 
   credentials_id = seqera_aws_credential.main.id
   region         = "eu-west-1"
-  store_name     = "my-existing-lineage-bucket"
+  store_location = "s3://my-existing-lineage-bucket/lineage"
   topic_arn      = aws_sns_topic.lineage.arn
 }
 
@@ -81,7 +82,8 @@ resource "aws_sns_topic_subscription" "lineage" {
 
 - `lineage_default` (Boolean) When true, the lineage toggle in the pipeline launch form defaults to enabled. Default: false
 - `provisioning_mode` (String) How the lineage infrastructure is provisioned. AUTO: Platform creates the bucket, SNS topic and subscription. MANUAL: you pre-create the bucket and SNS topic and subscribe the Platform webhook (see `webhook_url`) to the topic yourself. Default: "AUTO"; must be one of ["AUTO", "MANUAL"]
-- `store_name` (String) Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
+- `store_location` (String) Storage location of the lineage store: a cloud storage path within your existing bucket, e.g. 's3://my-bucket/lineage'. Required in MANUAL mode; must not be set in AUTO mode, where Platform always uses the root of 's3://seqera-lineage-{workspaceId}'.
+- `store_name` (String, Deprecated) Bucket name for the lineage store, used as the bucket root. Must not be set in AUTO mode, nor together with `store_location`.
 - `topic_arn` (String) AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
 
 ### Read-Only

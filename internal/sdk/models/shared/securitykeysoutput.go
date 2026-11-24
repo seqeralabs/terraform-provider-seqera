@@ -10,6 +10,7 @@ import (
 )
 
 type LocalSecurityKeysOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
@@ -32,9 +33,12 @@ func (l *LocalSecurityKeysOutput) GetDiscriminator() *string {
 }
 
 type S3CompatibleCredentialsOutput struct {
-	AccessKey              *string `json:"accessKey,omitempty"`
-	Discriminator          *string `json:"discriminator,omitempty"`
-	PathStyleAccessEnabled *bool   `json:"pathStyleAccessEnabled,omitempty"`
+	// Access key ID.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Whether path-style bucket addressing is used.
+	PathStyleAccessEnabled *bool `json:"pathStyleAccessEnabled,omitempty"`
 }
 
 func (s S3CompatibleCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -73,8 +77,11 @@ func (s *S3CompatibleCredentialsOutput) GetPathStyleAccessEnabled() *bool {
 // #endregion class-body-s3compatiblecredentialsoutput
 
 type SeqeraComputeCredentialsOutput struct {
-	AccessKey     *string `json:"accessKey,omitempty"`
+	// AWS IAM access key ID (keys mode).
+	AccessKey *string `json:"accessKey,omitempty"`
+	// IAM role ARN to assume when using these credentials (role and workload identity modes).
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
@@ -112,12 +119,15 @@ func (s *SeqeraComputeCredentialsOutput) GetDiscriminator() *string {
 
 type AzureEntraCredentialsOutput struct {
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Application (client) ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName *string `json:"storageName,omitempty"`
-	TenantID    *string `json:"tenantId,omitempty"`
+	// Entra tenant ID.
+	TenantID *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureEntraCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -167,9 +177,12 @@ func (a *AzureEntraCredentialsOutput) GetTenantID() *string {
 }
 
 type AWSCodeCommitCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+	Token *string `json:"token,omitempty"`
+	// Username (equivalent to an AWS access key).
+	Username *string `json:"username,omitempty"`
 }
 
 func (a AWSCodeCommitCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -205,10 +218,14 @@ func (a *AWSCodeCommitCredentialsOutput) GetUsername() *string {
 }
 
 type TowerAgentCredentials struct {
-	ConnectionID  *string `json:"connectionId,omitempty"`
+	// Agent connection ID.
+	ConnectionID *string `json:"connectionId,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Shared        *bool   `json:"shared,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
+	// Whether the agent connection is shared across multiple workspaces.
+	Shared *bool `json:"shared,omitempty"`
+	// Agent working directory. Always `$TW_AGENT_WORK`, replaced with the work directory the agent reports.
+	WorkDir *string `json:"workDir,omitempty"`
 }
 
 func (t TowerAgentCredentials) MarshalJSON() ([]byte, error) {
@@ -251,9 +268,12 @@ func (t *TowerAgentCredentials) GetWorkDir() *string {
 }
 
 type ContainerRegistryCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Registry      *string `json:"registry,omitempty"`
-	UserName      *string `json:"userName,omitempty"`
+	// Container registry server URL, for example `docker.io`, `quay.io`, or a custom registry domain. Defaults to `docker.io`.
+	Registry *string `json:"registry,omitempty"`
+	// Registry username.
+	UserName *string `json:"userName,omitempty"`
 }
 
 func (c ContainerRegistryCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -289,8 +309,10 @@ func (c *ContainerRegistryCredentialsOutput) GetUserName() *string {
 }
 
 type AzureReposCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (a AzureReposCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -320,13 +342,17 @@ func (a *AzureReposCredentialsOutput) GetUsername() *string {
 
 type AzureCloudCredentialsOutput struct {
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Application (client) ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
-	StorageName    *string `json:"storageName,omitempty"`
+	StorageName *string `json:"storageName,omitempty"`
+	// Azure subscription ID.
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	TenantID       *string `json:"tenantId,omitempty"`
+	// Entra tenant ID.
+	TenantID *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureCloudCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -384,7 +410,8 @@ func (a *AzureCloudCredentialsOutput) GetTenantID() *string {
 
 type AzureCredentialsOutput struct {
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName *string `json:"storageName,omitempty"`
@@ -423,6 +450,7 @@ func (a *AzureCredentialsOutput) GetStorageName() *string {
 }
 
 type KubernetesCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
@@ -445,6 +473,7 @@ func (k *KubernetesCredentialsOutput) GetDiscriminator() *string {
 }
 
 type SSHCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
@@ -467,8 +496,10 @@ func (s *SSHCredentialsOutput) GetDiscriminator() *string {
 }
 
 type GiteaCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GiteaCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -497,8 +528,10 @@ func (g *GiteaCredentialsOutput) GetUsername() *string {
 }
 
 type BitBucketCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (b BitBucketCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -527,8 +560,10 @@ func (b *BitBucketCredentialsOutput) GetUsername() *string {
 }
 
 type GitLabCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GitLabCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -556,46 +591,50 @@ func (g *GitLabCredentialsOutput) GetUsername() *string {
 	return g.Username
 }
 
-type GitHubAppSecurityKeysOutput struct {
-	AppID         *string `json:"appId,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
+type GitHubAppCredentialsOutput struct {
+	// GitHub App ID.
+	AppID *string `json:"appId,omitempty"`
+	// OAuth client ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Slug          *string `json:"slug,omitempty"`
+	// App URL slug returned by the GitHub App manifest flow.
+	Slug *string `json:"slug,omitempty"`
 }
 
-func (g GitHubAppSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+func (g GitHubAppCredentialsOutput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GitHubAppSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+func (g *GitHubAppCredentialsOutput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GitHubAppSecurityKeysOutput) GetAppID() *string {
+func (g *GitHubAppCredentialsOutput) GetAppID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.AppID
 }
 
-func (g *GitHubAppSecurityKeysOutput) GetClientID() *string {
+func (g *GitHubAppCredentialsOutput) GetClientID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.ClientID
 }
 
-func (g *GitHubAppSecurityKeysOutput) GetDiscriminator() *string {
+func (g *GitHubAppCredentialsOutput) GetDiscriminator() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Discriminator
 }
 
-func (g *GitHubAppSecurityKeysOutput) GetSlug() *string {
+func (g *GitHubAppCredentialsOutput) GetSlug() *string {
 	if g == nil {
 		return nil
 	}
@@ -603,8 +642,10 @@ func (g *GitHubAppSecurityKeysOutput) GetSlug() *string {
 }
 
 type GitHubCredentialsOutput struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GitHubCredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -633,9 +674,13 @@ func (g *GitHubCredentialsOutput) GetUsername() *string {
 }
 
 type GoogleCredentialsOutput struct {
-	Discriminator            *string `json:"discriminator,omitempty"`
-	ServiceAccountEmail      *string `json:"serviceAccountEmail,omitempty"`
-	TokenAudience            *string `json:"tokenAudience,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Service account email to impersonate (Workload Identity Federation mode).
+	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
+	// Optional custom audience for the Workload Identity Federation OIDC token exchange. Defaults to the Workload Identity Provider resource name. Must not be an audience Seqera Platform or its services accept: `platform` (or the installation's configured access-token audience), `sched`, `consumption`, the Platform API URL, or its `/token` endpoint.
+	TokenAudience *string `json:"tokenAudience,omitempty"`
+	// Full resource name of the Workload Identity Federation OIDC provider.
 	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
 }
 
@@ -679,8 +724,11 @@ func (g *GoogleCredentialsOutput) GetWorkloadIdentityProvider() *string {
 }
 
 type AWSCredentialsOutput struct {
-	AccessKey     *string `json:"accessKey,omitempty"`
+	// AWS IAM access key ID (keys mode).
+	AccessKey *string `json:"accessKey,omitempty"`
+	// IAM role ARN to assume when using these credentials (role and workload identity modes).
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
@@ -744,7 +792,7 @@ type SecurityKeysOutput struct {
 	AWSCredentialsOutput               *AWSCredentialsOutput               `queryParam:"inline" union:"member"`
 	GoogleCredentialsOutput            *GoogleCredentialsOutput            `queryParam:"inline" union:"member"`
 	GitHubCredentialsOutput            *GitHubCredentialsOutput            `queryParam:"inline" union:"member"`
-	GitHubAppSecurityKeysOutput        *GitHubAppSecurityKeysOutput        `queryParam:"inline" union:"member"`
+	GitHubAppCredentialsOutput         *GitHubAppCredentialsOutput         `queryParam:"inline" union:"member"`
 	GitLabCredentialsOutput            *GitLabCredentialsOutput            `queryParam:"inline" union:"member"`
 	BitBucketCredentialsOutput         *BitBucketCredentialsOutput         `queryParam:"inline" union:"member"`
 	GiteaCredentialsOutput             *GiteaCredentialsOutput             `queryParam:"inline" union:"member"`
@@ -884,15 +932,15 @@ func CreateSecurityKeysOutputGithub(github GitHubCredentialsOutput) SecurityKeys
 	}
 }
 
-func CreateSecurityKeysOutputGithubApp(githubApp GitHubAppSecurityKeysOutput) SecurityKeysOutput {
+func CreateSecurityKeysOutputGithubApp(githubApp GitHubAppCredentialsOutput) SecurityKeysOutput {
 	typ := SecurityKeysOutputTypeGithubApp
 
 	typStr := string(typ)
 	githubApp.Discriminator = &typStr
 
 	return SecurityKeysOutput{
-		GitHubAppSecurityKeysOutput: &githubApp,
-		Type:                        typ,
+		GitHubAppCredentialsOutput: &githubApp,
+		Type:                       typ,
 	}
 }
 
@@ -1102,12 +1150,12 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) (err error) {
 		u.Type = SecurityKeysOutputTypeGithub
 		return nil
 	case "github_app":
-		gitHubAppSecurityKeysOutput := new(GitHubAppSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &gitHubAppSecurityKeysOutput, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
+		gitHubAppCredentialsOutput := new(GitHubAppCredentialsOutput)
+		if err := utils.UnmarshalJSON(data, &gitHubAppCredentialsOutput, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppCredentialsOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
-		u.GitHubAppSecurityKeysOutput = gitHubAppSecurityKeysOutput
+		u.GitHubAppCredentialsOutput = gitHubAppCredentialsOutput
 		u.Type = SecurityKeysOutputTypeGithubApp
 		return nil
 	case "gitlab":
@@ -1200,8 +1248,8 @@ func (u SecurityKeysOutput) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.GitHubCredentialsOutput, "", true)
 	}
 
-	if u.GitHubAppSecurityKeysOutput != nil {
-		return utils.MarshalJSON(u.GitHubAppSecurityKeysOutput, "", true)
+	if u.GitHubAppCredentialsOutput != nil {
+		return utils.MarshalJSON(u.GitHubAppCredentialsOutput, "", true)
 	}
 
 	if u.GitLabCredentialsOutput != nil {
@@ -1268,8 +1316,10 @@ func (u SecurityKeysOutput) MarshalJSON() ([]byte, error) {
 }
 
 type LocalSecurityKeys struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
+	// Password of the local account.
+	Password *string `json:"password,omitempty"`
 }
 
 func (l LocalSecurityKeys) MarshalJSON() ([]byte, error) {
@@ -1298,10 +1348,14 @@ func (l *LocalSecurityKeys) GetPassword() *string {
 }
 
 type S3CompatibleCredentials struct {
-	AccessKey              *string `json:"accessKey,omitempty"`
-	Discriminator          *string `json:"discriminator,omitempty"`
-	PathStyleAccessEnabled *bool   `json:"pathStyleAccessEnabled,omitempty"`
-	SecretKey              *string `json:"secretKey,omitempty"`
+	// Access key ID.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Whether path-style bucket addressing is used.
+	PathStyleAccessEnabled *bool `json:"pathStyleAccessEnabled,omitempty"`
+	// Secret access key.
+	SecretKey *string `json:"secretKey,omitempty"`
 }
 
 func (s S3CompatibleCredentials) MarshalJSON() ([]byte, error) {
@@ -1347,10 +1401,14 @@ func (s *S3CompatibleCredentials) GetSecretKey() *string {
 // #endregion class-body-s3compatiblecredentials
 
 type SeqeraComputeCredentials struct {
-	AccessKey     *string `json:"accessKey,omitempty"`
+	// AWS IAM access key ID (keys mode).
+	AccessKey *string `json:"accessKey,omitempty"`
+	// IAM role ARN to assume when using these credentials (role and workload identity modes).
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	SecretKey     *string `json:"secretKey,omitempty"`
+	// AWS IAM secret access key (keys mode).
+	SecretKey *string `json:"secretKey,omitempty"`
 }
 
 func (s SeqeraComputeCredentials) MarshalJSON() ([]byte, error) {
@@ -1393,16 +1451,22 @@ func (s *SeqeraComputeCredentials) GetSecretKey() *string {
 }
 
 type AzureEntraCredentials struct {
+	// Azure Batch account access key.
 	BatchKey *string `json:"batchKey,omitempty"`
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
-	ClientSecret  *string `json:"clientSecret,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Application (client) ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// Application (client) secret.
+	ClientSecret *string `json:"clientSecret,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	StorageKey    *string `json:"storageKey,omitempty"`
+	// Azure Storage account access key.
+	StorageKey *string `json:"storageKey,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName *string `json:"storageName,omitempty"`
-	TenantID    *string `json:"tenantId,omitempty"`
+	// Entra tenant ID.
+	TenantID *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureEntraCredentials) MarshalJSON() ([]byte, error) {
@@ -1473,10 +1537,14 @@ func (a *AzureEntraCredentials) GetTenantID() *string {
 }
 
 type AWSCodeCommitCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Password (equivalent to an AWS secret key).
+	Password *string `json:"password,omitempty"`
+	// Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+	Token *string `json:"token,omitempty"`
+	// Username (equivalent to an AWS access key).
+	Username *string `json:"username,omitempty"`
 }
 
 func (a AWSCodeCommitCredentials) MarshalJSON() ([]byte, error) {
@@ -1519,10 +1587,14 @@ func (a *AWSCodeCommitCredentials) GetUsername() *string {
 }
 
 type ContainerRegistryCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Registry      *string `json:"registry,omitempty"`
-	UserName      *string `json:"userName,omitempty"`
+	// Registry password or access token.
+	Password *string `json:"password,omitempty"`
+	// Container registry server URL, for example `docker.io`, `quay.io`, or a custom registry domain. Defaults to `docker.io`.
+	Registry *string `json:"registry,omitempty"`
+	// Registry username.
+	UserName *string `json:"userName,omitempty"`
 }
 
 func (c ContainerRegistryCredentials) MarshalJSON() ([]byte, error) {
@@ -1565,10 +1637,14 @@ func (c *ContainerRegistryCredentials) GetUserName() *string {
 }
 
 type AzureReposCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account password or personal access token.
+	Password *string `json:"password,omitempty"`
+	// Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+	Token *string `json:"token,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (a AzureReposCredentials) MarshalJSON() ([]byte, error) {
@@ -1611,17 +1687,24 @@ func (a *AzureReposCredentials) GetUsername() *string {
 }
 
 type AzureCloudCredentials struct {
+	// Azure Batch account access key.
 	BatchKey *string `json:"batchKey,omitempty"`
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
-	ClientSecret  *string `json:"clientSecret,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Application (client) ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// Application (client) secret.
+	ClientSecret *string `json:"clientSecret,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	StorageKey    *string `json:"storageKey,omitempty"`
+	// Azure Storage account access key.
+	StorageKey *string `json:"storageKey,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
-	StorageName    *string `json:"storageName,omitempty"`
+	StorageName *string `json:"storageName,omitempty"`
+	// Azure subscription ID.
 	SubscriptionID *string `json:"subscriptionId,omitempty"`
-	TenantID       *string `json:"tenantId,omitempty"`
+	// Entra tenant ID.
+	TenantID *string `json:"tenantId,omitempty"`
 }
 
 func (a AzureCloudCredentials) MarshalJSON() ([]byte, error) {
@@ -1699,11 +1782,14 @@ func (a *AzureCloudCredentials) GetTenantID() *string {
 }
 
 type AzureCredentials struct {
+	// Azure Batch account access key.
 	BatchKey *string `json:"batchKey,omitempty"`
 	// Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-	BatchName     *string `json:"batchName,omitempty"`
+	BatchName *string `json:"batchName,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	StorageKey    *string `json:"storageKey,omitempty"`
+	// Azure Storage account access key.
+	StorageKey *string `json:"storageKey,omitempty"`
 	// Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 	StorageName *string `json:"storageName,omitempty"`
 }
@@ -1755,10 +1841,14 @@ func (a *AzureCredentials) GetStorageName() *string {
 }
 
 type KubernetesCredentials struct {
-	Certificate   *string `json:"certificate,omitempty"`
+	// Base64-encoded client certificate for Kubernetes authentication.
+	Certificate *string `json:"certificate,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	PrivateKey    *string `json:"privateKey,omitempty"`
-	Token         *string `json:"token,omitempty"`
+	// Base64-encoded private key for Kubernetes authentication.
+	PrivateKey *string `json:"privateKey,omitempty"`
+	// Service account token, as an alternative to the certificate and private key pair.
+	Token *string `json:"token,omitempty"`
 }
 
 func (k KubernetesCredentials) MarshalJSON() ([]byte, error) {
@@ -1801,9 +1891,12 @@ func (k *KubernetesCredentials) GetToken() *string {
 }
 
 type SSHCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Passphrase    *string `json:"passphrase,omitempty"`
-	PrivateKey    *string `json:"privateKey,omitempty"`
+	// Passphrase protecting the private key, when it is encrypted.
+	Passphrase *string `json:"passphrase,omitempty"`
+	// PEM-encoded SSH private key.
+	PrivateKey *string `json:"privateKey,omitempty"`
 }
 
 func (s SSHCredentials) MarshalJSON() ([]byte, error) {
@@ -1839,10 +1932,14 @@ func (s *SSHCredentials) GetPrivateKey() *string {
 }
 
 type GiteaCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account password or access token.
+	Password *string `json:"password,omitempty"`
+	// Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+	Token *string `json:"token,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GiteaCredentials) MarshalJSON() ([]byte, error) {
@@ -1885,10 +1982,14 @@ func (g *GiteaCredentials) GetUsername() *string {
 }
 
 type BitBucketCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account password.
+	Password *string `json:"password,omitempty"`
+	// App password or access token.
+	Token *string `json:"token,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (b BitBucketCredentials) MarshalJSON() ([]byte, error) {
@@ -1931,10 +2032,14 @@ func (b *BitBucketCredentials) GetUsername() *string {
 }
 
 type GitLabCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// Account password.
+	Password *string `json:"password,omitempty"`
+	// Personal access token, as an alternative to the username and password.
+	Token *string `json:"token,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GitLabCredentials) MarshalJSON() ([]byte, error) {
@@ -1976,70 +2081,77 @@ func (g *GitLabCredentials) GetUsername() *string {
 	return g.Username
 }
 
-type GitHubAppSecurityKeys struct {
-	AppID         *string `json:"appId,omitempty"`
-	ClientID      *string `json:"clientId,omitempty"`
-	ClientSecret  *string `json:"clientSecret,omitempty"`
+type GitHubAppCredentials struct {
+	// GitHub App ID.
+	AppID *string `json:"appId,omitempty"`
+	// OAuth client ID.
+	ClientID *string `json:"clientId,omitempty"`
+	// OAuth client secret, returned by the GitHub App manifest flow.
+	ClientSecret *string `json:"clientSecret,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	PrivateKey    *string `json:"privateKey,omitempty"`
-	Slug          *string `json:"slug,omitempty"`
+	// PEM-encoded GitHub App private key.
+	PrivateKey *string `json:"privateKey,omitempty"`
+	// App URL slug returned by the GitHub App manifest flow.
+	Slug *string `json:"slug,omitempty"`
+	// Webhook secret, returned by the GitHub App manifest flow.
 	WebhookSecret *string `json:"webhookSecret,omitempty"`
 }
 
-func (g GitHubAppSecurityKeys) MarshalJSON() ([]byte, error) {
+func (g GitHubAppCredentials) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GitHubAppSecurityKeys) UnmarshalJSON(data []byte) error {
+func (g *GitHubAppCredentials) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GitHubAppSecurityKeys) GetAppID() *string {
+func (g *GitHubAppCredentials) GetAppID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.AppID
 }
 
-func (g *GitHubAppSecurityKeys) GetClientID() *string {
+func (g *GitHubAppCredentials) GetClientID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.ClientID
 }
 
-func (g *GitHubAppSecurityKeys) GetClientSecret() *string {
+func (g *GitHubAppCredentials) GetClientSecret() *string {
 	if g == nil {
 		return nil
 	}
 	return g.ClientSecret
 }
 
-func (g *GitHubAppSecurityKeys) GetDiscriminator() *string {
+func (g *GitHubAppCredentials) GetDiscriminator() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Discriminator
 }
 
-func (g *GitHubAppSecurityKeys) GetPrivateKey() *string {
+func (g *GitHubAppCredentials) GetPrivateKey() *string {
 	if g == nil {
 		return nil
 	}
 	return g.PrivateKey
 }
 
-func (g *GitHubAppSecurityKeys) GetSlug() *string {
+func (g *GitHubAppCredentials) GetSlug() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Slug
 }
 
-func (g *GitHubAppSecurityKeys) GetWebhookSecret() *string {
+func (g *GitHubAppCredentials) GetWebhookSecret() *string {
 	if g == nil {
 		return nil
 	}
@@ -2047,10 +2159,14 @@ func (g *GitHubAppSecurityKeys) GetWebhookSecret() *string {
 }
 
 type GitHubCredentials struct {
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	Password      *string `json:"password,omitempty"`
-	Token         *string `json:"token,omitempty"`
-	Username      *string `json:"username,omitempty"`
+	// GitHub personal access token, classic or fine-grained.
+	Password *string `json:"password,omitempty"`
+	// Ignored: send the personal access token in `password`.
+	Token *string `json:"token,omitempty"`
+	// Account username.
+	Username *string `json:"username,omitempty"`
 }
 
 func (g GitHubCredentials) MarshalJSON() ([]byte, error) {
@@ -2093,10 +2209,15 @@ func (g *GitHubCredentials) GetUsername() *string {
 }
 
 type GoogleCredentials struct {
-	Data                     *string `json:"data,omitempty"`
-	Discriminator            *string `json:"discriminator,omitempty"`
-	ServiceAccountEmail      *string `json:"serviceAccountEmail,omitempty"`
-	TokenAudience            *string `json:"tokenAudience,omitempty"`
+	// Service account JSON key (service-account key mode).
+	Data *string `json:"data,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Service account email to impersonate (Workload Identity Federation mode).
+	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
+	// Optional custom audience for the Workload Identity Federation OIDC token exchange. Defaults to the Workload Identity Provider resource name. Must not be an audience Seqera Platform or its services accept: `platform` (or the installation's configured access-token audience), `sched`, `consumption`, the Platform API URL, or its `/token` endpoint.
+	TokenAudience *string `json:"tokenAudience,omitempty"`
+	// Full resource name of the Workload Identity Federation OIDC provider.
 	WorkloadIdentityProvider *string `json:"workloadIdentityProvider,omitempty"`
 }
 
@@ -2147,10 +2268,14 @@ func (g *GoogleCredentials) GetWorkloadIdentityProvider() *string {
 }
 
 type AWSCredentials struct {
-	AccessKey     *string `json:"accessKey,omitempty"`
+	// AWS IAM access key ID (keys mode).
+	AccessKey *string `json:"accessKey,omitempty"`
+	// IAM role ARN to assume when using these credentials (role and workload identity modes).
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+	// Provider these credentials authenticate against; selects the keys variant.
 	Discriminator *string `json:"discriminator,omitempty"`
-	SecretKey     *string `json:"secretKey,omitempty"`
+	// AWS IAM secret access key (keys mode).
+	SecretKey *string `json:"secretKey,omitempty"`
 }
 
 func (a AWSCredentials) MarshalJSON() ([]byte, error) {
@@ -2220,7 +2345,7 @@ type SecurityKeys struct {
 	AWSCredentials               *AWSCredentials               `queryParam:"inline" union:"member"`
 	GoogleCredentials            *GoogleCredentials            `queryParam:"inline" union:"member"`
 	GitHubCredentials            *GitHubCredentials            `queryParam:"inline" union:"member"`
-	GitHubAppSecurityKeys        *GitHubAppSecurityKeys        `queryParam:"inline" union:"member"`
+	GitHubAppCredentials         *GitHubAppCredentials         `queryParam:"inline" union:"member"`
 	GitLabCredentials            *GitLabCredentials            `queryParam:"inline" union:"member"`
 	BitBucketCredentials         *BitBucketCredentials         `queryParam:"inline" union:"member"`
 	GiteaCredentials             *GiteaCredentials             `queryParam:"inline" union:"member"`
@@ -2360,15 +2485,15 @@ func CreateSecurityKeysGithub(github GitHubCredentials) SecurityKeys {
 	}
 }
 
-func CreateSecurityKeysGithubApp(githubApp GitHubAppSecurityKeys) SecurityKeys {
+func CreateSecurityKeysGithubApp(githubApp GitHubAppCredentials) SecurityKeys {
 	typ := SecurityKeysTypeGithubApp
 
 	typStr := string(typ)
 	githubApp.Discriminator = &typStr
 
 	return SecurityKeys{
-		GitHubAppSecurityKeys: &githubApp,
-		Type:                  typ,
+		GitHubAppCredentials: &githubApp,
+		Type:                 typ,
 	}
 }
 
@@ -2578,12 +2703,12 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) (err error) {
 		u.Type = SecurityKeysTypeGithub
 		return nil
 	case "github_app":
-		gitHubAppSecurityKeys := new(GitHubAppSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &gitHubAppSecurityKeys, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppSecurityKeys within SecurityKeys: %w", string(data), err)
+		gitHubAppCredentials := new(GitHubAppCredentials)
+		if err := utils.UnmarshalJSON(data, &gitHubAppCredentials, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github_app) type GitHubAppCredentials within SecurityKeys: %w", string(data), err)
 		}
 
-		u.GitHubAppSecurityKeys = gitHubAppSecurityKeys
+		u.GitHubAppCredentials = gitHubAppCredentials
 		u.Type = SecurityKeysTypeGithubApp
 		return nil
 	case "gitlab":
@@ -2676,8 +2801,8 @@ func (u SecurityKeys) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.GitHubCredentials, "", true)
 	}
 
-	if u.GitHubAppSecurityKeys != nil {
-		return utils.MarshalJSON(u.GitHubAppSecurityKeys, "", true)
+	if u.GitHubAppCredentials != nil {
+		return utils.MarshalJSON(u.GitHubAppCredentials, "", true)
 	}
 
 	if u.GitLabCredentials != nil {

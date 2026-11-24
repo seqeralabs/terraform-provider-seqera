@@ -234,7 +234,7 @@ Requires replacement if changed.
 - `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
 - `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
-- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate. Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
@@ -586,7 +586,7 @@ Requires replacement if changed.
 - `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
 - `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job. Requires replacement if changed.
-- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job container. Must be at least 3584 when creating a compute environment. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `job_max_wall_clock_time` (String) Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days. Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
@@ -806,7 +806,7 @@ Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Requires replacement if changed.
 - `namespace` (String) Requires replacement if changed.
@@ -861,7 +861,7 @@ Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
 - `fusion_version` (String) Fusion version used by launches on this compute environment. Must exist in the system catalog and be compatible with the deployed services. When omitted, the catalog default Fusion version is used. Requires `override_nextflow_fusion_version = true`. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head/launcher pod. Requires replacement if changed.
-- `head_job_memory_mb` (Number) Memory allocation for the Nextflow head/launcher pod in MB. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.
 - `head_pod_spec` (String) Custom pod specification (YAML) for the Nextflow head/launcher pod.
 Use for nodeSelector, affinity, tolerations, etc.
 Requires replacement if changed.
@@ -939,7 +939,7 @@ Requires replacement if changed.
 - `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
 Overrides other VM configuration settings for the head job.
 Requires replacement if changed.
-- `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 when omitted. Requires replacement if changed.
 - `labels` (Map of String) Static Google Cloud resource labels applied to compute resources at creation
 time, for cost tracking and organization. For per-run dynamic resource labels,
 attach seqera_labels via label_ids.
@@ -1030,7 +1030,7 @@ all tasks run on a single instance (Classic mode).
 to accept the platform defaults, or provide it (only when
 `intelligent_compute_enabled = true`) to override the scheduler settings.
 Requires replacement if changed.
-- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
+- `network` (String) VPC network for compute instances, as a short name or fully qualified path. A short name resolves in `projectId` when it's set, otherwise in the credentials' project. If empty, the project `default` network is used. Required when `usePrivateAddress` is `true`. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.
@@ -1043,7 +1043,7 @@ Not Null; Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
-- `subnetworks` (List of String) Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
+- `subnetworks` (List of String) Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short `network` name: in `projectId` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used. Requires replacement if changed.
 - `use_private_address` (Boolean) Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
@@ -1194,7 +1194,7 @@ Optional:
 - `compute_service_account` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Not Null; Requires replacement if changed.
 - `namespace` (String) Not Null; Requires replacement if changed.
@@ -1414,6 +1414,10 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+Read-Only:
+
+- `sched_enabled` (Boolean) Whether pipelines on this compute environment run on the Seqera Scheduler. Set by Seqera at creation and cannot be changed.
 
 <a id="nestedatt--compute_env--config--seqeracompute_platform--environment"></a>
 ### Nested Schema for `compute_env.config.seqeracompute_platform.environment`

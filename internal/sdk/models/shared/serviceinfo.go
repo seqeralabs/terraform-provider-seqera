@@ -72,10 +72,12 @@ type ServiceInfo struct {
 	SeqeraAiBaseURL                                 *string `json:"seqeraAiBaseUrl,omitempty"`
 	SeqeraCloud                                     *bool   `json:"seqeraCloud,omitempty"`
 	SeqeraComputeEnabled                            *bool   `json:"seqeraComputeEnabled,omitempty"`
-	TermsOfUseURL                                   *string `json:"termsOfUseUrl,omitempty"`
-	UserWorkspaceEnabled                            *bool   `json:"userWorkspaceEnabled,omitempty"`
-	Version                                         *string `json:"version,omitempty"`
-	WaveEnabled                                     *bool   `json:"waveEnabled,omitempty"`
+	// Whether Studios are enabled for at least one workspace on this installation
+	StudiosEnabled       *bool   `json:"studiosEnabled,omitempty"`
+	TermsOfUseURL        *string `json:"termsOfUseUrl,omitempty"`
+	UserWorkspaceEnabled *bool   `json:"userWorkspaceEnabled,omitempty"`
+	Version              *string `json:"version,omitempty"`
+	WaveEnabled          *bool   `json:"waveEnabled,omitempty"`
 }
 
 func (s *ServiceInfo) GetAllowInstanceCredentials() *bool {
@@ -279,6 +281,13 @@ func (s *ServiceInfo) GetSeqeraComputeEnabled() *bool {
 		return nil
 	}
 	return s.SeqeraComputeEnabled
+}
+
+func (s *ServiceInfo) GetStudiosEnabled() *bool {
+	if s == nil {
+		return nil
+	}
+	return s.StudiosEnabled
 }
 
 func (s *ServiceInfo) GetTermsOfUseURL() *string {

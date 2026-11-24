@@ -5,13 +5,64 @@ package shared
 type Outputs struct {
 }
 
+type Request struct {
+	Tags                     map[string]string `json:"tags,omitempty"`
+	WorkflowEngineParameters map[string]string `json:"workflow_engine_parameters,omitempty"`
+	WorkflowParams           *string           `json:"workflow_params,omitempty"`
+	WorkflowType             *string           `json:"workflow_type,omitempty"`
+	WorkflowTypeVersion      *string           `json:"workflow_type_version,omitempty"`
+	WorkflowURL              *string           `json:"workflow_url,omitempty"`
+}
+
+func (r *Request) GetTags() map[string]string {
+	if r == nil {
+		return nil
+	}
+	return r.Tags
+}
+
+func (r *Request) GetWorkflowEngineParameters() map[string]string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowEngineParameters
+}
+
+func (r *Request) GetWorkflowParams() *string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowParams
+}
+
+func (r *Request) GetWorkflowType() *string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowType
+}
+
+func (r *Request) GetWorkflowTypeVersion() *string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowTypeVersion
+}
+
+func (r *Request) GetWorkflowURL() *string {
+	if r == nil {
+		return nil
+	}
+	return r.WorkflowURL
+}
+
 type RunLog struct {
-	Outputs  *Outputs    `json:"outputs,omitempty"`
-	Request  *RunRequest `json:"request,omitempty"`
-	RunID    *string     `json:"run_id,omitempty"`
-	RunLog   *Log        `json:"run_log,omitempty"`
-	State    *State      `json:"state,omitempty"`
-	TaskLogs []Log       `json:"task_logs,omitempty"`
+	Outputs  *Outputs `json:"outputs,omitempty"`
+	Request  *Request `json:"request,omitempty"`
+	RunID    *string  `json:"run_id,omitempty"`
+	RunLog   *Log     `json:"run_log,omitempty"`
+	State    *State   `json:"state,omitempty"`
+	TaskLogs []Log    `json:"task_logs,omitempty"`
 }
 
 func (r *RunLog) GetOutputs() *Outputs {
@@ -21,7 +72,7 @@ func (r *RunLog) GetOutputs() *Outputs {
 	return r.Outputs
 }
 
-func (r *RunLog) GetRequest() *RunRequest {
+func (r *RunLog) GetRequest() *Request {
 	if r == nil {
 		return nil
 	}

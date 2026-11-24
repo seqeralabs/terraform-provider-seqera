@@ -20,6 +20,7 @@ import (
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	custom_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -40,18 +41,21 @@ type AgentResource struct {
 
 // AgentResourceModel describes the resource data model.
 type AgentResourceModel struct {
-	AgentInstructions       types.String `tfsdk:"agent_instructions"`
-	DateCreated             types.String `tfsdk:"date_created"`
-	Description             types.String `tfsdk:"description"`
-	GithubAppCredentialID   types.String `tfsdk:"github_app_credential_id"`
-	GithubAppCredentialName types.String `tfsdk:"github_app_credential_name"`
-	ID                      types.String `tfsdk:"id"`
-	LastUpdated             types.String `tfsdk:"last_updated"`
-	Name                    types.String `tfsdk:"name"`
-	ServiceAccountID        types.Int64  `tfsdk:"service_account_id"`
-	ServiceAccountName      types.String `tfsdk:"service_account_name"`
-	Status                  types.String `tfsdk:"status"`
-	WorkspaceID             types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AgentInstructions       types.String                             `tfsdk:"agent_instructions"`
+	DateCreated             types.String                             `tfsdk:"date_created"`
+	Description             types.String                             `tfsdk:"description"`
+	GithubAppCredentialID   types.String                             `tfsdk:"github_app_credential_id"`
+	GithubAppCredentialName types.String                             `tfsdk:"github_app_credential_name"`
+	ID                      types.String                             `tfsdk:"id"`
+	LastUpdated             types.String                             `tfsdk:"last_updated"`
+	Name                    types.String                             `tfsdk:"name"`
+	SandboxAutoChange       types.Bool                               `tfsdk:"sandbox_auto_change"`
+	ServiceAccountID        types.Int64                              `tfsdk:"service_account_id"`
+	ServiceAccountName      types.String                             `tfsdk:"service_account_name"`
+	Status                  types.String                             `tfsdk:"status"`
+	StudioSandbox           *tfTypes.CreateAgentRequestStudioSandbox `tfsdk:"studio_sandbox"`
+	StudioSandboxName       types.String                             `tfsdk:"studio_sandbox_name"`
+	WorkspaceID             types.Int64                              `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AgentResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -113,6 +117,11 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[A-Za-z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[A-Za-z0-9_-]+$`).String()),
 				},
 			},
+			"sandbox_auto_change": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether the agent may switch its sandbox during a run. Defaults to false`,
+			},
 			"service_account_id": schema.Int64Attribute{
 				Required:    true,
 				Description: `Service account the agent runs as (` + "`" + `seqera_service_account.x.id` + "`" + `). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the ` + "`" + `seqera_workspace_participant` + "`" + ` first, by reference or with ` + "`" + `depends_on` + "`" + `), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.`,
@@ -133,6 +142,24 @@ func (r *AgentResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Current status, ` + "`" + `active` + "`" + ` or ` + "`" + `inactive` + "`" + `. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.`,
+			},
+			"studio_sandbox": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"session_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+					"workspace_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+					},
+				},
+				Description: `Studio session the agent's runs use as their sandbox. Null uses a scratch sandbox`,
+			},
+			"studio_sandbox_name": schema.StringAttribute{
+				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,

@@ -1,8 +1,8 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: e5b5a2bd4260c42e281a81ed4bc5e2de
-  docVersion: 1.257.0
+  docChecksum: e97ca7cb06ab119d88720248d19e100f
+  docVersion: 1.274.4
   speakeasyVersion: 1.811.0
   generationVersion: 2.968.1
   releaseVersion: 0.44.0
@@ -649,7 +649,7 @@ trackedFiles:
   internal/provider/types/bucket_action_config.go: {}
   internal/provider/types/bucket_action_request.go: {}
   internal/provider/types/client_credentials.go: {}
-  internal/provider/types/compute_config.go: {}
+  internal/provider/types/compute_config_input.go: {}
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
     pristine_git_object: 4e2b91d1eb0b29699d4a1d4e6603011abd8a7418
@@ -665,6 +665,7 @@ trackedFiles:
   internal/provider/types/create_agent_action_request_bucket.go: {}
   internal/provider/types/create_agent_action_request_cron.go: {}
   internal/provider/types/create_agent_action_request_pipeline_status.go: {}
+  internal/provider/types/create_agent_request_studio_sandbox.go: {}
   internal/provider/types/create_pipeline_action_request_bucket.go: {}
   internal/provider/types/create_pipeline_action_request_cron.go: {}
   internal/provider/types/create_pipeline_action_request_pipeline_status.go: {}
@@ -688,7 +689,7 @@ trackedFiles:
   internal/provider/types/forge_config.go:
     id: 59cc8ac25831
     pristine_git_object: dc0e42b289943cf567e2051339104d135b119aec
-  internal/provider/types/git_hub_app_security_keys.go: {}
+  internal/provider/types/git_hub_app_credentials.go: {}
   internal/provider/types/git_hub_credentials.go:
     id: a6d4944159d4
     pristine_git_object: 71972be9ca7b86d65aacfef501a3f3e16da80c5e
@@ -1287,6 +1288,7 @@ trackedFiles:
     id: 19855696ec0b
     pristine_git_object: cbaae92b2d2a259b1d8e8a0df3088f4c2c9526e5
   internal/sdk/models/operations/describepipelineaction.go: {}
+  internal/sdk/models/operations/describepipelinediagram.go: {}
   internal/sdk/models/operations/describepipelinelaunch.go:
     id: 1708099c377e
     pristine_git_object: e670cb4d864ad3d0873a7d3f40f3e3c32e92aaa0
@@ -1439,6 +1441,7 @@ trackedFiles:
   internal/sdk/models/operations/info.go:
     id: e2a6ef8e19d1
     pristine_git_object: 869cd320ac836e4f9c978e48597de7d5c60bdfb7
+  internal/sdk/models/operations/issueserviceaccountsecret.go: {}
   internal/sdk/models/operations/launchaction.go:
     id: 4cc69c1add55
     pristine_git_object: 62bd65a9985f8bc27fa2598b7e1fa1eb4930d2e3
@@ -1540,6 +1543,7 @@ trackedFiles:
   internal/sdk/models/operations/listrolepermissions.go: {}
   internal/sdk/models/operations/listroles.go: {}
   internal/sdk/models/operations/listserviceaccounts.go: {}
+  internal/sdk/models/operations/listserviceaccountsecrets.go: {}
   internal/sdk/models/operations/listserviceaccountsshkeys.go: {}
   internal/sdk/models/operations/listsshkeys.go: {}
   internal/sdk/models/operations/listuserrolesinorganization.go: {}
@@ -1597,6 +1601,7 @@ trackedFiles:
   internal/sdk/models/operations/resolvelineage.go: {}
   internal/sdk/models/operations/revertdatastudiocheckpointrecovery.go: {}
   internal/sdk/models/operations/revokeorganizationscimtoken.go: {}
+  internal/sdk/models/operations/revokeserviceaccountsecret.go: {}
   internal/sdk/models/operations/rotateorganizationscimtoken.go: {}
   internal/sdk/models/operations/searchlineage.go: {}
   internal/sdk/models/operations/showdatasets.go:
@@ -1796,14 +1801,12 @@ trackedFiles:
   internal/sdk/models/shared/accesstoken.go:
     id: b6c12f20829f
     pristine_git_object: 42e5ef188787fba948bc6dd1f8e68ae528caec5e
-  internal/sdk/models/shared/accesstokenimage.go: {}
   internal/sdk/models/shared/actionconfigtype.go:
     id: c6961286bf22
     pristine_git_object: 2b316fa6b8f23512b6e2d1c127240a224ff1b5e8
   internal/sdk/models/shared/actioneventtype.go:
     id: cd30fa613358
     pristine_git_object: 730a625fa6922c93c90574273666fec9cdc3b496
-  internal/sdk/models/shared/actionimage.go: {}
   internal/sdk/models/shared/actionlaunchrequest.go: {}
   internal/sdk/models/shared/actionqueryattribute.go:
     id: fc49f81f9928
@@ -1845,12 +1848,9 @@ trackedFiles:
   internal/sdk/models/shared/agentaction.go: {}
   internal/sdk/models/shared/agentactionrequest.go: {}
   internal/sdk/models/shared/agentdbdto.go: {}
-  internal/sdk/models/shared/agentimage.go: {}
   internal/sdk/models/shared/agentrundbdto.go: {}
-  internal/sdk/models/shared/agentrunimage.go: {}
   internal/sdk/models/shared/agentrunstatus.go: {}
   internal/sdk/models/shared/agentrunstatusresponse.go: {}
-  internal/sdk/models/shared/aichatthreadimage.go: {}
   internal/sdk/models/shared/associateactionlabelsrequest.go:
     id: 029d49c9f31c
     pristine_git_object: b124117f8d16f9da97f8890b5d458558034a7bdb
@@ -1935,6 +1935,8 @@ trackedFiles:
     pristine_git_object: ae25e05275b2d663fd39d3ae8c4c5eea0a4ab9c3
   internal/sdk/models/shared/changestatus.go: {}
   internal/sdk/models/shared/clientcredentialsstatus.go: {}
+  internal/sdk/models/shared/clientsecretdto.go: {}
+  internal/sdk/models/shared/clientsecretstatus.go: {}
   internal/sdk/models/shared/cloudpricemodel.go:
     id: 8e761866be31
     pristine_git_object: cc8547dd4b50e53073c00a2e2f3181a9fd23786a
@@ -1943,7 +1945,6 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go: {}
   internal/sdk/models/shared/computeenvcomputeconfiginput.go: {}
-  internal/sdk/models/shared/computeenvimage.go: {}
   internal/sdk/models/shared/computeenvqueryattribute.go:
     id: e1c918e85834
     pristine_git_object: 2a0d9974806899fa4f9187c35f5e7544b1d4fc51
@@ -2182,19 +2183,15 @@ trackedFiles:
   internal/sdk/models/shared/createworkspaceresponse.go:
     id: aee357718cbf
     pristine_git_object: f6597ec3ea4952d1d73ccf4169c329b4e947f7c3
-  internal/sdk/models/shared/credentialsimage.go: {}
   internal/sdk/models/shared/credentialsinput.go:
     id: a9735abcd6a9
     pristine_git_object: b8ae95231871f580a17018cea2c1bd0795eccf9c
   internal/sdk/models/shared/credentialssetupvalue.go: {}
   internal/sdk/models/shared/credentialssetupvaluesresponse.go: {}
   internal/sdk/models/shared/credentialsstatus.go: {}
-  internal/sdk/models/shared/creditinfoimage.go: {}
-  internal/sdk/models/shared/creditpurchaseimage.go: {}
   internal/sdk/models/shared/cronactionconfig.go: {}
   internal/sdk/models/shared/cronactionevent.go: {}
   internal/sdk/models/shared/cronactionrequest.go: {}
-  internal/sdk/models/shared/customroleimage.go: {}
   internal/sdk/models/shared/datalinkcontentresponse.go:
     id: 33df464c7812
     pristine_git_object: 4db6f6b6d4cd906bd14c1379d581c0a9e1e995e0
@@ -2223,11 +2220,9 @@ trackedFiles:
   internal/sdk/models/shared/datalinkdto.go:
     id: 5b92f13f1e83
     pristine_git_object: c7d163766c28007ac37cbcf2093a5a16732a158b
-  internal/sdk/models/shared/datalinkfileimage.go: {}
   internal/sdk/models/shared/datalinkfinishmultipartuploadrequest.go:
     id: d71bb92372e2
     pristine_git_object: 09bc398401a5ae040e29cf2c7d528d5735634eed
-  internal/sdk/models/shared/datalinkimage.go: {}
   internal/sdk/models/shared/datalinkitem.go:
     id: 5aaedf83bae5
     pristine_git_object: 74d7463434251bbff86cd8c76c697e5447a7b183
@@ -2237,7 +2232,6 @@ trackedFiles:
   internal/sdk/models/shared/datalinkitemtype.go:
     id: 880c380d1507
     pristine_git_object: a264b42c0cf023788a59f4ee15a89c7191fce4e7
-  internal/sdk/models/shared/datalinkmetadataimage.go: {}
   internal/sdk/models/shared/datalinkmultipartuploadrequest.go:
     id: e1ecfa54fafc
     pristine_git_object: 79aa78147a811e84e9410915773d48c823a1ba11
@@ -2259,7 +2253,6 @@ trackedFiles:
   internal/sdk/models/shared/datasetdto.go:
     id: b074571b3884
     pristine_git_object: 4ecf8266e8d8deb599c269187b729037d5325b1a
-  internal/sdk/models/shared/datasetimage.go: {}
   internal/sdk/models/shared/datasetpreviewresponse.go: {}
   internal/sdk/models/shared/datasetqueryattribute.go:
     id: 0f64395f994a
@@ -2267,7 +2260,6 @@ trackedFiles:
   internal/sdk/models/shared/datasetversiondto.go:
     id: 1f228cf15b72
     pristine_git_object: 0587a5793ac51e565d25e5084d2440153d08009f
-  internal/sdk/models/shared/datasetversionimage.go: {}
   internal/sdk/models/shared/datasetversionimageblobcontentimage.go: {}
   internal/sdk/models/shared/datasetversionimagelinkedsourceimage.go: {}
   internal/sdk/models/shared/datastudiocheckpointdto.go:
@@ -2279,7 +2271,6 @@ trackedFiles:
   internal/sdk/models/shared/datastudioconfiguration.go:
     id: 5841b2c71ba6
     pristine_git_object: 227f1fede7b4f984a6dccff2b3f650fec8187799
-  internal/sdk/models/shared/datastudioconnectionimage.go: {}
   internal/sdk/models/shared/datastudiocreaterequest.go:
     id: f3e2d037c2c4
     pristine_git_object: dc064ad9e53d57fa56e83968852b6c130e6c0d1a
@@ -2289,7 +2280,6 @@ trackedFiles:
   internal/sdk/models/shared/datastudiodto.go:
     id: e7da86830815
     pristine_git_object: 31d366345ef0f16a13e69c4a39d3516b82279009
-  internal/sdk/models/shared/datastudioimage.go: {}
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
     pristine_git_object: d8ced19804d75bccfa1010931fda452d4b6f3758
@@ -2413,6 +2403,7 @@ trackedFiles:
     id: 432ca34e7c80
     pristine_git_object: 6bfd884a3e392f803e06153390fd925f4600f530
   internal/sdk/models/shared/describepipelineactionresponse.go: {}
+  internal/sdk/models/shared/describepipelinediagramresponse.go: {}
   internal/sdk/models/shared/describepipelineinforesponse.go:
     id: 7ca306f71e81
     pristine_git_object: ea42e7370bb6ae9d7388e4f51f4f6a7b663151d8
@@ -2527,13 +2518,14 @@ trackedFiles:
     id: 5fdad7c9a6d3
     pristine_git_object: 7123c4e5960ce98abbce7152014961b8d4f30482
   internal/sdk/models/shared/idpgroupentry.go: {}
-  internal/sdk/models/shared/idpgroupimage.go: {}
   internal/sdk/models/shared/image.go:
     id: c63d9aff3853
     pristine_git_object: b78ff41dc0b125a7d6ee8c4f1c93fb8bbeac8f72
   internal/sdk/models/shared/instancetype.go:
     id: f088143313c8
     pristine_git_object: f3fe93890eb2f0b566cc6ea4e5802af50124bb25
+  internal/sdk/models/shared/issueserviceaccountsecretrequest.go: {}
+  internal/sdk/models/shared/issueserviceaccountsecretresponse.go: {}
   internal/sdk/models/shared/jobqueue.go:
     id: ca3b1b08cf50
     pristine_git_object: 39b819e0d11d50eeff1c9c767133c1aafba0463a
@@ -2543,11 +2535,9 @@ trackedFiles:
   internal/sdk/models/shared/kubernetescredential.go:
     id: 6cf20ba318a9
     pristine_git_object: 844e20a2429f42fc26fcb77430963158f4d4059a
-  internal/sdk/models/shared/labelassignmentimage.go: {}
   internal/sdk/models/shared/labeldbdto.go:
     id: 45e15e6c711e
     pristine_git_object: a8dd7c4c13fa70bdcd7cf3b77f17cab4c56f8b1e
-  internal/sdk/models/shared/labelimage.go: {}
   internal/sdk/models/shared/labeltype.go:
     id: 0050e50fd2c9
     pristine_git_object: fe9c695f86891f4b3d35acf81d0fb455b2792eca
@@ -2643,6 +2633,7 @@ trackedFiles:
   internal/sdk/models/shared/listrolepermissionsresponse.go: {}
   internal/sdk/models/shared/listrolesresponse.go: {}
   internal/sdk/models/shared/listrolesresponseroleinfo.go: {}
+  internal/sdk/models/shared/listserviceaccountsecretsresponse.go: {}
   internal/sdk/models/shared/listserviceaccountsresponse.go: {}
   internal/sdk/models/shared/listsshkeysresponse.go: {}
   internal/sdk/models/shared/listtaskprocesssummaryresponse.go: {}
@@ -2687,7 +2678,6 @@ trackedFiles:
   internal/sdk/models/shared/managedcredentialsdbdto.go:
     id: 1c90d0daeff5
     pristine_git_object: 8926add559a35c9aa0b6d5a3a1c261af7e62e717
-  internal/sdk/models/shared/managedcredentialsimage.go: {}
   internal/sdk/models/shared/managedcredentialsmetadata.go:
     id: 0a7c92f07638
     pristine_git_object: 115954fc987778ca0272c5914679b623faa5d785
@@ -2697,11 +2687,9 @@ trackedFiles:
   internal/sdk/models/shared/managedidentitydbdtoabstractgridconfig.go:
     id: 7b0feeadbd91
     pristine_git_object: 852fb4270ad4b7919df4c204da17d3c627bb0700
-  internal/sdk/models/shared/managedidentityimage.go: {}
   internal/sdk/models/shared/memberdbdto.go:
     id: 35794a08491e
     pristine_git_object: bc829d8840721d025fe69676064eec6f900539ae
-  internal/sdk/models/shared/memberimage.go: {}
   internal/sdk/models/shared/mountdata.go: {}
   internal/sdk/models/shared/multirequestfileschema.go:
     id: bb5e470b2566
@@ -2712,7 +2700,6 @@ trackedFiles:
   internal/sdk/models/shared/nextflowversion.go: {}
   internal/sdk/models/shared/nextflowversionpolicy.go: {}
   internal/sdk/models/shared/nextflowversionsresponse.go: {}
-  internal/sdk/models/shared/oauthconsentimage.go: {}
   internal/sdk/models/shared/organdworkspacedto.go:
     id: f163e4764451
     pristine_git_object: a55f3e71026d76874a738065ff056f574e26b3a4
@@ -2722,7 +2709,6 @@ trackedFiles:
   internal/sdk/models/shared/organizationdbdto.go:
     id: 743698f7345f
     pristine_git_object: ed662ad9da6e6efcb588e485cc1d4c41d50ee43e
-  internal/sdk/models/shared/organizationimage.go: {}
   internal/sdk/models/shared/organizationquotas.go:
     id: 653380a41b95
     pristine_git_object: 4d5ba2552e9c82854928307286b0ff6ee507b39f
@@ -2730,11 +2716,9 @@ trackedFiles:
   internal/sdk/models/shared/orgrole.go:
     id: ed5779593dea
     pristine_git_object: 216f13d193ab1137d827a87061058aa6aa0f239a
-  internal/sdk/models/shared/orgssoconnectionimage.go: {}
   internal/sdk/models/shared/orgtype.go:
     id: 4a0bba33099f
     pristine_git_object: 13fe96a8021598c1f6b21b80139bf9c9d637b881
-  internal/sdk/models/shared/participantimage.go: {}
   internal/sdk/models/shared/participantresponsedto.go:
     id: 395d9018c66e
     pristine_git_object: abb39bee1d289db94cf26b2b8eb6a5e923d85cbe
@@ -2748,7 +2732,6 @@ trackedFiles:
   internal/sdk/models/shared/pipelinedbdto.go:
     id: ab8ad3b3fa8a
     pristine_git_object: 4e92c835cc6c6b1bf6fff9027a42ca0ea78dabf7
-  internal/sdk/models/shared/pipelineimage.go: {}
   internal/sdk/models/shared/pipelineinfo.go:
     id: 4179c13facd2
     pristine_git_object: 0a1420177bd0ed88993580aa7879f848a284fe60
@@ -2772,7 +2755,6 @@ trackedFiles:
   internal/sdk/models/shared/pipelinesecret.go:
     id: 7a4e83a4b916
     pristine_git_object: d44a6507099d85a8c4d8d8c4911795888ae623cf
-  internal/sdk/models/shared/pipelinesecretimage.go: {}
   internal/sdk/models/shared/pipelinestatusactionconfig.go: {}
   internal/sdk/models/shared/pipelinestatusactionevent.go: {}
   internal/sdk/models/shared/pipelinestatusactionrequest.go: {}
@@ -2801,6 +2783,7 @@ trackedFiles:
   internal/sdk/models/shared/resourcedata.go:
     id: c390aa593bc1
     pristine_git_object: 0f1a811a5e550def410f370cd8546ecead0b9ae3
+  internal/sdk/models/shared/revokeserviceaccountsecretresponse.go: {}
   internal/sdk/models/shared/roledto.go: {}
   internal/sdk/models/shared/rolepermissionresponsedto.go: {}
   internal/sdk/models/shared/runid.go:
@@ -2820,7 +2803,6 @@ trackedFiles:
     pristine_git_object: d4ae89cfca8f1a8d235ef8339bc449e64e31d3f3
   internal/sdk/models/shared/schedconfig.go: {}
   internal/sdk/models/shared/schemeclientcredentials.go: {}
-  internal/sdk/models/shared/scimtokenimage.go: {}
   internal/sdk/models/shared/searchresult.go: {}
   internal/sdk/models/shared/security.go:
     id: 9098af98367e
@@ -2834,7 +2816,6 @@ trackedFiles:
     pristine_git_object: dbc4620b157442c58c43439125bc2c7392e8c935
   internal/sdk/models/shared/servedfrom.go: {}
   internal/sdk/models/shared/serviceaccountdto.go: {}
-  internal/sdk/models/shared/serviceaccountimage.go: {}
   internal/sdk/models/shared/serviceinfo.go:
     id: 18e2052471c9
     pristine_git_object: 0008df58bab87596da85d9faec7d40db61fdb705
@@ -2876,9 +2857,6 @@ trackedFiles:
   internal/sdk/models/shared/teamdbdto.go:
     id: ee24b7228b4c
     pristine_git_object: c7ecedae2f88deb2e9c68175ace0168cfbbc006b
-  internal/sdk/models/shared/teamimage.go: {}
-  internal/sdk/models/shared/teammemberimage.go: {}
-  internal/sdk/models/shared/teamtype.go: {}
   internal/sdk/models/shared/toweragentcredential.go:
     id: 9035b6976eb3
     pristine_git_object: df7b2a4139a0d7d29eba4b5e4bfc4cf25af30f96
@@ -3024,16 +3002,13 @@ trackedFiles:
   internal/sdk/models/shared/upsertuserrequest.go:
     id: 72fc23caa5e9
     pristine_git_object: a15ea2de68e36fec2b45d7304ba0db60ec298d96
-  internal/sdk/models/shared/userimage.go: {}
   internal/sdk/models/shared/userinfo.go:
     id: f0ace1ffcd13
     pristine_git_object: 57ee3b992288d1366cc52c1ec2e56fd0efdb1f97
   internal/sdk/models/shared/userresponsedto.go:
     id: 70f552c0c33f
     pristine_git_object: edb71a4804774e8b40bf1eaa8a8bbca50b1ba968
-  internal/sdk/models/shared/userroleimage.go: {}
   internal/sdk/models/shared/usersshpublickeydto.go: {}
-  internal/sdk/models/shared/usersshpublickeyimage.go: {}
   internal/sdk/models/shared/usertype.go: {}
   internal/sdk/models/shared/userworkspacepermissiondto.go: {}
   internal/sdk/models/shared/userworkspaceroledto.go: {}
@@ -3067,10 +3042,6 @@ trackedFiles:
   internal/sdk/models/shared/workflowdaginput.go: {}
   internal/sdk/models/shared/workflowdaginputedge.go: {}
   internal/sdk/models/shared/workflowdaginputvertex.go: {}
-  internal/sdk/models/shared/workflowdbdto.go:
-    id: e47bdf72a96a
-    pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
-  internal/sdk/models/shared/workflowimage.go: {}
   internal/sdk/models/shared/workflowinput.go: {}
   internal/sdk/models/shared/workflowlaunchrequest.go:
     id: 2b0df021cbad
@@ -3079,6 +3050,7 @@ trackedFiles:
     id: 58befbe96295
     pristine_git_object: 13b67e02a553d72cb892d94b902fc42711fc730f
   internal/sdk/models/shared/workflowlaunchvalidationerrorresponse.go: {}
+  internal/sdk/models/shared/workflowlistresponsedto.go: {}
   internal/sdk/models/shared/workflowload.go:
     id: 07709e14f2ba
     pristine_git_object: fe08dfb369e047ca51f57a255ce66cb9741c3bca
@@ -3101,7 +3073,6 @@ trackedFiles:
   internal/sdk/models/shared/workspacedbdto.go:
     id: 163affec0c67
     pristine_git_object: ab4968045f5c87a8c5ec8df1a438af66536cd8b7
-  internal/sdk/models/shared/workspaceimage.go: {}
   internal/sdk/models/shared/workspaceparticipantresponsedto.go:
     id: b31a7a242ffd
     pristine_git_object: f36c85c944a8707c4e63584a6767cfdd9b539cb9
@@ -4239,7 +4210,11 @@ examples:
           application/json: {}
         "400":
           application/json: {"message": "<value>"}
-  RefreshDataLinkCache: {}
+  RefreshDataLinkCache:
+    speakeasy-default-refresh-data-link-cache:
+      responses:
+        "404":
+          application/json: {"message": "<value>"}
   DescribeDataLink:
     speakeasy-default-describe-data-link:
       parameters:
@@ -7098,7 +7073,7 @@ examples:
           orgId: 979574
           workspaceId: 635460
       requestBody:
-        application/json: {"credentialsId": "<id>", "lineageDefault": false, "provisioningMode": "AUTO", "region": "<value>"}
+        application/json: {"credentialsId": "<id>", "lineageDefault": false, "provisioningMode": "AUTO", "region": "<value>", "storeLocation": "s3://my-existing-lineage-bucket/lineage"}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -7179,6 +7154,49 @@ examples:
       responses:
         "200":
           application/json: {"author": {}, "dateCreated": "2026-06-29T20:51:07.326Z", "dateSaved": "2024-05-23T19:50:55.019Z", "id": 104874, "name": "<value>", "path": "/lost+found", "status": "empty"}
+        "400":
+          application/json: {"message": "<value>"}
+  ListServiceAccountSecrets:
+    speakeasy-default-list-service-account-secrets:
+      parameters:
+        path:
+          orgId: 571395
+          saId: 36378
+      responses:
+        "200":
+          application/json: {"secrets": []}
+        "400":
+          application/json: {"message": "<value>"}
+  IssueServiceAccountSecret:
+    speakeasy-default-issue-service-account-secret:
+      parameters:
+        path:
+          orgId: 886282
+          saId: 147244
+      requestBody:
+        application/json: {"expiryDays": 90}
+      responses:
+        "201":
+          application/json: {"expiresAt": "2026-03-31T17:39:01.262Z", "hint": "<value>", "secret": "<value>", "secretId": 7279}
+        "400":
+          application/json: {"message": "<value>"}
+  RevokeServiceAccountSecret:
+    speakeasy-default-revoke-service-account-secret:
+      parameters:
+        path:
+          orgId: 576563
+          saId: 851991
+          secretId: 405630
+      responses:
+        "200":
+          application/json: {"secret": {"createdAt": "2026-04-28T00:09:42.324Z", "expiresAt": "2024-02-21T06:06:42.216Z", "hint": "<value>", "id": 32409, "status": "EXPIRING"}}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipelineDiagram:
+    speakeasy-default-describe-pipeline-diagram:
+      responses:
+        "200":
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

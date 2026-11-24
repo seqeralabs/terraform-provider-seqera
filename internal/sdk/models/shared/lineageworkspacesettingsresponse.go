@@ -95,7 +95,11 @@ type LineageWorkspaceSettingsResponse struct {
 	Region *string `json:"region,omitempty"`
 	// Lifecycle status of the lineage configuration: PENDING, AVAILABLE or ERRORED. Null when lineage is not configured.
 	Status *LineageWorkspaceSettingsResponseStatus `json:"status,omitempty"`
-	// Bucket name of the lineage store.
+	// Storage location of the lineage store: a cloud storage path, e.g. 's3://my-bucket/lineage'.
+	StoreLocation *string `json:"storeLocation,omitempty"`
+	// Deprecated. Bucket name of the lineage store, without the prefix. Use 'storeLocation' instead.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StoreName *string `json:"storeName,omitempty"`
 	// URI of the lineage store. Not returned by the settings endpoints.
 	StoreURI *string `json:"storeUri,omitempty"`
@@ -182,6 +186,13 @@ func (l *LineageWorkspaceSettingsResponse) GetStatus() *LineageWorkspaceSettings
 		return nil
 	}
 	return l.Status
+}
+
+func (l *LineageWorkspaceSettingsResponse) GetStoreLocation() *string {
+	if l == nil {
+		return nil
+	}
+	return l.StoreLocation
 }
 
 func (l *LineageWorkspaceSettingsResponse) GetStoreName() *string {

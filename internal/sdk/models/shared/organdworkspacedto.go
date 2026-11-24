@@ -2,16 +2,47 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type OrgAndWorkspaceDtoVisibility string
+
+const (
+	OrgAndWorkspaceDtoVisibilityPrivate OrgAndWorkspaceDtoVisibility = "PRIVATE"
+	OrgAndWorkspaceDtoVisibilityShared  OrgAndWorkspaceDtoVisibility = "SHARED"
+)
+
+func (e OrgAndWorkspaceDtoVisibility) ToPointer() *OrgAndWorkspaceDtoVisibility {
+	return &e
+}
+func (e *OrgAndWorkspaceDtoVisibility) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "PRIVATE":
+		fallthrough
+	case "SHARED":
+		*e = OrgAndWorkspaceDtoVisibility(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for OrgAndWorkspaceDtoVisibility: %v", v)
+	}
+}
+
 type OrgAndWorkspaceDto struct {
-	OrgID             *int64      `json:"orgId,omitempty"`
-	OrgLogoURL        *string     `json:"orgLogoUrl,omitempty"`
-	OrgName           *string     `json:"orgName,omitempty"`
-	OrgType           *OrgType    `json:"orgType,omitempty"`
-	Roles             []string    `json:"roles,omitempty"`
-	Visibility        *Visibility `json:"visibility,omitempty"`
-	WorkspaceFullName *string     `json:"workspaceFullName,omitempty"`
-	WorkspaceID       *int64      `json:"workspaceId,omitempty"`
-	WorkspaceName     *string     `json:"workspaceName,omitempty"`
+	OrgID             *int64                        `json:"orgId,omitempty"`
+	OrgLogoURL        *string                       `json:"orgLogoUrl,omitempty"`
+	OrgName           *string                       `json:"orgName,omitempty"`
+	OrgType           *OrgType                      `json:"orgType,omitempty"`
+	Roles             []string                      `json:"roles,omitempty"`
+	Visibility        *OrgAndWorkspaceDtoVisibility `json:"visibility,omitempty"`
+	WorkspaceFullName *string                       `json:"workspaceFullName,omitempty"`
+	WorkspaceID       *int64                        `json:"workspaceId,omitempty"`
+	WorkspaceName     *string                       `json:"workspaceName,omitempty"`
 }
 
 func (o *OrgAndWorkspaceDto) GetOrgID() *int64 {
@@ -49,7 +80,7 @@ func (o *OrgAndWorkspaceDto) GetRoles() []string {
 	return o.Roles
 }
 
-func (o *OrgAndWorkspaceDto) GetVisibility() *Visibility {
+func (o *OrgAndWorkspaceDto) GetVisibility() *OrgAndWorkspaceDtoVisibility {
 	if o == nil {
 		return nil
 	}

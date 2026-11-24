@@ -81,7 +81,7 @@ type ComputeEnvComputeConfigInput struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config                         ComputeConfig                   `json:"config"`
+	Config                         ComputeConfigInput              `json:"config"`
 	CredentialsID                  string                          `json:"credentialsId"`
 	Description                    *string                         `json:"description,omitempty"`
 	FusionMetricsCollectionEnabled *bool                           `json:"fusionMetricsCollectionEnabled,omitempty"`
@@ -90,9 +90,9 @@ type ComputeEnvComputeConfigInput struct {
 	Platform                       ComputeEnvComputeConfigPlatform `json:"platform"`
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
+func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfigInput {
 	if c == nil {
-		return ComputeConfig{}
+		return ComputeConfigInput{}
 	}
 	return c.Config
 }
@@ -153,8 +153,8 @@ func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguratio
 	return c.GetConfig().MoabConfiguration
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfigurationInput {
+	return c.GetConfig().SeqeraComputeConfigurationInput
 }
 
 func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmConfiguration {

@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -338,7 +339,10 @@ func (r *GCPBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Memory allocation for the Nextflow head job in MB. Requires replacement if changed.`,
+						Description: `Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 when omitted. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(3584),
+						},
 					},
 					"labels": schema.MapAttribute{
 						Computed: true,

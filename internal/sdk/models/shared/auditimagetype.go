@@ -25,6 +25,7 @@ const (
 	AuditImageTypeOrgSsoConnection     AuditImageType = "org_sso_connection"
 	AuditImageTypeCreditInfo           AuditImageType = "credit_info"
 	AuditImageTypeCreditPurchase       AuditImageType = "credit_purchase"
+	AuditImageTypeBudget               AuditImageType = "budget"
 	AuditImageTypeDataStudio           AuditImageType = "data_studio"
 	AuditImageTypeDataStudioConnection AuditImageType = "data_studio_connection"
 	AuditImageTypeDataLink             AuditImageType = "data_link"
@@ -48,6 +49,7 @@ const (
 	AuditImageTypeIdpGroup             AuditImageType = "idp_group"
 	AuditImageTypeScimToken            AuditImageType = "scim_token"
 	AuditImageTypeServiceAccount       AuditImageType = "service_account"
+	AuditImageTypeOauthClientSecret    AuditImageType = "oauth_client_secret"
 )
 
 func (e AuditImageType) ToPointer() *AuditImageType {
@@ -88,6 +90,8 @@ func (e *AuditImageType) UnmarshalJSON(data []byte) error {
 	case "credit_info":
 		fallthrough
 	case "credit_purchase":
+		fallthrough
+	case "budget":
 		fallthrough
 	case "data_studio":
 		fallthrough
@@ -134,6 +138,8 @@ func (e *AuditImageType) UnmarshalJSON(data []byte) error {
 	case "scim_token":
 		fallthrough
 	case "service_account":
+		fallthrough
+	case "oauth_client_secret":
 		*e = AuditImageType(v)
 		return nil
 	default:

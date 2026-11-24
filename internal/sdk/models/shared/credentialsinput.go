@@ -184,8 +184,8 @@ func (c *CredentialsInput) GetKeysGithub() *GitHubCredentials {
 	return c.GetKeys().GitHubCredentials
 }
 
-func (c *CredentialsInput) GetKeysGithubApp() *GitHubAppSecurityKeys {
-	return c.GetKeys().GitHubAppSecurityKeys
+func (c *CredentialsInput) GetKeysGithubApp() *GitHubAppCredentials {
+	return c.GetKeys().GitHubAppCredentials
 }
 
 func (c *CredentialsInput) GetKeysGitlab() *GitLabCredentials {
@@ -398,8 +398,8 @@ func (c *CredentialsOutput) GetKeysGithub() *GitHubCredentialsOutput {
 	return c.GetKeys().GitHubCredentialsOutput
 }
 
-func (c *CredentialsOutput) GetKeysGithubApp() *GitHubAppSecurityKeysOutput {
-	return c.GetKeys().GitHubAppSecurityKeysOutput
+func (c *CredentialsOutput) GetKeysGithubApp() *GitHubAppCredentialsOutput {
+	return c.GetKeys().GitHubAppCredentialsOutput
 }
 
 func (c *CredentialsOutput) GetKeysGitlab() *GitLabCredentialsOutput {

@@ -53,7 +53,7 @@ type AwsBatchConfig struct {
 	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Memory allocation for the head job in MB (default: 1024)
+	// Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate.
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// IAM role ARN for the head job.
 	// Format: arn:aws:iam::account-id:role/role-name

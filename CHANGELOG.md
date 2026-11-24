@@ -1,12 +1,26 @@
 # Unreleased
 
+BREAKING CHANGES:
+
+- **`head_job_memory_mb` must be at least 3584 on compute environments.** The Platform now rejects a head job memory below 3584 MiB when a compute environment is created, and the attribute forces replacement, so every configured value reaches a create call. The limit is now checked at plan time on `seqera_aws_batch_ce`, `seqera_aws_compute_env`, `seqera_azure_batch_ce`, `seqera_gcp_batch_ce` and the `aws_batch`, `azure_batch`, `eks_platform`, `gke_platform`, `google_batch` and `k8s_platform` blocks of `seqera_compute_env`. A configuration that sets a lower value now fails `terraform validate` and `terraform plan`, even for an existing compute environment that is not otherwise changing; raise it to 3584 or more, or remove it to use the platform default. Leaving it unset is unaffected. The descriptions now state the real defaults, replacing an outdated "default: 1024" on AWS Batch. The `google_lifesciences` block and the launch settings of `seqera_pipeline`, `seqera_action` and `seqera_workflows` have no such limit and are unchanged.
+
 FEATURES:
+
+- **Studio sandbox on `seqera_agent`.** New optional `studio_sandbox` block (`session_id`, `workspace_id`) runs the agent in an existing Studio session; when it is null, runs use a scratch sandbox. New `sandbox_auto_change` (default `false`) lets the agent switch its sandbox during a run. The name of the selected Studio is exposed read-only as `studio_sandbox_name`.
+
+- **`store_location` on `seqera_workspace_lineage_settings`; `store_name` deprecated.** New `store_location` sets the lineage store as a cloud storage path within your existing bucket, for example `s3://my-bucket/lineage`, so lineage no longer has to live at the bucket root. It replaces `store_name`, which is deprecated and now shows a warning: a `store_name = "my-bucket"` corresponds to `store_location = "s3://my-bucket"`. Checked at plan time: in `MANUAL` mode set `store_location`, or `store_name` alone for existing configurations, but not both; in `AUTO` mode set neither, as Platform chooses the store. Existing configurations that use `store_name` keep working unchanged.
+
+- **Seqera Scheduler status on Seqera Compute.** New read-only `sched_enabled` on the `seqeracompute_platform` block of `seqera_compute_env` reports whether pipelines on the compute environment run on the Seqera Scheduler. Seqera sets it, and the Scheduler settings, when the compute environment is created; they cannot be configured from Terraform.
 
 - **Authenticate as a service account with client credentials.** The provider can now authenticate with a service account's OAuth client credentials instead of a personal access token, for automation such as CI pipelines. Set the new `client_id` and `client_secret` provider attributes, or the `TOWER_CLIENT_ID` and `TOWER_CLIENT_SECRET` environment variables. The provider exchanges them at the Platform's token endpoint (`{server_url}/token`) for a short-lived access token and requests a new one when it expires, so long runs are not interrupted. Configure either a personal access token or client credentials, not both: the provider reports an error when both are set, when only one of `client_id` and `client_secret` is set, or when neither method is set, counting the provider block and the environment variables. Client secrets are issued by an organization owner from the service account's page in the Seqera UI. The service account acts with its own permissions: it only reaches workspaces it has been added to and cannot hold an organization role above Member, so organization-level resources such as `seqera_orgs`, `seqera_teams` and workspace creation still need a personal access token. Service account client credentials must be enabled for the organization; if they are not, the token exchange fails with an `unauthorized_client` error.
 
   On self-hosted deployments, whose `server_url` includes the `/api` path, also set the new `token_url` attribute (or `TOWER_TOKEN_URL` environment variable) to the full token endpoint, for example `https://seqera.my-company.io/api/token`. Without it the token is requested from `https://seqera.my-company.io/token` and the exchange fails. Seqera Cloud with the default `server_url` needs no `token_url`. See [#319](https://github.com/seqeralabs/terraform-provider-seqera/issues/319).
 
 NOTES:
+
+- **Seqera Platform API spec updated to 1.274.4.**
+
+- **Credential and compute environment attributes documented.** Fields of `seqera_credential` that had no description (AWS, Azure, Git provider and container registry keys) now describe what they hold, and `network` and `subnetworks` on the `google_cloud` block of `seqera_compute_env` and on `seqera_gcp_cloud_ce` explain how short names resolve. Behaviour is unchanged.
 
 - **Authentication documentation updated.** The provider documentation lists the client credentials attributes with their environment variables and shows a self-hosted configuration.
 

@@ -508,7 +508,10 @@ func (r *AzureBatchCEResource) Schema(ctx context.Context, req resource.SchemaRe
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.`,
+						Description: `Memory in MiB reserved for the Nextflow head job container. Must be at least 3584 when creating a compute environment. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(3584),
+						},
 					},
 					"head_pool": schema.StringAttribute{
 						Computed: true,

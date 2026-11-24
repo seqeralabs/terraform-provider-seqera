@@ -437,7 +437,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.`,
+						Description: `VPC network for compute instances, as a short name or fully qualified path. A short name resolves in ` + "`" + `projectId` + "`" + ` when it's set, otherwise in the credentials' project. If empty, the project ` + "`" + `default` + "`" + ` network is used. Required when ` + "`" + `usePrivateAddress` + "`" + ` is ` + "`" + `true` + "`" + `. Requires replacement if changed.`,
 					},
 					"network_tags": schema.ListAttribute{
 						Computed: true,
@@ -531,7 +531,7 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 						},
 						ElementType: types.StringType,
-						Description: `Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+						Description: `Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short ` + "`" + `network` + "`" + ` name: in ` + "`" + `projectId` + "`" + ` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used. Requires replacement if changed.`,
 					},
 					"use_private_address": schema.BoolAttribute{
 						Computed: true,
