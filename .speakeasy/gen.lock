@@ -3,8 +3,8 @@ id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
   docChecksum: e5b5a2bd4260c42e281a81ed4bc5e2de
   docVersion: 1.257.0
-  speakeasyVersion: 1.806.0
-  generationVersion: 2.956.1
+  speakeasyVersion: 1.811.0
+  generationVersion: 2.968.1
   releaseVersion: 0.44.0
   configChecksum: ff62016278747413a444c45d50744361
 persistentEdits:
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.50.3
+    core: 3.50.7
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     formatBinary: 0.2.0
