@@ -84,7 +84,7 @@ func TestLineageStoreValidators(t *testing.T) {
 				"store_name":        tc.storeName,
 			}
 
-			var v validator.String = LineageStoreLocationValidator()
+			v := LineageStoreLocationValidator()
 			if tc.attr == "store_name" {
 				v = LineageStoreNameValidator()
 			}
