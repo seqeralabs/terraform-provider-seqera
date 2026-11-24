@@ -1,3 +1,15 @@
+# Unreleased
+
+FEATURES:
+
+- **Authenticate as a service account with client credentials.** The provider can now authenticate with a service account's OAuth client credentials instead of a personal access token, for automation such as CI pipelines. Set the new `client_id` and `client_secret` provider attributes, or the `TOWER_CLIENT_ID` and `TOWER_CLIENT_SECRET` environment variables. The provider exchanges them at the Platform's token endpoint (`{server_url}/token`) for a short-lived access token and requests a new one when it expires, so long runs are not interrupted. Configure either a personal access token or client credentials, not both: the provider reports an error when both are set, when only one of `client_id` and `client_secret` is set, or when neither method is set, counting the provider block and the environment variables. Client secrets are issued by an organization owner from the service account's page in the Seqera UI. The service account acts with its own permissions: it only reaches workspaces it has been added to and cannot hold an organization role above Member, so organization-level resources such as `seqera_orgs`, `seqera_teams` and workspace creation still need a personal access token. Service account client credentials must be enabled for the organization; if they are not, the token exchange fails with an `unauthorized_client` error.
+
+  On self-hosted deployments, whose `server_url` includes the `/api` path, also set the new `token_url` attribute (or `TOWER_TOKEN_URL` environment variable) to the full token endpoint, for example `https://seqera.my-company.io/api/token`. Without it the token is requested from `https://seqera.my-company.io/token` and the exchange fails. Seqera Cloud with the default `server_url` needs no `token_url`. See [#319](https://github.com/seqeralabs/terraform-provider-seqera/issues/319).
+
+NOTES:
+
+- **Authentication documentation updated.** The provider documentation lists the client credentials attributes with their environment variables and shows a self-hosted configuration.
+
 # v0.44.0
 
 BREAKING CHANGES:

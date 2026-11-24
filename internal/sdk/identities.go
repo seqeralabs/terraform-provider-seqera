@@ -63,7 +63,7 @@ func (s *Identities) ListManagedIdentities(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListManagedIdentities",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -292,7 +292,7 @@ func (s *Identities) CreateManagedIdentity(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateManagedIdentity",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
@@ -528,7 +528,7 @@ func (s *Identities) DeleteManagedIdentity(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteManagedIdentity",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -759,7 +759,7 @@ func (s *Identities) DescribeManagedIdentity(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeManagedIdentity",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -988,7 +988,7 @@ func (s *Identities) UpdateManagedIdentity(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateManagedIdentity",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
@@ -1205,7 +1205,7 @@ func (s *Identities) ListManagedCredentials(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListManagedCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1434,7 +1434,7 @@ func (s *Identities) CreateManagedCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateManagedCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)
@@ -1671,7 +1671,7 @@ func (s *Identities) DeleteManagedCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteManagedCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1902,7 +1902,7 @@ func (s *Identities) UpdateManagedCredentials(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateManagedCredentials",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)

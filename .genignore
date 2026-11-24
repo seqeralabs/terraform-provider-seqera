@@ -1,6 +1,11 @@
 # Speakeasy generation ignore patterns
 # Files listed here will not be overwritten by Speakeasy code generation
 
+# Serves the provider through provider.NewWithAuthValidation
+main.go
+internal/provider/provider_auth_validation.go
+internal/provider/provider_auth_validation_test.go
+
 # Custom SDK hooks for polling and error handling
 internal/sdk/internal/hooks/registration.go
 internal/sdk/internal/hooks/compute_env_status_hook.go

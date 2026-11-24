@@ -64,7 +64,7 @@ func (s *Platforms) ListPlatforms(ctx context.Context, request operations.ListPl
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListPlatforms",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -293,7 +293,7 @@ func (s *Platforms) DescribePlatform(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribePlatform",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -522,7 +522,7 @@ func (s *Platforms) ListPlatformRegions(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListPlatformRegions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

@@ -35,8 +35,6 @@ func newDataLinks(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hoo
 // ListDataLinks - List data links
 // Lists all data links accessible to the authenticated user.
 // Use `workspace_id` to filter data links in a specific workspace context.
-//
-// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
 func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDataLinksDataSourceRequest, opts ...operations.Option) (*operations.ListDataLinksDataSourceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -67,7 +65,7 @@ func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDataLinksDataSource",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -93,7 +91,7 @@ func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDa
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
 	}
 
@@ -300,7 +298,7 @@ func (s *DataLinks) CreateCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateCustomDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkCreateRequest", "json", `request:"mediaType=application/json"`)
@@ -538,7 +536,7 @@ func (s *DataLinks) RefreshDataLinkCache(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "RefreshDataLinkCache",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -727,7 +725,7 @@ func (s *DataLinks) DeleteCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteCustomDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -941,7 +939,7 @@ func (s *DataLinks) DescribeDataLink(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1172,7 +1170,7 @@ func (s *DataLinks) UpdateCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateCustomDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkUpdateRequest", "json", `request:"mediaType=application/json"`)
@@ -1410,7 +1408,7 @@ func (s *DataLinks) ExploreDataLink(ctx context.Context, request operations.Expl
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1641,7 +1639,7 @@ func (s *DataLinks) ExploreDataLinkWithPath(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLinkWithPath",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1872,7 +1870,7 @@ func (s *DataLinks) ExploreDataLinkTree(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLinkTree",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2103,7 +2101,7 @@ func (s *DataLinks) DeleteDataLinkItem(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDataLinkItem",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkDeleteItemRequest", "json", `request:"mediaType=application/json"`)
@@ -2342,7 +2340,7 @@ func (s *DataLinks) DownloadDataLink(ctx context.Context, request operations.Dow
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2573,7 +2571,7 @@ func (s *DataLinks) CreateDataLinkFolder(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateDataLinkFolder",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkCreateFolderRequest", "json", `request:"mediaType=application/json"`)
@@ -2792,7 +2790,7 @@ func (s *DataLinks) GenerateDownloadURLDataLink(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDownloadUrlDataLink",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3023,7 +3021,7 @@ func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDownloadScript",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3255,7 +3253,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDataLinkUploadUrl",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -3495,7 +3493,7 @@ func (s *DataLinks) FinishDataLinkUpload(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "FinishDataLinkUpload",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkFinishMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -3735,7 +3733,7 @@ func (s *DataLinks) FinishDataLinkUploadWithPath(ctx context.Context, request op
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "FinishDataLinkUploadWithPath",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkFinishMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -3976,7 +3974,7 @@ func (s *DataLinks) GenerateDataLinkUploadURLWithPath(ctx context.Context, reque
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDataLinkUploadUrlWithPath",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)

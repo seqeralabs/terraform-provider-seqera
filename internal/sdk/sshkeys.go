@@ -63,7 +63,7 @@ func (s *SSHKeys) ListSSHKeys(ctx context.Context, opts ...operations.Option) (*
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListSshKeys",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -288,7 +288,7 @@ func (s *SSHKeys) CreateSSHKey(ctx context.Context, request shared.CreateSSHKeyR
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateSshKey",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -522,7 +522,7 @@ func (s *SSHKeys) ValidateSSHKey(ctx context.Context, request operations.Validat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateSshKey",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -715,7 +715,7 @@ func (s *SSHKeys) ValidateSSHKeyName(ctx context.Context, request operations.Val
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateSshKeyName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -908,7 +908,7 @@ func (s *SSHKeys) DeleteSSHKey(ctx context.Context, request operations.DeleteSSH
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteSshKey",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1114,7 +1114,7 @@ func (s *SSHKeys) DescribeSSHKey(ctx context.Context, request operations.Describ
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeSshKey",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

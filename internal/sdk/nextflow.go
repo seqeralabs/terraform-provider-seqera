@@ -64,7 +64,7 @@ func (s *Nextflow) NextflowVersions(ctx context.Context, opts ...operations.Opti
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "NextflowVersions",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

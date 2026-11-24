@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 9f2c676a1f125ebb85ce20fb22337c16
+  docChecksum: e5b5a2bd4260c42e281a81ed4bc5e2de
   docVersion: 1.257.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 0.44.0
-  configChecksum: d3e6239a49537bb4276749ff14493c9c
+  configChecksum: ff62016278747413a444c45d50744361
 persistentEdits:
   generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
   pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
@@ -25,6 +25,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
     nullables: 0.0.0
+    oauth2ClientCredentials: 0.3.5
     retries: 2.81.7
     transformJq: 0.0.1
     unions: 2.82.20
@@ -828,6 +829,7 @@ trackedFiles:
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     pristine_git_object: 2d5adcb96f90399884d1b3bb127a92c0ef8dc470
+  internal/sdk/internal/hooks/clientcredentials.go: {}
   internal/sdk/internal/hooks/hooks.go:
     id: 4e88208e997f
     pristine_git_object: 7f5895d3e8519d2320ac8f04f67fd94780760fcf
@@ -847,6 +849,8 @@ trackedFiles:
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
     pristine_git_object: 892eb1b4ad3c029cddbd9aa0e63f639e1b24d6c5
+  internal/sdk/internal/utils/oauth2_credentials.go: {}
+  internal/sdk/internal/utils/oauth2_sessions.go: {}
   internal/sdk/internal/utils/pathparams.go:
     id: e7fec2afe4a6
     pristine_git_object: cef345d4cfe71dc6185f457cc2a03ba16e1c9730
@@ -2815,6 +2819,7 @@ trackedFiles:
     id: e2f3cbb7ae20
     pristine_git_object: d4ae89cfca8f1a8d235ef8339bc449e64e31d3f3
   internal/sdk/models/shared/schedconfig.go: {}
+  internal/sdk/models/shared/schemeclientcredentials.go: {}
   internal/sdk/models/shared/scimtokenimage.go: {}
   internal/sdk/models/shared/searchresult.go: {}
   internal/sdk/models/shared/security.go:
@@ -3218,9 +3223,6 @@ trackedFiles:
   internal/validators/stringvalidators/not_null.go:
     id: 80be7ffedf6c
     pristine_git_object: 1e40ac1b6ce68540327e01910f0dc91a60b62607
-  main.go:
-    id: 0607f785dfa3
-    pristine_git_object: 3b8f5967920ee401cbd21a5a4df07dfaa11903f8
   terraform-registry-manifest.json:
     id: fc3d63fd06e1
     pristine_git_object: fec2a5691e493a1941bd79b312b3925403a91aa6

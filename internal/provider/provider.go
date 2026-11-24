@@ -53,8 +53,11 @@ type SeqeraProvider struct {
 
 // SeqeraProviderModel describes the provider data model.
 type SeqeraProviderModel struct {
-	BearerAuth types.String `tfsdk:"bearer_auth"`
-	ServerURL  types.String `tfsdk:"server_url"`
+	BearerAuth   types.String `tfsdk:"bearer_auth"`
+	ClientID     types.String `tfsdk:"client_id"`
+	ClientSecret types.String `tfsdk:"client_secret"`
+	ServerURL    types.String `tfsdk:"server_url"`
+	TokenURL     types.String `tfsdk:"token_url"`
 }
 
 func (p *SeqeraProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -70,9 +73,24 @@ func (p *SeqeraProvider) Schema(ctx context.Context, req provider.SchemaRequest,
 				Optional:            true,
 				Sensitive:           true,
 			},
+			"client_id": schema.StringAttribute{
+				MarkdownDescription: `Service account client credentials, exchanged for a short-lived access token. client identifier. Configurable via environment variable ` + "`" + `TOWER_CLIENT_ID` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"client_secret": schema.StringAttribute{
+				MarkdownDescription: `Service account client credentials, exchanged for a short-lived access token. client secret. Configurable via environment variable ` + "`" + `TOWER_CLIENT_SECRET` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
+			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://api.cloud.seqera.io)`,
 				Optional:    true,
+			},
+			"token_url": schema.StringAttribute{
+				MarkdownDescription: `Service account client credentials, exchanged for a short-lived access token. token URL. Configurable via environment variable ` + "`" + `TOWER_TOKEN_URL` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 		},
 		MarkdownDescription: `Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.`,
@@ -97,20 +115,43 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {
-		security.BearerAuth = data.BearerAuth.ValueString()
+		security.BearerAuth = data.BearerAuth.ValueStringPointer()
 	}
 
-	if bearerAuthEnvVar := os.Getenv("TOWER_ACCESS_TOKEN"); security.BearerAuth == "" && bearerAuthEnvVar != "" {
-		security.BearerAuth = bearerAuthEnvVar
+	if bearerAuthEnvVar := os.Getenv("TOWER_ACCESS_TOKEN"); security.BearerAuth == nil && bearerAuthEnvVar != "" {
+		security.BearerAuth = &bearerAuthEnvVar
 	}
 
-	if security.BearerAuth == "" {
-		resp.Diagnostics.AddError(
-			"Missing Provider Security Configuration",
-			"Either the environment variable TOWER_ACCESS_TOKEN or provider configuration bearer_auth attribute must be configured.",
-		)
+	clientCredentials := &shared.SchemeClientCredentials{}
+
+	if !data.ClientID.IsUnknown() {
+		clientCredentials.ClientID = data.ClientID.ValueString()
 	}
-	registerSensitiveValues(security.BearerAuth)
+
+	if clientIDEnvVar := os.Getenv("TOWER_CLIENT_ID"); clientCredentials.ClientID == "" && clientIDEnvVar != "" {
+		clientCredentials.ClientID = clientIDEnvVar
+	}
+
+	if !data.ClientSecret.IsUnknown() {
+		clientCredentials.ClientSecret = data.ClientSecret.ValueString()
+	}
+
+	if clientSecretEnvVar := os.Getenv("TOWER_CLIENT_SECRET"); clientCredentials.ClientSecret == "" && clientSecretEnvVar != "" {
+		clientCredentials.ClientSecret = clientSecretEnvVar
+	}
+
+	if !data.TokenURL.IsUnknown() {
+		clientCredentials.TokenURL = data.TokenURL.ValueString()
+	}
+
+	if tokenURLEnvVar := os.Getenv("TOWER_TOKEN_URL"); clientCredentials.TokenURL == "" && tokenURLEnvVar != "" {
+		clientCredentials.TokenURL = tokenURLEnvVar
+	}
+
+	if clientCredentials.ClientID != "" && clientCredentials.ClientSecret != "" {
+		security.ClientCredentials = clientCredentials
+	}
+	registerSensitiveValues(security.BearerAuth, clientCredentials.ClientSecret)
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),

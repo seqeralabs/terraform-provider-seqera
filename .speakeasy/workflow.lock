@@ -2,8 +2,8 @@ speakeasyVersion: 1.806.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:c382c7ab6b4d53845786056b8e662461dbf5a447259a8ee074dc50b4253ae30b
-        sourceBlobDigest: sha256:8d84d036d31277b7b2e7bae71a59f889e17adef4596abc1def883692dc02a2f1
+        sourceRevisionDigest: sha256:44980db43d36bce1852e657a2c2c44665b066b5fd3d5de9f95585e3bf14bab67
+        sourceBlobDigest: sha256:fa9d2a730e16f0ffd172c7cd12feacbb0aa379c85a336ac8171a8282c3e91c18
         tags:
             - latest
             - 1.257.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:c382c7ab6b4d53845786056b8e662461dbf5a447259a8ee074dc50b4253ae30b
-        sourceBlobDigest: sha256:8d84d036d31277b7b2e7bae71a59f889e17adef4596abc1def883692dc02a2f1
+        sourceRevisionDigest: sha256:44980db43d36bce1852e657a2c2c44665b066b5fd3d5de9f95585e3bf14bab67
+        sourceBlobDigest: sha256:fa9d2a730e16f0ffd172c7cd12feacbb0aa379c85a336ac8171a8282c3e91c18
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.806.0
@@ -78,6 +78,7 @@ workflow:
                 - location: overlays/workspaces.yaml
                 - location: overlays/workspace-lineage-settings.yaml
                 - location: overlays/workspace-studios-settings.yaml
+                - location: overlays/auth.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

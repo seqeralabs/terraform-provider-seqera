@@ -63,7 +63,7 @@ func (s *Launch) DescribeLaunch(ctx context.Context, request operations.Describe
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeLaunch",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

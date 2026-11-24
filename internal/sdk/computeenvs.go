@@ -64,7 +64,7 @@ func (s *ComputeEnvs) ListComputeEnvs(ctx context.Context, request operations.Li
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListComputeEnvs",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -293,7 +293,7 @@ func (s *ComputeEnvs) CreateComputeEnv(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -530,7 +530,7 @@ func (s *ComputeEnvs) ValidateComputeEnvName(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateComputeEnvName",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -742,7 +742,7 @@ func (s *ComputeEnvs) DeleteComputeEnv(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -956,7 +956,7 @@ func (s *ComputeEnvs) DescribeComputeEnv(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1187,7 +1187,7 @@ func (s *ComputeEnvs) UpdateComputeEnv(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -1406,7 +1406,7 @@ func (s *ComputeEnvs) DisableComputeEnv(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DisableComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -1623,7 +1623,7 @@ func (s *ComputeEnvs) EnableComputeEnv(ctx context.Context, request operations.E
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "EnableComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -1842,7 +1842,7 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateComputeEnvPrimary",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -2059,7 +2059,7 @@ func (s *ComputeEnvs) ValidateComputeEnv(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -2301,7 +2301,7 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAWSComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAWSComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -2540,7 +2540,7 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAWSComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2771,7 +2771,7 @@ func (s *ComputeEnvs) UpdateAWSComputeEnv(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAWSComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -2990,7 +2990,7 @@ func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAWSComputeEnv",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3202,7 +3202,7 @@ func (s *ComputeEnvs) CreateAWSBatchCE(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAWSBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAWSBatchCERequest", "json", `request:"mediaType=application/json"`)
@@ -3441,7 +3441,7 @@ func (s *ComputeEnvs) DescribeAWSBatchCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAWSBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -3672,7 +3672,7 @@ func (s *ComputeEnvs) UpdateAWSBatchCE(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAWSBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -3891,7 +3891,7 @@ func (s *ComputeEnvs) DeleteAWSBatchCE(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAWSBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4103,7 +4103,7 @@ func (s *ComputeEnvs) CreateAwsCloudCE(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAwsCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAwsCloudCERequest", "json", `request:"mediaType=application/json"`)
@@ -4342,7 +4342,7 @@ func (s *ComputeEnvs) DescribeAwsCloudCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAwsCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -4573,7 +4573,7 @@ func (s *ComputeEnvs) UpdateAwsCloudCE(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAwsCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -4792,7 +4792,7 @@ func (s *ComputeEnvs) DeleteAwsCloudCE(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAwsCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5004,7 +5004,7 @@ func (s *ComputeEnvs) CreateAzureBatchCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAzureBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAzureBatchCERequest", "json", `request:"mediaType=application/json"`)
@@ -5243,7 +5243,7 @@ func (s *ComputeEnvs) DescribeAzureBatchCE(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAzureBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5474,7 +5474,7 @@ func (s *ComputeEnvs) UpdateAzureBatchCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAzureBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -5693,7 +5693,7 @@ func (s *ComputeEnvs) DeleteAzureBatchCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAzureBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -5905,7 +5905,7 @@ func (s *ComputeEnvs) CreateAzureCloudCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAzureCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAzureCloudCERequest", "json", `request:"mediaType=application/json"`)
@@ -6144,7 +6144,7 @@ func (s *ComputeEnvs) DescribeAzureCloudCE(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAzureCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -6375,7 +6375,7 @@ func (s *ComputeEnvs) UpdateAzureCloudCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAzureCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -6594,7 +6594,7 @@ func (s *ComputeEnvs) DeleteAzureCloudCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAzureCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -6806,7 +6806,7 @@ func (s *ComputeEnvs) CreateGCPBatchCE(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGCPBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGCPBatchCERequest", "json", `request:"mediaType=application/json"`)
@@ -7045,7 +7045,7 @@ func (s *ComputeEnvs) DescribeGCPBatchCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGCPBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -7276,7 +7276,7 @@ func (s *ComputeEnvs) UpdateGCPBatchCE(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGCPBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -7495,7 +7495,7 @@ func (s *ComputeEnvs) DeleteGCPBatchCE(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGCPBatchCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -7707,7 +7707,7 @@ func (s *ComputeEnvs) CreateGCPCloudCE(ctx context.Context, request operations.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateGCPCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGCPCloudCERequest", "json", `request:"mediaType=application/json"`)
@@ -7946,7 +7946,7 @@ func (s *ComputeEnvs) DescribeGCPCloudCE(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeGCPCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -8177,7 +8177,7 @@ func (s *ComputeEnvs) UpdateGCPCloudCE(ctx context.Context, request operations.U
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateGCPCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -8396,7 +8396,7 @@ func (s *ComputeEnvs) DeleteGCPCloudCE(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteGCPCloudCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -8611,7 +8611,7 @@ func (s *ComputeEnvs) CreateManagedComputeCE(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateManagedComputeCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateManagedComputeCERequest", "json", `request:"mediaType=application/json"`)
@@ -8850,7 +8850,7 @@ func (s *ComputeEnvs) DescribeManagedComputeCE(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeManagedComputeCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -9081,7 +9081,7 @@ func (s *ComputeEnvs) UpdateManagedComputeCE(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateManagedComputeCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -9300,7 +9300,7 @@ func (s *ComputeEnvs) DeleteManagedComputeCE(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteManagedComputeCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -9512,7 +9512,7 @@ func (s *ComputeEnvs) CreateSlurmCE(ctx context.Context, request operations.Crea
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateSlurmCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateSlurmCERequest", "json", `request:"mediaType=application/json"`)
@@ -9751,7 +9751,7 @@ func (s *ComputeEnvs) DescribeSlurmCE(ctx context.Context, request operations.De
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeSlurmCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -9982,7 +9982,7 @@ func (s *ComputeEnvs) UpdateSlurmCE(ctx context.Context, request operations.Upda
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateSlurmCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateComputeEnvRequest", "json", `request:"mediaType=application/json"`)
@@ -10201,7 +10201,7 @@ func (s *ComputeEnvs) DeleteSlurmCE(ctx context.Context, request operations.Dele
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteSlurmCE",
-		OAuth2Scopes:     nil,
+		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
