@@ -834,9 +834,8 @@ actions:
 
   - target: $.components.schemas.GoogleBatchConfig.properties.headJobMemoryMb
     update:
-      description: |
-        Memory allocation for the Nextflow head job in MB.
       example: 8192
+      minimum: 3584
       x-speakeasy-param-force-new: true
 
   - target: $.components.schemas.GoogleBatchConfig.properties.nfsTarget
@@ -1313,10 +1312,23 @@ actions:
 
   - target: $.components.schemas.GkeComputeConfig.properties.headJobMemoryMb
     update:
-      description: |
-        Memory allocation for the Nextflow head/launcher pod in MB.
       example: 8192
+      minimum: 3584
       x-speakeasy-param-force-new: true
+
+  # The API rejects a head job memory below 3584 MiB when a compute environment
+  # is created. The field forces replacement, so every configured value reaches a
+  # create call; enforce the floor at plan time. (AwsBatchConfig, GoogleBatchConfig
+  # and GkeComputeConfig carry the same minimum on their own rules.)
+  - target: $.components.schemas.AzBatchConfig.properties.headJobMemoryMb
+    update:
+      minimum: 3584
+  - target: $.components.schemas.EksComputeConfig.properties.headJobMemoryMb
+    update:
+      minimum: 3584
+  - target: $.components.schemas.K8sComputeConfig.properties.headJobMemoryMb
+    update:
+      minimum: 3584
 
   # Schema description
   - target: $.components.schemas.ComputeConfig
@@ -1425,6 +1437,22 @@ actions:
     update:
       example: "s3://my-nextflow-bucket/cache"
       x-speakeasy-plan-validators: GlobalCachePathS3Validator
+
+  # Seqera sets the Seqera Scheduler settings of a Seqera Compute environment at
+  # creation and they cannot be changed, so users must not set them: hide
+  # schedConfig from the Terraform schema. terraform-ignore keeps it in the SDK
+  # model; allOf-unwrapped because extensions next to a $ref are dropped.
+  # schedEnabled stays as a read-only attribute.
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["schedConfig"]["$ref"]
+    remove: true
+  - target: $.components.schemas.SeqeraComputeConfig.properties.schedConfig
+    update:
+      allOf:
+        - $ref: "#/components/schemas/SchedConfig"
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SeqeraComputeConfig.properties.schedEnabled
+    update:
+      description: Whether pipelines on this compute environment run on the Seqera Scheduler. Set by Seqera at creation and cannot be changed.
   - target: $.components.schemas.AzBatchConfig.properties.globalCacheEnabled
     update:
       example: true

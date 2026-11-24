@@ -157,7 +157,7 @@ all tasks run on a single instance (Classic mode).
 to accept the platform defaults, or provide it (only when
 `intelligent_compute_enabled = true`) to override the scheduler settings.
 Requires replacement if changed.
-- `network` (String) VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.
+- `network` (String) VPC network for compute instances, as a short name or fully qualified path. A short name resolves in `projectId` when it's set, otherwise in the credentials' project. If empty, the project `default` network is used. Required when `usePrivateAddress` is `true`. Requires replacement if changed.
 - `network_tags` (List of String) Network tags applied to compute instances (VPC firewall-rule targets). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
@@ -169,7 +169,7 @@ Requires replacement if changed.
 - `service_account_email` (String) Google Cloud service account email for compute instances.
 If not specified, the default compute service account is used.
 Requires replacement if changed.
-- `subnetworks` (List of String) Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.
+- `subnetworks` (List of String) Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short `network` name: in `projectId` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used. Requires replacement if changed.
 - `use_private_address` (Boolean) Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork. Requires replacement if changed.
 - `zone` (String) Google Cloud zone within the configured region (e.g., us-central1-a).
 If not specified, the platform selects a zone automatically.

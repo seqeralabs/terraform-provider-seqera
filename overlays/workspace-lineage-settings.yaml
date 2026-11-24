@@ -109,11 +109,22 @@ actions:
     update:
       default: false
 
+  # storeLocation replaces the deprecated storeName. In MANUAL mode one of them
+  # must be set (storeLocation preferred; storeName alone is still accepted so
+  # existing configurations keep working), never both; in AUTO mode neither.
+  - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.storeLocation
+    update:
+      description: "Storage location of the lineage store: a cloud storage path within your existing bucket, e.g. 's3://my-bucket/lineage'. Required in MANUAL mode; must not be set in AUTO mode, where Platform always uses the root of 's3://seqera-lineage-{workspaceId}'."
+      example: "s3://my-existing-lineage-bucket/lineage"
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: LineageStoreLocationValidator
+
   - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.storeName
     update:
-      description: Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
+      description: Bucket name for the lineage store, used as the bucket root. Must not be set in AUTO mode, nor together with `store_location`.
+      x-speakeasy-deprecation-message: Use `store_location` instead. A bucket name `my-bucket` corresponds to `store_location = "s3://my-bucket"`.
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-validators: LineageManualFieldValidator
+      x-speakeasy-plan-validators: LineageStoreNameValidator
 
   - target: $.components.schemas.LineageWorkspaceSettingsRequest.properties.topicArn
     update:

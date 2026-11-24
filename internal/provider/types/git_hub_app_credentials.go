@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GitHubAppSecurityKeys struct {
+type GitHubAppCredentials struct {
 	AppID         types.String `tfsdk:"app_id"`
 	ClientID      types.String `tfsdk:"client_id"`
 	ClientSecret  types.String `tfsdk:"client_secret"`

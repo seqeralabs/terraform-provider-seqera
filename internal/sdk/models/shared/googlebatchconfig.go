@@ -49,8 +49,7 @@ type GoogleBatchConfig struct {
 	// Overrides other VM configuration settings for the head job.
 	//
 	HeadJobInstanceTemplate *string `json:"headJobInstanceTemplate,omitempty"`
-	// Memory allocation for the Nextflow head job in MB.
-	//
+	// Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 when omitted.
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// Static Google Cloud resource labels applied to compute resources at creation
 	// time, for cost tracking and organization. For per-run dynamic resource labels,

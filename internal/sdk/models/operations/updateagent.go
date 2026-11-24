@@ -46,7 +46,7 @@ type UpdateAgentResponse struct {
 	RawResponse *http.Response
 	// OK
 	UpdateAgentResponse *shared.UpdateAgentResponse
-	// Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace
+	// Bad request: a field fails validation, serviceAccountId is missing, githubAppCredentialId does not name a valid GitHub App credential in the workspace, or studioSandbox does not name an existing Studio in the workspace
 	ErrorResponse *shared.ErrorResponse
 }
 

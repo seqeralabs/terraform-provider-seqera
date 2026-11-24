@@ -722,7 +722,10 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
+						Description: `Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(3584),
+						},
 					},
 					"head_job_role": schema.StringAttribute{
 						Computed: true,

@@ -39,6 +39,25 @@ func (e *AgentDbDtoStatus) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type AgentDbDtoStudioSandbox struct {
+	SessionID   *string `json:"sessionId,omitempty"`
+	WorkspaceID *string `json:"workspaceId,omitempty"`
+}
+
+func (a *AgentDbDtoStudioSandbox) GetSessionID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SessionID
+}
+
+func (a *AgentDbDtoStudioSandbox) GetWorkspaceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkspaceID
+}
+
 type AgentDbDto struct {
 	AgentInstructions *string `json:"agentInstructions,omitempty"`
 	// Creation timestamp.
@@ -51,14 +70,17 @@ type AgentDbDto struct {
 	// Agent identifier. Use it as `agent.agent_config_id` on `seqera_action`.
 	ID *string `json:"id,omitempty"`
 	// Last update timestamp.
-	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
-	Name             *string    `json:"name,omitempty"`
-	ServiceAccountID *int64     `json:"serviceAccountId,omitempty"`
+	LastUpdated       *time.Time `json:"lastUpdated,omitempty"`
+	Name              *string    `json:"name,omitempty"`
+	SandboxAutoChange *bool      `json:"sandboxAutoChange,omitempty"`
+	ServiceAccountID  *int64     `json:"serviceAccountId,omitempty"`
 	// Name of the bound service account.
 	ServiceAccountName *string `json:"serviceAccountName,omitempty"`
 	// Current status, `active` or `inactive`. It can change outside Terraform: from the Platform UI, or automatically when the bound service account stops participating in the workspace. Updating the agent does not change it.
-	Status      *AgentDbDtoStatus `json:"status,omitempty"`
-	WorkspaceID *int64            `json:"workspaceId,omitempty"`
+	Status            *AgentDbDtoStatus        `json:"status,omitempty"`
+	StudioSandbox     *AgentDbDtoStudioSandbox `json:"studioSandbox,omitempty"`
+	StudioSandboxName *string                  `json:"studioSandboxName,omitempty"`
+	WorkspaceID       *int64                   `json:"workspaceId,omitempty"`
 }
 
 func (a AgentDbDto) MarshalJSON() ([]byte, error) {
@@ -128,6 +150,13 @@ func (a *AgentDbDto) GetName() *string {
 	return a.Name
 }
 
+func (a *AgentDbDto) GetSandboxAutoChange() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.SandboxAutoChange
+}
+
 func (a *AgentDbDto) GetServiceAccountID() *int64 {
 	if a == nil {
 		return nil
@@ -147,6 +176,20 @@ func (a *AgentDbDto) GetStatus() *AgentDbDtoStatus {
 		return nil
 	}
 	return a.Status
+}
+
+func (a *AgentDbDto) GetStudioSandbox() *AgentDbDtoStudioSandbox {
+	if a == nil {
+		return nil
+	}
+	return a.StudioSandbox
+}
+
+func (a *AgentDbDto) GetStudioSandboxName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.StudioSandboxName
 }
 
 func (a *AgentDbDto) GetWorkspaceID() *int64 {

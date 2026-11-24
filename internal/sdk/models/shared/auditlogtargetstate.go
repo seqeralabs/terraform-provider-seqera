@@ -7,7 +7,3455 @@ import (
 	"errors"
 	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"time"
 )
+
+type NewStateWorkspaceAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	FullName       *string        `json:"fullName,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Visibility     *Visibility    `json:"visibility,omitempty"`
+}
+
+func (n NewStateWorkspaceAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateWorkspaceAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateWorkspaceAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateWorkspaceAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateWorkspaceAuditImage) GetFullName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.FullName
+}
+
+func (n *NewStateWorkspaceAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateWorkspaceAuditImage) GetVisibility() *Visibility {
+	if n == nil {
+		return nil
+	}
+	return n.Visibility
+}
+
+type NewStateWorkflowAuditImage struct {
+	AuditImageType    AuditImageType `json:"auditImageType"`
+	CommandLine       *string        `json:"commandLine,omitempty"`
+	CommitID          *string        `json:"commitId,omitempty"`
+	Complete          *time.Time     `json:"complete,omitempty"`
+	ConfigFiles       []string       `json:"configFiles,omitempty"`
+	ConfigText        *string        `json:"configText,omitempty"`
+	Container         *string        `json:"container,omitempty"`
+	ContainerEngine   *string        `json:"containerEngine,omitempty"`
+	Duration          *int64         `json:"duration,omitempty"`
+	ErrorMessage      *string        `json:"errorMessage,omitempty"`
+	ErrorReport       *string        `json:"errorReport,omitempty"`
+	ExitStatus        *int           `json:"exitStatus,omitempty"`
+	Fusion            *WfFusionMeta  `json:"fusion,omitempty"`
+	HomeDir           *string        `json:"homeDir,omitempty"`
+	LaunchDir         *string        `json:"launchDir,omitempty"`
+	LaunchID          *string        `json:"launchId,omitempty"`
+	LogFile           *string        `json:"logFile,omitempty"`
+	Manifest          *WfManifest    `json:"manifest,omitempty"`
+	Nextflow          *WfNextflow    `json:"nextflow,omitempty"`
+	OperationID       *string        `json:"operationId,omitempty"`
+	OutFile           *string        `json:"outFile,omitempty"`
+	Params            *string        `json:"params,omitempty"`
+	Profile           *string        `json:"profile,omitempty"`
+	ProjectDir        *string        `json:"projectDir,omitempty"`
+	ProjectName       *string        `json:"projectName,omitempty"`
+	Repository        *string        `json:"repository,omitempty"`
+	RequiresAttention *bool          `json:"requiresAttention,omitempty"`
+	Resume            *bool          `json:"resume,omitempty"`
+	Revision          *string        `json:"revision,omitempty"`
+	RunName           *string        `json:"runName,omitempty"`
+	ScriptFile        *string        `json:"scriptFile,omitempty"`
+	ScriptID          *string        `json:"scriptId,omitempty"`
+	ScriptName        *string        `json:"scriptName,omitempty"`
+	SessionID         *string        `json:"sessionId,omitempty"`
+	Start             *time.Time     `json:"start,omitempty"`
+	Stats             *WfStats       `json:"stats,omitempty"`
+	Status            *string        `json:"status,omitempty"`
+	Submit            *time.Time     `json:"submit,omitempty"`
+	Success           *bool          `json:"success,omitempty"`
+	UserName          *string        `json:"userName,omitempty"`
+	Wave              *WfWaveMeta    `json:"wave,omitempty"`
+	WorkDir           *string        `json:"workDir,omitempty"`
+}
+
+func (n NewStateWorkflowAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateWorkflowAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateWorkflowAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateWorkflowAuditImage) GetCommandLine() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CommandLine
+}
+
+func (n *NewStateWorkflowAuditImage) GetCommitID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CommitID
+}
+
+func (n *NewStateWorkflowAuditImage) GetComplete() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.Complete
+}
+
+func (n *NewStateWorkflowAuditImage) GetConfigFiles() []string {
+	if n == nil {
+		return nil
+	}
+	return n.ConfigFiles
+}
+
+func (n *NewStateWorkflowAuditImage) GetConfigText() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ConfigText
+}
+
+func (n *NewStateWorkflowAuditImage) GetContainer() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Container
+}
+
+func (n *NewStateWorkflowAuditImage) GetContainerEngine() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ContainerEngine
+}
+
+func (n *NewStateWorkflowAuditImage) GetDuration() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.Duration
+}
+
+func (n *NewStateWorkflowAuditImage) GetErrorMessage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ErrorMessage
+}
+
+func (n *NewStateWorkflowAuditImage) GetErrorReport() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ErrorReport
+}
+
+func (n *NewStateWorkflowAuditImage) GetExitStatus() *int {
+	if n == nil {
+		return nil
+	}
+	return n.ExitStatus
+}
+
+func (n *NewStateWorkflowAuditImage) GetFusion() *WfFusionMeta {
+	if n == nil {
+		return nil
+	}
+	return n.Fusion
+}
+
+func (n *NewStateWorkflowAuditImage) GetHomeDir() *string {
+	if n == nil {
+		return nil
+	}
+	return n.HomeDir
+}
+
+func (n *NewStateWorkflowAuditImage) GetLaunchDir() *string {
+	if n == nil {
+		return nil
+	}
+	return n.LaunchDir
+}
+
+func (n *NewStateWorkflowAuditImage) GetLaunchID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.LaunchID
+}
+
+func (n *NewStateWorkflowAuditImage) GetLogFile() *string {
+	if n == nil {
+		return nil
+	}
+	return n.LogFile
+}
+
+func (n *NewStateWorkflowAuditImage) GetManifest() *WfManifest {
+	if n == nil {
+		return nil
+	}
+	return n.Manifest
+}
+
+func (n *NewStateWorkflowAuditImage) GetNextflow() *WfNextflow {
+	if n == nil {
+		return nil
+	}
+	return n.Nextflow
+}
+
+func (n *NewStateWorkflowAuditImage) GetOperationID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.OperationID
+}
+
+func (n *NewStateWorkflowAuditImage) GetOutFile() *string {
+	if n == nil {
+		return nil
+	}
+	return n.OutFile
+}
+
+func (n *NewStateWorkflowAuditImage) GetParams() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Params
+}
+
+func (n *NewStateWorkflowAuditImage) GetProfile() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Profile
+}
+
+func (n *NewStateWorkflowAuditImage) GetProjectDir() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ProjectDir
+}
+
+func (n *NewStateWorkflowAuditImage) GetProjectName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ProjectName
+}
+
+func (n *NewStateWorkflowAuditImage) GetRepository() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Repository
+}
+
+func (n *NewStateWorkflowAuditImage) GetRequiresAttention() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.RequiresAttention
+}
+
+func (n *NewStateWorkflowAuditImage) GetResume() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Resume
+}
+
+func (n *NewStateWorkflowAuditImage) GetRevision() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Revision
+}
+
+func (n *NewStateWorkflowAuditImage) GetRunName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RunName
+}
+
+func (n *NewStateWorkflowAuditImage) GetScriptFile() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ScriptFile
+}
+
+func (n *NewStateWorkflowAuditImage) GetScriptID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ScriptID
+}
+
+func (n *NewStateWorkflowAuditImage) GetScriptName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ScriptName
+}
+
+func (n *NewStateWorkflowAuditImage) GetSessionID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.SessionID
+}
+
+func (n *NewStateWorkflowAuditImage) GetStart() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.Start
+}
+
+func (n *NewStateWorkflowAuditImage) GetStats() *WfStats {
+	if n == nil {
+		return nil
+	}
+	return n.Stats
+}
+
+func (n *NewStateWorkflowAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+func (n *NewStateWorkflowAuditImage) GetSubmit() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.Submit
+}
+
+func (n *NewStateWorkflowAuditImage) GetSuccess() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Success
+}
+
+func (n *NewStateWorkflowAuditImage) GetUserName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.UserName
+}
+
+func (n *NewStateWorkflowAuditImage) GetWave() *WfWaveMeta {
+	if n == nil {
+		return nil
+	}
+	return n.Wave
+}
+
+func (n *NewStateWorkflowAuditImage) GetWorkDir() *string {
+	if n == nil {
+		return nil
+	}
+	return n.WorkDir
+}
+
+type NewStateSSHKeyAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	KeyHash        *string        `json:"keyHash,omitempty"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+}
+
+func (n NewStateSSHKeyAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateSSHKeyAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateSSHKeyAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateSSHKeyAuditImage) GetKeyHash() *string {
+	if n == nil {
+		return nil
+	}
+	return n.KeyHash
+}
+
+func (n *NewStateSSHKeyAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+type NewStateUserRoleAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Context        *string        `json:"context,omitempty"`
+	CustomRoleID   *int64         `json:"customRoleId,omitempty"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Role           *string        `json:"role,omitempty"`
+	TeamID         *int64         `json:"teamId,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+	WorkspaceID    *int64         `json:"workspaceId,omitempty"`
+}
+
+func (n NewStateUserRoleAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateUserRoleAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateUserRoleAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateUserRoleAuditImage) GetContext() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Context
+}
+
+func (n *NewStateUserRoleAuditImage) GetCustomRoleID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.CustomRoleID
+}
+
+func (n *NewStateUserRoleAuditImage) GetOrganizationID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.OrganizationID
+}
+
+func (n *NewStateUserRoleAuditImage) GetRole() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Role
+}
+
+func (n *NewStateUserRoleAuditImage) GetTeamID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.TeamID
+}
+
+func (n *NewStateUserRoleAuditImage) GetUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+func (n *NewStateUserRoleAuditImage) GetWorkspaceID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.WorkspaceID
+}
+
+type NewStateUserAuditImage struct {
+	AuditImageType    AuditImageType `json:"auditImageType"`
+	Auth0ID           *string        `json:"auth0Id,omitempty"`
+	AuthTime          *time.Time     `json:"authTime,omitempty"`
+	AvatarID          *string        `json:"avatarId,omitempty"`
+	AvatarURL         *string        `json:"avatarUrl,omitempty"`
+	Description       *string        `json:"description,omitempty"`
+	Disabled          *bool          `json:"disabled,omitempty"`
+	Email             *string        `json:"email,omitempty"`
+	FirstName         *string        `json:"firstName,omitempty"`
+	LastAccess        *time.Time     `json:"lastAccess,omitempty"`
+	LastName          *string        `json:"lastName,omitempty"`
+	MarketingConsent  *bool          `json:"marketingConsent,omitempty"`
+	Notification      *bool          `json:"notification,omitempty"`
+	Organization      *string        `json:"organization,omitempty"`
+	TermsOfUseConsent *bool          `json:"termsOfUseConsent,omitempty"`
+	Trusted           *bool          `json:"trusted,omitempty"`
+	UserName          *string        `json:"userName,omitempty"`
+}
+
+func (n NewStateUserAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateUserAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateUserAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateUserAuditImage) GetAuth0ID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Auth0ID
+}
+
+func (n *NewStateUserAuditImage) GetAuthTime() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.AuthTime
+}
+
+func (n *NewStateUserAuditImage) GetAvatarID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.AvatarID
+}
+
+func (n *NewStateUserAuditImage) GetAvatarURL() *string {
+	if n == nil {
+		return nil
+	}
+	return n.AvatarURL
+}
+
+func (n *NewStateUserAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateUserAuditImage) GetDisabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Disabled
+}
+
+func (n *NewStateUserAuditImage) GetEmail() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Email
+}
+
+func (n *NewStateUserAuditImage) GetFirstName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.FirstName
+}
+
+func (n *NewStateUserAuditImage) GetLastAccess() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastAccess
+}
+
+func (n *NewStateUserAuditImage) GetLastName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.LastName
+}
+
+func (n *NewStateUserAuditImage) GetMarketingConsent() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.MarketingConsent
+}
+
+func (n *NewStateUserAuditImage) GetNotification() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Notification
+}
+
+func (n *NewStateUserAuditImage) GetOrganization() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Organization
+}
+
+func (n *NewStateUserAuditImage) GetTermsOfUseConsent() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.TermsOfUseConsent
+}
+
+func (n *NewStateUserAuditImage) GetTrusted() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Trusted
+}
+
+func (n *NewStateUserAuditImage) GetUserName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.UserName
+}
+
+type NewStateTeamMemberAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	MemberID       *int64         `json:"memberId,omitempty"`
+	TeamID         *int64         `json:"teamId,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+}
+
+func (n NewStateTeamMemberAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateTeamMemberAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateTeamMemberAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateTeamMemberAuditImage) GetMemberID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.MemberID
+}
+
+func (n *NewStateTeamMemberAuditImage) GetTeamID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.TeamID
+}
+
+func (n *NewStateTeamMemberAuditImage) GetUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+type NewStateTeamAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	AvatarID       *string        `json:"avatarId,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	IdpGroupID     *int64         `json:"idpGroupId,omitempty"`
+	IdpGroupName   *string        `json:"idpGroupName,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (n NewStateTeamAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateTeamAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateTeamAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateTeamAuditImage) GetAvatarID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.AvatarID
+}
+
+func (n *NewStateTeamAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateTeamAuditImage) GetIdpGroupID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.IdpGroupID
+}
+
+func (n *NewStateTeamAuditImage) GetIdpGroupName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.IdpGroupName
+}
+
+func (n *NewStateTeamAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+type NewStateServiceAccountAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ClientID       *string        `json:"clientId,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	ID             *int64         `json:"id,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (n NewStateServiceAccountAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateServiceAccountAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateServiceAccountAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateServiceAccountAuditImage) GetClientID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ClientID
+}
+
+func (n *NewStateServiceAccountAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateServiceAccountAuditImage) GetID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.ID
+}
+
+func (n *NewStateServiceAccountAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+type NewStateSCIMTokenAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	DateCreated    *time.Time     `json:"dateCreated,omitempty"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	RevokedAt      *time.Time     `json:"revokedAt,omitempty"`
+	TokenPrefix    *string        `json:"tokenPrefix,omitempty"`
+}
+
+func (n NewStateSCIMTokenAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateSCIMTokenAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateSCIMTokenAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateSCIMTokenAuditImage) GetDateCreated() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.DateCreated
+}
+
+func (n *NewStateSCIMTokenAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+func (n *NewStateSCIMTokenAuditImage) GetRevokedAt() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.RevokedAt
+}
+
+func (n *NewStateSCIMTokenAuditImage) GetTokenPrefix() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TokenPrefix
+}
+
+type NewStatePipelineSecretAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Salt           *string        `json:"salt,omitempty"`
+}
+
+func (n NewStatePipelineSecretAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStatePipelineSecretAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStatePipelineSecretAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStatePipelineSecretAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+func (n *NewStatePipelineSecretAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStatePipelineSecretAuditImage) GetSalt() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Salt
+}
+
+type NewStatePipelineAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	Icon           *string        `json:"icon,omitempty"`
+	Launch         *LaunchImage   `json:"launch,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (n NewStatePipelineAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStatePipelineAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStatePipelineAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStatePipelineAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStatePipelineAuditImage) GetIcon() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Icon
+}
+
+func (n *NewStatePipelineAuditImage) GetLaunch() *LaunchImage {
+	if n == nil {
+		return nil
+	}
+	return n.Launch
+}
+
+func (n *NewStatePipelineAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+type NewStateParticipantAuditImage struct {
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	MemberID        *int64         `json:"memberId,omitempty"`
+	Role            *WspRole       `json:"role,omitempty"`
+	TeamID          *int64         `json:"teamId,omitempty"`
+	UserID          *int64         `json:"userId,omitempty"`
+	WorkspaceID     *int64         `json:"workspaceId,omitempty"`
+	WspCustomRoleID *int64         `json:"wspCustomRoleId,omitempty"`
+}
+
+func (n NewStateParticipantAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateParticipantAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateParticipantAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateParticipantAuditImage) GetMemberID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.MemberID
+}
+
+func (n *NewStateParticipantAuditImage) GetRole() *WspRole {
+	if n == nil {
+		return nil
+	}
+	return n.Role
+}
+
+func (n *NewStateParticipantAuditImage) GetTeamID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.TeamID
+}
+
+func (n *NewStateParticipantAuditImage) GetUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+func (n *NewStateParticipantAuditImage) GetWorkspaceID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.WorkspaceID
+}
+
+func (n *NewStateParticipantAuditImage) GetWspCustomRoleID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.WspCustomRoleID
+}
+
+type NewStateOrgSSOConnectionAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Auth0OrgID     *string        `json:"auth0OrgId,omitempty"`
+	ConnectionID   *string        `json:"connectionId,omitempty"`
+	ConnectionName *string        `json:"connectionName,omitempty"`
+	CreatedAt      *time.Time     `json:"createdAt,omitempty"`
+	CreatedByID    *int64         `json:"createdById,omitempty"`
+	Domain         *string        `json:"domain,omitempty"`
+	Status         *string        `json:"status,omitempty"`
+	TicketURL      *string        `json:"ticketUrl,omitempty"`
+}
+
+func (n NewStateOrgSSOConnectionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetAuth0OrgID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Auth0OrgID
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetConnectionID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ConnectionID
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetConnectionName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ConnectionName
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetCreatedAt() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.CreatedAt
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetCreatedByID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.CreatedByID
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetDomain() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Domain
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+func (n *NewStateOrgSSOConnectionAuditImage) GetTicketURL() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TicketURL
+}
+
+type NewStateOrganizationAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	FullName       *string        `json:"fullName,omitempty"`
+	Location       *string        `json:"location,omitempty"`
+	LogoID         *string        `json:"logoId,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Type           *OrgType       `json:"type,omitempty"`
+	Website        *string        `json:"website,omitempty"`
+}
+
+func (n NewStateOrganizationAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateOrganizationAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateOrganizationAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateOrganizationAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateOrganizationAuditImage) GetFullName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.FullName
+}
+
+func (n *NewStateOrganizationAuditImage) GetLocation() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Location
+}
+
+func (n *NewStateOrganizationAuditImage) GetLogoID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.LogoID
+}
+
+func (n *NewStateOrganizationAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateOrganizationAuditImage) GetType() *OrgType {
+	if n == nil {
+		return nil
+	}
+	return n.Type
+}
+
+func (n *NewStateOrganizationAuditImage) GetWebsite() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Website
+}
+
+type NewStateOAuthClientSecretAuditImage struct {
+	AuditImageType   AuditImageType `json:"auditImageType"`
+	ClientID         *string        `json:"clientId,omitempty"`
+	ExpiresAt        *time.Time     `json:"expiresAt,omitempty"`
+	ID               *int64         `json:"id,omitempty"`
+	LastUsedAt       *time.Time     `json:"lastUsedAt,omitempty"`
+	RevocationReason *string        `json:"revocationReason,omitempty"`
+	RevokedAt        *time.Time     `json:"revokedAt,omitempty"`
+}
+
+func (n NewStateOAuthClientSecretAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetClientID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ClientID
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetExpiresAt() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.ExpiresAt
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.ID
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetLastUsedAt() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsedAt
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetRevocationReason() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RevocationReason
+}
+
+func (n *NewStateOAuthClientSecretAuditImage) GetRevokedAt() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.RevokedAt
+}
+
+type NewStateOAuthConsentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Scopes         *string        `json:"scopes,omitempty"`
+}
+
+func (n NewStateOAuthConsentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateOAuthConsentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateOAuthConsentAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateOAuthConsentAuditImage) GetScopes() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Scopes
+}
+
+type NewStateMemberAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Role           *string        `json:"role,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+}
+
+func (n NewStateMemberAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateMemberAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateMemberAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateMemberAuditImage) GetOrganizationID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.OrganizationID
+}
+
+func (n *NewStateMemberAuditImage) GetRole() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Role
+}
+
+func (n *NewStateMemberAuditImage) GetUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+type NewStateManagedIdentityAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config   *ComputeConfig `json:"config,omitempty"`
+	Name     *string        `json:"name,omitempty"`
+	Platform *string        `json:"platform,omitempty"`
+}
+
+func (n NewStateManagedIdentityAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateManagedIdentityAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfig() *ComputeConfig {
+	if n == nil {
+		return nil
+	}
+	return n.Config
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateManagedIdentityAuditImage) GetPlatform() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Platform
+}
+
+type NewStateManagedCredentialsAuditImage struct {
+	AuditImageType    AuditImageType              `json:"auditImageType"`
+	CredentialsID     *string                     `json:"credentialsId,omitempty"`
+	ManagedIdentityID *int64                      `json:"managedIdentityId,omitempty"`
+	MemberID          *int64                      `json:"memberId,omitempty"`
+	Metadata          *ManagedCredentialsMetadata `json:"metadata,omitempty"`
+}
+
+func (n NewStateManagedCredentialsAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateManagedCredentialsAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateManagedCredentialsAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateManagedCredentialsAuditImage) GetCredentialsID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CredentialsID
+}
+
+func (n *NewStateManagedCredentialsAuditImage) GetManagedIdentityID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.ManagedIdentityID
+}
+
+func (n *NewStateManagedCredentialsAuditImage) GetMemberID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.MemberID
+}
+
+func (n *NewStateManagedCredentialsAuditImage) GetMetadata() *ManagedCredentialsMetadata {
+	if n == nil {
+		return nil
+	}
+	return n.Metadata
+}
+
+type NewStateLabelAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Dynamic        *bool          `json:"dynamic,omitempty"`
+	IsDefault      *bool          `json:"isDefault,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Resource       *bool          `json:"resource,omitempty"`
+	Value          *string        `json:"value,omitempty"`
+}
+
+func (n NewStateLabelAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateLabelAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateLabelAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateLabelAuditImage) GetDynamic() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Dynamic
+}
+
+func (n *NewStateLabelAuditImage) GetIsDefault() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.IsDefault
+}
+
+func (n *NewStateLabelAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateLabelAuditImage) GetResource() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Resource
+}
+
+func (n *NewStateLabelAuditImage) GetValue() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Value
+}
+
+type NewStateLabelAssignmentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LabelID        *int64         `json:"labelId,omitempty"`
+	ResourceID     *string        `json:"resourceId,omitempty"`
+	ResourceType   *string        `json:"resourceType,omitempty"`
+}
+
+func (n NewStateLabelAssignmentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateLabelAssignmentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateLabelAssignmentAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateLabelAssignmentAuditImage) GetLabelID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.LabelID
+}
+
+func (n *NewStateLabelAssignmentAuditImage) GetResourceID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ResourceID
+}
+
+func (n *NewStateLabelAssignmentAuditImage) GetResourceType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ResourceType
+}
+
+type NewStateIDPGroupAuditImage struct {
+	AuditImageType AuditImageType     `json:"auditImageType"`
+	DisplayName    *string            `json:"displayName,omitempty"`
+	ScimExternalID *string            `json:"scimExternalId,omitempty"`
+	Source         *OrgIdpGroupSource `json:"source,omitempty"`
+}
+
+func (n NewStateIDPGroupAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateIDPGroupAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateIDPGroupAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateIDPGroupAuditImage) GetDisplayName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.DisplayName
+}
+
+func (n *NewStateIDPGroupAuditImage) GetScimExternalID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ScimExternalID
+}
+
+func (n *NewStateIDPGroupAuditImage) GetSource() *OrgIdpGroupSource {
+	if n == nil {
+		return nil
+	}
+	return n.Source
+}
+
+type NewStateDataStudioAuditImage struct {
+	AppliedLifespanHours     *int           `json:"appliedLifespanHours,omitempty"`
+	AuditImageType           AuditImageType `json:"auditImageType"`
+	BaseImage                *string        `json:"baseImage,omitempty"`
+	ComputeEnvID             *string        `json:"computeEnvId,omitempty"`
+	CondaEnvironment         *string        `json:"condaEnvironment,omitempty"`
+	ConnectVersion           *string        `json:"connectVersion,omitempty"`
+	CustomIconID             *string        `json:"customIconId,omitempty"`
+	Description              *string        `json:"description,omitempty"`
+	EffectiveLifespanHours   *int           `json:"effectiveLifespanHours,omitempty"`
+	Environment              *string        `json:"environment,omitempty"`
+	InitialCheckpointID      *int64         `json:"initialCheckpointId,omitempty"`
+	InitialSessionID         *string        `json:"initialSessionId,omitempty"`
+	IsPrivate                *bool          `json:"isPrivate,omitempty"`
+	LastHeartbeat            *time.Time     `json:"lastHeartbeat,omitempty"`
+	LastStarted              *time.Time     `json:"lastStarted,omitempty"`
+	Name                     *string        `json:"name,omitempty"`
+	RemoteConfigCloneEnabled *bool          `json:"remoteConfigCloneEnabled,omitempty"`
+	RemoteConfigClonePath    *string        `json:"remoteConfigClonePath,omitempty"`
+	RemoteConfigCommitHash   *string        `json:"remoteConfigCommitHash,omitempty"`
+	RemoteConfigRepository   *string        `json:"remoteConfigRepository,omitempty"`
+	RemoteConfigRevision     *string        `json:"remoteConfigRevision,omitempty"`
+	RequiredCpus             *int64         `json:"requiredCpus,omitempty"`
+	RequiredGpus             *int64         `json:"requiredGpus,omitempty"`
+	RequiredMemory           *int64         `json:"requiredMemory,omitempty"`
+	RunningOperationID       *string        `json:"runningOperationId,omitempty"`
+	SSHEnabled               *bool          `json:"sshEnabled,omitempty"`
+	Status                   *string        `json:"status,omitempty"`
+	StatusMessage            *string        `json:"statusMessage,omitempty"`
+	StopReason               *string        `json:"stopReason,omitempty"`
+	TemplateIcon             *string        `json:"templateIcon,omitempty"`
+	TemplatePort             *int           `json:"templatePort,omitempty"`
+	TemplateURL              *string        `json:"templateUrl,omitempty"`
+	Tool                     *string        `json:"tool,omitempty"`
+	UserID                   *int64         `json:"userId,omitempty"`
+	WaveBuildID              *string        `json:"waveBuildId,omitempty"`
+}
+
+func (n NewStateDataStudioAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDataStudioAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDataStudioAuditImage) GetAppliedLifespanHours() *int {
+	if n == nil {
+		return nil
+	}
+	return n.AppliedLifespanHours
+}
+
+func (n *NewStateDataStudioAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDataStudioAuditImage) GetBaseImage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.BaseImage
+}
+
+func (n *NewStateDataStudioAuditImage) GetComputeEnvID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ComputeEnvID
+}
+
+func (n *NewStateDataStudioAuditImage) GetCondaEnvironment() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CondaEnvironment
+}
+
+func (n *NewStateDataStudioAuditImage) GetConnectVersion() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ConnectVersion
+}
+
+func (n *NewStateDataStudioAuditImage) GetCustomIconID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CustomIconID
+}
+
+func (n *NewStateDataStudioAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateDataStudioAuditImage) GetEffectiveLifespanHours() *int {
+	if n == nil {
+		return nil
+	}
+	return n.EffectiveLifespanHours
+}
+
+func (n *NewStateDataStudioAuditImage) GetEnvironment() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Environment
+}
+
+func (n *NewStateDataStudioAuditImage) GetInitialCheckpointID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.InitialCheckpointID
+}
+
+func (n *NewStateDataStudioAuditImage) GetInitialSessionID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.InitialSessionID
+}
+
+func (n *NewStateDataStudioAuditImage) GetIsPrivate() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.IsPrivate
+}
+
+func (n *NewStateDataStudioAuditImage) GetLastHeartbeat() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastHeartbeat
+}
+
+func (n *NewStateDataStudioAuditImage) GetLastStarted() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastStarted
+}
+
+func (n *NewStateDataStudioAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateDataStudioAuditImage) GetRemoteConfigCloneEnabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.RemoteConfigCloneEnabled
+}
+
+func (n *NewStateDataStudioAuditImage) GetRemoteConfigClonePath() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RemoteConfigClonePath
+}
+
+func (n *NewStateDataStudioAuditImage) GetRemoteConfigCommitHash() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RemoteConfigCommitHash
+}
+
+func (n *NewStateDataStudioAuditImage) GetRemoteConfigRepository() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RemoteConfigRepository
+}
+
+func (n *NewStateDataStudioAuditImage) GetRemoteConfigRevision() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RemoteConfigRevision
+}
+
+func (n *NewStateDataStudioAuditImage) GetRequiredCpus() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.RequiredCpus
+}
+
+func (n *NewStateDataStudioAuditImage) GetRequiredGpus() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.RequiredGpus
+}
+
+func (n *NewStateDataStudioAuditImage) GetRequiredMemory() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.RequiredMemory
+}
+
+func (n *NewStateDataStudioAuditImage) GetRunningOperationID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.RunningOperationID
+}
+
+func (n *NewStateDataStudioAuditImage) GetSSHEnabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.SSHEnabled
+}
+
+func (n *NewStateDataStudioAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+func (n *NewStateDataStudioAuditImage) GetStatusMessage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.StatusMessage
+}
+
+func (n *NewStateDataStudioAuditImage) GetStopReason() *string {
+	if n == nil {
+		return nil
+	}
+	return n.StopReason
+}
+
+func (n *NewStateDataStudioAuditImage) GetTemplateIcon() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TemplateIcon
+}
+
+func (n *NewStateDataStudioAuditImage) GetTemplatePort() *int {
+	if n == nil {
+		return nil
+	}
+	return n.TemplatePort
+}
+
+func (n *NewStateDataStudioAuditImage) GetTemplateURL() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TemplateURL
+}
+
+func (n *NewStateDataStudioAuditImage) GetTool() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Tool
+}
+
+func (n *NewStateDataStudioAuditImage) GetUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+func (n *NewStateDataStudioAuditImage) GetWaveBuildID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.WaveBuildID
+}
+
+type NewStateDataStudioConnectionAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ConnectionTag  *int           `json:"connectionTag,omitempty"`
+	LastActive     *time.Time     `json:"lastActive,omitempty"`
+	UserID         *string        `json:"userId,omitempty"`
+}
+
+func (n NewStateDataStudioConnectionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDataStudioConnectionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDataStudioConnectionAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDataStudioConnectionAuditImage) GetConnectionTag() *int {
+	if n == nil {
+		return nil
+	}
+	return n.ConnectionTag
+}
+
+func (n *NewStateDataStudioConnectionAuditImage) GetLastActive() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastActive
+}
+
+func (n *NewStateDataStudioConnectionAuditImage) GetUserID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.UserID
+}
+
+type NewStateDatasetVersionAuditImage struct {
+	AuditImageType AuditImageType                        `json:"auditImageType"`
+	CreatedByID    *int64                                `json:"createdById,omitempty"`
+	Data           *DatasetVersionImageBlobContentImage  `json:"data,omitempty"`
+	DatasetID      *string                               `json:"datasetId,omitempty"`
+	Disabled       *bool                                 `json:"disabled,omitempty"`
+	HasHeader      *bool                                 `json:"hasHeader,omitempty"`
+	Latest         *bool                                 `json:"latest,omitempty"`
+	LinkedSource   *DatasetVersionImageLinkedSourceImage `json:"linkedSource,omitempty"`
+	Version        *int64                                `json:"version,omitempty"`
+}
+
+func (n NewStateDatasetVersionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDatasetVersionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetCreatedByID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.CreatedByID
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetData() *DatasetVersionImageBlobContentImage {
+	if n == nil {
+		return nil
+	}
+	return n.Data
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetDatasetID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.DatasetID
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetDisabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Disabled
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetHasHeader() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.HasHeader
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetLatest() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Latest
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetLinkedSource() *DatasetVersionImageLinkedSourceImage {
+	if n == nil {
+		return nil
+	}
+	return n.LinkedSource
+}
+
+func (n *NewStateDatasetVersionAuditImage) GetVersion() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.Version
+}
+
+type NewStateDatasetAuditImage struct {
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	Description     *string        `json:"description,omitempty"`
+	Hidden          *bool          `json:"hidden,omitempty"`
+	LastUpdatedByID *int64         `json:"lastUpdatedById,omitempty"`
+	MediaType       *string        `json:"mediaType,omitempty"`
+	Name            *string        `json:"name,omitempty"`
+	SourceType      *string        `json:"sourceType,omitempty"`
+}
+
+func (n NewStateDatasetAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDatasetAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDatasetAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDatasetAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateDatasetAuditImage) GetHidden() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Hidden
+}
+
+func (n *NewStateDatasetAuditImage) GetLastUpdatedByID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.LastUpdatedByID
+}
+
+func (n *NewStateDatasetAuditImage) GetMediaType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.MediaType
+}
+
+func (n *NewStateDatasetAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateDatasetAuditImage) GetSourceType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.SourceType
+}
+
+type NewStateDataLinkMetadataAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Hidden         *bool          `json:"hidden,omitempty"`
+}
+
+func (n NewStateDataLinkMetadataAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDataLinkMetadataAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDataLinkMetadataAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDataLinkMetadataAuditImage) GetHidden() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Hidden
+}
+
+type NewStateDataLinkAuditImage struct {
+	AuditImageType   AuditImageType `json:"auditImageType"`
+	CreationSource   *string        `json:"creationSource,omitempty"`
+	CredentialsID    *string        `json:"credentialsId,omitempty"`
+	Description      *string        `json:"description,omitempty"`
+	Message          *string        `json:"message,omitempty"`
+	Name             *string        `json:"name,omitempty"`
+	Provider         *string        `json:"provider,omitempty"`
+	PublicAccessible *bool          `json:"publicAccessible,omitempty"`
+	Region           *string        `json:"region,omitempty"`
+	ResourceRef      *string        `json:"resourceRef,omitempty"`
+	Status           *string        `json:"status,omitempty"`
+	Type             *string        `json:"type,omitempty"`
+}
+
+func (n NewStateDataLinkAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDataLinkAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDataLinkAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDataLinkAuditImage) GetCreationSource() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CreationSource
+}
+
+func (n *NewStateDataLinkAuditImage) GetCredentialsID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CredentialsID
+}
+
+func (n *NewStateDataLinkAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateDataLinkAuditImage) GetMessage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Message
+}
+
+func (n *NewStateDataLinkAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateDataLinkAuditImage) GetProvider() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Provider
+}
+
+func (n *NewStateDataLinkAuditImage) GetPublicAccessible() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.PublicAccessible
+}
+
+func (n *NewStateDataLinkAuditImage) GetRegion() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Region
+}
+
+func (n *NewStateDataLinkAuditImage) GetResourceRef() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ResourceRef
+}
+
+func (n *NewStateDataLinkAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+func (n *NewStateDataLinkAuditImage) GetType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Type
+}
+
+type NewStateDataLinkFileOperationAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Provider       *string        `json:"provider,omitempty"`
+	URI            *string        `json:"uri,omitempty"`
+}
+
+func (n NewStateDataLinkFileOperationAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateDataLinkFileOperationAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateDataLinkFileOperationAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateDataLinkFileOperationAuditImage) GetProvider() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Provider
+}
+
+func (n *NewStateDataLinkFileOperationAuditImage) GetURI() *string {
+	if n == nil {
+		return nil
+	}
+	return n.URI
+}
+
+type NewStateCustomRoleAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ContextType    *string        `json:"contextType,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Permissions    []string       `json:"permissions,omitempty"`
+}
+
+func (n NewStateCustomRoleAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateCustomRoleAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateCustomRoleAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateCustomRoleAuditImage) GetContextType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ContextType
+}
+
+func (n *NewStateCustomRoleAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateCustomRoleAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateCustomRoleAuditImage) GetPermissions() []string {
+	if n == nil {
+		return nil
+	}
+	return n.Permissions
+}
+
+type NewStateCreditPurchaseAuditImage struct {
+	Amount          *float64       `json:"amount,omitempty"`
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	CreatedByUserID *int64         `json:"createdByUserId,omitempty"`
+	OrganizationID  *int64         `json:"organizationId,omitempty"`
+	Status          *string        `json:"status,omitempty"`
+}
+
+func (n NewStateCreditPurchaseAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateCreditPurchaseAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateCreditPurchaseAuditImage) GetAmount() *float64 {
+	if n == nil {
+		return nil
+	}
+	return n.Amount
+}
+
+func (n *NewStateCreditPurchaseAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateCreditPurchaseAuditImage) GetCreatedByUserID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.CreatedByUserID
+}
+
+func (n *NewStateCreditPurchaseAuditImage) GetOrganizationID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.OrganizationID
+}
+
+func (n *NewStateCreditPurchaseAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+type NewStateCreditInfoAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ContractID     *string        `json:"contractId,omitempty"`
+	CustomerID     *string        `json:"customerId,omitempty"`
+	HasCreditGrant *bool          `json:"hasCreditGrant,omitempty"`
+}
+
+func (n NewStateCreditInfoAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateCreditInfoAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateCreditInfoAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateCreditInfoAuditImage) GetContractID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ContractID
+}
+
+func (n *NewStateCreditInfoAuditImage) GetCustomerID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CustomerID
+}
+
+func (n *NewStateCreditInfoAuditImage) GetHasCreditGrant() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.HasCreditGrant
+}
+
+type NewStateCredentialsAuditImage struct {
+	AuditImageType AuditImageType      `json:"auditImageType"`
+	BaseURL        *string             `json:"baseUrl,omitempty"`
+	Category       *string             `json:"category,omitempty"`
+	Description    *string             `json:"description,omitempty"`
+	Keys           *SecurityKeysOutput `json:"keys,omitempty"`
+	LastUsed       *time.Time          `json:"lastUsed,omitempty"`
+	Message        *string             `json:"message,omitempty"`
+	Name           *string             `json:"name,omitempty"`
+	Provider       *string             `json:"provider,omitempty"`
+	Status         *string             `json:"status,omitempty"`
+}
+
+func (n NewStateCredentialsAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateCredentialsAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateCredentialsAuditImage) GetBaseURL() *string {
+	if n == nil {
+		return nil
+	}
+	return n.BaseURL
+}
+
+func (n *NewStateCredentialsAuditImage) GetCategory() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Category
+}
+
+func (n *NewStateCredentialsAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeys() *SecurityKeysOutput {
+	if n == nil {
+		return nil
+	}
+	return n.Keys
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysAws() *AWSCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AWSCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysAzure() *AzureCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AzureCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysAzureCloud() *AzureCloudCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AzureCloudCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysAzureEntra() *AzureEntraCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AzureEntraCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysAzurerepos() *AzureReposCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AzureReposCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysBitbucket() *BitBucketCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.BitBucketCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysCodecommit() *AWSCodeCommitCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.AWSCodeCommitCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysContainerReg() *ContainerRegistryCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.ContainerRegistryCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysGitea() *GiteaCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.GiteaCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysGithub() *GitHubCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.GitHubCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysGithubApp() *GitHubAppCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.GitHubAppCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysGitlab() *GitLabCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.GitLabCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysGoogle() *GoogleCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.GoogleCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysK8s() *KubernetesCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.KubernetesCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysLocal() *LocalSecurityKeysOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.LocalSecurityKeysOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysS3() *S3CompatibleCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.S3CompatibleCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysSeqeracompute() *SeqeraComputeCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.SeqeraComputeCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysSSH() *SSHCredentialsOutput {
+	if v := n.GetKeys(); v != nil {
+		return v.SSHCredentialsOutput
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetKeysTwAgent() *TowerAgentCredentials {
+	if v := n.GetKeys(); v != nil {
+		return v.TowerAgentCredentials
+	}
+	return nil
+}
+
+func (n *NewStateCredentialsAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+func (n *NewStateCredentialsAuditImage) GetMessage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Message
+}
+
+func (n *NewStateCredentialsAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateCredentialsAuditImage) GetProvider() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Provider
+}
+
+func (n *NewStateCredentialsAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+type NewStateComputeEnvironmentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config                         *ComputeConfig `json:"config,omitempty"`
+	CredentialsID                  *string        `json:"credentialsId,omitempty"`
+	Description                    *string        `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool          `json:"fusionMetricsCollectionEnabled,omitempty"`
+	LastUsed                       *time.Time     `json:"lastUsed,omitempty"`
+	ManagedIdentityID              *int64         `json:"managedIdentityId,omitempty"`
+	Message                        *string        `json:"message,omitempty"`
+	Name                           *string        `json:"name,omitempty"`
+	Platform                       *string        `json:"platform,omitempty"`
+	Primary                        *bool          `json:"primary,omitempty"`
+	Status                         *string        `json:"status,omitempty"`
+}
+
+func (n NewStateComputeEnvironmentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfig() *ComputeConfig {
+	if n == nil {
+		return nil
+	}
+	return n.Config
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := n.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := n.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetCredentialsID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.CredentialsID
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetFusionMetricsCollectionEnabled() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.FusionMetricsCollectionEnabled
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetManagedIdentityID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.ManagedIdentityID
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetMessage() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Message
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetPlatform() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Platform
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetPrimary() *bool {
+	if n == nil {
+		return nil
+	}
+	return n.Primary
+}
+
+func (n *NewStateComputeEnvironmentAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+type NewStateBudgetAuditImage struct {
+	Amount         *int64         `json:"amount,omitempty"`
+	AuditImageType AuditImageType `json:"auditImageType"`
+	BudgetType     *string        `json:"budgetType,omitempty"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Reason         *string        `json:"reason,omitempty"`
+	WorkspaceID    *int64         `json:"workspaceId,omitempty"`
+}
+
+func (n NewStateBudgetAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateBudgetAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateBudgetAuditImage) GetAmount() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.Amount
+}
+
+func (n *NewStateBudgetAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateBudgetAuditImage) GetBudgetType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.BudgetType
+}
+
+func (n *NewStateBudgetAuditImage) GetOrganizationID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.OrganizationID
+}
+
+func (n *NewStateBudgetAuditImage) GetReason() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Reason
+}
+
+func (n *NewStateBudgetAuditImage) GetWorkspaceID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.WorkspaceID
+}
+
+type NewStateAIChatThreadAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ParentThreadID *string        `json:"parentThreadId,omitempty"`
+}
+
+func (n NewStateAIChatThreadAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateAIChatThreadAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateAIChatThreadAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateAIChatThreadAuditImage) GetParentThreadID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ParentThreadID
+}
+
+type NewStateAgentRunAuditImage struct {
+	AgentID         *string        `json:"agentId,omitempty"`
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	TriggerEntityID *string        `json:"triggerEntityId,omitempty"`
+	TriggerType     *string        `json:"triggerType,omitempty"`
+}
+
+func (n NewStateAgentRunAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateAgentRunAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateAgentRunAuditImage) GetAgentID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.AgentID
+}
+
+func (n *NewStateAgentRunAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateAgentRunAuditImage) GetTriggerEntityID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TriggerEntityID
+}
+
+func (n *NewStateAgentRunAuditImage) GetTriggerType() *string {
+	if n == nil {
+		return nil
+	}
+	return n.TriggerType
+}
+
+type NewStateAgentAuditImage struct {
+	AgentInstructionsTemplateID *string        `json:"agentInstructionsTemplateId,omitempty"`
+	AuditImageType              AuditImageType `json:"auditImageType"`
+	Description                 *string        `json:"description,omitempty"`
+	GithubAppCredentialID       *string        `json:"githubAppCredentialId,omitempty"`
+	Name                        *string        `json:"name,omitempty"`
+	ServiceAccountID            *int64         `json:"serviceAccountId,omitempty"`
+	Status                      *string        `json:"status,omitempty"`
+}
+
+func (n NewStateAgentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateAgentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateAgentAuditImage) GetAgentInstructionsTemplateID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.AgentInstructionsTemplateID
+}
+
+func (n *NewStateAgentAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateAgentAuditImage) GetDescription() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Description
+}
+
+func (n *NewStateAgentAuditImage) GetGithubAppCredentialID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.GithubAppCredentialID
+}
+
+func (n *NewStateAgentAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateAgentAuditImage) GetServiceAccountID() *int64 {
+	if n == nil {
+		return nil
+	}
+	return n.ServiceAccountID
+}
+
+func (n *NewStateAgentAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+type NewStateActionAuditImage struct {
+	AuditImageType AuditImageType    `json:"auditImageType"`
+	Config         *ActionConfigType `json:"config,omitempty"`
+	Error          *string           `json:"error,omitempty"`
+	Event          *ActionEventType  `json:"event,omitempty"`
+	HookID         *string           `json:"hookId,omitempty"`
+	HookURL        *string           `json:"hookUrl,omitempty"`
+	LastSeen       *time.Time        `json:"lastSeen,omitempty"`
+	Launch         *LaunchImage      `json:"launch,omitempty"`
+	Name           *string           `json:"name,omitempty"`
+	Source         *string           `json:"source,omitempty"`
+	Status         *string           `json:"status,omitempty"`
+}
+
+func (n NewStateActionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateActionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateActionAuditImage) GetConfig() *ActionConfigType {
+	if n == nil {
+		return nil
+	}
+	return n.Config
+}
+
+func (n *NewStateActionAuditImage) GetConfigBucket() *BucketActionConfig {
+	if v := n.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetConfigCron() *CronActionConfig {
+	if v := n.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetConfigGithub() *GithubActionConfig {
+	if v := n.GetConfig(); v != nil {
+		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := n.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetConfigTower() *ActionTowerActionConfig {
+	if v := n.GetConfig(); v != nil {
+		return v.ActionTowerActionConfig
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetError() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Error
+}
+
+func (n *NewStateActionAuditImage) GetEvent() *ActionEventType {
+	if n == nil {
+		return nil
+	}
+	return n.Event
+}
+
+func (n *NewStateActionAuditImage) GetEventBucket() *BucketActionEvent {
+	if v := n.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetEventCron() *CronActionEvent {
+	if v := n.GetEvent(); v != nil {
+		return v.CronActionEvent
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetEventGithub() *GithubActionEvent {
+	if v := n.GetEvent(); v != nil {
+		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetEventPipelineStatus() *PipelineStatusActionEvent {
+	if v := n.GetEvent(); v != nil {
+		return v.PipelineStatusActionEvent
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetEventTower() *ActionTowerActionEvent {
+	if v := n.GetEvent(); v != nil {
+		return v.ActionTowerActionEvent
+	}
+	return nil
+}
+
+func (n *NewStateActionAuditImage) GetHookID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.HookID
+}
+
+func (n *NewStateActionAuditImage) GetHookURL() *string {
+	if n == nil {
+		return nil
+	}
+	return n.HookURL
+}
+
+func (n *NewStateActionAuditImage) GetLastSeen() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastSeen
+}
+
+func (n *NewStateActionAuditImage) GetLaunch() *LaunchImage {
+	if n == nil {
+		return nil
+	}
+	return n.Launch
+}
+
+func (n *NewStateActionAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
+
+func (n *NewStateActionAuditImage) GetSource() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Source
+}
+
+func (n *NewStateActionAuditImage) GetStatus() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Status
+}
+
+type NewStateAccessTokenAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (n NewStateAccessTokenAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(n, "", false)
+}
+
+func (n *NewStateAccessTokenAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &n, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (n *NewStateAccessTokenAuditImage) GetAuditImageType() AuditImageType {
+	if n == nil {
+		return AuditImageType("")
+	}
+	return n.AuditImageType
+}
+
+func (n *NewStateAccessTokenAuditImage) GetLastUsed() *time.Time {
+	if n == nil {
+		return nil
+	}
+	return n.LastUsed
+}
+
+func (n *NewStateAccessTokenAuditImage) GetName() *string {
+	if n == nil {
+		return nil
+	}
+	return n.Name
+}
 
 type NewStateType string
 
@@ -17,6 +3465,7 @@ const (
 	NewStateTypeAgent                NewStateType = "agent"
 	NewStateTypeAgentRun             NewStateType = "agent_run"
 	NewStateTypeAiChatThread         NewStateType = "ai_chat_thread"
+	NewStateTypeBudget               NewStateType = "budget"
 	NewStateTypeComputeEnv           NewStateType = "compute_env"
 	NewStateTypeCredentials          NewStateType = "credentials"
 	NewStateTypeCreditInfo           NewStateType = "credit_info"
@@ -35,6 +3484,7 @@ const (
 	NewStateTypeManagedCredentials   NewStateType = "managed_credentials"
 	NewStateTypeManagedIdentity      NewStateType = "managed_identity"
 	NewStateTypeMember               NewStateType = "member"
+	NewStateTypeOauthClientSecret    NewStateType = "oauth_client_secret"
 	NewStateTypeOauthConsent         NewStateType = "oauth_consent"
 	NewStateTypeOrgSsoConnection     NewStateType = "org_sso_connection"
 	NewStateTypeOrganization         NewStateType = "organization"
@@ -53,501 +3503,527 @@ const (
 )
 
 type NewState struct {
-	AccessTokenImage          *AccessTokenImage          `queryParam:"inline" union:"member"`
-	ActionImage               *ActionImage               `queryParam:"inline" union:"member"`
-	AgentImage                *AgentImage                `queryParam:"inline" union:"member"`
-	AgentRunImage             *AgentRunImage             `queryParam:"inline" union:"member"`
-	AiChatThreadImage         *AiChatThreadImage         `queryParam:"inline" union:"member"`
-	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
-	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
-	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
-	CreditPurchaseImage       *CreditPurchaseImage       `queryParam:"inline" union:"member"`
-	CustomRoleImage           *CustomRoleImage           `queryParam:"inline" union:"member"`
-	DataLinkFileImage         *DataLinkFileImage         `queryParam:"inline" union:"member"`
-	DataLinkImage             *DataLinkImage             `queryParam:"inline" union:"member"`
-	DataLinkMetadataImage     *DataLinkMetadataImage     `queryParam:"inline" union:"member"`
-	DatasetImage              *DatasetImage              `queryParam:"inline" union:"member"`
-	DatasetVersionImage       *DatasetVersionImage       `queryParam:"inline" union:"member"`
-	DataStudioConnectionImage *DataStudioConnectionImage `queryParam:"inline" union:"member"`
-	DataStudioImage           *DataStudioImage           `queryParam:"inline" union:"member"`
-	IdpGroupImage             *IdpGroupImage             `queryParam:"inline" union:"member"`
-	LabelAssignmentImage      *LabelAssignmentImage      `queryParam:"inline" union:"member"`
-	LabelImage                *LabelImage                `queryParam:"inline" union:"member"`
-	ManagedCredentialsImage   *ManagedCredentialsImage   `queryParam:"inline" union:"member"`
-	ManagedIdentityImage      *ManagedIdentityImage      `queryParam:"inline" union:"member"`
-	MemberImage               *MemberImage               `queryParam:"inline" union:"member"`
-	OAuthConsentImage         *OAuthConsentImage         `queryParam:"inline" union:"member"`
-	OrganizationImage         *OrganizationImage         `queryParam:"inline" union:"member"`
-	OrgSsoConnectionImage     *OrgSsoConnectionImage     `queryParam:"inline" union:"member"`
-	ParticipantImage          *ParticipantImage          `queryParam:"inline" union:"member"`
-	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
-	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
-	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
-	ServiceAccountImage       *ServiceAccountImage       `queryParam:"inline" union:"member"`
-	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
-	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
-	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
-	UserRoleImage             *UserRoleImage             `queryParam:"inline" union:"member"`
-	UserSSHPublicKeyImage     *UserSSHPublicKeyImage     `queryParam:"inline" union:"member"`
-	WorkflowImage             *WorkflowImage             `queryParam:"inline" union:"member"`
-	WorkspaceImage            *WorkspaceImage            `queryParam:"inline" union:"member"`
+	NewStateAccessTokenAuditImage           *NewStateAccessTokenAuditImage           `queryParam:"inline" union:"member"`
+	NewStateActionAuditImage                *NewStateActionAuditImage                `queryParam:"inline" union:"member"`
+	NewStateAgentAuditImage                 *NewStateAgentAuditImage                 `queryParam:"inline" union:"member"`
+	NewStateAgentRunAuditImage              *NewStateAgentRunAuditImage              `queryParam:"inline" union:"member"`
+	NewStateAIChatThreadAuditImage          *NewStateAIChatThreadAuditImage          `queryParam:"inline" union:"member"`
+	NewStateBudgetAuditImage                *NewStateBudgetAuditImage                `queryParam:"inline" union:"member"`
+	NewStateComputeEnvironmentAuditImage    *NewStateComputeEnvironmentAuditImage    `queryParam:"inline" union:"member"`
+	NewStateCredentialsAuditImage           *NewStateCredentialsAuditImage           `queryParam:"inline" union:"member"`
+	NewStateCreditInfoAuditImage            *NewStateCreditInfoAuditImage            `queryParam:"inline" union:"member"`
+	NewStateCreditPurchaseAuditImage        *NewStateCreditPurchaseAuditImage        `queryParam:"inline" union:"member"`
+	NewStateCustomRoleAuditImage            *NewStateCustomRoleAuditImage            `queryParam:"inline" union:"member"`
+	NewStateDataLinkFileOperationAuditImage *NewStateDataLinkFileOperationAuditImage `queryParam:"inline" union:"member"`
+	NewStateDataLinkAuditImage              *NewStateDataLinkAuditImage              `queryParam:"inline" union:"member"`
+	NewStateDataLinkMetadataAuditImage      *NewStateDataLinkMetadataAuditImage      `queryParam:"inline" union:"member"`
+	NewStateDatasetAuditImage               *NewStateDatasetAuditImage               `queryParam:"inline" union:"member"`
+	NewStateDatasetVersionAuditImage        *NewStateDatasetVersionAuditImage        `queryParam:"inline" union:"member"`
+	NewStateDataStudioConnectionAuditImage  *NewStateDataStudioConnectionAuditImage  `queryParam:"inline" union:"member"`
+	NewStateDataStudioAuditImage            *NewStateDataStudioAuditImage            `queryParam:"inline" union:"member"`
+	NewStateIDPGroupAuditImage              *NewStateIDPGroupAuditImage              `queryParam:"inline" union:"member"`
+	NewStateLabelAssignmentAuditImage       *NewStateLabelAssignmentAuditImage       `queryParam:"inline" union:"member"`
+	NewStateLabelAuditImage                 *NewStateLabelAuditImage                 `queryParam:"inline" union:"member"`
+	NewStateManagedCredentialsAuditImage    *NewStateManagedCredentialsAuditImage    `queryParam:"inline" union:"member"`
+	NewStateManagedIdentityAuditImage       *NewStateManagedIdentityAuditImage       `queryParam:"inline" union:"member"`
+	NewStateMemberAuditImage                *NewStateMemberAuditImage                `queryParam:"inline" union:"member"`
+	NewStateOAuthConsentAuditImage          *NewStateOAuthConsentAuditImage          `queryParam:"inline" union:"member"`
+	NewStateOAuthClientSecretAuditImage     *NewStateOAuthClientSecretAuditImage     `queryParam:"inline" union:"member"`
+	NewStateOrganizationAuditImage          *NewStateOrganizationAuditImage          `queryParam:"inline" union:"member"`
+	NewStateOrgSSOConnectionAuditImage      *NewStateOrgSSOConnectionAuditImage      `queryParam:"inline" union:"member"`
+	NewStateParticipantAuditImage           *NewStateParticipantAuditImage           `queryParam:"inline" union:"member"`
+	NewStatePipelineAuditImage              *NewStatePipelineAuditImage              `queryParam:"inline" union:"member"`
+	NewStatePipelineSecretAuditImage        *NewStatePipelineSecretAuditImage        `queryParam:"inline" union:"member"`
+	NewStateSCIMTokenAuditImage             *NewStateSCIMTokenAuditImage             `queryParam:"inline" union:"member"`
+	NewStateServiceAccountAuditImage        *NewStateServiceAccountAuditImage        `queryParam:"inline" union:"member"`
+	NewStateTeamAuditImage                  *NewStateTeamAuditImage                  `queryParam:"inline" union:"member"`
+	NewStateTeamMemberAuditImage            *NewStateTeamMemberAuditImage            `queryParam:"inline" union:"member"`
+	NewStateUserAuditImage                  *NewStateUserAuditImage                  `queryParam:"inline" union:"member"`
+	NewStateUserRoleAuditImage              *NewStateUserRoleAuditImage              `queryParam:"inline" union:"member"`
+	NewStateSSHKeyAuditImage                *NewStateSSHKeyAuditImage                `queryParam:"inline" union:"member"`
+	NewStateWorkflowAuditImage              *NewStateWorkflowAuditImage              `queryParam:"inline" union:"member"`
+	NewStateWorkspaceAuditImage             *NewStateWorkspaceAuditImage             `queryParam:"inline" union:"member"`
 
 	Type NewStateType
 }
 
-func CreateNewStateAccessToken(accessToken AccessTokenImage) NewState {
+func CreateNewStateAccessToken(accessToken NewStateAccessTokenAuditImage) NewState {
 	typ := NewStateTypeAccessToken
 
 	typStr := AuditImageType(typ)
 	accessToken.AuditImageType = typStr
 
 	return NewState{
-		AccessTokenImage: &accessToken,
-		Type:             typ,
+		NewStateAccessTokenAuditImage: &accessToken,
+		Type:                          typ,
 	}
 }
 
-func CreateNewStateAction(action ActionImage) NewState {
+func CreateNewStateAction(action NewStateActionAuditImage) NewState {
 	typ := NewStateTypeAction
 
 	typStr := AuditImageType(typ)
 	action.AuditImageType = typStr
 
 	return NewState{
-		ActionImage: &action,
-		Type:        typ,
+		NewStateActionAuditImage: &action,
+		Type:                     typ,
 	}
 }
 
-func CreateNewStateAgent(agent AgentImage) NewState {
+func CreateNewStateAgent(agent NewStateAgentAuditImage) NewState {
 	typ := NewStateTypeAgent
 
 	typStr := AuditImageType(typ)
 	agent.AuditImageType = typStr
 
 	return NewState{
-		AgentImage: &agent,
-		Type:       typ,
+		NewStateAgentAuditImage: &agent,
+		Type:                    typ,
 	}
 }
 
-func CreateNewStateAgentRun(agentRun AgentRunImage) NewState {
+func CreateNewStateAgentRun(agentRun NewStateAgentRunAuditImage) NewState {
 	typ := NewStateTypeAgentRun
 
 	typStr := AuditImageType(typ)
 	agentRun.AuditImageType = typStr
 
 	return NewState{
-		AgentRunImage: &agentRun,
-		Type:          typ,
+		NewStateAgentRunAuditImage: &agentRun,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStateAiChatThread(aiChatThread AiChatThreadImage) NewState {
+func CreateNewStateAiChatThread(aiChatThread NewStateAIChatThreadAuditImage) NewState {
 	typ := NewStateTypeAiChatThread
 
 	typStr := AuditImageType(typ)
 	aiChatThread.AuditImageType = typStr
 
 	return NewState{
-		AiChatThreadImage: &aiChatThread,
-		Type:              typ,
+		NewStateAIChatThreadAuditImage: &aiChatThread,
+		Type:                           typ,
 	}
 }
 
-func CreateNewStateComputeEnv(computeEnv ComputeEnvImage) NewState {
+func CreateNewStateBudget(budget NewStateBudgetAuditImage) NewState {
+	typ := NewStateTypeBudget
+
+	typStr := AuditImageType(typ)
+	budget.AuditImageType = typStr
+
+	return NewState{
+		NewStateBudgetAuditImage: &budget,
+		Type:                     typ,
+	}
+}
+
+func CreateNewStateComputeEnv(computeEnv NewStateComputeEnvironmentAuditImage) NewState {
 	typ := NewStateTypeComputeEnv
 
 	typStr := AuditImageType(typ)
 	computeEnv.AuditImageType = typStr
 
 	return NewState{
-		ComputeEnvImage: &computeEnv,
-		Type:            typ,
+		NewStateComputeEnvironmentAuditImage: &computeEnv,
+		Type:                                 typ,
 	}
 }
 
-func CreateNewStateCredentials(credentials CredentialsImage) NewState {
+func CreateNewStateCredentials(credentials NewStateCredentialsAuditImage) NewState {
 	typ := NewStateTypeCredentials
 
 	typStr := AuditImageType(typ)
 	credentials.AuditImageType = typStr
 
 	return NewState{
-		CredentialsImage: &credentials,
-		Type:             typ,
+		NewStateCredentialsAuditImage: &credentials,
+		Type:                          typ,
 	}
 }
 
-func CreateNewStateCreditInfo(creditInfo CreditInfoImage) NewState {
+func CreateNewStateCreditInfo(creditInfo NewStateCreditInfoAuditImage) NewState {
 	typ := NewStateTypeCreditInfo
 
 	typStr := AuditImageType(typ)
 	creditInfo.AuditImageType = typStr
 
 	return NewState{
-		CreditInfoImage: &creditInfo,
-		Type:            typ,
+		NewStateCreditInfoAuditImage: &creditInfo,
+		Type:                         typ,
 	}
 }
 
-func CreateNewStateCreditPurchase(creditPurchase CreditPurchaseImage) NewState {
+func CreateNewStateCreditPurchase(creditPurchase NewStateCreditPurchaseAuditImage) NewState {
 	typ := NewStateTypeCreditPurchase
 
 	typStr := AuditImageType(typ)
 	creditPurchase.AuditImageType = typStr
 
 	return NewState{
-		CreditPurchaseImage: &creditPurchase,
-		Type:                typ,
+		NewStateCreditPurchaseAuditImage: &creditPurchase,
+		Type:                             typ,
 	}
 }
 
-func CreateNewStateCustomRole(customRole CustomRoleImage) NewState {
+func CreateNewStateCustomRole(customRole NewStateCustomRoleAuditImage) NewState {
 	typ := NewStateTypeCustomRole
 
 	typStr := AuditImageType(typ)
 	customRole.AuditImageType = typStr
 
 	return NewState{
-		CustomRoleImage: &customRole,
-		Type:            typ,
+		NewStateCustomRoleAuditImage: &customRole,
+		Type:                         typ,
 	}
 }
 
-func CreateNewStateDataLink(dataLink DataLinkImage) NewState {
+func CreateNewStateDataLink(dataLink NewStateDataLinkAuditImage) NewState {
 	typ := NewStateTypeDataLink
 
 	typStr := AuditImageType(typ)
 	dataLink.AuditImageType = typStr
 
 	return NewState{
-		DataLinkImage: &dataLink,
-		Type:          typ,
+		NewStateDataLinkAuditImage: &dataLink,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStateDataLinkFile(dataLinkFile DataLinkFileImage) NewState {
+func CreateNewStateDataLinkFile(dataLinkFile NewStateDataLinkFileOperationAuditImage) NewState {
 	typ := NewStateTypeDataLinkFile
 
 	typStr := AuditImageType(typ)
 	dataLinkFile.AuditImageType = typStr
 
 	return NewState{
-		DataLinkFileImage: &dataLinkFile,
-		Type:              typ,
+		NewStateDataLinkFileOperationAuditImage: &dataLinkFile,
+		Type:                                    typ,
 	}
 }
 
-func CreateNewStateDataLinkMetadata(dataLinkMetadata DataLinkMetadataImage) NewState {
+func CreateNewStateDataLinkMetadata(dataLinkMetadata NewStateDataLinkMetadataAuditImage) NewState {
 	typ := NewStateTypeDataLinkMetadata
 
 	typStr := AuditImageType(typ)
 	dataLinkMetadata.AuditImageType = typStr
 
 	return NewState{
-		DataLinkMetadataImage: &dataLinkMetadata,
-		Type:                  typ,
+		NewStateDataLinkMetadataAuditImage: &dataLinkMetadata,
+		Type:                               typ,
 	}
 }
 
-func CreateNewStateDataStudio(dataStudio DataStudioImage) NewState {
+func CreateNewStateDataStudio(dataStudio NewStateDataStudioAuditImage) NewState {
 	typ := NewStateTypeDataStudio
 
 	typStr := AuditImageType(typ)
 	dataStudio.AuditImageType = typStr
 
 	return NewState{
-		DataStudioImage: &dataStudio,
-		Type:            typ,
+		NewStateDataStudioAuditImage: &dataStudio,
+		Type:                         typ,
 	}
 }
 
-func CreateNewStateDataStudioConnection(dataStudioConnection DataStudioConnectionImage) NewState {
+func CreateNewStateDataStudioConnection(dataStudioConnection NewStateDataStudioConnectionAuditImage) NewState {
 	typ := NewStateTypeDataStudioConnection
 
 	typStr := AuditImageType(typ)
 	dataStudioConnection.AuditImageType = typStr
 
 	return NewState{
-		DataStudioConnectionImage: &dataStudioConnection,
-		Type:                      typ,
+		NewStateDataStudioConnectionAuditImage: &dataStudioConnection,
+		Type:                                   typ,
 	}
 }
 
-func CreateNewStateDataset(dataset DatasetImage) NewState {
+func CreateNewStateDataset(dataset NewStateDatasetAuditImage) NewState {
 	typ := NewStateTypeDataset
 
 	typStr := AuditImageType(typ)
 	dataset.AuditImageType = typStr
 
 	return NewState{
-		DatasetImage: &dataset,
-		Type:         typ,
+		NewStateDatasetAuditImage: &dataset,
+		Type:                      typ,
 	}
 }
 
-func CreateNewStateDatasetVersion(datasetVersion DatasetVersionImage) NewState {
+func CreateNewStateDatasetVersion(datasetVersion NewStateDatasetVersionAuditImage) NewState {
 	typ := NewStateTypeDatasetVersion
 
 	typStr := AuditImageType(typ)
 	datasetVersion.AuditImageType = typStr
 
 	return NewState{
-		DatasetVersionImage: &datasetVersion,
-		Type:                typ,
+		NewStateDatasetVersionAuditImage: &datasetVersion,
+		Type:                             typ,
 	}
 }
 
-func CreateNewStateIdpGroup(idpGroup IdpGroupImage) NewState {
+func CreateNewStateIdpGroup(idpGroup NewStateIDPGroupAuditImage) NewState {
 	typ := NewStateTypeIdpGroup
 
 	typStr := AuditImageType(typ)
 	idpGroup.AuditImageType = typStr
 
 	return NewState{
-		IdpGroupImage: &idpGroup,
-		Type:          typ,
+		NewStateIDPGroupAuditImage: &idpGroup,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStateLabel(label LabelImage) NewState {
+func CreateNewStateLabel(label NewStateLabelAuditImage) NewState {
 	typ := NewStateTypeLabel
 
 	typStr := AuditImageType(typ)
 	label.AuditImageType = typStr
 
 	return NewState{
-		LabelImage: &label,
-		Type:       typ,
+		NewStateLabelAuditImage: &label,
+		Type:                    typ,
 	}
 }
 
-func CreateNewStateLabelAssignment(labelAssignment LabelAssignmentImage) NewState {
+func CreateNewStateLabelAssignment(labelAssignment NewStateLabelAssignmentAuditImage) NewState {
 	typ := NewStateTypeLabelAssignment
 
 	typStr := AuditImageType(typ)
 	labelAssignment.AuditImageType = typStr
 
 	return NewState{
-		LabelAssignmentImage: &labelAssignment,
-		Type:                 typ,
+		NewStateLabelAssignmentAuditImage: &labelAssignment,
+		Type:                              typ,
 	}
 }
 
-func CreateNewStateManagedCredentials(managedCredentials ManagedCredentialsImage) NewState {
+func CreateNewStateManagedCredentials(managedCredentials NewStateManagedCredentialsAuditImage) NewState {
 	typ := NewStateTypeManagedCredentials
 
 	typStr := AuditImageType(typ)
 	managedCredentials.AuditImageType = typStr
 
 	return NewState{
-		ManagedCredentialsImage: &managedCredentials,
-		Type:                    typ,
+		NewStateManagedCredentialsAuditImage: &managedCredentials,
+		Type:                                 typ,
 	}
 }
 
-func CreateNewStateManagedIdentity(managedIdentity ManagedIdentityImage) NewState {
+func CreateNewStateManagedIdentity(managedIdentity NewStateManagedIdentityAuditImage) NewState {
 	typ := NewStateTypeManagedIdentity
 
 	typStr := AuditImageType(typ)
 	managedIdentity.AuditImageType = typStr
 
 	return NewState{
-		ManagedIdentityImage: &managedIdentity,
-		Type:                 typ,
+		NewStateManagedIdentityAuditImage: &managedIdentity,
+		Type:                              typ,
 	}
 }
 
-func CreateNewStateMember(member MemberImage) NewState {
+func CreateNewStateMember(member NewStateMemberAuditImage) NewState {
 	typ := NewStateTypeMember
 
 	typStr := AuditImageType(typ)
 	member.AuditImageType = typStr
 
 	return NewState{
-		MemberImage: &member,
-		Type:        typ,
+		NewStateMemberAuditImage: &member,
+		Type:                     typ,
 	}
 }
 
-func CreateNewStateOauthConsent(oauthConsent OAuthConsentImage) NewState {
+func CreateNewStateOauthClientSecret(oauthClientSecret NewStateOAuthClientSecretAuditImage) NewState {
+	typ := NewStateTypeOauthClientSecret
+
+	typStr := AuditImageType(typ)
+	oauthClientSecret.AuditImageType = typStr
+
+	return NewState{
+		NewStateOAuthClientSecretAuditImage: &oauthClientSecret,
+		Type:                                typ,
+	}
+}
+
+func CreateNewStateOauthConsent(oauthConsent NewStateOAuthConsentAuditImage) NewState {
 	typ := NewStateTypeOauthConsent
 
 	typStr := AuditImageType(typ)
 	oauthConsent.AuditImageType = typStr
 
 	return NewState{
-		OAuthConsentImage: &oauthConsent,
-		Type:              typ,
+		NewStateOAuthConsentAuditImage: &oauthConsent,
+		Type:                           typ,
 	}
 }
 
-func CreateNewStateOrgSsoConnection(orgSsoConnection OrgSsoConnectionImage) NewState {
+func CreateNewStateOrgSsoConnection(orgSsoConnection NewStateOrgSSOConnectionAuditImage) NewState {
 	typ := NewStateTypeOrgSsoConnection
 
 	typStr := AuditImageType(typ)
 	orgSsoConnection.AuditImageType = typStr
 
 	return NewState{
-		OrgSsoConnectionImage: &orgSsoConnection,
-		Type:                  typ,
+		NewStateOrgSSOConnectionAuditImage: &orgSsoConnection,
+		Type:                               typ,
 	}
 }
 
-func CreateNewStateOrganization(organization OrganizationImage) NewState {
+func CreateNewStateOrganization(organization NewStateOrganizationAuditImage) NewState {
 	typ := NewStateTypeOrganization
 
 	typStr := AuditImageType(typ)
 	organization.AuditImageType = typStr
 
 	return NewState{
-		OrganizationImage: &organization,
-		Type:              typ,
+		NewStateOrganizationAuditImage: &organization,
+		Type:                           typ,
 	}
 }
 
-func CreateNewStateParticipant(participant ParticipantImage) NewState {
+func CreateNewStateParticipant(participant NewStateParticipantAuditImage) NewState {
 	typ := NewStateTypeParticipant
 
 	typStr := AuditImageType(typ)
 	participant.AuditImageType = typStr
 
 	return NewState{
-		ParticipantImage: &participant,
-		Type:             typ,
+		NewStateParticipantAuditImage: &participant,
+		Type:                          typ,
 	}
 }
 
-func CreateNewStatePipeline(pipeline PipelineImage) NewState {
+func CreateNewStatePipeline(pipeline NewStatePipelineAuditImage) NewState {
 	typ := NewStateTypePipeline
 
 	typStr := AuditImageType(typ)
 	pipeline.AuditImageType = typStr
 
 	return NewState{
-		PipelineImage: &pipeline,
-		Type:          typ,
+		NewStatePipelineAuditImage: &pipeline,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStatePipelineSecret(pipelineSecret PipelineSecretImage) NewState {
+func CreateNewStatePipelineSecret(pipelineSecret NewStatePipelineSecretAuditImage) NewState {
 	typ := NewStateTypePipelineSecret
 
 	typStr := AuditImageType(typ)
 	pipelineSecret.AuditImageType = typStr
 
 	return NewState{
-		PipelineSecretImage: &pipelineSecret,
-		Type:                typ,
+		NewStatePipelineSecretAuditImage: &pipelineSecret,
+		Type:                             typ,
 	}
 }
 
-func CreateNewStateScimToken(scimToken ScimTokenImage) NewState {
+func CreateNewStateScimToken(scimToken NewStateSCIMTokenAuditImage) NewState {
 	typ := NewStateTypeScimToken
 
 	typStr := AuditImageType(typ)
 	scimToken.AuditImageType = typStr
 
 	return NewState{
-		ScimTokenImage: &scimToken,
-		Type:           typ,
+		NewStateSCIMTokenAuditImage: &scimToken,
+		Type:                        typ,
 	}
 }
 
-func CreateNewStateServiceAccount(serviceAccount ServiceAccountImage) NewState {
+func CreateNewStateServiceAccount(serviceAccount NewStateServiceAccountAuditImage) NewState {
 	typ := NewStateTypeServiceAccount
 
 	typStr := AuditImageType(typ)
 	serviceAccount.AuditImageType = typStr
 
 	return NewState{
-		ServiceAccountImage: &serviceAccount,
-		Type:                typ,
+		NewStateServiceAccountAuditImage: &serviceAccount,
+		Type:                             typ,
 	}
 }
 
-func CreateNewStateTeam(team TeamImage) NewState {
+func CreateNewStateTeam(team NewStateTeamAuditImage) NewState {
 	typ := NewStateTypeTeam
 
 	typStr := AuditImageType(typ)
 	team.AuditImageType = typStr
 
 	return NewState{
-		TeamImage: &team,
-		Type:      typ,
+		NewStateTeamAuditImage: &team,
+		Type:                   typ,
 	}
 }
 
-func CreateNewStateTeamMember(teamMember TeamMemberImage) NewState {
+func CreateNewStateTeamMember(teamMember NewStateTeamMemberAuditImage) NewState {
 	typ := NewStateTypeTeamMember
 
 	typStr := AuditImageType(typ)
 	teamMember.AuditImageType = typStr
 
 	return NewState{
-		TeamMemberImage: &teamMember,
-		Type:            typ,
+		NewStateTeamMemberAuditImage: &teamMember,
+		Type:                         typ,
 	}
 }
 
-func CreateNewStateUser(user UserImage) NewState {
+func CreateNewStateUser(user NewStateUserAuditImage) NewState {
 	typ := NewStateTypeUser
 
 	typStr := AuditImageType(typ)
 	user.AuditImageType = typStr
 
 	return NewState{
-		UserImage: &user,
-		Type:      typ,
+		NewStateUserAuditImage: &user,
+		Type:                   typ,
 	}
 }
 
-func CreateNewStateUserRole(userRole UserRoleImage) NewState {
+func CreateNewStateUserRole(userRole NewStateUserRoleAuditImage) NewState {
 	typ := NewStateTypeUserRole
 
 	typStr := AuditImageType(typ)
 	userRole.AuditImageType = typStr
 
 	return NewState{
-		UserRoleImage: &userRole,
-		Type:          typ,
+		NewStateUserRoleAuditImage: &userRole,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStateUserSSHPublicKey(userSSHPublicKey UserSSHPublicKeyImage) NewState {
+func CreateNewStateUserSSHPublicKey(userSSHPublicKey NewStateSSHKeyAuditImage) NewState {
 	typ := NewStateTypeUserSSHPublicKey
 
 	typStr := AuditImageType(typ)
 	userSSHPublicKey.AuditImageType = typStr
 
 	return NewState{
-		UserSSHPublicKeyImage: &userSSHPublicKey,
-		Type:                  typ,
+		NewStateSSHKeyAuditImage: &userSSHPublicKey,
+		Type:                     typ,
 	}
 }
 
-func CreateNewStateWorkflow(workflow WorkflowImage) NewState {
+func CreateNewStateWorkflow(workflow NewStateWorkflowAuditImage) NewState {
 	typ := NewStateTypeWorkflow
 
 	typStr := AuditImageType(typ)
 	workflow.AuditImageType = typStr
 
 	return NewState{
-		WorkflowImage: &workflow,
-		Type:          typ,
+		NewStateWorkflowAuditImage: &workflow,
+		Type:                       typ,
 	}
 }
 
-func CreateNewStateWorkspace(workspace WorkspaceImage) NewState {
+func CreateNewStateWorkspace(workspace NewStateWorkspaceAuditImage) NewState {
 	typ := NewStateTypeWorkspace
 
 	typStr := AuditImageType(typ)
 	workspace.AuditImageType = typStr
 
 	return NewState{
-		WorkspaceImage: &workspace,
-		Type:           typ,
+		NewStateWorkspaceAuditImage: &workspace,
+		Type:                        typ,
 	}
 }
 
@@ -571,345 +4047,363 @@ func (u *NewState) UnmarshalJSON(data []byte) (err error) {
 
 	switch dis.AuditImageType {
 	case "access_token":
-		accessTokenImage := new(AccessTokenImage)
-		if err := utils.UnmarshalJSON(data, &accessTokenImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == access_token) type AccessTokenImage within NewState: %w", string(data), err)
+		newStateAccessTokenAuditImage := new(NewStateAccessTokenAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateAccessTokenAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == access_token) type NewStateAccessTokenAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.AccessTokenImage = accessTokenImage
+		u.NewStateAccessTokenAuditImage = newStateAccessTokenAuditImage
 		u.Type = NewStateTypeAccessToken
 		return nil
 	case "action":
-		actionImage := new(ActionImage)
-		if err := utils.UnmarshalJSON(data, &actionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == action) type ActionImage within NewState: %w", string(data), err)
+		newStateActionAuditImage := new(NewStateActionAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateActionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == action) type NewStateActionAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ActionImage = actionImage
+		u.NewStateActionAuditImage = newStateActionAuditImage
 		u.Type = NewStateTypeAction
 		return nil
 	case "agent":
-		agentImage := new(AgentImage)
-		if err := utils.UnmarshalJSON(data, &agentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type AgentImage within NewState: %w", string(data), err)
+		newStateAgentAuditImage := new(NewStateAgentAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateAgentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type NewStateAgentAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.AgentImage = agentImage
+		u.NewStateAgentAuditImage = newStateAgentAuditImage
 		u.Type = NewStateTypeAgent
 		return nil
 	case "agent_run":
-		agentRunImage := new(AgentRunImage)
-		if err := utils.UnmarshalJSON(data, &agentRunImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type AgentRunImage within NewState: %w", string(data), err)
+		newStateAgentRunAuditImage := new(NewStateAgentRunAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateAgentRunAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type NewStateAgentRunAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.AgentRunImage = agentRunImage
+		u.NewStateAgentRunAuditImage = newStateAgentRunAuditImage
 		u.Type = NewStateTypeAgentRun
 		return nil
 	case "ai_chat_thread":
-		aiChatThreadImage := new(AiChatThreadImage)
-		if err := utils.UnmarshalJSON(data, &aiChatThreadImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type AiChatThreadImage within NewState: %w", string(data), err)
+		newStateAIChatThreadAuditImage := new(NewStateAIChatThreadAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateAIChatThreadAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type NewStateAIChatThreadAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.AiChatThreadImage = aiChatThreadImage
+		u.NewStateAIChatThreadAuditImage = newStateAIChatThreadAuditImage
 		u.Type = NewStateTypeAiChatThread
 		return nil
-	case "compute_env":
-		computeEnvImage := new(ComputeEnvImage)
-		if err := utils.UnmarshalJSON(data, &computeEnvImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == compute_env) type ComputeEnvImage within NewState: %w", string(data), err)
+	case "budget":
+		newStateBudgetAuditImage := new(NewStateBudgetAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateBudgetAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == budget) type NewStateBudgetAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ComputeEnvImage = computeEnvImage
+		u.NewStateBudgetAuditImage = newStateBudgetAuditImage
+		u.Type = NewStateTypeBudget
+		return nil
+	case "compute_env":
+		newStateComputeEnvironmentAuditImage := new(NewStateComputeEnvironmentAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateComputeEnvironmentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == compute_env) type NewStateComputeEnvironmentAuditImage within NewState: %w", string(data), err)
+		}
+
+		u.NewStateComputeEnvironmentAuditImage = newStateComputeEnvironmentAuditImage
 		u.Type = NewStateTypeComputeEnv
 		return nil
 	case "credentials":
-		credentialsImage := new(CredentialsImage)
-		if err := utils.UnmarshalJSON(data, &credentialsImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credentials) type CredentialsImage within NewState: %w", string(data), err)
+		newStateCredentialsAuditImage := new(NewStateCredentialsAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateCredentialsAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credentials) type NewStateCredentialsAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.CredentialsImage = credentialsImage
+		u.NewStateCredentialsAuditImage = newStateCredentialsAuditImage
 		u.Type = NewStateTypeCredentials
 		return nil
 	case "credit_info":
-		creditInfoImage := new(CreditInfoImage)
-		if err := utils.UnmarshalJSON(data, &creditInfoImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_info) type CreditInfoImage within NewState: %w", string(data), err)
+		newStateCreditInfoAuditImage := new(NewStateCreditInfoAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateCreditInfoAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_info) type NewStateCreditInfoAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.CreditInfoImage = creditInfoImage
+		u.NewStateCreditInfoAuditImage = newStateCreditInfoAuditImage
 		u.Type = NewStateTypeCreditInfo
 		return nil
 	case "credit_purchase":
-		creditPurchaseImage := new(CreditPurchaseImage)
-		if err := utils.UnmarshalJSON(data, &creditPurchaseImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type CreditPurchaseImage within NewState: %w", string(data), err)
+		newStateCreditPurchaseAuditImage := new(NewStateCreditPurchaseAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateCreditPurchaseAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type NewStateCreditPurchaseAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.CreditPurchaseImage = creditPurchaseImage
+		u.NewStateCreditPurchaseAuditImage = newStateCreditPurchaseAuditImage
 		u.Type = NewStateTypeCreditPurchase
 		return nil
 	case "custom_role":
-		customRoleImage := new(CustomRoleImage)
-		if err := utils.UnmarshalJSON(data, &customRoleImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == custom_role) type CustomRoleImage within NewState: %w", string(data), err)
+		newStateCustomRoleAuditImage := new(NewStateCustomRoleAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateCustomRoleAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == custom_role) type NewStateCustomRoleAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.CustomRoleImage = customRoleImage
+		u.NewStateCustomRoleAuditImage = newStateCustomRoleAuditImage
 		u.Type = NewStateTypeCustomRole
 		return nil
 	case "data_link":
-		dataLinkImage := new(DataLinkImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link) type DataLinkImage within NewState: %w", string(data), err)
+		newStateDataLinkAuditImage := new(NewStateDataLinkAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDataLinkAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link) type NewStateDataLinkAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DataLinkImage = dataLinkImage
+		u.NewStateDataLinkAuditImage = newStateDataLinkAuditImage
 		u.Type = NewStateTypeDataLink
 		return nil
 	case "data_link_file":
-		dataLinkFileImage := new(DataLinkFileImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkFileImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_file) type DataLinkFileImage within NewState: %w", string(data), err)
+		newStateDataLinkFileOperationAuditImage := new(NewStateDataLinkFileOperationAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDataLinkFileOperationAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_file) type NewStateDataLinkFileOperationAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DataLinkFileImage = dataLinkFileImage
+		u.NewStateDataLinkFileOperationAuditImage = newStateDataLinkFileOperationAuditImage
 		u.Type = NewStateTypeDataLinkFile
 		return nil
 	case "data_link_metadata":
-		dataLinkMetadataImage := new(DataLinkMetadataImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkMetadataImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_metadata) type DataLinkMetadataImage within NewState: %w", string(data), err)
+		newStateDataLinkMetadataAuditImage := new(NewStateDataLinkMetadataAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDataLinkMetadataAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_metadata) type NewStateDataLinkMetadataAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DataLinkMetadataImage = dataLinkMetadataImage
+		u.NewStateDataLinkMetadataAuditImage = newStateDataLinkMetadataAuditImage
 		u.Type = NewStateTypeDataLinkMetadata
 		return nil
 	case "data_studio":
-		dataStudioImage := new(DataStudioImage)
-		if err := utils.UnmarshalJSON(data, &dataStudioImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio) type DataStudioImage within NewState: %w", string(data), err)
+		newStateDataStudioAuditImage := new(NewStateDataStudioAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDataStudioAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio) type NewStateDataStudioAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DataStudioImage = dataStudioImage
+		u.NewStateDataStudioAuditImage = newStateDataStudioAuditImage
 		u.Type = NewStateTypeDataStudio
 		return nil
 	case "data_studio_connection":
-		dataStudioConnectionImage := new(DataStudioConnectionImage)
-		if err := utils.UnmarshalJSON(data, &dataStudioConnectionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio_connection) type DataStudioConnectionImage within NewState: %w", string(data), err)
+		newStateDataStudioConnectionAuditImage := new(NewStateDataStudioConnectionAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDataStudioConnectionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio_connection) type NewStateDataStudioConnectionAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DataStudioConnectionImage = dataStudioConnectionImage
+		u.NewStateDataStudioConnectionAuditImage = newStateDataStudioConnectionAuditImage
 		u.Type = NewStateTypeDataStudioConnection
 		return nil
 	case "dataset":
-		datasetImage := new(DatasetImage)
-		if err := utils.UnmarshalJSON(data, &datasetImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset) type DatasetImage within NewState: %w", string(data), err)
+		newStateDatasetAuditImage := new(NewStateDatasetAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDatasetAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset) type NewStateDatasetAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DatasetImage = datasetImage
+		u.NewStateDatasetAuditImage = newStateDatasetAuditImage
 		u.Type = NewStateTypeDataset
 		return nil
 	case "dataset_version":
-		datasetVersionImage := new(DatasetVersionImage)
-		if err := utils.UnmarshalJSON(data, &datasetVersionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset_version) type DatasetVersionImage within NewState: %w", string(data), err)
+		newStateDatasetVersionAuditImage := new(NewStateDatasetVersionAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateDatasetVersionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset_version) type NewStateDatasetVersionAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.DatasetVersionImage = datasetVersionImage
+		u.NewStateDatasetVersionAuditImage = newStateDatasetVersionAuditImage
 		u.Type = NewStateTypeDatasetVersion
 		return nil
 	case "idp_group":
-		idpGroupImage := new(IdpGroupImage)
-		if err := utils.UnmarshalJSON(data, &idpGroupImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == idp_group) type IdpGroupImage within NewState: %w", string(data), err)
+		newStateIDPGroupAuditImage := new(NewStateIDPGroupAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateIDPGroupAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == idp_group) type NewStateIDPGroupAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.IdpGroupImage = idpGroupImage
+		u.NewStateIDPGroupAuditImage = newStateIDPGroupAuditImage
 		u.Type = NewStateTypeIdpGroup
 		return nil
 	case "label":
-		labelImage := new(LabelImage)
-		if err := utils.UnmarshalJSON(data, &labelImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label) type LabelImage within NewState: %w", string(data), err)
+		newStateLabelAuditImage := new(NewStateLabelAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateLabelAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label) type NewStateLabelAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.LabelImage = labelImage
+		u.NewStateLabelAuditImage = newStateLabelAuditImage
 		u.Type = NewStateTypeLabel
 		return nil
 	case "label_assignment":
-		labelAssignmentImage := new(LabelAssignmentImage)
-		if err := utils.UnmarshalJSON(data, &labelAssignmentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label_assignment) type LabelAssignmentImage within NewState: %w", string(data), err)
+		newStateLabelAssignmentAuditImage := new(NewStateLabelAssignmentAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateLabelAssignmentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label_assignment) type NewStateLabelAssignmentAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.LabelAssignmentImage = labelAssignmentImage
+		u.NewStateLabelAssignmentAuditImage = newStateLabelAssignmentAuditImage
 		u.Type = NewStateTypeLabelAssignment
 		return nil
 	case "managed_credentials":
-		managedCredentialsImage := new(ManagedCredentialsImage)
-		if err := utils.UnmarshalJSON(data, &managedCredentialsImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_credentials) type ManagedCredentialsImage within NewState: %w", string(data), err)
+		newStateManagedCredentialsAuditImage := new(NewStateManagedCredentialsAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateManagedCredentialsAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_credentials) type NewStateManagedCredentialsAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ManagedCredentialsImage = managedCredentialsImage
+		u.NewStateManagedCredentialsAuditImage = newStateManagedCredentialsAuditImage
 		u.Type = NewStateTypeManagedCredentials
 		return nil
 	case "managed_identity":
-		managedIdentityImage := new(ManagedIdentityImage)
-		if err := utils.UnmarshalJSON(data, &managedIdentityImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_identity) type ManagedIdentityImage within NewState: %w", string(data), err)
+		newStateManagedIdentityAuditImage := new(NewStateManagedIdentityAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateManagedIdentityAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_identity) type NewStateManagedIdentityAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ManagedIdentityImage = managedIdentityImage
+		u.NewStateManagedIdentityAuditImage = newStateManagedIdentityAuditImage
 		u.Type = NewStateTypeManagedIdentity
 		return nil
 	case "member":
-		memberImage := new(MemberImage)
-		if err := utils.UnmarshalJSON(data, &memberImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == member) type MemberImage within NewState: %w", string(data), err)
+		newStateMemberAuditImage := new(NewStateMemberAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateMemberAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == member) type NewStateMemberAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.MemberImage = memberImage
+		u.NewStateMemberAuditImage = newStateMemberAuditImage
 		u.Type = NewStateTypeMember
 		return nil
-	case "oauth_consent":
-		oAuthConsentImage := new(OAuthConsentImage)
-		if err := utils.UnmarshalJSON(data, &oAuthConsentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_consent) type OAuthConsentImage within NewState: %w", string(data), err)
+	case "oauth_client_secret":
+		newStateOAuthClientSecretAuditImage := new(NewStateOAuthClientSecretAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateOAuthClientSecretAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_client_secret) type NewStateOAuthClientSecretAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.OAuthConsentImage = oAuthConsentImage
+		u.NewStateOAuthClientSecretAuditImage = newStateOAuthClientSecretAuditImage
+		u.Type = NewStateTypeOauthClientSecret
+		return nil
+	case "oauth_consent":
+		newStateOAuthConsentAuditImage := new(NewStateOAuthConsentAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateOAuthConsentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_consent) type NewStateOAuthConsentAuditImage within NewState: %w", string(data), err)
+		}
+
+		u.NewStateOAuthConsentAuditImage = newStateOAuthConsentAuditImage
 		u.Type = NewStateTypeOauthConsent
 		return nil
 	case "org_sso_connection":
-		orgSsoConnectionImage := new(OrgSsoConnectionImage)
-		if err := utils.UnmarshalJSON(data, &orgSsoConnectionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == org_sso_connection) type OrgSsoConnectionImage within NewState: %w", string(data), err)
+		newStateOrgSSOConnectionAuditImage := new(NewStateOrgSSOConnectionAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateOrgSSOConnectionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == org_sso_connection) type NewStateOrgSSOConnectionAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.OrgSsoConnectionImage = orgSsoConnectionImage
+		u.NewStateOrgSSOConnectionAuditImage = newStateOrgSSOConnectionAuditImage
 		u.Type = NewStateTypeOrgSsoConnection
 		return nil
 	case "organization":
-		organizationImage := new(OrganizationImage)
-		if err := utils.UnmarshalJSON(data, &organizationImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == organization) type OrganizationImage within NewState: %w", string(data), err)
+		newStateOrganizationAuditImage := new(NewStateOrganizationAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateOrganizationAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == organization) type NewStateOrganizationAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.OrganizationImage = organizationImage
+		u.NewStateOrganizationAuditImage = newStateOrganizationAuditImage
 		u.Type = NewStateTypeOrganization
 		return nil
 	case "participant":
-		participantImage := new(ParticipantImage)
-		if err := utils.UnmarshalJSON(data, &participantImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == participant) type ParticipantImage within NewState: %w", string(data), err)
+		newStateParticipantAuditImage := new(NewStateParticipantAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateParticipantAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == participant) type NewStateParticipantAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ParticipantImage = participantImage
+		u.NewStateParticipantAuditImage = newStateParticipantAuditImage
 		u.Type = NewStateTypeParticipant
 		return nil
 	case "pipeline":
-		pipelineImage := new(PipelineImage)
-		if err := utils.UnmarshalJSON(data, &pipelineImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline) type PipelineImage within NewState: %w", string(data), err)
+		newStatePipelineAuditImage := new(NewStatePipelineAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStatePipelineAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline) type NewStatePipelineAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.PipelineImage = pipelineImage
+		u.NewStatePipelineAuditImage = newStatePipelineAuditImage
 		u.Type = NewStateTypePipeline
 		return nil
 	case "pipeline_secret":
-		pipelineSecretImage := new(PipelineSecretImage)
-		if err := utils.UnmarshalJSON(data, &pipelineSecretImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline_secret) type PipelineSecretImage within NewState: %w", string(data), err)
+		newStatePipelineSecretAuditImage := new(NewStatePipelineSecretAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStatePipelineSecretAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline_secret) type NewStatePipelineSecretAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.PipelineSecretImage = pipelineSecretImage
+		u.NewStatePipelineSecretAuditImage = newStatePipelineSecretAuditImage
 		u.Type = NewStateTypePipelineSecret
 		return nil
 	case "scim_token":
-		scimTokenImage := new(ScimTokenImage)
-		if err := utils.UnmarshalJSON(data, &scimTokenImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type ScimTokenImage within NewState: %w", string(data), err)
+		newStateSCIMTokenAuditImage := new(NewStateSCIMTokenAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateSCIMTokenAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type NewStateSCIMTokenAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ScimTokenImage = scimTokenImage
+		u.NewStateSCIMTokenAuditImage = newStateSCIMTokenAuditImage
 		u.Type = NewStateTypeScimToken
 		return nil
 	case "service_account":
-		serviceAccountImage := new(ServiceAccountImage)
-		if err := utils.UnmarshalJSON(data, &serviceAccountImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type ServiceAccountImage within NewState: %w", string(data), err)
+		newStateServiceAccountAuditImage := new(NewStateServiceAccountAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateServiceAccountAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type NewStateServiceAccountAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.ServiceAccountImage = serviceAccountImage
+		u.NewStateServiceAccountAuditImage = newStateServiceAccountAuditImage
 		u.Type = NewStateTypeServiceAccount
 		return nil
 	case "team":
-		teamImage := new(TeamImage)
-		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team) type TeamImage within NewState: %w", string(data), err)
+		newStateTeamAuditImage := new(NewStateTeamAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateTeamAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team) type NewStateTeamAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.TeamImage = teamImage
+		u.NewStateTeamAuditImage = newStateTeamAuditImage
 		u.Type = NewStateTypeTeam
 		return nil
 	case "team_member":
-		teamMemberImage := new(TeamMemberImage)
-		if err := utils.UnmarshalJSON(data, &teamMemberImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team_member) type TeamMemberImage within NewState: %w", string(data), err)
+		newStateTeamMemberAuditImage := new(NewStateTeamMemberAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateTeamMemberAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team_member) type NewStateTeamMemberAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.TeamMemberImage = teamMemberImage
+		u.NewStateTeamMemberAuditImage = newStateTeamMemberAuditImage
 		u.Type = NewStateTypeTeamMember
 		return nil
 	case "user":
-		userImage := new(UserImage)
-		if err := utils.UnmarshalJSON(data, &userImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user) type UserImage within NewState: %w", string(data), err)
+		newStateUserAuditImage := new(NewStateUserAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateUserAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user) type NewStateUserAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.UserImage = userImage
+		u.NewStateUserAuditImage = newStateUserAuditImage
 		u.Type = NewStateTypeUser
 		return nil
 	case "user_role":
-		userRoleImage := new(UserRoleImage)
-		if err := utils.UnmarshalJSON(data, &userRoleImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_role) type UserRoleImage within NewState: %w", string(data), err)
+		newStateUserRoleAuditImage := new(NewStateUserRoleAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateUserRoleAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_role) type NewStateUserRoleAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.UserRoleImage = userRoleImage
+		u.NewStateUserRoleAuditImage = newStateUserRoleAuditImage
 		u.Type = NewStateTypeUserRole
 		return nil
 	case "user_ssh_public_key":
-		userSSHPublicKeyImage := new(UserSSHPublicKeyImage)
-		if err := utils.UnmarshalJSON(data, &userSSHPublicKeyImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_ssh_public_key) type UserSSHPublicKeyImage within NewState: %w", string(data), err)
+		newStateSSHKeyAuditImage := new(NewStateSSHKeyAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateSSHKeyAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_ssh_public_key) type NewStateSSHKeyAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.UserSSHPublicKeyImage = userSSHPublicKeyImage
+		u.NewStateSSHKeyAuditImage = newStateSSHKeyAuditImage
 		u.Type = NewStateTypeUserSSHPublicKey
 		return nil
 	case "workflow":
-		workflowImage := new(WorkflowImage)
-		if err := utils.UnmarshalJSON(data, &workflowImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workflow) type WorkflowImage within NewState: %w", string(data), err)
+		newStateWorkflowAuditImage := new(NewStateWorkflowAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateWorkflowAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workflow) type NewStateWorkflowAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.WorkflowImage = workflowImage
+		u.NewStateWorkflowAuditImage = newStateWorkflowAuditImage
 		u.Type = NewStateTypeWorkflow
 		return nil
 	case "workspace":
-		workspaceImage := new(WorkspaceImage)
-		if err := utils.UnmarshalJSON(data, &workspaceImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workspace) type WorkspaceImage within NewState: %w", string(data), err)
+		newStateWorkspaceAuditImage := new(NewStateWorkspaceAuditImage)
+		if err := utils.UnmarshalJSON(data, &newStateWorkspaceAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workspace) type NewStateWorkspaceAuditImage within NewState: %w", string(data), err)
 		}
 
-		u.WorkspaceImage = workspaceImage
+		u.NewStateWorkspaceAuditImage = newStateWorkspaceAuditImage
 		u.Type = NewStateTypeWorkspace
 		return nil
 	}
@@ -918,159 +4412,3614 @@ func (u *NewState) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (u NewState) MarshalJSON() ([]byte, error) {
-	if u.AccessTokenImage != nil {
-		return utils.MarshalJSON(u.AccessTokenImage, "", true)
+	if u.NewStateAccessTokenAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateAccessTokenAuditImage, "", true)
 	}
 
-	if u.ActionImage != nil {
-		return utils.MarshalJSON(u.ActionImage, "", true)
+	if u.NewStateActionAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateActionAuditImage, "", true)
 	}
 
-	if u.AgentImage != nil {
-		return utils.MarshalJSON(u.AgentImage, "", true)
+	if u.NewStateAgentAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateAgentAuditImage, "", true)
 	}
 
-	if u.AgentRunImage != nil {
-		return utils.MarshalJSON(u.AgentRunImage, "", true)
+	if u.NewStateAgentRunAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateAgentRunAuditImage, "", true)
 	}
 
-	if u.AiChatThreadImage != nil {
-		return utils.MarshalJSON(u.AiChatThreadImage, "", true)
+	if u.NewStateAIChatThreadAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateAIChatThreadAuditImage, "", true)
 	}
 
-	if u.ComputeEnvImage != nil {
-		return utils.MarshalJSON(u.ComputeEnvImage, "", true)
+	if u.NewStateBudgetAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateBudgetAuditImage, "", true)
 	}
 
-	if u.CredentialsImage != nil {
-		return utils.MarshalJSON(u.CredentialsImage, "", true)
+	if u.NewStateComputeEnvironmentAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateComputeEnvironmentAuditImage, "", true)
 	}
 
-	if u.CreditInfoImage != nil {
-		return utils.MarshalJSON(u.CreditInfoImage, "", true)
+	if u.NewStateCredentialsAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateCredentialsAuditImage, "", true)
 	}
 
-	if u.CreditPurchaseImage != nil {
-		return utils.MarshalJSON(u.CreditPurchaseImage, "", true)
+	if u.NewStateCreditInfoAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateCreditInfoAuditImage, "", true)
 	}
 
-	if u.CustomRoleImage != nil {
-		return utils.MarshalJSON(u.CustomRoleImage, "", true)
+	if u.NewStateCreditPurchaseAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateCreditPurchaseAuditImage, "", true)
 	}
 
-	if u.DataLinkFileImage != nil {
-		return utils.MarshalJSON(u.DataLinkFileImage, "", true)
+	if u.NewStateCustomRoleAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateCustomRoleAuditImage, "", true)
 	}
 
-	if u.DataLinkImage != nil {
-		return utils.MarshalJSON(u.DataLinkImage, "", true)
+	if u.NewStateDataLinkFileOperationAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDataLinkFileOperationAuditImage, "", true)
 	}
 
-	if u.DataLinkMetadataImage != nil {
-		return utils.MarshalJSON(u.DataLinkMetadataImage, "", true)
+	if u.NewStateDataLinkAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDataLinkAuditImage, "", true)
 	}
 
-	if u.DatasetImage != nil {
-		return utils.MarshalJSON(u.DatasetImage, "", true)
+	if u.NewStateDataLinkMetadataAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDataLinkMetadataAuditImage, "", true)
 	}
 
-	if u.DatasetVersionImage != nil {
-		return utils.MarshalJSON(u.DatasetVersionImage, "", true)
+	if u.NewStateDatasetAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDatasetAuditImage, "", true)
 	}
 
-	if u.DataStudioConnectionImage != nil {
-		return utils.MarshalJSON(u.DataStudioConnectionImage, "", true)
+	if u.NewStateDatasetVersionAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDatasetVersionAuditImage, "", true)
 	}
 
-	if u.DataStudioImage != nil {
-		return utils.MarshalJSON(u.DataStudioImage, "", true)
+	if u.NewStateDataStudioConnectionAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDataStudioConnectionAuditImage, "", true)
 	}
 
-	if u.IdpGroupImage != nil {
-		return utils.MarshalJSON(u.IdpGroupImage, "", true)
+	if u.NewStateDataStudioAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateDataStudioAuditImage, "", true)
 	}
 
-	if u.LabelAssignmentImage != nil {
-		return utils.MarshalJSON(u.LabelAssignmentImage, "", true)
+	if u.NewStateIDPGroupAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateIDPGroupAuditImage, "", true)
 	}
 
-	if u.LabelImage != nil {
-		return utils.MarshalJSON(u.LabelImage, "", true)
+	if u.NewStateLabelAssignmentAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateLabelAssignmentAuditImage, "", true)
 	}
 
-	if u.ManagedCredentialsImage != nil {
-		return utils.MarshalJSON(u.ManagedCredentialsImage, "", true)
+	if u.NewStateLabelAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateLabelAuditImage, "", true)
 	}
 
-	if u.ManagedIdentityImage != nil {
-		return utils.MarshalJSON(u.ManagedIdentityImage, "", true)
+	if u.NewStateManagedCredentialsAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateManagedCredentialsAuditImage, "", true)
 	}
 
-	if u.MemberImage != nil {
-		return utils.MarshalJSON(u.MemberImage, "", true)
+	if u.NewStateManagedIdentityAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateManagedIdentityAuditImage, "", true)
 	}
 
-	if u.OAuthConsentImage != nil {
-		return utils.MarshalJSON(u.OAuthConsentImage, "", true)
+	if u.NewStateMemberAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateMemberAuditImage, "", true)
 	}
 
-	if u.OrganizationImage != nil {
-		return utils.MarshalJSON(u.OrganizationImage, "", true)
+	if u.NewStateOAuthConsentAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateOAuthConsentAuditImage, "", true)
 	}
 
-	if u.OrgSsoConnectionImage != nil {
-		return utils.MarshalJSON(u.OrgSsoConnectionImage, "", true)
+	if u.NewStateOAuthClientSecretAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateOAuthClientSecretAuditImage, "", true)
 	}
 
-	if u.ParticipantImage != nil {
-		return utils.MarshalJSON(u.ParticipantImage, "", true)
+	if u.NewStateOrganizationAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateOrganizationAuditImage, "", true)
 	}
 
-	if u.PipelineImage != nil {
-		return utils.MarshalJSON(u.PipelineImage, "", true)
+	if u.NewStateOrgSSOConnectionAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateOrgSSOConnectionAuditImage, "", true)
 	}
 
-	if u.PipelineSecretImage != nil {
-		return utils.MarshalJSON(u.PipelineSecretImage, "", true)
+	if u.NewStateParticipantAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateParticipantAuditImage, "", true)
 	}
 
-	if u.ScimTokenImage != nil {
-		return utils.MarshalJSON(u.ScimTokenImage, "", true)
+	if u.NewStatePipelineAuditImage != nil {
+		return utils.MarshalJSON(u.NewStatePipelineAuditImage, "", true)
 	}
 
-	if u.ServiceAccountImage != nil {
-		return utils.MarshalJSON(u.ServiceAccountImage, "", true)
+	if u.NewStatePipelineSecretAuditImage != nil {
+		return utils.MarshalJSON(u.NewStatePipelineSecretAuditImage, "", true)
 	}
 
-	if u.TeamImage != nil {
-		return utils.MarshalJSON(u.TeamImage, "", true)
+	if u.NewStateSCIMTokenAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateSCIMTokenAuditImage, "", true)
 	}
 
-	if u.TeamMemberImage != nil {
-		return utils.MarshalJSON(u.TeamMemberImage, "", true)
+	if u.NewStateServiceAccountAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateServiceAccountAuditImage, "", true)
 	}
 
-	if u.UserImage != nil {
-		return utils.MarshalJSON(u.UserImage, "", true)
+	if u.NewStateTeamAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateTeamAuditImage, "", true)
 	}
 
-	if u.UserRoleImage != nil {
-		return utils.MarshalJSON(u.UserRoleImage, "", true)
+	if u.NewStateTeamMemberAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateTeamMemberAuditImage, "", true)
 	}
 
-	if u.UserSSHPublicKeyImage != nil {
-		return utils.MarshalJSON(u.UserSSHPublicKeyImage, "", true)
+	if u.NewStateUserAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateUserAuditImage, "", true)
 	}
 
-	if u.WorkflowImage != nil {
-		return utils.MarshalJSON(u.WorkflowImage, "", true)
+	if u.NewStateUserRoleAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateUserRoleAuditImage, "", true)
 	}
 
-	if u.WorkspaceImage != nil {
-		return utils.MarshalJSON(u.WorkspaceImage, "", true)
+	if u.NewStateSSHKeyAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateSSHKeyAuditImage, "", true)
+	}
+
+	if u.NewStateWorkflowAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateWorkflowAuditImage, "", true)
+	}
+
+	if u.NewStateWorkspaceAuditImage != nil {
+		return utils.MarshalJSON(u.NewStateWorkspaceAuditImage, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type NewState: all fields are null")
+}
+
+type PreviousStateWorkspaceAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	FullName       *string        `json:"fullName,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Visibility     *Visibility    `json:"visibility,omitempty"`
+}
+
+func (p PreviousStateWorkspaceAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateWorkspaceAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateWorkspaceAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateWorkspaceAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateWorkspaceAuditImage) GetFullName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.FullName
+}
+
+func (p *PreviousStateWorkspaceAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateWorkspaceAuditImage) GetVisibility() *Visibility {
+	if p == nil {
+		return nil
+	}
+	return p.Visibility
+}
+
+type PreviousStateWorkflowAuditImage struct {
+	AuditImageType    AuditImageType `json:"auditImageType"`
+	CommandLine       *string        `json:"commandLine,omitempty"`
+	CommitID          *string        `json:"commitId,omitempty"`
+	Complete          *time.Time     `json:"complete,omitempty"`
+	ConfigFiles       []string       `json:"configFiles,omitempty"`
+	ConfigText        *string        `json:"configText,omitempty"`
+	Container         *string        `json:"container,omitempty"`
+	ContainerEngine   *string        `json:"containerEngine,omitempty"`
+	Duration          *int64         `json:"duration,omitempty"`
+	ErrorMessage      *string        `json:"errorMessage,omitempty"`
+	ErrorReport       *string        `json:"errorReport,omitempty"`
+	ExitStatus        *int           `json:"exitStatus,omitempty"`
+	Fusion            *WfFusionMeta  `json:"fusion,omitempty"`
+	HomeDir           *string        `json:"homeDir,omitempty"`
+	LaunchDir         *string        `json:"launchDir,omitempty"`
+	LaunchID          *string        `json:"launchId,omitempty"`
+	LogFile           *string        `json:"logFile,omitempty"`
+	Manifest          *WfManifest    `json:"manifest,omitempty"`
+	Nextflow          *WfNextflow    `json:"nextflow,omitempty"`
+	OperationID       *string        `json:"operationId,omitempty"`
+	OutFile           *string        `json:"outFile,omitempty"`
+	Params            *string        `json:"params,omitempty"`
+	Profile           *string        `json:"profile,omitempty"`
+	ProjectDir        *string        `json:"projectDir,omitempty"`
+	ProjectName       *string        `json:"projectName,omitempty"`
+	Repository        *string        `json:"repository,omitempty"`
+	RequiresAttention *bool          `json:"requiresAttention,omitempty"`
+	Resume            *bool          `json:"resume,omitempty"`
+	Revision          *string        `json:"revision,omitempty"`
+	RunName           *string        `json:"runName,omitempty"`
+	ScriptFile        *string        `json:"scriptFile,omitempty"`
+	ScriptID          *string        `json:"scriptId,omitempty"`
+	ScriptName        *string        `json:"scriptName,omitempty"`
+	SessionID         *string        `json:"sessionId,omitempty"`
+	Start             *time.Time     `json:"start,omitempty"`
+	Stats             *WfStats       `json:"stats,omitempty"`
+	Status            *string        `json:"status,omitempty"`
+	Submit            *time.Time     `json:"submit,omitempty"`
+	Success           *bool          `json:"success,omitempty"`
+	UserName          *string        `json:"userName,omitempty"`
+	Wave              *WfWaveMeta    `json:"wave,omitempty"`
+	WorkDir           *string        `json:"workDir,omitempty"`
+}
+
+func (p PreviousStateWorkflowAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateWorkflowAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetCommandLine() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CommandLine
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetCommitID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CommitID
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetComplete() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.Complete
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetConfigFiles() []string {
+	if p == nil {
+		return nil
+	}
+	return p.ConfigFiles
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetConfigText() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ConfigText
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetContainer() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Container
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetContainerEngine() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ContainerEngine
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetDuration() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.Duration
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetErrorMessage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ErrorMessage
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetErrorReport() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ErrorReport
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetExitStatus() *int {
+	if p == nil {
+		return nil
+	}
+	return p.ExitStatus
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetFusion() *WfFusionMeta {
+	if p == nil {
+		return nil
+	}
+	return p.Fusion
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetHomeDir() *string {
+	if p == nil {
+		return nil
+	}
+	return p.HomeDir
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetLaunchDir() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LaunchDir
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetLaunchID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LaunchID
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetLogFile() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LogFile
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetManifest() *WfManifest {
+	if p == nil {
+		return nil
+	}
+	return p.Manifest
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetNextflow() *WfNextflow {
+	if p == nil {
+		return nil
+	}
+	return p.Nextflow
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetOperationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OperationID
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetOutFile() *string {
+	if p == nil {
+		return nil
+	}
+	return p.OutFile
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetParams() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Params
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetProfile() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Profile
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetProjectDir() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ProjectDir
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetProjectName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ProjectName
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetRepository() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Repository
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetRequiresAttention() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.RequiresAttention
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetResume() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Resume
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetRevision() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Revision
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetRunName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RunName
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetScriptFile() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ScriptFile
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetScriptID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ScriptID
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetScriptName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ScriptName
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetSessionID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.SessionID
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetStart() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.Start
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetStats() *WfStats {
+	if p == nil {
+		return nil
+	}
+	return p.Stats
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetSubmit() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.Submit
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetSuccess() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Success
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetUserName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserName
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetWave() *WfWaveMeta {
+	if p == nil {
+		return nil
+	}
+	return p.Wave
+}
+
+func (p *PreviousStateWorkflowAuditImage) GetWorkDir() *string {
+	if p == nil {
+		return nil
+	}
+	return p.WorkDir
+}
+
+type PreviousStateSSHKeyAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	KeyHash        *string        `json:"keyHash,omitempty"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+}
+
+func (p PreviousStateSSHKeyAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateSSHKeyAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateSSHKeyAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateSSHKeyAuditImage) GetKeyHash() *string {
+	if p == nil {
+		return nil
+	}
+	return p.KeyHash
+}
+
+func (p *PreviousStateSSHKeyAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+type PreviousStateUserRoleAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Context        *string        `json:"context,omitempty"`
+	CustomRoleID   *int64         `json:"customRoleId,omitempty"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Role           *string        `json:"role,omitempty"`
+	TeamID         *int64         `json:"teamId,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+	WorkspaceID    *int64         `json:"workspaceId,omitempty"`
+}
+
+func (p PreviousStateUserRoleAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateUserRoleAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetContext() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Context
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetCustomRoleID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CustomRoleID
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetOrganizationID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.OrganizationID
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetRole() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Role
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetTeamID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.TeamID
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+func (p *PreviousStateUserRoleAuditImage) GetWorkspaceID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.WorkspaceID
+}
+
+type PreviousStateUserAuditImage struct {
+	AuditImageType    AuditImageType `json:"auditImageType"`
+	Auth0ID           *string        `json:"auth0Id,omitempty"`
+	AuthTime          *time.Time     `json:"authTime,omitempty"`
+	AvatarID          *string        `json:"avatarId,omitempty"`
+	AvatarURL         *string        `json:"avatarUrl,omitempty"`
+	Description       *string        `json:"description,omitempty"`
+	Disabled          *bool          `json:"disabled,omitempty"`
+	Email             *string        `json:"email,omitempty"`
+	FirstName         *string        `json:"firstName,omitempty"`
+	LastAccess        *time.Time     `json:"lastAccess,omitempty"`
+	LastName          *string        `json:"lastName,omitempty"`
+	MarketingConsent  *bool          `json:"marketingConsent,omitempty"`
+	Notification      *bool          `json:"notification,omitempty"`
+	Organization      *string        `json:"organization,omitempty"`
+	TermsOfUseConsent *bool          `json:"termsOfUseConsent,omitempty"`
+	Trusted           *bool          `json:"trusted,omitempty"`
+	UserName          *string        `json:"userName,omitempty"`
+}
+
+func (p PreviousStateUserAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateUserAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateUserAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateUserAuditImage) GetAuth0ID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Auth0ID
+}
+
+func (p *PreviousStateUserAuditImage) GetAuthTime() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.AuthTime
+}
+
+func (p *PreviousStateUserAuditImage) GetAvatarID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.AvatarID
+}
+
+func (p *PreviousStateUserAuditImage) GetAvatarURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.AvatarURL
+}
+
+func (p *PreviousStateUserAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateUserAuditImage) GetDisabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Disabled
+}
+
+func (p *PreviousStateUserAuditImage) GetEmail() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Email
+}
+
+func (p *PreviousStateUserAuditImage) GetFirstName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.FirstName
+}
+
+func (p *PreviousStateUserAuditImage) GetLastAccess() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastAccess
+}
+
+func (p *PreviousStateUserAuditImage) GetLastName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LastName
+}
+
+func (p *PreviousStateUserAuditImage) GetMarketingConsent() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.MarketingConsent
+}
+
+func (p *PreviousStateUserAuditImage) GetNotification() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Notification
+}
+
+func (p *PreviousStateUserAuditImage) GetOrganization() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Organization
+}
+
+func (p *PreviousStateUserAuditImage) GetTermsOfUseConsent() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.TermsOfUseConsent
+}
+
+func (p *PreviousStateUserAuditImage) GetTrusted() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Trusted
+}
+
+func (p *PreviousStateUserAuditImage) GetUserName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserName
+}
+
+type PreviousStateTeamMemberAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	MemberID       *int64         `json:"memberId,omitempty"`
+	TeamID         *int64         `json:"teamId,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+}
+
+func (p PreviousStateTeamMemberAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateTeamMemberAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateTeamMemberAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateTeamMemberAuditImage) GetMemberID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.MemberID
+}
+
+func (p *PreviousStateTeamMemberAuditImage) GetTeamID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.TeamID
+}
+
+func (p *PreviousStateTeamMemberAuditImage) GetUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+type PreviousStateTeamAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	AvatarID       *string        `json:"avatarId,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	IdpGroupID     *int64         `json:"idpGroupId,omitempty"`
+	IdpGroupName   *string        `json:"idpGroupName,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (p PreviousStateTeamAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateTeamAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateTeamAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateTeamAuditImage) GetAvatarID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.AvatarID
+}
+
+func (p *PreviousStateTeamAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateTeamAuditImage) GetIdpGroupID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.IdpGroupID
+}
+
+func (p *PreviousStateTeamAuditImage) GetIdpGroupName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.IdpGroupName
+}
+
+func (p *PreviousStateTeamAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+type PreviousStateServiceAccountAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ClientID       *string        `json:"clientId,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	ID             *int64         `json:"id,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (p PreviousStateServiceAccountAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateServiceAccountAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateServiceAccountAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateServiceAccountAuditImage) GetClientID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ClientID
+}
+
+func (p *PreviousStateServiceAccountAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateServiceAccountAuditImage) GetID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PreviousStateServiceAccountAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+type PreviousStateSCIMTokenAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	DateCreated    *time.Time     `json:"dateCreated,omitempty"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	RevokedAt      *time.Time     `json:"revokedAt,omitempty"`
+	TokenPrefix    *string        `json:"tokenPrefix,omitempty"`
+}
+
+func (p PreviousStateSCIMTokenAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) GetDateCreated() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.DateCreated
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) GetRevokedAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.RevokedAt
+}
+
+func (p *PreviousStateSCIMTokenAuditImage) GetTokenPrefix() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TokenPrefix
+}
+
+type PreviousStatePipelineSecretAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Salt           *string        `json:"salt,omitempty"`
+}
+
+func (p PreviousStatePipelineSecretAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStatePipelineSecretAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStatePipelineSecretAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStatePipelineSecretAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+func (p *PreviousStatePipelineSecretAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStatePipelineSecretAuditImage) GetSalt() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Salt
+}
+
+type PreviousStatePipelineAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	Icon           *string        `json:"icon,omitempty"`
+	Launch         *LaunchImage   `json:"launch,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (p PreviousStatePipelineAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStatePipelineAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStatePipelineAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStatePipelineAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStatePipelineAuditImage) GetIcon() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Icon
+}
+
+func (p *PreviousStatePipelineAuditImage) GetLaunch() *LaunchImage {
+	if p == nil {
+		return nil
+	}
+	return p.Launch
+}
+
+func (p *PreviousStatePipelineAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+type PreviousStateParticipantAuditImage struct {
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	MemberID        *int64         `json:"memberId,omitempty"`
+	Role            *WspRole       `json:"role,omitempty"`
+	TeamID          *int64         `json:"teamId,omitempty"`
+	UserID          *int64         `json:"userId,omitempty"`
+	WorkspaceID     *int64         `json:"workspaceId,omitempty"`
+	WspCustomRoleID *int64         `json:"wspCustomRoleId,omitempty"`
+}
+
+func (p PreviousStateParticipantAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateParticipantAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateParticipantAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateParticipantAuditImage) GetMemberID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.MemberID
+}
+
+func (p *PreviousStateParticipantAuditImage) GetRole() *WspRole {
+	if p == nil {
+		return nil
+	}
+	return p.Role
+}
+
+func (p *PreviousStateParticipantAuditImage) GetTeamID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.TeamID
+}
+
+func (p *PreviousStateParticipantAuditImage) GetUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+func (p *PreviousStateParticipantAuditImage) GetWorkspaceID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.WorkspaceID
+}
+
+func (p *PreviousStateParticipantAuditImage) GetWspCustomRoleID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.WspCustomRoleID
+}
+
+type PreviousStateOrgSSOConnectionAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Auth0OrgID     *string        `json:"auth0OrgId,omitempty"`
+	ConnectionID   *string        `json:"connectionId,omitempty"`
+	ConnectionName *string        `json:"connectionName,omitempty"`
+	CreatedAt      *time.Time     `json:"createdAt,omitempty"`
+	CreatedByID    *int64         `json:"createdById,omitempty"`
+	Domain         *string        `json:"domain,omitempty"`
+	Status         *string        `json:"status,omitempty"`
+	TicketURL      *string        `json:"ticketUrl,omitempty"`
+}
+
+func (p PreviousStateOrgSSOConnectionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetAuth0OrgID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Auth0OrgID
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetConnectionID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ConnectionID
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetConnectionName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ConnectionName
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetCreatedAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedAt
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetCreatedByID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedByID
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetDomain() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Domain
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *PreviousStateOrgSSOConnectionAuditImage) GetTicketURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TicketURL
+}
+
+type PreviousStateOrganizationAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Description    *string        `json:"description,omitempty"`
+	FullName       *string        `json:"fullName,omitempty"`
+	Location       *string        `json:"location,omitempty"`
+	LogoID         *string        `json:"logoId,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Type           *OrgType       `json:"type,omitempty"`
+	Website        *string        `json:"website,omitempty"`
+}
+
+func (p PreviousStateOrganizationAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateOrganizationAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetFullName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.FullName
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetLocation() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Location
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetLogoID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.LogoID
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetType() *OrgType {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+func (p *PreviousStateOrganizationAuditImage) GetWebsite() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Website
+}
+
+type PreviousStateOAuthClientSecretAuditImage struct {
+	AuditImageType   AuditImageType `json:"auditImageType"`
+	ClientID         *string        `json:"clientId,omitempty"`
+	ExpiresAt        *time.Time     `json:"expiresAt,omitempty"`
+	ID               *int64         `json:"id,omitempty"`
+	LastUsedAt       *time.Time     `json:"lastUsedAt,omitempty"`
+	RevocationReason *string        `json:"revocationReason,omitempty"`
+	RevokedAt        *time.Time     `json:"revokedAt,omitempty"`
+}
+
+func (p PreviousStateOAuthClientSecretAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetClientID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ClientID
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetExpiresAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.ExpiresAt
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ID
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetLastUsedAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsedAt
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetRevocationReason() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RevocationReason
+}
+
+func (p *PreviousStateOAuthClientSecretAuditImage) GetRevokedAt() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.RevokedAt
+}
+
+type PreviousStateOAuthConsentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Scopes         *string        `json:"scopes,omitempty"`
+}
+
+func (p PreviousStateOAuthConsentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateOAuthConsentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateOAuthConsentAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateOAuthConsentAuditImage) GetScopes() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Scopes
+}
+
+type PreviousStateMemberAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Role           *string        `json:"role,omitempty"`
+	UserID         *int64         `json:"userId,omitempty"`
+}
+
+func (p PreviousStateMemberAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateMemberAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateMemberAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateMemberAuditImage) GetOrganizationID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.OrganizationID
+}
+
+func (p *PreviousStateMemberAuditImage) GetRole() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Role
+}
+
+func (p *PreviousStateMemberAuditImage) GetUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+type PreviousStateManagedIdentityAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config   *ComputeConfig `json:"config,omitempty"`
+	Name     *string        `json:"name,omitempty"`
+	Platform *string        `json:"platform,omitempty"`
+}
+
+func (p PreviousStateManagedIdentityAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfig() *ComputeConfig {
+	if p == nil {
+		return nil
+	}
+	return p.Config
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateManagedIdentityAuditImage) GetPlatform() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Platform
+}
+
+type PreviousStateManagedCredentialsAuditImage struct {
+	AuditImageType    AuditImageType              `json:"auditImageType"`
+	CredentialsID     *string                     `json:"credentialsId,omitempty"`
+	ManagedIdentityID *int64                      `json:"managedIdentityId,omitempty"`
+	MemberID          *int64                      `json:"memberId,omitempty"`
+	Metadata          *ManagedCredentialsMetadata `json:"metadata,omitempty"`
+}
+
+func (p PreviousStateManagedCredentialsAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) GetCredentialsID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CredentialsID
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) GetManagedIdentityID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ManagedIdentityID
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) GetMemberID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.MemberID
+}
+
+func (p *PreviousStateManagedCredentialsAuditImage) GetMetadata() *ManagedCredentialsMetadata {
+	if p == nil {
+		return nil
+	}
+	return p.Metadata
+}
+
+type PreviousStateLabelAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Dynamic        *bool          `json:"dynamic,omitempty"`
+	IsDefault      *bool          `json:"isDefault,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Resource       *bool          `json:"resource,omitempty"`
+	Value          *string        `json:"value,omitempty"`
+}
+
+func (p PreviousStateLabelAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateLabelAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateLabelAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateLabelAuditImage) GetDynamic() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Dynamic
+}
+
+func (p *PreviousStateLabelAuditImage) GetIsDefault() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.IsDefault
+}
+
+func (p *PreviousStateLabelAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateLabelAuditImage) GetResource() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Resource
+}
+
+func (p *PreviousStateLabelAuditImage) GetValue() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Value
+}
+
+type PreviousStateLabelAssignmentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LabelID        *int64         `json:"labelId,omitempty"`
+	ResourceID     *string        `json:"resourceId,omitempty"`
+	ResourceType   *string        `json:"resourceType,omitempty"`
+}
+
+func (p PreviousStateLabelAssignmentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateLabelAssignmentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateLabelAssignmentAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateLabelAssignmentAuditImage) GetLabelID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.LabelID
+}
+
+func (p *PreviousStateLabelAssignmentAuditImage) GetResourceID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ResourceID
+}
+
+func (p *PreviousStateLabelAssignmentAuditImage) GetResourceType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ResourceType
+}
+
+type PreviousStateIDPGroupAuditImage struct {
+	AuditImageType AuditImageType     `json:"auditImageType"`
+	DisplayName    *string            `json:"displayName,omitempty"`
+	ScimExternalID *string            `json:"scimExternalId,omitempty"`
+	Source         *OrgIdpGroupSource `json:"source,omitempty"`
+}
+
+func (p PreviousStateIDPGroupAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateIDPGroupAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateIDPGroupAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateIDPGroupAuditImage) GetDisplayName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DisplayName
+}
+
+func (p *PreviousStateIDPGroupAuditImage) GetScimExternalID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ScimExternalID
+}
+
+func (p *PreviousStateIDPGroupAuditImage) GetSource() *OrgIdpGroupSource {
+	if p == nil {
+		return nil
+	}
+	return p.Source
+}
+
+type PreviousStateDataStudioAuditImage struct {
+	AppliedLifespanHours     *int           `json:"appliedLifespanHours,omitempty"`
+	AuditImageType           AuditImageType `json:"auditImageType"`
+	BaseImage                *string        `json:"baseImage,omitempty"`
+	ComputeEnvID             *string        `json:"computeEnvId,omitempty"`
+	CondaEnvironment         *string        `json:"condaEnvironment,omitempty"`
+	ConnectVersion           *string        `json:"connectVersion,omitempty"`
+	CustomIconID             *string        `json:"customIconId,omitempty"`
+	Description              *string        `json:"description,omitempty"`
+	EffectiveLifespanHours   *int           `json:"effectiveLifespanHours,omitempty"`
+	Environment              *string        `json:"environment,omitempty"`
+	InitialCheckpointID      *int64         `json:"initialCheckpointId,omitempty"`
+	InitialSessionID         *string        `json:"initialSessionId,omitempty"`
+	IsPrivate                *bool          `json:"isPrivate,omitempty"`
+	LastHeartbeat            *time.Time     `json:"lastHeartbeat,omitempty"`
+	LastStarted              *time.Time     `json:"lastStarted,omitempty"`
+	Name                     *string        `json:"name,omitempty"`
+	RemoteConfigCloneEnabled *bool          `json:"remoteConfigCloneEnabled,omitempty"`
+	RemoteConfigClonePath    *string        `json:"remoteConfigClonePath,omitempty"`
+	RemoteConfigCommitHash   *string        `json:"remoteConfigCommitHash,omitempty"`
+	RemoteConfigRepository   *string        `json:"remoteConfigRepository,omitempty"`
+	RemoteConfigRevision     *string        `json:"remoteConfigRevision,omitempty"`
+	RequiredCpus             *int64         `json:"requiredCpus,omitempty"`
+	RequiredGpus             *int64         `json:"requiredGpus,omitempty"`
+	RequiredMemory           *int64         `json:"requiredMemory,omitempty"`
+	RunningOperationID       *string        `json:"runningOperationId,omitempty"`
+	SSHEnabled               *bool          `json:"sshEnabled,omitempty"`
+	Status                   *string        `json:"status,omitempty"`
+	StatusMessage            *string        `json:"statusMessage,omitempty"`
+	StopReason               *string        `json:"stopReason,omitempty"`
+	TemplateIcon             *string        `json:"templateIcon,omitempty"`
+	TemplatePort             *int           `json:"templatePort,omitempty"`
+	TemplateURL              *string        `json:"templateUrl,omitempty"`
+	Tool                     *string        `json:"tool,omitempty"`
+	UserID                   *int64         `json:"userId,omitempty"`
+	WaveBuildID              *string        `json:"waveBuildId,omitempty"`
+}
+
+func (p PreviousStateDataStudioAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDataStudioAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetAppliedLifespanHours() *int {
+	if p == nil {
+		return nil
+	}
+	return p.AppliedLifespanHours
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetBaseImage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.BaseImage
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetComputeEnvID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ComputeEnvID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetCondaEnvironment() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CondaEnvironment
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetConnectVersion() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ConnectVersion
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetCustomIconID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CustomIconID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetEffectiveLifespanHours() *int {
+	if p == nil {
+		return nil
+	}
+	return p.EffectiveLifespanHours
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetEnvironment() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Environment
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetInitialCheckpointID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.InitialCheckpointID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetInitialSessionID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.InitialSessionID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetIsPrivate() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.IsPrivate
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetLastHeartbeat() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastHeartbeat
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetLastStarted() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastStarted
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRemoteConfigCloneEnabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.RemoteConfigCloneEnabled
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRemoteConfigClonePath() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RemoteConfigClonePath
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRemoteConfigCommitHash() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RemoteConfigCommitHash
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRemoteConfigRepository() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RemoteConfigRepository
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRemoteConfigRevision() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RemoteConfigRevision
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRequiredCpus() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.RequiredCpus
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRequiredGpus() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.RequiredGpus
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRequiredMemory() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.RequiredMemory
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetRunningOperationID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.RunningOperationID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetSSHEnabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.SSHEnabled
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetStatusMessage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.StatusMessage
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetStopReason() *string {
+	if p == nil {
+		return nil
+	}
+	return p.StopReason
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetTemplateIcon() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TemplateIcon
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetTemplatePort() *int {
+	if p == nil {
+		return nil
+	}
+	return p.TemplatePort
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetTemplateURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TemplateURL
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetTool() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Tool
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+func (p *PreviousStateDataStudioAuditImage) GetWaveBuildID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.WaveBuildID
+}
+
+type PreviousStateDataStudioConnectionAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ConnectionTag  *int           `json:"connectionTag,omitempty"`
+	LastActive     *time.Time     `json:"lastActive,omitempty"`
+	UserID         *string        `json:"userId,omitempty"`
+}
+
+func (p PreviousStateDataStudioConnectionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDataStudioConnectionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDataStudioConnectionAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDataStudioConnectionAuditImage) GetConnectionTag() *int {
+	if p == nil {
+		return nil
+	}
+	return p.ConnectionTag
+}
+
+func (p *PreviousStateDataStudioConnectionAuditImage) GetLastActive() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastActive
+}
+
+func (p *PreviousStateDataStudioConnectionAuditImage) GetUserID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.UserID
+}
+
+type PreviousStateDatasetVersionAuditImage struct {
+	AuditImageType AuditImageType                        `json:"auditImageType"`
+	CreatedByID    *int64                                `json:"createdById,omitempty"`
+	Data           *DatasetVersionImageBlobContentImage  `json:"data,omitempty"`
+	DatasetID      *string                               `json:"datasetId,omitempty"`
+	Disabled       *bool                                 `json:"disabled,omitempty"`
+	HasHeader      *bool                                 `json:"hasHeader,omitempty"`
+	Latest         *bool                                 `json:"latest,omitempty"`
+	LinkedSource   *DatasetVersionImageLinkedSourceImage `json:"linkedSource,omitempty"`
+	Version        *int64                                `json:"version,omitempty"`
+}
+
+func (p PreviousStateDatasetVersionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetCreatedByID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedByID
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetData() *DatasetVersionImageBlobContentImage {
+	if p == nil {
+		return nil
+	}
+	return p.Data
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetDatasetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.DatasetID
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetDisabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Disabled
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetHasHeader() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.HasHeader
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetLatest() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Latest
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetLinkedSource() *DatasetVersionImageLinkedSourceImage {
+	if p == nil {
+		return nil
+	}
+	return p.LinkedSource
+}
+
+func (p *PreviousStateDatasetVersionAuditImage) GetVersion() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.Version
+}
+
+type PreviousStateDatasetAuditImage struct {
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	Description     *string        `json:"description,omitempty"`
+	Hidden          *bool          `json:"hidden,omitempty"`
+	LastUpdatedByID *int64         `json:"lastUpdatedById,omitempty"`
+	MediaType       *string        `json:"mediaType,omitempty"`
+	Name            *string        `json:"name,omitempty"`
+	SourceType      *string        `json:"sourceType,omitempty"`
+}
+
+func (p PreviousStateDatasetAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDatasetAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDatasetAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDatasetAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateDatasetAuditImage) GetHidden() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Hidden
+}
+
+func (p *PreviousStateDatasetAuditImage) GetLastUpdatedByID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.LastUpdatedByID
+}
+
+func (p *PreviousStateDatasetAuditImage) GetMediaType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.MediaType
+}
+
+func (p *PreviousStateDatasetAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateDatasetAuditImage) GetSourceType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.SourceType
+}
+
+type PreviousStateDataLinkMetadataAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Hidden         *bool          `json:"hidden,omitempty"`
+}
+
+func (p PreviousStateDataLinkMetadataAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDataLinkMetadataAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDataLinkMetadataAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDataLinkMetadataAuditImage) GetHidden() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Hidden
+}
+
+type PreviousStateDataLinkAuditImage struct {
+	AuditImageType   AuditImageType `json:"auditImageType"`
+	CreationSource   *string        `json:"creationSource,omitempty"`
+	CredentialsID    *string        `json:"credentialsId,omitempty"`
+	Description      *string        `json:"description,omitempty"`
+	Message          *string        `json:"message,omitempty"`
+	Name             *string        `json:"name,omitempty"`
+	Provider         *string        `json:"provider,omitempty"`
+	PublicAccessible *bool          `json:"publicAccessible,omitempty"`
+	Region           *string        `json:"region,omitempty"`
+	ResourceRef      *string        `json:"resourceRef,omitempty"`
+	Status           *string        `json:"status,omitempty"`
+	Type             *string        `json:"type,omitempty"`
+}
+
+func (p PreviousStateDataLinkAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDataLinkAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetCreationSource() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CreationSource
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetCredentialsID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CredentialsID
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetMessage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Message
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetProvider() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Provider
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetPublicAccessible() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.PublicAccessible
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetRegion() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Region
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetResourceRef() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ResourceRef
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+func (p *PreviousStateDataLinkAuditImage) GetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Type
+}
+
+type PreviousStateDataLinkFileOperationAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	Provider       *string        `json:"provider,omitempty"`
+	URI            *string        `json:"uri,omitempty"`
+}
+
+func (p PreviousStateDataLinkFileOperationAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateDataLinkFileOperationAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateDataLinkFileOperationAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateDataLinkFileOperationAuditImage) GetProvider() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Provider
+}
+
+func (p *PreviousStateDataLinkFileOperationAuditImage) GetURI() *string {
+	if p == nil {
+		return nil
+	}
+	return p.URI
+}
+
+type PreviousStateCustomRoleAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ContextType    *string        `json:"contextType,omitempty"`
+	Description    *string        `json:"description,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+	Permissions    []string       `json:"permissions,omitempty"`
+}
+
+func (p PreviousStateCustomRoleAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateCustomRoleAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateCustomRoleAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateCustomRoleAuditImage) GetContextType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ContextType
+}
+
+func (p *PreviousStateCustomRoleAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateCustomRoleAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateCustomRoleAuditImage) GetPermissions() []string {
+	if p == nil {
+		return nil
+	}
+	return p.Permissions
+}
+
+type PreviousStateCreditPurchaseAuditImage struct {
+	Amount          *float64       `json:"amount,omitempty"`
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	CreatedByUserID *int64         `json:"createdByUserId,omitempty"`
+	OrganizationID  *int64         `json:"organizationId,omitempty"`
+	Status          *string        `json:"status,omitempty"`
+}
+
+func (p PreviousStateCreditPurchaseAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) GetAmount() *float64 {
+	if p == nil {
+		return nil
+	}
+	return p.Amount
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) GetCreatedByUserID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.CreatedByUserID
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) GetOrganizationID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.OrganizationID
+}
+
+func (p *PreviousStateCreditPurchaseAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+type PreviousStateCreditInfoAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ContractID     *string        `json:"contractId,omitempty"`
+	CustomerID     *string        `json:"customerId,omitempty"`
+	HasCreditGrant *bool          `json:"hasCreditGrant,omitempty"`
+}
+
+func (p PreviousStateCreditInfoAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateCreditInfoAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateCreditInfoAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateCreditInfoAuditImage) GetContractID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ContractID
+}
+
+func (p *PreviousStateCreditInfoAuditImage) GetCustomerID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CustomerID
+}
+
+func (p *PreviousStateCreditInfoAuditImage) GetHasCreditGrant() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.HasCreditGrant
+}
+
+type PreviousStateCredentialsAuditImage struct {
+	AuditImageType AuditImageType      `json:"auditImageType"`
+	BaseURL        *string             `json:"baseUrl,omitempty"`
+	Category       *string             `json:"category,omitempty"`
+	Description    *string             `json:"description,omitempty"`
+	Keys           *SecurityKeysOutput `json:"keys,omitempty"`
+	LastUsed       *time.Time          `json:"lastUsed,omitempty"`
+	Message        *string             `json:"message,omitempty"`
+	Name           *string             `json:"name,omitempty"`
+	Provider       *string             `json:"provider,omitempty"`
+	Status         *string             `json:"status,omitempty"`
+}
+
+func (p PreviousStateCredentialsAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateCredentialsAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetBaseURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.BaseURL
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetCategory() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Category
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeys() *SecurityKeysOutput {
+	if p == nil {
+		return nil
+	}
+	return p.Keys
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysAws() *AWSCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AWSCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysAzure() *AzureCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AzureCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysAzureCloud() *AzureCloudCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AzureCloudCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysAzureEntra() *AzureEntraCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AzureEntraCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysAzurerepos() *AzureReposCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AzureReposCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysBitbucket() *BitBucketCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.BitBucketCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysCodecommit() *AWSCodeCommitCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.AWSCodeCommitCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysContainerReg() *ContainerRegistryCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.ContainerRegistryCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysGitea() *GiteaCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.GiteaCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysGithub() *GitHubCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.GitHubCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysGithubApp() *GitHubAppCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.GitHubAppCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysGitlab() *GitLabCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.GitLabCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysGoogle() *GoogleCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.GoogleCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysK8s() *KubernetesCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.KubernetesCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysLocal() *LocalSecurityKeysOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.LocalSecurityKeysOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysS3() *S3CompatibleCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.S3CompatibleCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysSeqeracompute() *SeqeraComputeCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.SeqeraComputeCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysSSH() *SSHCredentialsOutput {
+	if v := p.GetKeys(); v != nil {
+		return v.SSHCredentialsOutput
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetKeysTwAgent() *TowerAgentCredentials {
+	if v := p.GetKeys(); v != nil {
+		return v.TowerAgentCredentials
+	}
+	return nil
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetMessage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Message
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetProvider() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Provider
+}
+
+func (p *PreviousStateCredentialsAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+type PreviousStateComputeEnvironmentAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config                         *ComputeConfig `json:"config,omitempty"`
+	CredentialsID                  *string        `json:"credentialsId,omitempty"`
+	Description                    *string        `json:"description,omitempty"`
+	FusionMetricsCollectionEnabled *bool          `json:"fusionMetricsCollectionEnabled,omitempty"`
+	LastUsed                       *time.Time     `json:"lastUsed,omitempty"`
+	ManagedIdentityID              *int64         `json:"managedIdentityId,omitempty"`
+	Message                        *string        `json:"message,omitempty"`
+	Name                           *string        `json:"name,omitempty"`
+	Platform                       *string        `json:"platform,omitempty"`
+	Primary                        *bool          `json:"primary,omitempty"`
+	Status                         *string        `json:"status,omitempty"`
+}
+
+func (p PreviousStateComputeEnvironmentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfig() *ComputeConfig {
+	if p == nil {
+		return nil
+	}
+	return p.Config
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := p.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := p.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetCredentialsID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.CredentialsID
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetFusionMetricsCollectionEnabled() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.FusionMetricsCollectionEnabled
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetManagedIdentityID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ManagedIdentityID
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetMessage() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Message
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetPlatform() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Platform
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetPrimary() *bool {
+	if p == nil {
+		return nil
+	}
+	return p.Primary
+}
+
+func (p *PreviousStateComputeEnvironmentAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+type PreviousStateBudgetAuditImage struct {
+	Amount         *int64         `json:"amount,omitempty"`
+	AuditImageType AuditImageType `json:"auditImageType"`
+	BudgetType     *string        `json:"budgetType,omitempty"`
+	OrganizationID *int64         `json:"organizationId,omitempty"`
+	Reason         *string        `json:"reason,omitempty"`
+	WorkspaceID    *int64         `json:"workspaceId,omitempty"`
+}
+
+func (p PreviousStateBudgetAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateBudgetAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateBudgetAuditImage) GetAmount() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.Amount
+}
+
+func (p *PreviousStateBudgetAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateBudgetAuditImage) GetBudgetType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.BudgetType
+}
+
+func (p *PreviousStateBudgetAuditImage) GetOrganizationID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.OrganizationID
+}
+
+func (p *PreviousStateBudgetAuditImage) GetReason() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Reason
+}
+
+func (p *PreviousStateBudgetAuditImage) GetWorkspaceID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.WorkspaceID
+}
+
+type PreviousStateAIChatThreadAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	ParentThreadID *string        `json:"parentThreadId,omitempty"`
+}
+
+func (p PreviousStateAIChatThreadAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateAIChatThreadAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateAIChatThreadAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateAIChatThreadAuditImage) GetParentThreadID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ParentThreadID
+}
+
+type PreviousStateAgentRunAuditImage struct {
+	AgentID         *string        `json:"agentId,omitempty"`
+	AuditImageType  AuditImageType `json:"auditImageType"`
+	TriggerEntityID *string        `json:"triggerEntityId,omitempty"`
+	TriggerType     *string        `json:"triggerType,omitempty"`
+}
+
+func (p PreviousStateAgentRunAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateAgentRunAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateAgentRunAuditImage) GetAgentID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.AgentID
+}
+
+func (p *PreviousStateAgentRunAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateAgentRunAuditImage) GetTriggerEntityID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TriggerEntityID
+}
+
+func (p *PreviousStateAgentRunAuditImage) GetTriggerType() *string {
+	if p == nil {
+		return nil
+	}
+	return p.TriggerType
+}
+
+type PreviousStateAgentAuditImage struct {
+	AgentInstructionsTemplateID *string        `json:"agentInstructionsTemplateId,omitempty"`
+	AuditImageType              AuditImageType `json:"auditImageType"`
+	Description                 *string        `json:"description,omitempty"`
+	GithubAppCredentialID       *string        `json:"githubAppCredentialId,omitempty"`
+	Name                        *string        `json:"name,omitempty"`
+	ServiceAccountID            *int64         `json:"serviceAccountId,omitempty"`
+	Status                      *string        `json:"status,omitempty"`
+}
+
+func (p PreviousStateAgentAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateAgentAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateAgentAuditImage) GetAgentInstructionsTemplateID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.AgentInstructionsTemplateID
+}
+
+func (p *PreviousStateAgentAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateAgentAuditImage) GetDescription() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Description
+}
+
+func (p *PreviousStateAgentAuditImage) GetGithubAppCredentialID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.GithubAppCredentialID
+}
+
+func (p *PreviousStateAgentAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateAgentAuditImage) GetServiceAccountID() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.ServiceAccountID
+}
+
+func (p *PreviousStateAgentAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+type PreviousStateActionAuditImage struct {
+	AuditImageType AuditImageType    `json:"auditImageType"`
+	Config         *ActionConfigType `json:"config,omitempty"`
+	Error          *string           `json:"error,omitempty"`
+	Event          *ActionEventType  `json:"event,omitempty"`
+	HookID         *string           `json:"hookId,omitempty"`
+	HookURL        *string           `json:"hookUrl,omitempty"`
+	LastSeen       *time.Time        `json:"lastSeen,omitempty"`
+	Launch         *LaunchImage      `json:"launch,omitempty"`
+	Name           *string           `json:"name,omitempty"`
+	Source         *string           `json:"source,omitempty"`
+	Status         *string           `json:"status,omitempty"`
+}
+
+func (p PreviousStateActionAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateActionAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateActionAuditImage) GetConfig() *ActionConfigType {
+	if p == nil {
+		return nil
+	}
+	return p.Config
+}
+
+func (p *PreviousStateActionAuditImage) GetConfigBucket() *BucketActionConfig {
+	if v := p.GetConfig(); v != nil {
+		return v.BucketActionConfig
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetConfigCron() *CronActionConfig {
+	if v := p.GetConfig(); v != nil {
+		return v.CronActionConfig
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetConfigGithub() *GithubActionConfig {
+	if v := p.GetConfig(); v != nil {
+		return v.GithubActionConfig
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetConfigPipelineStatus() *PipelineStatusActionConfig {
+	if v := p.GetConfig(); v != nil {
+		return v.PipelineStatusActionConfig
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetConfigTower() *ActionTowerActionConfig {
+	if v := p.GetConfig(); v != nil {
+		return v.ActionTowerActionConfig
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetError() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Error
+}
+
+func (p *PreviousStateActionAuditImage) GetEvent() *ActionEventType {
+	if p == nil {
+		return nil
+	}
+	return p.Event
+}
+
+func (p *PreviousStateActionAuditImage) GetEventBucket() *BucketActionEvent {
+	if v := p.GetEvent(); v != nil {
+		return v.BucketActionEvent
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetEventCron() *CronActionEvent {
+	if v := p.GetEvent(); v != nil {
+		return v.CronActionEvent
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetEventGithub() *GithubActionEvent {
+	if v := p.GetEvent(); v != nil {
+		return v.GithubActionEvent
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetEventPipelineStatus() *PipelineStatusActionEvent {
+	if v := p.GetEvent(); v != nil {
+		return v.PipelineStatusActionEvent
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetEventTower() *ActionTowerActionEvent {
+	if v := p.GetEvent(); v != nil {
+		return v.ActionTowerActionEvent
+	}
+	return nil
+}
+
+func (p *PreviousStateActionAuditImage) GetHookID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.HookID
+}
+
+func (p *PreviousStateActionAuditImage) GetHookURL() *string {
+	if p == nil {
+		return nil
+	}
+	return p.HookURL
+}
+
+func (p *PreviousStateActionAuditImage) GetLastSeen() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastSeen
+}
+
+func (p *PreviousStateActionAuditImage) GetLaunch() *LaunchImage {
+	if p == nil {
+		return nil
+	}
+	return p.Launch
+}
+
+func (p *PreviousStateActionAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
+}
+
+func (p *PreviousStateActionAuditImage) GetSource() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Source
+}
+
+func (p *PreviousStateActionAuditImage) GetStatus() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Status
+}
+
+type PreviousStateAccessTokenAuditImage struct {
+	AuditImageType AuditImageType `json:"auditImageType"`
+	LastUsed       *time.Time     `json:"lastUsed,omitempty"`
+	Name           *string        `json:"name,omitempty"`
+}
+
+func (p PreviousStateAccessTokenAuditImage) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PreviousStateAccessTokenAuditImage) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PreviousStateAccessTokenAuditImage) GetAuditImageType() AuditImageType {
+	if p == nil {
+		return AuditImageType("")
+	}
+	return p.AuditImageType
+}
+
+func (p *PreviousStateAccessTokenAuditImage) GetLastUsed() *time.Time {
+	if p == nil {
+		return nil
+	}
+	return p.LastUsed
+}
+
+func (p *PreviousStateAccessTokenAuditImage) GetName() *string {
+	if p == nil {
+		return nil
+	}
+	return p.Name
 }
 
 type PreviousStateType string
@@ -1081,6 +8030,7 @@ const (
 	PreviousStateTypeAgent                PreviousStateType = "agent"
 	PreviousStateTypeAgentRun             PreviousStateType = "agent_run"
 	PreviousStateTypeAiChatThread         PreviousStateType = "ai_chat_thread"
+	PreviousStateTypeBudget               PreviousStateType = "budget"
 	PreviousStateTypeComputeEnv           PreviousStateType = "compute_env"
 	PreviousStateTypeCredentials          PreviousStateType = "credentials"
 	PreviousStateTypeCreditInfo           PreviousStateType = "credit_info"
@@ -1099,6 +8049,7 @@ const (
 	PreviousStateTypeManagedCredentials   PreviousStateType = "managed_credentials"
 	PreviousStateTypeManagedIdentity      PreviousStateType = "managed_identity"
 	PreviousStateTypeMember               PreviousStateType = "member"
+	PreviousStateTypeOauthClientSecret    PreviousStateType = "oauth_client_secret"
 	PreviousStateTypeOauthConsent         PreviousStateType = "oauth_consent"
 	PreviousStateTypeOrgSsoConnection     PreviousStateType = "org_sso_connection"
 	PreviousStateTypeOrganization         PreviousStateType = "organization"
@@ -1117,501 +8068,527 @@ const (
 )
 
 type PreviousState struct {
-	AccessTokenImage          *AccessTokenImage          `queryParam:"inline" union:"member"`
-	ActionImage               *ActionImage               `queryParam:"inline" union:"member"`
-	AgentImage                *AgentImage                `queryParam:"inline" union:"member"`
-	AgentRunImage             *AgentRunImage             `queryParam:"inline" union:"member"`
-	AiChatThreadImage         *AiChatThreadImage         `queryParam:"inline" union:"member"`
-	ComputeEnvImage           *ComputeEnvImage           `queryParam:"inline" union:"member"`
-	CredentialsImage          *CredentialsImage          `queryParam:"inline" union:"member"`
-	CreditInfoImage           *CreditInfoImage           `queryParam:"inline" union:"member"`
-	CreditPurchaseImage       *CreditPurchaseImage       `queryParam:"inline" union:"member"`
-	CustomRoleImage           *CustomRoleImage           `queryParam:"inline" union:"member"`
-	DataLinkFileImage         *DataLinkFileImage         `queryParam:"inline" union:"member"`
-	DataLinkImage             *DataLinkImage             `queryParam:"inline" union:"member"`
-	DataLinkMetadataImage     *DataLinkMetadataImage     `queryParam:"inline" union:"member"`
-	DatasetImage              *DatasetImage              `queryParam:"inline" union:"member"`
-	DatasetVersionImage       *DatasetVersionImage       `queryParam:"inline" union:"member"`
-	DataStudioConnectionImage *DataStudioConnectionImage `queryParam:"inline" union:"member"`
-	DataStudioImage           *DataStudioImage           `queryParam:"inline" union:"member"`
-	IdpGroupImage             *IdpGroupImage             `queryParam:"inline" union:"member"`
-	LabelAssignmentImage      *LabelAssignmentImage      `queryParam:"inline" union:"member"`
-	LabelImage                *LabelImage                `queryParam:"inline" union:"member"`
-	ManagedCredentialsImage   *ManagedCredentialsImage   `queryParam:"inline" union:"member"`
-	ManagedIdentityImage      *ManagedIdentityImage      `queryParam:"inline" union:"member"`
-	MemberImage               *MemberImage               `queryParam:"inline" union:"member"`
-	OAuthConsentImage         *OAuthConsentImage         `queryParam:"inline" union:"member"`
-	OrganizationImage         *OrganizationImage         `queryParam:"inline" union:"member"`
-	OrgSsoConnectionImage     *OrgSsoConnectionImage     `queryParam:"inline" union:"member"`
-	ParticipantImage          *ParticipantImage          `queryParam:"inline" union:"member"`
-	PipelineImage             *PipelineImage             `queryParam:"inline" union:"member"`
-	PipelineSecretImage       *PipelineSecretImage       `queryParam:"inline" union:"member"`
-	ScimTokenImage            *ScimTokenImage            `queryParam:"inline" union:"member"`
-	ServiceAccountImage       *ServiceAccountImage       `queryParam:"inline" union:"member"`
-	TeamImage                 *TeamImage                 `queryParam:"inline" union:"member"`
-	TeamMemberImage           *TeamMemberImage           `queryParam:"inline" union:"member"`
-	UserImage                 *UserImage                 `queryParam:"inline" union:"member"`
-	UserRoleImage             *UserRoleImage             `queryParam:"inline" union:"member"`
-	UserSSHPublicKeyImage     *UserSSHPublicKeyImage     `queryParam:"inline" union:"member"`
-	WorkflowImage             *WorkflowImage             `queryParam:"inline" union:"member"`
-	WorkspaceImage            *WorkspaceImage            `queryParam:"inline" union:"member"`
+	PreviousStateAccessTokenAuditImage           *PreviousStateAccessTokenAuditImage           `queryParam:"inline" union:"member"`
+	PreviousStateActionAuditImage                *PreviousStateActionAuditImage                `queryParam:"inline" union:"member"`
+	PreviousStateAgentAuditImage                 *PreviousStateAgentAuditImage                 `queryParam:"inline" union:"member"`
+	PreviousStateAgentRunAuditImage              *PreviousStateAgentRunAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStateAIChatThreadAuditImage          *PreviousStateAIChatThreadAuditImage          `queryParam:"inline" union:"member"`
+	PreviousStateBudgetAuditImage                *PreviousStateBudgetAuditImage                `queryParam:"inline" union:"member"`
+	PreviousStateComputeEnvironmentAuditImage    *PreviousStateComputeEnvironmentAuditImage    `queryParam:"inline" union:"member"`
+	PreviousStateCredentialsAuditImage           *PreviousStateCredentialsAuditImage           `queryParam:"inline" union:"member"`
+	PreviousStateCreditInfoAuditImage            *PreviousStateCreditInfoAuditImage            `queryParam:"inline" union:"member"`
+	PreviousStateCreditPurchaseAuditImage        *PreviousStateCreditPurchaseAuditImage        `queryParam:"inline" union:"member"`
+	PreviousStateCustomRoleAuditImage            *PreviousStateCustomRoleAuditImage            `queryParam:"inline" union:"member"`
+	PreviousStateDataLinkFileOperationAuditImage *PreviousStateDataLinkFileOperationAuditImage `queryParam:"inline" union:"member"`
+	PreviousStateDataLinkAuditImage              *PreviousStateDataLinkAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStateDataLinkMetadataAuditImage      *PreviousStateDataLinkMetadataAuditImage      `queryParam:"inline" union:"member"`
+	PreviousStateDatasetAuditImage               *PreviousStateDatasetAuditImage               `queryParam:"inline" union:"member"`
+	PreviousStateDatasetVersionAuditImage        *PreviousStateDatasetVersionAuditImage        `queryParam:"inline" union:"member"`
+	PreviousStateDataStudioConnectionAuditImage  *PreviousStateDataStudioConnectionAuditImage  `queryParam:"inline" union:"member"`
+	PreviousStateDataStudioAuditImage            *PreviousStateDataStudioAuditImage            `queryParam:"inline" union:"member"`
+	PreviousStateIDPGroupAuditImage              *PreviousStateIDPGroupAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStateLabelAssignmentAuditImage       *PreviousStateLabelAssignmentAuditImage       `queryParam:"inline" union:"member"`
+	PreviousStateLabelAuditImage                 *PreviousStateLabelAuditImage                 `queryParam:"inline" union:"member"`
+	PreviousStateManagedCredentialsAuditImage    *PreviousStateManagedCredentialsAuditImage    `queryParam:"inline" union:"member"`
+	PreviousStateManagedIdentityAuditImage       *PreviousStateManagedIdentityAuditImage       `queryParam:"inline" union:"member"`
+	PreviousStateMemberAuditImage                *PreviousStateMemberAuditImage                `queryParam:"inline" union:"member"`
+	PreviousStateOAuthConsentAuditImage          *PreviousStateOAuthConsentAuditImage          `queryParam:"inline" union:"member"`
+	PreviousStateOAuthClientSecretAuditImage     *PreviousStateOAuthClientSecretAuditImage     `queryParam:"inline" union:"member"`
+	PreviousStateOrganizationAuditImage          *PreviousStateOrganizationAuditImage          `queryParam:"inline" union:"member"`
+	PreviousStateOrgSSOConnectionAuditImage      *PreviousStateOrgSSOConnectionAuditImage      `queryParam:"inline" union:"member"`
+	PreviousStateParticipantAuditImage           *PreviousStateParticipantAuditImage           `queryParam:"inline" union:"member"`
+	PreviousStatePipelineAuditImage              *PreviousStatePipelineAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStatePipelineSecretAuditImage        *PreviousStatePipelineSecretAuditImage        `queryParam:"inline" union:"member"`
+	PreviousStateSCIMTokenAuditImage             *PreviousStateSCIMTokenAuditImage             `queryParam:"inline" union:"member"`
+	PreviousStateServiceAccountAuditImage        *PreviousStateServiceAccountAuditImage        `queryParam:"inline" union:"member"`
+	PreviousStateTeamAuditImage                  *PreviousStateTeamAuditImage                  `queryParam:"inline" union:"member"`
+	PreviousStateTeamMemberAuditImage            *PreviousStateTeamMemberAuditImage            `queryParam:"inline" union:"member"`
+	PreviousStateUserAuditImage                  *PreviousStateUserAuditImage                  `queryParam:"inline" union:"member"`
+	PreviousStateUserRoleAuditImage              *PreviousStateUserRoleAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStateSSHKeyAuditImage                *PreviousStateSSHKeyAuditImage                `queryParam:"inline" union:"member"`
+	PreviousStateWorkflowAuditImage              *PreviousStateWorkflowAuditImage              `queryParam:"inline" union:"member"`
+	PreviousStateWorkspaceAuditImage             *PreviousStateWorkspaceAuditImage             `queryParam:"inline" union:"member"`
 
 	Type PreviousStateType
 }
 
-func CreatePreviousStateAccessToken(accessToken AccessTokenImage) PreviousState {
+func CreatePreviousStateAccessToken(accessToken PreviousStateAccessTokenAuditImage) PreviousState {
 	typ := PreviousStateTypeAccessToken
 
 	typStr := AuditImageType(typ)
 	accessToken.AuditImageType = typStr
 
 	return PreviousState{
-		AccessTokenImage: &accessToken,
-		Type:             typ,
+		PreviousStateAccessTokenAuditImage: &accessToken,
+		Type:                               typ,
 	}
 }
 
-func CreatePreviousStateAction(action ActionImage) PreviousState {
+func CreatePreviousStateAction(action PreviousStateActionAuditImage) PreviousState {
 	typ := PreviousStateTypeAction
 
 	typStr := AuditImageType(typ)
 	action.AuditImageType = typStr
 
 	return PreviousState{
-		ActionImage: &action,
-		Type:        typ,
+		PreviousStateActionAuditImage: &action,
+		Type:                          typ,
 	}
 }
 
-func CreatePreviousStateAgent(agent AgentImage) PreviousState {
+func CreatePreviousStateAgent(agent PreviousStateAgentAuditImage) PreviousState {
 	typ := PreviousStateTypeAgent
 
 	typStr := AuditImageType(typ)
 	agent.AuditImageType = typStr
 
 	return PreviousState{
-		AgentImage: &agent,
-		Type:       typ,
+		PreviousStateAgentAuditImage: &agent,
+		Type:                         typ,
 	}
 }
 
-func CreatePreviousStateAgentRun(agentRun AgentRunImage) PreviousState {
+func CreatePreviousStateAgentRun(agentRun PreviousStateAgentRunAuditImage) PreviousState {
 	typ := PreviousStateTypeAgentRun
 
 	typStr := AuditImageType(typ)
 	agentRun.AuditImageType = typStr
 
 	return PreviousState{
-		AgentRunImage: &agentRun,
-		Type:          typ,
+		PreviousStateAgentRunAuditImage: &agentRun,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStateAiChatThread(aiChatThread AiChatThreadImage) PreviousState {
+func CreatePreviousStateAiChatThread(aiChatThread PreviousStateAIChatThreadAuditImage) PreviousState {
 	typ := PreviousStateTypeAiChatThread
 
 	typStr := AuditImageType(typ)
 	aiChatThread.AuditImageType = typStr
 
 	return PreviousState{
-		AiChatThreadImage: &aiChatThread,
-		Type:              typ,
+		PreviousStateAIChatThreadAuditImage: &aiChatThread,
+		Type:                                typ,
 	}
 }
 
-func CreatePreviousStateComputeEnv(computeEnv ComputeEnvImage) PreviousState {
+func CreatePreviousStateBudget(budget PreviousStateBudgetAuditImage) PreviousState {
+	typ := PreviousStateTypeBudget
+
+	typStr := AuditImageType(typ)
+	budget.AuditImageType = typStr
+
+	return PreviousState{
+		PreviousStateBudgetAuditImage: &budget,
+		Type:                          typ,
+	}
+}
+
+func CreatePreviousStateComputeEnv(computeEnv PreviousStateComputeEnvironmentAuditImage) PreviousState {
 	typ := PreviousStateTypeComputeEnv
 
 	typStr := AuditImageType(typ)
 	computeEnv.AuditImageType = typStr
 
 	return PreviousState{
-		ComputeEnvImage: &computeEnv,
-		Type:            typ,
+		PreviousStateComputeEnvironmentAuditImage: &computeEnv,
+		Type: typ,
 	}
 }
 
-func CreatePreviousStateCredentials(credentials CredentialsImage) PreviousState {
+func CreatePreviousStateCredentials(credentials PreviousStateCredentialsAuditImage) PreviousState {
 	typ := PreviousStateTypeCredentials
 
 	typStr := AuditImageType(typ)
 	credentials.AuditImageType = typStr
 
 	return PreviousState{
-		CredentialsImage: &credentials,
-		Type:             typ,
+		PreviousStateCredentialsAuditImage: &credentials,
+		Type:                               typ,
 	}
 }
 
-func CreatePreviousStateCreditInfo(creditInfo CreditInfoImage) PreviousState {
+func CreatePreviousStateCreditInfo(creditInfo PreviousStateCreditInfoAuditImage) PreviousState {
 	typ := PreviousStateTypeCreditInfo
 
 	typStr := AuditImageType(typ)
 	creditInfo.AuditImageType = typStr
 
 	return PreviousState{
-		CreditInfoImage: &creditInfo,
-		Type:            typ,
+		PreviousStateCreditInfoAuditImage: &creditInfo,
+		Type:                              typ,
 	}
 }
 
-func CreatePreviousStateCreditPurchase(creditPurchase CreditPurchaseImage) PreviousState {
+func CreatePreviousStateCreditPurchase(creditPurchase PreviousStateCreditPurchaseAuditImage) PreviousState {
 	typ := PreviousStateTypeCreditPurchase
 
 	typStr := AuditImageType(typ)
 	creditPurchase.AuditImageType = typStr
 
 	return PreviousState{
-		CreditPurchaseImage: &creditPurchase,
-		Type:                typ,
+		PreviousStateCreditPurchaseAuditImage: &creditPurchase,
+		Type:                                  typ,
 	}
 }
 
-func CreatePreviousStateCustomRole(customRole CustomRoleImage) PreviousState {
+func CreatePreviousStateCustomRole(customRole PreviousStateCustomRoleAuditImage) PreviousState {
 	typ := PreviousStateTypeCustomRole
 
 	typStr := AuditImageType(typ)
 	customRole.AuditImageType = typStr
 
 	return PreviousState{
-		CustomRoleImage: &customRole,
-		Type:            typ,
+		PreviousStateCustomRoleAuditImage: &customRole,
+		Type:                              typ,
 	}
 }
 
-func CreatePreviousStateDataLink(dataLink DataLinkImage) PreviousState {
+func CreatePreviousStateDataLink(dataLink PreviousStateDataLinkAuditImage) PreviousState {
 	typ := PreviousStateTypeDataLink
 
 	typStr := AuditImageType(typ)
 	dataLink.AuditImageType = typStr
 
 	return PreviousState{
-		DataLinkImage: &dataLink,
-		Type:          typ,
+		PreviousStateDataLinkAuditImage: &dataLink,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStateDataLinkFile(dataLinkFile DataLinkFileImage) PreviousState {
+func CreatePreviousStateDataLinkFile(dataLinkFile PreviousStateDataLinkFileOperationAuditImage) PreviousState {
 	typ := PreviousStateTypeDataLinkFile
 
 	typStr := AuditImageType(typ)
 	dataLinkFile.AuditImageType = typStr
 
 	return PreviousState{
-		DataLinkFileImage: &dataLinkFile,
-		Type:              typ,
+		PreviousStateDataLinkFileOperationAuditImage: &dataLinkFile,
+		Type: typ,
 	}
 }
 
-func CreatePreviousStateDataLinkMetadata(dataLinkMetadata DataLinkMetadataImage) PreviousState {
+func CreatePreviousStateDataLinkMetadata(dataLinkMetadata PreviousStateDataLinkMetadataAuditImage) PreviousState {
 	typ := PreviousStateTypeDataLinkMetadata
 
 	typStr := AuditImageType(typ)
 	dataLinkMetadata.AuditImageType = typStr
 
 	return PreviousState{
-		DataLinkMetadataImage: &dataLinkMetadata,
-		Type:                  typ,
+		PreviousStateDataLinkMetadataAuditImage: &dataLinkMetadata,
+		Type:                                    typ,
 	}
 }
 
-func CreatePreviousStateDataStudio(dataStudio DataStudioImage) PreviousState {
+func CreatePreviousStateDataStudio(dataStudio PreviousStateDataStudioAuditImage) PreviousState {
 	typ := PreviousStateTypeDataStudio
 
 	typStr := AuditImageType(typ)
 	dataStudio.AuditImageType = typStr
 
 	return PreviousState{
-		DataStudioImage: &dataStudio,
-		Type:            typ,
+		PreviousStateDataStudioAuditImage: &dataStudio,
+		Type:                              typ,
 	}
 }
 
-func CreatePreviousStateDataStudioConnection(dataStudioConnection DataStudioConnectionImage) PreviousState {
+func CreatePreviousStateDataStudioConnection(dataStudioConnection PreviousStateDataStudioConnectionAuditImage) PreviousState {
 	typ := PreviousStateTypeDataStudioConnection
 
 	typStr := AuditImageType(typ)
 	dataStudioConnection.AuditImageType = typStr
 
 	return PreviousState{
-		DataStudioConnectionImage: &dataStudioConnection,
-		Type:                      typ,
+		PreviousStateDataStudioConnectionAuditImage: &dataStudioConnection,
+		Type: typ,
 	}
 }
 
-func CreatePreviousStateDataset(dataset DatasetImage) PreviousState {
+func CreatePreviousStateDataset(dataset PreviousStateDatasetAuditImage) PreviousState {
 	typ := PreviousStateTypeDataset
 
 	typStr := AuditImageType(typ)
 	dataset.AuditImageType = typStr
 
 	return PreviousState{
-		DatasetImage: &dataset,
-		Type:         typ,
+		PreviousStateDatasetAuditImage: &dataset,
+		Type:                           typ,
 	}
 }
 
-func CreatePreviousStateDatasetVersion(datasetVersion DatasetVersionImage) PreviousState {
+func CreatePreviousStateDatasetVersion(datasetVersion PreviousStateDatasetVersionAuditImage) PreviousState {
 	typ := PreviousStateTypeDatasetVersion
 
 	typStr := AuditImageType(typ)
 	datasetVersion.AuditImageType = typStr
 
 	return PreviousState{
-		DatasetVersionImage: &datasetVersion,
-		Type:                typ,
+		PreviousStateDatasetVersionAuditImage: &datasetVersion,
+		Type:                                  typ,
 	}
 }
 
-func CreatePreviousStateIdpGroup(idpGroup IdpGroupImage) PreviousState {
+func CreatePreviousStateIdpGroup(idpGroup PreviousStateIDPGroupAuditImage) PreviousState {
 	typ := PreviousStateTypeIdpGroup
 
 	typStr := AuditImageType(typ)
 	idpGroup.AuditImageType = typStr
 
 	return PreviousState{
-		IdpGroupImage: &idpGroup,
-		Type:          typ,
+		PreviousStateIDPGroupAuditImage: &idpGroup,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStateLabel(label LabelImage) PreviousState {
+func CreatePreviousStateLabel(label PreviousStateLabelAuditImage) PreviousState {
 	typ := PreviousStateTypeLabel
 
 	typStr := AuditImageType(typ)
 	label.AuditImageType = typStr
 
 	return PreviousState{
-		LabelImage: &label,
-		Type:       typ,
+		PreviousStateLabelAuditImage: &label,
+		Type:                         typ,
 	}
 }
 
-func CreatePreviousStateLabelAssignment(labelAssignment LabelAssignmentImage) PreviousState {
+func CreatePreviousStateLabelAssignment(labelAssignment PreviousStateLabelAssignmentAuditImage) PreviousState {
 	typ := PreviousStateTypeLabelAssignment
 
 	typStr := AuditImageType(typ)
 	labelAssignment.AuditImageType = typStr
 
 	return PreviousState{
-		LabelAssignmentImage: &labelAssignment,
-		Type:                 typ,
+		PreviousStateLabelAssignmentAuditImage: &labelAssignment,
+		Type:                                   typ,
 	}
 }
 
-func CreatePreviousStateManagedCredentials(managedCredentials ManagedCredentialsImage) PreviousState {
+func CreatePreviousStateManagedCredentials(managedCredentials PreviousStateManagedCredentialsAuditImage) PreviousState {
 	typ := PreviousStateTypeManagedCredentials
 
 	typStr := AuditImageType(typ)
 	managedCredentials.AuditImageType = typStr
 
 	return PreviousState{
-		ManagedCredentialsImage: &managedCredentials,
-		Type:                    typ,
+		PreviousStateManagedCredentialsAuditImage: &managedCredentials,
+		Type: typ,
 	}
 }
 
-func CreatePreviousStateManagedIdentity(managedIdentity ManagedIdentityImage) PreviousState {
+func CreatePreviousStateManagedIdentity(managedIdentity PreviousStateManagedIdentityAuditImage) PreviousState {
 	typ := PreviousStateTypeManagedIdentity
 
 	typStr := AuditImageType(typ)
 	managedIdentity.AuditImageType = typStr
 
 	return PreviousState{
-		ManagedIdentityImage: &managedIdentity,
-		Type:                 typ,
+		PreviousStateManagedIdentityAuditImage: &managedIdentity,
+		Type:                                   typ,
 	}
 }
 
-func CreatePreviousStateMember(member MemberImage) PreviousState {
+func CreatePreviousStateMember(member PreviousStateMemberAuditImage) PreviousState {
 	typ := PreviousStateTypeMember
 
 	typStr := AuditImageType(typ)
 	member.AuditImageType = typStr
 
 	return PreviousState{
-		MemberImage: &member,
-		Type:        typ,
+		PreviousStateMemberAuditImage: &member,
+		Type:                          typ,
 	}
 }
 
-func CreatePreviousStateOauthConsent(oauthConsent OAuthConsentImage) PreviousState {
+func CreatePreviousStateOauthClientSecret(oauthClientSecret PreviousStateOAuthClientSecretAuditImage) PreviousState {
+	typ := PreviousStateTypeOauthClientSecret
+
+	typStr := AuditImageType(typ)
+	oauthClientSecret.AuditImageType = typStr
+
+	return PreviousState{
+		PreviousStateOAuthClientSecretAuditImage: &oauthClientSecret,
+		Type:                                     typ,
+	}
+}
+
+func CreatePreviousStateOauthConsent(oauthConsent PreviousStateOAuthConsentAuditImage) PreviousState {
 	typ := PreviousStateTypeOauthConsent
 
 	typStr := AuditImageType(typ)
 	oauthConsent.AuditImageType = typStr
 
 	return PreviousState{
-		OAuthConsentImage: &oauthConsent,
-		Type:              typ,
+		PreviousStateOAuthConsentAuditImage: &oauthConsent,
+		Type:                                typ,
 	}
 }
 
-func CreatePreviousStateOrgSsoConnection(orgSsoConnection OrgSsoConnectionImage) PreviousState {
+func CreatePreviousStateOrgSsoConnection(orgSsoConnection PreviousStateOrgSSOConnectionAuditImage) PreviousState {
 	typ := PreviousStateTypeOrgSsoConnection
 
 	typStr := AuditImageType(typ)
 	orgSsoConnection.AuditImageType = typStr
 
 	return PreviousState{
-		OrgSsoConnectionImage: &orgSsoConnection,
-		Type:                  typ,
+		PreviousStateOrgSSOConnectionAuditImage: &orgSsoConnection,
+		Type:                                    typ,
 	}
 }
 
-func CreatePreviousStateOrganization(organization OrganizationImage) PreviousState {
+func CreatePreviousStateOrganization(organization PreviousStateOrganizationAuditImage) PreviousState {
 	typ := PreviousStateTypeOrganization
 
 	typStr := AuditImageType(typ)
 	organization.AuditImageType = typStr
 
 	return PreviousState{
-		OrganizationImage: &organization,
-		Type:              typ,
+		PreviousStateOrganizationAuditImage: &organization,
+		Type:                                typ,
 	}
 }
 
-func CreatePreviousStateParticipant(participant ParticipantImage) PreviousState {
+func CreatePreviousStateParticipant(participant PreviousStateParticipantAuditImage) PreviousState {
 	typ := PreviousStateTypeParticipant
 
 	typStr := AuditImageType(typ)
 	participant.AuditImageType = typStr
 
 	return PreviousState{
-		ParticipantImage: &participant,
-		Type:             typ,
+		PreviousStateParticipantAuditImage: &participant,
+		Type:                               typ,
 	}
 }
 
-func CreatePreviousStatePipeline(pipeline PipelineImage) PreviousState {
+func CreatePreviousStatePipeline(pipeline PreviousStatePipelineAuditImage) PreviousState {
 	typ := PreviousStateTypePipeline
 
 	typStr := AuditImageType(typ)
 	pipeline.AuditImageType = typStr
 
 	return PreviousState{
-		PipelineImage: &pipeline,
-		Type:          typ,
+		PreviousStatePipelineAuditImage: &pipeline,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStatePipelineSecret(pipelineSecret PipelineSecretImage) PreviousState {
+func CreatePreviousStatePipelineSecret(pipelineSecret PreviousStatePipelineSecretAuditImage) PreviousState {
 	typ := PreviousStateTypePipelineSecret
 
 	typStr := AuditImageType(typ)
 	pipelineSecret.AuditImageType = typStr
 
 	return PreviousState{
-		PipelineSecretImage: &pipelineSecret,
-		Type:                typ,
+		PreviousStatePipelineSecretAuditImage: &pipelineSecret,
+		Type:                                  typ,
 	}
 }
 
-func CreatePreviousStateScimToken(scimToken ScimTokenImage) PreviousState {
+func CreatePreviousStateScimToken(scimToken PreviousStateSCIMTokenAuditImage) PreviousState {
 	typ := PreviousStateTypeScimToken
 
 	typStr := AuditImageType(typ)
 	scimToken.AuditImageType = typStr
 
 	return PreviousState{
-		ScimTokenImage: &scimToken,
-		Type:           typ,
+		PreviousStateSCIMTokenAuditImage: &scimToken,
+		Type:                             typ,
 	}
 }
 
-func CreatePreviousStateServiceAccount(serviceAccount ServiceAccountImage) PreviousState {
+func CreatePreviousStateServiceAccount(serviceAccount PreviousStateServiceAccountAuditImage) PreviousState {
 	typ := PreviousStateTypeServiceAccount
 
 	typStr := AuditImageType(typ)
 	serviceAccount.AuditImageType = typStr
 
 	return PreviousState{
-		ServiceAccountImage: &serviceAccount,
-		Type:                typ,
+		PreviousStateServiceAccountAuditImage: &serviceAccount,
+		Type:                                  typ,
 	}
 }
 
-func CreatePreviousStateTeam(team TeamImage) PreviousState {
+func CreatePreviousStateTeam(team PreviousStateTeamAuditImage) PreviousState {
 	typ := PreviousStateTypeTeam
 
 	typStr := AuditImageType(typ)
 	team.AuditImageType = typStr
 
 	return PreviousState{
-		TeamImage: &team,
-		Type:      typ,
+		PreviousStateTeamAuditImage: &team,
+		Type:                        typ,
 	}
 }
 
-func CreatePreviousStateTeamMember(teamMember TeamMemberImage) PreviousState {
+func CreatePreviousStateTeamMember(teamMember PreviousStateTeamMemberAuditImage) PreviousState {
 	typ := PreviousStateTypeTeamMember
 
 	typStr := AuditImageType(typ)
 	teamMember.AuditImageType = typStr
 
 	return PreviousState{
-		TeamMemberImage: &teamMember,
-		Type:            typ,
+		PreviousStateTeamMemberAuditImage: &teamMember,
+		Type:                              typ,
 	}
 }
 
-func CreatePreviousStateUser(user UserImage) PreviousState {
+func CreatePreviousStateUser(user PreviousStateUserAuditImage) PreviousState {
 	typ := PreviousStateTypeUser
 
 	typStr := AuditImageType(typ)
 	user.AuditImageType = typStr
 
 	return PreviousState{
-		UserImage: &user,
-		Type:      typ,
+		PreviousStateUserAuditImage: &user,
+		Type:                        typ,
 	}
 }
 
-func CreatePreviousStateUserRole(userRole UserRoleImage) PreviousState {
+func CreatePreviousStateUserRole(userRole PreviousStateUserRoleAuditImage) PreviousState {
 	typ := PreviousStateTypeUserRole
 
 	typStr := AuditImageType(typ)
 	userRole.AuditImageType = typStr
 
 	return PreviousState{
-		UserRoleImage: &userRole,
-		Type:          typ,
+		PreviousStateUserRoleAuditImage: &userRole,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStateUserSSHPublicKey(userSSHPublicKey UserSSHPublicKeyImage) PreviousState {
+func CreatePreviousStateUserSSHPublicKey(userSSHPublicKey PreviousStateSSHKeyAuditImage) PreviousState {
 	typ := PreviousStateTypeUserSSHPublicKey
 
 	typStr := AuditImageType(typ)
 	userSSHPublicKey.AuditImageType = typStr
 
 	return PreviousState{
-		UserSSHPublicKeyImage: &userSSHPublicKey,
-		Type:                  typ,
+		PreviousStateSSHKeyAuditImage: &userSSHPublicKey,
+		Type:                          typ,
 	}
 }
 
-func CreatePreviousStateWorkflow(workflow WorkflowImage) PreviousState {
+func CreatePreviousStateWorkflow(workflow PreviousStateWorkflowAuditImage) PreviousState {
 	typ := PreviousStateTypeWorkflow
 
 	typStr := AuditImageType(typ)
 	workflow.AuditImageType = typStr
 
 	return PreviousState{
-		WorkflowImage: &workflow,
-		Type:          typ,
+		PreviousStateWorkflowAuditImage: &workflow,
+		Type:                            typ,
 	}
 }
 
-func CreatePreviousStateWorkspace(workspace WorkspaceImage) PreviousState {
+func CreatePreviousStateWorkspace(workspace PreviousStateWorkspaceAuditImage) PreviousState {
 	typ := PreviousStateTypeWorkspace
 
 	typStr := AuditImageType(typ)
 	workspace.AuditImageType = typStr
 
 	return PreviousState{
-		WorkspaceImage: &workspace,
-		Type:           typ,
+		PreviousStateWorkspaceAuditImage: &workspace,
+		Type:                             typ,
 	}
 }
 
@@ -1635,345 +8612,363 @@ func (u *PreviousState) UnmarshalJSON(data []byte) (err error) {
 
 	switch dis.AuditImageType {
 	case "access_token":
-		accessTokenImage := new(AccessTokenImage)
-		if err := utils.UnmarshalJSON(data, &accessTokenImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == access_token) type AccessTokenImage within PreviousState: %w", string(data), err)
+		previousStateAccessTokenAuditImage := new(PreviousStateAccessTokenAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateAccessTokenAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == access_token) type PreviousStateAccessTokenAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.AccessTokenImage = accessTokenImage
+		u.PreviousStateAccessTokenAuditImage = previousStateAccessTokenAuditImage
 		u.Type = PreviousStateTypeAccessToken
 		return nil
 	case "action":
-		actionImage := new(ActionImage)
-		if err := utils.UnmarshalJSON(data, &actionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == action) type ActionImage within PreviousState: %w", string(data), err)
+		previousStateActionAuditImage := new(PreviousStateActionAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateActionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == action) type PreviousStateActionAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ActionImage = actionImage
+		u.PreviousStateActionAuditImage = previousStateActionAuditImage
 		u.Type = PreviousStateTypeAction
 		return nil
 	case "agent":
-		agentImage := new(AgentImage)
-		if err := utils.UnmarshalJSON(data, &agentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type AgentImage within PreviousState: %w", string(data), err)
+		previousStateAgentAuditImage := new(PreviousStateAgentAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateAgentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent) type PreviousStateAgentAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.AgentImage = agentImage
+		u.PreviousStateAgentAuditImage = previousStateAgentAuditImage
 		u.Type = PreviousStateTypeAgent
 		return nil
 	case "agent_run":
-		agentRunImage := new(AgentRunImage)
-		if err := utils.UnmarshalJSON(data, &agentRunImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type AgentRunImage within PreviousState: %w", string(data), err)
+		previousStateAgentRunAuditImage := new(PreviousStateAgentRunAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateAgentRunAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == agent_run) type PreviousStateAgentRunAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.AgentRunImage = agentRunImage
+		u.PreviousStateAgentRunAuditImage = previousStateAgentRunAuditImage
 		u.Type = PreviousStateTypeAgentRun
 		return nil
 	case "ai_chat_thread":
-		aiChatThreadImage := new(AiChatThreadImage)
-		if err := utils.UnmarshalJSON(data, &aiChatThreadImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type AiChatThreadImage within PreviousState: %w", string(data), err)
+		previousStateAIChatThreadAuditImage := new(PreviousStateAIChatThreadAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateAIChatThreadAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == ai_chat_thread) type PreviousStateAIChatThreadAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.AiChatThreadImage = aiChatThreadImage
+		u.PreviousStateAIChatThreadAuditImage = previousStateAIChatThreadAuditImage
 		u.Type = PreviousStateTypeAiChatThread
 		return nil
-	case "compute_env":
-		computeEnvImage := new(ComputeEnvImage)
-		if err := utils.UnmarshalJSON(data, &computeEnvImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == compute_env) type ComputeEnvImage within PreviousState: %w", string(data), err)
+	case "budget":
+		previousStateBudgetAuditImage := new(PreviousStateBudgetAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateBudgetAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == budget) type PreviousStateBudgetAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ComputeEnvImage = computeEnvImage
+		u.PreviousStateBudgetAuditImage = previousStateBudgetAuditImage
+		u.Type = PreviousStateTypeBudget
+		return nil
+	case "compute_env":
+		previousStateComputeEnvironmentAuditImage := new(PreviousStateComputeEnvironmentAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateComputeEnvironmentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == compute_env) type PreviousStateComputeEnvironmentAuditImage within PreviousState: %w", string(data), err)
+		}
+
+		u.PreviousStateComputeEnvironmentAuditImage = previousStateComputeEnvironmentAuditImage
 		u.Type = PreviousStateTypeComputeEnv
 		return nil
 	case "credentials":
-		credentialsImage := new(CredentialsImage)
-		if err := utils.UnmarshalJSON(data, &credentialsImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credentials) type CredentialsImage within PreviousState: %w", string(data), err)
+		previousStateCredentialsAuditImage := new(PreviousStateCredentialsAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateCredentialsAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credentials) type PreviousStateCredentialsAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.CredentialsImage = credentialsImage
+		u.PreviousStateCredentialsAuditImage = previousStateCredentialsAuditImage
 		u.Type = PreviousStateTypeCredentials
 		return nil
 	case "credit_info":
-		creditInfoImage := new(CreditInfoImage)
-		if err := utils.UnmarshalJSON(data, &creditInfoImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_info) type CreditInfoImage within PreviousState: %w", string(data), err)
+		previousStateCreditInfoAuditImage := new(PreviousStateCreditInfoAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateCreditInfoAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_info) type PreviousStateCreditInfoAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.CreditInfoImage = creditInfoImage
+		u.PreviousStateCreditInfoAuditImage = previousStateCreditInfoAuditImage
 		u.Type = PreviousStateTypeCreditInfo
 		return nil
 	case "credit_purchase":
-		creditPurchaseImage := new(CreditPurchaseImage)
-		if err := utils.UnmarshalJSON(data, &creditPurchaseImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type CreditPurchaseImage within PreviousState: %w", string(data), err)
+		previousStateCreditPurchaseAuditImage := new(PreviousStateCreditPurchaseAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateCreditPurchaseAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == credit_purchase) type PreviousStateCreditPurchaseAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.CreditPurchaseImage = creditPurchaseImage
+		u.PreviousStateCreditPurchaseAuditImage = previousStateCreditPurchaseAuditImage
 		u.Type = PreviousStateTypeCreditPurchase
 		return nil
 	case "custom_role":
-		customRoleImage := new(CustomRoleImage)
-		if err := utils.UnmarshalJSON(data, &customRoleImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == custom_role) type CustomRoleImage within PreviousState: %w", string(data), err)
+		previousStateCustomRoleAuditImage := new(PreviousStateCustomRoleAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateCustomRoleAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == custom_role) type PreviousStateCustomRoleAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.CustomRoleImage = customRoleImage
+		u.PreviousStateCustomRoleAuditImage = previousStateCustomRoleAuditImage
 		u.Type = PreviousStateTypeCustomRole
 		return nil
 	case "data_link":
-		dataLinkImage := new(DataLinkImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link) type DataLinkImage within PreviousState: %w", string(data), err)
+		previousStateDataLinkAuditImage := new(PreviousStateDataLinkAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDataLinkAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link) type PreviousStateDataLinkAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DataLinkImage = dataLinkImage
+		u.PreviousStateDataLinkAuditImage = previousStateDataLinkAuditImage
 		u.Type = PreviousStateTypeDataLink
 		return nil
 	case "data_link_file":
-		dataLinkFileImage := new(DataLinkFileImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkFileImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_file) type DataLinkFileImage within PreviousState: %w", string(data), err)
+		previousStateDataLinkFileOperationAuditImage := new(PreviousStateDataLinkFileOperationAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDataLinkFileOperationAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_file) type PreviousStateDataLinkFileOperationAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DataLinkFileImage = dataLinkFileImage
+		u.PreviousStateDataLinkFileOperationAuditImage = previousStateDataLinkFileOperationAuditImage
 		u.Type = PreviousStateTypeDataLinkFile
 		return nil
 	case "data_link_metadata":
-		dataLinkMetadataImage := new(DataLinkMetadataImage)
-		if err := utils.UnmarshalJSON(data, &dataLinkMetadataImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_metadata) type DataLinkMetadataImage within PreviousState: %w", string(data), err)
+		previousStateDataLinkMetadataAuditImage := new(PreviousStateDataLinkMetadataAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDataLinkMetadataAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_link_metadata) type PreviousStateDataLinkMetadataAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DataLinkMetadataImage = dataLinkMetadataImage
+		u.PreviousStateDataLinkMetadataAuditImage = previousStateDataLinkMetadataAuditImage
 		u.Type = PreviousStateTypeDataLinkMetadata
 		return nil
 	case "data_studio":
-		dataStudioImage := new(DataStudioImage)
-		if err := utils.UnmarshalJSON(data, &dataStudioImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio) type DataStudioImage within PreviousState: %w", string(data), err)
+		previousStateDataStudioAuditImage := new(PreviousStateDataStudioAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDataStudioAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio) type PreviousStateDataStudioAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DataStudioImage = dataStudioImage
+		u.PreviousStateDataStudioAuditImage = previousStateDataStudioAuditImage
 		u.Type = PreviousStateTypeDataStudio
 		return nil
 	case "data_studio_connection":
-		dataStudioConnectionImage := new(DataStudioConnectionImage)
-		if err := utils.UnmarshalJSON(data, &dataStudioConnectionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio_connection) type DataStudioConnectionImage within PreviousState: %w", string(data), err)
+		previousStateDataStudioConnectionAuditImage := new(PreviousStateDataStudioConnectionAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDataStudioConnectionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == data_studio_connection) type PreviousStateDataStudioConnectionAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DataStudioConnectionImage = dataStudioConnectionImage
+		u.PreviousStateDataStudioConnectionAuditImage = previousStateDataStudioConnectionAuditImage
 		u.Type = PreviousStateTypeDataStudioConnection
 		return nil
 	case "dataset":
-		datasetImage := new(DatasetImage)
-		if err := utils.UnmarshalJSON(data, &datasetImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset) type DatasetImage within PreviousState: %w", string(data), err)
+		previousStateDatasetAuditImage := new(PreviousStateDatasetAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDatasetAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset) type PreviousStateDatasetAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DatasetImage = datasetImage
+		u.PreviousStateDatasetAuditImage = previousStateDatasetAuditImage
 		u.Type = PreviousStateTypeDataset
 		return nil
 	case "dataset_version":
-		datasetVersionImage := new(DatasetVersionImage)
-		if err := utils.UnmarshalJSON(data, &datasetVersionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset_version) type DatasetVersionImage within PreviousState: %w", string(data), err)
+		previousStateDatasetVersionAuditImage := new(PreviousStateDatasetVersionAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateDatasetVersionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == dataset_version) type PreviousStateDatasetVersionAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.DatasetVersionImage = datasetVersionImage
+		u.PreviousStateDatasetVersionAuditImage = previousStateDatasetVersionAuditImage
 		u.Type = PreviousStateTypeDatasetVersion
 		return nil
 	case "idp_group":
-		idpGroupImage := new(IdpGroupImage)
-		if err := utils.UnmarshalJSON(data, &idpGroupImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == idp_group) type IdpGroupImage within PreviousState: %w", string(data), err)
+		previousStateIDPGroupAuditImage := new(PreviousStateIDPGroupAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateIDPGroupAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == idp_group) type PreviousStateIDPGroupAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.IdpGroupImage = idpGroupImage
+		u.PreviousStateIDPGroupAuditImage = previousStateIDPGroupAuditImage
 		u.Type = PreviousStateTypeIdpGroup
 		return nil
 	case "label":
-		labelImage := new(LabelImage)
-		if err := utils.UnmarshalJSON(data, &labelImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label) type LabelImage within PreviousState: %w", string(data), err)
+		previousStateLabelAuditImage := new(PreviousStateLabelAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateLabelAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label) type PreviousStateLabelAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.LabelImage = labelImage
+		u.PreviousStateLabelAuditImage = previousStateLabelAuditImage
 		u.Type = PreviousStateTypeLabel
 		return nil
 	case "label_assignment":
-		labelAssignmentImage := new(LabelAssignmentImage)
-		if err := utils.UnmarshalJSON(data, &labelAssignmentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label_assignment) type LabelAssignmentImage within PreviousState: %w", string(data), err)
+		previousStateLabelAssignmentAuditImage := new(PreviousStateLabelAssignmentAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateLabelAssignmentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == label_assignment) type PreviousStateLabelAssignmentAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.LabelAssignmentImage = labelAssignmentImage
+		u.PreviousStateLabelAssignmentAuditImage = previousStateLabelAssignmentAuditImage
 		u.Type = PreviousStateTypeLabelAssignment
 		return nil
 	case "managed_credentials":
-		managedCredentialsImage := new(ManagedCredentialsImage)
-		if err := utils.UnmarshalJSON(data, &managedCredentialsImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_credentials) type ManagedCredentialsImage within PreviousState: %w", string(data), err)
+		previousStateManagedCredentialsAuditImage := new(PreviousStateManagedCredentialsAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateManagedCredentialsAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_credentials) type PreviousStateManagedCredentialsAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ManagedCredentialsImage = managedCredentialsImage
+		u.PreviousStateManagedCredentialsAuditImage = previousStateManagedCredentialsAuditImage
 		u.Type = PreviousStateTypeManagedCredentials
 		return nil
 	case "managed_identity":
-		managedIdentityImage := new(ManagedIdentityImage)
-		if err := utils.UnmarshalJSON(data, &managedIdentityImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_identity) type ManagedIdentityImage within PreviousState: %w", string(data), err)
+		previousStateManagedIdentityAuditImage := new(PreviousStateManagedIdentityAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateManagedIdentityAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == managed_identity) type PreviousStateManagedIdentityAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ManagedIdentityImage = managedIdentityImage
+		u.PreviousStateManagedIdentityAuditImage = previousStateManagedIdentityAuditImage
 		u.Type = PreviousStateTypeManagedIdentity
 		return nil
 	case "member":
-		memberImage := new(MemberImage)
-		if err := utils.UnmarshalJSON(data, &memberImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == member) type MemberImage within PreviousState: %w", string(data), err)
+		previousStateMemberAuditImage := new(PreviousStateMemberAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateMemberAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == member) type PreviousStateMemberAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.MemberImage = memberImage
+		u.PreviousStateMemberAuditImage = previousStateMemberAuditImage
 		u.Type = PreviousStateTypeMember
 		return nil
-	case "oauth_consent":
-		oAuthConsentImage := new(OAuthConsentImage)
-		if err := utils.UnmarshalJSON(data, &oAuthConsentImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_consent) type OAuthConsentImage within PreviousState: %w", string(data), err)
+	case "oauth_client_secret":
+		previousStateOAuthClientSecretAuditImage := new(PreviousStateOAuthClientSecretAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateOAuthClientSecretAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_client_secret) type PreviousStateOAuthClientSecretAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.OAuthConsentImage = oAuthConsentImage
+		u.PreviousStateOAuthClientSecretAuditImage = previousStateOAuthClientSecretAuditImage
+		u.Type = PreviousStateTypeOauthClientSecret
+		return nil
+	case "oauth_consent":
+		previousStateOAuthConsentAuditImage := new(PreviousStateOAuthConsentAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateOAuthConsentAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == oauth_consent) type PreviousStateOAuthConsentAuditImage within PreviousState: %w", string(data), err)
+		}
+
+		u.PreviousStateOAuthConsentAuditImage = previousStateOAuthConsentAuditImage
 		u.Type = PreviousStateTypeOauthConsent
 		return nil
 	case "org_sso_connection":
-		orgSsoConnectionImage := new(OrgSsoConnectionImage)
-		if err := utils.UnmarshalJSON(data, &orgSsoConnectionImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == org_sso_connection) type OrgSsoConnectionImage within PreviousState: %w", string(data), err)
+		previousStateOrgSSOConnectionAuditImage := new(PreviousStateOrgSSOConnectionAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateOrgSSOConnectionAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == org_sso_connection) type PreviousStateOrgSSOConnectionAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.OrgSsoConnectionImage = orgSsoConnectionImage
+		u.PreviousStateOrgSSOConnectionAuditImage = previousStateOrgSSOConnectionAuditImage
 		u.Type = PreviousStateTypeOrgSsoConnection
 		return nil
 	case "organization":
-		organizationImage := new(OrganizationImage)
-		if err := utils.UnmarshalJSON(data, &organizationImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == organization) type OrganizationImage within PreviousState: %w", string(data), err)
+		previousStateOrganizationAuditImage := new(PreviousStateOrganizationAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateOrganizationAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == organization) type PreviousStateOrganizationAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.OrganizationImage = organizationImage
+		u.PreviousStateOrganizationAuditImage = previousStateOrganizationAuditImage
 		u.Type = PreviousStateTypeOrganization
 		return nil
 	case "participant":
-		participantImage := new(ParticipantImage)
-		if err := utils.UnmarshalJSON(data, &participantImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == participant) type ParticipantImage within PreviousState: %w", string(data), err)
+		previousStateParticipantAuditImage := new(PreviousStateParticipantAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateParticipantAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == participant) type PreviousStateParticipantAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ParticipantImage = participantImage
+		u.PreviousStateParticipantAuditImage = previousStateParticipantAuditImage
 		u.Type = PreviousStateTypeParticipant
 		return nil
 	case "pipeline":
-		pipelineImage := new(PipelineImage)
-		if err := utils.UnmarshalJSON(data, &pipelineImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline) type PipelineImage within PreviousState: %w", string(data), err)
+		previousStatePipelineAuditImage := new(PreviousStatePipelineAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStatePipelineAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline) type PreviousStatePipelineAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.PipelineImage = pipelineImage
+		u.PreviousStatePipelineAuditImage = previousStatePipelineAuditImage
 		u.Type = PreviousStateTypePipeline
 		return nil
 	case "pipeline_secret":
-		pipelineSecretImage := new(PipelineSecretImage)
-		if err := utils.UnmarshalJSON(data, &pipelineSecretImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline_secret) type PipelineSecretImage within PreviousState: %w", string(data), err)
+		previousStatePipelineSecretAuditImage := new(PreviousStatePipelineSecretAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStatePipelineSecretAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == pipeline_secret) type PreviousStatePipelineSecretAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.PipelineSecretImage = pipelineSecretImage
+		u.PreviousStatePipelineSecretAuditImage = previousStatePipelineSecretAuditImage
 		u.Type = PreviousStateTypePipelineSecret
 		return nil
 	case "scim_token":
-		scimTokenImage := new(ScimTokenImage)
-		if err := utils.UnmarshalJSON(data, &scimTokenImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type ScimTokenImage within PreviousState: %w", string(data), err)
+		previousStateSCIMTokenAuditImage := new(PreviousStateSCIMTokenAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateSCIMTokenAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == scim_token) type PreviousStateSCIMTokenAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ScimTokenImage = scimTokenImage
+		u.PreviousStateSCIMTokenAuditImage = previousStateSCIMTokenAuditImage
 		u.Type = PreviousStateTypeScimToken
 		return nil
 	case "service_account":
-		serviceAccountImage := new(ServiceAccountImage)
-		if err := utils.UnmarshalJSON(data, &serviceAccountImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type ServiceAccountImage within PreviousState: %w", string(data), err)
+		previousStateServiceAccountAuditImage := new(PreviousStateServiceAccountAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateServiceAccountAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == service_account) type PreviousStateServiceAccountAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.ServiceAccountImage = serviceAccountImage
+		u.PreviousStateServiceAccountAuditImage = previousStateServiceAccountAuditImage
 		u.Type = PreviousStateTypeServiceAccount
 		return nil
 	case "team":
-		teamImage := new(TeamImage)
-		if err := utils.UnmarshalJSON(data, &teamImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team) type TeamImage within PreviousState: %w", string(data), err)
+		previousStateTeamAuditImage := new(PreviousStateTeamAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateTeamAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team) type PreviousStateTeamAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.TeamImage = teamImage
+		u.PreviousStateTeamAuditImage = previousStateTeamAuditImage
 		u.Type = PreviousStateTypeTeam
 		return nil
 	case "team_member":
-		teamMemberImage := new(TeamMemberImage)
-		if err := utils.UnmarshalJSON(data, &teamMemberImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team_member) type TeamMemberImage within PreviousState: %w", string(data), err)
+		previousStateTeamMemberAuditImage := new(PreviousStateTeamMemberAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateTeamMemberAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == team_member) type PreviousStateTeamMemberAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.TeamMemberImage = teamMemberImage
+		u.PreviousStateTeamMemberAuditImage = previousStateTeamMemberAuditImage
 		u.Type = PreviousStateTypeTeamMember
 		return nil
 	case "user":
-		userImage := new(UserImage)
-		if err := utils.UnmarshalJSON(data, &userImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user) type UserImage within PreviousState: %w", string(data), err)
+		previousStateUserAuditImage := new(PreviousStateUserAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateUserAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user) type PreviousStateUserAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.UserImage = userImage
+		u.PreviousStateUserAuditImage = previousStateUserAuditImage
 		u.Type = PreviousStateTypeUser
 		return nil
 	case "user_role":
-		userRoleImage := new(UserRoleImage)
-		if err := utils.UnmarshalJSON(data, &userRoleImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_role) type UserRoleImage within PreviousState: %w", string(data), err)
+		previousStateUserRoleAuditImage := new(PreviousStateUserRoleAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateUserRoleAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_role) type PreviousStateUserRoleAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.UserRoleImage = userRoleImage
+		u.PreviousStateUserRoleAuditImage = previousStateUserRoleAuditImage
 		u.Type = PreviousStateTypeUserRole
 		return nil
 	case "user_ssh_public_key":
-		userSSHPublicKeyImage := new(UserSSHPublicKeyImage)
-		if err := utils.UnmarshalJSON(data, &userSSHPublicKeyImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_ssh_public_key) type UserSSHPublicKeyImage within PreviousState: %w", string(data), err)
+		previousStateSSHKeyAuditImage := new(PreviousStateSSHKeyAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateSSHKeyAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == user_ssh_public_key) type PreviousStateSSHKeyAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.UserSSHPublicKeyImage = userSSHPublicKeyImage
+		u.PreviousStateSSHKeyAuditImage = previousStateSSHKeyAuditImage
 		u.Type = PreviousStateTypeUserSSHPublicKey
 		return nil
 	case "workflow":
-		workflowImage := new(WorkflowImage)
-		if err := utils.UnmarshalJSON(data, &workflowImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workflow) type WorkflowImage within PreviousState: %w", string(data), err)
+		previousStateWorkflowAuditImage := new(PreviousStateWorkflowAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateWorkflowAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workflow) type PreviousStateWorkflowAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.WorkflowImage = workflowImage
+		u.PreviousStateWorkflowAuditImage = previousStateWorkflowAuditImage
 		u.Type = PreviousStateTypeWorkflow
 		return nil
 	case "workspace":
-		workspaceImage := new(WorkspaceImage)
-		if err := utils.UnmarshalJSON(data, &workspaceImage, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workspace) type WorkspaceImage within PreviousState: %w", string(data), err)
+		previousStateWorkspaceAuditImage := new(PreviousStateWorkspaceAuditImage)
+		if err := utils.UnmarshalJSON(data, &previousStateWorkspaceAuditImage, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (AuditImageType == workspace) type PreviousStateWorkspaceAuditImage within PreviousState: %w", string(data), err)
 		}
 
-		u.WorkspaceImage = workspaceImage
+		u.PreviousStateWorkspaceAuditImage = previousStateWorkspaceAuditImage
 		u.Type = PreviousStateTypeWorkspace
 		return nil
 	}
@@ -1982,156 +8977,164 @@ func (u *PreviousState) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (u PreviousState) MarshalJSON() ([]byte, error) {
-	if u.AccessTokenImage != nil {
-		return utils.MarshalJSON(u.AccessTokenImage, "", true)
+	if u.PreviousStateAccessTokenAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateAccessTokenAuditImage, "", true)
 	}
 
-	if u.ActionImage != nil {
-		return utils.MarshalJSON(u.ActionImage, "", true)
+	if u.PreviousStateActionAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateActionAuditImage, "", true)
 	}
 
-	if u.AgentImage != nil {
-		return utils.MarshalJSON(u.AgentImage, "", true)
+	if u.PreviousStateAgentAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateAgentAuditImage, "", true)
 	}
 
-	if u.AgentRunImage != nil {
-		return utils.MarshalJSON(u.AgentRunImage, "", true)
+	if u.PreviousStateAgentRunAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateAgentRunAuditImage, "", true)
 	}
 
-	if u.AiChatThreadImage != nil {
-		return utils.MarshalJSON(u.AiChatThreadImage, "", true)
+	if u.PreviousStateAIChatThreadAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateAIChatThreadAuditImage, "", true)
 	}
 
-	if u.ComputeEnvImage != nil {
-		return utils.MarshalJSON(u.ComputeEnvImage, "", true)
+	if u.PreviousStateBudgetAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateBudgetAuditImage, "", true)
 	}
 
-	if u.CredentialsImage != nil {
-		return utils.MarshalJSON(u.CredentialsImage, "", true)
+	if u.PreviousStateComputeEnvironmentAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateComputeEnvironmentAuditImage, "", true)
 	}
 
-	if u.CreditInfoImage != nil {
-		return utils.MarshalJSON(u.CreditInfoImage, "", true)
+	if u.PreviousStateCredentialsAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateCredentialsAuditImage, "", true)
 	}
 
-	if u.CreditPurchaseImage != nil {
-		return utils.MarshalJSON(u.CreditPurchaseImage, "", true)
+	if u.PreviousStateCreditInfoAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateCreditInfoAuditImage, "", true)
 	}
 
-	if u.CustomRoleImage != nil {
-		return utils.MarshalJSON(u.CustomRoleImage, "", true)
+	if u.PreviousStateCreditPurchaseAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateCreditPurchaseAuditImage, "", true)
 	}
 
-	if u.DataLinkFileImage != nil {
-		return utils.MarshalJSON(u.DataLinkFileImage, "", true)
+	if u.PreviousStateCustomRoleAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateCustomRoleAuditImage, "", true)
 	}
 
-	if u.DataLinkImage != nil {
-		return utils.MarshalJSON(u.DataLinkImage, "", true)
+	if u.PreviousStateDataLinkFileOperationAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDataLinkFileOperationAuditImage, "", true)
 	}
 
-	if u.DataLinkMetadataImage != nil {
-		return utils.MarshalJSON(u.DataLinkMetadataImage, "", true)
+	if u.PreviousStateDataLinkAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDataLinkAuditImage, "", true)
 	}
 
-	if u.DatasetImage != nil {
-		return utils.MarshalJSON(u.DatasetImage, "", true)
+	if u.PreviousStateDataLinkMetadataAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDataLinkMetadataAuditImage, "", true)
 	}
 
-	if u.DatasetVersionImage != nil {
-		return utils.MarshalJSON(u.DatasetVersionImage, "", true)
+	if u.PreviousStateDatasetAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDatasetAuditImage, "", true)
 	}
 
-	if u.DataStudioConnectionImage != nil {
-		return utils.MarshalJSON(u.DataStudioConnectionImage, "", true)
+	if u.PreviousStateDatasetVersionAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDatasetVersionAuditImage, "", true)
 	}
 
-	if u.DataStudioImage != nil {
-		return utils.MarshalJSON(u.DataStudioImage, "", true)
+	if u.PreviousStateDataStudioConnectionAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDataStudioConnectionAuditImage, "", true)
 	}
 
-	if u.IdpGroupImage != nil {
-		return utils.MarshalJSON(u.IdpGroupImage, "", true)
+	if u.PreviousStateDataStudioAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateDataStudioAuditImage, "", true)
 	}
 
-	if u.LabelAssignmentImage != nil {
-		return utils.MarshalJSON(u.LabelAssignmentImage, "", true)
+	if u.PreviousStateIDPGroupAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateIDPGroupAuditImage, "", true)
 	}
 
-	if u.LabelImage != nil {
-		return utils.MarshalJSON(u.LabelImage, "", true)
+	if u.PreviousStateLabelAssignmentAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateLabelAssignmentAuditImage, "", true)
 	}
 
-	if u.ManagedCredentialsImage != nil {
-		return utils.MarshalJSON(u.ManagedCredentialsImage, "", true)
+	if u.PreviousStateLabelAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateLabelAuditImage, "", true)
 	}
 
-	if u.ManagedIdentityImage != nil {
-		return utils.MarshalJSON(u.ManagedIdentityImage, "", true)
+	if u.PreviousStateManagedCredentialsAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateManagedCredentialsAuditImage, "", true)
 	}
 
-	if u.MemberImage != nil {
-		return utils.MarshalJSON(u.MemberImage, "", true)
+	if u.PreviousStateManagedIdentityAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateManagedIdentityAuditImage, "", true)
 	}
 
-	if u.OAuthConsentImage != nil {
-		return utils.MarshalJSON(u.OAuthConsentImage, "", true)
+	if u.PreviousStateMemberAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateMemberAuditImage, "", true)
 	}
 
-	if u.OrganizationImage != nil {
-		return utils.MarshalJSON(u.OrganizationImage, "", true)
+	if u.PreviousStateOAuthConsentAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateOAuthConsentAuditImage, "", true)
 	}
 
-	if u.OrgSsoConnectionImage != nil {
-		return utils.MarshalJSON(u.OrgSsoConnectionImage, "", true)
+	if u.PreviousStateOAuthClientSecretAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateOAuthClientSecretAuditImage, "", true)
 	}
 
-	if u.ParticipantImage != nil {
-		return utils.MarshalJSON(u.ParticipantImage, "", true)
+	if u.PreviousStateOrganizationAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateOrganizationAuditImage, "", true)
 	}
 
-	if u.PipelineImage != nil {
-		return utils.MarshalJSON(u.PipelineImage, "", true)
+	if u.PreviousStateOrgSSOConnectionAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateOrgSSOConnectionAuditImage, "", true)
 	}
 
-	if u.PipelineSecretImage != nil {
-		return utils.MarshalJSON(u.PipelineSecretImage, "", true)
+	if u.PreviousStateParticipantAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateParticipantAuditImage, "", true)
 	}
 
-	if u.ScimTokenImage != nil {
-		return utils.MarshalJSON(u.ScimTokenImage, "", true)
+	if u.PreviousStatePipelineAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStatePipelineAuditImage, "", true)
 	}
 
-	if u.ServiceAccountImage != nil {
-		return utils.MarshalJSON(u.ServiceAccountImage, "", true)
+	if u.PreviousStatePipelineSecretAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStatePipelineSecretAuditImage, "", true)
 	}
 
-	if u.TeamImage != nil {
-		return utils.MarshalJSON(u.TeamImage, "", true)
+	if u.PreviousStateSCIMTokenAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateSCIMTokenAuditImage, "", true)
 	}
 
-	if u.TeamMemberImage != nil {
-		return utils.MarshalJSON(u.TeamMemberImage, "", true)
+	if u.PreviousStateServiceAccountAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateServiceAccountAuditImage, "", true)
 	}
 
-	if u.UserImage != nil {
-		return utils.MarshalJSON(u.UserImage, "", true)
+	if u.PreviousStateTeamAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateTeamAuditImage, "", true)
 	}
 
-	if u.UserRoleImage != nil {
-		return utils.MarshalJSON(u.UserRoleImage, "", true)
+	if u.PreviousStateTeamMemberAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateTeamMemberAuditImage, "", true)
 	}
 
-	if u.UserSSHPublicKeyImage != nil {
-		return utils.MarshalJSON(u.UserSSHPublicKeyImage, "", true)
+	if u.PreviousStateUserAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateUserAuditImage, "", true)
 	}
 
-	if u.WorkflowImage != nil {
-		return utils.MarshalJSON(u.WorkflowImage, "", true)
+	if u.PreviousStateUserRoleAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateUserRoleAuditImage, "", true)
 	}
 
-	if u.WorkspaceImage != nil {
-		return utils.MarshalJSON(u.WorkspaceImage, "", true)
+	if u.PreviousStateSSHKeyAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateSSHKeyAuditImage, "", true)
+	}
+
+	if u.PreviousStateWorkflowAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateWorkflowAuditImage, "", true)
+	}
+
+	if u.PreviousStateWorkspaceAuditImage != nil {
+		return utils.MarshalJSON(u.PreviousStateWorkspaceAuditImage, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type PreviousState: all fields are null")
@@ -2157,268 +9160,282 @@ func (a *AuditLogTargetState) GetNewState() *NewState {
 	return a.NewState
 }
 
-func (a *AuditLogTargetState) GetNewStateAccessToken() *AccessTokenImage {
+func (a *AuditLogTargetState) GetNewStateAccessToken() *NewStateAccessTokenAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.AccessTokenImage
+		return v.NewStateAccessTokenAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateAction() *ActionImage {
+func (a *AuditLogTargetState) GetNewStateAction() *NewStateActionAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ActionImage
+		return v.NewStateActionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateAgent() *AgentImage {
+func (a *AuditLogTargetState) GetNewStateAgent() *NewStateAgentAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.AgentImage
+		return v.NewStateAgentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateAgentRun() *AgentRunImage {
+func (a *AuditLogTargetState) GetNewStateAgentRun() *NewStateAgentRunAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.AgentRunImage
+		return v.NewStateAgentRunAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateAiChatThread() *AiChatThreadImage {
+func (a *AuditLogTargetState) GetNewStateAiChatThread() *NewStateAIChatThreadAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.AiChatThreadImage
+		return v.NewStateAIChatThreadAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateComputeEnv() *ComputeEnvImage {
+func (a *AuditLogTargetState) GetNewStateBudget() *NewStateBudgetAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ComputeEnvImage
+		return v.NewStateBudgetAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateCredentials() *CredentialsImage {
+func (a *AuditLogTargetState) GetNewStateComputeEnv() *NewStateComputeEnvironmentAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.CredentialsImage
+		return v.NewStateComputeEnvironmentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateCreditInfo() *CreditInfoImage {
+func (a *AuditLogTargetState) GetNewStateCredentials() *NewStateCredentialsAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.CreditInfoImage
+		return v.NewStateCredentialsAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateCreditPurchase() *CreditPurchaseImage {
+func (a *AuditLogTargetState) GetNewStateCreditInfo() *NewStateCreditInfoAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.CreditPurchaseImage
+		return v.NewStateCreditInfoAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateCustomRole() *CustomRoleImage {
+func (a *AuditLogTargetState) GetNewStateCreditPurchase() *NewStateCreditPurchaseAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.CustomRoleImage
+		return v.NewStateCreditPurchaseAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataLink() *DataLinkImage {
+func (a *AuditLogTargetState) GetNewStateCustomRole() *NewStateCustomRoleAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DataLinkImage
+		return v.NewStateCustomRoleAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataLinkFile() *DataLinkFileImage {
+func (a *AuditLogTargetState) GetNewStateDataLink() *NewStateDataLinkAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DataLinkFileImage
+		return v.NewStateDataLinkAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataLinkMetadata() *DataLinkMetadataImage {
+func (a *AuditLogTargetState) GetNewStateDataLinkFile() *NewStateDataLinkFileOperationAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DataLinkMetadataImage
+		return v.NewStateDataLinkFileOperationAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataStudio() *DataStudioImage {
+func (a *AuditLogTargetState) GetNewStateDataLinkMetadata() *NewStateDataLinkMetadataAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DataStudioImage
+		return v.NewStateDataLinkMetadataAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataStudioConnection() *DataStudioConnectionImage {
+func (a *AuditLogTargetState) GetNewStateDataStudio() *NewStateDataStudioAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DataStudioConnectionImage
+		return v.NewStateDataStudioAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDataset() *DatasetImage {
+func (a *AuditLogTargetState) GetNewStateDataStudioConnection() *NewStateDataStudioConnectionAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DatasetImage
+		return v.NewStateDataStudioConnectionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateDatasetVersion() *DatasetVersionImage {
+func (a *AuditLogTargetState) GetNewStateDataset() *NewStateDatasetAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.DatasetVersionImage
+		return v.NewStateDatasetAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateIdpGroup() *IdpGroupImage {
+func (a *AuditLogTargetState) GetNewStateDatasetVersion() *NewStateDatasetVersionAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.IdpGroupImage
+		return v.NewStateDatasetVersionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateLabel() *LabelImage {
+func (a *AuditLogTargetState) GetNewStateIdpGroup() *NewStateIDPGroupAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.LabelImage
+		return v.NewStateIDPGroupAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateLabelAssignment() *LabelAssignmentImage {
+func (a *AuditLogTargetState) GetNewStateLabel() *NewStateLabelAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.LabelAssignmentImage
+		return v.NewStateLabelAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateManagedCredentials() *ManagedCredentialsImage {
+func (a *AuditLogTargetState) GetNewStateLabelAssignment() *NewStateLabelAssignmentAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ManagedCredentialsImage
+		return v.NewStateLabelAssignmentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateManagedIdentity() *ManagedIdentityImage {
+func (a *AuditLogTargetState) GetNewStateManagedCredentials() *NewStateManagedCredentialsAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ManagedIdentityImage
+		return v.NewStateManagedCredentialsAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateMember() *MemberImage {
+func (a *AuditLogTargetState) GetNewStateManagedIdentity() *NewStateManagedIdentityAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.MemberImage
+		return v.NewStateManagedIdentityAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateOauthConsent() *OAuthConsentImage {
+func (a *AuditLogTargetState) GetNewStateMember() *NewStateMemberAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.OAuthConsentImage
+		return v.NewStateMemberAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateOrgSsoConnection() *OrgSsoConnectionImage {
+func (a *AuditLogTargetState) GetNewStateOauthClientSecret() *NewStateOAuthClientSecretAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.OrgSsoConnectionImage
+		return v.NewStateOAuthClientSecretAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateOrganization() *OrganizationImage {
+func (a *AuditLogTargetState) GetNewStateOauthConsent() *NewStateOAuthConsentAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.OrganizationImage
+		return v.NewStateOAuthConsentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateParticipant() *ParticipantImage {
+func (a *AuditLogTargetState) GetNewStateOrgSsoConnection() *NewStateOrgSSOConnectionAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ParticipantImage
+		return v.NewStateOrgSSOConnectionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStatePipeline() *PipelineImage {
+func (a *AuditLogTargetState) GetNewStateOrganization() *NewStateOrganizationAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.PipelineImage
+		return v.NewStateOrganizationAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStatePipelineSecret() *PipelineSecretImage {
+func (a *AuditLogTargetState) GetNewStateParticipant() *NewStateParticipantAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.PipelineSecretImage
+		return v.NewStateParticipantAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateScimToken() *ScimTokenImage {
+func (a *AuditLogTargetState) GetNewStatePipeline() *NewStatePipelineAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ScimTokenImage
+		return v.NewStatePipelineAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateServiceAccount() *ServiceAccountImage {
+func (a *AuditLogTargetState) GetNewStatePipelineSecret() *NewStatePipelineSecretAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.ServiceAccountImage
+		return v.NewStatePipelineSecretAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateTeam() *TeamImage {
+func (a *AuditLogTargetState) GetNewStateScimToken() *NewStateSCIMTokenAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.TeamImage
+		return v.NewStateSCIMTokenAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateTeamMember() *TeamMemberImage {
+func (a *AuditLogTargetState) GetNewStateServiceAccount() *NewStateServiceAccountAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.TeamMemberImage
+		return v.NewStateServiceAccountAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateUser() *UserImage {
+func (a *AuditLogTargetState) GetNewStateTeam() *NewStateTeamAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.UserImage
+		return v.NewStateTeamAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateUserRole() *UserRoleImage {
+func (a *AuditLogTargetState) GetNewStateTeamMember() *NewStateTeamMemberAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.UserRoleImage
+		return v.NewStateTeamMemberAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateUserSSHPublicKey() *UserSSHPublicKeyImage {
+func (a *AuditLogTargetState) GetNewStateUser() *NewStateUserAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.UserSSHPublicKeyImage
+		return v.NewStateUserAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateWorkflow() *WorkflowImage {
+func (a *AuditLogTargetState) GetNewStateUserRole() *NewStateUserRoleAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.WorkflowImage
+		return v.NewStateUserRoleAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetNewStateWorkspace() *WorkspaceImage {
+func (a *AuditLogTargetState) GetNewStateUserSSHPublicKey() *NewStateSSHKeyAuditImage {
 	if v := a.GetNewState(); v != nil {
-		return v.WorkspaceImage
+		return v.NewStateSSHKeyAuditImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateWorkflow() *NewStateWorkflowAuditImage {
+	if v := a.GetNewState(); v != nil {
+		return v.NewStateWorkflowAuditImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetNewStateWorkspace() *NewStateWorkspaceAuditImage {
+	if v := a.GetNewState(); v != nil {
+		return v.NewStateWorkspaceAuditImage
 	}
 	return nil
 }
@@ -2430,268 +9447,282 @@ func (a *AuditLogTargetState) GetPreviousState() *PreviousState {
 	return a.PreviousState
 }
 
-func (a *AuditLogTargetState) GetPreviousStateAccessToken() *AccessTokenImage {
+func (a *AuditLogTargetState) GetPreviousStateAccessToken() *PreviousStateAccessTokenAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.AccessTokenImage
+		return v.PreviousStateAccessTokenAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateAction() *ActionImage {
+func (a *AuditLogTargetState) GetPreviousStateAction() *PreviousStateActionAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ActionImage
+		return v.PreviousStateActionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateAgent() *AgentImage {
+func (a *AuditLogTargetState) GetPreviousStateAgent() *PreviousStateAgentAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.AgentImage
+		return v.PreviousStateAgentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateAgentRun() *AgentRunImage {
+func (a *AuditLogTargetState) GetPreviousStateAgentRun() *PreviousStateAgentRunAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.AgentRunImage
+		return v.PreviousStateAgentRunAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateAiChatThread() *AiChatThreadImage {
+func (a *AuditLogTargetState) GetPreviousStateAiChatThread() *PreviousStateAIChatThreadAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.AiChatThreadImage
+		return v.PreviousStateAIChatThreadAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateComputeEnv() *ComputeEnvImage {
+func (a *AuditLogTargetState) GetPreviousStateBudget() *PreviousStateBudgetAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ComputeEnvImage
+		return v.PreviousStateBudgetAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateCredentials() *CredentialsImage {
+func (a *AuditLogTargetState) GetPreviousStateComputeEnv() *PreviousStateComputeEnvironmentAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.CredentialsImage
+		return v.PreviousStateComputeEnvironmentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateCreditInfo() *CreditInfoImage {
+func (a *AuditLogTargetState) GetPreviousStateCredentials() *PreviousStateCredentialsAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.CreditInfoImage
+		return v.PreviousStateCredentialsAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateCreditPurchase() *CreditPurchaseImage {
+func (a *AuditLogTargetState) GetPreviousStateCreditInfo() *PreviousStateCreditInfoAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.CreditPurchaseImage
+		return v.PreviousStateCreditInfoAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateCustomRole() *CustomRoleImage {
+func (a *AuditLogTargetState) GetPreviousStateCreditPurchase() *PreviousStateCreditPurchaseAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.CustomRoleImage
+		return v.PreviousStateCreditPurchaseAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataLink() *DataLinkImage {
+func (a *AuditLogTargetState) GetPreviousStateCustomRole() *PreviousStateCustomRoleAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DataLinkImage
+		return v.PreviousStateCustomRoleAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataLinkFile() *DataLinkFileImage {
+func (a *AuditLogTargetState) GetPreviousStateDataLink() *PreviousStateDataLinkAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DataLinkFileImage
+		return v.PreviousStateDataLinkAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataLinkMetadata() *DataLinkMetadataImage {
+func (a *AuditLogTargetState) GetPreviousStateDataLinkFile() *PreviousStateDataLinkFileOperationAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DataLinkMetadataImage
+		return v.PreviousStateDataLinkFileOperationAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataStudio() *DataStudioImage {
+func (a *AuditLogTargetState) GetPreviousStateDataLinkMetadata() *PreviousStateDataLinkMetadataAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DataStudioImage
+		return v.PreviousStateDataLinkMetadataAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataStudioConnection() *DataStudioConnectionImage {
+func (a *AuditLogTargetState) GetPreviousStateDataStudio() *PreviousStateDataStudioAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DataStudioConnectionImage
+		return v.PreviousStateDataStudioAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDataset() *DatasetImage {
+func (a *AuditLogTargetState) GetPreviousStateDataStudioConnection() *PreviousStateDataStudioConnectionAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DatasetImage
+		return v.PreviousStateDataStudioConnectionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateDatasetVersion() *DatasetVersionImage {
+func (a *AuditLogTargetState) GetPreviousStateDataset() *PreviousStateDatasetAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.DatasetVersionImage
+		return v.PreviousStateDatasetAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateIdpGroup() *IdpGroupImage {
+func (a *AuditLogTargetState) GetPreviousStateDatasetVersion() *PreviousStateDatasetVersionAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.IdpGroupImage
+		return v.PreviousStateDatasetVersionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateLabel() *LabelImage {
+func (a *AuditLogTargetState) GetPreviousStateIdpGroup() *PreviousStateIDPGroupAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.LabelImage
+		return v.PreviousStateIDPGroupAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateLabelAssignment() *LabelAssignmentImage {
+func (a *AuditLogTargetState) GetPreviousStateLabel() *PreviousStateLabelAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.LabelAssignmentImage
+		return v.PreviousStateLabelAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateManagedCredentials() *ManagedCredentialsImage {
+func (a *AuditLogTargetState) GetPreviousStateLabelAssignment() *PreviousStateLabelAssignmentAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ManagedCredentialsImage
+		return v.PreviousStateLabelAssignmentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateManagedIdentity() *ManagedIdentityImage {
+func (a *AuditLogTargetState) GetPreviousStateManagedCredentials() *PreviousStateManagedCredentialsAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ManagedIdentityImage
+		return v.PreviousStateManagedCredentialsAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateMember() *MemberImage {
+func (a *AuditLogTargetState) GetPreviousStateManagedIdentity() *PreviousStateManagedIdentityAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.MemberImage
+		return v.PreviousStateManagedIdentityAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateOauthConsent() *OAuthConsentImage {
+func (a *AuditLogTargetState) GetPreviousStateMember() *PreviousStateMemberAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.OAuthConsentImage
+		return v.PreviousStateMemberAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateOrgSsoConnection() *OrgSsoConnectionImage {
+func (a *AuditLogTargetState) GetPreviousStateOauthClientSecret() *PreviousStateOAuthClientSecretAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.OrgSsoConnectionImage
+		return v.PreviousStateOAuthClientSecretAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateOrganization() *OrganizationImage {
+func (a *AuditLogTargetState) GetPreviousStateOauthConsent() *PreviousStateOAuthConsentAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.OrganizationImage
+		return v.PreviousStateOAuthConsentAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateParticipant() *ParticipantImage {
+func (a *AuditLogTargetState) GetPreviousStateOrgSsoConnection() *PreviousStateOrgSSOConnectionAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ParticipantImage
+		return v.PreviousStateOrgSSOConnectionAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStatePipeline() *PipelineImage {
+func (a *AuditLogTargetState) GetPreviousStateOrganization() *PreviousStateOrganizationAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.PipelineImage
+		return v.PreviousStateOrganizationAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStatePipelineSecret() *PipelineSecretImage {
+func (a *AuditLogTargetState) GetPreviousStateParticipant() *PreviousStateParticipantAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.PipelineSecretImage
+		return v.PreviousStateParticipantAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateScimToken() *ScimTokenImage {
+func (a *AuditLogTargetState) GetPreviousStatePipeline() *PreviousStatePipelineAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ScimTokenImage
+		return v.PreviousStatePipelineAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateServiceAccount() *ServiceAccountImage {
+func (a *AuditLogTargetState) GetPreviousStatePipelineSecret() *PreviousStatePipelineSecretAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.ServiceAccountImage
+		return v.PreviousStatePipelineSecretAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateTeam() *TeamImage {
+func (a *AuditLogTargetState) GetPreviousStateScimToken() *PreviousStateSCIMTokenAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.TeamImage
+		return v.PreviousStateSCIMTokenAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateTeamMember() *TeamMemberImage {
+func (a *AuditLogTargetState) GetPreviousStateServiceAccount() *PreviousStateServiceAccountAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.TeamMemberImage
+		return v.PreviousStateServiceAccountAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateUser() *UserImage {
+func (a *AuditLogTargetState) GetPreviousStateTeam() *PreviousStateTeamAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.UserImage
+		return v.PreviousStateTeamAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateUserRole() *UserRoleImage {
+func (a *AuditLogTargetState) GetPreviousStateTeamMember() *PreviousStateTeamMemberAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.UserRoleImage
+		return v.PreviousStateTeamMemberAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateUserSSHPublicKey() *UserSSHPublicKeyImage {
+func (a *AuditLogTargetState) GetPreviousStateUser() *PreviousStateUserAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.UserSSHPublicKeyImage
+		return v.PreviousStateUserAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateWorkflow() *WorkflowImage {
+func (a *AuditLogTargetState) GetPreviousStateUserRole() *PreviousStateUserRoleAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.WorkflowImage
+		return v.PreviousStateUserRoleAuditImage
 	}
 	return nil
 }
 
-func (a *AuditLogTargetState) GetPreviousStateWorkspace() *WorkspaceImage {
+func (a *AuditLogTargetState) GetPreviousStateUserSSHPublicKey() *PreviousStateSSHKeyAuditImage {
 	if v := a.GetPreviousState(); v != nil {
-		return v.WorkspaceImage
+		return v.PreviousStateSSHKeyAuditImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateWorkflow() *PreviousStateWorkflowAuditImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.PreviousStateWorkflowAuditImage
+	}
+	return nil
+}
+
+func (a *AuditLogTargetState) GetPreviousStateWorkspace() *PreviousStateWorkspaceAuditImage {
+	if v := a.GetPreviousState(); v != nil {
+		return v.PreviousStateWorkspaceAuditImage
 	}
 	return nil
 }

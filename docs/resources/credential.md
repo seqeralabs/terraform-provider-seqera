@@ -150,9 +150,9 @@ Optional:
 
 Optional:
 
-- `access_key` (String)
-- `assume_role_arn` (String)
-- `secret_key` (String)
+- `access_key` (String) AWS IAM access key ID (keys mode).
+- `assume_role_arn` (String) IAM role ARN to assume when using these credentials (role and workload identity modes).
+- `secret_key` (String) AWS IAM secret access key (keys mode).
 
 
 <a id="nestedatt--keys--azure"></a>
@@ -160,9 +160,9 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String) Azure Batch account access key.
 - `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-- `storage_key` (String)
+- `storage_key` (String) Azure Storage account access key.
 - `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
 
 
@@ -171,14 +171,14 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String) Azure Batch account access key.
 - `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-- `client_id` (String)
-- `client_secret` (String)
-- `storage_key` (String)
+- `client_id` (String) Application (client) ID.
+- `client_secret` (String) Application (client) secret.
+- `storage_key` (String) Azure Storage account access key.
 - `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
-- `subscription_id` (String)
-- `tenant_id` (String)
+- `subscription_id` (String) Azure subscription ID.
+- `tenant_id` (String) Entra tenant ID.
 
 
 <a id="nestedatt--keys--azure_entra"></a>
@@ -186,13 +186,13 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String) Azure Batch account access key.
 - `batch_name` (String) Azure Batch account name (3 to 24 letters or digits, case-insensitive)
-- `client_id` (String)
-- `client_secret` (String)
-- `storage_key` (String)
+- `client_id` (String) Application (client) ID.
+- `client_secret` (String) Application (client) secret.
+- `storage_key` (String) Azure Storage account access key.
 - `storage_name` (String) Azure Storage account name (3 to 24 letters or digits, case-insensitive)
-- `tenant_id` (String)
+- `tenant_id` (String) Entra tenant ID.
 
 
 <a id="nestedatt--keys--azurerepos"></a>
@@ -200,9 +200,9 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
-- `username` (String)
+- `password` (String) Account password or personal access token.
+- `token` (String) Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+- `username` (String) Account username.
 
 
 <a id="nestedatt--keys--bitbucket"></a>
@@ -210,9 +210,9 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
-- `username` (String)
+- `password` (String) Account password.
+- `token` (String) App password or access token.
+- `username` (String) Account username.
 
 
 <a id="nestedatt--keys--codecommit"></a>
@@ -220,9 +220,9 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
-- `username` (String)
+- `password` (String) Password (equivalent to an AWS secret key).
+- `token` (String) Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+- `username` (String) Username (equivalent to an AWS access key).
 
 
 <a id="nestedatt--keys--container_reg"></a>
@@ -230,9 +230,9 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `registry` (String)
-- `user_name` (String)
+- `password` (String) Registry password or access token.
+- `registry` (String) Container registry server URL, for example `docker.io`, `quay.io`, or a custom registry domain. Defaults to `docker.io`.
+- `user_name` (String) Registry username.
 
 
 <a id="nestedatt--keys--gitea"></a>
@@ -240,9 +240,9 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
-- `username` (String)
+- `password` (String) Account password or access token.
+- `token` (String) Access token, for the providers that accept one as an alternative to the password. Unused by the others.
+- `username` (String) Account username.
 
 
 <a id="nestedatt--keys--github"></a>
@@ -250,9 +250,9 @@ Optional:
 
 Optional:
 
-- `password` (String, Sensitive)
-- `token` (String)
-- `username` (String)
+- `password` (String, Sensitive) GitHub personal access token, classic or fine-grained.
+- `token` (String) Ignored: send the personal access token in `password`.
+- `username` (String) Account username.
 
 
 <a id="nestedatt--keys--github_app"></a>
@@ -260,15 +260,15 @@ Optional:
 
 Optional:
 
-- `app_id` (String)
-- `client_id` (String)
-- `client_secret` (String, Sensitive)
-- `private_key` (String, Sensitive)
-- `webhook_secret` (String, Sensitive)
+- `app_id` (String) GitHub App ID.
+- `client_id` (String) OAuth client ID.
+- `client_secret` (String, Sensitive) OAuth client secret, returned by the GitHub App manifest flow.
+- `private_key` (String, Sensitive) PEM-encoded GitHub App private key.
+- `webhook_secret` (String, Sensitive) Webhook secret, returned by the GitHub App manifest flow.
 
 Read-Only:
 
-- `slug` (String)
+- `slug` (String) App URL slug returned by the GitHub App manifest flow.
 
 
 <a id="nestedatt--keys--gitlab"></a>
@@ -276,9 +276,9 @@ Read-Only:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
-- `username` (String)
+- `password` (String) Account password.
+- `token` (String) Personal access token, as an alternative to the username and password.
+- `username` (String) Account username.
 
 
 <a id="nestedatt--keys--google"></a>
@@ -286,10 +286,10 @@ Optional:
 
 Optional:
 
-- `data` (String, Sensitive)
-- `service_account_email` (String)
-- `token_audience` (String)
-- `workload_identity_provider` (String)
+- `data` (String, Sensitive) Service account JSON key (service-account key mode).
+- `service_account_email` (String) Service account email to impersonate (Workload Identity Federation mode).
+- `token_audience` (String) Optional custom audience for the Workload Identity Federation OIDC token exchange. Defaults to the Workload Identity Provider resource name. Must not be an audience Seqera Platform or its services accept: `platform` (or the installation's configured access-token audience), `sched`, `consumption`, the Platform API URL, or its `/token` endpoint.
+- `workload_identity_provider` (String) Full resource name of the Workload Identity Federation OIDC provider.
 
 
 <a id="nestedatt--keys--k8s"></a>
@@ -297,9 +297,9 @@ Optional:
 
 Optional:
 
-- `certificate` (String)
-- `private_key` (String)
-- `token` (String)
+- `certificate` (String) Base64-encoded client certificate for Kubernetes authentication.
+- `private_key` (String) Base64-encoded private key for Kubernetes authentication.
+- `token` (String) Service account token, as an alternative to the certificate and private key pair.
 
 
 <a id="nestedatt--keys--local"></a>
@@ -307,7 +307,7 @@ Optional:
 
 Optional:
 
-- `password` (String)
+- `password` (String) Password of the local account.
 
 
 <a id="nestedatt--keys--s3"></a>
@@ -315,9 +315,9 @@ Optional:
 
 Optional:
 
-- `access_key` (String)
-- `path_style_access_enabled` (Boolean)
-- `secret_key` (String)
+- `access_key` (String) Access key ID.
+- `path_style_access_enabled` (Boolean) Whether path-style bucket addressing is used.
+- `secret_key` (String) Secret access key.
 
 
 <a id="nestedatt--keys--seqeracompute"></a>
@@ -325,9 +325,9 @@ Optional:
 
 Optional:
 
-- `access_key` (String)
-- `assume_role_arn` (String)
-- `secret_key` (String)
+- `access_key` (String) AWS IAM access key ID (keys mode).
+- `assume_role_arn` (String) IAM role ARN to assume when using these credentials (role and workload identity modes).
+- `secret_key` (String) AWS IAM secret access key (keys mode).
 
 
 <a id="nestedatt--keys--ssh"></a>
@@ -335,8 +335,8 @@ Optional:
 
 Optional:
 
-- `passphrase` (String)
-- `private_key` (String)
+- `passphrase` (String) Passphrase protecting the private key, when it is encrypted.
+- `private_key` (String) PEM-encoded SSH private key.
 
 
 <a id="nestedatt--keys--tw_agent"></a>
@@ -344,9 +344,9 @@ Optional:
 
 Optional:
 
-- `connection_id` (String)
-- `shared` (Boolean)
-- `work_dir` (String)
+- `connection_id` (String) Agent connection ID.
+- `shared` (Boolean) Whether the agent connection is shared across multiple workspaces.
+- `work_dir` (String) Agent working directory. Always `$TW_AGENT_WORK`, replaced with the work directory the agent reports.
 
 ## Import
 

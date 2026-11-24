@@ -898,7 +898,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
+										Description: `Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"head_job_role": schema.StringAttribute{
 										Computed: true,
@@ -1979,7 +1982,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.`,
+										Description: `Memory in MiB reserved for the Nextflow head job container. Must be at least 3584 when creating a compute environment. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"head_pool": schema.StringAttribute{
 										Computed: true,
@@ -2758,7 +2764,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"head_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -3058,7 +3067,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Memory allocation for the Nextflow head/launcher pod in MB. Requires replacement if changed.`,
+										Description: `Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"head_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -3454,7 +3466,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Memory allocation for the Nextflow head job in MB. Requires replacement if changed.`,
+										Description: `Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 when omitted. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"labels": schema.MapAttribute{
 										Computed: true,
@@ -3982,7 +3997,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network. Requires replacement if changed.`,
+										Description: `VPC network for compute instances, as a short name or fully qualified path. A short name resolves in ` + "`" + `projectId` + "`" + ` when it's set, otherwise in the credentials' project. If empty, the project ` + "`" + `default` + "`" + ` network is used. Required when ` + "`" + `usePrivateAddress` + "`" + ` is ` + "`" + `true` + "`" + `. Requires replacement if changed.`,
 									},
 									"network_tags": schema.ListAttribute{
 										Computed: true,
@@ -4069,7 +4084,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all. Requires replacement if changed.`,
+										Description: `Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short ` + "`" + `network` + "`" + ` name: in ` + "`" + `projectId` + "`" + ` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used. Requires replacement if changed.`,
 									},
 									"use_private_address": schema.BoolAttribute{
 										Computed: true,
@@ -4487,7 +4502,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request. Requires replacement if changed.`,
+										Validators: []validator.Int32{
+											int32validator.AtLeast(3584),
+										},
 									},
 									"head_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -5579,6 +5597,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
+									},
+									"sched_enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Whether pipelines on this compute environment run on the Seqera Scheduler. Set by Seqera at creation and cannot be changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,

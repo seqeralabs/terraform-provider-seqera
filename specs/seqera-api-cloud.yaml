@@ -5,7 +5,7 @@ info:
     url: https://seqera.io
   description: Seqera Platform services API
   title: Seqera API
-  version: 1.257.0
+  version: 1.274.4
 tags:
   - name: actions
     description: Pipeline actions
@@ -125,6 +125,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Another action in the workspace, or another personal action of the user, already has this name, case ignored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -431,7 +437,7 @@ paths:
         '403':
           description: Operation not allowed
         '409':
-          description: Duplicate element, or another write changed the action after this request read it
+          description: Another action in the workspace, or another personal action of the user, already has this name, case ignored. Or another write changed the action after this request read it
           content:
             application/json:
               schema:
@@ -697,6 +703,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: State images are disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -743,6 +755,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: State images are disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -867,7 +885,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateAgentResponse'
         '400':
-          description: 'Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace'
+          description: 'Bad request: a field fails validation, serviceAccountId is missing, githubAppCredentialId does not name a valid GitHub App credential in the workspace, or studioSandbox does not name an existing Studio in the workspace'
           content:
             application/json:
               schema:
@@ -1157,7 +1175,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UpdateAgentResponse'
         '400':
-          description: 'Bad request: a field fails validation, serviceAccountId is missing, or githubAppCredentialId does not name a valid GitHub App credential in the workspace'
+          description: 'Bad request: a field fails validation, serviceAccountId is missing, githubAppCredentialId does not name a valid GitHub App credential in the workspace, or studioSandbox does not name an existing Studio in the workspace'
           content:
             application/json:
               schema:
@@ -1441,11 +1459,11 @@ paths:
     get:
       operationId: ListComputeEnvs
       summary: List compute environments
-      description: Lists all available compute environments in a user context. Append `?workspaceId` to list compute environments in a workspace context, and `?status` to filter by compute environment status.
+      description: 'Lists all available compute environments in a user context. Append `?workspaceId` to list compute environments in a workspace context, and `?status` to filter by compute environment status. Pagination is opt-in: without `max` every matching compute environment is returned.'
       parameters:
         - name: status
           in: query
-          description: Compute environment status
+          description: Compute environment status. Accepts several as a comma-separated list (ex. `CREATING,DELETING`)
           schema:
             type: string
         - name: workspaceId
@@ -1462,6 +1480,23 @@ paths:
             items:
               $ref: '#/components/schemas/ComputeEnvQueryAttribute'
           explode: false
+        - name: search
+          in: query
+          description: Match compute environments by name or description, optionally narrowed by a `platform:` keyword (ex. `platform:aws`)
+          schema:
+            type: string
+        - name: max
+          in: query
+          description: Pagination max results, between 1 and 100. Omit to return every matching compute environment
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Pagination offset. Requires `max`, since the listing is unpaged without it
+          schema:
+            type: integer
+            format: int32
       responses:
         '200':
           description: OK
@@ -1590,8 +1625,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Conflicting deletion
+          description: Conflicting deletion, or the compute environment has already been deleted
           content:
             application/json:
               schema:
@@ -1639,6 +1680,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1678,8 +1725,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Duplicate element
+          description: Duplicate element, or the compute environment has been deleted
           content:
             application/json:
               schema:
@@ -1722,6 +1775,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Compute environment has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1760,6 +1825,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Compute environment has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -1798,6 +1875,18 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Compute environment has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -2055,6 +2144,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Credentials not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Running jobs block the deletion of this credentials
           content:
@@ -2097,6 +2192,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Credentials not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -2141,6 +2242,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Credentials not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -2262,7 +2369,7 @@ paths:
             type: string
         - name: search
           in: query
-          description: Optional data-link search query. Free text matches the data-link name. Supports the `region`, `provider`, and `resourceRef` keywords.
+          description: Optional data-link search query. Free text matches the data-link name. Supports the `region`, `provider`, and `resourceRef` keywords, and `containsPath` to return only the most specific data link containing a cloud path (for example, a task work directory).
           schema:
             type: string
             example: provider:aws region:eu-west-1
@@ -2345,7 +2452,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataLinkDto'
         '400':
-          description: BadRequest
+          description: BadRequest — invalid request, or credentials not found
           content:
             application/json:
               schema:
@@ -2353,7 +2460,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: NotFound — workspace or credentials not found, API disabled in the workspace, or data-link or path not found
+          description: NotFound — workspace not found, API disabled in the workspace, or data-link or path not found
           content:
             application/json:
               schema:
@@ -2384,6 +2491,12 @@ paths:
           description: OK
         '403':
           description: Operation not allowed
+        '404':
+          description: Credentials not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -2513,7 +2626,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataLinkDto'
         '400':
-          description: BadRequest
+          description: BadRequest — invalid request, or credentials not found
           content:
             application/json:
               schema:
@@ -2521,7 +2634,7 @@ paths:
         '403':
           description: Operation not allowed
         '404':
-          description: NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found
+          description: NotFound — workspace not found, API disabled for the workspace, or data-link not found
           content:
             application/json:
               schema:
@@ -4447,6 +4560,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Running jobs block the deletion of this Managed Identity
           content:
@@ -4490,6 +4609,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -4530,6 +4655,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -4592,6 +4723,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -4643,6 +4780,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -4690,6 +4833,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Running jobs block the deletion of this Managed Credentials
           content:
@@ -4743,6 +4892,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '404':
+          description: Managed identity not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -6190,6 +6345,158 @@ paths:
         - BearerAuth: []
       tags:
         - service-accounts
+  /orgs/{orgId}/service-accounts/{saId}/secrets:
+    get:
+      operationId: ListServiceAccountSecrets
+      summary: List service account secrets
+      description: Lists the live secrets of the service account, soonest expiry first, then the secrets that ended in the last 30 days, most recently ended first. Returns at most 10 secrets. Secret values are never returned.
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListServiceAccountSecretsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service account not found, or service account credentials are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+    post:
+      operationId: IssueServiceAccountSecret
+      summary: Issue a service account secret
+      description: "Issues a new secret for the service account's client credentials. The secret value is returned only in this response. A service account holds at most 2 live secrets: to rotate, issue a second secret, then revoke the old one."
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueServiceAccountSecretRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueServiceAccountSecretResponse'
+        '400':
+          description: 'Bad request: expiryDays is not an accepted lifetime'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service account not found, or service account credentials are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: The service account already has 2 live secrets, or is disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
+  /orgs/{orgId}/service-accounts/{saId}/secrets/{secretId}/revoke:
+    post:
+      operationId: RevokeServiceAccountSecret
+      summary: Revoke a service account secret
+      description: Revokes a secret so it can no longer be exchanged for an access token. Access tokens already issued with it stay valid until they expire, 1 hour after issue by default. Revoking a secret that is already revoked returns it unchanged. Cannot be undone.
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: saId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: secretId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevokeServiceAccountSecretResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Service account or secret not found, or service account credentials are not enabled for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: The secret has already expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - service-accounts
   /orgs/{orgId}/service-accounts/{saId}/ssh-keys:
     get:
       operationId: ListServiceAccountSshKeys
@@ -7458,7 +7765,7 @@ paths:
     put:
       operationId: UpdateLineageWorkspaceSettings
       summary: Update workspace lineage settings
-      description: Updates the lineage settings of the workspace identified by the given `workspaceId`. `credentialsId` and `region` are always required. In `MANUAL` provisioning mode, `storeName` and `topicArn` are also required.
+      description: Updates the lineage settings of the workspace identified by the given `workspaceId`. `credentialsId` and `region` are always required. In `MANUAL` provisioning mode, `storeLocation` and `topicArn` are also required.
       parameters:
         - name: orgId
           in: path
@@ -8019,6 +8326,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+      tags:
+        - pipelines
+  /pipelines/diagram:
+    get:
+      operationId: DescribePipelineDiagram
+      summary: Describe remote pipeline diagram
+      description: Retrieves the overview diagram declared in the manifest of a remote Nextflow pipeline repository, as a `data:` URI. Append the repository name or full URL with `?name`.
+      parameters:
+        - name: name
+          in: query
+          description: Pipeline repository name or URL
+          schema:
+            type: string
+        - name: revision
+          in: query
+          description: Pipeline revision
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+        - name: mainScript
+          in: query
+          description: Pipeline alternative main.nf
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Cache-Control:
+              description: '`private, max-age=86400` for a full commit SHA revision, `private, max-age=300, stale-while-revalidate=86400` otherwise, `no-store` when there is no diagram.'
+              schema:
+                type: string
+            Vary:
+              description: '`Cookie`, set only when a diagram is returned.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribePipelineDiagramResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
       security:
         - BearerAuth: []
       tags:
@@ -9345,7 +9707,7 @@ paths:
             format: int64
         - name: search
           in: query
-          description: Optional Studio search query. Free text matches the Studio name and template URL. Supports `is:starred` and the `userName`, `computeEnvName`, `status`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `label`, `collaborationMode`, and `computeEnvType` keywords.
+          description: Optional Studio search query. Free text matches the Studio name, template URL, and session ID. Supports `is:starred` and the `userName`, `computeEnvName`, `status`, `createdAfter`, `createdBefore`, `updatedAfter`, `updatedBefore`, `label`, `collaborationMode`, and `computeEnvType` keywords.
           schema:
             type: string
             example: status:running label:production
@@ -10881,6 +11243,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -11104,6 +11472,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -11239,6 +11613,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Operation not allowed
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       security:
         - BearerAuth: []
       tags:
@@ -12210,7 +12590,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
     AccessToken:
       type: object
@@ -12242,6 +12622,7 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         name:
           type: string
       required:
@@ -12473,6 +12854,7 @@ components:
           type: string
           nullable: true
         eventPayload:
+          description: The event that caused the trigger, as a string that holds JSON, not as a nested object. Its shape depends on the Action `source`. A `github` value is the webhook body as received and can be invalid JSON.
           type: string
           nullable: true
         eventSummary:
@@ -12556,6 +12938,13 @@ components:
         - active
         - inactive
         - deleted
+    Agent.StudioSandbox:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        workspaceId:
+          type: string
     AgentActionRequest:
       type: object
       properties:
@@ -12609,6 +12998,8 @@ components:
           type: string
           maxLength: 255
           pattern: ^[A-Za-z0-9_-]+$
+        sandboxAutoChange:
+          type: boolean
         serviceAccountId:
           type: integer
           format: int64
@@ -12618,6 +13009,13 @@ components:
           nullable: true
         status:
           $ref: '#/components/schemas/Agent.Status'
+        studioSandbox:
+          allOf:
+            - $ref: '#/components/schemas/Agent.StudioSandbox'
+          nullable: true
+        studioSandboxName:
+          type: string
+          nullable: true
         updatedBy:
           type: integer
           format: int64
@@ -12742,12 +13140,16 @@ components:
       type: object
       properties:
         connectionId:
+          description: Agent connection ID.
           type: string
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         shared:
+          description: Whether the agent connection is shared across multiple workspaces.
           type: boolean
         workDir:
+          description: Agent working directory. Always `$TW_AGENT_WORK`, replaced with the work directory the agent reports.
           type: string
       title: Tower Agent credentials
     AiChatThreadImage:
@@ -12810,7 +13212,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Altair PBS configuration
     Analytics:
@@ -12997,6 +13399,8 @@ components:
         - credit_purchase_failed
         - credit_purchase_canceled
         - credit_purchase_expired
+        - budget_set
+        - budget_removed
         - user_role_created
         - user_role_updated
         - user_role_deleted
@@ -13013,6 +13417,8 @@ components:
         - service_account_created
         - service_account_updated
         - service_account_deleted
+        - oauth_client_secret_created
+        - oauth_client_secret_updated
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -13201,6 +13607,8 @@ components:
         - credit_purchase_failed
         - credit_purchase_canceled
         - credit_purchase_expired
+        - budget_set
+        - budget_removed
         - user_role_created
         - user_role_updated
         - user_role_deleted
@@ -13217,6 +13625,8 @@ components:
         - service_account_created
         - service_account_updated
         - service_account_deleted
+        - oauth_client_secret_created
+        - oauth_client_secret_updated
         - compute_environment_made_primary
         - compute_environment_made_non_primary
         - compute_profile_created
@@ -13278,6 +13688,7 @@ components:
         - org_sso_connection
         - credit_info
         - credit_purchase
+        - budget
         - data_studio
         - data_studio_connection
         - data_link
@@ -13301,6 +13712,7 @@ components:
         - idp_group
         - scim_token
         - service_account
+        - oauth_client_secret
       x-enum-varnames:
         - user
         - pipeline
@@ -13317,6 +13729,7 @@ components:
         - org_sso_connection
         - credit_info
         - credit_purchase
+        - budget
         - data_studio
         - data_studio_connection
         - data_link
@@ -13340,6 +13753,7 @@ components:
         - idp_group
         - scim_token
         - service_account
+        - oauth_client_secret
     AuditLogTargetState:
       type: object
       properties:
@@ -13355,6 +13769,7 @@ components:
                   agent: '#/components/schemas/AgentImage'
                   agent_run: '#/components/schemas/AgentRunImage'
                   ai_chat_thread: '#/components/schemas/AiChatThreadImage'
+                  budget: '#/components/schemas/BudgetImage'
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
@@ -13373,6 +13788,7 @@ components:
                   managed_credentials: '#/components/schemas/ManagedCredentialsImage'
                   managed_identity: '#/components/schemas/ManagedIdentityImage'
                   member: '#/components/schemas/MemberImage'
+                  oauth_client_secret: '#/components/schemas/OidcClientSecretImage'
                   oauth_consent: '#/components/schemas/OAuthConsentImage'
                   org_sso_connection: '#/components/schemas/OrgSsoConnectionImage'
                   organization: '#/components/schemas/OrganizationImage'
@@ -13390,12 +13806,14 @@ components:
                   workspace: '#/components/schemas/WorkspaceImage'
                 propertyName: auditImageType
               type: object
+          nullable: true
           oneOf:
             - $ref: '#/components/schemas/AccessTokenImage'
             - $ref: '#/components/schemas/ActionImage'
             - $ref: '#/components/schemas/AgentImage'
             - $ref: '#/components/schemas/AgentRunImage'
             - $ref: '#/components/schemas/AiChatThreadImage'
+            - $ref: '#/components/schemas/BudgetImage'
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
@@ -13415,6 +13833,7 @@ components:
             - $ref: '#/components/schemas/ManagedIdentityImage'
             - $ref: '#/components/schemas/MemberImage'
             - $ref: '#/components/schemas/OAuthConsentImage'
+            - $ref: '#/components/schemas/OidcClientSecretImage'
             - $ref: '#/components/schemas/OrganizationImage'
             - $ref: '#/components/schemas/OrgSsoConnectionImage'
             - $ref: '#/components/schemas/ParticipantImage'
@@ -13439,6 +13858,7 @@ components:
                   agent: '#/components/schemas/AgentImage'
                   agent_run: '#/components/schemas/AgentRunImage'
                   ai_chat_thread: '#/components/schemas/AiChatThreadImage'
+                  budget: '#/components/schemas/BudgetImage'
                   compute_env: '#/components/schemas/ComputeEnvImage'
                   credentials: '#/components/schemas/CredentialsImage'
                   credit_info: '#/components/schemas/CreditInfoImage'
@@ -13457,6 +13877,7 @@ components:
                   managed_credentials: '#/components/schemas/ManagedCredentialsImage'
                   managed_identity: '#/components/schemas/ManagedIdentityImage'
                   member: '#/components/schemas/MemberImage'
+                  oauth_client_secret: '#/components/schemas/OidcClientSecretImage'
                   oauth_consent: '#/components/schemas/OAuthConsentImage'
                   org_sso_connection: '#/components/schemas/OrgSsoConnectionImage'
                   organization: '#/components/schemas/OrganizationImage'
@@ -13474,12 +13895,14 @@ components:
                   workspace: '#/components/schemas/WorkspaceImage'
                 propertyName: auditImageType
               type: object
+          nullable: true
           oneOf:
             - $ref: '#/components/schemas/AccessTokenImage'
             - $ref: '#/components/schemas/ActionImage'
             - $ref: '#/components/schemas/AgentImage'
             - $ref: '#/components/schemas/AgentRunImage'
             - $ref: '#/components/schemas/AiChatThreadImage'
+            - $ref: '#/components/schemas/BudgetImage'
             - $ref: '#/components/schemas/ComputeEnvImage'
             - $ref: '#/components/schemas/CredentialsImage'
             - $ref: '#/components/schemas/CreditInfoImage'
@@ -13499,6 +13922,7 @@ components:
             - $ref: '#/components/schemas/ManagedIdentityImage'
             - $ref: '#/components/schemas/MemberImage'
             - $ref: '#/components/schemas/OAuthConsentImage'
+            - $ref: '#/components/schemas/OidcClientSecretImage'
             - $ref: '#/components/schemas/OrganizationImage'
             - $ref: '#/components/schemas/OrgSsoConnectionImage'
             - $ref: '#/components/schemas/ParticipantImage'
@@ -13560,35 +13984,45 @@ components:
           nullable: true
         email:
           type: string
+          nullable: true
         firstName:
           type: string
+          nullable: true
         isRoot:
           type: boolean
+          nullable: true
         lastName:
           type: string
+          nullable: true
         type:
           $ref: '#/components/schemas/AuditActor.ActorType'
         userId:
           type: integer
           format: int64
+          nullable: true
         userName:
           type: string
+          nullable: true
     AuditLogV2ResponseDto.Client:
       type: object
       properties:
         accessTokenId:
           type: integer
           format: int64
+          nullable: true
         ip:
           type: string
+          nullable: true
         userAgent:
           type: string
+          nullable: true
     AuditLogV2ResponseDto.ResourceOrganization:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          nullable: true
         name:
           type: string
     AuditLogV2ResponseDto.ResourceUser:
@@ -13597,6 +14031,7 @@ components:
         id:
           type: integer
           format: int64
+          nullable: true
         name:
           type: string
     AuditLogV2ResponseDto.ResourceWorkspace:
@@ -13605,6 +14040,7 @@ components:
         id:
           type: integer
           format: int64
+          nullable: true
         name:
           type: string
     AuditLogV2ResponseDto.Target:
@@ -13616,6 +14052,7 @@ components:
           type: string
         name:
           type: string
+          nullable: true
         organization:
           $ref: '#/components/schemas/AuditLogV2ResponseDto.ResourceOrganization'
         state:
@@ -13705,6 +14142,7 @@ components:
           format: int32
           nullable: true
         headJobMemoryMb:
+          description: Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate.
           type: integer
           format: int32
           nullable: true
@@ -13754,7 +14192,7 @@ components:
           type: boolean
           nullable: true
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: AWS Batch configuration
     AwsBatchPlatformMetainfo:
@@ -13900,6 +14338,7 @@ components:
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
         schedEnabled:
+          description: 'If `true`, enables Seqera Scheduler (Intelligent Compute) execution for this compute environment. Not available with workload identity federation credentials, nor with role-based credentials unless the installation allows them. Default: `false`.'
           type: boolean
         secretsKmsKeyId:
           description: Optional customer-managed KMS key used to encrypt the temporary Secrets Manager secrets created for runs that use pipeline secrets. Accepts a key ARN or a key id. When omitted, the AWS-managed default Secrets Manager key is used.
@@ -13914,7 +14353,7 @@ components:
           type: string
           deprecated: true
         subnetIds:
-          description: Subnets to launch into. Basic uses the first; Intelligent Compute may use all.
+          description: Subnets to launch into. The Nextflow head instance tries them in order, moving to the next one when a subnet or its Availability Zone has no capacity. With Intelligent Compute, the task instances may use any of them.
           type: array
           items:
             type: string
@@ -13924,7 +14363,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: AWS Cloud configuration
     AwsCloudPlatformMetainfo:
@@ -13981,19 +14420,26 @@ components:
       type: object
       properties:
         accessKey:
+          description: AWS IAM access key ID (keys mode).
           type: string
           nullable: true
         assumeRoleArn:
+          description: IAM role ARN to assume when using these credentials (role and workload identity modes).
           type: string
           nullable: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         externalId:
+          description: Platform-managed External ID used when assuming an IAM role. Present when generated or stored for role-based AWS credentials.
           type: string
           nullable: true
         mode:
-          $ref: '#/components/schemas/AwsCredentialsMode'
+          description: 'AWS credentials authentication mode: `keys` for IAM access key authentication, `role` for IAM role authentication, `workloadIdentity` for OIDC workload identity federation.'
+          allOf:
+            - $ref: '#/components/schemas/AwsCredentialsMode'
         secretKey:
+          description: AWS IAM secret access key (keys mode).
           type: string
           writeOnly: true
       title: AWS credentials
@@ -14050,7 +14496,7 @@ components:
           example: 1
           nullable: true
         headJobMemoryMb:
-          description: Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
+          description: Memory in MiB reserved for the Nextflow head job container. Must be at least 3584 when creating a compute environment. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
           type: integer
           format: int32
           example: 4096
@@ -14108,7 +14554,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
         workerPool:
           type: string
@@ -14298,7 +14744,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Azure Cloud configuration
     AzCloudPlatformMetaInfo:
@@ -14352,6 +14798,7 @@ components:
       type: object
       properties:
         batchKey:
+          description: Azure Batch account access key.
           type: string
           writeOnly: true
         batchName:
@@ -14359,13 +14806,17 @@ components:
           type: string
           pattern: ^[a-zA-Z0-9]{3,24}$
         clientId:
+          description: Application (client) ID.
           type: string
         clientSecret:
+          description: Application (client) secret.
           type: string
           writeOnly: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         storageKey:
+          description: Azure Storage account access key.
           type: string
           writeOnly: true
         storageName:
@@ -14373,14 +14824,17 @@ components:
           type: string
           pattern: ^[a-zA-Z0-9]{3,24}$
         subscriptionId:
+          description: Azure subscription ID.
           type: string
         tenantId:
+          description: Entra tenant ID.
           type: string
       title: Azure Cloud credentials
     AzureEntraKeys:
       type: object
       properties:
         batchKey:
+          description: Azure Batch account access key.
           type: string
           writeOnly: true
         batchName:
@@ -14388,13 +14842,17 @@ components:
           type: string
           pattern: ^[a-zA-Z0-9]{3,24}$
         clientId:
+          description: Application (client) ID.
           type: string
         clientSecret:
+          description: Application (client) secret.
           type: string
           writeOnly: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         storageKey:
+          description: Azure Storage account access key.
           type: string
           writeOnly: true
         storageName:
@@ -14402,25 +14860,31 @@ components:
           type: string
           pattern: ^[a-zA-Z0-9]{3,24}$
         tenantId:
+          description: Entra tenant ID.
           type: string
       title: Azure Entra credentials
     AzureReposSecurityKeys:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Account password or personal access token.
           type: string
           writeOnly: true
         token:
+          description: Access token, for the providers that accept one as an alternative to the password. Unused by the others.
           type: string
         username:
+          description: Account username.
           type: string
       title: Azure Repos credentials
     AzureSecurityKeys:
       type: object
       properties:
         batchKey:
+          description: Azure Batch account access key.
           type: string
           writeOnly: true
         batchName:
@@ -14428,8 +14892,10 @@ components:
           type: string
           pattern: ^[a-zA-Z0-9]{3,24}$
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         storageKey:
+          description: Azure Storage account access key.
           type: string
           writeOnly: true
         storageName:
@@ -14441,14 +14907,18 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Account password.
           type: string
           writeOnly: true
         token:
+          description: App password or access token.
           type: string
           writeOnly: true
         username:
+          description: Account username.
           type: string
       title: BitBucket credentials
     Bucket:
@@ -14512,6 +14982,27 @@ components:
         - ENABLED
         - SUSPENDED
         - DISABLED
+    BudgetImage:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        budgetType:
+          type: string
+        organizationId:
+          type: integer
+          format: int64
+        reason:
+          type: string
+        workspaceId:
+          type: integer
+          format: int64
+      required:
+        - auditImageType
+      title: Budget audit image
     CatalogArtifact:
       type: object
       properties:
@@ -14560,6 +15051,7 @@ components:
       properties:
         defaultVersion:
           type: string
+          nullable: true
         deploymentVersions:
           type: object
           additionalProperties:
@@ -14613,6 +15105,57 @@ components:
             - $ref: '#/components/schemas/ClientCredentialsStatus'
       required:
         - status
+    ClientSecretDto:
+      type: object
+      properties:
+        createdAt:
+          description: When the secret was issued
+          type: string
+          format: date-time
+        expiresAt:
+          description: When the secret expires. It can no longer be exchanged for an access token from this time.
+          type: string
+          format: date-time
+        hint:
+          description: Masked secret showing its last 4 characters, e.g. ****9HwP
+          type: string
+        id:
+          description: Secret ID
+          type: integer
+          format: int64
+        lastUsedAt:
+          description: Last time the secret was exchanged for an access token. Null if it never was.
+          type: string
+          format: date-time
+          nullable: true
+        revokedAt:
+          description: When the secret was revoked. Null if it was not.
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          description: Status of the secret, computed from its expiry and revocation dates
+          allOf:
+            - $ref: '#/components/schemas/ClientSecretStatus'
+      required:
+        - createdAt
+        - expiresAt
+        - hint
+        - id
+        - status
+    ClientSecretStatus:
+      description: Status of a service account secret, computed from its expiry and revocation dates
+      type: string
+      enum:
+        - ACTIVE
+        - EXPIRING
+        - EXPIRED
+        - REVOKED
+      x-enum-descriptions:
+        - The secret is live and expires in more than 14 days
+        - The secret is live but expires within 14 days
+        - The secret reached its expiry without being revoked
+        - The secret was revoked before expiry
     CloudPriceModel:
       type: string
       enum:
@@ -14625,13 +15168,17 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Password (equivalent to an AWS secret key).
           type: string
           writeOnly: true
         token:
+          description: Access token, for the providers that accept one as an alternative to the password. Unused by the others.
           type: string
         username:
+          description: Username (equivalent to an AWS access key).
           type: string
       title: AWS CodeCommit credentials
     ComputeConfig:
@@ -14657,7 +15204,7 @@ components:
           type: string
           nullable: true
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       discriminator:
         mapping:
@@ -14727,26 +15274,33 @@ components:
           $ref: '#/components/schemas/ComputeConfig'
         credentialsId:
           type: string
+          nullable: true
         description:
           type: string
+          nullable: true
         fusionMetricsCollectionEnabled:
           type: boolean
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         managedIdentityId:
           type: integer
           format: int64
+          nullable: true
         message:
           type: string
+          nullable: true
         name:
           type: string
         platform:
           type: string
         primary:
           type: boolean
+          nullable: true
         status:
           type: string
+          nullable: true
       required:
         - auditImageType
       title: Compute environment audit image
@@ -14884,10 +15438,12 @@ components:
           readOnly: true
         deleted:
           type: boolean
+          nullable: true
           readOnly: true
         description:
           type: string
           maxLength: 2000
+          nullable: true
         fusionMetricsCollectionEnabled:
           type: boolean
         id:
@@ -14901,10 +15457,12 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
           readOnly: true
         message:
           type: string
           maxLength: 4096
+          nullable: true
         name:
           type: string
           maxLength: 100
@@ -14935,10 +15493,12 @@ components:
           maxLength: 25
         primary:
           type: boolean
+          nullable: true
           readOnly: true
         status:
           allOf:
             - $ref: '#/components/schemas/ComputeEnv.Status'
+          nullable: true
           readOnly: true
         workspaceId:
           type: integer
@@ -15023,13 +15583,17 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Registry password or access token.
           type: string
           writeOnly: true
         registry:
+          description: Container registry server URL, for example `docker.io`, `quay.io`, or a custom registry domain. Defaults to `docker.io`.
           type: string
         userName:
+          description: Registry username.
           type: string
       title: Container registry credentials
     CreateAccessTokenRequest:
@@ -15119,11 +15683,19 @@ components:
           type: string
           maxLength: 255
           pattern: ^[A-Za-z0-9_-]+$
+        sandboxAutoChange:
+          description: Whether the agent may switch its sandbox during a run. Defaults to false
+          type: boolean
         serviceAccountId:
           description: Service account the agent runs as. It must be enabled, be a participant of the workspace, and have a workspace role that grants agent:execute (launch, maintain, admin or owner)
           type: integer
           format: int64
           minimum: 1
+        studioSandbox:
+          description: Studio session the agent's runs use as their sandbox. Null uses a scratch sandbox
+          allOf:
+            - $ref: '#/components/schemas/Agent.StudioSandbox'
+          nullable: true
       required:
         - agentInstructions
         - name
@@ -15520,17 +16092,22 @@ components:
           $ref: '#/components/schemas/AuditImageType'
         baseUrl:
           type: string
+          nullable: true
         category:
           type: string
+          nullable: true
         description:
           type: string
+          nullable: true
         keys:
           $ref: '#/components/schemas/SecurityKeys'
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         message:
           type: string
+          nullable: true
         name:
           type: string
         provider:
@@ -15651,6 +16228,7 @@ components:
       properties:
         nextPageToken:
           type: string
+          nullable: true
         objects:
           type: array
           items:
@@ -15844,11 +16422,13 @@ components:
           nullable: true
         mimeType:
           type: string
+          nullable: true
         name:
           type: string
         size:
           type: integer
           format: int64
+          nullable: true
         type:
           $ref: '#/components/schemas/DataLinkItemType'
     DataLinkItemDeletionFailure:
@@ -16517,6 +17097,7 @@ components:
         - SPOT_RECLAMATION
         - NO_STATS_AVAIL
         - FORCE_STOPPED
+        - BUDGET_EXCEEDED
     DataStudioStopResponse:
       type: object
       properties:
@@ -16939,6 +17520,12 @@ components:
       properties:
         organization:
           $ref: '#/components/schemas/OrganizationDbDto'
+    DescribePipelineDiagramResponse:
+      type: object
+      properties:
+        diagramImage:
+          type: string
+          nullable: true
     DescribePipelineInfoResponse:
       type: object
       properties:
@@ -17099,7 +17686,7 @@ components:
           type: string
           nullable: true
         workflow:
-          $ref: '#/components/schemas/WorkflowMaxDbDto'
+          $ref: '#/components/schemas/WorkflowDescribeResponseDto'
         workspaceId:
           type: integer
           format: int64
@@ -17160,6 +17747,7 @@ components:
           type: integer
           format: int32
         headJobMemoryMb:
+          description: Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request.
           type: integer
           format: int32
         headPodSpec:
@@ -17201,7 +17789,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Amazon EKS cluster configuration
     EksPlatformMetaInfo:
@@ -17394,72 +17982,96 @@ components:
       type: object
       properties:
         appId:
+          description: GitHub App ID.
           type: string
         clientId:
+          description: OAuth client ID.
           type: string
         clientSecret:
+          description: OAuth client secret, returned by the GitHub App manifest flow.
           type: string
           writeOnly: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         privateKey:
+          description: PEM-encoded GitHub App private key.
           type: string
           writeOnly: true
         slug:
+          description: App URL slug returned by the GitHub App manifest flow.
           type: string
         webhookSecret:
+          description: Webhook secret, returned by the GitHub App manifest flow.
           type: string
           writeOnly: true
+      title: GitHub App credentials
     GitHubSecurityKeys:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: GitHub personal access token, classic or fine-grained.
           type: string
           writeOnly: true
         token:
+          description: 'Ignored: send the personal access token in `password`.'
           type: string
           writeOnly: true
         username:
+          description: Account username.
           type: string
       title: GitHub credentials
     GitKeys:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Account password or access token.
           type: string
         token:
+          description: Access token, for the providers that accept one as an alternative to the password. Unused by the others.
           type: string
         username:
+          description: Account username.
           type: string
     GitLabSecurityKeys:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Account password.
           type: string
           writeOnly: true
         token:
+          description: Personal access token, as an alternative to the username and password.
           type: string
           writeOnly: true
         username:
+          description: Account username.
           type: string
       title: GitLab credentials
     GiteaSecurityKeys:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Account password or access token.
           type: string
           writeOnly: true
         token:
+          description: Access token, for the providers that accept one as an alternative to the password. Unused by the others.
           type: string
         username:
+          description: Account username.
           type: string
       title: Gitea credentials
     GithubActionConfig:
@@ -17517,6 +18129,7 @@ components:
           type: integer
           format: int32
         headJobMemoryMb:
+          description: Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request.
           type: integer
           format: int32
         headPodSpec:
@@ -17558,7 +18171,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Google GKE cluster configuration
     GkePlatformMetaInfo:
@@ -17630,6 +18243,7 @@ components:
         headJobInstanceTemplate:
           type: string
         headJobMemoryMb:
+          description: Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 when omitted.
           type: integer
           format: int32
         labels:
@@ -17682,7 +18296,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Google Batch service configuration
     GoogleBucket:
@@ -17743,7 +18357,7 @@ components:
         instanceType:
           type: string
         network:
-          description: VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
+          description: VPC network for compute instances, as a short name or fully qualified path. A short name resolves in `projectId` when it's set, otherwise in the credentials' project. If empty, the project `default` network is used. Required when `usePrivateAddress` is `true`.
           type: string
           nullable: true
         networkTags:
@@ -17774,11 +18388,12 @@ components:
         schedConfig:
           $ref: '#/components/schemas/SchedConfig'
         schedEnabled:
+          description: 'If `true`, enables Seqera Scheduler (Intelligent Compute) execution for this compute environment. Not available with Workload Identity Federation credentials. Default: `false`.'
           type: boolean
         serviceAccountEmail:
           type: string
         subnetworks:
-          description: Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+          description: "Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short `network` name: in `projectId` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used."
           type: array
           items:
             type: string
@@ -17790,7 +18405,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
         zone:
           type: string
@@ -17914,7 +18529,7 @@ components:
         usePrivateAddress:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
         zones:
           type: array
@@ -17981,15 +18596,20 @@ components:
       type: object
       properties:
         data:
+          description: Service account JSON key (service-account key mode).
           type: string
           writeOnly: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         serviceAccountEmail:
+          description: Service account email to impersonate (Workload Identity Federation mode).
           type: string
         tokenAudience:
+          description: "Optional custom audience for the Workload Identity Federation OIDC token exchange. Defaults to the Workload Identity Provider resource name. Must not be an audience Seqera Platform or its services accept: `platform` (or the installation's configured access-token audience), `sched`, `consumption`, the Platform API URL, or its `/token` endpoint."
           type: string
         workloadIdentityProvider:
+          description: Full resource name of the Workload Identity Federation OIDC provider.
           type: string
       title: Google credentials
     GoogleSubnetwork:
@@ -18099,6 +18719,38 @@ components:
           type: string
       required:
         - arch
+    IssueServiceAccountSecretRequest:
+      type: object
+      properties:
+        expiryDays:
+          description: 'Lifetime of the secret in days. Accepted values: 30, 90, 180 or 365'
+          type: integer
+          format: int32
+          example: 90
+      required:
+        - expiryDays
+    IssueServiceAccountSecretResponse:
+      type: object
+      properties:
+        expiresAt:
+          description: When the secret expires
+          type: string
+          format: date-time
+        hint:
+          description: Masked secret showing its last 4 characters, e.g. ****9HwP
+          type: string
+        secret:
+          description: Secret value. Returned only once, in this response.
+          type: string
+        secretId:
+          description: Secret ID
+          type: integer
+          format: int64
+      required:
+        - expiresAt
+        - hint
+        - secret
+        - secretId
     JobCleanupPolicy:
       type: string
       enum:
@@ -18154,6 +18806,7 @@ components:
           type: integer
           format: int32
         headJobMemoryMb:
+          description: Memory in MiB requested for the Nextflow head job pod. Must be at least 3584 when creating a compute environment. When omitted, the pod carries no memory request.
           type: integer
           format: int32
         headPodSpec:
@@ -18186,7 +18839,7 @@ components:
         storageMountPath:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Kubernetes compute configuration
     K8sPlatformMetaInfo:
@@ -18200,13 +18853,17 @@ components:
       type: object
       properties:
         certificate:
+          description: Base64-encoded client certificate for Kubernetes authentication.
           type: string
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         privateKey:
+          description: Base64-encoded private key for Kubernetes authentication.
           type: string
           writeOnly: true
         token:
+          description: Service account token, as an alternative to the certificate and private key pair.
           type: string
           writeOnly: true
       title: Kubernetes credentials
@@ -18279,8 +18936,7 @@ components:
       properties:
         params:
           type: object
-          additionalProperties:
-            type: object
+          additionalProperties: true
     LaunchActionResponse:
       type: object
       properties:
@@ -18311,19 +18967,23 @@ components:
       properties:
         commitId:
           type: string
+          nullable: true
         computeEnv:
           $ref: '#/components/schemas/ComputeEnv_ComputeConfig_'
         configProfiles:
           type: array
           items:
             type: string
+          nullable: true
         configText:
           type: string
+          nullable: true
         dateCreated:
           type: string
           format: date-time
         entryName:
           type: string
+          nullable: true
         fusionSnapshots:
           description: Whether to enable Fusion snapshots, overriding the compute environment setting; null inherits the compute environment setting. Can only be enabled when the compute environment runs Wave, Fusion v2 and Spot instances.
           type: boolean
@@ -18334,12 +18994,15 @@ components:
           nullable: true
         globalCachePath:
           type: string
+          nullable: true
         headJobCpus:
           type: integer
           format: int32
+          nullable: true
         headJobMemoryMb:
           type: integer
           format: int32
+          nullable: true
         id:
           type: string
         lastUpdated:
@@ -18347,16 +19010,20 @@ components:
           format: date-time
         launchContainer:
           type: string
+          nullable: true
         mainScript:
           type: string
+          nullable: true
         nextflowVersion:
           description: Nextflow release version to run this workflow with; must exist in the system catalog and satisfy the minimum configured for the compute environment's type.
           type: string
           nullable: true
         optimizationId:
           type: string
+          nullable: true
         optimizationTargets:
           type: string
+          nullable: true
         outputDir:
           description: Per-run output directory passed as Nextflow -output-dir (requires Nextflow 24.10.0 or later and workflow outputs syntax).
           type: string
@@ -18367,29 +19034,38 @@ components:
           nullable: true
         paramsText:
           type: string
+          nullable: true
         pipeline:
           type: string
         pipelineSchemaId:
           type: integer
           format: int64
+          nullable: true
         postRunScript:
           type: string
+          nullable: true
         preRunScript:
           type: string
+          nullable: true
         pullLatest:
           type: boolean
         resume:
           type: boolean
         resumeLaunchId:
           type: string
+          nullable: true
         revision:
           type: string
+          nullable: true
         runName:
           type: string
+          nullable: true
         schemaName:
           type: string
+          nullable: true
         sessionId:
           type: string
+          nullable: true
         stubRun:
           type: boolean
         syntaxParser:
@@ -18400,10 +19076,12 @@ components:
           nullable: true
         towerConfig:
           type: string
+          nullable: true
         userSecrets:
           type: array
           items:
             type: string
+          nullable: true
         workDir:
           type: string
         workspaceId:
@@ -18413,6 +19091,7 @@ components:
           type: array
           items:
             type: string
+          nullable: true
     LaunchImage:
       type: object
       properties:
@@ -18551,9 +19230,14 @@ components:
         region:
           description: Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
           type: string
-        storeName:
-          description: Bucket name for the lineage store. Ignored in AUTO mode (Platform always selects 'seqera-lineage-{workspaceId}'); required in MANUAL mode (must match the existing customer-managed bucket).
+        storeLocation:
+          description: "Storage location of the lineage store: a cloud storage path, e.g. 's3://my-bucket/lineage'. Required in MANUAL mode (must be within the existing customer-managed bucket); ignored in AUTO mode, where Platform always uses the root of 's3://seqera-lineage-{workspaceId}'."
           type: string
+          nullable: true
+        storeName:
+          description: Deprecated. Bucket name for the lineage store, read as the bucket root. Use 'storeLocation' instead.
+          type: string
+          deprecated: true
           nullable: true
         topicArn:
           description: AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode to identify the existing topic; ignored on input in AUTO mode.
@@ -18605,9 +19289,14 @@ components:
           allOf:
             - $ref: '#/components/schemas/LineageWorkspaceConfig.Status'
           nullable: true
-        storeName:
-          description: Bucket name of the lineage store.
+        storeLocation:
+          description: "Storage location of the lineage store: a cloud storage path, e.g. 's3://my-bucket/lineage'."
           type: string
+          nullable: true
+        storeName:
+          description: Deprecated. Bucket name of the lineage store, without the prefix. Use 'storeLocation' instead.
+          type: string
+          deprecated: true
           nullable: true
         storeUri:
           description: URI of the lineage store. Not returned by the settings endpoints.
@@ -18741,6 +19430,7 @@ components:
             $ref: '#/components/schemas/AuditLogV2ResponseDto'
         nextPageToken:
           type: string
+          nullable: true
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -18748,6 +19438,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ListComputeEnvsResponse.Entry'
+        totalSize:
+          description: Total number of compute environments that match the request, across all pages.
+          type: integer
+          format: int64
+          nullable: true
     ListComputeEnvsResponse.Entry:
       type: object
       properties:
@@ -19004,6 +19699,16 @@ components:
           type: boolean
         name:
           type: string
+    ListServiceAccountSecretsResponse:
+      type: object
+      properties:
+        secrets:
+          description: Live secrets first, soonest expiry first, then secrets ended within the last 30 days, most recently ended first. At most 10.
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientSecretDto'
+      required:
+        - secrets
     ListServiceAccountsResponse:
       type: object
       properties:
@@ -19096,7 +19801,7 @@ components:
         starred:
           type: boolean
         workflow:
-          $ref: '#/components/schemas/WorkflowDbDto'
+          $ref: '#/components/schemas/WorkflowListResponseDto'
         workspaceId:
           type: integer
           format: int64
@@ -19175,7 +19880,7 @@ components:
         waveEnabled:
           type: boolean
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Local execution configuration
     LocalPlatformMetainfo:
@@ -19189,8 +19894,10 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         password:
+          description: Password of the local account.
           type: string
           writeOnly: true
       title: Local security keys
@@ -19203,17 +19910,22 @@ components:
             type: string
         end_time:
           type: string
+          nullable: true
         exit_code:
           type: integer
           format: int32
+          nullable: true
         name:
           type: string
         start_time:
           type: string
+          nullable: true
         stderr:
           type: string
+          nullable: true
         stdout:
           type: string
+          nullable: true
     LogPage:
       type: object
       properties:
@@ -19227,6 +19939,7 @@ components:
             type: string
         forwardToken:
           type: string
+          nullable: true
         message:
           type: string
           nullable: true
@@ -19234,6 +19947,7 @@ components:
           type: boolean
         rewindToken:
           type: string
+          nullable: true
         truncated:
           type: boolean
     LogPage.Download:
@@ -19294,7 +20008,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: IBM LSF configuration
     ManagedCredentialsDbDto:
@@ -19451,7 +20165,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Moab configuration
     MountData:
@@ -19492,6 +20206,7 @@ components:
           type: string
         imageDind:
           type: string
+          nullable: true
         version:
           type: string
     NextflowVersionPolicy:
@@ -19534,6 +20249,30 @@ components:
       required:
         - auditImageType
       title: OAuth consent audit image
+    OidcClientSecretImage:
+      type: object
+      properties:
+        auditImageType:
+          $ref: '#/components/schemas/AuditImageType'
+        clientId:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        id:
+          type: integer
+          format: int64
+        lastUsedAt:
+          type: string
+          format: date-time
+        revocationReason:
+          type: string
+        revokedAt:
+          type: string
+          format: date-time
+      required:
+        - auditImageType
+      title: OAuth client secret audit image
     OrgAndWorkspaceDto:
       type: object
       properties:
@@ -19542,6 +20281,7 @@ components:
           format: int64
         orgLogoUrl:
           type: string
+          nullable: true
         orgName:
           type: string
         orgType:
@@ -19551,14 +20291,19 @@ components:
           items:
             type: string
         visibility:
-          $ref: '#/components/schemas/Visibility'
+          allOf:
+            - $ref: '#/components/schemas/Visibility'
+          nullable: true
         workspaceFullName:
           type: string
+          nullable: true
         workspaceId:
           type: integer
           format: int64
+          nullable: true
         workspaceName:
           type: string
+          nullable: true
     OrgIdpGroupSource:
       type: string
       enum:
@@ -19717,45 +20462,59 @@ components:
         maxCustomRolesPerOrg:
           type: integer
           format: int64
+          nullable: true
         maxDatasetsPerWorkspace:
           type: integer
           format: int64
+          nullable: true
         maxDataStudiosRunning:
           type: integer
           format: int64
+          nullable: true
         maxFusionThroughputBytes:
           type: integer
           format: int64
+          nullable: true
         maxLabelsPerWorkspace:
           type: integer
           format: int64
+          nullable: true
         maxMembers:
           type: integer
           format: int64
+          nullable: true
         maxParticipantsPerWorkspace:
           type: integer
           format: int64
+          nullable: true
         maxPipelinesPerWorkspace:
           type: integer
           format: int64
+          nullable: true
         maxRunHistory:
           type: integer
           format: int64
+          nullable: true
         maxRuns:
           type: integer
           format: int64
+          nullable: true
         maxSeqeraComputeComputeEnvs:
           type: integer
           format: int64
+          nullable: true
         maxTeams:
           type: integer
           format: int64
+          nullable: true
         maxVersionsPerDataset:
           type: integer
           format: int64
+          nullable: true
         maxWorkspaces:
           type: integer
           format: int64
+          nullable: true
     ParticipantImage:
       type: object
       properties:
@@ -19954,9 +20713,6 @@ components:
           type: array
           items:
             type: string
-        diagramImage:
-          type: string
-          nullable: true
         manifest:
           $ref: '#/components/schemas/WfManifest'
         profiles:
@@ -20064,8 +20820,10 @@ components:
       properties:
         params:
           type: string
+          nullable: true
         schema:
           type: string
+          nullable: true
       required:
         - schema
     PipelineSecret:
@@ -20102,6 +20860,7 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         name:
           type: string
         salt:
@@ -20338,6 +21097,7 @@ components:
         version:
           type: integer
           format: int64
+          nullable: true
         volCtxSwitch:
           type: integer
           format: int64
@@ -20454,6 +21214,15 @@ components:
           type: array
           items:
             type: string
+    RevokeServiceAccountSecretResponse:
+      type: object
+      properties:
+        secret:
+          description: The revoked secret
+          allOf:
+            - $ref: '#/components/schemas/ClientSecretDto'
+      required:
+        - secret
     RoleDto:
       type: object
       properties:
@@ -20493,8 +21262,11 @@ components:
       properties:
         outputs:
           type: object
+          nullable: true
         request:
-          $ref: '#/components/schemas/RunRequest'
+          allOf:
+            - $ref: '#/components/schemas/RunRequest'
+          nullable: true
         run_id:
           type: string
         run_log:
@@ -20535,12 +21307,16 @@ components:
       type: object
       properties:
         accessKey:
+          description: Access key ID.
           type: string
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         pathStyleAccessEnabled:
+          description: Whether path-style bucket addressing is used.
           type: boolean
         secretKey:
+          description: Secret access key.
           type: string
           writeOnly: true
       title: S3-compatible credentials
@@ -20548,11 +21324,14 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         passphrase:
+          description: Passphrase protecting the private key, when it is encrypted.
           type: string
           writeOnly: true
         privateKey:
+          description: PEM-encoded SSH private key.
           type: string
           writeOnly: true
       title: SSH credentials
@@ -20596,7 +21375,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/SchedConfig.Pool'
         predictionModel:
-          description: "Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v1', 'qr/v2', 'qr/v3'. Any other string is accepted."
+          description: "Resource-prediction model used by Intelligent Compute to size tasks. Suggested values: 'none' (default), 'qr/v3'. 'qr/v1' and 'qr/v2' are deprecated and treated as 'qr/v3' by the scheduler. Any other string is accepted."
           type: string
         provisioningModel:
           type: string
@@ -20629,9 +21408,11 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
         revokedAt:
           type: string
           format: date-time
+          nullable: true
         tokenPrefix:
           type: string
       required:
@@ -20659,6 +21440,7 @@ components:
       type: object
       properties:
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
       discriminator:
         mapping:
@@ -20766,8 +21548,15 @@ components:
           nullable: true
         region:
           type: string
+        schedConfig:
+          $ref: '#/components/schemas/SchedConfig'
+        schedEnabled:
+          description: Whether pipelines on this compute environment run on the Seqera Scheduler, with the settings in schedConfig. Both are set by Seqera at creation and cannot be changed.
+          type: boolean
+          nullable: true
+          readOnly: true
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Seqera Compute configuration
     SeqeraComputePlatformMetainfo:
@@ -20833,30 +21622,36 @@ components:
       type: object
       properties:
         accessKey:
+          description: AWS IAM access key ID (keys mode).
           type: string
           nullable: true
         assumeRoleArn:
+          description: IAM role ARN to assume when using these credentials (role and workload identity modes).
           type: string
           nullable: true
         discriminator:
+          description: Provider these credentials authenticate against; selects the keys variant.
           type: string
         externalId:
+          description: Platform-managed External ID used when assuming an IAM role. Present when generated or stored for role-based AWS credentials.
           type: string
           nullable: true
         mode:
-          $ref: '#/components/schemas/AwsCredentialsMode'
+          description: 'AWS credentials authentication mode: `keys` for IAM access key authentication, `role` for IAM role authentication, `workloadIdentity` for OIDC workload identity federation.'
+          allOf:
+            - $ref: '#/components/schemas/AwsCredentialsMode'
         secretKey:
+          description: AWS IAM secret access key (keys mode).
           type: string
           writeOnly: true
       title: Seqera Compute credentials
     ServedFrom:
       type: string
       enum:
-        - EMBEDDED
-        - STATIC
-        - LICMAN
-        - CACHE
-      x-type: String
+        - embedded
+        - static
+        - licman
+        - cache
     ServiceAccountDto:
       type: object
       properties:
@@ -20886,6 +21681,9 @@ components:
       properties:
         auditImageType:
           $ref: '#/components/schemas/AuditImageType'
+        clientId:
+          type: string
+          nullable: true
         description:
           type: string
         id:
@@ -20982,6 +21780,9 @@ components:
           type: boolean
         seqeraComputeEnabled:
           type: boolean
+        studiosEnabled:
+          description: Whether Studios are enabled for at least one workspace on this installation
+          type: boolean
         termsOfUseUrl:
           type: string
         userWorkspaceEnabled:
@@ -21038,7 +21839,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Slurm configuration
     SourceType:
@@ -21734,7 +22535,7 @@ components:
         userName:
           type: string
         workDir:
-          description: Compute environment working directory
+          description: Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
           type: string
       title: Univa Grid Engine configuration
     UpdateActionRequest:
@@ -21796,11 +22597,19 @@ components:
           type: string
           maxLength: 255
           pattern: ^[A-Za-z0-9_-]+$
+        sandboxAutoChange:
+          description: Whether the agent may switch its sandbox during a run. Defaults to false
+          type: boolean
         serviceAccountId:
           description: Service account the agent runs as. It must be enabled, be a participant of the workspace, and have a workspace role that grants agent:execute (launch, maintain, admin or owner)
           type: integer
           format: int64
           minimum: 1
+        studioSandbox:
+          description: Studio session the agent's runs use as their sandbox. Null uses a scratch sandbox
+          allOf:
+            - $ref: '#/components/schemas/Agent.StudioSandbox'
+          nullable: true
       required:
         - agentInstructions
         - name
@@ -22213,6 +23022,7 @@ components:
         lastUsed:
           type: string
           format: date-time
+          nullable: true
       required:
         - auditImageType
       title: SSH key audit image
@@ -22240,16 +23050,21 @@ components:
         sourceTeamId:
           type: integer
           format: int64
+          nullable: true
         sourceTeamName:
           type: string
+          nullable: true
         sourceTeamType:
-          $ref: '#/components/schemas/TeamType'
+          allOf:
+            - $ref: '#/components/schemas/TeamType'
+          nullable: true
     UserWorkspaceRolesDto:
       type: object
       properties:
         participantId:
           type: integer
           format: int64
+          nullable: true
         permissions:
           type: array
           items:
@@ -22388,6 +23203,7 @@ components:
         author:
           type: string
           maxLength: 150
+          nullable: true
         defaultBranch:
           type: string
           maxLength: 20
@@ -22397,12 +23213,14 @@ components:
         gitmodules:
           type: string
           maxLength: 150
+          nullable: true
         homePage:
           type: string
           maxLength: 200
         icon:
           type: string
           maxLength: 255
+          nullable: true
         mainScript:
           type: string
           maxLength: 100
@@ -22565,8 +23383,7 @@ components:
           readOnly: true
         params:
           type: object
-          additionalProperties:
-            type: object
+          additionalProperties: true
         profile:
           type: string
           maxLength: 100
@@ -22668,131 +23485,58 @@ components:
         type:
           description: One of PROCESS, OPERATOR, ORIGIN, NODE
           type: string
-    WorkflowDbDto:
+    WorkflowDescribeResponseDto:
       type: object
-      properties:
-        commandLine:
-          type: string
-        commitId:
-          type: string
-          nullable: true
-        complete:
-          type: string
-          format: date-time
-          nullable: true
-        configFiles:
-          type: array
-          items:
-            type: string
-          nullable: true
-        configText:
-          type: string
-          nullable: true
-        container:
-          type: string
-          nullable: true
-        containerEngine:
-          type: string
-          nullable: true
-        dateCreated:
-          type: string
-          format: date-time
-        deleted:
-          type: boolean
-          nullable: true
-        duration:
-          type: integer
-          format: int64
-          nullable: true
-        errorMessage:
-          type: string
-          nullable: true
-        errorReport:
-          type: string
-          nullable: true
-        exitStatus:
-          type: integer
-          format: int32
-          nullable: true
-        homeDir:
-          type: string
-          nullable: true
-        id:
-          type: string
-        lastUpdated:
-          type: string
-          format: date-time
-        launchDir:
-          type: string
-          nullable: true
-        launchId:
-          type: string
-        manifest:
-          allOf:
-            - $ref: '#/components/schemas/WfManifest'
-          nullable: true
-        nextflow:
-          allOf:
-            - $ref: '#/components/schemas/WfNextflow'
-          nullable: true
-        ownerId:
-          type: integer
-          format: int64
-        params:
+      allOf:
+        - $ref: '#/components/schemas/WorkflowListResponseDto'
+        - properties:
+            configProfiles:
+              type: array
+              items:
+                type: string
+              nullable: true
+            fusion:
+              allOf:
+                - $ref: '#/components/schemas/WfFusionMeta'
+              nullable: true
+            fusionVersion:
+              type: string
+              nullable: true
+            globalCachePath:
+              type: string
+              nullable: true
+            logFile:
+              type: string
+              nullable: true
+            nextflowConfig:
+              type: string
+              nullable: true
+            nextflowVersion:
+              type: string
+              nullable: true
+            operationId:
+              type: string
+              nullable: true
+            outFile:
+              type: string
+              nullable: true
+            postRunScript:
+              type: string
+              nullable: true
+            preRunScript:
+              type: string
+              nullable: true
+            syntaxParser:
+              type: string
+              nullable: true
+            towerConfig:
+              type: string
+              nullable: true
+            wave:
+              allOf:
+                - $ref: '#/components/schemas/WfWaveMeta'
+              nullable: true
           type: object
-          additionalProperties:
-            type: object
-          nullable: true
-        profile:
-          type: string
-          nullable: true
-        projectDir:
-          type: string
-          nullable: true
-        projectName:
-          type: string
-        repository:
-          type: string
-          nullable: true
-        requiresAttention:
-          type: boolean
-        resume:
-          type: boolean
-        revision:
-          type: string
-          nullable: true
-        runName:
-          type: string
-        scriptFile:
-          type: string
-          nullable: true
-        scriptId:
-          type: string
-          nullable: true
-        scriptName:
-          type: string
-        sessionId:
-          type: string
-        start:
-          type: string
-          format: date-time
-          nullable: true
-        stats:
-          allOf:
-            - $ref: '#/components/schemas/WfStats'
-          nullable: true
-        status:
-          $ref: '#/components/schemas/WorkflowStatus'
-        submit:
-          type: string
-          format: date-time
-        success:
-          type: boolean
-          nullable: true
-        userName:
-          type: string
-        workDir:
-          type: string
     WorkflowExtAttributes:
       type: object
       properties:
@@ -22805,6 +23549,8 @@ components:
           format: int32
         empty:
           type: boolean
+        endedByTask:
+          type: string
         instancesOnDemand:
           type: integer
           format: int32
@@ -23163,6 +23909,131 @@ components:
           type: string
       required:
         - message
+    WorkflowListResponseDto:
+      type: object
+      properties:
+        commandLine:
+          type: string
+        commitId:
+          type: string
+          nullable: true
+        complete:
+          type: string
+          format: date-time
+          nullable: true
+        configFiles:
+          type: array
+          items:
+            type: string
+          nullable: true
+        configText:
+          type: string
+          nullable: true
+        container:
+          type: string
+          nullable: true
+        containerEngine:
+          type: string
+          nullable: true
+        dateCreated:
+          type: string
+          format: date-time
+        deleted:
+          type: boolean
+          nullable: true
+        duration:
+          type: integer
+          format: int64
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        errorReport:
+          type: string
+          nullable: true
+        exitStatus:
+          type: integer
+          format: int32
+          nullable: true
+        homeDir:
+          type: string
+          nullable: true
+        id:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+        launchDir:
+          type: string
+          nullable: true
+        launchId:
+          type: string
+        manifest:
+          allOf:
+            - $ref: '#/components/schemas/WfManifest'
+          nullable: true
+        nextflow:
+          allOf:
+            - $ref: '#/components/schemas/WfNextflow'
+          nullable: true
+        ownerId:
+          type: integer
+          format: int64
+        params:
+          type: object
+          additionalProperties: true
+          nullable: true
+        profile:
+          type: string
+          nullable: true
+        projectDir:
+          type: string
+          nullable: true
+        projectName:
+          type: string
+        repository:
+          type: string
+          nullable: true
+        requiresAttention:
+          type: boolean
+        resume:
+          type: boolean
+        revision:
+          type: string
+          nullable: true
+        runName:
+          type: string
+        scriptFile:
+          type: string
+          nullable: true
+        scriptId:
+          type: string
+          nullable: true
+        scriptName:
+          type: string
+          nullable: true
+        sessionId:
+          type: string
+        start:
+          type: string
+          format: date-time
+          nullable: true
+        stats:
+          allOf:
+            - $ref: '#/components/schemas/WfStats'
+          nullable: true
+        status:
+          $ref: '#/components/schemas/WorkflowStatus'
+        submit:
+          type: string
+          format: date-time
+        success:
+          type: boolean
+          nullable: true
+        userName:
+          type: string
+        workDir:
+          type: string
     WorkflowLoad:
       type: object
       properties:
@@ -23362,58 +24233,6 @@ components:
       properties:
         log:
           $ref: '#/components/schemas/LogPage'
-    WorkflowMaxDbDto:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/WorkflowDbDto'
-        - properties:
-            configProfiles:
-              type: array
-              items:
-                type: string
-              nullable: true
-            fusion:
-              allOf:
-                - $ref: '#/components/schemas/WfFusionMeta'
-              nullable: true
-            fusionVersion:
-              type: string
-              nullable: true
-            globalCachePath:
-              type: string
-              nullable: true
-            logFile:
-              type: string
-              nullable: true
-            nextflowConfig:
-              type: string
-              nullable: true
-            nextflowVersion:
-              type: string
-              nullable: true
-            operationId:
-              type: string
-              nullable: true
-            outFile:
-              type: string
-              nullable: true
-            postRunScript:
-              type: string
-              nullable: true
-            preRunScript:
-              type: string
-              nullable: true
-            syntaxParser:
-              type: string
-              nullable: true
-            towerConfig:
-              type: string
-              nullable: true
-            wave:
-              allOf:
-                - $ref: '#/components/schemas/WfWaveMeta'
-              nullable: true
-          type: object
     WorkflowMetrics:
       type: object
       properties:
@@ -23422,19 +24241,29 @@ components:
         cpuUsage:
           $ref: '#/components/schemas/ResourceData'
         gpuMemAvg:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         gpuMemPeak:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         gpuUsage:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         id:
           type: integer
           format: int64
           nullable: true
         mem:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         memUsage:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         process:
           type: string
           maxLength: 255
@@ -23443,9 +24272,13 @@ components:
         time:
           $ref: '#/components/schemas/ResourceData'
         timeUsage:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         vmem:
-          $ref: '#/components/schemas/ResourceData'
+          allOf:
+            - $ref: '#/components/schemas/ResourceData'
+          nullable: true
         writes:
           $ref: '#/components/schemas/ResourceData'
       required:

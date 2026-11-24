@@ -34,7 +34,7 @@ type GoogleCloudConfig struct {
 	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
 	//
 	InstanceType *string `json:"instanceType,omitempty"`
-	// VPC network for compute instances. Short name or fully-qualified path; defaults to the project's 'default' network when empty, unless 'usePrivateAddress' is set, which requires an explicit network.
+	// VPC network for compute instances, as a short name or fully qualified path. A short name resolves in `projectId` when it's set, otherwise in the credentials' project. If empty, the project `default` network is used. Required when `usePrivateAddress` is `true`.
 	Network *string `json:"network,omitempty"`
 	// Network tags applied to compute instances (VPC firewall-rule targets).
 	NetworkTags []string `json:"networkTags,omitempty"`
@@ -70,7 +70,7 @@ type GoogleCloudConfig struct {
 	// If not specified, the default compute service account is used.
 	//
 	ServiceAccountEmail *string `json:"serviceAccountEmail,omitempty"`
-	// Subnetworks for compute instances. Short names (scoped to the CE region) or fully-qualified paths. Basic uses the first; Intelligent Compute may use all.
+	// Array of subnetworks for compute instances, as short names in the compute environment region or fully qualified paths. Short names resolve like a short `network` name: in `projectId` when it's set, otherwise in the credentials' project. For a shared VPC network in another project, give fully qualified paths. Without Seqera Scheduler, only the first subnetwork is used. With Seqera Scheduler (Intelligent Compute), any of the subnetworks can be used.
 	Subnetworks []string `json:"subnetworks,omitempty"`
 	// Launch instances without an external IP. Requires the 'network' field to be set, plus Cloud NAT + Private Google Access on the subnetwork.
 	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`

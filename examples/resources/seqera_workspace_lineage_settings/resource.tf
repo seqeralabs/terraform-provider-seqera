@@ -4,7 +4,7 @@
 # var.* and seqera_aws_credential.main are placeholders for your own values.
 #
 # AUTO provisioning (default): Platform creates the lineage bucket, the
-# notification topic and the subscription. Do not set store_name or topic_arn.
+# notification topic and the subscription. Do not set store_location or topic_arn.
 #
 # credentials_id and region are locked once AUTO provisioning has completed; changing
 # them afterwards is rejected by the Platform.
@@ -22,7 +22,8 @@ resource "seqera_workspace_lineage_settings" "auto" {
 }
 
 # MANUAL provisioning: you create the bucket and the SNS topic, and subscribe
-# the Platform webhook to the topic. store_name and topic_arn are required.
+# the Platform webhook to the topic. store_location and topic_arn are required;
+# store_location must be within the existing bucket.
 resource "aws_sns_topic" "lineage" {
   name = "seqera-lineage-events"
 }
@@ -34,7 +35,7 @@ resource "seqera_workspace_lineage_settings" "manual" {
 
   credentials_id = seqera_aws_credential.main.id
   region         = "eu-west-1"
-  store_name     = "my-existing-lineage-bucket"
+  store_location = "s3://my-existing-lineage-bucket/lineage"
   topic_arn      = aws_sns_topic.lineage.arn
 }
 

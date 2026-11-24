@@ -19,5 +19,6 @@ type SeqeraComputeConfiguration struct {
 	PostRunScript                 types.String        `tfsdk:"post_run_script"`
 	PreRunScript                  types.String        `tfsdk:"pre_run_script"`
 	Region                        types.String        `tfsdk:"region"`
+	SchedEnabled                  types.Bool          `tfsdk:"sched_enabled"`
 	WorkDir                       types.String        `tfsdk:"work_dir"`
 }

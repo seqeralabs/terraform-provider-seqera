@@ -49,6 +49,7 @@ type WorkspaceLineageSettingsResourceModel struct {
 	ProvisioningMode types.String `tfsdk:"provisioning_mode"`
 	Region           types.String `tfsdk:"region"`
 	Status           types.String `tfsdk:"status"`
+	StoreLocation    types.String `tfsdk:"store_location"`
 	StoreName        types.String `tfsdk:"store_name"`
 	TopicArn         types.String `tfsdk:"topic_arn"`
 	WebhookURL       types.String `tfsdk:"webhook_url"`
@@ -113,12 +114,21 @@ func (r *WorkspaceLineageSettingsResource) Schema(ctx context.Context, req resou
 				Computed:    true,
 				Description: `Lifecycle status of the lineage configuration: PENDING, AVAILABLE or ERRORED. Null when lineage is not configured.`,
 			},
-			"store_name": schema.StringAttribute{
+			"store_location": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket ` + "`" + `seqera-lineage-{workspaceId}` + "`" + `; required in MANUAL mode and must match the existing bucket.`,
+				Description: `Storage location of the lineage store: a cloud storage path within your existing bucket, e.g. 's3://my-bucket/lineage'. Required in MANUAL mode; must not be set in AUTO mode, where Platform always uses the root of 's3://seqera-lineage-{workspaceId}'.`,
 				Validators: []validator.String{
-					custom_stringvalidators.LineageManualFieldValidator(),
+					custom_stringvalidators.LineageStoreLocationValidator(),
+				},
+			},
+			"store_name": schema.StringAttribute{
+				Computed:           true,
+				Optional:           true,
+				DeprecationMessage: `Use ` + "`" + `store_location` + "`" + ` instead. A bucket name ` + "`" + `my-bucket` + "`" + ` corresponds to ` + "`" + `store_location = "s3://my-bucket"` + "`" + `.`,
+				Description:        `Bucket name for the lineage store, used as the bucket root. Must not be set in AUTO mode, nor together with ` + "`" + `store_location` + "`" + `.`,
+				Validators: []validator.String{
+					custom_stringvalidators.LineageStoreNameValidator(),
 				},
 			},
 			"topic_arn": schema.StringAttribute{

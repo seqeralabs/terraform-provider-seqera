@@ -45,18 +45,19 @@ func (e *ActionTriggerResponseDtoSource) UnmarshalJSON(data []byte) error {
 }
 
 type ActionTriggerResponseDto struct {
-	ActionID          *string                         `json:"actionId,omitempty"`
-	ActorID           *int64                          `json:"actorId,omitempty"`
-	AgentRunID        *string                         `json:"agentRunId,omitempty"`
-	CausedByTriggerID *string                         `json:"causedByTriggerId,omitempty"`
-	EventPayload      *string                         `json:"eventPayload,omitempty"`
-	EventSummary      *string                         `json:"eventSummary,omitempty"`
-	FiredAt           *time.Time                      `json:"firedAt,omitempty"`
-	ID                *string                         `json:"id,omitempty"`
-	Outcome           *ActionTriggerResult            `json:"outcome,omitempty"`
-	OutcomeDetail     *string                         `json:"outcomeDetail,omitempty"`
-	Source            *ActionTriggerResponseDtoSource `json:"source,omitempty"`
-	WorkflowID        *string                         `json:"workflowId,omitempty"`
+	ActionID          *string `json:"actionId,omitempty"`
+	ActorID           *int64  `json:"actorId,omitempty"`
+	AgentRunID        *string `json:"agentRunId,omitempty"`
+	CausedByTriggerID *string `json:"causedByTriggerId,omitempty"`
+	// The event that caused the trigger, as a string that holds JSON, not as a nested object. Its shape depends on the Action `source`. A `github` value is the webhook body as received and can be invalid JSON.
+	EventPayload  *string                         `json:"eventPayload,omitempty"`
+	EventSummary  *string                         `json:"eventSummary,omitempty"`
+	FiredAt       *time.Time                      `json:"firedAt,omitempty"`
+	ID            *string                         `json:"id,omitempty"`
+	Outcome       *ActionTriggerResult            `json:"outcome,omitempty"`
+	OutcomeDetail *string                         `json:"outcomeDetail,omitempty"`
+	Source        *ActionTriggerResponseDtoSource `json:"source,omitempty"`
+	WorkflowID    *string                         `json:"workflowId,omitempty"`
 }
 
 func (a ActionTriggerResponseDto) MarshalJSON() ([]byte, error) {

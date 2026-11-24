@@ -26,3 +26,20 @@ resource "seqera_agent" "triage" {
   # Otherwise the Platform rejects the service account binding.
   depends_on = [seqera_workspace_participant.triage]
 }
+
+# Run the agent inside an existing Studio session instead of a scratch sandbox.
+# session_id is the Studio's session (seqera_studios.<name>.session_id), and
+# workspace_id is a string here, unlike on the agent itself.
+resource "seqera_agent" "analysis" {
+  workspace_id       = var.workspace_id
+  name               = "studio-analysis"
+  agent_instructions = "Explore the run outputs mounted in the Studio and report anomalies."
+  service_account_id = seqera_service_account.triage.id
+
+  studio_sandbox = {
+    session_id   = var.studio_session_id
+    workspace_id = tostring(var.workspace_id)
+  }
+
+  depends_on = [seqera_workspace_participant.triage]
+}

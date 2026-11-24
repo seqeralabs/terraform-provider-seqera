@@ -140,6 +140,21 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 				r.Keys.ContainerReg.Password = containerRegPriorData.Password
 			}
 		}
+		if resp.Keys.GitHubAppCredentialsOutput != nil {
+			var githubAppPriorData *tfTypes.GitHubAppCredentials
+			if keysPriorData != nil {
+				githubAppPriorData = keysPriorData.GithubApp
+			}
+			r.Keys.GithubApp = &tfTypes.GitHubAppCredentials{}
+			r.Keys.GithubApp.AppID = types.StringPointerValue(resp.Keys.GitHubAppCredentialsOutput.AppID)
+			r.Keys.GithubApp.ClientID = types.StringPointerValue(resp.Keys.GitHubAppCredentialsOutput.ClientID)
+			r.Keys.GithubApp.Slug = types.StringPointerValue(resp.Keys.GitHubAppCredentialsOutput.Slug)
+			if githubAppPriorData != nil {
+				r.Keys.GithubApp.ClientSecret = githubAppPriorData.ClientSecret
+				r.Keys.GithubApp.PrivateKey = githubAppPriorData.PrivateKey
+				r.Keys.GithubApp.WebhookSecret = githubAppPriorData.WebhookSecret
+			}
+		}
 		if resp.Keys.GitHubCredentialsOutput != nil {
 			var githubPriorData *tfTypes.GitHubCredentials
 			if keysPriorData != nil {
@@ -150,21 +165,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			if githubPriorData != nil {
 				r.Keys.Github.Password = githubPriorData.Password
 				r.Keys.Github.Token = githubPriorData.Token
-			}
-		}
-		if resp.Keys.GitHubAppSecurityKeysOutput != nil {
-			var githubAppPriorData *tfTypes.GitHubAppSecurityKeys
-			if keysPriorData != nil {
-				githubAppPriorData = keysPriorData.GithubApp
-			}
-			r.Keys.GithubApp = &tfTypes.GitHubAppSecurityKeys{}
-			r.Keys.GithubApp.AppID = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.AppID)
-			r.Keys.GithubApp.ClientID = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.ClientID)
-			r.Keys.GithubApp.Slug = types.StringPointerValue(resp.Keys.GitHubAppSecurityKeysOutput.Slug)
-			if githubAppPriorData != nil {
-				r.Keys.GithubApp.ClientSecret = githubAppPriorData.ClientSecret
-				r.Keys.GithubApp.PrivateKey = githubAppPriorData.PrivateKey
-				r.Keys.GithubApp.WebhookSecret = githubAppPriorData.WebhookSecret
 			}
 		}
 		if resp.Keys.GitLabCredentialsOutput != nil {
@@ -530,7 +530,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			GitHubCredentials: gitHubCredentials,
 		}
 	}
-	var gitHubAppSecurityKeys *shared.GitHubAppSecurityKeys
+	var gitHubAppCredentials *shared.GitHubAppCredentials
 	if r.Keys.GithubApp != nil {
 		appID := new(string)
 		if !r.Keys.GithubApp.AppID.IsUnknown() && !r.Keys.GithubApp.AppID.IsNull() {
@@ -568,7 +568,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			webhookSecret = nil
 		}
-		gitHubAppSecurityKeys = &shared.GitHubAppSecurityKeys{
+		gitHubAppCredentials = &shared.GitHubAppCredentials{
 			AppID:         appID,
 			ClientID:      clientID,
 			ClientSecret:  clientSecret,
@@ -577,9 +577,9 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			WebhookSecret: webhookSecret,
 		}
 	}
-	if gitHubAppSecurityKeys != nil {
+	if gitHubAppCredentials != nil {
 		keys = shared.SecurityKeys{
-			GitHubAppSecurityKeys: gitHubAppSecurityKeys,
+			GitHubAppCredentials: gitHubAppCredentials,
 		}
 	}
 	var gitLabCredentials *shared.GitLabCredentials

@@ -7,10 +7,10 @@ import (
 	"time"
 )
 
-// WorkflowDbDto - Represents a workflow execution record.
+// WorkflowListResponseDto - Represents a workflow execution record.
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
-type WorkflowDbDto struct {
+type WorkflowListResponseDto struct {
 	// Command line
 	CommandLine *string `json:"commandLine,omitempty"`
 	// Timestamp when the workflow execution completed
@@ -58,179 +58,179 @@ type WorkflowDbDto struct {
 	WorkDir *string `json:"workDir,omitempty"`
 }
 
-func (w WorkflowDbDto) MarshalJSON() ([]byte, error) {
+func (w WorkflowListResponseDto) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(w, "", false)
 }
 
-func (w *WorkflowDbDto) UnmarshalJSON(data []byte) error {
+func (w *WorkflowListResponseDto) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (w *WorkflowDbDto) GetCommandLine() *string {
+func (w *WorkflowListResponseDto) GetCommandLine() *string {
 	if w == nil {
 		return nil
 	}
 	return w.CommandLine
 }
 
-func (w *WorkflowDbDto) GetComplete() *time.Time {
+func (w *WorkflowListResponseDto) GetComplete() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.Complete
 }
 
-func (w *WorkflowDbDto) GetConfigFiles() []string {
+func (w *WorkflowListResponseDto) GetConfigFiles() []string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigFiles
 }
 
-func (w *WorkflowDbDto) GetConfigText() *string {
+func (w *WorkflowListResponseDto) GetConfigText() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ConfigText
 }
 
-func (w *WorkflowDbDto) GetDateCreated() *time.Time {
+func (w *WorkflowListResponseDto) GetDateCreated() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.DateCreated
 }
 
-func (w *WorkflowDbDto) GetDeleted() *bool {
+func (w *WorkflowListResponseDto) GetDeleted() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Deleted
 }
 
-func (w *WorkflowDbDto) GetID() *string {
+func (w *WorkflowListResponseDto) GetID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ID
 }
 
-func (w *WorkflowDbDto) GetLastUpdated() *time.Time {
+func (w *WorkflowListResponseDto) GetLastUpdated() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.LastUpdated
 }
 
-func (w *WorkflowDbDto) GetLaunchID() *string {
+func (w *WorkflowListResponseDto) GetLaunchID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.LaunchID
 }
 
-func (w *WorkflowDbDto) GetOwnerID() *int64 {
+func (w *WorkflowListResponseDto) GetOwnerID() *int64 {
 	if w == nil {
 		return nil
 	}
 	return w.OwnerID
 }
 
-func (w *WorkflowDbDto) GetParams() map[string]any {
+func (w *WorkflowListResponseDto) GetParams() map[string]any {
 	if w == nil {
 		return nil
 	}
 	return w.Params
 }
 
-func (w *WorkflowDbDto) GetProfile() *string {
+func (w *WorkflowListResponseDto) GetProfile() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Profile
 }
 
-func (w *WorkflowDbDto) GetProjectName() *string {
+func (w *WorkflowListResponseDto) GetProjectName() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ProjectName
 }
 
-func (w *WorkflowDbDto) GetRepository() *string {
+func (w *WorkflowListResponseDto) GetRepository() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Repository
 }
 
-func (w *WorkflowDbDto) GetRequiresAttention() *bool {
+func (w *WorkflowListResponseDto) GetRequiresAttention() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.RequiresAttention
 }
 
-func (w *WorkflowDbDto) GetResume() *bool {
+func (w *WorkflowListResponseDto) GetResume() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Resume
 }
 
-func (w *WorkflowDbDto) GetRevision() *string {
+func (w *WorkflowListResponseDto) GetRevision() *string {
 	if w == nil {
 		return nil
 	}
 	return w.Revision
 }
 
-func (w *WorkflowDbDto) GetRunName() *string {
+func (w *WorkflowListResponseDto) GetRunName() *string {
 	if w == nil {
 		return nil
 	}
 	return w.RunName
 }
 
-func (w *WorkflowDbDto) GetScriptName() *string {
+func (w *WorkflowListResponseDto) GetScriptName() *string {
 	if w == nil {
 		return nil
 	}
 	return w.ScriptName
 }
 
-func (w *WorkflowDbDto) GetSessionID() *string {
+func (w *WorkflowListResponseDto) GetSessionID() *string {
 	if w == nil {
 		return nil
 	}
 	return w.SessionID
 }
 
-func (w *WorkflowDbDto) GetStart() *time.Time {
+func (w *WorkflowListResponseDto) GetStart() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.Start
 }
 
-func (w *WorkflowDbDto) GetStatus() *WorkflowStatus {
+func (w *WorkflowListResponseDto) GetStatus() *WorkflowStatus {
 	if w == nil {
 		return nil
 	}
 	return w.Status
 }
 
-func (w *WorkflowDbDto) GetSubmit() *time.Time {
+func (w *WorkflowListResponseDto) GetSubmit() *time.Time {
 	if w == nil {
 		return nil
 	}
 	return w.Submit
 }
 
-func (w *WorkflowDbDto) GetWorkDir() *string {
+func (w *WorkflowListResponseDto) GetWorkDir() *string {
 	if w == nil {
 		return nil
 	}

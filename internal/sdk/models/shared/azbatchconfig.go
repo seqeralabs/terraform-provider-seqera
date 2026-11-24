@@ -77,7 +77,7 @@ type AzBatchConfig struct {
 	GlobalCachePath *string `json:"globalCachePath,omitempty"`
 	// Number of CPU slots reserved on the head pool VM for the Nextflow head job. Defaults to 1 so multiple head jobs can share a head pool VM; increase to dedicate more CPU and memory to each head job.
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Memory in MiB reserved for the Nextflow head job container. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
+	// Memory in MiB reserved for the Nextflow head job container. Must be at least 3584 when creating a compute environment. When omitted, the value is derived from the head pool VM size as the per-slot share (vmMemory / vmCpus) multiplied by the requested slot count.
 	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
 	HeadPool        *string `json:"headPool,omitempty"`
 	// Maximum wall clock time for Azure Batch jobs before automatic termination. Accepts human-readable duration syntax (e.g., '7d', '1d1h1m'). Defaults to 7d when not specified. Maximum: 180 days.

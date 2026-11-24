@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -23,6 +24,7 @@ func (r *AgentResourceModel) RefreshFromSharedAgentDbDto(ctx context.Context, re
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.Name = types.StringPointerValue(resp.Name)
+		r.SandboxAutoChange = types.BoolPointerValue(resp.SandboxAutoChange)
 		r.ServiceAccountID = types.Int64PointerValue(resp.ServiceAccountID)
 		r.ServiceAccountName = types.StringPointerValue(resp.ServiceAccountName)
 		if resp.Status != nil {
@@ -30,6 +32,14 @@ func (r *AgentResourceModel) RefreshFromSharedAgentDbDto(ctx context.Context, re
 		} else {
 			r.Status = types.StringNull()
 		}
+		if resp.StudioSandbox == nil {
+			r.StudioSandbox = nil
+		} else {
+			r.StudioSandbox = &tfTypes.CreateAgentRequestStudioSandbox{}
+			r.StudioSandbox.SessionID = types.StringPointerValue(resp.StudioSandbox.SessionID)
+			r.StudioSandbox.WorkspaceID = types.StringPointerValue(resp.StudioSandbox.WorkspaceID)
+		}
+		r.StudioSandboxName = types.StringPointerValue(resp.StudioSandboxName)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -182,15 +192,42 @@ func (r *AgentResourceModel) ToSharedCreateAgentRequest(ctx context.Context) (*s
 	var name string
 	name = r.Name.ValueString()
 
+	sandboxAutoChange := new(bool)
+	if !r.SandboxAutoChange.IsUnknown() && !r.SandboxAutoChange.IsNull() {
+		*sandboxAutoChange = r.SandboxAutoChange.ValueBool()
+	} else {
+		sandboxAutoChange = nil
+	}
 	var serviceAccountID int64
 	serviceAccountID = r.ServiceAccountID.ValueInt64()
 
+	var studioSandbox *shared.CreateAgentRequestStudioSandbox
+	if r.StudioSandbox != nil {
+		sessionID := new(string)
+		if !r.StudioSandbox.SessionID.IsUnknown() && !r.StudioSandbox.SessionID.IsNull() {
+			*sessionID = r.StudioSandbox.SessionID.ValueString()
+		} else {
+			sessionID = nil
+		}
+		workspaceID := new(string)
+		if !r.StudioSandbox.WorkspaceID.IsUnknown() && !r.StudioSandbox.WorkspaceID.IsNull() {
+			*workspaceID = r.StudioSandbox.WorkspaceID.ValueString()
+		} else {
+			workspaceID = nil
+		}
+		studioSandbox = &shared.CreateAgentRequestStudioSandbox{
+			SessionID:   sessionID,
+			WorkspaceID: workspaceID,
+		}
+	}
 	out := shared.CreateAgentRequest{
 		AgentInstructions:     agentInstructions,
 		Description:           description,
 		GithubAppCredentialID: githubAppCredentialID,
 		Name:                  name,
+		SandboxAutoChange:     sandboxAutoChange,
 		ServiceAccountID:      serviceAccountID,
+		StudioSandbox:         studioSandbox,
 	}
 
 	return &out, diags
@@ -217,15 +254,42 @@ func (r *AgentResourceModel) ToSharedUpdateAgentRequest(ctx context.Context) (*s
 	var name string
 	name = r.Name.ValueString()
 
+	sandboxAutoChange := new(bool)
+	if !r.SandboxAutoChange.IsUnknown() && !r.SandboxAutoChange.IsNull() {
+		*sandboxAutoChange = r.SandboxAutoChange.ValueBool()
+	} else {
+		sandboxAutoChange = nil
+	}
 	var serviceAccountID int64
 	serviceAccountID = r.ServiceAccountID.ValueInt64()
 
+	var studioSandbox *shared.UpdateAgentRequestStudioSandbox
+	if r.StudioSandbox != nil {
+		sessionID := new(string)
+		if !r.StudioSandbox.SessionID.IsUnknown() && !r.StudioSandbox.SessionID.IsNull() {
+			*sessionID = r.StudioSandbox.SessionID.ValueString()
+		} else {
+			sessionID = nil
+		}
+		workspaceID := new(string)
+		if !r.StudioSandbox.WorkspaceID.IsUnknown() && !r.StudioSandbox.WorkspaceID.IsNull() {
+			*workspaceID = r.StudioSandbox.WorkspaceID.ValueString()
+		} else {
+			workspaceID = nil
+		}
+		studioSandbox = &shared.UpdateAgentRequestStudioSandbox{
+			SessionID:   sessionID,
+			WorkspaceID: workspaceID,
+		}
+	}
 	out := shared.UpdateAgentRequest{
 		AgentInstructions:     agentInstructions,
 		Description:           description,
 		GithubAppCredentialID: githubAppCredentialID,
 		Name:                  name,
+		SandboxAutoChange:     sandboxAutoChange,
 		ServiceAccountID:      serviceAccountID,
+		StudioSandbox:         studioSandbox,
 	}
 
 	return &out, diags

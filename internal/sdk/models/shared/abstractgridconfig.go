@@ -20,7 +20,7 @@ type AbstractGridConfig struct {
 	PreRunScript            *string `json:"preRunScript,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
-	// Compute environment working directory
+	// Work directory path for storing intermediate workflow files. Trailing slashes are removed when the compute environment is saved.
 	WorkDir *string `json:"workDir,omitempty"`
 }
 

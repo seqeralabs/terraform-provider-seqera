@@ -4,7 +4,6 @@ package shared
 
 type PipelineInfo struct {
 	CommitID           *string `json:"commitId,omitempty"`
-	DiagramImage       *string `json:"diagramImage,omitempty"`
 	RepositoryProvider *string `json:"provider,omitempty"`
 	RevisionName       *string `json:"revisionName,omitempty"`
 }
@@ -14,13 +13,6 @@ func (p *PipelineInfo) GetCommitID() *string {
 		return nil
 	}
 	return p.CommitID
-}
-
-func (p *PipelineInfo) GetDiagramImage() *string {
-	if p == nil {
-		return nil
-	}
-	return p.DiagramImage
 }
 
 func (p *PipelineInfo) GetRepositoryProvider() *string {

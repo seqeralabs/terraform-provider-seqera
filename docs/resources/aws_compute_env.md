@@ -216,7 +216,7 @@ Requires replacement if changed.
 - `global_cache_enabled` (Boolean) Whether the Nextflow Global Cache is enabled for this compute environment. Requires replacement if changed.
 - `global_cache_path` (String) Object storage folder used as the Nextflow Global Cache location. Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
-- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory in MiB reserved for the Nextflow head job. Must be at least 3584 when creating a compute environment. Defaults to 3584 per head job CPU when omitted, or 4096 per CPU with Fargate. Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.

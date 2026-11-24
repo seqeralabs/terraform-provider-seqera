@@ -120,6 +120,8 @@ const (
 	AuditEventTypeCreditPurchaseFailed              AuditEventType = "credit_purchase_failed"
 	AuditEventTypeCreditPurchaseCanceled            AuditEventType = "credit_purchase_canceled"
 	AuditEventTypeCreditPurchaseExpired             AuditEventType = "credit_purchase_expired"
+	AuditEventTypeBudgetSet                         AuditEventType = "budget_set"
+	AuditEventTypeBudgetRemoved                     AuditEventType = "budget_removed"
 	AuditEventTypeUserRoleCreated                   AuditEventType = "user_role_created"
 	AuditEventTypeUserRoleUpdated                   AuditEventType = "user_role_updated"
 	AuditEventTypeUserRoleDeleted                   AuditEventType = "user_role_deleted"
@@ -136,6 +138,8 @@ const (
 	AuditEventTypeServiceAccountCreated             AuditEventType = "service_account_created"
 	AuditEventTypeServiceAccountUpdated             AuditEventType = "service_account_updated"
 	AuditEventTypeServiceAccountDeleted             AuditEventType = "service_account_deleted"
+	AuditEventTypeOauthClientSecretCreated          AuditEventType = "oauth_client_secret_created"
+	AuditEventTypeOauthClientSecretUpdated          AuditEventType = "oauth_client_secret_updated"
 	AuditEventTypeComputeEnvironmentMadePrimary     AuditEventType = "compute_environment_made_primary"
 	AuditEventTypeComputeEnvironmentMadeNonPrimary  AuditEventType = "compute_environment_made_non_primary"
 	AuditEventTypeComputeProfileCreated             AuditEventType = "compute_profile_created"
@@ -405,6 +409,10 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "credit_purchase_expired":
 		fallthrough
+	case "budget_set":
+		fallthrough
+	case "budget_removed":
+		fallthrough
 	case "user_role_created":
 		fallthrough
 	case "user_role_updated":
@@ -436,6 +444,10 @@ func (e *AuditEventType) UnmarshalJSON(data []byte) error {
 	case "service_account_updated":
 		fallthrough
 	case "service_account_deleted":
+		fallthrough
+	case "oauth_client_secret_created":
+		fallthrough
+	case "oauth_client_secret_updated":
 		fallthrough
 	case "compute_environment_made_primary":
 		fallthrough

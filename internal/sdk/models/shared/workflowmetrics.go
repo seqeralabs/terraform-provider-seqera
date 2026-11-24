@@ -2,20 +2,713 @@
 
 package shared
 
+type GpuMemAvg struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (g *GpuMemAvg) GetMax() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Max
+}
+
+func (g *GpuMemAvg) GetMaxLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MaxLabel
+}
+
+func (g *GpuMemAvg) GetMean() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Mean
+}
+
+func (g *GpuMemAvg) GetMin() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Min
+}
+
+func (g *GpuMemAvg) GetMinLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MinLabel
+}
+
+func (g *GpuMemAvg) GetQ1() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q1
+}
+
+func (g *GpuMemAvg) GetQ1Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q1Label
+}
+
+func (g *GpuMemAvg) GetQ2() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q2
+}
+
+func (g *GpuMemAvg) GetQ2Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q2Label
+}
+
+func (g *GpuMemAvg) GetQ3() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q3
+}
+
+func (g *GpuMemAvg) GetQ3Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q3Label
+}
+
+func (g *GpuMemAvg) GetWarnings() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Warnings
+}
+
+type GpuMemPeak struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (g *GpuMemPeak) GetMax() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Max
+}
+
+func (g *GpuMemPeak) GetMaxLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MaxLabel
+}
+
+func (g *GpuMemPeak) GetMean() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Mean
+}
+
+func (g *GpuMemPeak) GetMin() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Min
+}
+
+func (g *GpuMemPeak) GetMinLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MinLabel
+}
+
+func (g *GpuMemPeak) GetQ1() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q1
+}
+
+func (g *GpuMemPeak) GetQ1Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q1Label
+}
+
+func (g *GpuMemPeak) GetQ2() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q2
+}
+
+func (g *GpuMemPeak) GetQ2Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q2Label
+}
+
+func (g *GpuMemPeak) GetQ3() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q3
+}
+
+func (g *GpuMemPeak) GetQ3Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q3Label
+}
+
+func (g *GpuMemPeak) GetWarnings() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Warnings
+}
+
+type GpuUsage struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (g *GpuUsage) GetMax() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Max
+}
+
+func (g *GpuUsage) GetMaxLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MaxLabel
+}
+
+func (g *GpuUsage) GetMean() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Mean
+}
+
+func (g *GpuUsage) GetMin() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Min
+}
+
+func (g *GpuUsage) GetMinLabel() *string {
+	if g == nil {
+		return nil
+	}
+	return g.MinLabel
+}
+
+func (g *GpuUsage) GetQ1() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q1
+}
+
+func (g *GpuUsage) GetQ1Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q1Label
+}
+
+func (g *GpuUsage) GetQ2() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q2
+}
+
+func (g *GpuUsage) GetQ2Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q2Label
+}
+
+func (g *GpuUsage) GetQ3() *float32 {
+	if g == nil {
+		return nil
+	}
+	return g.Q3
+}
+
+func (g *GpuUsage) GetQ3Label() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Q3Label
+}
+
+func (g *GpuUsage) GetWarnings() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Warnings
+}
+
+type Mem struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (m *Mem) GetMax() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Max
+}
+
+func (m *Mem) GetMaxLabel() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MaxLabel
+}
+
+func (m *Mem) GetMean() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Mean
+}
+
+func (m *Mem) GetMin() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Min
+}
+
+func (m *Mem) GetMinLabel() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MinLabel
+}
+
+func (m *Mem) GetQ1() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q1
+}
+
+func (m *Mem) GetQ1Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q1Label
+}
+
+func (m *Mem) GetQ2() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q2
+}
+
+func (m *Mem) GetQ2Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q2Label
+}
+
+func (m *Mem) GetQ3() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q3
+}
+
+func (m *Mem) GetQ3Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q3Label
+}
+
+func (m *Mem) GetWarnings() []string {
+	if m == nil {
+		return nil
+	}
+	return m.Warnings
+}
+
+type MemUsage struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (m *MemUsage) GetMax() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Max
+}
+
+func (m *MemUsage) GetMaxLabel() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MaxLabel
+}
+
+func (m *MemUsage) GetMean() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Mean
+}
+
+func (m *MemUsage) GetMin() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Min
+}
+
+func (m *MemUsage) GetMinLabel() *string {
+	if m == nil {
+		return nil
+	}
+	return m.MinLabel
+}
+
+func (m *MemUsage) GetQ1() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q1
+}
+
+func (m *MemUsage) GetQ1Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q1Label
+}
+
+func (m *MemUsage) GetQ2() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q2
+}
+
+func (m *MemUsage) GetQ2Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q2Label
+}
+
+func (m *MemUsage) GetQ3() *float32 {
+	if m == nil {
+		return nil
+	}
+	return m.Q3
+}
+
+func (m *MemUsage) GetQ3Label() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Q3Label
+}
+
+func (m *MemUsage) GetWarnings() []string {
+	if m == nil {
+		return nil
+	}
+	return m.Warnings
+}
+
+type TimeUsage struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (t *TimeUsage) GetMax() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Max
+}
+
+func (t *TimeUsage) GetMaxLabel() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MaxLabel
+}
+
+func (t *TimeUsage) GetMean() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Mean
+}
+
+func (t *TimeUsage) GetMin() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Min
+}
+
+func (t *TimeUsage) GetMinLabel() *string {
+	if t == nil {
+		return nil
+	}
+	return t.MinLabel
+}
+
+func (t *TimeUsage) GetQ1() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Q1
+}
+
+func (t *TimeUsage) GetQ1Label() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Q1Label
+}
+
+func (t *TimeUsage) GetQ2() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Q2
+}
+
+func (t *TimeUsage) GetQ2Label() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Q2Label
+}
+
+func (t *TimeUsage) GetQ3() *float32 {
+	if t == nil {
+		return nil
+	}
+	return t.Q3
+}
+
+func (t *TimeUsage) GetQ3Label() *string {
+	if t == nil {
+		return nil
+	}
+	return t.Q3Label
+}
+
+func (t *TimeUsage) GetWarnings() []string {
+	if t == nil {
+		return nil
+	}
+	return t.Warnings
+}
+
+type Vmem struct {
+	Max      *float32 `json:"max,omitempty"`
+	MaxLabel *string  `json:"maxLabel,omitempty"`
+	Mean     *float32 `json:"mean,omitempty"`
+	Min      *float32 `json:"min,omitempty"`
+	MinLabel *string  `json:"minLabel,omitempty"`
+	Q1       *float32 `json:"q1,omitempty"`
+	Q1Label  *string  `json:"q1Label,omitempty"`
+	Q2       *float32 `json:"q2,omitempty"`
+	Q2Label  *string  `json:"q2Label,omitempty"`
+	Q3       *float32 `json:"q3,omitempty"`
+	Q3Label  *string  `json:"q3Label,omitempty"`
+	Warnings []string `json:"warnings,omitempty"`
+}
+
+func (v *Vmem) GetMax() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Max
+}
+
+func (v *Vmem) GetMaxLabel() *string {
+	if v == nil {
+		return nil
+	}
+	return v.MaxLabel
+}
+
+func (v *Vmem) GetMean() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Mean
+}
+
+func (v *Vmem) GetMin() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Min
+}
+
+func (v *Vmem) GetMinLabel() *string {
+	if v == nil {
+		return nil
+	}
+	return v.MinLabel
+}
+
+func (v *Vmem) GetQ1() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Q1
+}
+
+func (v *Vmem) GetQ1Label() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Q1Label
+}
+
+func (v *Vmem) GetQ2() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Q2
+}
+
+func (v *Vmem) GetQ2Label() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Q2Label
+}
+
+func (v *Vmem) GetQ3() *float32 {
+	if v == nil {
+		return nil
+	}
+	return v.Q3
+}
+
+func (v *Vmem) GetQ3Label() *string {
+	if v == nil {
+		return nil
+	}
+	return v.Q3Label
+}
+
+func (v *Vmem) GetWarnings() []string {
+	if v == nil {
+		return nil
+	}
+	return v.Warnings
+}
+
 type WorkflowMetrics struct {
 	CPU        *ResourceData `json:"cpu,omitempty"`
 	CPUUsage   *ResourceData `json:"cpuUsage,omitempty"`
-	GpuMemAvg  *ResourceData `json:"gpuMemAvg,omitempty"`
-	GpuMemPeak *ResourceData `json:"gpuMemPeak,omitempty"`
-	GpuUsage   *ResourceData `json:"gpuUsage,omitempty"`
+	GpuMemAvg  *GpuMemAvg    `json:"gpuMemAvg,omitempty"`
+	GpuMemPeak *GpuMemPeak   `json:"gpuMemPeak,omitempty"`
+	GpuUsage   *GpuUsage     `json:"gpuUsage,omitempty"`
 	ID         *int64        `json:"id,omitempty"`
-	Mem        *ResourceData `json:"mem,omitempty"`
-	MemUsage   *ResourceData `json:"memUsage,omitempty"`
+	Mem        *Mem          `json:"mem,omitempty"`
+	MemUsage   *MemUsage     `json:"memUsage,omitempty"`
 	Process    string        `json:"process"`
 	Reads      *ResourceData `json:"reads,omitempty"`
 	Time       *ResourceData `json:"time,omitempty"`
-	TimeUsage  *ResourceData `json:"timeUsage,omitempty"`
-	Vmem       *ResourceData `json:"vmem,omitempty"`
+	TimeUsage  *TimeUsage    `json:"timeUsage,omitempty"`
+	Vmem       *Vmem         `json:"vmem,omitempty"`
 	Writes     *ResourceData `json:"writes,omitempty"`
 }
 
@@ -33,21 +726,21 @@ func (w *WorkflowMetrics) GetCPUUsage() *ResourceData {
 	return w.CPUUsage
 }
 
-func (w *WorkflowMetrics) GetGpuMemAvg() *ResourceData {
+func (w *WorkflowMetrics) GetGpuMemAvg() *GpuMemAvg {
 	if w == nil {
 		return nil
 	}
 	return w.GpuMemAvg
 }
 
-func (w *WorkflowMetrics) GetGpuMemPeak() *ResourceData {
+func (w *WorkflowMetrics) GetGpuMemPeak() *GpuMemPeak {
 	if w == nil {
 		return nil
 	}
 	return w.GpuMemPeak
 }
 
-func (w *WorkflowMetrics) GetGpuUsage() *ResourceData {
+func (w *WorkflowMetrics) GetGpuUsage() *GpuUsage {
 	if w == nil {
 		return nil
 	}
@@ -61,14 +754,14 @@ func (w *WorkflowMetrics) GetID() *int64 {
 	return w.ID
 }
 
-func (w *WorkflowMetrics) GetMem() *ResourceData {
+func (w *WorkflowMetrics) GetMem() *Mem {
 	if w == nil {
 		return nil
 	}
 	return w.Mem
 }
 
-func (w *WorkflowMetrics) GetMemUsage() *ResourceData {
+func (w *WorkflowMetrics) GetMemUsage() *MemUsage {
 	if w == nil {
 		return nil
 	}
@@ -96,14 +789,14 @@ func (w *WorkflowMetrics) GetTime() *ResourceData {
 	return w.Time
 }
 
-func (w *WorkflowMetrics) GetTimeUsage() *ResourceData {
+func (w *WorkflowMetrics) GetTimeUsage() *TimeUsage {
 	if w == nil {
 		return nil
 	}
 	return w.TimeUsage
 }
 
-func (w *WorkflowMetrics) GetVmem() *ResourceData {
+func (w *WorkflowMetrics) GetVmem() *Vmem {
 	if w == nil {
 		return nil
 	}

@@ -513,8 +513,8 @@ actions:
 
   - target: $.components.schemas.AwsBatchConfig.properties.headJobMemoryMb
     update:
-      description: "Memory allocation for the head job in MB (default: 1024)"
       example: 8192
+      minimum: 3584
       x-speakeasy-param-force-new: true
 
   # Forge configuration descriptions - add force-new to all properties

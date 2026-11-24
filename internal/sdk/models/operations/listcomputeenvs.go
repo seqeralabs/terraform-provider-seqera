@@ -8,12 +8,18 @@ import (
 )
 
 type ListComputeEnvsRequest struct {
-	// Compute environment status
+	// Compute environment status. Accepts several as a comma-separated list (ex. `CREATING,DELETING`)
 	Status *string `queryParam:"style=form,explode=true,name=status"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Additional attribute values to include in the response (`labels`, `resources`). Returns an empty value (ex. `labels: null`) if omitted.
 	Attributes []shared.ComputeEnvQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
+	// Match compute environments by name or description, optionally narrowed by a `platform:` keyword (ex. `platform:aws`)
+	Search *string `queryParam:"style=form,explode=true,name=search"`
+	// Pagination max results, between 1 and 100. Omit to return every matching compute environment
+	Max *int `queryParam:"style=form,explode=true,name=max"`
+	// Pagination offset. Requires `max`, since the listing is unpaged without it
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
 }
 
 func (l *ListComputeEnvsRequest) GetStatus() *string {
@@ -35,6 +41,27 @@ func (l *ListComputeEnvsRequest) GetAttributes() []shared.ComputeEnvQueryAttribu
 		return nil
 	}
 	return l.Attributes
+}
+
+func (l *ListComputeEnvsRequest) GetSearch() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Search
+}
+
+func (l *ListComputeEnvsRequest) GetMax() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Max
+}
+
+func (l *ListComputeEnvsRequest) GetOffset() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Offset
 }
 
 type ListComputeEnvsResponse struct {

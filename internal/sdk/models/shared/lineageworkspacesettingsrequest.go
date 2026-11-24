@@ -48,7 +48,11 @@ type LineageWorkspaceSettingsRequest struct {
 	QueueArn *string `json:"queueArn,omitempty"`
 	// Cloud region where the lineage storage bucket will be created (e.g. 'us-east-1').
 	Region string `json:"region"`
-	// Bucket name for the lineage store. Must not be set in AUTO mode, where Platform selects the bucket `seqera-lineage-{workspaceId}`; required in MANUAL mode and must match the existing bucket.
+	// Storage location of the lineage store: a cloud storage path within your existing bucket, e.g. 's3://my-bucket/lineage'. Required in MANUAL mode; must not be set in AUTO mode, where Platform always uses the root of 's3://seqera-lineage-{workspaceId}'.
+	StoreLocation *string `json:"storeLocation,omitempty"`
+	// Bucket name for the lineage store, used as the bucket root. Must not be set in AUTO mode, nor together with `store_location`.
+	//
+	// Deprecated: Use `store_location` instead. A bucket name `my-bucket` corresponds to `store_location = "s3://my-bucket"`..
 	StoreName *string `json:"storeName,omitempty"`
 	// AWS only. ARN of the SNS topic receiving the bucket's S3 notifications. Required in MANUAL mode; not accepted in AUTO mode.
 	TopicArn *string `json:"topicArn,omitempty"`
@@ -98,6 +102,13 @@ func (l *LineageWorkspaceSettingsRequest) GetRegion() string {
 		return ""
 	}
 	return l.Region
+}
+
+func (l *LineageWorkspaceSettingsRequest) GetStoreLocation() *string {
+	if l == nil {
+		return nil
+	}
+	return l.StoreLocation
 }
 
 func (l *LineageWorkspaceSettingsRequest) GetStoreName() *string {

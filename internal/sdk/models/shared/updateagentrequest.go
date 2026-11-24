@@ -2,6 +2,26 @@
 
 package shared
 
+// UpdateAgentRequestStudioSandbox - Studio session the agent's runs use as their sandbox. Null uses a scratch sandbox
+type UpdateAgentRequestStudioSandbox struct {
+	SessionID   *string `json:"sessionId,omitempty"`
+	WorkspaceID *string `json:"workspaceId,omitempty"`
+}
+
+func (u *UpdateAgentRequestStudioSandbox) GetSessionID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.SessionID
+}
+
+func (u *UpdateAgentRequestStudioSandbox) GetWorkspaceID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.WorkspaceID
+}
+
 type UpdateAgentRequest struct {
 	// Instructions the agent follows when it runs, up to 50000 characters. They are appended to the platform's base agent prompt.
 	AgentInstructions string `json:"agentInstructions"`
@@ -11,8 +31,12 @@ type UpdateAgentRequest struct {
 	GithubAppCredentialID *string `json:"githubAppCredentialId,omitempty"`
 	// Agent name: letters, numbers, dashes and underscores, up to 255 characters. Unique within the workspace.
 	Name string `json:"name"`
+	// Whether the agent may switch its sandbox during a run. Defaults to false
+	SandboxAutoChange *bool `json:"sandboxAutoChange,omitempty"`
 	// Service account the agent runs as (`seqera_service_account.x.id`). Every agent must run as a service account: the Platform rejects an agent without one. The service account must already be a participant in the workspace with a role that allows launching agents (configure the `seqera_workspace_participant` first, by reference or with `depends_on`), otherwise the apply fails with the Platform's error explaining what is missing. Requires service accounts to be enabled on the Platform instance.
 	ServiceAccountID int64 `json:"serviceAccountId"`
+	// Studio session the agent's runs use as their sandbox. Null uses a scratch sandbox
+	StudioSandbox *UpdateAgentRequestStudioSandbox `json:"studioSandbox,omitempty"`
 }
 
 func (u *UpdateAgentRequest) GetAgentInstructions() string {
@@ -43,9 +67,23 @@ func (u *UpdateAgentRequest) GetName() string {
 	return u.Name
 }
 
+func (u *UpdateAgentRequest) GetSandboxAutoChange() *bool {
+	if u == nil {
+		return nil
+	}
+	return u.SandboxAutoChange
+}
+
 func (u *UpdateAgentRequest) GetServiceAccountID() int64 {
 	if u == nil {
 		return 0
 	}
 	return u.ServiceAccountID
+}
+
+func (u *UpdateAgentRequest) GetStudioSandbox() *UpdateAgentRequestStudioSandbox {
+	if u == nil {
+		return nil
+	}
+	return u.StudioSandbox
 }

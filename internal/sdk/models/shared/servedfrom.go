@@ -10,10 +10,10 @@ import (
 type ServedFrom string
 
 const (
-	ServedFromEmbedded ServedFrom = "EMBEDDED"
-	ServedFromStatic   ServedFrom = "STATIC"
-	ServedFromLicman   ServedFrom = "LICMAN"
-	ServedFromCache    ServedFrom = "CACHE"
+	ServedFromEmbedded ServedFrom = "embedded"
+	ServedFromStatic   ServedFrom = "static"
+	ServedFromLicman   ServedFrom = "licman"
+	ServedFromCache    ServedFrom = "cache"
 )
 
 func (e ServedFrom) ToPointer() *ServedFrom {
@@ -25,13 +25,13 @@ func (e *ServedFrom) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "EMBEDDED":
+	case "embedded":
 		fallthrough
-	case "STATIC":
+	case "static":
 		fallthrough
-	case "LICMAN":
+	case "licman":
 		fallthrough
-	case "CACHE":
+	case "cache":
 		*e = ServedFrom(v)
 		return nil
 	default:

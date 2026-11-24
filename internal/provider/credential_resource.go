@@ -98,15 +98,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `AWS IAM access key ID (keys mode).`,
 							},
 							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `IAM role ARN to assume when using these credentials (role and workload identity modes).`,
 							},
 							"secret_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `AWS IAM secret access key (keys mode).`,
 							},
 						},
 						Validators: []validator.Object{
@@ -118,8 +121,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -136,7 +139,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Batch account access key.`,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed:    true,
@@ -147,7 +151,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Storage account access key.`,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed:    true,
@@ -167,8 +172,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -185,7 +190,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Batch account access key.`,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed:    true,
@@ -196,14 +202,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"client_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Application (client) ID.`,
 							},
 							"client_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Application (client) secret.`,
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Storage account access key.`,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed:    true,
@@ -214,12 +223,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"subscription_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Azure subscription ID.`,
 							},
 							"tenant_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Entra tenant ID.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -231,8 +242,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -249,7 +260,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Batch account access key.`,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed:    true,
@@ -260,14 +272,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"client_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Application (client) ID.`,
 							},
 							"client_secret": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Application (client) secret.`,
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Azure Storage account access key.`,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed:    true,
@@ -278,8 +293,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"tenant_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Entra tenant ID.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -291,8 +307,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -309,14 +325,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Account password or personal access token.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Access token, for the providers that accept one as an alternative to the password. Unused by the others.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Account username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -328,8 +347,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -346,14 +365,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Account password.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `App password or access token.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Account username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -365,8 +387,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -383,15 +405,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Password (equivalent to an AWS secret key).`,
 							},
 							"token": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Access token, for the providers that accept one as an alternative to the password. Unused by the others.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Username (equivalent to an AWS access key).`,
 							},
 						},
 						Validators: []validator.Object{
@@ -403,8 +428,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -421,15 +446,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Registry password or access token.`,
 							},
 							"registry": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Container registry server URL, for example ` + "`" + `docker.io` + "`" + `, ` + "`" + `quay.io` + "`" + `, or a custom registry domain. Defaults to ` + "`" + `docker.io` + "`" + `.`,
 							},
 							"user_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Registry username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -441,8 +469,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -459,14 +487,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Account password or access token.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Access token, for the providers that accept one as an alternative to the password. Unused by the others.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Account username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -479,8 +510,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
@@ -496,15 +527,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `GitHub personal access token, classic or fine-grained.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Ignored: send the personal access token in ` + "`" + `password` + "`" + `.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Account username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -534,30 +568,36 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"app_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `GitHub App ID.`,
 							},
 							"client_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `OAuth client ID.`,
 							},
 							"client_secret": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `OAuth client secret, returned by the GitHub App manifest flow.`,
 							},
 							"private_key": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `PEM-encoded GitHub App private key.`,
 							},
 							"slug": schema.StringAttribute{
 								Computed: true,
 								PlanModifiers: []planmodifier.String{
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
+								Description: `App URL slug returned by the GitHub App manifest flow.`,
 							},
 							"webhook_secret": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `Webhook secret, returned by the GitHub App manifest flow.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -587,14 +627,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Account password.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Personal access token, as an alternative to the username and password.`,
 							},
 							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Account username.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -607,8 +650,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
@@ -624,20 +667,24 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"data": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `Service account JSON key (service-account key mode).`,
 							},
 							"service_account_email": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Service account email to impersonate (Workload Identity Federation mode).`,
 							},
 							"token_audience": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Optional custom audience for the Workload Identity Federation OIDC token exchange. Defaults to the Workload Identity Provider resource name. Must not be an audience Seqera Platform or its services accept: ` + "`" + `platform` + "`" + ` (or the installation's configured access-token audience), ` + "`" + `sched` + "`" + `, ` + "`" + `consumption` + "`" + `, the Platform API URL, or its ` + "`" + `/token` + "`" + ` endpoint.`,
 							},
 							"workload_identity_provider": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Full resource name of the Workload Identity Federation OIDC provider.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -650,8 +697,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("k8s"),
@@ -668,13 +715,16 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Base64-encoded client certificate for Kubernetes authentication.`,
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Base64-encoded private key for Kubernetes authentication.`,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Service account token, as an alternative to the certificate and private key pair.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -687,8 +737,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -704,7 +754,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Password of the local account.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -717,8 +768,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -734,15 +785,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Access key ID.`,
 							},
 							"path_style_access_enabled": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether path-style bucket addressing is used.`,
 							},
 							"secret_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Secret access key.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -755,8 +809,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -772,15 +826,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `AWS IAM access key ID (keys mode).`,
 							},
 							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `IAM role ARN to assume when using these credentials (role and workload identity modes).`,
 							},
 							"secret_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `AWS IAM secret access key (keys mode).`,
 							},
 						},
 						Validators: []validator.Object{
@@ -793,8 +850,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -810,10 +867,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"passphrase": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Passphrase protecting the private key, when it is encrypted.`,
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `PEM-encoded SSH private key.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -826,8 +885,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),
@@ -843,16 +902,19 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"connection_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Agent connection ID.`,
 							},
 							"shared": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Whether the agent connection is shared across multiple workspaces.`,
 							},
 							"work_dir": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:    true,
+								Optional:    true,
+								Description: `Agent working directory. Always ` + "`" + `$TW_AGENT_WORK` + "`" + `, replaced with the work directory the agent reports.`,
 							},
 						},
 						Validators: []validator.Object{
@@ -865,8 +927,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
 								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("github_app"),
+								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("gitea"),
 								path.MatchRelative().AtParent().AtName("google"),

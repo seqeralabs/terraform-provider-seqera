@@ -116,60 +116,60 @@ actions:
   # SCHEMA DESCRIPTIONS
   # ============================================================================
 
-  # WorkflowDbDto schema description
-  - target: $.components.schemas.WorkflowDbDto
+  # WorkflowListResponseDto schema description
+  - target: $.components.schemas.WorkflowListResponseDto
     update:
       description: |
         Represents a workflow execution record.
         Contains execution status, metadata, and results from pipeline
         runs including logs and performance metrics.
 
-  # WorkflowDbDto field descriptions
-  - target: $.components.schemas.WorkflowDbDto.properties.id
+  # WorkflowListResponseDto field descriptions
+  - target: $.components.schemas.WorkflowListResponseDto.properties.id
     update:
       description: Unique identifier for the workflow execution
-  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+  - target: $.components.schemas.WorkflowListResponseDto.properties.ownerId
     update:
       description: Numeric identifier of the user who owns this workflow
-  - target: $.components.schemas.WorkflowDbDto.properties.submit
+  - target: $.components.schemas.WorkflowListResponseDto.properties.submit
     update:
       description: Timestamp when the workflow was submitted for execution
-  - target: $.components.schemas.WorkflowDbDto.properties.start
+  - target: $.components.schemas.WorkflowListResponseDto.properties.start
     update:
       description: Timestamp when the workflow execution actually started
-  - target: $.components.schemas.WorkflowDbDto.properties.complete
+  - target: $.components.schemas.WorkflowListResponseDto.properties.complete
     update:
       description: Timestamp when the workflow execution completed
   # ============================================================================
   # READ-ONLY FIELDS
   # ============================================================================
 
-  # Mark server-managed fields as read-only in WorkflowDbDto
-  - target: $.components.schemas.WorkflowDbDto.properties.id
+  # Mark server-managed fields as read-only in WorkflowListResponseDto
+  - target: $.components.schemas.WorkflowListResponseDto.properties.id
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+  - target: $.components.schemas.WorkflowListResponseDto.properties.ownerId
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.submit
+  - target: $.components.schemas.WorkflowListResponseDto.properties.submit
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.start
+  - target: $.components.schemas.WorkflowListResponseDto.properties.start
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.complete
+  - target: $.components.schemas.WorkflowListResponseDto.properties.complete
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.dateCreated
+  - target: $.components.schemas.WorkflowListResponseDto.properties.dateCreated
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.lastUpdated
+  - target: $.components.schemas.WorkflowListResponseDto.properties.lastUpdated
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.deleted
+  - target: $.components.schemas.WorkflowListResponseDto.properties.deleted
     update:
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.status
+  - target: $.components.schemas.WorkflowListResponseDto.properties.status
     update:
       x-speakeasy-param-readonly: true
   # ============================================================================
@@ -355,71 +355,71 @@ actions:
   - target: $.components.schemas.DescribeWorkflowResponse.properties.labels
     remove: true
 
-  # Remove additional runtime fields from WorkflowDbDto
-  - target: $.components.schemas.WorkflowDbDto.properties.userName
+  # Remove additional runtime fields from WorkflowListResponseDto
+  - target: $.components.schemas.WorkflowListResponseDto.properties.userName
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.commitId
+  - target: $.components.schemas.WorkflowListResponseDto.properties.commitId
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.scriptId
+  - target: $.components.schemas.WorkflowListResponseDto.properties.scriptId
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.projectDir
+  - target: $.components.schemas.WorkflowListResponseDto.properties.projectDir
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.homeDir
+  - target: $.components.schemas.WorkflowListResponseDto.properties.homeDir
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.launchDir
+  - target: $.components.schemas.WorkflowListResponseDto.properties.launchDir
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.container
+  - target: $.components.schemas.WorkflowListResponseDto.properties.container
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.containerEngine
+  - target: $.components.schemas.WorkflowListResponseDto.properties.containerEngine
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.scriptFile
+  - target: $.components.schemas.WorkflowListResponseDto.properties.scriptFile
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.duration
+  - target: $.components.schemas.WorkflowListResponseDto.properties.duration
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.exitStatus
+  - target: $.components.schemas.WorkflowListResponseDto.properties.exitStatus
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.success
+  - target: $.components.schemas.WorkflowListResponseDto.properties.success
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.manifest
+  - target: $.components.schemas.WorkflowListResponseDto.properties.manifest
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.nextflow
+  - target: $.components.schemas.WorkflowListResponseDto.properties.nextflow
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.stats
+  - target: $.components.schemas.WorkflowListResponseDto.properties.stats
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.errorMessage
+  - target: $.components.schemas.WorkflowListResponseDto.properties.errorMessage
     remove: true
-  - target: $.components.schemas.WorkflowDbDto.properties.errorReport
+  - target: $.components.schemas.WorkflowListResponseDto.properties.errorReport
     remove: true
 
-  # Heavyweight run-report internals, ignored on WorkflowDbDto in case it
+  # Heavyweight run-report internals, ignored on WorkflowListResponseDto in case it
   # surfaces via future data sources. None of them are launch inputs — they
   # describe what the runtime executed. terraform-ignore (not remove) keeps
   # them in the SDK models; only the Terraform schema drops them.
-  - target: $.components.schemas.WorkflowDbDto.properties.commandLine
+  - target: $.components.schemas.WorkflowListResponseDto.properties.commandLine
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.configText
+  - target: $.components.schemas.WorkflowListResponseDto.properties.configText
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.configFiles
+  - target: $.components.schemas.WorkflowListResponseDto.properties.configFiles
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.params
+  - target: $.components.schemas.WorkflowListResponseDto.properties.params
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+  - target: $.components.schemas.WorkflowListResponseDto.properties.ownerId
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.deleted
+  - target: $.components.schemas.WorkflowListResponseDto.properties.deleted
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.requiresAttention
+  - target: $.components.schemas.WorkflowListResponseDto.properties.requiresAttention
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.profile
+  - target: $.components.schemas.WorkflowListResponseDto.properties.profile
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.WorkflowDbDto.properties.scriptName
+  - target: $.components.schemas.WorkflowListResponseDto.properties.scriptName
     update:
       x-speakeasy-terraform-ignore: true
 
@@ -438,7 +438,7 @@ actions:
   - target: $.components.schemas.DescribeWorkflowResponse.properties.workflow
     update:
       allOf:
-        - $ref: "#/components/schemas/WorkflowMaxDbDto"
+        - $ref: "#/components/schemas/WorkflowDescribeResponseDto"
       x-speakeasy-terraform-ignore: true
 
   # Suppress "(known after apply)" noise on the remaining read-only
