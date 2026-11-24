@@ -29,41 +29,63 @@ func TestValidateAuthConfig(t *testing.T) {
 		{name: "PAT in provider block", bearer: str("pat"), id: null, secret: null},
 		{name: "PAT in env", bearer: null, id: null, secret: null, env: map[string]string{"TOWER_ACCESS_TOKEN": "pat"}},
 		{name: "client credentials in provider block", bearer: null, id: str("sa_1"), secret: str("s")},
-		{name: "client credentials in env", bearer: null, id: null, secret: null,
-			env: map[string]string{"TOWER_CLIENT_ID": "sa_1", "TOWER_CLIENT_SECRET": "s"}},
-		{name: "client credentials mixed sources", bearer: null, id: str("sa_1"), secret: null,
-			env: map[string]string{"TOWER_CLIENT_SECRET": "s"}},
-		{name: "token URL alone does not count", bearer: str("pat"), id: null, secret: null,
-			env: map[string]string{"TOWER_TOKEN_URL": "https://h/api/token"}},
+		{
+			name: "client credentials in env", bearer: null, id: null, secret: null,
+			env: map[string]string{"TOWER_CLIENT_ID": "sa_1", "TOWER_CLIENT_SECRET": "s"},
+		},
+		{
+			name: "client credentials mixed sources", bearer: null, id: str("sa_1"), secret: null,
+			env: map[string]string{"TOWER_CLIENT_SECRET": "s"},
+		},
+		{
+			name: "token URL alone does not count", bearer: str("pat"), id: null, secret: null,
+			env: map[string]string{"TOWER_TOKEN_URL": "https://h/api/token"},
+		},
 		{name: "unknown value is not checked", bearer: unknown, id: null, secret: null},
-		{name: "empty attribute falls back to env", bearer: null, id: str(""), secret: str(""),
-			env: map[string]string{"TOWER_ACCESS_TOKEN": "pat"}},
+		{
+			name: "empty attribute falls back to env", bearer: null, id: str(""), secret: str(""),
+			env: map[string]string{"TOWER_ACCESS_TOKEN": "pat"},
+		},
 
 		// Missing
-		{name: "nothing set", bearer: null, id: null, secret: null,
-			wantError: []string{"Missing Provider Authentication"}, wantInMsg: "TOWER_CLIENT_ID"},
-		{name: "empty values only", bearer: str(""), id: str(""), secret: str(""),
-			wantError: []string{"Missing Provider Authentication"}},
+		{
+			name: "nothing set", bearer: null, id: null, secret: null,
+			wantError: []string{"Missing Provider Authentication"}, wantInMsg: "TOWER_CLIENT_ID",
+		},
+		{
+			name: "empty values only", bearer: str(""), id: str(""), secret: str(""),
+			wantError: []string{"Missing Provider Authentication"},
+		},
 
 		// Partial
-		{name: "client ID only", bearer: null, id: str("sa_1"), secret: null,
+		{
+			name: "client ID only", bearer: null, id: str("sa_1"), secret: null,
 			wantError: []string{"Incomplete Service Account Client Credentials"},
-			wantInMsg: "client_id in the provider block is set, but the client_secret attribute or the TOWER_CLIENT_SECRET environment variable is not"},
-		{name: "client secret only, from env", bearer: null, id: null, secret: null,
+			wantInMsg: "client_id in the provider block is set, but the client_secret attribute or the TOWER_CLIENT_SECRET environment variable is not",
+		},
+		{
+			name: "client secret only, from env", bearer: null, id: null, secret: null,
 			env:       map[string]string{"TOWER_CLIENT_SECRET": "s"},
 			wantError: []string{"Incomplete Service Account Client Credentials"},
-			wantInMsg: "the TOWER_CLIENT_SECRET environment variable is set, but the client_id attribute or the TOWER_CLIENT_ID environment variable is not"},
+			wantInMsg: "the TOWER_CLIENT_SECRET environment variable is set, but the client_id attribute or the TOWER_CLIENT_ID environment variable is not",
+		},
 
 		// Conflicting
-		{name: "PAT and client credentials", bearer: str("pat"), id: str("sa_1"), secret: str("s"),
+		{
+			name: "PAT and client credentials", bearer: str("pat"), id: str("sa_1"), secret: str("s"),
 			wantError: []string{"Conflicting Provider Authentication"},
-			wantInMsg: "(bearer_auth in the provider block) and service account client credentials (client_id in the provider block, client_secret in the provider block)"},
-		{name: "PAT in env and client credentials in block", bearer: null, id: str("sa_1"), secret: str("s"),
+			wantInMsg: "(bearer_auth in the provider block) and service account client credentials (client_id in the provider block, client_secret in the provider block)",
+		},
+		{
+			name: "PAT in env and client credentials in block", bearer: null, id: str("sa_1"), secret: str("s"),
 			env:       map[string]string{"TOWER_ACCESS_TOKEN": "pat"},
 			wantError: []string{"Conflicting Provider Authentication"},
-			wantInMsg: "the TOWER_ACCESS_TOKEN environment variable"},
-		{name: "PAT and partial client credentials", bearer: str("pat"), id: str("sa_1"), secret: null,
-			wantError: []string{"Conflicting Provider Authentication", "Incomplete Service Account Client Credentials"}},
+			wantInMsg: "the TOWER_ACCESS_TOKEN environment variable",
+		},
+		{
+			name: "PAT and partial client credentials", bearer: str("pat"), id: str("sa_1"), secret: null,
+			wantError: []string{"Conflicting Provider Authentication", "Incomplete Service Account Client Credentials"},
+		},
 	}
 
 	for _, tt := range tests {

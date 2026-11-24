@@ -28,10 +28,12 @@ type AuthValidatingProvider struct {
 	*SeqeraProvider
 }
 
-var _ provider.Provider = (*AuthValidatingProvider)(nil)
-var _ provider.ProviderWithActions = (*AuthValidatingProvider)(nil)
-var _ provider.ProviderWithEphemeralResources = (*AuthValidatingProvider)(nil)
-var _ provider.ProviderWithFunctions = (*AuthValidatingProvider)(nil)
+var (
+	_ provider.Provider                       = (*AuthValidatingProvider)(nil)
+	_ provider.ProviderWithActions            = (*AuthValidatingProvider)(nil)
+	_ provider.ProviderWithEphemeralResources = (*AuthValidatingProvider)(nil)
+	_ provider.ProviderWithFunctions          = (*AuthValidatingProvider)(nil)
+)
 
 // NewWithAuthValidation is New with the authentication check.
 func NewWithAuthValidation(version string) func() provider.Provider {
