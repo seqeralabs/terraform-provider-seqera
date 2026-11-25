@@ -101,10 +101,11 @@ type SchedConfig struct {
 	//
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
 	// EC2 instance types eligible for Seqera Intelligent Compute nodes.
-	// Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-	// types per task. When populated, the scheduler is restricted to this
-	// whitelist; types outside the platform's filtered catalog for the
-	// scheduler are accepted by the API but may produce warnings.
+	// Omit it, or set it to `[]`, to let the scheduler pick the most
+	// cost-optimal types per task. When populated, the scheduler is
+	// restricted to this whitelist; types outside the platform's filtered
+	// catalog for the scheduler are accepted by the API but may produce
+	// warnings.
 	//
 	MachineTypes []string `json:"machineTypes,omitempty"`
 	// Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited.
@@ -144,6 +145,11 @@ func (s SchedConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SchedConfig) UnmarshalJSON(data []byte) error {
+	if out, err := utils.RunJQBytes(data, ".machineTypes = (.machineTypes // [])"); err != nil {
+		return err
+	} else {
+		data = out
+	}
 	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}

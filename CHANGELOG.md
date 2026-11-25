@@ -16,6 +16,10 @@ FEATURES:
 
   On self-hosted deployments, whose `server_url` includes the `/api` path, also set the new `token_url` attribute (or `TOWER_TOKEN_URL` environment variable) to the full token endpoint, for example `https://seqera.my-company.io/api/token`. Without it the token is requested from `https://seqera.my-company.io/token` and the exchange fails. Seqera Cloud with the default `server_url` needs no `token_url`. See [#319](https://github.com/seqeralabs/terraform-provider-seqera/issues/319).
 
+BUG FIXES:
+
+- **`machine_types = []` no longer forces a compute environment replacement on every plan.** On the `intelligent_compute_config` block of `seqera_aws_cloud_ce`, `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and `seqera_compute_env`, an empty `machine_types` was never sent to the API, which returned the field as null, so every plan planned to destroy and recreate the compute environment. An unset value is now read as `[]`, so setting `machine_types = []` and leaving it out both plan cleanly, and the description no longer recommends `[]` over leaving it out. Existing compute environments are not replaced on upgrade: the first refresh stores `machine_types = []` in the state without planning a change, and Classic-mode compute environments are unaffected. See [#321](https://github.com/seqeralabs/terraform-provider-seqera/issues/321).
+
 NOTES:
 
 - **Seqera Platform API spec updated to 1.274.4.**

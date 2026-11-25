@@ -519,10 +519,11 @@ resume from a snapshot instead of restarting from scratch. Not supported
 on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
-Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-types per task. When populated, the scheduler is restricted to this
-whitelist; types outside the platform's filtered catalog for the
-scheduler are accepted by the API but may produce warnings.
+Omit it, or set it to `[]`, to let the scheduler pick the most
+cost-optimal types per task. When populated, the scheduler is
+restricted to this whitelist; types outside the platform's filtered
+catalog for the scheduler are accepted by the API but may produce
+warnings.
 Requires replacement if changed.
 - `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
 - `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
@@ -745,10 +746,11 @@ resume from a snapshot instead of restarting from scratch. Not supported
 on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
-Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-types per task. When populated, the scheduler is restricted to this
-whitelist; types outside the platform's filtered catalog for the
-scheduler are accepted by the API but may produce warnings.
+Omit it, or set it to `[]`, to let the scheduler pick the most
+cost-optimal types per task. When populated, the scheduler is
+restricted to this whitelist; types outside the platform's filtered
+catalog for the scheduler are accepted by the API but may produce
+warnings.
 Requires replacement if changed.
 - `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
 - `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
@@ -1082,10 +1084,11 @@ resume from a snapshot instead of restarting from scratch. Not supported
 on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
-Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-types per task. When populated, the scheduler is restricted to this
-whitelist; types outside the platform's filtered catalog for the
-scheduler are accepted by the API but may produce warnings.
+Omit it, or set it to `[]`, to let the scheduler pick the most
+cost-optimal types per task. When populated, the scheduler is
+restricted to this whitelist; types outside the platform's filtered
+catalog for the scheduler are accepted by the API but may produce
+warnings.
 Requires replacement if changed.
 - `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
 - `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the
@@ -1276,10 +1279,11 @@ resume from a snapshot instead of restarting from scratch. Not supported
 on Azure compute environments.
 Requires replacement if changed.
 - `machine_types` (List of String) EC2 instance types eligible for Seqera Intelligent Compute nodes.
-Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-types per task. When populated, the scheduler is restricted to this
-whitelist; types outside the platform's filtered catalog for the
-scheduler are accepted by the API but may produce warnings.
+Omit it, or set it to `[]`, to let the scheduler pick the most
+cost-optimal types per task. When populated, the scheduler is
+restricted to this whitelist; types outside the platform's filtered
+catalog for the scheduler are accepted by the API but may produce
+warnings.
 Requires replacement if changed.
 - `max_cpus_per_user` (Number) Maximum concurrent vCPUs a single user may hold across their runs in this compute environment. null means unlimited. Requires replacement if changed.
 - `max_spot_attempts` (Number) Maximum number of Spot provisioning attempts for a task, including the

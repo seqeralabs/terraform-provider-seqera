@@ -485,15 +485,25 @@ actions:
       example: "spotFirst"
       x-speakeasy-param-force-new: true
 
+  # The provider drops an empty machineTypes from requests (omitempty) and the
+  # API returns an unset list as null. Read null back as [] so a configured
+  # `[]` matches the state instead of forcing a replacement on every plan
+  # (#321). An omitted attribute is Optional+Computed and takes [] from state.
+  - target: $.components.schemas.SchedConfig
+    update:
+      x-speakeasy-transform-from-api:
+        jq: '.machineTypes = (.machineTypes // [])'
+
   - target: $.components.schemas.SchedConfig.properties.machineTypes
     update:
       description: |
         EC2 instance types eligible for Seqera Intelligent Compute nodes.
-        Leave empty (`[]`) to let the scheduler pick the most cost-optimal
-        types per task. When populated, the scheduler is restricted to this
-        whitelist; types outside the platform's filtered catalog for the
-        scheduler are accepted by the API but may produce warnings.
-      example: []
+        Omit it, or set it to `[]`, to let the scheduler pick the most
+        cost-optimal types per task. When populated, the scheduler is
+        restricted to this whitelist; types outside the platform's filtered
+        catalog for the scheduler are accepted by the API but may produce
+        warnings.
+      example: ["m5.large", "c5.xlarge"]
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
         imports:

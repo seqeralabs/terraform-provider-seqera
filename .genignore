@@ -132,6 +132,7 @@ internal/provider/agentaction_transform_test.go
 internal/provider/pipelineaction_resource_state_move.go
 internal/provider/pipelineaction_resource_state_move_test.go
 internal/provider/pipelineaction_transform_test.go
+internal/provider/sched_config_machine_types_test.go
 internal/planmodifiers/stringplanmodifier/service_account_name_follows_id.go
 
 # Custom examples that should be manually maintained

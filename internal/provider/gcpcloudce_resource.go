@@ -301,10 +301,11 @@ func (r *GCPCloudCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 								ElementType: types.StringType,
 								MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
-									`Leave empty (` + "`" + `[]` + "`" + `) to let the scheduler pick the most cost-optimal` + "\n" +
-									`types per task. When populated, the scheduler is restricted to this` + "\n" +
-									`whitelist; types outside the platform's filtered catalog for the` + "\n" +
-									`scheduler are accepted by the API but may produce warnings.` + "\n" +
+									`Omit it, or set it to ` + "`" + `[]` + "`" + `, to let the scheduler pick the most` + "\n" +
+									`cost-optimal types per task. When populated, the scheduler is` + "\n" +
+									`restricted to this whitelist; types outside the platform's filtered` + "\n" +
+									`catalog for the scheduler are accepted by the API but may produce` + "\n" +
+									`warnings.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"max_cpus_per_user": schema.Int32Attribute{
