@@ -37,13 +37,43 @@ func TestSchedConfigMachineTypesNullReadsAsEmpty(t *testing.T) {
 		})
 	}
 
-	t.Run("null schedConfig stays null", func(t *testing.T) {
-		var cfg shared.AwsCloudConfig
-		if err := json.Unmarshal([]byte(`{"region":"eu-west-1","schedConfig":null}`), &cfg); err != nil {
-			t.Fatal(err)
-		}
-		if cfg.IntelligentComputeConfig != nil {
-			t.Fatalf("schedConfig = %+v, want nil", cfg.IntelligentComputeConfig)
-		}
-	})
+	// Every cloud compute environment shares SchedConfig, so the transform
+	// must apply through each of their config types.
+	clouds := map[string]func(body []byte) (*shared.SchedConfig, error){
+		"aws": func(b []byte) (*shared.SchedConfig, error) {
+			var c shared.AwsCloudConfig
+			err := json.Unmarshal(b, &c)
+			return c.IntelligentComputeConfig, err
+		},
+		"azure": func(b []byte) (*shared.SchedConfig, error) {
+			var c shared.AzCloudConfig
+			err := json.Unmarshal(b, &c)
+			return c.IntelligentComputeConfig, err
+		},
+		"google": func(b []byte) (*shared.SchedConfig, error) {
+			var c shared.GoogleCloudConfig
+			err := json.Unmarshal(b, &c)
+			return c.IntelligentComputeConfig, err
+		},
+	}
+	for cloud, decode := range clouds {
+		t.Run(cloud+" null machineTypes reads as empty", func(t *testing.T) {
+			sc, err := decode([]byte(`{"region":"r","schedConfig":{"machineTypes":null}}`))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if sc == nil || sc.MachineTypes == nil || len(sc.MachineTypes) != 0 {
+				t.Fatalf("schedConfig = %+v, want machineTypes []", sc)
+			}
+		})
+		t.Run(cloud+" null schedConfig stays null", func(t *testing.T) {
+			sc, err := decode([]byte(`{"region":"r","schedConfig":null}`))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if sc != nil {
+				t.Fatalf("schedConfig = %+v, want nil", sc)
+			}
+		})
+	}
 }
