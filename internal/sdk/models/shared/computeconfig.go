@@ -3069,7 +3069,7 @@ func (s *SeqeraComputeConfigPool) GetScaleToZeroSecs() *int {
 	return s.ScaleToZeroSecs
 }
 
-// SeqeraComputeConfigProvisioningModel - EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+// SeqeraComputeConfigProvisioningModel - Provisioning strategy for Seqera Intelligent Compute nodes.
 // Case-sensitive — must be one of:
 // - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
 // - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
@@ -3118,7 +3118,7 @@ type SeqeraComputeConfigSchedConfig struct {
 	// on Azure compute environments.
 	//
 	FusionSnapshots *bool `json:"fusionSnapshots,omitempty"`
-	// EC2 instance types eligible for Seqera Intelligent Compute nodes.
+	// Instance types eligible for Seqera Intelligent Compute nodes.
 	// Omit it, or set it to `[]`, to let the scheduler pick the most
 	// cost-optimal types per task. When populated, the scheduler is
 	// restricted to this whitelist; types outside the platform's filtered
@@ -3147,7 +3147,7 @@ type SeqeraComputeConfigSchedConfig struct {
 	// string is accepted.
 	//
 	PredictionModel *string `json:"predictionModel,omitempty"`
-	// EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+	// Provisioning strategy for Seqera Intelligent Compute nodes.
 	// Case-sensitive — must be one of:
 	// - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
 	// - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
