@@ -692,8 +692,10 @@ Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
 - `managed_identity_id` (String) Azure managed identity resource ID for compute instances. Requires replacement if changed.
-- `network_id` (String) Azure VNet resource ID for compute instance networking.
-Required when using private network isolation.
+- `network_id` (String) Resource ID of an existing Azure virtual network for compute instances,
+in the compute environment's region. When omitted, Seqera creates a
+virtual network for the compute environment. Required when using
+private network isolation.
 Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `override_nextflow_fusion_version` (Boolean) Whether launches on this compute environment override the Fusion version provided by the Nextflow launcher container. When false or null, the container default is used and fusionVersion is ignored. Applies only when Wave and Fusion v2 are enabled. Requires replacement if changed.

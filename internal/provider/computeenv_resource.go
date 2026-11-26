@@ -2513,8 +2513,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Azure VNet resource ID for compute instance networking.` + "\n" +
-											`Required when using private network isolation.` + "\n" +
+										MarkdownDescription: `Resource ID of an existing Azure virtual network for compute instances,` + "\n" +
+											`in the compute environment's region. When omitted, Seqera creates a` + "\n" +
+											`virtual network for the compute environment. Required when using` + "\n" +
+											`private network isolation.` + "\n" +
 											`Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{

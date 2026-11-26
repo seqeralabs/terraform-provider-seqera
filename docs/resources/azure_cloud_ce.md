@@ -37,6 +37,38 @@ resource "seqera_azure_cloud_ce" "minimal" {
 }
 ```
 
+### Intelligent Compute
+
+```terraform
+# Seqera Intelligent Compute (Preview) distributes tasks across multiple Azure
+# VMs with optimised scheduling.
+resource "seqera_azure_cloud_ce" "intelligent" {
+  name           = "azure-cloud-intelligent"
+  workspace_id   = data.seqera_workspace.main.id
+  credentials_id = seqera_azure_credential.main.credentials_id
+
+  config = {
+    region          = "eastus"
+    work_dir        = "az://my-container/work"
+    subscription_id = "00000000-0000-0000-0000-000000000000"
+    instance_type   = "Standard_D4s_v5"
+
+    intelligent_compute_enabled = true
+    intelligent_compute_config = {
+      provisioning_model = "spotFirst" # spot | spotFirst | ondemand
+
+      # Restrict the VM sizes the scheduler may use. Omit to let it pick the
+      # most cost-optimal sizes per task. Each entry is a full VM size name,
+      # or a glob with `*`. A bare `Standard` matches every size.
+      machine_types = [
+        "Standard_D4s_v5", # exactly this size
+        "Standard_E*s_v5", # memory-optimised Esv5 sizes and variants such as Edsv5
+      ]
+    }
+  }
+}
+```
+
 ### Log Analytics
 
 ```terraform
@@ -79,6 +111,33 @@ resource "seqera_azure_cloud_ce" "managed_identity" {
     instance_type              = "Standard_D4s_v3"
     managed_identity_client_id = "00000000-0000-0000-0000-000000000000"
     managed_identity_id        = "/subscriptions/.../resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/seqera-vm"
+  }
+}
+```
+
+### Networking
+
+```terraform
+# Azure Cloud in an existing virtual network instead of one Seqera creates.
+# Use this for private connectivity to other Azure resources, or in a region
+# without the StandardV2 NAT gateway Seqera uses for the network it creates.
+resource "seqera_azure_cloud_ce" "networking" {
+  name           = "azure-cloud-vnet"
+  workspace_id   = data.seqera_workspace.main.id
+  credentials_id = seqera_azure_credential.main.credentials_id
+
+  config = {
+    region          = "eastus"
+    work_dir        = "az://my-container/work"
+    subscription_id = "00000000-0000-0000-0000-000000000000"
+    instance_type   = "Standard_D4s_v5"
+
+    # The virtual network must be in `region`.
+    network_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-network-rg/providers/Microsoft.Network/virtualNetworks/my-vnet"
+
+    # Names (not resource IDs) of subnets in that network. Instances launch in
+    # the first one. Omit to use a subnet discovered in the network.
+    subnets = ["compute"]
   }
 }
 ```
@@ -150,8 +209,10 @@ Requires replacement if changed.
 - `log_workspace_id` (String) Azure Log Analytics workspace ID for execution logs. Requires replacement if changed.
 - `managed_identity_client_id` (String) Azure managed identity client ID for compute instances. Requires replacement if changed.
 - `managed_identity_id` (String) Azure managed identity resource ID for compute instances. Requires replacement if changed.
-- `network_id` (String) Azure VNet resource ID for compute instance networking.
-Required when using private network isolation.
+- `network_id` (String) Resource ID of an existing Azure virtual network for compute instances,
+in the compute environment's region. When omitted, Seqera creates a
+virtual network for the compute environment. Required when using
+private network isolation.
 Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
 Applied globally to all pipelines launched in this compute environment.
