@@ -28820,7 +28820,6 @@ components:
           type: array
           items:
             type: string
-          example: ["m5.large", "c5.xlarge"]
           x-speakeasy-param-force-new: true
           x-speakeasy-terraform-custom-type:
             imports:

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 98a3498a85c0973f49886baa65293ece
+  docChecksum: fdcc7cfac9518648d099752f42bd68a6
   docVersion: 1.274.4
   speakeasyVersion: 1.811.0
   generationVersion: 2.968.1
@@ -6077,7 +6077,7 @@ examples:
         query:
           workspaceId: 892944
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6092,7 +6092,7 @@ examples:
           workspaceId: 366403
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "azure-cloud", "config": {"bootDiskSizeGB": 100, "globalCacheEnabled": true, "globalCachePath": "az://my-nextflow-bucket/cache", "instanceType": "Standard_D4s_v3", "keyVaultUrl": "https://my-vault.vault.azure.net", "region": "eastus", "resourceGroup": "my-resource-group", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "subscriptionId": "00000000-0000-0000-0000-000000000000", "workDir": "az://my-container/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAzureCloudCE:
@@ -6145,7 +6145,7 @@ examples:
         query:
           workspaceId: 341971
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
       responses:
         "200":
           application/json: {}
@@ -6160,7 +6160,7 @@ examples:
           workspaceId: 19060
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-cloud", "config": {"arm64Enabled": false, "bootDiskSizeGb": 50, "globalCacheEnabled": true, "globalCachePath": "gs://my-nextflow-bucket/cache", "gpuEnabled": false, "instanceType": "n1-standard-4", "projectId": "my-gcp-project", "region": "us-central1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "serviceAccountEmail": "my-sa@my-project.iam.gserviceaccount.com", "workDir": "gs://my-nextflow-bucket/work", "zone": "us-central1-a"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteGCPCloudCE:
@@ -6189,7 +6189,7 @@ examples:
         query:
           workspaceId: 442912
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
       responses:
         "200":
           application/json: {}
@@ -6204,7 +6204,7 @@ examples:
           workspaceId: 562518
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"arm64Enabled": false, "ebsBootSize": 100, "ebsEncrypted": true, "ebsKmsKeyId": "arn:aws:kms:us-east-1:123456789012:key/12345678-90ab-cdef-1234-567890abcdef", "ec2KeyPair": "my-keypair", "globalCacheEnabled": true, "globalCachePath": "s3://my-nextflow-bucket/cache", "gpuEnabled": false, "imageId": "ami-0123456789abcdef0", "instanceProfileArn": "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile", "instanceType": "m5.xlarge", "logGroup": "/aws/batch/seqera", "region": "us-east-1", "schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}, "schedEnabled": false, "securityGroups": ["sg-12345678"], "subnetIds": ["subnet-12345678", "subnet-87654321"], "vpcId": "vpc-12345678", "workDir": "s3://my-bucket/work"}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAwsCloudCE:
@@ -6687,7 +6687,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "machineTypes": [], "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}}
+          application/json: {"schedConfig": {"diskAllocation": "nvme", "fusionSnapshots": false, "maxSpotAttempts": 5, "predictionModel": "none", "provisioningModel": "spotFirst"}}
         "400":
           application/json: {"message": "<value>"}
   LaunchAgent:

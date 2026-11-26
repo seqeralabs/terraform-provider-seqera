@@ -48,7 +48,6 @@ actions:
         restricted to this whitelist; types outside the platform's filtered
         catalog for the scheduler are accepted by the API but may produce
         warnings.
-      example: ["m5.large", "c5.xlarge"]
       x-speakeasy-param-force-new: true
       x-speakeasy-terraform-custom-type:
         imports:
