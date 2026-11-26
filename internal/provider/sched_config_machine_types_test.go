@@ -2,6 +2,7 @@ package provider
 
 import (
 	"encoding/json"
+	"slices"
 	"testing"
 
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
@@ -20,7 +21,7 @@ func TestSchedConfigMachineTypesNullReadsAsEmpty(t *testing.T) {
 		{name: "null", body: `{"machineTypes":null}`, want: []string{}},
 		{name: "absent", body: `{}`, want: []string{}},
 		{name: "empty", body: `{"machineTypes":[]}`, want: []string{}},
-		{name: "listed", body: `{"machineTypes":["m5.large"]}`, want: []string{"m5.large"}},
+		{name: "listed", body: `{"machineTypes":["m5.large","c5.xlarge"]}`, want: []string{"m5.large", "c5.xlarge"}},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -31,14 +32,31 @@ func TestSchedConfigMachineTypesNullReadsAsEmpty(t *testing.T) {
 			if sc.MachineTypes == nil {
 				t.Fatalf("machineTypes is nil, want %v", tc.want)
 			}
-			if len(sc.MachineTypes) != len(tc.want) || (len(tc.want) > 0 && sc.MachineTypes[0] != tc.want[0]) {
+			if !slices.Equal(sc.MachineTypes, tc.want) {
 				t.Fatalf("machineTypes = %v, want %v", sc.MachineTypes, tc.want)
 			}
 		})
 	}
 
-	// Every cloud compute environment shares SchedConfig, so the transform
-	// must apply through each of their config types.
+	// Every compute environment with Intelligent Compute shares SchedConfig, so
+	// the transform must apply through each of their config types: the
+	// per-cloud resources (seqera_*_cloud_ce) and the members of the
+	// ComputeConfig union used by seqera_compute_env.
+	union := func(discriminator string, get func(shared.ComputeConfig) *shared.SchedConfig) func([]byte) (*shared.SchedConfig, error) {
+		return func(b []byte) (*shared.SchedConfig, error) {
+			var m map[string]any
+			if err := json.Unmarshal(b, &m); err != nil {
+				return nil, err
+			}
+			m["discriminator"] = discriminator
+			b, _ = json.Marshal(m)
+			var cc shared.ComputeConfig
+			if err := json.Unmarshal(b, &cc); err != nil {
+				return nil, err
+			}
+			return get(cc), nil
+		}
+	}
 	clouds := map[string]func(body []byte) (*shared.SchedConfig, error){
 		"aws": func(b []byte) (*shared.SchedConfig, error) {
 			var c shared.AwsCloudConfig
@@ -55,10 +73,22 @@ func TestSchedConfigMachineTypesNullReadsAsEmpty(t *testing.T) {
 			err := json.Unmarshal(b, &c)
 			return c.IntelligentComputeConfig, err
 		},
+		"compute_env aws_cloud": union("aws-cloud", func(cc shared.ComputeConfig) *shared.SchedConfig {
+			return cc.AWSCloudConfiguration.IntelligentComputeConfig
+		}),
+		"compute_env azure_cloud": union("azure-cloud", func(cc shared.ComputeConfig) *shared.SchedConfig {
+			return cc.AzureCloudConfiguration.IntelligentComputeConfig
+		}),
+		"compute_env google_cloud": union("google-cloud", func(cc shared.ComputeConfig) *shared.SchedConfig {
+			return cc.GoogleCloudConfiguration.IntelligentComputeConfig
+		}),
+		"compute_env local_platform": union("local-platform", func(cc shared.ComputeConfig) *shared.SchedConfig {
+			return cc.LocalExecutionConfiguration.IntelligentComputeConfig
+		}),
 	}
 	for cloud, decode := range clouds {
 		t.Run(cloud+" null machineTypes reads as empty", func(t *testing.T) {
-			sc, err := decode([]byte(`{"region":"r","schedConfig":{"machineTypes":null}}`))
+			sc, err := decode([]byte(`{"region":"r","workDir":"s3://b","schedConfig":{"machineTypes":null}}`))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -67,7 +97,7 @@ func TestSchedConfigMachineTypesNullReadsAsEmpty(t *testing.T) {
 			}
 		})
 		t.Run(cloud+" null schedConfig stays null", func(t *testing.T) {
-			sc, err := decode([]byte(`{"region":"r","schedConfig":null}`))
+			sc, err := decode([]byte(`{"region":"r","workDir":"s3://b","schedConfig":null}`))
 			if err != nil {
 				t.Fatal(err)
 			}
