@@ -32,6 +32,8 @@ NOTES:
 
 - **Intelligent Compute descriptions no longer say EC2.** `machine_types` and `provisioning_model` in `intelligent_compute_config` described EC2 instance types and an EC2 provisioning strategy on every resource, including `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud`, `google_cloud` and `local_platform` blocks of `seqera_compute_env`. They are now provider-neutral. Behaviour is unchanged.
 
+- **Azure Cloud networking documented; Intelligent Compute examples for Azure and Google Cloud.** `network_id` on `seqera_azure_cloud_ce` and the `azure_cloud` block of `seqera_compute_env` now explains that it selects an existing virtual network in the compute environment's region, and that Seqera creates one when it is omitted. New examples on `seqera_azure_cloud_ce` (Intelligent Compute, existing virtual network) and `seqera_gcp_cloud_ce` (Intelligent Compute) show `machine_types` with each cloud's machine type names. Behaviour is unchanged.
+
 # v0.44.0
 
 BREAKING CHANGES:
