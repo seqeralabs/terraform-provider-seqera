@@ -92,6 +92,9 @@ terraform:
     - importAlias: dataset_version
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version
       resource: dataset_version.NewResource
+    - importAlias: service_account_secret
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_secret
+      resource: service_account_secret.NewResource
     - importAlias: pipeline_schema
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_schema
       resource: pipeline_schema.NewResource

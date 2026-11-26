@@ -30,6 +30,7 @@ import (
 	pipeline_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_version"
 	pipeline_versions_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_versions_data"
 	service_account_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_data"
+	service_account_secret "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/service_account_secret"
 	team_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_data"
 	team_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member"
 	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
@@ -234,6 +235,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		organization_member.NewResource,
 		team_member.NewResource,
 		dataset_version.NewResource,
+		service_account_secret.NewResource,
 		pipeline_schema.NewResource,
 		compute_env_enabled.NewResource,
 		pipeline_version.NewResource,
