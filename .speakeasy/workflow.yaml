@@ -18,6 +18,7 @@ sources:
             - location: overlays/compute-env-azure-cloud.yaml
             - location: overlays/compute-env-gcp-batch.yaml
             - location: overlays/compute-env-gcp-cloud.yaml
+            - location: overlays/compute-env-sched-config.yaml
             - location: overlays/compute-env-seqera-compute.yaml
             - location: overlays/compute-env-slurm.yaml
             - location: overlays/compute-env.yaml

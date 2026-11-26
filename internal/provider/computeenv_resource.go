@@ -1318,7 +1318,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
 													`Omit it, or set it to ` + "`" + `[]` + "`" + `, to let the scheduler pick the most` + "\n" +
 													`cost-optimal types per task. When populated, the scheduler is` + "\n" +
 													`restricted to this whitelist; types outside the platform's filtered` + "\n" +
@@ -1405,7 +1405,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
 													`Case-sensitive — must be one of:` + "\n" +
 													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
 													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
@@ -2342,7 +2342,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
 													`Omit it, or set it to ` + "`" + `[]` + "`" + `, to let the scheduler pick the most` + "\n" +
 													`cost-optimal types per task. When populated, the scheduler is` + "\n" +
 													`restricted to this whitelist; types outside the platform's filtered` + "\n" +
@@ -2429,7 +2429,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
 													`Case-sensitive — must be one of:` + "\n" +
 													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
 													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
@@ -3872,7 +3872,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
 													`Omit it, or set it to ` + "`" + `[]` + "`" + `, to let the scheduler pick the most` + "\n" +
 													`cost-optimal types per task. When populated, the scheduler is` + "\n" +
 													`restricted to this whitelist; types outside the platform's filtered` + "\n" +
@@ -3959,7 +3959,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
 													`Case-sensitive — must be one of:` + "\n" +
 													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
 													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +
@@ -4797,7 +4797,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												MarkdownDescription: `EC2 instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Instance types eligible for Seqera Intelligent Compute nodes.` + "\n" +
 													`Omit it, or set it to ` + "`" + `[]` + "`" + `, to let the scheduler pick the most` + "\n" +
 													`cost-optimal types per task. When populated, the scheduler is` + "\n" +
 													`restricted to this whitelist; types outside the platform's filtered` + "\n" +
@@ -4884,7 +4884,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `EC2 provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
+												MarkdownDescription: `Provisioning strategy for Seqera Intelligent Compute nodes.` + "\n" +
 													`Case-sensitive — must be one of:` + "\n" +
 													`- ` + "`" + `spotFirst` + "`" + ` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.` + "\n" +
 													`- ` + "`" + `spot` + "`" + `: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.` + "\n" +

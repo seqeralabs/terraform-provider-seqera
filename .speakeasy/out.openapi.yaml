@@ -28811,7 +28811,7 @@ components:
           x-speakeasy-param-force-new: true
         machineTypes:
           description: |
-            EC2 instance types eligible for Seqera Intelligent Compute nodes.
+            Instance types eligible for Seqera Intelligent Compute nodes.
             Omit it, or set it to `[]`, to let the scheduler pick the most
             cost-optimal types per task. When populated, the scheduler is
             restricted to this whitelist; types outside the platform's filtered
@@ -28865,7 +28865,7 @@ components:
             - spotFirst
             - ondemand
           description: |
-            EC2 provisioning strategy for Seqera Intelligent Compute nodes.
+            Provisioning strategy for Seqera Intelligent Compute nodes.
             Case-sensitive — must be one of:
             - `spotFirst` (default): try spot instances first, fall back to on-demand if capacity is unavailable. Recommended for cost.
             - `spot`: spot instances only — lower cost, but jobs may be interrupted if capacity is reclaimed.
@@ -32307,8 +32307,10 @@ components:
 
 
 
+
             error("action " + .id + " launches a pipeline; manage it with seqera_pipeline_action")
           else
+
 
 
 
@@ -32605,8 +32607,10 @@ components:
 
 
 
+
             error("action " + .id + " runs an agent; manage it with seqera_agent_action")
           else
+
 
 
 

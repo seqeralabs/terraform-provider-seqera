@@ -30,6 +30,8 @@ NOTES:
 
 - **Authentication documentation updated.** The provider documentation lists the client credentials attributes with their environment variables and shows a self-hosted configuration.
 
+- **Intelligent Compute descriptions no longer say EC2.** `machine_types` and `provisioning_model` in `intelligent_compute_config` described EC2 instance types and an EC2 provisioning strategy on every resource, including `seqera_azure_cloud_ce`, `seqera_gcp_cloud_ce` and the `azure_cloud`, `google_cloud` and `local_platform` blocks of `seqera_compute_env`. They are now provider-neutral. Behaviour is unchanged.
+
 # v0.44.0
 
 BREAKING CHANGES:

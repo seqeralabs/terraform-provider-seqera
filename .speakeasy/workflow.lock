@@ -2,8 +2,8 @@ speakeasyVersion: 1.811.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:3ba199b3b846ed5396cdbb754e85721c4c1e02fec49894b2fc25ec4c78286d77
-        sourceBlobDigest: sha256:576a0864dae504a572e48a959041ad1e4f794bcba7ffaaf266d0ce325f7a7e4f
+        sourceRevisionDigest: sha256:60b4bb12fa80c2feba7622cd5457b81ed044f6ff9fb15f9f0aca3703ee2d8af4
+        sourceBlobDigest: sha256:0f0a9386be0347b3873ba451562ce31a83e63a766588f6232b25b804147bde0d
         tags:
             - latest
             - 1.274.4
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:3ba199b3b846ed5396cdbb754e85721c4c1e02fec49894b2fc25ec4c78286d77
-        sourceBlobDigest: sha256:576a0864dae504a572e48a959041ad1e4f794bcba7ffaaf266d0ce325f7a7e4f
+        sourceRevisionDigest: sha256:60b4bb12fa80c2feba7622cd5457b81ed044f6ff9fb15f9f0aca3703ee2d8af4
+        sourceBlobDigest: sha256:0f0a9386be0347b3873ba451562ce31a83e63a766588f6232b25b804147bde0d
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.811.0
@@ -34,6 +34,7 @@ workflow:
                 - location: overlays/compute-env-azure-cloud.yaml
                 - location: overlays/compute-env-gcp-batch.yaml
                 - location: overlays/compute-env-gcp-cloud.yaml
+                - location: overlays/compute-env-sched-config.yaml
                 - location: overlays/compute-env-seqera-compute.yaml
                 - location: overlays/compute-env-slurm.yaml
                 - location: overlays/compute-env.yaml
